@@ -1,6 +1,6 @@
 # AndroidKernelPatch
 
-Patching and hooking and rooting the Android kernel with only stripped linux kernel image.
+Patching, hooking, and rooting the Android kernel using only a stripped Linux kernel image.
 
 **English** | [简体中文](README_zh-CN.md)
 
@@ -9,6 +9,9 @@ AndroidKernelPatch relies on [KernelPatch](https://github.com/bmax121/KernelPatc
 Not limited to rooting, AndroidKernelPatch can patch the kernel and inject arbitrary code into it even without source code or symbol information.
 
 Want to learn more? Visit [KernelPatch](https://github.com/bmax121/KernelPatch/) .
+
+## Development Status
+Early alpha stage, many features are yet to be implemented.
 
 ## Supported Versions
 
@@ -19,10 +22,10 @@ Currently only supports arm64.
 Linux 3.8 - 6.2 (theoretically)  
 Linux 6.3+ (not yet adapted)  
 
-Pixel2xl-Android10, Linux 4.4.210 (tested)  
+Pixel2xl-Android10, Linux 4.4.210 (tested before)  
 Pixel3xl-Android12, Linux 4.9.270 (tested)  
 Pixel4xl-Android13, Linux 4.14.276 (tested)  
-Oneplus8T-Android13, Linux 4.19.157 (tested)  
+Oneplus8T-Android13, Linux 4.19.157 (tested before)  
 Pixel6-Android13, Linux 5.10.157 (tested)  
 
 ## Development Status
