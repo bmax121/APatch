@@ -1,0 +1,52 @@
+/*
+ * Copyright (c) 2016 NextThing Co
+ * Copyright (c) 2016 Free Electrons
+ * Copyright (c) 2016 Konsulko Inc.
+ *
+ * SPDX-License-Identifier:	GPL-2.0+
+ */
+
+/dts-v1/;
+/plugin/;
+
+/* Test that we can change an int by another */
+&test {
+	test-int-property = <43>;
+};
+
+/* Test that we can replace a string by a longer one */
+&test {
+	test-str-property = "foobar";
+};
+
+/* Test that we add a new property */
+&test {
+	test-str-property-2 = "foobar2";
+};
+
+/* Test that we add a new node (by phandle) */
+&test {
+	new-node {
+		new-property;
+	};
+};
+
+&test {
+	local: new-local-node {
+		new-property;
+	};
+};
+
+&test {
+	test-phandle = <&test>, <&local>;
+};
+
+&test {
+	test-several-phandle = <&local>, <&local>;
+};
+
+&test {
+	sub-test-node {
+		new-sub-test-property;
+	};
+};

@@ -1,0 +1,7 @@
+/dts-v1/;
+
+/ {
+	intc: interrupt-controller {
+		interrupt-controller;
+	};
+};

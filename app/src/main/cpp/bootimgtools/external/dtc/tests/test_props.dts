@@ -1,0 +1,15 @@
+/dts-v1/;
+
+/ {
+	compatible = "test_props";
+	prop-hex32 = <0xdeadbeef>;
+	prop-uint32 = <123>;
+	prop-int32 = <0xfffffffe>;
+	prop-hex64 = /bits/ 64 <0xdeadbeef01abcdef>;
+	prop-uint64 = /bits/ 64 <9223372036854775807>;
+	prop-int64 = /bits/ 64 <0xfffffffffffffffe>;
+	prop-int32-array = <128>, <(-16)>, <0xfffffffe>;
+	prop-uint32-array = <0x1>, <0x98765432>, <0xdeadbeef>;
+	prop-int64-array = /bits/ 64 <0x100000000 0xfffffffffffffffe>;
+	prop-uint64-array = /bits/ 64 <0x100000000 0x1>;
+};

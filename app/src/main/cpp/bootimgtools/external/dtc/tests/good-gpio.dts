@@ -1,0 +1,12 @@
+/dts-v1/;
+
+/ {
+	gpio: gpio-controller {
+		#gpio-cells = <3>;
+	};
+
+	node {
+		foo,nr-gpios = <1>;
+		foo-gpios = <&gpio 1 2 3>;
+	};
+};

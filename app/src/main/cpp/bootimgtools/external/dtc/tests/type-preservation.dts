@@ -1,0 +1,31 @@
+/dts-v1/;
+
+/ {
+	#address-cells = <0x01>;
+	#size-cells = <0x00>;
+
+	sub1: subnode@1 {
+		prop_label: compatible = value_label: "subnode1";
+		reg = <0x01>;
+		int-array = <0x00 0x01>, int_value_label: <0x02 0x03>;
+		int8 = [56];
+		int8-array = [00 12 34 56] label:;
+		int16 = /bits/ 16 <0x3210>;
+		int16-array = /bits/ 16 <0x1234 0x5678 0x90ab 0xcdef>;
+		int16-matrix = /bits/ 16 <0x1234 0x5678>, <0x90ab 0xcdef>;
+		int64 = /bits/ 64 <0x200000000>;
+		int64-array = /bits/ 64 <0x100000000 0x00> int64_array_label_end:;
+		a-string-with-nulls = "foo\0bar", "baz";
+		a-phandle = <&subsub1>;
+		a-phandle-with-args = <&subsub1 0x00 0x01>, <&subsub1 0x02 0x03>;
+
+		subsub1: subsubnode {
+			compatible = "subsubnode1", "subsubnode";
+			phandle = <0x01>;
+
+			subsubsub1: subsubsubnode {
+				compatible = "subsubsubnode1", <0x1234>, valuea: valueb: "subsubsubnode";
+			};
+		};
+	};
+};

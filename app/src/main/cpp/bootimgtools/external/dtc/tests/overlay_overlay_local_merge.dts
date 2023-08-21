@@ -1,0 +1,29 @@
+/*
+ * Copyright (c) 2016 NextThing Co
+ * Copyright (c) 2016 Free Electrons
+ * Copyright (c) 2016 Konsulko Inc.
+ *
+ * SPDX-License-Identifier:	GPL-2.0+
+ */
+
+/dts-v1/;
+/plugin/;
+
+&test {
+	parent: new-node {
+		parent-property;
+	};
+};
+
+&parent {
+	new-merged-property;
+	new-merged-node {
+		new-property;
+	};
+};
+
+&{/} {
+	new-root-node {
+		new-root-node-property;
+	};
+};

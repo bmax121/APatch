@@ -1,0 +1,10 @@
+option('tools', type: 'boolean', value: true,
+       description: 'Build tools')
+option('assume-mask', type: 'integer', value: 0,
+       description: 'Control the assumptions made (e.g. risking security issues) in the code.')
+option('yaml', type: 'feature', value: 'auto',
+       description: 'YAML support')
+option('valgrind', type: 'feature', value: 'auto',
+       description: 'Valgrind support')
+option('python', type: 'feature', value: 'auto',
+       description: 'Build pylibfdt Python library')

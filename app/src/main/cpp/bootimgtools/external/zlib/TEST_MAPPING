@@ -1,0 +1,27 @@
+{
+  "presubmit": [
+    {
+      "name": "puffin_unittest"
+    },
+    {
+      "name": "recovery_unit_test"
+    },
+    {
+      "name": "update_engine_unittests"
+    },
+    {
+      "name": "ziparchive-tests"
+    },
+    {
+      "name": "zlib_tests"
+    },
+    {
+      "name": "CtsLibcoreTestCases",
+      "options": [
+        {
+          "include-filter": "org.apache.harmony.tests.java.util.zip"
+        }
+      ]
+    }
+  ]
+}

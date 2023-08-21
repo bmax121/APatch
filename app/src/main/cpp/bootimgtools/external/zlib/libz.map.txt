@@ -1,0 +1,151 @@
+# This file is copied from src/zlib.map and annotated with comments for the NDK
+# stub library generation script.
+ZLIB_1.2.0 {
+  global:
+    compressBound;
+    deflateBound;
+    inflateBack;
+    inflateBackEnd;
+    inflateBackInit_;
+    inflateCopy;
+  local:
+    deflate_copyright; # var
+    inflate_copyright; # var
+    inflate_fast;
+    inflate_table;
+    zcalloc;
+    zcfree;
+    z_errmsg; # var
+    gz_error;
+    gz_intmax;
+    _*;
+};
+
+ZLIB_1.2.0.2 {
+    gzclearerr;
+    gzungetc;
+    zlibCompileFlags;
+} ZLIB_1.2.0;
+
+ZLIB_1.2.0.8 {
+    deflatePrime;
+} ZLIB_1.2.0.2;
+
+ZLIB_1.2.2 {
+    adler32_combine;
+    crc32_combine;
+    deflateSetHeader;
+    inflateGetHeader;
+} ZLIB_1.2.0.8;
+
+ZLIB_1.2.2.3 {
+    deflateTune;
+    gzdirect;
+} ZLIB_1.2.2;
+
+ZLIB_1.2.2.4 {
+    inflatePrime;
+} ZLIB_1.2.2.3;
+
+ZLIB_1.2.3.3 {
+    adler32_combine64;
+    crc32_combine64;
+    gzopen64;
+    gzseek64;
+    gztell64;
+    inflateUndermine;
+} ZLIB_1.2.2.4;
+
+ZLIB_1.2.3.4 {
+    inflateReset2;
+    inflateMark;
+} ZLIB_1.2.3.3;
+
+ZLIB_1.2.3.5 {
+    gzbuffer;
+    gzoffset;
+    gzoffset64;
+    gzclose_r;
+    gzclose_w;
+} ZLIB_1.2.3.4;
+
+ZLIB_1.2.5.1 {
+    deflatePending;
+} ZLIB_1.2.3.5;
+
+ZLIB_1.2.5.2 {
+    deflateResetKeep;
+    gzgetc_;
+    inflateResetKeep;
+} ZLIB_1.2.5.1;
+
+ZLIB_1.2.7.1 { # introduced=19
+    inflateGetDictionary;
+    gzvprintf;
+} ZLIB_1.2.5.2;
+
+ZLIB_1.2.9 { # introduced=28
+    inflateCodesUsed;
+    inflateValidate;
+    uncompress2;
+    gzfread;
+    gzfwrite;
+    deflateGetDictionary;
+    adler32_z;
+    crc32_z;
+} ZLIB_1.2.7.1;
+
+# These were all exposed by the old NDK stub library. Unclear if they still
+# should be, but at least some of them are marked as being exported in zlib.h
+# and the tree doesn't build without them.
+ZLIB_NDK {
+    _dist_code;
+    _length_code;
+    _tr_align;
+    _tr_flush_bits; # introduced=21
+    _tr_flush_block;
+    _tr_init;
+    _tr_stored_block;
+    _tr_tally;
+    adler32;
+    compress2;
+    compress;
+    crc32;
+    deflate;
+    deflateCopy;
+    deflateEnd;
+    deflateInit2_;
+    deflateInit_;
+    deflateParams;
+    deflateReset;
+    deflateSetDictionary;
+    get_crc_table;
+    gzclose;
+    gzdopen;
+    gzeof;
+    gzerror;
+    gzflush;
+    gzgetc;
+    gzgets;
+    gzopen;
+    gzprintf;
+    gzputc;
+    gzputs;
+    gzread;
+    gzrewind;
+    gzseek;
+    gzsetparams;
+    gztell;
+    gzwrite;
+    inflate;
+    inflateEnd;
+    inflateInit2_;
+    inflateInit_;
+    inflateReset;
+    inflateSetDictionary;
+    inflateSync;
+    inflateSyncPoint;
+    uncompress;
+    zError;
+    zlibVersion;
+};

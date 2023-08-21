@@ -1,0 +1,18 @@
+/dts-v1/;
+
+/ {
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	bus@10000000 {
+		#address-cells = <1>;
+		#size-cells = <1>;
+		compatible = "foo-bus", "simple-bus";
+		ranges = <0x0 0x10000000 0x10000>;
+
+		node@100 {
+			reg = <0x1000 1>;
+		};
+	};
+
+};

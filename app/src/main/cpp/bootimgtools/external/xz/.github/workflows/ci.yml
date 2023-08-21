@@ -1,0 +1,72 @@
+#############################################################################
+#
+# Author: Jia Tan
+#
+# This file has been put into the public domain.
+# You can do whatever you want with this file.
+#
+#############################################################################
+
+name: CI
+
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+  # Allows running workflow manually
+  workflow_dispatch:
+
+jobs:
+  # When CMake can support disabling check types and
+  # encoders/decoders/threads, it will be combined to one Linux job
+  # and another matrix list.
+  Linux-Autotools:
+    # Just run on latest ubuntu
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        check_types: ["crc32", "crc32,crc64", "crc32,sha256", "crc32,crc64,sha256"]
+        disable: [encoders, decoders, bcj, delta, threads]
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      - name: Install Dependencies
+        run: sudo apt-get install -y autoconf automake build-essential po4a autopoint
+      - name: Build
+        run: ./build-aux/ci_build.sh -b autotools -c ${{ matrix.check_types }} -d ${{ matrix.disable }}
+
+  Linux-CMake:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Dependencies
+        run: sudo apt-get install -y build-essential cmake
+      - name: Build
+        run: ./build-aux/ci_build.sh -b cmake
+
+  MacOS-Autotools:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        check_types: ["crc32", "crc32,crc64", "crc32,sha256", "crc32,crc64,sha256"]
+        disable: [encoders, decoders, bcj, delta, threads]
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      - name: Install Dependencies
+        run: brew install autoconf automake libtool po4a
+      - name: Build
+        run: ./build-aux/ci_build.sh -b autotools -c ${{ matrix.check_types }} -d ${{ matrix.disable }}
+
+  MacOS-CMake:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Dependencies
+        run: brew install cmake
+      - name: Build
+        run: ./build-aux/ci_build.sh -b cmake
+    

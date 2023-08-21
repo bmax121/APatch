@@ -1,0 +1,91 @@
+<resources>
+    <string name="app_name" translatable="false">AKPatch ( Pre-alpha ) </string>
+    <string name="super_key">SuperKey：</string>
+    <string name="click_install">Install</string>
+    <string name="super_key_hint">Start after typing</string>
+    <string name="super_key_warnning">
+        The Super Key possesses all the capabilities of AndroidKernelPatch, with higher privileges than Root.
+        In order to prevent key leakage, this input box might be removed once AKP achieves compatibility with traditional "su" and gains permission management.
+    </string>
+
+    <string name="super_key_dialog_title">Set a SuperKey</string>
+    <string name="super_key_dialog_text">
+        AndroidKernelPatch provides capabilities to user space through system calls,
+        and the SuperKey is the unique credential used for this system call.
+        Therefore, it is best to set it to be more complex.
+    </string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_confirm">Confirm</string>
+    <string name="super_key_dialog_label">SuperKey</string>
+    <string name="super_key_dialog_placeholder"></string>
+    <string name="auth_succeed">Authentication successful</string>
+    <string name="auth_succeed_text">You have successfully completed the installation. Please keep your super key safe</string>
+
+    <string name="succeed">Success</string>
+    <string name="extract_succeed_text"></string>
+
+    <string name="falied">Failure</string>
+    <string name="extract_failed_text">Please confirm that the status of AKPatch is \'Working\'.</string>
+
+    <string name="patch">Patch boot.img</string>
+    <string name="auth">Auth</string>
+    <string name="extract_text">Extract kpatch to /data/local/tmp</string>
+
+    <string name="module_support">
+        Module support is currently under development.\n
+        AKP will support two types of modules:\n
+        1. KPM(Kernel Patch Module): Loaded into the kernel, capable of hooking kernel methods.\n
+        2. Similar to Magisk modules.
+    </string>
+    <string name="module">Module</string>
+
+    <string name="log">Log</string>
+    <string name="clear">Clear</string>
+    <string name="log_kernel">Kernel</string>
+    <string name="log_user">User</string>
+    <string name="grant_su">Thread Root</string>
+    <string name="grant_su_title">Granting thread Root permissions</string>
+    <string name="grant_su_text">You can grant Root permissions to any thread. You can use gettid to obtain the Thread ID</string>
+
+
+    <string name="home">Home</string>
+    <string name="home_installed_unknow">Status unknown</string>
+    <string name="home_need_skey_or_install">You need to complete the installation and enter the SuperKey.</string>
+    <string name="home_security_notice">This project is currently under development and testing, and installing it may pose a security risk, data loss risk, or cause the device to fail to boot. If you are sure you need to install it, please back up your data, including your boot.img.</string>
+    <string name="home_working">Working</string>
+    <string name="home_working_version">Version: %d</string>
+    <string name="home_module_count">Modules: %d</string>
+
+    <string name="superuser_note">Management of superuser is under development. For now, you can use kpatch for rooting.</string>
+
+    <string name="home_kernel">Kernel</string>
+    <string name="home_manager_version">Manager Version</string>
+    <string name="home_fingerprint">Fingerprint</string>
+
+    <string name="home_selinux_status">SELinux status</string>
+    <string name="superuser">Superuser</string>
+    <string name="uninstall">Uninstall</string>
+    <string name="kp_install">Install</string>
+    <string name="reboot">Reboot</string>
+    <string name="settings">Settings</string>
+    <string name="reboot_userspace">Soft Reboot</string>
+    <string name="reboot_recovery">Reboot to Recovery</string>
+    <string name="reboot_bootloader">Reboot to Bootloader</string>
+    <string name="reboot_download">Reboot to Download</string>
+    <string name="reboot_edl">Reboot to EDL</string>
+    <string name="about">About</string>
+    <string name="refresh">Refresh</string>
+    <string name="show_system_apps">Show system apps</string>
+    <string name="hide_system_apps">Hide system apps</string>
+    <string name="send_log">Send Log</string>
+    <string name="safe_mode">Safe mode</string>
+    <string name="reboot_to_apply">Reboot to take effect</string>
+    <string name="home_click_to_learn_akpatch">Learn how to install KernelSU and use modules</string>
+    <string name="home_support_title">Support Us</string>
+    <string name="home_support_content">AndroidKernelPatch is, and always will be, free, and open source.</string>
+    <string name="about_source_code"><![CDATA[View source code at %1$s<br/>]]></string>
+
+    <string name="launch_app">Launch</string>
+    <string name="force_stop_app">Force Stop</string>
+    <string name="restart_app">Restart</string>
+</resources>

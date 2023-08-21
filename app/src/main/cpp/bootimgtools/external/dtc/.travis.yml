@@ -1,0 +1,65 @@
+language: c
+
+# Coverity Scan uploads
+env:
+  global:
+  # COVERITY_SCAN_TOKEN (dgibson/dtc)
+  - secure: "vlHvXe618//IM9LQaKzqsrUbjs7ng0L9UCST4kJbJnFQDXvVe5JiSmJGd4ef7mm0NUv5bMRl2W3xCiu6BYAu/NvU3tMNHoLG+JgCJs0+wLJXbWOwji/NmH7olqgJG+CmpaCMXjARF6+nrTnBYHJL6cYyf4KVoV4B0I/hLUW91+s="
+
+matrix:
+  include:
+    - addons:
+        apt:
+          packages:
+            - swig
+            - python-dev
+            - valgrind
+            - libyaml-0-2
+        coverity_scan:
+          project:
+            name: dtc
+            description: Device Tree Compiler
+          notification_email: david@gibson.dropbear.id.au
+          build_command: make
+          branch_pattern: coverity_scan
+      script:
+        - make
+        - make check && make checkm
+
+    # Check it builds properly without optional packages:
+    #     python, valgrind, libyaml
+    - script:
+        - make
+        - make check
+
+    - arch: arm64
+      addons:
+        apt_packages:
+          - swig
+          - python-dev
+          - valgrind
+          - libyaml-0-2
+      script:
+        - make
+        - make check checkm
+
+    - arch: ppc64le
+      addons:
+        apt_packages:
+          - swig
+          - python-dev
+          - libyaml-0-2
+      script:
+        - make
+        - make check
+
+    - arch: s390x
+      addons:
+        apt_packages:
+          - swig
+          - python-dev
+          - valgrind
+          - libyaml-0-2
+      script:
+        - make
+        - make check checkm

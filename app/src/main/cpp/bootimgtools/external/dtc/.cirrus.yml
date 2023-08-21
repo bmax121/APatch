@@ -1,0 +1,23 @@
+env:
+  CIRRUS_CLONE_DEPTH: 1
+
+freebsd_13_task:
+  freebsd_instance:
+    image: freebsd-13-0-release-amd64
+  install_script:
+    pkg install -y bison gmake pkgconf
+  build_script:
+    gmake
+  test_script:
+    gmake check
+
+linux_gcc_task:
+  container:
+    image: gcc:latest
+  install_script:
+    - apt-get update
+    - apt-get -y install bison flex
+  build_script:
+    - make
+  test_script:
+    - make check

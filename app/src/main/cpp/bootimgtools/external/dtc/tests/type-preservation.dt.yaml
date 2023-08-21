@@ -1,0 +1,23 @@
+---
+- '#address-cells': [[0x1]]
+  '#size-cells': [[0x0]]
+  subnode@1:
+    compatible: ["subnode1"]
+    reg: [[0x1]]
+    int-array: [[0x0, 0x1], [0x2, 0x3]]
+    int8: [!u8 [0x56]]
+    int8-array: [!u8 [0x0, 0x12, 0x34, 0x56]]
+    int16: [!u16 [0x3210]]
+    int16-array: [!u16 [0x1234, 0x5678, 0x90ab, 0xcdef]]
+    int16-matrix: [!u16 [0x1234, 0x5678], [0x90ab, 0xcdef]]
+    int64: [!u64 [0x200000000]]
+    int64-array: [!u64 [0x100000000, 0x0]]
+    a-string-with-nulls: ["foo\0bar", "baz"]
+    a-phandle: [[!phandle 0x1]]
+    a-phandle-with-args: [[!phandle 0x1, 0x0, 0x1], [!phandle 0x1, 0x2, 0x3]]
+    subsubnode:
+      compatible: ["subsubnode1", "subsubnode"]
+      phandle: [[0x1]]
+      subsubsubnode:
+        compatible: ["subsubsubnode1", [0x1234], "subsubsubnode"]
+...

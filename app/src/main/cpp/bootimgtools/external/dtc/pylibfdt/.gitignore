@@ -1,0 +1,3 @@
+libfdt.py
+*.pyc
+libfdt_wrap.c
