@@ -10,9 +10,6 @@ Not limited to rooting, AndroidKernelPatch can patch the kernel and inject arbit
 
 Want to learn more? Visit [KernelPatch](https://github.com/bmax121/KernelPatch/) .
 
-## Development Status
-Early alpha stage, many features are yet to be implemented.
-
 ## Supported Versions
 
 Same as KernelPatch.
@@ -30,7 +27,7 @@ Pixel6-Android13, Linux 5.10.157 (tested)
 
 ## Development Status
 
-It is still in the early stages, and many features have not been implemented yet. Development is happening sporadically and slowly. **Welcome those who are interested to join in**.
+It is still in the early stages, and many features have not been implemented yet. Development is happening sporadically and slowly.
 
 ## Get Help
 

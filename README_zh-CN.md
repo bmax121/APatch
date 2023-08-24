@@ -8,7 +8,6 @@ AndroidKernelPatch 依赖 [KernelPatch](https://github.com/bmax121/KernelPatch/)
 
 想要了解更多？请到 [KernelPatch](https://github.com/bmax121/KernelPatch/)
 
-
 ## 支持情况
 
 同 KernelPatch
@@ -26,7 +25,7 @@ Pixel6-Android12, Linux 5.10.81 (测试过)
 
 ## 开发状态
 
-还比较初期，很多功能还没做，不定期缓慢开发中，**期待有兴趣的一起**。
+还比较初期，很多功能还没做，不定期缓慢开发中
 
 ## 获取帮助
 
