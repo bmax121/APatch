@@ -27,7 +27,7 @@ Pixel6-Android13, Linux 5.10.157 (tested)
 
 ## Development Status
 
-It is still in the early stages, and many features have not been implemented yet. Development is happening sporadically and slowly.
+It is still in the early stages, and many features have not been implemented yet.
 
 ## Get Help
 
