@@ -1,44 +1,56 @@
-# Usage
+# Compilation and Usage
 
-## Build bootimgtools
+## Using AKPatch
 
-bootimgtools is a tool used for unpacking and repacking boot.img files. It utilizes code from Magisk for this purpose.
+Import this project into AndroidStudio for compilation and installation. It provides functions for patching boot.img and exporting kpatch.
+
+## Step-by-step Manual Operation
+
+### Compiling bootimgtools
+
+bootimgtools is used for unpacking and repacking boot.img, and it employs the code from Magisk.
 
 ```shell
-cd imgtools
+cd bootimgtools
 mkdir build; cd build
 cmake ..
 make
 ```
 
-## Download kpimg and kptools
+### kpimg, kptools, and kpuser
 
 [KernelPatch Release](<https://github.com/bmax121/KernelPatch/releases/tag/latest>)
 
-## Build manager (Only for test now)
+kpimg is a precompiled binary.  
+Compile kptool using cmake or makefile.  
+kpuser is used for compiling kpatch.  
 
-Import [manager](/manager) to AndroidStudio.
+### Patching the boot.img
 
-## Install
+Refer to the content in [Patch.kt](/app/src/main/java/me/bmax/akpatch/ui/util/Patch.kt).
 
 ```shell
-# 1. First, obtain the boot.img file for your device
+# 1. First, obtain the `boot.img` for your device.
 
-# 2. Unpack the boot.img
+# 2. Unpack the `boot.img`.
 cd imgtools/build
 ./bootimgtools unpack where_your_boot_img
 cp kernel kernel.ori
 
-# 3. Use kptools to patch the kernel image
-# Note: skey is the unique credential for invoking SuperCall. Remember to keep your skey confidential and not disclose it to others!
+# 3. Use `kptools` to patch the kernel image.
+# Note: `skey` is the unique credential for invoking SuperCall. Remember your `skey` and do not share it!
 ./kptools -p kernel.ori --kpimg where_your_kpimg --skey your_skey --out kernel
 
-# 4. Repack boot.img
+# 4. Repack the `boot.img`.
 ./bootimgtools repack boot.img
 
-# 5. Finally, flash the boot.img
-# It is recommended to use first.
+# 5. Finally, flash the new `boot.img`.
+# It is recommended to first use
 fastboot boot new-boot.img
-# If everything is working fine, then you can proceed to flash it.
+# If you are sure that there are no issues, then flash
 fastboot flash boot new-boot.img
+
+
 ```
+
+

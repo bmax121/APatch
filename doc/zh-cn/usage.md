@@ -1,25 +1,33 @@
-# 使用
+# 编译和使用
 
-## 编译 bootimgtools
+## 使用 AKPatch
+
+导入此项目到 AndroidStudio 编译安装，里面提供了修补 boot.img 和导出 kpatch 的功能
+
+## 一步步自己操作
+
+### 编译 bootimgtools
 
 bootimgtools 用于对 boot.img 进行解包和重打包，这里使用了 Magisk 的代码。
 
 ```shell
-cd imgtools
+cd bootimgtools
 mkdir build; cd build
 cmake ..
 make
 ```
 
-## 下载 kpimg, kptools
+### kpimg, kptools, kpuser
 
 [KernelPatch Release](<https://github.com/bmax121/KernelPatch/releases/tag/latest>)
 
-## 编译 manager (当前只有测试功能)
+kpimg 是一个二进制文件，是编译好了的  
+kptool 用 cmake 或者 makefile 编译  
+kpuser 用于编译 kpatch  
 
-将 [manager](/manager) 导入到 AndroidStudio 编译即可
+### 修补 boot.img
 
-## 安装
+参照 [Patch.kt](/app/src/main/java/me/bmax/akpatch/ui/util/Patch.kt) 的内容
 
 ```shell
 # 1. 首先获取你的设备的 boot.img
