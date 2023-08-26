@@ -4,7 +4,7 @@
 
 导入此项目到 AndroidStudio 编译安装，里面提供了修补 boot.img 和导出 kpatch 的功能
 
-## 一步步自己操作
+## 或者一步步自己操作
 
 ### 编译 bootimgtools
 

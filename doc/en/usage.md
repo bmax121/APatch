@@ -4,7 +4,7 @@
 
 Import this project into AndroidStudio for compilation and installation. It provides functions for patching boot.img and exporting kpatch.
 
-## Step-by-step Manual Operation
+## Alternatively, Step-by-step Manual Operation
 
 ### Compiling bootimgtools
 
