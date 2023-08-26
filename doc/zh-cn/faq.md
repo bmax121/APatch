@@ -12,7 +12,7 @@ AKP 依赖 KP，KP 修补内核镜像，向内核空间注入代码，能够完�
 ## AKP 是如何 root 的
 
 Root 是 KP 提供的功能。  
-KP 修改 cred 将 uid 全都置 0，capability 全置为 1，selinux 通过 hook 使 task 用于所有权限。  
+KP 修改 cred 将 uid 全都置 0，capability 全置为 1，selinux 通过 hook 绕过。  
 KP Hook 系统调用来将此能力提供给用户空间，这个系统调用被称作 SuperCall。   
 SuperCall 的调用需要传入一个凭证，此凭证被称作 SuperKey，SuperCall 只有 SuperKey 正确的情况下才能调用成功，SuperKey 错误调用者无感。  
 

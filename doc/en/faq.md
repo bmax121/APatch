@@ -11,11 +11,10 @@ If you want to learn more, you can visit [KernelPatch](https://github.com/bmax12
 
 ## How does AKP root?
 
-Root access is a feature provided by KP.  
-KP modifies the "cred" structure to set the UID to 0 (root user) and all capabilities to 1.   
-Additionally, it utilizes SELinux hooks to grant tasks access to all permissions.  
-KP hooks into system calls to provide this capability to user-space, and this system call is referred to as SuperCall.   
-To invoke SuperCall, a credential is required, known as the SuperKey. Successful invocation of SuperCall depends on the correctness of the SuperKey. If the SuperKey is incorrect, the caller remains unaffected.
+Root is a functionality provided by KP.  
+KP modifies the `cred` structure to set all UIDs to 0, and sets all capabilities to 1. SELinux is bypassed through hooks.  
+KP hooks system calls to provide this capability to user space, and this system call is referred to as SuperCall.   
+Invoking SuperCall requires passing a credential, known as the SuperKey. SuperCall can only be successfully invoked when the SuperKey is correct; if the SuperKey is incorrect, the caller remains unaffected.  
 
 ## How to invoke the su command?
 
