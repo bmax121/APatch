@@ -33,6 +33,8 @@ It is still in the early stages, and many features have not been implemented yet
 
 ## Discussions
 
+- Telegram Group: https://t.me/+B5aYwCw4tY9hOWI9
+
 ## More Information
 
 [FAQ](./doc/en/faq.md)  
