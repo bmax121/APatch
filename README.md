@@ -14,7 +14,7 @@ Want to learn more? Visit [KernelPatch](https://github.com/bmax121/KernelPatch/)
 
 Same as KernelPatch.
 
-Linux 3.18 - 6.1 (theoretically)  
+Android Kernel Version 3.18 - 6.1 
 
 ## Development Status
 

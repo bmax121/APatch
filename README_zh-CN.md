@@ -12,7 +12,7 @@ AndroidKernelPatch 依赖 [KernelPatch](https://github.com/bmax121/KernelPatch/)
 
 当前只支持 arm64
 
-Linux 3.18 - 6.1 (理论上)  
+Android内核版本 3.18 - 6.1 
 
 ## 开发状态
 
