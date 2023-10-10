@@ -14,10 +14,7 @@ Want to learn more? Visit [KernelPatch](https://github.com/bmax121/KernelPatch/)
 
 Same as KernelPatch.
 
-Currently only supports arm64.
-
-Linux 3.8 - 6.2 (theoretically)  
-Linux 6.3+ (not yet adapted)  
+Linux 3.18 - 6.1 (theoretically)  
 
 ## Development Status
 
@@ -37,7 +34,7 @@ It is still in the early stages, and many features have not been implemented yet
 ## Credits
 
 - [KernelPatch](https://github.com/bmax121/KernelPatch/): The core.  
-- [Magisk](https://github.com/topjohnwu/Magisk): Used their code for unpacking and repacking boot.img. SELinux support. (todo)
+- [Magisk](https://github.com/topjohnwu/Magisk): Unpacking and repacking boot.img, and SELinux support. (todo)
 - [KernelSU](https://github.com/tiann/KernelSU): The Android UI, and The module support. (In developing ...)
 
 ## License

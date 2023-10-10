@@ -10,12 +10,9 @@ AndroidKernelPatch 依赖 [KernelPatch](https://github.com/bmax121/KernelPatch/)
 
 ## 支持情况
 
-同 KernelPatch
-
 当前只支持 arm64
 
-Linux 3.8 - 6.2 (理论上)  
-Linux 6.3+ (暂未适配)  
+Linux 3.18 - 6.1 (理论上)  
 
 ## 开发状态
 
@@ -33,7 +30,7 @@ Linux 6.3+ (暂未适配)
 ## 鸣谢
 
 - [KernelPatch](https://github.com/bmax121/KernelPatch/): 核心
-- [Magisk](https://github.com/topjohnwu/Magisk): 使用其代码用于解包，重打包 boot.img。SELinux 支持（待开发）
+- [Magisk](https://github.com/topjohnwu/Magisk): 解包重打包boot.img。SELinux 支持（待开发）
 - [KernelSU](https://github.com/tiann/KernelSU): Android App 界面和模块支持. (正在开发中)
 
 ## License
