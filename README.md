@@ -19,20 +19,11 @@ Currently only supports arm64.
 Linux 3.8 - 6.2 (theoretically)  
 Linux 6.3+ (not yet adapted)  
 
-Pixel2xl-Android10, Linux 4.4.210 (tested before)  
-Pixel3xl-Android12, Linux 4.9.270 (tested)  
-Pixel4xl-Android13, Linux 4.14.276 (tested)  
-Oneplus8T-Android13, Linux 4.19.157 (tested before)  
-Pixel6-Android13, Linux 5.10.157 (tested)  
-emulator, Linux 5.15.41 (tested)
-
 ## Development Status
 
 It is still in the early stages, and many features have not been implemented yet.
 
 ## Get Help
-
- [https://t.me/bmax121](https://t.me/bmax121) 
 
 ## Discussions
 
@@ -46,7 +37,8 @@ It is still in the early stages, and many features have not been implemented yet
 ## Credits
 
 - [KernelPatch](https://github.com/bmax121/KernelPatch/): The core.  
-- [Magisk](https://github.com/topjohnwu/Magisk): Used their code for unpacking and repacking boot.img.
+- [Magisk](https://github.com/topjohnwu/Magisk): Used their code for unpacking and repacking boot.img. SELinux support. (todo)
+- [KernelSU](https://github.com/tiann/KernelSU): The Android UI, and The module support. (In developing ...)
 
 ## License
 

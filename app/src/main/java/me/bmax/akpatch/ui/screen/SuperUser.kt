@@ -16,7 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import me.bmax.akpatch.Natives
+import me.bmax.akpatch.KPNatives
 import me.bmax.akpatch.R
 import me.bmax.akpatch.ui.component.SearchAppBar
 import me.bmax.akpatch.ui.util.extractKpatch
@@ -140,7 +140,7 @@ fun ExtractKpatchCard() {
                     .wrapContentWidth()
                     .clickable {
                         Thread(Runnable {
-                            if (Natives.makeMeSu() != 0L) {
+                            if (KPNatives.makeMeSu() != 0L) {
                                 succ = false
                                 showResultDialog = true
                                 return@Runnable

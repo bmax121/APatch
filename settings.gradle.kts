@@ -19,3 +19,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "AKPatch"
 include(":app")
+//include(":native")

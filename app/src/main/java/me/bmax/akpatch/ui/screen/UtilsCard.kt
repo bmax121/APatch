@@ -33,7 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import me.bmax.akpatch.Natives
+import me.bmax.akpatch.KPNatives
 import me.bmax.akpatch.R
 import me.bmax.akpatch.ui.component.InputDialog
 import me.bmax.akpatch.ui.screen.destinations.InstallScreenDestination
@@ -83,7 +83,7 @@ fun ExtractExeCard() {
                         showDialog = false
                         Thread(Runnable {
 
-                            if(Natives.makeMeSu() != 0L) {
+                            if(KPNatives.makeMeSu() != 0L) {
                                 succ = false
                                 showResultDialog = true
                                 return@Runnable
@@ -244,7 +244,7 @@ fun GrantPidSuCard() {
                     onClick = {
                         showPidDialog = false
                         val tid: Int = tidStr.value.toIntOrNull() ?: return@TextButton
-                        val ret = Natives.threadSu(tid)
+                        val ret = KPNatives.threadSu(tid, null)
                         succ = ret == 0L
                         showResultDialog = true
                     }

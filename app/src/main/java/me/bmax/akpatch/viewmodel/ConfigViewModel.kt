@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import me.bmax.akpatch.Natives
+import me.bmax.akpatch.KPNatives
 import me.bmax.akpatch.pApp
 
 class ConfigViewModel() : ViewModel() {

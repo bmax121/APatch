@@ -40,7 +40,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import me.bmax.akpatch.Natives
+import me.bmax.akpatch.KPNatives
 import me.bmax.akpatch.R
 import me.bmax.akpatch.ui.screen.destinations.SettingScreenDestination
 import me.bmax.akpatch.ui.util.*
@@ -105,7 +105,7 @@ private fun StatusCard(superKey: String) {
             .fillMaxWidth()
             .padding(24.dp), verticalAlignment = Alignment.CenterVertically) {
             when {
-                Natives.installed(superKey) -> {
+                KPNatives.installed(superKey) -> {
                     val appendText = ""
                     Icon(Icons.Outlined.CheckCircle, stringResource(R.string.home_working))
                     Column(Modifier.padding(start = 20.dp)) {
@@ -115,7 +115,7 @@ private fun StatusCard(superKey: String) {
                         )
                         Spacer(Modifier.height(4.dp))
                         Text(
-                            text = stringResource(R.string.home_working_version, Natives.kernelPatchVersion()),
+                            text = stringResource(R.string.home_working_version, KPNatives.kernelPatchVersion()),
                             style = MaterialTheme.typography.bodyMedium
                         )
                     }
@@ -151,7 +151,7 @@ fun SuperKeyCard(superKey: MutableState<String>) {
     val configViewModel: ConfigViewModel = viewModel()
     val defSkey = configViewModel.load("skey")
     superKey.value = defSkey
-    Natives.setSuperKey(defSkey)
+    KPNatives.setSuperKey(defSkey)
 
     val context = LocalContext.current
 
@@ -194,12 +194,12 @@ fun SuperKeyCard(superKey: MutableState<String>) {
                                 newText ->
                             run {
                                 superKey.value = newText
-                                if(Natives.installed(newText)) {
+                                if(KPNatives.installed(newText)) {
                                     Log.d(TAG, "Android Kernel Patch Installed!")
                                     authShowDialog = true
                                     superKey.value = newText
                                     focusManager.clearFocus()
-                                    Natives.setSuperKey(newText)
+                                    KPNatives.setSuperKey(newText)
                                     configViewModel.put("skey", newText)
 //                                    context.startService(Intent(context, LogService::class.java))
                                 }

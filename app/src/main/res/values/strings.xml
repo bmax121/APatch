@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">AKPatch ( Pre-alpha ) </string>
+    <string name="app_name" translatable="false">AKPatch (alpha) </string>
     <string name="super_key">SuperKey：</string>
     <string name="click_install">Install</string>
     <string name="super_key_hint">Start after typing</string>

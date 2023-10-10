@@ -17,20 +17,11 @@ AndroidKernelPatch 依赖 [KernelPatch](https://github.com/bmax121/KernelPatch/)
 Linux 3.8 - 6.2 (理论上)  
 Linux 6.3+ (暂未适配)  
 
-Pixel2xl-Android10, Linux 4.4.210 (以前测试过)  
-Pixel3xl-Android12, Linux 4.9.270 (测试过)  
-Pixel4xl-Android13, Linux 4.14.276 (测试过)  
-Oneplus8T-Android13, Linux 4.19.157 (以前测试过)  
-Pixel6-Android12, Linux 5.10.81 (测试过)  
-emulator, Linux 5.15.41 (测试过)
-
 ## 开发状态
 
 还比较初期，很多功能还没做
 
 ## 获取帮助
-
-[https://t.me/bmax121](https://t.me/bmax121) 
 
 ## 讨论
 
@@ -42,7 +33,8 @@ emulator, Linux 5.15.41 (测试过)
 ## 鸣谢
 
 - [KernelPatch](https://github.com/bmax121/KernelPatch/): 核心
-- [Magisk](https://github.com/topjohnwu/Magisk): 使用其代码用于解包，重打包 boot.img
+- [Magisk](https://github.com/topjohnwu/Magisk): 使用其代码用于解包，重打包 boot.img。SELinux 支持（待开发）
+- [KernelSU](https://github.com/tiann/KernelSU): Android App 界面和模块支持. (正在开发中)
 
 ## License
 

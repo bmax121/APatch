@@ -93,7 +93,7 @@ fun patchBootimg(uri: Uri, superKey: String, onMessage: (String) -> Unit): Int {
     onMessage("work_dir: ${workDir.absolutePath}")
 
     // todo, version
-    val version = 100
+    val version = 200
     val patchedImgFile = "${workDir.absolutePath}/akp_${version}_${superKey}_${time.time/1000}_boot.img"
 
     // copy boot.img to workDir

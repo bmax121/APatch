@@ -148,8 +148,8 @@ tasks.register("redirectKpuser") {
 
 tasks.getByName("preBuild").dependsOn(
     "downloadKpimg",
-    "unzipKptools",
-    "unzipKpuser",
+//    "unzipKptools",
+//    "unzipKpuser",
     "redirectKptools",
     "redirectKpuser"
 )

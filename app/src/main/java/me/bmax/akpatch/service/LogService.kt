@@ -4,7 +4,7 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
-import me.bmax.akpatch.Natives
+import me.bmax.akpatch.KPNatives
 import me.bmax.akpatch.TAG
 import java.io.BufferedReader
 import java.io.File
@@ -19,8 +19,8 @@ class LogService(): Service() {
 
     override fun onCreate() {
         super.onCreate()
-        if(Natives.installed()) {
-            if(Natives.makeMeSu() == 0L) {
+        if(KPNatives.installed()) {
+            if(KPNatives.makeMeSu() == 0L) {
                 isRoot = true
                 Log.d(TAG, "LogService start in root mode ...")
                 startKernelLog()
