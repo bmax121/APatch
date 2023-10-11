@@ -17,7 +17,7 @@ Android Kernel Version 3.18 - 6.1
 
 ## Development Status
 
-It is still in the early stages, and many features have not been implemented yet.
+** It is still in the early stages, and many features have not been implemented yet. currently unavailable. **
 
 ## Get Help
 
