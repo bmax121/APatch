@@ -2,6 +2,10 @@
 
 Patching, hooking, and rooting the Android kernel using only a stripped Linux kernel image.
 
+# su has been implemented and can be downloaded from KernelPatch release. The module is under development and this app is also under development
+# su已实现，可到 KernelPatch release 中下载。模块开发中，此app也在开发中
+
+
 **English** | [简体中文](README_zh-CN.md)
 
 AndroidKernelPatch relies on [KernelPatch](https://github.com/bmax121/KernelPatch/)  and is the Android version of KernelPatch.
