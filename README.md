@@ -2,15 +2,12 @@
 
 Patching, hooking, and rooting the Android kernel using only a stripped Linux kernel image.
 
-# Coming soon ...
+# Coming soon ...  
 
 # SU and KPM has been implemented and can be downloaded from KernelPatch release.   
 
-**English** | [简体中文](README_zh-CN.md)
 
-AndroidKernelPatch relies on [KernelPatch](https://github.com/bmax121/KernelPatch/)  and is the Android version of KernelPatch.
-
-Not limited to rooting, AndroidKernelPatch can patch the kernel and inject arbitrary code into it even without source code or symbol information.
+APatch relies on [KernelPatch](https://github.com/bmax121/KernelPatch/) 
 
 Want to learn more? Visit [KernelPatch](https://github.com/bmax121/KernelPatch/) .
 
@@ -18,10 +15,6 @@ Want to learn more? Visit [KernelPatch](https://github.com/bmax121/KernelPatch/)
 
 Only arm64.  
 Android Kernel Version 3.18 - 6.1 
-
-## Development Status
-
-** It is still in the early stages, and many features have not been implemented yet. currently unavailable. **
 
 ## Get Help
 
@@ -42,4 +35,4 @@ Android Kernel Version 3.18 - 6.1
 
 ## License
 
-AndroidKernelPatch is licensed under the GNU General Public License v3 (GPL-3) (http://www.gnu.org/copyleft/gpl.html).
+APatch is licensed under the GNU General Public License v3 (GPL-3) (http://www.gnu.org/copyleft/gpl.html).
