@@ -1,3 +1,0 @@
-#!/bin/sh
-
-exec "$srcdir/test_compress.sh" compress_generated_random
