@@ -2,9 +2,9 @@
 
 Patching, hooking, and rooting the Android kernel using only a stripped Linux kernel image.
 
-# su has been implemented and can be downloaded from KernelPatch release. The module is under development and this app is also under development
-# su已实现，可到 KernelPatch release 中下载。模块开发中，此app也在开发中
+# Coming soon ...
 
+# SU and KPM has been implemented and can be downloaded from KernelPatch release.   
 
 **English** | [简体中文](README_zh-CN.md)
 
@@ -37,7 +37,7 @@ Android Kernel Version 3.18 - 6.1
 ## Credits
 
 - [KernelPatch](https://github.com/bmax121/KernelPatch/): The core.  
-- [Magisk](https://github.com/topjohnwu/Magisk): Unpacking and repacking boot.img, and SELinux support. (todo)
+- [Magisk](https://github.com/topjohnwu/Magisk): Unpacking and repacking boot.img, and SELinux support. 
 - [KernelSU](https://github.com/tiann/KernelSU): The Android UI, and The module support. (In developing ...)
 
 ## License

@@ -1,6 +1,0 @@
-/dts-v1/;
-/ {
-	foonode {
-		foo-property = "foo";
-	};
-};
