@@ -37,8 +37,8 @@ Android Kernel Version 3.18 - 6.1
 ## Credits
 
 - [KernelPatch](https://github.com/bmax121/KernelPatch/): The core.  
-- [Magisk](https://github.com/topjohnwu/Magisk): Unpacking and repacking boot.img, and SELinux support. 
-- [KernelSU](https://github.com/tiann/KernelSU): The Android UI, and The module support. (In developing ...)
+- [Magisk](https://github.com/topjohnwu/Magisk): Some script and magiskboot and magiskpolicy. 
+- [KernelSU](https://github.com/tiann/KernelSU): App UI, and module support.
 
 ## License
 

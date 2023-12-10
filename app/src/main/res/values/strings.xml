@@ -1,0 +1,100 @@
+<resources>
+    <string name="app_name" translatable="false">APatch</string>
+
+    <string name="home">Home</string>
+
+<!--    patch -->
+    <string name="super_key">SuperKey</string>
+    <string name="set_key_title">Set SuperKey</string>
+    <string name="set_key_desc">Only credential for KernelPatch</string>
+    <string name="next_step">Next Step</string>
+
+
+    <string name="kernel_patch">KernelPatch</string>
+    <string name="android_patch">AndroidPatch</string>
+    <string name="home_not_installed">Not installed</string>
+    <string name="home_install_unknown">Unknown</string>
+    <string name="home_click_to_install">Click to install</string>
+    <string name="working">Working</string>
+    <string name="home_working_version">ver: %d.%d.%d</string>
+    <string name="home_su_path">su: %s</string>
+    <string name="home_apatch_version">APatch: %s</string>
+    <string name="home_superuser_count">Superusers: %d</string>
+    <string name="home_module_count">Modules: %d</string>
+    <string name="home_unsupported">Unsupported</string>
+    <string name="home_unsupported_reason">APatch only supports GKI kernels now</string>
+
+    <string name="home_kernel">Kernel</string>
+    <string name="home_manager_version">Manager Version</string>
+    <string name="home_fingerprint">Fingerprint</string>
+
+    <string name="home_selinux_status">SELinux status</string>
+    <string name="selinux_status_disabled">Disabled</string>
+    <string name="selinux_status_enforcing">Enforcing</string>
+    <string name="selinux_status_permissive">Permissive</string>
+    <string name="selinux_status_unknown">Unknown</string>
+    <string name="superuser">Superuser</string>
+    <string name="module_failed_to_enable">Failed to enable module: %s</string>
+    <string name="module_failed_to_disable">Failed to disable module: %s</string>
+    <string name="module_empty">No module installed</string>
+
+    <string name="module">Module</string>
+    <string name="uninstall">Uninstall</string>
+    <string name="module_install">Install</string>
+    <string name="install">Install</string>
+    <string name="reboot">Reboot</string>
+    <string name="settings">Settings</string>
+    <string name="reboot_userspace">Soft Reboot</string>
+    <string name="reboot_recovery">Reboot to Recovery</string>
+    <string name="reboot_bootloader">Reboot to Bootloader</string>
+    <string name="reboot_download">Reboot to Download</string>
+    <string name="reboot_edl">Reboot to EDL</string>
+    <string name="about">About</string>
+    <string name="module_uninstall_confirm">Are you sure you want to uninstall module %s?</string>
+    <string name="module_uninstall_success">%s uninstalled</string>
+    <string name="module_uninstall_failed">Failed to uninstall: %s</string>
+    <string name="module_version">Version</string>
+    <string name="module_author">Author</string>
+    <string name="module_overlay_fs_not_available">overlayfs is not available, module cannot work!</string>
+    <string name="refresh">Refresh</string>
+    <string name="show_system_apps">Show system apps</string>
+    <string name="hide_system_apps">Hide system apps</string>
+    <string name="send_log">Send Log</string>
+    <string name="safe_mode">Safe mode</string>
+    <string name="reboot_to_apply">Reboot to take effect</string>
+    <string name="module_magisk_conflict">Modules are disabled because it is conflict with Magisk\'s!</string>
+    <string name="home_learn_kernelsu">Learn APatch</string>
+    <string name="home_learn_kernelsu_url">https://kernelsu.org/guide/what-is-kernelsu.html</string>
+    <string name="home_click_to_learn_kernelsu">Learn how to install APatch and use modules</string>
+    <string name="home_support_title">Support Us</string>
+    <string name="home_support_content">APatch is, and always will be, free, and open source. You can however show us that you care by making a donation.</string>
+    <string name="about_source_code"><![CDATA[View source code at %1$s<br/>Join our %2$s channel]]></string>
+    <string name="profile" translatable="false">App Profile</string>
+    <string name="profile_default">Default</string>
+    <string name="profile_template">Template</string>
+    <string name="profile_custom">Custom</string>
+    <string name="profile_name">Profile name</string>
+    <string name="profile_namespace">Mount namespace</string>
+    <string name="profile_namespace_inherited">Inherited</string>
+    <string name="profile_namespace_global">Global</string>
+    <string name="profile_namespace_individual">Individual</string>
+    <string name="profile_groups">Groups</string>
+    <string name="profile_capabilities">Capabilities</string>
+    <string name="profile_selinux_context">SELinux context</string>
+    <string name="profile_umount_modules">Umount modules</string>
+    <string name="failed_to_update_app_profile">Failed to update App Profile for %s</string>
+    <string name="settings_umount_modules_default">Umount modules by default</string>
+    <string name="settings_umount_modules_default_summary">The global default value for \"Umount modules\" in App Profiles. If enabled, it will remove all module modifications to the system for applications that do not have a Profile set.</string>
+    <string name="profile_umount_modules_summary">Enabling this option will allow APatch to restore any modified files by the modules for this application.</string>
+    <string name="profile_selinux_domain">Domain</string>
+    <string name="profile_selinux_rules">Rules</string>
+    <string name="module_update">Update</string>
+    <string name="module_downloading">Downloading module: %s</string>
+    <string name="module_start_downloading">Start downloading: %s</string>
+    <string name="new_version_available">New version: %s is available, click to upgrade</string>
+    <string name="launch_app">Launch</string>
+    <string name="force_stop_app">Force Stop</string>
+    <string name="restart_app">Restart</string>
+    <string name="failed_to_update_sepolicy">Failed to update SELinux rules for: %s</string>
+    <string name="module_changelog">Changelog</string>
+</resources>
