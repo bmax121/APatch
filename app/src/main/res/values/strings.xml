@@ -16,7 +16,7 @@
     <string name="home_install_unknown">Unknown</string>
     <string name="home_click_to_install">Click to install</string>
     <string name="working">Working</string>
-    <string name="home_working_version">ver: %d.%d.%d</string>
+    <string name="home_working_version">version: %d.%d.%d</string>
     <string name="home_su_path">su: %s</string>
     <string name="home_apatch_version">APatch: %s</string>
     <string name="home_superuser_count">Superusers: %d</string>

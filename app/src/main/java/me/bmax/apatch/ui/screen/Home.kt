@@ -58,6 +58,7 @@ import me.bmax.apatch.ui.screen.destinations.PatchScreenDestination
 import me.bmax.apatch.util.LocalDialogHost
 import me.bmax.apatch.util.reboot
 import me.bmax.apatch.ui.screen.destinations.SettingScreenDestination
+import kotlin.concurrent.thread
 
 @RootNavGraph(start = true)
 @Destination
@@ -79,15 +80,10 @@ fun HomeScreen(navigator: DestinationsNavigator) {
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            val isManager = true
-            SideEffect {
-                // todo:
-//                if (isManager) install()
-            }
             KStatusCard()
+            AStatusCard()
             UpdateCard()
             InfoCard()
-//            DonateCard()
             LearnMoreCard()
             Spacer(Modifier)
             ConfirmDialog()
@@ -209,7 +205,7 @@ fun StartPatch(showDialog: MutableState<Boolean>, navigator: DestinationsNavigat
 
 @Composable
 fun FloatButton(navigator: DestinationsNavigator) {
-    val ready by APApplication.readyLiveData.observeAsState(initial = false)
+    val state by APApplication.apStateLiveData.observeAsState()
 
     var patchOff by remember { mutableStateOf(IntOffset.Zero) }
     var skeyOff by remember { mutableStateOf(IntOffset.Zero) }
@@ -255,14 +251,14 @@ fun FloatButton(navigator: DestinationsNavigator) {
         ) {
             ExtendedFloatingActionButton(
                 onClick = {
-                    if(ready) {
+                    if(state != APApplication.ApState.UNKNOWN) {
                         apApp.updateSuperKey("")
                     } else {
                         showAuthKeyDialog.value = true
                     }
                 },
-                icon = { Icon(Icons.Filled.Key, "key") },
-                text = { Text(text = if(ready) "clear" else "sky" )},
+                icon = { Icon(Icons.Filled.Key, "skey") },
+                text = { Text(text = if(state != APApplication.ApState.UNKNOWN) "Clear" else "SuperKey" )},
             )
         }
     }
@@ -356,7 +352,9 @@ private fun TopBar(onSettingsClick: () -> Unit) {
 
 @Composable
 private fun KStatusCard() {
-    val ready by APApplication.readyLiveData.observeAsState(initial = false)
+    val state by APApplication.apStateLiveData.observeAsState()
+    Log.d(TAG, state.toString())
+
     ElevatedCard(
         colors = CardDefaults.elevatedCardColors(containerColor = run {
             MaterialTheme.colorScheme.secondaryContainer
@@ -372,7 +370,7 @@ private fun KStatusCard() {
                 .fillMaxWidth()
                 .padding(6.dp), verticalAlignment = Alignment.CenterVertically) {
                 when {
-                    ready -> {
+                    state == APApplication.ApState.KERNELPATCH_READY  -> {
                         val appendText = ""
                         val kernelPatchVersion = Natives.kerenlPatchVersion()
                         Icon(Icons.Outlined.CheckCircle, stringResource(R.string.working))
@@ -410,6 +408,66 @@ private fun KStatusCard() {
 
     }
 }
+
+@Composable
+private fun AStatusCard() {
+    val state by APApplication.apStateLiveData.observeAsState()
+
+    ElevatedCard(
+        colors = CardDefaults.elevatedCardColors(containerColor = run {
+            MaterialTheme.colorScheme.secondaryContainer
+        })
+    ) {
+        Column(modifier = Modifier
+            .fillMaxWidth()
+            .padding(6.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(text = stringResource(R.string.android_patch),
+                style = MaterialTheme.typography.titleMedium
+            )
+            Row(modifier = Modifier
+                .fillMaxWidth()
+                .padding(6.dp), verticalAlignment = Alignment.CenterVertically) {
+                when {
+                    state == APApplication.ApState.KERNELPATCH_READY -> {
+                        val appendText = ""
+                        val kernelPatchVersion = Natives.kerenlPatchVersion()
+                        Icon(Icons.Outlined.CheckCircle, stringResource(R.string.working))
+                        Column(Modifier.padding(start = 20.dp)) {
+                            Text(
+                                text = stringResource(R.string.working) + appendText,
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                            Spacer(Modifier.height(6.dp))
+                            Text(
+                                text = stringResource(R.string.home_working_version, kernelPatchVersion.and(0xff0000).shr(16),
+                                    kernelPatchVersion.and(0xff00).shr(8), kernelPatchVersion.and(0xff)),
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                            Spacer(Modifier.height(6.dp))
+                            Text(
+                                text = stringResource(R.string.home_su_path, Natives.suPath()),
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
+                    }
+                    else -> {
+                        Icon(Icons.Outlined.Warning, "")
+                        Column(Modifier.padding(start = 20.dp)) {
+                            Text(
+                                text = stringResource(R.string.home_install_unknown),
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                            Spacer(Modifier.height(4.dp))
+                        }
+                    }
+                }
+                Text(text = "aaaaaaa")
+            }
+        }
+
+    }
+}
+
 
 
 @Composable
@@ -455,33 +513,6 @@ fun LearnMoreCard() {
                 Spacer(Modifier.height(4.dp))
                 Text(
                     text = stringResource(R.string.home_click_to_learn_kernelsu),
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun DonateCard() {
-    val uriHandler = LocalUriHandler.current
-
-    ElevatedCard {
-
-        Row(modifier = Modifier
-            .fillMaxWidth()
-            .clickable {
-                uriHandler.openUri("https://xxx")
-            }
-            .padding(24.dp), verticalAlignment = Alignment.CenterVertically) {
-            Column() {
-                Text(
-                    text = stringResource(R.string.home_support_title),
-                    style = MaterialTheme.typography.titleSmall
-                )
-                Spacer(Modifier.height(4.dp))
-                Text(
-                    text = stringResource(R.string.home_support_content),
                     style = MaterialTheme.typography.bodyMedium
                 )
             }

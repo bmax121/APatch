@@ -90,7 +90,6 @@ pub fn mount_systemlessly(module_dir: &str) -> Result<()> {
 }
 
 pub fn on_post_data_fs() -> Result<()> {
-    crate::ksu::report_post_fs_data();
 
     utils::umask(0);
 
@@ -226,7 +225,6 @@ pub fn on_services() -> Result<()> {
 }
 
 pub fn on_boot_completed() -> Result<()> {
-    crate::ksu::report_boot_complete();
     info!("on_boot_completed triggered!");
     let module_update_img = Path::new(defs::MODULE_UPDATE_IMG);
     let module_img = Path::new(defs::MODULE_IMG);

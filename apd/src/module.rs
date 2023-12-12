@@ -3,7 +3,6 @@ use crate::utils::*;
 use crate::{
     assets, defs, mount,
     restorecon::{restore_syscon, setsyscon},
-    sepolicy,
 };
 
 use anyhow::{anyhow, bail, ensure, Context, Result};
@@ -39,6 +38,8 @@ fn exec_install_script(module_file: &str) -> Result<()> {
     let realpath = std::fs::canonicalize(module_file)
         .with_context(|| format!("realpath: {module_file} failed"))?;
 
+
+
     let result = Command::new(assets::BUSYBOX_PATH)
         .args(["sh", "-c", INSTALL_MODULE_SCRIPT])
         .env("ASH_STANDALONE", "1")
@@ -50,8 +51,8 @@ fn exec_install_script(module_file: &str) -> Result<()> {
                 defs::BINARY_DIR.trim_end_matches('/')
             ),
         )
-        .env("KSU", "true")
-        .env("KSU_KERNEL_VER_CODE", crate::ksu::get_version().to_string())
+        .env("APATCH", "true")
+        .env("KSU_KERNEL_VER_CODE", crate::apd::get_version().to_string())
         .env("KSU_VER", defs::VERSION_NAME)
         .env("KSU_VER_CODE", defs::VERSION_CODE)
         .env("OUTFD", "1")
@@ -189,10 +190,12 @@ pub fn load_sepolicy_rule() -> Result<()> {
             return Ok(());
         }
         info!("load policy: {}", &rule_file.display());
+        
+        //todo: magiskpolicy
 
-        if sepolicy::apply_file(&rule_file).is_err() {
-            warn!("Failed to load sepolicy.rule for {}", &rule_file.display());
-        }
+        // if sepolicy::apply_file(&rule_file).is_err() {
+        //     warn!("Failed to load sepolicy.rule for {}", &rule_file.display());
+        // }
         Ok(())
     })?;
 
@@ -220,7 +223,7 @@ fn exec_script<T: AsRef<Path>>(path: T, wait: bool) -> Result<()> {
         .arg(path.as_ref())
         .env("ASH_STANDALONE", "1")
         .env("KSU", "true")
-        .env("KSU_KERNEL_VER_CODE", crate::ksu::get_version().to_string())
+        .env("KSU_KERNEL_VER_CODE", crate::apd::get_version().to_string())
         .env("KSU_VER_CODE", defs::VERSION_CODE)
         .env("KSU_VER", defs::VERSION_NAME)
         .env(

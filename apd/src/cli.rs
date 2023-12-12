@@ -1,4 +1,4 @@
-use anyhow::{Ok, Result};
+use anyhow::Result;
 use clap::Parser;
 
 #[cfg(target_os = "android")]
@@ -6,7 +6,7 @@ use android_logger::Config;
 #[cfg(target_os = "android")]
 use log::LevelFilter;
 
-use crate::{apk_sign, debug, defs, event, module, utils};
+use crate::{defs, event, module, utils};
 
 /// APatch cli
 #[derive(Parser, Debug)]
@@ -35,12 +35,6 @@ enum Commands {
 
     /// Install APatch userspace component to system
     Install,
-
-    /// For developers
-    Debug {
-        #[command(subcommand)]
-        command: Debug,
-    },
 }
 #[derive(clap::Subcommand, Debug)]
 enum Debug {
@@ -174,7 +168,7 @@ pub fn run() -> Result<()> {
     // the kernel executes su with argv[0] = "su" and replace it with us
     let arg0 = std::env::args().next().unwrap_or_default();
     if arg0 == "/system/bin/sh" {
-        return crate::ksu::root_shell();
+        return crate::apd::root_shell();
     }
 
     let cli = Args::parse();
@@ -205,21 +199,6 @@ pub fn run() -> Result<()> {
 
         Commands::Services => event::on_services(),
 
-        Commands::Debug { command } => match command {
-            Debug::SetManager { apk } => debug::set_manager(&apk),
-            Debug::GetSign { apk } => {
-                let sign = apk_sign::get_apk_signature(&apk)?;
-                println!("size: {:#x}, hash: {}", sign.0, sign.1);
-                Ok(())
-            }
-            Debug::Version => {
-                println!("Kernel Version: {}", crate::ksu::get_version());
-                Ok(())
-            }
-            Debug::Su => crate::ksu::grant_root(),
-            Debug::Mount => event::mount_systemlessly(defs::MODULE_DIR),
-            Debug::Test => todo!(),
-        },
     };
 
     if let Err(e) = &result {

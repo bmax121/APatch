@@ -5,6 +5,12 @@ object Natives {
         System.loadLibrary("apjni")
     }
 
+    private external fun nativeSu(superKey: String, to_uid: Int, scontext: String? ): Int
+
+    fun su(to_uid: Int, scontext: String?): Boolean {
+        return nativeSu(APApplication.superKey, to_uid, scontext) == 0
+    }
+
     external fun nativeReady(superKey: String): Boolean
 
     private external fun nativeSuPath(superKey: String): String
@@ -13,7 +19,6 @@ object Natives {
         return nativeSuPath(APApplication.superKey)
     }
 
-    external fun nativeKernelVersion(superKey: String): Long
     private external fun nativeKernelPatchVersion(superKey: String): Long
     fun kerenlPatchVersion(): Long {
         return nativeKernelPatchVersion(APApplication.superKey)

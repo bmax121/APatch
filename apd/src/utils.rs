@@ -10,6 +10,8 @@ use std::fs::{set_permissions, Permissions};
 #[cfg(unix)]
 use std::os::unix::prelude::PermissionsExt;
 
+use crate::defs;
+
 pub fn ensure_clean_dir(dir: &str) -> Result<()> {
     let path = Path::new(dir);
     log::debug!("ensure_clean_dir: {}", path.display());
@@ -84,7 +86,7 @@ pub fn is_safe_mode() -> bool {
     if safemode {
         return true;
     }
-    let safemode = crate::ksu::check_kernel_safemode();
+    let safemode = Path::new(defs::SAFEMODE_PATH).exists();
     log::info!("kernel_safemode: {}", safemode);
     safemode
 }

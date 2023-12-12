@@ -11,6 +11,8 @@ pub const DAEMON_PATH: &str = concatcp!(ADB_DIR, "apd");
 pub const MAGISK_POLICY_PATH: &str = concatcp!(BINARY_DIR, "magiskpolicy");
 
 #[cfg(target_os = "android")]
+pub const SAFEMODE_PATH: &str = "/dev/._safemode";
+pub const AP_VERSION_PATH: &str = concatcp!(WORKING_DIR, "version");
 pub const DAEMON_LINK_PATH: &str = concatcp!(BINARY_DIR, "apd");
 pub const KPATCH_LINK_PATH: &str = concatcp!(BINARY_DIR, "kpatch");
 pub const SUPOLICY_LINK_PATH: &str = concatcp!(BINARY_DIR, "supolicy");

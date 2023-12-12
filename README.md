@@ -1,4 +1,4 @@
-# AndroidKernelPatch
+# AndroidPatch
 
 Patching, hooking, and rooting the Android kernel using only a stripped Linux kernel image.
 

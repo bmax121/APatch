@@ -11,10 +11,6 @@ import android.os.Environment
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 
-/**
- * @author weishu
- * @date 2023/6/22.
- */
 @SuppressLint("Range")
 fun download(
     context: Context,

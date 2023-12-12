@@ -36,10 +36,6 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
-/**
- * @author weishu
- * @date 2023/1/1.
- */
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 @Destination

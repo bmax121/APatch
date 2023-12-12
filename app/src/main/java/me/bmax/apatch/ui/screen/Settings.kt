@@ -29,14 +29,9 @@ import me.bmax.apatch.ui.component.SwitchItem
 import me.bmax.apatch.util.LocalDialogHost
 import me.bmax.apatch.util.getBugreportFile
 
-/**
- * @author weishu
- * @date 2023/1/1.
- */
 @Destination
 @Composable
 fun SettingScreen(navigator: DestinationsNavigator) {
-
     Scaffold(
         topBar = {
             TopBar(onBack = {
