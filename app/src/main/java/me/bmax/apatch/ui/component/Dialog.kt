@@ -252,7 +252,6 @@ fun PromptDialog(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ConfirmDialog(state: DialogHostState = LocalDialogHost.current) {
     val confirmDialogData = state.currentDialogData.tryInto<ConfirmDialogData>() ?: return

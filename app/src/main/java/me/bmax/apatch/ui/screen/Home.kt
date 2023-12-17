@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Build
 import android.os.PowerManager
 import android.system.Os
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
@@ -23,11 +22,15 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.outlined.AppBlocking
+import androidx.compose.material.icons.outlined.Cached
 import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,35 +38,30 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.round
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import me.bmax.apatch.util.checkNewVersion
 import me.bmax.apatch.util.getSELinuxStatus
 import me.bmax.apatch.*
 import me.bmax.apatch.R
 import me.bmax.apatch.ui.component.ConfirmDialog
-import me.bmax.apatch.ui.component.ConfirmResult
 import me.bmax.apatch.ui.screen.destinations.PatchScreenDestination
-import me.bmax.apatch.util.LocalDialogHost
 import me.bmax.apatch.util.reboot
 import me.bmax.apatch.ui.screen.destinations.SettingScreenDestination
-import kotlin.concurrent.thread
 
 @RootNavGraph(start = true)
 @Destination
 @Composable
 fun HomeScreen(navigator: DestinationsNavigator) {
+    val state by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
+
     Scaffold(topBar = {
         TopBar(onSettingsClick = {
             navigator.navigate(SettingScreenDestination)
@@ -80,9 +78,9 @@ fun HomeScreen(navigator: DestinationsNavigator) {
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            KStatusCard()
-            AStatusCard()
-            UpdateCard()
+            WarningCard()
+            KStatusCard(state)
+            AStatusCard(state)
             InfoCard()
             LearnMoreCard()
             Spacer(Modifier)
@@ -205,7 +203,7 @@ fun StartPatch(showDialog: MutableState<Boolean>, navigator: DestinationsNavigat
 
 @Composable
 fun FloatButton(navigator: DestinationsNavigator) {
-    val state by APApplication.apStateLiveData.observeAsState()
+    val state by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
 
     var patchOff by remember { mutableStateOf(IntOffset.Zero) }
     var skeyOff by remember { mutableStateOf(IntOffset.Zero) }
@@ -251,52 +249,15 @@ fun FloatButton(navigator: DestinationsNavigator) {
         ) {
             ExtendedFloatingActionButton(
                 onClick = {
-                    if(state != APApplication.ApState.UNKNOWN) {
+                    if(state != APApplication.State.UNKNOWN_STATE) {
                         apApp.updateSuperKey("")
                     } else {
                         showAuthKeyDialog.value = true
                     }
                 },
-                icon = { Icon(Icons.Filled.Key, "skey") },
-                text = { Text(text = if(state != APApplication.ApState.UNKNOWN) "Clear" else "SuperKey" )},
+                icon = { Icon(Icons.Filled.Key, "") },
+                text = { Text(text = if(state != APApplication.State.UNKNOWN_STATE) "Clear Key" else "SuperKey" )},
             )
-        }
-    }
-}
-
-@Composable
-fun UpdateCard() {
-    val context = LocalContext.current
-    val newVersion by produceState(initialValue = Triple(0, "", "")) {
-        value = withContext(Dispatchers.IO) { checkNewVersion() }
-    }
-    val currentVersionCode = getManagerVersion(context).second
-    val newVersionCode = newVersion.first
-    val newVersionUrl = newVersion.second
-    val changelog = newVersion.third
-    if (newVersionCode <= currentVersionCode) {
-        return
-    }
-
-    val uriHandler = LocalUriHandler.current
-    val dialogHost = LocalDialogHost.current
-    val title = stringResource(id = R.string.module_changelog)
-    val updateText = stringResource(id = R.string.module_update)
-    val scope = rememberCoroutineScope()
-    WarningCard(
-        message = stringResource(id = R.string.new_version_available).format(newVersionCode),
-        MaterialTheme.colorScheme.outlineVariant
-    ) {
-        scope.launch {
-            if (changelog.isEmpty() || dialogHost.showConfirm(
-                    title = title,
-                    content = changelog,
-                    markdown = true,
-                    confirm = updateText,
-                ) == ConfirmResult.Confirmed
-            ) {
-                uriHandler.openUri(newVersionUrl)
-            }
         }
     }
 }
@@ -326,7 +287,6 @@ private fun TopBar(onSettingsClick: () -> Unit) {
             DropdownMenu(expanded = showDropdown, onDismissRequest = {
                 showDropdown = false
             }) {
-
                 RebootDropdownItem(id = R.string.reboot)
 
                 val pm =
@@ -351,10 +311,7 @@ private fun TopBar(onSettingsClick: () -> Unit) {
 }
 
 @Composable
-private fun KStatusCard() {
-    val state by APApplication.apStateLiveData.observeAsState()
-    Log.d(TAG, state.toString())
-
+private fun KStatusCard(state: APApplication.State) {
     ElevatedCard(
         colors = CardDefaults.elevatedCardColors(containerColor = run {
             MaterialTheme.colorScheme.secondaryContainer
@@ -362,57 +319,63 @@ private fun KStatusCard() {
     ) {
         Column(modifier = Modifier
             .fillMaxWidth()
-            .padding(6.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(text = stringResource(R.string.kernel_patch),
-                style = MaterialTheme.typography.titleMedium
-            )
+            .padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+            Row {
+                Text(text = stringResource(R.string.kernel_patch),
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
             Row(modifier = Modifier
                 .fillMaxWidth()
                 .padding(6.dp), verticalAlignment = Alignment.CenterVertically) {
                 when {
-                    state == APApplication.ApState.KERNELPATCH_READY  -> {
-                        val appendText = ""
+                    !state.equals(APApplication.State.UNKNOWN_STATE) -> {
                         val kernelPatchVersion = Natives.kerenlPatchVersion()
-                        Icon(Icons.Outlined.CheckCircle, stringResource(R.string.working))
-                        Column(Modifier.padding(start = 20.dp)) {
-                            Text(
-                                text = stringResource(R.string.working) + appendText,
+                        Column() {
+                            Text(text = stringResource(R.string.working),
                                 style = MaterialTheme.typography.titleMedium
                             )
                             Spacer(Modifier.height(6.dp))
-                            Text(
-                                text = stringResource(R.string.home_working_version, kernelPatchVersion.and(0xff0000).shr(16),
+                            Text(text = stringResource(R.string.kpatch_version, kernelPatchVersion.and(0xff0000).shr(16),
                                     kernelPatchVersion.and(0xff00).shr(8), kernelPatchVersion.and(0xff)),
                                 style = MaterialTheme.typography.bodyMedium
                             )
                             Spacer(Modifier.height(6.dp))
-                            Text(
-                                text = stringResource(R.string.home_su_path, Natives.suPath()),
-                                style = MaterialTheme.typography.bodyMedium
-                            )
+                            when {
+                                state.equals(APApplication.State.ANDROIDPATCH_INSTALLED) -> {
+                                    Text(text = stringResource(R.string.home_su_path_ex, Natives.suPath(), APApplication.APD_PATH),
+                                        style = MaterialTheme.typography.bodyMedium
+                                    )
+                                    Spacer(Modifier.height(6.dp))
+                                    Text(text = stringResource(R.string.kpatch_shadow_path, APApplication.KPATCH_SHADOW_PATH, APApplication.KPATCH_PATH),
+                                        style = MaterialTheme.typography.bodyMedium
+                                    )
+                                }
+                                !state.equals(APApplication.State.UNKNOWN_STATE) -> {
+                                    Text(text = stringResource(R.string.home_su_path, Natives.suPath()),
+                                        style = MaterialTheme.typography.bodyMedium
+                                    )
+                                }
+                            }
                         }
                     }
                     else -> {
-                        Icon(Icons.Outlined.Warning, "")
-                        Column(Modifier.padding(start = 20.dp)) {
-                            Text(
-                                text = stringResource(R.string.home_install_unknown),
+                        Column(Modifier.padding(start = 12.dp)) {
+                            Text(text = stringResource(R.string.home_install_unknown),
                                 style = MaterialTheme.typography.titleMedium
                             )
-                            Spacer(Modifier.height(4.dp))
+                            Spacer(Modifier.height(8.dp))
                         }
                     }
                 }
             }
         }
-
     }
 }
 
 @Composable
-private fun AStatusCard() {
-    val state by APApplication.apStateLiveData.observeAsState()
-
+private fun AStatusCard(state: APApplication.State) {
+    val state by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
     ElevatedCard(
         colors = CardDefaults.elevatedCardColors(containerColor = run {
             MaterialTheme.colorScheme.secondaryContainer
@@ -420,110 +383,131 @@ private fun AStatusCard() {
     ) {
         Column(modifier = Modifier
             .fillMaxWidth()
-            .padding(6.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(text = stringResource(R.string.android_patch),
-                style = MaterialTheme.typography.titleMedium
-            )
-            Row(modifier = Modifier
-                .fillMaxWidth()
-                .padding(6.dp), verticalAlignment = Alignment.CenterVertically) {
-                when {
-                    state == APApplication.ApState.KERNELPATCH_READY -> {
-                        val appendText = ""
-                        val kernelPatchVersion = Natives.kerenlPatchVersion()
-                        Icon(Icons.Outlined.CheckCircle, stringResource(R.string.working))
-                        Column(Modifier.padding(start = 20.dp)) {
-                            Text(
-                                text = stringResource(R.string.working) + appendText,
+            .padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+            Row {
+                Text(text = stringResource(R.string.android_patch),
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(6.dp), verticalAlignment = Alignment.CenterVertically) {
+                Column(Modifier
+                    .weight(2f)
+                ) {
+                    when {
+                        state.equals(APApplication.State.ANDROIDPATCH_INSTALLING) -> {
+                            Text(text = stringResource(R.string.installing),
                                 style = MaterialTheme.typography.titleMedium
                             )
                             Spacer(Modifier.height(6.dp))
-                            Text(
-                                text = stringResource(R.string.home_working_version, kernelPatchVersion.and(0xff0000).shr(16),
-                                    kernelPatchVersion.and(0xff00).shr(8), kernelPatchVersion.and(0xff)),
+                        }
+                        state.equals(APApplication.State.ANDROIDPATCH_INSTALLED) -> {
+                            val androidPatchVersion = getManagerVersion()
+                            Text(text = stringResource(R.string.working),
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                            Spacer(Modifier.height(6.dp))
+                            Text(text = stringResource(R.string.apatch_version,
+                                "${androidPatchVersion.first} (${androidPatchVersion.second})"),
                                 style = MaterialTheme.typography.bodyMedium
                             )
                             Spacer(Modifier.height(6.dp))
-                            Text(
-                                text = stringResource(R.string.home_su_path, Natives.suPath()),
-                                style = MaterialTheme.typography.bodyMedium
-                            )
                         }
-                    }
-                    else -> {
-                        Icon(Icons.Outlined.Warning, "")
-                        Column(Modifier.padding(start = 20.dp)) {
-                            Text(
-                                text = stringResource(R.string.home_install_unknown),
+                        else -> {
+                            Text(text = stringResource(R.string.home_install_unknown),
                                 style = MaterialTheme.typography.titleMedium
                             )
                             Spacer(Modifier.height(4.dp))
                         }
                     }
                 }
-                Text(text = "aaaaaaa")
+                if(!state.equals(APApplication.State.UNKNOWN_STATE)) {
+                    Column (modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .weight(1f)
+                    ) {
+                        Button(
+                            onClick = {
+                                when {
+                                    state.equals(APApplication.State.ANDROIDPATCH_NEED_UPDATE)
+                                            || state.equals(APApplication.State.KERNELPATCH_READY) -> {
+                                        APApplication.install()
+                                    }
+                                    state.equals(APApplication.State.ANDROIDPATCH_INSTALLED) -> {
+                                        APApplication.uninstall()
+                                    }
+                                    else -> {
+
+                                    }
+                                }
+                            },
+                            content = {
+                                when {
+                                    state.equals(APApplication.State.KERNELPATCH_READY) -> {
+                                        Text(text = "Install", color = Color.Black)
+                                    }
+                                    state.equals(APApplication.State.ANDROIDPATCH_UNINSTALLING)
+                                            || state.equals(APApplication.State.ANDROIDPATCH_UNINSTALLING) -> {
+                                        Icon(Icons.Outlined.Cached, contentDescription =  "")
+                                    }
+                                    state.equals(APApplication.State.ANDROIDPATCH_NEED_UPDATE) -> {
+                                        Text(text = "Update", color = Color.Black)
+                                    }
+                                    state.equals(APApplication.State.ANDROIDPATCH_INSTALLED) -> {
+                                        Text(text = "Uninstall", color = Color.Black)
+                                    }
+                                }
+                            }
+                        )
+                    }
+                }
             }
         }
-
     }
 }
 
 
-
 @Composable
-fun WarningCard(
-    message: String, color: Color = MaterialTheme.colorScheme.error, onClick: (() -> Unit)? = null
-) {
-    ElevatedCard(
-        colors = CardDefaults.elevatedCardColors(
-            containerColor = color
-        )
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .then(onClick?.let { Modifier.clickable { it() } } ?: Modifier)
-                .padding(24.dp)
+fun WarningCard() {
+    var show by rememberSaveable { mutableStateOf(true) }
+    if(show) {
+        ElevatedCard(
+            colors = CardDefaults.elevatedCardColors(containerColor = run {
+                MaterialTheme.colorScheme.secondaryContainer
+            })
         ) {
-            Text(
-                text = message, style = MaterialTheme.typography.bodyMedium
-            )
-        }
-    }
-}
-
-@Composable
-fun LearnMoreCard() {
-    val uriHandler = LocalUriHandler.current
-    val url = stringResource(R.string.home_learn_kernelsu_url)
-
-    ElevatedCard {
-
-        Row(modifier = Modifier
-            .fillMaxWidth()
-            .clickable {
-                uriHandler.openUri(url)
-            }
-            .padding(24.dp), verticalAlignment = Alignment.CenterVertically) {
-            Column() {
+            Row (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+                    .align(Alignment.CenterHorizontally),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ){
                 Text(
-                    text = stringResource(R.string.home_learn_kernelsu),
-                    style = MaterialTheme.typography.titleSmall
+                    modifier = Modifier.weight(1f),
+                    text = stringResource(id = R.string.patch_warnning),
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        color = Color.Red,
+                        fontWeight = FontWeight.Bold
+                    )
                 )
-                Spacer(Modifier.height(4.dp))
-                Text(
-                    text = stringResource(R.string.home_click_to_learn_kernelsu),
-                    style = MaterialTheme.typography.bodyMedium
+
+                Spacer(Modifier.width(12.dp))
+
+                Icon(Icons.Outlined.Clear,
+                    contentDescription =  "",
+                    modifier = Modifier.clickable { show = false },
                 )
             }
         }
     }
 }
+
 
 @Composable
 private fun InfoCard() {
-    val context = LocalContext.current
-
     ElevatedCard {
         Column(
             modifier = Modifier
@@ -543,13 +527,6 @@ private fun InfoCard() {
             InfoCardItem(stringResource(R.string.home_kernel), uname.release)
 
             Spacer(Modifier.height(16.dp))
-            val managerVersion = getManagerVersion(context)
-            InfoCardItem(
-                stringResource(R.string.home_manager_version),
-                "${managerVersion.first} (${managerVersion.second})"
-            )
-
-            Spacer(Modifier.height(16.dp))
             InfoCardItem(stringResource(R.string.home_fingerprint), Build.FINGERPRINT)
 
             Spacer(Modifier.height(16.dp))
@@ -558,20 +535,36 @@ private fun InfoCard() {
     }
 }
 
-fun getManagerVersion(context: Context): Pair<String, Int> {
-    val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
-    return Pair(packageInfo.versionName, packageInfo.versionCode)
+
+@Composable
+fun LearnMoreCard() {
+    val uriHandler = LocalUriHandler.current
+    val url = stringResource(R.string.home_learn_android_patch_url)
+
+    ElevatedCard {
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                uriHandler.openUri(url)
+            }
+            .padding(24.dp), verticalAlignment = Alignment.CenterVertically) {
+            Column() {
+                Text(
+                    text = stringResource(R.string.home_learn_apatch),
+                    style = MaterialTheme.typography.titleSmall
+                )
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    text = stringResource(R.string.home_click_to_learn_kernelsu),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+        }
+    }
 }
 
 
-@Preview
-@Composable
-private fun WarningCardPreview() {
-    Column {
-        WarningCard(message = "Warning message")
-        WarningCard(
-            message = "Warning message ",
-            MaterialTheme.colorScheme.outlineVariant,
-            onClick = {})
-    }
+fun getManagerVersion(): Pair<String, Int> {
+    val packageInfo = apApp.packageManager.getPackageInfo(apApp.packageName, 0)
+    return Pair(packageInfo.versionName, packageInfo.versionCode)
 }

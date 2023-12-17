@@ -3,12 +3,12 @@
 
     <string name="home">Home</string>
 
-<!--    patch -->
     <string name="super_key">SuperKey</string>
     <string name="set_key_title">Set SuperKey</string>
     <string name="set_key_desc">Only credential for KernelPatch</string>
     <string name="next_step">Next Step</string>
 
+    <string name="patch_warnning">Installation comes with risks, please ensure your data is backed up.</string>
 
     <string name="kernel_patch">KernelPatch</string>
     <string name="android_patch">AndroidPatch</string>
@@ -16,8 +16,12 @@
     <string name="home_install_unknown">Unknown</string>
     <string name="home_click_to_install">Click to install</string>
     <string name="working">Working</string>
-    <string name="home_working_version">version: %d.%d.%d</string>
+    <string name="installing">Installing</string>
+    <string name="kpatch_version">version: %d.%d.%d</string>
+    <string name="apatch_version">version: %s</string>
     <string name="home_su_path">su: %s</string>
+    <string name="home_su_path_ex">su: %s->%s</string>
+    <string name="kpatch_shadow_path">kpatch: %s->%s</string>
     <string name="home_apatch_version">APatch: %s</string>
     <string name="home_superuser_count">Superusers: %d</string>
     <string name="home_module_count">Modules: %d</string>
@@ -57,37 +61,23 @@
     <string name="module_author">Author</string>
     <string name="module_overlay_fs_not_available">overlayfs is not available, module cannot work!</string>
     <string name="refresh">Refresh</string>
+    <string name="reset_su">Reset su path</string>
     <string name="show_system_apps">Show system apps</string>
     <string name="hide_system_apps">Hide system apps</string>
     <string name="send_log">Send Log</string>
     <string name="safe_mode">Safe mode</string>
     <string name="reboot_to_apply">Reboot to take effect</string>
     <string name="module_magisk_conflict">Modules are disabled because it is conflict with Magisk\'s!</string>
-    <string name="home_learn_kernelsu">Learn APatch</string>
-    <string name="home_learn_kernelsu_url">https://kernelsu.org/guide/what-is-kernelsu.html</string>
-    <string name="home_click_to_learn_kernelsu">Learn how to install APatch and use modules</string>
+    <string name="home_learn_apatch">Learn AndroidPatch</string>
+    <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
+    <string name="home_click_to_learn_kernelsu">Learn about the features of AndroidPatch and how to use</string>
     <string name="home_support_title">Support Us</string>
     <string name="home_support_content">APatch is, and always will be, free, and open source. You can however show us that you care by making a donation.</string>
     <string name="about_source_code"><![CDATA[View source code at %1$s<br/>Join our %2$s channel]]></string>
-    <string name="profile" translatable="false">App Profile</string>
-    <string name="profile_default">Default</string>
-    <string name="profile_template">Template</string>
-    <string name="profile_custom">Custom</string>
-    <string name="profile_name">Profile name</string>
-    <string name="profile_namespace">Mount namespace</string>
-    <string name="profile_namespace_inherited">Inherited</string>
-    <string name="profile_namespace_global">Global</string>
-    <string name="profile_namespace_individual">Individual</string>
-    <string name="profile_groups">Groups</string>
-    <string name="profile_capabilities">Capabilities</string>
-    <string name="profile_selinux_context">SELinux context</string>
-    <string name="profile_umount_modules">Umount modules</string>
     <string name="failed_to_update_app_profile">Failed to update App Profile for %s</string>
     <string name="settings_umount_modules_default">Umount modules by default</string>
     <string name="settings_umount_modules_default_summary">The global default value for \"Umount modules\" in App Profiles. If enabled, it will remove all module modifications to the system for applications that do not have a Profile set.</string>
     <string name="profile_umount_modules_summary">Enabling this option will allow APatch to restore any modified files by the modules for this application.</string>
-    <string name="profile_selinux_domain">Domain</string>
-    <string name="profile_selinux_rules">Rules</string>
     <string name="module_update">Update</string>
     <string name="module_downloading">Downloading module: %s</string>
     <string name="module_start_downloading">Start downloading: %s</string>

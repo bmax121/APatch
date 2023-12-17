@@ -100,36 +100,7 @@ tasks.register<Download>("downloadApjni") {
     onlyIfNewer(true)
     overwrite(true)
 }
-//
-//tasks.register<Download>("downloadKpuser") {
-//    src("https://github.com/bmax121/KernelPatch/releases/download/${kernelPatchVersion}/kpuser-src-${kpVersion}.zip")
-//    dest(file("${project.projectDir}/build/tmp/download/kpuser.zip"))
-//    onlyIfNewer(true)
-//    overwrite(true)
-//}
-//
-//tasks.register<Copy>("unzipKpuser") {
-//    dependsOn("downloadKpuser")
-//    from(zipTree(file("${project.projectDir}/build/tmp/download/kpuser.zip")))
-//    into(file("${project.projectDir}/src/main/cpp/"))
-//}
-//
-//tasks.register("redirectKpuser") {
-//    val cmake = file("${project.projectDir}/src/main/cpp/user/CMakeLists.txt")
-//    val con = """
-//        set_target_properties(kpatch PROPERTIES OUTPUT_NAME "kpatch.exe.so")
-//        set_target_properties(kpatch PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${'$'}{PROJECT_SOURCE_DIR}/../../jniLibs/arm64-v8a/)
-//        # redirect_build_flag
-//        """.trimIndent()
-//    doLast {
-//        if (!cmake.readText().contains("# redirect_build_flag")) {
-//            cmake.appendText("\n")
-//            cmake.appendText(con)
-//            cmake.appendText("\n")
-//        }
-//    }
-//}
-//
+
 tasks.getByName("preBuild").dependsOn(
     "downloadKpimg",
     "downloadKpatch",

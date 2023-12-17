@@ -1,5 +1,6 @@
 package me.bmax.apatch.ui.screen
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -20,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -28,10 +30,15 @@ import coil.request.ImageRequest
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.launch
+import me.bmax.apatch.APApplication
+import me.bmax.apatch.Natives
 import me.bmax.apatch.R
+import me.bmax.apatch.TAG
+import me.bmax.apatch.apApp
 import me.bmax.apatch.ui.component.ConfirmDialog
 import me.bmax.apatch.ui.component.SearchAppBar
 import me.bmax.apatch.ui.viewmodel.SuperUserViewModel
+
 
 @OptIn(ExperimentalMaterialApi::class)
 @Destination
@@ -75,6 +82,7 @@ fun SuperUserScreen(navigator: DestinationsNavigator) {
                                 }
                                 showDropdown = false
                             })
+
                             DropdownMenuItem(text = {
                                 Text(
                                     if (viewModel.showSystemApps) {
@@ -91,6 +99,8 @@ fun SuperUserScreen(navigator: DestinationsNavigator) {
                     }
                 },
             )
+        },
+        floatingActionButton = {
         }
     ) { innerPadding ->
 
@@ -100,19 +110,21 @@ fun SuperUserScreen(navigator: DestinationsNavigator) {
             refreshing = viewModel.isRefreshing,
             onRefresh = { scope.launch { viewModel.fetchAppList() } },
         )
+
         Box(
             modifier = Modifier
                 .padding(innerPadding)
                 .pullRefresh(refreshState)
         ) {
+
             LazyColumn(Modifier.fillMaxSize()) {
                 items(viewModel.appList, key = { it.packageName + it.uid }) { app ->
-                    AppItem(app) {
-//                        navigator.navigate(AppProfileScreenDestination(app))
+                    var edit by remember { mutableStateOf(false) }
+                    AppItem(app, edit) {
+                        edit = !edit
                     }
                 }
             }
-
             PullRefreshIndicator(
                 refreshing = viewModel.isRefreshing,
                 state = refreshState,
@@ -122,32 +134,20 @@ fun SuperUserScreen(navigator: DestinationsNavigator) {
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
+@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
 private fun AppItem(
     app: SuperUserViewModel.AppInfo,
+    edit: Boolean,
     onClickListener: () -> Unit,
 ) {
+    var checked by remember {
+        mutableStateOf(app.profile != null)
+    }
+    var profile = app.profile
     ListItem(
         modifier = Modifier.clickable(onClick = onClickListener),
         headlineContent = { Text(app.label) },
-        supportingContent = {
-            Column {
-                Text(app.packageName)
-                FlowRow {
-                    if (app.allowSu) {
-                        LabelText(label = "ROOT")
-                    } else {
-//                        if (Natives.uidShouldUmount(app.uid)) {
-                            LabelText(label = "UMOUNT")
-//                        }
-                    }
-                    if (app.hasCustomProfile) {
-                        LabelText(label = "CUSTOM")
-                    }
-                }
-            }
-        },
         leadingContent = {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
@@ -160,6 +160,36 @@ private fun AppItem(
                     .width(48.dp)
                     .height(48.dp)
             )
+        },
+        supportingContent = {
+            Column {
+                Text(app.packageName)
+                FlowRow {
+                    if (profile != null) {
+                        Row {
+                            LabelText(label = profile.uid.toString())
+                            LabelText(label = profile.toUid.toString())
+                            LabelText(label = when {
+                                profile.scontext.isNotEmpty() -> profile.scontext
+                                else -> "bypass via hook"
+                            })
+                        }
+                    }
+                }
+            }
+        },
+        trailingContent = {
+            Row {
+                Switch(checked = checked
+                    , onCheckedChange = {
+                        checked = !checked
+                        if(checked) {
+                            Natives.grantSu(app.uid, 0, APApplication.MAGISK_SCONTEXT)
+                        } else {
+                            Natives.revokeSu(app.uid)
+                        }
+                    })
+            }
         },
     )
 }

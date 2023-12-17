@@ -1,9 +1,27 @@
 package me.bmax.apatch
 
+import android.os.Parcelable
+import androidx.annotation.Keep
+import androidx.compose.runtime.Immutable
+import kotlinx.android.parcel.Parcelize
+
 object Natives {
     init {
         System.loadLibrary("apjni")
     }
+
+    @Immutable
+    @Parcelize
+    @Keep
+    data class Profile (
+        var pkg: String,
+        var uid: Int = 0,
+        var toUid: Int = 0,
+        var scontext: String = "u:r:magisk:s0",
+    ) : Parcelable {
+
+    }
+
 
     private external fun nativeSu(superKey: String, to_uid: Int, scontext: String? ): Int
 
@@ -19,6 +37,12 @@ object Natives {
         return nativeSuPath(APApplication.superKey)
     }
 
+    private external fun nativeSuUids(superKey: String): IntArray
+
+    fun suUids(): IntArray {
+        return nativeSuUids(APApplication.superKey)
+    }
+
     private external fun nativeKernelPatchVersion(superKey: String): Long
     fun kerenlPatchVersion(): Long {
         return nativeKernelPatchVersion(APApplication.superKey)
@@ -28,9 +52,25 @@ object Natives {
     external fun nativeMakeMeSu(superKey: String, scontext: String?): Long
     external fun nativeThreadSu(superKey: String, uid: Int, scontext: String?): Long
     external fun nativeThreadUnsu(superKey: String, uid: Int): Long
-    external fun nativeGrantSu(superKey: String, uid: Int): Long
-    external fun nativeRevokeSu(superKey: String, uid: Int): Long
-    external fun nativeGetAllowList(superKey: String): IntArray
-    external fun nativeResetSu(superKey: String, cmd: String): Long
+    external private fun nativeGrantSu(superKey: String, uid: Int, to_uid: Int, scontext: String?): Long
+    fun grantSu(uid: Int, to_uid: Int, scontext: String?): Long {
+        return nativeGrantSu(APApplication.superKey, uid, to_uid, scontext)
+    }
+
+    external private fun nativeRevokeSu(superKey: String, uid: Int): Long
+    fun revokeSu(uid: Int): Long {
+        return nativeRevokeSu(APApplication.superKey, uid)
+    }
+
+    external private fun nativeSuProfile(superKey: String, uid: Int): Profile;
+
+    fun suProfile(uid: Int): Profile {
+        return nativeSuProfile(APApplication.superKey, uid)
+    }
+
+    external private fun nativeResetSuPath(superKey: String, path: String): Boolean
+    fun resetSuPath(path: String): Boolean {
+        return nativeResetSuPath(APApplication.superKey, path)
+    }
 
 }

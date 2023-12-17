@@ -17,8 +17,8 @@ use crate::{
 };
 
 
-fn print_usage(program: &str, opts: Options) {
-    let brief = format!("APatch\n\nUsage: {program} [options] [-] [user [argument...]]");
+fn print_usage(opts: Options) {
+    let brief = format!("APatch\n\nUsage: <command> [options] [-] [user [argument...]]");
     print!("{}", opts.usage(&brief));
 }
 
@@ -40,7 +40,6 @@ pub fn root_shell() -> Result<()> {
 pub fn root_shell() -> Result<()> {
     // we are root now, this was set in kernel!
     let env_args: Vec<String> = std::env::args().collect();
-    let program = env_args[0].clone();
     let args = env_args
         .iter()
         .position(|arg| arg == "-c")
@@ -100,13 +99,13 @@ pub fn root_shell() -> Result<()> {
         std::result::Result::Ok(m) => m,
         Err(f) => {
             println!("{f}");
-            print_usage(&program, opts);
+            print_usage(opts);
             std::process::exit(-1);
         }
     };
 
     if matches.opt_present("h") {
-        print_usage(&program, opts);
+        print_usage(opts);
         return Ok(());
     }
 

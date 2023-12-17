@@ -7,9 +7,11 @@ import com.topjohnwu.superuser.CallbackList
 import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.ShellUtils
 import me.bmax.apatch.BuildConfig
+import me.bmax.apatch.Natives
 import me.bmax.apatch.apApp
 import org.json.JSONArray
 import java.io.File
+import kotlin.concurrent.thread
 
 private const val TAG = "APatch"
 
@@ -125,12 +127,14 @@ fun installModule(uri: Uri, onFinish: (Boolean) -> Unit, onStdout: (String) -> U
 }
 
 fun reboot(reason: String = "") {
-    val shell = getRootShell()
-    if (reason == "recovery") {
-        // KEYCODE_POWER = 26, hide incorrect "Factory data reset" message
-        ShellUtils.fastCmd(shell, "/system/bin/input keyevent 26")
+    thread {
+        Natives.su(0, "")
+        if (reason == "recovery") {
+            // KEYCODE_POWER = 26, hide incorrect "Factory data reset" message
+            ShellUtils.fastCmd("/system/bin/input keyevent 26")
+        }
+        ShellUtils.fastCmd("/system/bin/svc power reboot $reason || /system/bin/reboot $reason")
     }
-    ShellUtils.fastCmd(shell, "/system/bin/svc power reboot $reason || /system/bin/reboot $reason")
 }
 
 fun overlayFsAvailable(): Boolean {

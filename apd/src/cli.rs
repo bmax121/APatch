@@ -165,7 +165,7 @@ pub fn run() -> Result<()> {
     #[cfg(not(target_os = "android"))]
     env_logger::init();
 
-    // the kernel executes su with argv[0] = "su" and replace it with us
+    // the kernel executes su with argv[0] = "/system/bin/sh" and replace it with us
     let arg0 = std::env::args().next().unwrap_or_default();
     if arg0 == "/system/bin/sh" {
         return crate::apd::root_shell();
