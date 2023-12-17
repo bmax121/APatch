@@ -375,7 +375,6 @@ private fun KStatusCard(state: APApplication.State) {
 
 @Composable
 private fun AStatusCard(state: APApplication.State) {
-    val state by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
     ElevatedCard(
         colors = CardDefaults.elevatedCardColors(containerColor = run {
             MaterialTheme.colorScheme.secondaryContainer
@@ -431,8 +430,8 @@ private fun AStatusCard(state: APApplication.State) {
                         Button(
                             onClick = {
                                 when {
-                                    state.equals(APApplication.State.ANDROIDPATCH_NEED_UPDATE)
-                                            || state.equals(APApplication.State.KERNELPATCH_READY) -> {
+                                    state.equals(state.equals(APApplication.State.KERNELPATCH_READY)
+                                            || state.equals(APApplication.State.ANDROIDPATCH_NEED_UPDATE)) -> {
                                         APApplication.install()
                                     }
                                     state.equals(APApplication.State.ANDROIDPATCH_INSTALLED) -> {
@@ -450,7 +449,7 @@ private fun AStatusCard(state: APApplication.State) {
                                     }
                                     state.equals(APApplication.State.ANDROIDPATCH_UNINSTALLING)
                                             || state.equals(APApplication.State.ANDROIDPATCH_UNINSTALLING) -> {
-                                        Icon(Icons.Outlined.Cached, contentDescription =  "")
+                                        Icon(Icons.Outlined.Cached, contentDescription = "busy")
                                     }
                                     state.equals(APApplication.State.ANDROIDPATCH_NEED_UPDATE) -> {
                                         Text(text = "Update", color = Color.Black)
