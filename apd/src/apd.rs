@@ -154,7 +154,7 @@ pub fn root_shell() -> Result<()> {
         }
     }
 
-    // https://github.com/topjohnwu/Magisk/blob/master/native/src/su/su_daemon.cpp#L408
+    // https://github.com/topjohnwu/Magisk/blob/master/native/src/core/su/su_daemon.cpp#L408
     let arg0 = if is_login { "-" } else { &shell };
 
     let mut command = &mut Command::new(&shell);

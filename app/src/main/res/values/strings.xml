@@ -17,8 +17,11 @@
     <string name="home_click_to_install">Click to install</string>
     <string name="working">Working</string>
     <string name="installing">Installing</string>
+    <string name="not_install">Not install</string>
+    <string name="need_update">Can update</string>
     <string name="kpatch_version">version: %d.%d.%d</string>
     <string name="apatch_version">version: %s</string>
+    <string name="apatch_version_update">version: %s -> %s</string>
     <string name="home_su_path">su: %s</string>
     <string name="home_su_path_ex">su: %s->%s</string>
     <string name="kpatch_shadow_path">kpatch: %s->%s</string>

@@ -29,7 +29,9 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import me.bmax.apatch.APApplication
 import me.bmax.apatch.Natives
 import me.bmax.apatch.R
@@ -38,6 +40,7 @@ import me.bmax.apatch.apApp
 import me.bmax.apatch.ui.component.ConfirmDialog
 import me.bmax.apatch.ui.component.SearchAppBar
 import me.bmax.apatch.ui.viewmodel.SuperUserViewModel
+import me.bmax.apatch.util.SuConfig
 
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -185,8 +188,21 @@ private fun AppItem(
                         checked = !checked
                         if(checked) {
                             Natives.grantSu(app.uid, 0, APApplication.MAGISK_SCONTEXT)
+                            runBlocking {
+                                launch(Dispatchers.IO) {
+                                    val new = Natives.Profile(app.packageName, app.uid, 0, APApplication.MAGISK_SCONTEXT)
+                                    Log.d(TAG, "add allow profile: " + new)
+                                    SuConfig.addProfile(new)
+                                }
+                            }
                         } else {
                             Natives.revokeSu(app.uid)
+                            runBlocking {
+                                launch(Dispatchers.IO) {
+                                    Log.d(TAG, "remove allow package: " + app.packageName)
+                                    SuConfig.removePackage(app.packageName)
+                                }
+                            }
                         }
                     })
             }
@@ -196,6 +212,7 @@ private fun AppItem(
 
 @Composable
 fun LabelText(label: String) {
+
     Box(
         modifier = Modifier
             .padding(top = 4.dp, end = 4.dp)

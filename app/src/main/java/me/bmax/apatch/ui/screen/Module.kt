@@ -19,6 +19,7 @@ import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,12 +35,16 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.topjohnwu.superuser.ShellUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import me.bmax.apatch.APApplication
+import me.bmax.apatch.Natives
 import me.bmax.apatch.util.DownloadListener
 import me.bmax.apatch.util.download
 import me.bmax.apatch.R
+import me.bmax.apatch.apApp
 import me.bmax.apatch.ui.component.ConfirmDialog
 import me.bmax.apatch.ui.component.ConfirmResult
 import me.bmax.apatch.ui.component.LoadingDialog
@@ -52,10 +57,29 @@ import me.bmax.apatch.util.uninstallModule
 import me.bmax.apatch.ui.screen.destinations.InstallScreenDestination
 import me.bmax.apatch.ui.viewmodel.ModuleViewModel
 import okhttp3.OkHttpClient
+import java.io.File
+import kotlin.concurrent.thread
 
 @Destination
 @Composable
 fun ModuleScreen(navigator: DestinationsNavigator) {
+    val state by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
+    if(state != APApplication.State.ANDROIDPATCH_INSTALLED) {
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .padding(12.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally) {
+            Row {
+                Text(
+                    text = "Android Patch Not Installed",
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
+        }
+        return
+    }
+
     val viewModel = viewModel<ModuleViewModel>()
 
     LaunchedEffect(Unit) {
@@ -64,10 +88,17 @@ fun ModuleScreen(navigator: DestinationsNavigator) {
         }
     }
 
-    val isSafeMode = false
-    val hasMagisk = hasMagisk()
 
-    val hideInstallButton = isSafeMode || hasMagisk
+    var hideInstallButton = true
+    var hasMagisk = false
+    var isSafeMode = false
+    thread {
+        Natives.su()
+        isSafeMode = File(APApplication.SAFEMODE_FILE).exists()
+        hasMagisk = ShellUtils.fastCmdResult("nsenter --mount=/proc/1/ns/mnt which magisk");
+        hideInstallButton = isSafeMode || hasMagisk
+    }.join()
+
 
     Scaffold(topBar = {
         TopBar()

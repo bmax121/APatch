@@ -22,11 +22,8 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material.icons.outlined.AppBlocking
 import androidx.compose.material.icons.outlined.Cached
-import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Clear
-import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -395,32 +392,45 @@ private fun AStatusCard(state: APApplication.State) {
                 Column(Modifier
                     .weight(2f)
                 ) {
+                    val managerVersion = getManagerVersion()
                     when {
+                        state.equals(APApplication.State.KERNELPATCH_READY) -> {
+                            Text(text = stringResource(R.string.not_install),
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                        }
                         state.equals(APApplication.State.ANDROIDPATCH_INSTALLING) -> {
                             Text(text = stringResource(R.string.installing),
                                 style = MaterialTheme.typography.titleMedium
                             )
-                            Spacer(Modifier.height(6.dp))
                         }
                         state.equals(APApplication.State.ANDROIDPATCH_INSTALLED) -> {
-                            val androidPatchVersion = getManagerVersion()
                             Text(text = stringResource(R.string.working),
                                 style = MaterialTheme.typography.titleMedium
                             )
                             Spacer(Modifier.height(6.dp))
                             Text(text = stringResource(R.string.apatch_version,
-                                "${androidPatchVersion.first} (${androidPatchVersion.second})"),
+                                "${managerVersion.first} (${managerVersion.second})"),
                                 style = MaterialTheme.typography.bodyMedium
                             )
+                        }
+                        state.equals(APApplication.State.ANDROIDPATCH_NEED_UPDATE) -> {
+                            Text(text = stringResource(R.string.need_update),
+                                style = MaterialTheme.typography.titleMedium
+                            )
                             Spacer(Modifier.height(6.dp))
+                            Text(text = stringResource(R.string.apatch_version_update, "${APApplication.apatchVersion}",
+                                "${managerVersion.first} (${managerVersion.second})"),
+                                style = MaterialTheme.typography.bodyMedium
+                            )
                         }
                         else -> {
                             Text(text = stringResource(R.string.home_install_unknown),
                                 style = MaterialTheme.typography.titleMedium
                             )
-                            Spacer(Modifier.height(4.dp))
                         }
                     }
+                    Spacer(Modifier.height(6.dp))
                 }
                 if(!state.equals(APApplication.State.UNKNOWN_STATE)) {
                     Column (modifier = Modifier
@@ -430,8 +440,8 @@ private fun AStatusCard(state: APApplication.State) {
                         Button(
                             onClick = {
                                 when {
-                                    state.equals(state.equals(APApplication.State.KERNELPATCH_READY)
-                                            || state.equals(APApplication.State.ANDROIDPATCH_NEED_UPDATE)) -> {
+                                    state.equals(APApplication.State.KERNELPATCH_READY)
+                                            || state.equals(APApplication.State.ANDROIDPATCH_NEED_UPDATE) -> {
                                         APApplication.install()
                                     }
                                     state.equals(APApplication.State.ANDROIDPATCH_INSTALLED) -> {

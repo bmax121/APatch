@@ -6,6 +6,7 @@ import android.util.Log
 import com.topjohnwu.superuser.CallbackList
 import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.ShellUtils
+import me.bmax.apatch.APApplication
 import me.bmax.apatch.BuildConfig
 import me.bmax.apatch.Natives
 import me.bmax.apatch.apApp
@@ -35,9 +36,10 @@ fun createRootShell(): Shell {
     Shell.enableVerboseLogging = BuildConfig.DEBUG
     val builder = Shell.Builder.create()
     return try {
-        builder.build(getAPDaemonPath(), "debug", "su")
+        builder.build(getKPatchPath(), APApplication.superKey, "su", "-x", APApplication.MAGISK_SCONTEXT)
+
     } catch (e: Throwable) {
-//        Log.e(TAG, "su failed: ", e)
+        Log.e(TAG, "su failed: ", e)
         builder.build("sh")
     }
 }

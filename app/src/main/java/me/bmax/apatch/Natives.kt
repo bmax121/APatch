@@ -1,6 +1,7 @@
 package me.bmax.apatch
 
 import android.os.Parcelable
+import android.util.Log
 import androidx.annotation.Keep
 import androidx.compose.runtime.Immutable
 import kotlinx.android.parcel.Parcelize
@@ -19,7 +20,15 @@ object Natives {
         var toUid: Int = 0,
         var scontext: String = "u:r:magisk:s0",
     ) : Parcelable {
-
+        fun toLine(): String {
+            return "${pkg},${uid},${toUid},${scontext}"
+        }
+        companion object {
+            fun from(line: String): Profile {
+                val sp = line.split(',')
+                return Profile(sp[0], sp[1].toInt(), sp[2].toInt(), sp[3])
+            }
+        }
     }
 
 
@@ -27,6 +36,10 @@ object Natives {
 
     fun su(to_uid: Int, scontext: String?): Boolean {
         return nativeSu(APApplication.superKey, to_uid, scontext) == 0
+    }
+
+    fun su(): Boolean {
+        return su(0, null)
     }
 
     external fun nativeReady(superKey: String): Boolean

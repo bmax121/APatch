@@ -40,6 +40,9 @@ class APApplication : Application() {
         val APATCH_LOG_FLODER = "/data/adb/ap/log/"
         val APD_LINK_PATH = APATCH_FLODER + "apd"
         val KPATCH_LINK_PATH = APATCH_FLODER + "kpatch"
+        val ALLOW_UID_FILE = APATCH_FLODER + ".allow_uid"
+        val SU_PATH_FILE = APATCH_FLODER + ".su_path"
+        val SAFEMODE_FILE = "/dev/.sefemode"
 
         val APATCH_VERSION_PATH = APATCH_FLODER + "version"
         val MAGISKPOLICY_BIN_PATH = APATCH_BIN_FLODER + "magiskpolicy"
@@ -59,20 +62,24 @@ class APApplication : Application() {
         private val _apStateLiveData = MutableLiveData<State>(State.UNKNOWN_STATE)
         val apStateLiveData: LiveData<State> = _apStateLiveData
 
+        var apatchVersion: Int = 0
+
         fun uninstall() {
             if(_apStateLiveData.value != State.ANDROIDPATCH_INSTALLED) return
             _apStateLiveData.value = State.ANDROIDPATCH_UNINSTALLING
             thread {
-                Natives.su(0, null)
+                val rc = Natives.su(0, null)
+                if(!rc) {
+                    Log.e(TAG, "su failed: " + rc)
+                    return@thread
+                }
                 Log.d(TAG, "APatch uninstalling ...")
-
-//                Thread.sleep(3000)
 
                 Natives.resetSuPath(DEFAULT_SU_PATH)
                 File(APATCH_VERSION_PATH).delete()
                 File(APD_PATH).delete()
                 File(KPATCH_PATH).delete()
-                File(APATCH_BIN_FLODER).deleteRecursively()
+                File(APATCH_FLODER).deleteRecursively()
 
                 Log.d(TAG, "APatch removed ...")
 
@@ -88,12 +95,12 @@ class APApplication : Application() {
             _apStateLiveData.value = State.ANDROIDPATCH_INSTALLING
 
             thread {
-                Natives.su(0, null)
+                val rc = Natives.su(0, null)
+                if(!rc) {
+                    Log.e(TAG, "su failed: " + rc)
+                    return@thread
+                }
                 Log.d(TAG, "APatch installing ...")
-
-//                Thread.sleep(3000)
-
-                Natives.resetSuPath(LEGACY_SU_PATH)
 
                 if(!File(APATCH_FLODER).exists()) File(APATCH_FLODER).mkdir()
                 if(!File(APATCH_BIN_FLODER).exists()) File(APATCH_BIN_FLODER).mkdir()
@@ -137,6 +144,9 @@ class APApplication : Application() {
 
                 ShellUtils.fastCmdResult("${KPATCH_PATH} ${superKey} --android_user_init")
 
+                File(SU_PATH_FILE).writeText(LEGACY_SU_PATH)
+                Natives.resetSuPath(LEGACY_SU_PATH)
+
                 Log.d(TAG, "APatch installed ...")
 
                 _apStateLiveData.postValue(State.ANDROIDPATCH_INSTALLED)
@@ -150,16 +160,35 @@ class APApplication : Application() {
                 val ready = Natives.nativeReady(value)
                 _apStateLiveData.value = if(ready) State.KERNELPATCH_READY else  State.UNKNOWN_STATE
                 Log.d(TAG, "state: " + _apStateLiveData.value)
-
                 sharedPreferences.edit().putString(SUPER_KEY, value).apply()
 
                 thread {
-                    Natives.su(0, null)
+                    val rc = Natives.su(0, null)
+                    if(!rc) {
+                        Log.e(TAG, "su failed: " + rc)
+                        return@thread
+                    }
+
                     val vf = File(APATCH_VERSION_PATH)
                     val mgv = getManagerVersion().second
-                    if(vf.exists() && vf.readLines().get(0).toInt() == mgv) {   //
-                        _apStateLiveData.postValue(State.ANDROIDPATCH_INSTALLED)
-                        Log.d(TAG, "state: " + _apStateLiveData.value)
+                    if(vf.exists()) {
+                        apatchVersion = vf.readLines().get(0).toInt()
+                        if(apatchVersion == mgv) {
+                            _apStateLiveData.postValue(State.ANDROIDPATCH_INSTALLED)
+                            Log.d(TAG, "state: " + State.ANDROIDPATCH_INSTALLED + ", version: " + apatchVersion)
+                        } else {
+                            _apStateLiveData.postValue(State.ANDROIDPATCH_NEED_UPDATE)
+                            Log.d(TAG, "state: " + State.ANDROIDPATCH_NEED_UPDATE + ", version: " + apatchVersion + "->" + mgv)
+                        }
+
+                        val suPathFile = File(SU_PATH_FILE)
+                        if(suPathFile.exists()) {
+                            val suPath = suPathFile.readLines()[0].trim()
+                            if(!Natives.suPath().equals(suPath)) {
+                                Log.d(TAG, "su path: " + suPath)
+                                Natives.resetSuPath(suPath)
+                            }
+                        }
                         return@thread
                     }
                 }
