@@ -3,7 +3,7 @@
 # APatch Boot Image Patcher
 #######################################################################################
 #
-# Usage: boot_patch.sh <bootimage> <superkey>
+# Usage: boot_patch.sh <bootimage> <superkey> <outimage>
 #
 # This script should be placed in a directory with the following files:
 #
@@ -47,8 +47,8 @@ api_level_arch_detect
 
 print_title "APatch Boot Image Patcher"
 
-BOOTIMAGE=$1
-SUPERKEY=$2
+SUPERKEY=$1
+BOOTIMAGE=$2
 
 [ -e "$BOOTIMAGE" ] || abort "$BOOTIMAGE does not exist!"
 [ -z "$SUPERKEY" ] && abort "SuperKey empty!"
@@ -68,6 +68,8 @@ fi
 
 ui_print "- Repacking boot image"
 ./magiskboot repack "$BOOTIMAGE" || abort "! Unable to repack boot image"
+
+ls -l "new-boot.img" | ui_print
 
 # Reset any error code
 true

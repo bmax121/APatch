@@ -6,6 +6,7 @@ use crate::{defs::BINARY_DIR, utils};
 
 pub const RESETPROP_PATH: &str = concatcp!(BINARY_DIR, "resetprop");
 pub const BUSYBOX_PATH: &str = concatcp!(BINARY_DIR, "busybox");
+pub const MAGISKPOLICY_PATH: &str = concatcp!(BINARY_DIR, "magiskpolicy");
 
 #[cfg(target_arch = "aarch64")]
 #[derive(RustEmbed)]

@@ -8,8 +8,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import coil.Coil
 import coil.ImageLoader
+import com.topjohnwu.superuser.CallbackList
+import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.ShellUtils
 import me.bmax.apatch.ui.screen.getManagerVersion
+import me.bmax.apatch.util.getRootShell
 import me.zhanghai.android.appiconloader.coil.AppIconFetcher
 import me.zhanghai.android.appiconloader.coil.AppIconKeyer
 import java.io.File
@@ -38,10 +41,10 @@ class APApplication : Application() {
         val APATCH_FLODER = "/data/adb/ap/"
         val APATCH_BIN_FLODER = "/data/adb/ap/bin/"
         val APATCH_LOG_FLODER = "/data/adb/ap/log/"
-        val APD_LINK_PATH = APATCH_FLODER + "apd"
-        val KPATCH_LINK_PATH = APATCH_FLODER + "kpatch"
-        val ALLOW_UID_FILE = APATCH_FLODER + ".allow_uid"
-        val SU_PATH_FILE = APATCH_FLODER + ".su_path"
+        val APD_LINK_PATH = APATCH_BIN_FLODER + "apd"
+        val KPATCH_LINK_PATH = APATCH_BIN_FLODER + "kpatch"
+        val ALLOW_UID_FILE = APATCH_FLODER + "allow_uid"
+        val SU_PATH_FILE = APATCH_FLODER + "su_path"
         val SAFEMODE_FILE = "/dev/.sefemode"
 
         val APATCH_VERSION_PATH = APATCH_FLODER + "version"
@@ -52,8 +55,6 @@ class APApplication : Application() {
 
         val DEFAULT_SU_PATH = "/system/bin/kp"
         val LEGACY_SU_PATH = "/system/bin/su"
-
-        val RESTORECON_PATH = "restorecon"
 
         // todo: should we store super_key in SharedPreferences
         private const val SUPER_KEY = "super_key"
@@ -67,6 +68,7 @@ class APApplication : Application() {
         fun uninstall() {
             if(_apStateLiveData.value != State.ANDROIDPATCH_INSTALLED) return
             _apStateLiveData.value = State.ANDROIDPATCH_UNINSTALLING
+
             thread {
                 val rc = Natives.su(0, null)
                 if(!rc) {
@@ -94,61 +96,49 @@ class APApplication : Application() {
             }
             _apStateLiveData.value = State.ANDROIDPATCH_INSTALLING
 
+            val nativeDir = apApp.applicationInfo.nativeLibraryDir
+            val logCallback: CallbackList<String?> = object : CallbackList<String?>() {
+                override fun onAddElement(s: String?) {
+                    Log.d(TAG, s.toString())
+                }
+            }
+
             thread {
-                val rc = Natives.su(0, null)
-                if(!rc) {
-                    Log.e(TAG, "su failed: " + rc)
-                    return@thread
-                }
-                Log.d(TAG, "APatch installing ...")
+                val cmds = arrayOf(
+                    "mkdir -p ${APATCH_BIN_FLODER}",
+                    "mkdir -p ${APATCH_LOG_FLODER}",
 
-                if(!File(APATCH_FLODER).exists()) File(APATCH_FLODER).mkdir()
-                if(!File(APATCH_BIN_FLODER).exists()) File(APATCH_BIN_FLODER).mkdir()
-                if(!File(APATCH_LOG_FLODER).exists()) File(APATCH_LOG_FLODER).mkdir()
+                    "cp -f ${nativeDir}/libkpatch.so ${KPATCH_PATH}",
+                    "chmod +x ${KPATCH_PATH}",
+                    "ln -s ${KPATCH_PATH} ${KPATCH_LINK_PATH}",
+                    "restorecon ${KPATCH_PATH}",
 
-                val nativeDir = apApp.applicationInfo.nativeLibraryDir
+                    "cp -f ${nativeDir}/libapd.so ${APD_PATH}",
+                    "chmod +x ${APD_PATH}",
+                    "ln -s ${APD_PATH} ${APD_LINK_PATH}",
+                    "restorecon ${APD_PATH}",
 
-                File(nativeDir, "libkpatch.so").copyTo(File(KPATCH_PATH), true)
-                File(KPATCH_PATH).setExecutable(true, true)
+                    "cp -f ${nativeDir}/libmagiskpolicy.so ${MAGISKPOLICY_BIN_PATH}",
+                    "chmod +x ${MAGISKPOLICY_BIN_PATH}",
+                    "cp -f ${nativeDir}/libresetprop.so ${RESETPROP_BIN_PATH}",
+                    "chmod +x ${RESETPROP_BIN_PATH}",
+                    "cp -f ${nativeDir}/libbusybox.so ${BUSYBOX_BIN_PATH}",
+                    "chmod +x ${BUSYBOX_BIN_PATH}",
 
-                if(!File(APATCH_BIN_FLODER, "kpatch").exists()) {
-                    Paths.get(APATCH_BIN_FLODER, "kpatch").createSymbolicLinkPointingTo(Paths.get(
-                        KPATCH_PATH))
-                }
+                    "touch ${ALLOW_UID_FILE}",
+                    "touch ${SU_PATH_FILE}",
+                    "[ -s ${SU_PATH_FILE} ] || echo ${LEGACY_SU_PATH} > ${SU_PATH_FILE}",
+                    "echo ${getManagerVersion().second} > ${APATCH_VERSION_PATH}",
 
-                File(nativeDir, "libmagiskpolicy.so").copyTo(File(MAGISKPOLICY_BIN_PATH), true)
-                File(MAGISKPOLICY_BIN_PATH).setExecutable(true, true)
+                    "restorecon -R ${APATCH_FLODER}",
 
-                File(nativeDir, "libresetprop.so").copyTo(File(RESETPROP_BIN_PATH), true)
-                File(RESETPROP_BIN_PATH).setExecutable(true, true)
+                    "${KPATCH_PATH} ${superKey} android_user init",
+                )
 
-                File(nativeDir, "libbusybox.so").copyTo(File(BUSYBOX_BIN_PATH), true)
-                File(BUSYBOX_BIN_PATH).setExecutable(true, true)
-
-                File(nativeDir, "libapd.so").copyTo(File(APD_PATH), true)
-                File(APD_PATH).setExecutable(true, true)
-
-                if(!File(APATCH_BIN_FLODER, "apd").exists()) {
-                    Paths.get(APATCH_BIN_FLODER, "apd").createSymbolicLinkPointingTo(Paths.get(
-                        APD_PATH))
-                }
-
-                ShellUtils.fastCmdResult("${RESTORECON_PATH} ${APD_PATH}")
-                ShellUtils.fastCmdResult("${RESTORECON_PATH} ${KPATCH_PATH}")
-                ShellUtils.fastCmdResult("${RESTORECON_PATH} -R ${APATCH_FLODER}")
-
-                val mgv = getManagerVersion().second
-                File(APATCH_VERSION_PATH).writeText(mgv.toString())
-
-                ShellUtils.fastCmdResult("${RESTORECON_PATH} ${APATCH_VERSION_PATH}")
-
-                ShellUtils.fastCmdResult("${KPATCH_PATH} ${superKey} --android_user_init")
-
-                File(SU_PATH_FILE).writeText(LEGACY_SU_PATH)
-                Natives.resetSuPath(LEGACY_SU_PATH)
+                Natives.su()
+                Shell.getShell().newJob().add(*cmds).to(logCallback, logCallback).exec()
 
                 Log.d(TAG, "APatch installed ...")
-
                 _apStateLiveData.postValue(State.ANDROIDPATCH_INSTALLED)
             }
         }
@@ -172,6 +162,7 @@ class APApplication : Application() {
                     val vf = File(APATCH_VERSION_PATH)
                     val mgv = getManagerVersion().second
                     if(vf.exists()) {
+                        //
                         apatchVersion = vf.readLines().get(0).toInt()
                         if(apatchVersion == mgv) {
                             _apStateLiveData.postValue(State.ANDROIDPATCH_INSTALLED)
@@ -181,6 +172,7 @@ class APApplication : Application() {
                             Log.d(TAG, "state: " + State.ANDROIDPATCH_NEED_UPDATE + ", version: " + apatchVersion + "->" + mgv)
                         }
 
+                        // su path
                         val suPathFile = File(SU_PATH_FILE)
                         if(suPathFile.exists()) {
                             val suPath = suPathFile.readLines()[0].trim()

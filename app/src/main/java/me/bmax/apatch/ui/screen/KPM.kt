@@ -4,13 +4,11 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -29,42 +27,35 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.topjohnwu.superuser.ShellUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.bmax.apatch.APApplication
 import me.bmax.apatch.Natives
 import me.bmax.apatch.util.DownloadListener
-import me.bmax.apatch.util.download
 import me.bmax.apatch.R
-import me.bmax.apatch.apApp
 import me.bmax.apatch.ui.component.ConfirmDialog
 import me.bmax.apatch.ui.component.ConfirmResult
 import me.bmax.apatch.ui.component.LoadingDialog
 import me.bmax.apatch.util.LocalDialogHost
 import me.bmax.apatch.util.LocalSnackbarHost
-import me.bmax.apatch.util.hasMagisk
 import me.bmax.apatch.util.reboot
 import me.bmax.apatch.util.toggleModule
-import me.bmax.apatch.util.uninstallModule
 import me.bmax.apatch.ui.screen.destinations.InstallScreenDestination
-import me.bmax.apatch.ui.viewmodel.ModuleViewModel
-import okhttp3.OkHttpClient
-import java.io.File
-import kotlin.concurrent.thread
+import me.bmax.apatch.ui.viewmodel.KPModuleViewModel
 
+
+private val TAG = "KernelPatchModule"
 @Destination
 @Composable
-fun ModuleScreen(navigator: DestinationsNavigator) {
+fun KPModuleScreen(navigator: DestinationsNavigator) {
     val state by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
-    if(state != APApplication.State.ANDROIDPATCH_INSTALLED) {
+    if(state == APApplication.State.UNKNOWN_STATE) {
         Column(modifier = Modifier
             .fillMaxSize()
             .padding(12.dp),
@@ -72,7 +63,7 @@ fun ModuleScreen(navigator: DestinationsNavigator) {
             horizontalAlignment = Alignment.CenterHorizontally) {
             Row {
                 Text(
-                    text = "Android Patch Not Installed",
+                    text = "Kernel Patch Not Installed",
                     style = MaterialTheme.typography.titleMedium
                 )
             }
@@ -80,7 +71,8 @@ fun ModuleScreen(navigator: DestinationsNavigator) {
         return
     }
 
-    val viewModel = viewModel<ModuleViewModel>()
+
+    val viewModel = viewModel<KPModuleViewModel>()
 
     LaunchedEffect(Unit) {
         if (viewModel.moduleList.isEmpty() || viewModel.isNeedRefresh) {
@@ -88,26 +80,12 @@ fun ModuleScreen(navigator: DestinationsNavigator) {
         }
     }
 
-
-    var hideInstallButton = true
-    var hasMagisk = false
-    var isSafeMode = false
-    thread {
-        Natives.su()
-        isSafeMode = File(APApplication.SAFEMODE_FILE).exists()
-        hasMagisk = ShellUtils.fastCmdResult("nsenter --mount=/proc/1/ns/mnt which magisk");
-        hideInstallButton = isSafeMode || hasMagisk
-    }.join()
-
-
     Scaffold(topBar = {
         TopBar()
-    }, floatingActionButton = if (hideInstallButton) {
-        { /* Empty */ }
-    } else {
+    }, floatingActionButton = run {
         {
-            val moduleInstall = stringResource(id = R.string.module_install)
-            val selectZipLauncher = rememberLauncherForActivityResult(
+            val moduleInstall = stringResource(id = R.string.kpm_load)
+            val selectKpmLauncher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.StartActivityForResult()
             ) {
                 if (it.resultCode != RESULT_OK) {
@@ -116,62 +94,55 @@ fun ModuleScreen(navigator: DestinationsNavigator) {
                 val data = it.data ?: return@rememberLauncherForActivityResult
                 val uri = data.data ?: return@rememberLauncherForActivityResult
 
-                navigator.navigate(InstallScreenDestination(uri))
+                Log.d(TAG, "data: " + data)
+                Log.d(TAG, "uri: " + uri)
 
                 viewModel.markNeedRefresh()
 
-                Log.i("ModuleScreen", "select zip result: ${it.data}")
+                Log.i(TAG, "select kpm result: ${it.data}")
             }
 
             ExtendedFloatingActionButton(
                 onClick = {
-                    // select the zip file to install
                     val intent = Intent(Intent.ACTION_GET_CONTENT)
-                    intent.type = "application/zip"
-                    selectZipLauncher.launch(intent)
+                    intent.type = "*/*"
+                    selectKpmLauncher.launch(intent)
                 },
                 icon = { Icon(Icons.Filled.Add, moduleInstall) },
                 text = { Text(text = moduleInstall) },
             )
         }
     }) { innerPadding ->
-
         ConfirmDialog()
-
         LoadingDialog()
 
-        when {
-            hasMagisk -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(24.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        stringResource(R.string.module_magisk_conflict),
-                        textAlign = TextAlign.Center,
-                    )
-                }
-            }
-
-            else -> {
-                ModuleList(
-                    viewModel = viewModel, modifier = Modifier
-                        .padding(innerPadding)
-                        .fillMaxSize()
-                ) {
-                    navigator.navigate(InstallScreenDestination(it))
-                }
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .padding(innerPadding),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally) {
+            Row {
+                Text(
+                    text = "Please use the kpatch CLI now, this page is under development.",
+                    style = MaterialTheme.typography.titleMedium
+                )
             }
         }
+
+//        ModuleList(
+//            viewModel = viewModel, modifier = Modifier
+//                .padding(innerPadding)
+//                .fillMaxSize()
+//        ) {
+//            navigator.navigate(InstallScreenDestination(it))
+//        }
     }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun ModuleList(
-    viewModel: ModuleViewModel, modifier: Modifier = Modifier, onInstallModule: (Uri) -> Unit
+    viewModel: KPModuleViewModel, modifier: Modifier = Modifier, onInstallModule: (Uri) -> Unit
 ) {
     val failedEnable = stringResource(R.string.module_failed_to_enable)
     val failedDisable = stringResource(R.string.module_failed_to_disable)
@@ -179,73 +150,16 @@ private fun ModuleList(
     val successUninstall = stringResource(R.string.module_uninstall_success)
     val reboot = stringResource(id = R.string.reboot)
     val rebootToApply = stringResource(id = R.string.reboot_to_apply)
-    val moduleStr = stringResource(id = R.string.module)
+    val moduleStr = stringResource(id = R.string.kpm)
     val uninstall = stringResource(id = R.string.uninstall)
     val cancel = stringResource(id = android.R.string.cancel)
     val moduleUninstallConfirm = stringResource(id = R.string.module_uninstall_confirm)
-    val updateText = stringResource(R.string.module_update)
-    val changelogText = stringResource(R.string.module_changelog)
-    val downloadingText = stringResource(R.string.module_downloading)
-    val startDownloadingText = stringResource(R.string.module_start_downloading)
 
     val dialogHost = LocalDialogHost.current
     val snackBarHost = LocalSnackbarHost.current
     val context = LocalContext.current
 
-    suspend fun onModuleUpdate(
-        module: ModuleViewModel.ModuleInfo,
-        changelogUrl: String,
-        downloadUrl: String,
-        fileName: String
-    ) {
-        val changelog = dialogHost.withLoading {
-            withContext(Dispatchers.IO) {
-                OkHttpClient().newCall(
-                    okhttp3.Request.Builder().url(changelogUrl).build()
-                ).execute().body!!.string()
-            }
-        }
-
-        if (changelog.isNotEmpty()) {
-            // changelog is not empty, show it and wait for confirm
-            val confirmResult = dialogHost.showConfirm(
-                changelogText,
-                content = changelog,
-                markdown = true,
-                confirm = updateText,
-            )
-
-            if (confirmResult != ConfirmResult.Confirmed) {
-                return
-            }
-        }
-
-        withContext(Dispatchers.Main) {
-            Toast.makeText(
-                context,
-                startDownloadingText.format(module.name),
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-
-        val downloading = downloadingText.format(module.name)
-        withContext(Dispatchers.IO) {
-            download(
-                context,
-                downloadUrl,
-                fileName,
-                downloading,
-                onDownloaded = onInstallModule,
-                onDownloading = {
-                    launch(Dispatchers.Main) {
-                        Toast.makeText(context, downloading, Toast.LENGTH_SHORT).show()
-                    }
-                }
-            )
-        }
-    }
-
-    suspend fun onModuleUninstall(module: ModuleViewModel.ModuleInfo) {
+    suspend fun onModuleUninstall(module: KPModuleViewModel.ModuleInfo) {
         val confirmResult = dialogHost.showConfirm(
             moduleStr,
             content = moduleUninstallConfirm.format(module.name),
@@ -258,7 +172,7 @@ private fun ModuleList(
 
         val success = dialogHost.withLoading {
             withContext(Dispatchers.IO) {
-                uninstallModule(module.id)
+                Natives.unloadKernelPatchModule(module.name) == 0L
             }
         }
 
@@ -299,20 +213,6 @@ private fun ModuleList(
             },
         ) {
             when {
-                !viewModel.isOverlayAvailable -> {
-                    item {
-                        Box(
-                            modifier = Modifier.fillParentMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                stringResource(R.string.module_overlay_fs_not_available),
-                                textAlign = TextAlign.Center
-                            )
-                        }
-                    }
-                }
-
                 viewModel.moduleList.isEmpty() -> {
                     item {
                         Box(
@@ -326,24 +226,18 @@ private fun ModuleList(
                         }
                     }
                 }
-
                 else -> {
                     items(viewModel.moduleList) { module ->
                         var isChecked by rememberSaveable(module) { mutableStateOf(module.enabled) }
                         val scope = rememberCoroutineScope()
-                        val updatedModule by produceState(initialValue = Triple("", "", "")) {
-                            scope.launch(Dispatchers.IO) {
-                                value = viewModel.checkUpdate(module)
-                            }
-                        }
 
-                        ModuleItem(module, isChecked, updatedModule.first, onUninstall = {
+                        KPModuleItem(module, isChecked, onUninstall = {
                             scope.launch { onModuleUninstall(module) }
                         }, onCheckChanged = {
                             scope.launch {
                                 val success = dialogHost.withLoading {
                                     withContext(Dispatchers.IO) {
-                                        toggleModule(module.id, !isChecked)
+                                        toggleModule(module.name, !isChecked)
                                     }
                                 }
                                 if (success) {
@@ -363,12 +257,6 @@ private fun ModuleList(
                             }
                         }, onUpdate = {
                             scope.launch {
-                                onModuleUpdate(
-                                    module,
-                                    updatedModule.third,
-                                    updatedModule.first,
-                                    "${module.name}-${updatedModule.second}.zip"
-                                )
                             }
                         })
 
@@ -392,17 +280,16 @@ private fun ModuleList(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TopBar() {
-    TopAppBar(title = { Text(stringResource(R.string.module)) })
+    TopAppBar(title = { Text(stringResource(R.string.kpm)) })
 }
 
 @Composable
-private fun ModuleItem(
-    module: ModuleViewModel.ModuleInfo,
+private fun KPModuleItem(
+    module: KPModuleViewModel.ModuleInfo,
     isChecked: Boolean,
-    updateUrl: String,
-    onUninstall: (ModuleViewModel.ModuleInfo) -> Unit,
+    onUninstall: (KPModuleViewModel.ModuleInfo) -> Unit,
     onCheckChanged: (Boolean) -> Unit,
-    onUpdate: (ModuleViewModel.ModuleInfo) -> Unit,
+    onUpdate: (KPModuleViewModel.ModuleInfo) -> Unit,
 ) {
     ElevatedCard(
         modifier = Modifier.fillMaxWidth(),
@@ -447,17 +334,6 @@ private fun ModuleItem(
                 }
 
                 Spacer(modifier = Modifier.weight(1f))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End,
-                ) {
-                    Switch(
-                        enabled = !module.update,
-                        checked = isChecked,
-                        onCheckedChange = onCheckChanged
-                    )
-                }
             }
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -483,23 +359,6 @@ private fun ModuleItem(
             ) {
                 Spacer(modifier = Modifier.weight(1f, true))
 
-                if (updateUrl.isNotEmpty()) {
-                    Button(
-                        modifier = Modifier
-                            .padding(0.dp)
-                            .defaultMinSize(52.dp, 32.dp),
-                        onClick = { onUpdate(module) },
-                        shape = RoundedCornerShape(6.dp),
-                        contentPadding = PaddingValues(0.dp)
-                    ) {
-                        Text(
-                            fontFamily = MaterialTheme.typography.labelMedium.fontFamily,
-                            fontSize = MaterialTheme.typography.labelMedium.fontSize,
-                            text = stringResource(R.string.module_update),
-                        )
-                    }
-                }
-
                 TextButton(
                     enabled = !module.remove,
                     onClick = { onUninstall(module) },
@@ -513,22 +372,4 @@ private fun ModuleItem(
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun ModuleItemPreview() {
-    val module = ModuleViewModel.ModuleInfo(
-        id = "id",
-        name = "name",
-        version = "version",
-        versionCode = 1,
-        author = "author",
-        description = "I am a test module and i do nothing but show a very long description",
-        enabled = true,
-        update = true,
-        remove = true,
-        updateJson = ""
-    )
-    ModuleItem(module, true, "", {}, {}, {})
 }

@@ -9,16 +9,17 @@ import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
 import me.bmax.apatch.R
 import me.bmax.apatch.ui.screen.destinations.HomeScreenDestination
 import me.bmax.apatch.ui.screen.destinations.SuperUserScreenDestination
-import me.bmax.apatch.ui.screen.destinations.ModuleScreenDestination
+import me.bmax.apatch.ui.screen.destinations.APModuleScreenDestination
+import me.bmax.apatch.ui.screen.destinations.KPModuleScreenDestination
 
 enum class BottomBarDestination(
     val direction: DirectionDestinationSpec,
     @StringRes val label: Int,
     val iconSelected: ImageVector,
     val iconNotSelected: ImageVector,
-    val rootRequired: Boolean,
 ) {
-    Home(HomeScreenDestination, R.string.home, Icons.Filled.Home, Icons.Outlined.Home, false),
-    SuperUser(SuperUserScreenDestination, R.string.superuser, Icons.Filled.Security, Icons.Outlined.Security, true),
-    Module(ModuleScreenDestination, R.string.module, Icons.Filled.Apps, Icons.Outlined.Apps, true)
+    Home(HomeScreenDestination, R.string.home, Icons.Filled.Home, Icons.Outlined.Home),
+    KModule(KPModuleScreenDestination, R.string.kpm, Icons.Filled.Build, Icons.Outlined.Build),
+    SuperUser(SuperUserScreenDestination, R.string.superuser, Icons.Filled.Security, Icons.Outlined.Security),
+    AModule(APModuleScreenDestination, R.string.apm, Icons.Filled.Apps, Icons.Outlined.Apps)
 }

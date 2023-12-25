@@ -14,11 +14,7 @@ import org.json.JSONArray
 import java.io.File
 import kotlin.concurrent.thread
 
-private const val TAG = "APatch"
-
-private fun getAPDaemonPath(): String {
-    return apApp.applicationInfo.nativeLibraryDir + File.separator + "libapd.so"
-}
+private const val TAG = "APatchCli"
 
 private fun getKPatchPath(): String {
     return apApp.applicationInfo.nativeLibraryDir + File.separator + "libkpatch.so"
@@ -37,30 +33,21 @@ fun createRootShell(): Shell {
     val builder = Shell.Builder.create()
     return try {
         builder.build(getKPatchPath(), APApplication.superKey, "su", "-x", APApplication.MAGISK_SCONTEXT)
-
     } catch (e: Throwable) {
         Log.e(TAG, "su failed: ", e)
         builder.build("sh")
     }
 }
 
-
 fun execApd(args: String): Boolean {
     val shell = getRootShell()
-    return ShellUtils.fastCmdResult(shell, "${getAPDaemonPath()} $args")
-}
-
-fun install() {
-    val start = SystemClock.elapsedRealtime()
-    val result = execApd("install")
-    Log.w(TAG, "install result: $result, cost: ${SystemClock.elapsedRealtime() - start}ms")
+    return ShellUtils.fastCmdResult(shell, "${APApplication.APD_PATH} $args")
 }
 
 fun listModules(): String {
     val shell = getRootShell()
-
     val out =
-        shell.newJob().add("${getAPDaemonPath()} module list").to(ArrayList(), null).exec().out
+        shell.newJob().add("${APApplication.APD_PATH} module list").to(ArrayList(), null).exec().out
     return out.joinToString("\n").ifBlank { "[]" }
 }
 
@@ -70,10 +57,6 @@ fun getModuleCount(): Int {
         val array = JSONArray(result)
         return array.length()
     }.getOrElse { return 0 }
-}
-
-fun getSuperuserCount(): Int {
-    return 10
 }
 
 fun toggleModule(id: String, enable: Boolean): Boolean {
@@ -118,8 +101,8 @@ fun installModule(uri: Uri, onFinish: (Boolean) -> Unit, onStdout: (String) -> U
         }
 
         val result =
-            shell.newJob().add("${getAPDaemonPath()} $cmd").to(stdoutCallback, stderrCallback).exec()
-        Log.i("APatch", "install module $uri result: $result")
+            shell.newJob().add("${APApplication.APD_PATH} $cmd").to(stdoutCallback, stderrCallback).exec()
+        Log.i(TAG, "install module $uri result: $result")
 
         file.delete()
 
@@ -141,7 +124,6 @@ fun reboot(reason: String = "") {
 
 fun overlayFsAvailable(): Boolean {
     val shell = getRootShell()
-    // check /proc/filesystems
     return ShellUtils.fastCmdResult(shell, "cat /proc/filesystems | grep overlay")
 }
 
@@ -159,7 +141,6 @@ fun forceStopApp(packageName: String) {
 }
 
 fun launchApp(packageName: String) {
-
     val shell = getRootShell()
     val result = shell.newJob().add("monkey -p $packageName -c android.intent.category.LAUNCHER 1").exec()
     Log.i(TAG, "launch $packageName result: $result")

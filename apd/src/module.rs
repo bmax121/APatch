@@ -38,8 +38,6 @@ fn exec_install_script(module_file: &str) -> Result<()> {
     let realpath = std::fs::canonicalize(module_file)
         .with_context(|| format!("realpath: {module_file} failed"))?;
 
-
-
     let result = Command::new(assets::BUSYBOX_PATH)
         .args(["sh", "-c", INSTALL_MODULE_SCRIPT])
         .env("ASH_STANDALONE", "1")
@@ -52,9 +50,8 @@ fn exec_install_script(module_file: &str) -> Result<()> {
             ),
         )
         .env("APATCH", "true")
-        .env("KSU_KERNEL_VER_CODE", crate::apd::get_version().to_string())
-        .env("KSU_VER", defs::VERSION_NAME)
-        .env("KSU_VER_CODE", defs::VERSION_CODE)
+        .env("APATCH_VER", defs::VERSION_NAME)
+        .env("APATCH_VER_CODE", defs::VERSION_CODE)
         .env("OUTFD", "1")
         .env("ZIPFILE", realpath)
         .status()?;
@@ -189,13 +186,14 @@ pub fn load_sepolicy_rule() -> Result<()> {
         if !rule_file.exists() {
             return Ok(());
         }
-        info!("load policy: {}", &rule_file.display());
-        
-        //todo: magiskpolicy
 
-        // if sepolicy::apply_file(&rule_file).is_err() {
-        //     warn!("Failed to load sepolicy.rule for {}", &rule_file.display());
-        // }
+        info!("load policy: {}", &rule_file.display());
+        Command::new(assets::MAGISKPOLICY_PATH)
+            .arg("--live")
+            .arg("--apply")
+            .arg(&rule_file)
+            .status()
+            .with_context(|| format!("Failed to exec {}", rule_file.display()))?;
         Ok(())
     })?;
 
@@ -222,10 +220,9 @@ fn exec_script<T: AsRef<Path>>(path: T, wait: bool) -> Result<()> {
         .arg("sh")
         .arg(path.as_ref())
         .env("ASH_STANDALONE", "1")
-        .env("KSU", "true")
-        .env("KSU_KERNEL_VER_CODE", crate::apd::get_version().to_string())
-        .env("KSU_VER_CODE", defs::VERSION_CODE)
-        .env("KSU_VER", defs::VERSION_NAME)
+        .env("APATCH", "true")
+        .env("APATCH_VER", defs::VERSION_CODE)
+        .env("APATCH_VER_CODE", defs::VERSION_NAME)
         .env(
             "PATH",
             format!(

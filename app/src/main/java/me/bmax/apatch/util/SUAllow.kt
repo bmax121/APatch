@@ -1,5 +1,6 @@
 package me.bmax.apatch.util
 
+import android.util.Log
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import me.bmax.apatch.APApplication
@@ -9,18 +10,19 @@ import java.io.File
 import java.io.FileWriter
 import kotlin.concurrent.thread
 
-object SuConfig {
+object SUAllow {
     private val mutex = Mutex()
-    private val TAG = "SUAllowConfig"
+    private val TAG = "SUAllow"
 
     suspend fun removePackage(packageName: String) {
         mutex.withLock {
             thread {
                 val allows = HashMap<String, Natives.Profile>()
                 Natives.su()
-                val file = File(APApplication.SU_PATH_FILE)
+                val file = File(APApplication.ALLOW_UID_FILE)
                 if(file.exists()) {
                     file.readLines().filter { !it.isEmpty() }.forEach {
+                        Log.d(TAG, it)
                         val p = Natives.Profile.from(it)
                         allows[p.pkg] = p
                     }

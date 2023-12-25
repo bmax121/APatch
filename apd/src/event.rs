@@ -1,12 +1,11 @@
 use anyhow::{bail, Context, Result};
-use log::{info, warn};
-use std::path::PathBuf;
+use log::{info, warn, LevelFilter};
 use std::{collections::HashMap, path::Path};
 
 use crate::module::prune_modules;
 use crate::{
     assets, defs, mount, restorecon,
-    utils::{self, ensure_clean_dir, ensure_dir_exists},
+    utils::{self, ensure_clean_dir},
 };
 
 fn mount_partition(partition: &str, lowerdir: &Vec<String>) -> Result<()> {
@@ -243,28 +242,6 @@ pub fn on_boot_completed() -> Result<()> {
     Ok(())
 }
 
-pub fn install() -> Result<()> {
-    ensure_dir_exists(defs::ADB_DIR)?;
-    std::fs::copy("/proc/self/exe", defs::DAEMON_PATH)?;
-    restorecon::lsetfilecon(defs::DAEMON_PATH, restorecon::ADB_CON)?;
-    // install binary assets
-    assets::ensure_binaries().with_context(|| "Failed to extract assets")?;
-
-    #[cfg(target_os = "android")]
-    link_ksud_to_bin()?;
-
-    Ok(())
-}
-
-#[cfg(target_os = "android")]
-fn link_ksud_to_bin() -> Result<()> {
-    let ksu_bin = PathBuf::from(defs::DAEMON_PATH);
-    let ksu_bin_link = PathBuf::from(defs::DAEMON_LINK_PATH);
-    if ksu_bin.exists() && !ksu_bin_link.exists() {
-        std::os::unix::fs::symlink(&ksu_bin, &ksu_bin_link)?;
-    }
-    Ok(())
-}
 
 #[cfg(unix)]
 fn catch_bootlog() -> Result<()> {
@@ -273,8 +250,8 @@ fn catch_bootlog() -> Result<()> {
 
     let logdir = Path::new(defs::LOG_DIR);
     utils::ensure_dir_exists(logdir)?;
-    let bootlog = logdir.join("boot.log");
-    let oldbootlog = logdir.join("boot.old.log");
+    let bootlog = logdir.join("apatch.log");
+    let oldbootlog = logdir.join("apatch.old.log");
 
     if bootlog.exists() {
         std::fs::rename(&bootlog, oldbootlog)?;

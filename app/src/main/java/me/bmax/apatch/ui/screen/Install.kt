@@ -40,7 +40,6 @@ import java.util.*
 @Composable
 @Destination
 fun InstallScreen(navigator: DestinationsNavigator, uri: Uri) {
-
     var text by rememberSaveable { mutableStateOf("") }
     val logContent = StringBuilder()
     var showFloatAction by rememberSaveable { mutableStateOf(false) }

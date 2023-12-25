@@ -21,7 +21,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -36,11 +35,10 @@ import me.bmax.apatch.APApplication
 import me.bmax.apatch.Natives
 import me.bmax.apatch.R
 import me.bmax.apatch.TAG
-import me.bmax.apatch.apApp
 import me.bmax.apatch.ui.component.ConfirmDialog
 import me.bmax.apatch.ui.component.SearchAppBar
 import me.bmax.apatch.ui.viewmodel.SuperUserViewModel
-import me.bmax.apatch.util.SuConfig
+import me.bmax.apatch.util.SUAllow
 
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -173,6 +171,7 @@ private fun AppItem(
                             LabelText(label = profile.uid.toString())
                             LabelText(label = profile.toUid.toString())
                             LabelText(label = when {
+                                // todo: valid scontext ?
                                 profile.scontext.isNotEmpty() -> profile.scontext
                                 else -> "bypass via hook"
                             })
@@ -192,7 +191,7 @@ private fun AppItem(
                                 launch(Dispatchers.IO) {
                                     val new = Natives.Profile(app.packageName, app.uid, 0, APApplication.MAGISK_SCONTEXT)
                                     Log.d(TAG, "add allow profile: " + new)
-                                    SuConfig.addProfile(new)
+                                    SUAllow.addProfile(new)
                                 }
                             }
                         } else {
@@ -200,7 +199,7 @@ private fun AppItem(
                             runBlocking {
                                 launch(Dispatchers.IO) {
                                     Log.d(TAG, "remove allow package: " + app.packageName)
-                                    SuConfig.removePackage(app.packageName)
+                                    SUAllow.removePackage(app.packageName)
                                 }
                             }
                         }

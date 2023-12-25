@@ -1,6 +1,7 @@
 package me.bmax.apatch.ui.screen
 
 import android.net.Uri
+import android.os.Environment
 import android.system.Os
 import android.util.Log
 import androidx.compose.foundation.layout.Column
@@ -13,7 +14,6 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -22,26 +22,23 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.topjohnwu.superuser.CallbackList
 import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.ShellUtils
-import com.topjohnwu.superuser.internal.NOPList
 import com.topjohnwu.superuser.nio.ExtendedFile
 import com.topjohnwu.superuser.nio.FileSystemManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import me.bmax.apatch.BuildConfig
 import me.bmax.apatch.R
 import me.bmax.apatch.TAG
 import me.bmax.apatch.apApp
-import timber.log.Timber
+import me.bmax.apatch.util.MediaStoreUtils
+import me.bmax.apatch.util.MediaStoreUtils.outputStream
+import java.io.BufferedOutputStream
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
-import java.lang.StringBuilder
-import java.security.SecureRandom
 import java.util.*
-import java.util.zip.ZipInputStream
 
 @Composable
 @Destination
@@ -156,11 +153,11 @@ private fun Array<String>.fsh() = ShellUtils.fastCmd(shell, *this)
 
 
 fun patchBootimg(uri: Uri, superKey: String, logs: MutableList<String>): Boolean {
-    var installDir: ExtendedFile = FileSystemManager.getLocal().getFile(apApp.filesDir.parent, "install")
-    installDir.deleteRecursively()
-    installDir.mkdirs()
+    var patchDir: ExtendedFile = FileSystemManager.getLocal().getFile(apApp.filesDir.parent, "patch")
+    patchDir.deleteRecursively()
+    patchDir.mkdirs()
 
-    val srcBoot = installDir.getChildFile("boot.img")
+    val srcBoot = patchDir.getChildFile("boot.img")
 
     // Process input file
     try {
@@ -183,20 +180,42 @@ fun patchBootimg(uri: Uri, superKey: String, logs: MutableList<String>): Boolean
 
     for (lib in libs) {
         val name = lib.name.substring(3, lib.name.length - 3)
-        Os.symlink(lib.path, "$installDir/$name")
+        Os.symlink(lib.path, "$patchDir/$name")
     }
 
     // Extract scripts
     for (script in listOf("util_functions.sh", "boot_patch.sh", "kpimg")) {
-        val dest = File(installDir, script)
+        val dest = File(patchDir, script)
         apApp.assets.open(script).writeTo(dest)
     }
 
+    val apVer = getManagerVersion().second
+    val rand = (1..4).map { ('a'..'z').random() }.joinToString("")
+    val outFilename = "apatch_${apVer}_${rand}_boot.img"
+
     val cmds = arrayOf(
-        "cd $installDir",
-        "sh boot_patch.sh ${srcBoot.path} $superKey",
+        "cd $patchDir",
+        "sh boot_patch.sh $superKey ${srcBoot.path}",
     )
     shell.newJob().add(*cmds).to(logs, logs).exec()
+
+    val outFile = MediaStoreUtils.getFile(outFilename, true)
+    val outStream = outFile.uri.outputStream()
+
+    try {
+        val newBoot = patchDir.getChildFile("new-boot.img")
+        newBoot.newInputStream().copyAndClose(outStream)
+        newBoot.delete()
+        logs.add("")
+        logs.add("****************************")
+        logs.add(" Output file is written to ")
+        logs.add(" ${outFile}")
+        logs.add("****************************")
+    } catch (e: IOException) {
+        logs.add("! Failed to output to $outFile")
+        outFile.delete()
+        return false
+    }
 
     return true
 }

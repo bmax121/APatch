@@ -60,11 +60,30 @@ object Natives {
     fun kerenlPatchVersion(): Long {
         return nativeKernelPatchVersion(APApplication.superKey)
     }
-    external fun nativeLoadKernelPatchModule(superKey: String, modulePath: String): Long
-    external fun nativeUnloadKernelPatchModule(superKey: String, modulePath: String): Long
-    external fun nativeMakeMeSu(superKey: String, scontext: String?): Long
+    private external fun nativeLoadKernelPatchModule(superKey: String, modulePath: String): Long
+    fun loadKernelPatchModule(modulePath: String): Long {
+        return nativeLoadKernelPatchModule(APApplication.superKey, modulePath)
+    }
+    private external fun nativeUnloadKernelPatchModule(superKey: String, moduleName: String): Long
+    fun unloadKernelPatchModule(moduleName: String): Long {
+        return nativeUnloadKernelPatchModule(APApplication.superKey, moduleName)
+    }
+    private external fun nativeKernelPatchModuleNum(superKey: String, moduleName: String): Long
+
+    fun kernelPatchModuleNum(moduleName: String): Long {
+        return nativeKernelPatchModuleNum(APApplication.superKey, moduleName)
+    }
+    private external fun nativeKernelPatchModuleList(superKey: String): String
+    fun kernelPatchModuleList(): String {
+        return nativeKernelPatchModuleList(APApplication.superKey)
+    }
+    private external fun nativeKernelPatchModuleInfo(superKey: String, moduleName: String): String
+    fun kernelPatchModuleInfo( moduleName: String): String {
+        return nativeKernelPatchModuleInfo(APApplication.superKey, moduleName)
+    }
+
     external fun nativeThreadSu(superKey: String, uid: Int, scontext: String?): Long
-    external fun nativeThreadUnsu(superKey: String, uid: Int): Long
+
     external private fun nativeGrantSu(superKey: String, uid: Int, to_uid: Int, scontext: String?): Long
     fun grantSu(uid: Int, to_uid: Int, scontext: String?): Long {
         return nativeGrantSu(APApplication.superKey, uid, to_uid, scontext)

@@ -339,7 +339,7 @@ private fun KStatusCard(state: APApplication.State) {
                             )
                             Spacer(Modifier.height(6.dp))
                             when {
-                                state.equals(APApplication.State.ANDROIDPATCH_INSTALLED) -> {
+                                state.equals(APApplication.State.ANDROIDPATCH_INSTALLED) || state.equals(APApplication.State.ANDROIDPATCH_NEED_UPDATE) -> {
                                     Text(text = stringResource(R.string.home_su_path_ex, Natives.suPath(), APApplication.APD_PATH),
                                         style = MaterialTheme.typography.bodyMedium
                                     )
