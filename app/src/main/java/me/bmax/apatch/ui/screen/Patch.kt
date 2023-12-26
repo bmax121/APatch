@@ -184,7 +184,7 @@ fun patchBootimg(uri: Uri, superKey: String, logs: MutableList<String>): Boolean
     }
 
     // Extract scripts
-    for (script in listOf("util_functions.sh", "boot_patch.sh", "kpimg")) {
+    for (script in listOf("boot_patch.sh", "kpimg")) {
         val dest = File(patchDir, script)
         apApp.assets.open(script).writeTo(dest)
     }
