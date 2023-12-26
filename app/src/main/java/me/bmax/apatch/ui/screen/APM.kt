@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.ShellUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -53,6 +54,7 @@ import me.bmax.apatch.util.toggleModule
 import me.bmax.apatch.util.uninstallModule
 import me.bmax.apatch.ui.screen.destinations.InstallScreenDestination
 import me.bmax.apatch.ui.viewmodel.ModuleViewModel
+import me.bmax.apatch.util.hasMagisk
 import okhttp3.OkHttpClient
 import java.io.File
 import kotlin.concurrent.thread
@@ -85,17 +87,10 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
         }
     }
 
-    var hideInstallButton = true
-    var hasMagisk = false
+    // todo
     var isSafeMode = false
-
-    thread {
-        Natives.su()
-        // todo
-        isSafeMode = File(APApplication.SAFEMODE_FILE).exists()
-        hasMagisk = ShellUtils.fastCmdResult("nsenter --mount=/proc/1/ns/mnt which magisk")
-        hideInstallButton = isSafeMode || hasMagisk
-    }.join()
+    var hasMagisk = hasMagisk()
+    val hideInstallButton = isSafeMode || hasMagisk
 
 
     Scaffold(topBar = {

@@ -1,5 +1,5 @@
 use anyhow::{bail, Context, Result};
-use log::{info, warn, LevelFilter};
+use log::{info, warn};
 use std::{collections::HashMap, path::Path};
 
 use crate::module::prune_modules;

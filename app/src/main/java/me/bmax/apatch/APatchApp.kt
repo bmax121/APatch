@@ -72,7 +72,8 @@ class APApplication : Application() {
             thread {
                 val rc = Natives.su(0, null)
                 if(!rc) {
-                    Log.e(TAG, "su failed: " + rc)
+                    Log.e(TAG, "Native.su failed: " + rc)
+                    _apStateLiveData.postValue(State.ANDROIDPATCH_INSTALLED)
                     return@thread
                 }
                 Log.d(TAG, "APatch uninstalling ...")
@@ -90,6 +91,7 @@ class APApplication : Application() {
         }
 
         fun install() {
+            val state = _apStateLiveData.value
             if(_apStateLiveData.value != State.KERNELPATCH_READY
                 && _apStateLiveData.value != State.ANDROIDPATCH_NEED_UPDATE) {
                 return
@@ -104,7 +106,14 @@ class APApplication : Application() {
             }
 
             thread {
-                Natives.su()
+                val rc = Natives.su(0, null)
+                if(!rc) {
+                    Log.e(TAG, "Native.su failed: " + rc)
+                    // revert state
+                    _apStateLiveData.postValue(state)
+                    return@thread
+                }
+
                 val cmds = arrayOf(
                     "mkdir -p ${APATCH_BIN_FLODER}",
                     "mkdir -p ${APATCH_LOG_FLODER}",
