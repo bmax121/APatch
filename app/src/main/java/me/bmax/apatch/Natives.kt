@@ -39,7 +39,7 @@ object Natives {
     }
 
     fun su(): Boolean {
-        return su(0, null)
+        return su(0, "")
     }
 
     external fun nativeReady(superKey: String): Boolean

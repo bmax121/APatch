@@ -1,5 +1,6 @@
 package me.bmax.apatch.ui.screen
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -45,6 +46,8 @@ import androidx.compose.ui.unit.round
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import dev.utils.app.permission.PermissionUtils
+import dev.utils.app.permission.PermissionUtils.PermissionCallback
 import me.bmax.apatch.util.getSELinuxStatus
 import me.bmax.apatch.*
 import me.bmax.apatch.R
@@ -207,9 +210,28 @@ fun FloatButton(navigator: DestinationsNavigator) {
 
     var showAuthKeyDialog = remember { mutableStateOf(false)  }
     var showSetKeyDialog = remember { mutableStateOf(false)  }
+    var permissionRequest = remember { mutableStateOf(false)  }
 
     if (showAuthKeyDialog.value) {
         AuthSuperKey(showDialog = showAuthKeyDialog)
+    }
+
+    if(permissionRequest.value) {
+        PermissionUtils.permission(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
+            .callback( object : PermissionCallback{
+                override fun onGranted() {
+                    permissionRequest.value = false
+                    showSetKeyDialog.value = true
+                }
+                override fun onDenied(
+                    grantedList: MutableList<String>?,
+                    deniedList: MutableList<String>?,
+                    notFoundList: MutableList<String>?
+                ) {
+                    permissionRequest.value = false
+                }
+            })
+            .request(LocalContext.current as Activity)
     }
 
     if(showSetKeyDialog.value) {
@@ -228,7 +250,8 @@ fun FloatButton(navigator: DestinationsNavigator) {
         ) {
             ExtendedFloatingActionButton(
                 onClick = {
-                    showSetKeyDialog.value = true
+//                    showSetKeyDialog.value = true
+                    permissionRequest.value = true
                 },
                 icon = { Icon(Icons.Filled.InstallMobile, "install") },
                 text = { Text(text = "Patch") },

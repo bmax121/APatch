@@ -104,6 +104,7 @@ class APApplication : Application() {
             }
 
             thread {
+                Natives.su()
                 val cmds = arrayOf(
                     "mkdir -p ${APATCH_BIN_FLODER}",
                     "mkdir -p ${APATCH_LOG_FLODER}",
@@ -135,7 +136,6 @@ class APApplication : Application() {
                     "${KPATCH_PATH} ${superKey} android_user init",
                 )
 
-                Natives.su()
                 Shell.getShell().newJob().add(*cmds).to(logCallback, logCallback).exec()
 
                 Log.d(TAG, "APatch installed ...")

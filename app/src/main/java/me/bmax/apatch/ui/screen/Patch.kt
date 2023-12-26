@@ -1,7 +1,9 @@
 package me.bmax.apatch.ui.screen
 
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
+import android.os.FileUtils
 import android.system.Os
 import android.util.Log
 import androidx.compose.foundation.layout.Column
@@ -24,15 +26,14 @@ import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.ShellUtils
 import com.topjohnwu.superuser.nio.ExtendedFile
 import com.topjohnwu.superuser.nio.FileSystemManager
+import dev.utils.app.MediaStoreUtils
+import dev.utils.app.UriUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.bmax.apatch.R
 import me.bmax.apatch.TAG
 import me.bmax.apatch.apApp
-import me.bmax.apatch.util.MediaStoreUtils
-import me.bmax.apatch.util.MediaStoreUtils.outputStream
-import java.io.BufferedOutputStream
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -184,7 +185,7 @@ fun patchBootimg(uri: Uri, superKey: String, logs: MutableList<String>): Boolean
     }
 
     // Extract scripts
-    for (script in listOf("util_functions.sh", "boot_patch.sh", "kpimg")) {
+    for (script in listOf("boot_patch.sh", "kpimg")) {
         val dest = File(patchDir, script)
         apApp.assets.open(script).writeTo(dest)
     }
@@ -198,24 +199,35 @@ fun patchBootimg(uri: Uri, superKey: String, logs: MutableList<String>): Boolean
         "sh boot_patch.sh $superKey ${srcBoot.path}",
     )
     shell.newJob().add(*cmds).to(logs, logs).exec()
+    logs.add("****************************")
 
-    val outFile = MediaStoreUtils.getFile(outFilename, true)
-    val outStream = outFile.uri.outputStream()
-
-    try {
-        val newBoot = patchDir.getChildFile("new-boot.img")
-        newBoot.newInputStream().copyAndClose(outStream)
-        newBoot.delete()
-        logs.add("")
-        logs.add("****************************")
-        logs.add(" Output file is written to ")
-        logs.add(" ${outFile}")
-        logs.add("****************************")
-    } catch (e: IOException) {
-        logs.add("! Failed to output to $outFile")
-        outFile.delete()
+    val newBootFile = patchDir.getChildFile("new-boot.img")
+    if(!newBootFile.exists()) {
+        logs.add(" Patch failed, no new-boot.img generated")
         return false
     }
+
+    val outDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+    if(!outDir.exists()) outDir.mkdirs()
+    val outPath = File(outDir, outFilename)
+
+    val inputUri = UriUtils.getUriForFile(newBootFile)
+
+    var succ = true
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        val outUri = MediaStoreUtils.createDownloadUri(outFilename)
+        succ = MediaStoreUtils.insertDownload(outUri, inputUri)
+    } else {
+        newBootFile.inputStream().copyAndClose(outPath.outputStream())
+    }
+
+    if(succ) {
+        logs.add(" Output file is written to ")
+        logs.add(" ${outPath.path}")
+    } else {
+        logs.add(" Write patched boot.img failed ")
+    }
+    logs.add("****************************")
 
     return true
 }
