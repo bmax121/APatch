@@ -20,14 +20,20 @@
 # magiskboot         executable    Magisk tool to unpack boot.img.
 #
 #######################################################################################
+ARCH=$(getprop ro.product.cpu.abi)
 
+if [ "$ARCH" != "arm64-v8a" ]; then
+  echo "Not is arm64"
+  exit 1
+fi
 
+echo "system is arm64"
 # Pure bash dirname implementation
 getdir() {
   case "$1" in
     */*)
       dir=${1%/*}
-      if [ -z $dir ]; then
+      if [! -d $dir ]; then
         echo "/"
       else
         echo $dir
@@ -37,39 +43,38 @@ getdir() {
   esac
 }
 
-
 # Switch to the location of the script file
-cd "$(getdir "${BASH_SOURCE:-$0}")"
-# Load utility functions
-. ./util_functions.sh
-# Check if 64-bit
-api_level_arch_detect
+cd "$(getdir "${BASH_SOURCE:-$0}")" || exit $?
 
-print_title "APatch Boot Image Patcher"
+echo "APatch Boot Image Patcher"
 
 SUPERKEY=$1
 BOOTIMAGE=$2
 
-[ -e "$BOOTIMAGE" ] || abort "$BOOTIMAGE does not exist!"
-[ -z "$SUPERKEY" ] && abort "SuperKey empty!"
+[ -z "$SUPERKEY" ] && { echo "SuperKey empty!"; exit 1; }
+[ -e "$BOOTIMAGE" ] || { echo "$BOOTIMAGE does not exist!"; exit 1; }
 
-ui_print "- Unpacking boot image"
+# Check for dependencies
+command -v ./magiskboot >/dev/null 2>&1 || { echo "magiskboot not found!"; exit 1; }
+command -v ./kptools >/dev/null 2>&1 || { echo "kptools not found!"; exit 1; }
+
+echo "- Unpacking boot image"
 ./magiskboot unpack "$BOOTIMAGE"
 
 mv kernel kernel.ori
 
-ui_print "- Patching kernel"
+echo "- Patching kernel"
 ./kptools -p kernel.ori --skey "$SUPERKEY" --kpimg kpimg --out kernel
 
 if [ $? -ne 0 ]; then
-  ui_print "Patch error: $?"
+  echo "Patch error: $?"
   exit $?
 fi
 
-ui_print "- Repacking boot image"
-./magiskboot repack "$BOOTIMAGE" || abort "! Unable to repack boot image"
+echo "- Repacking boot image"
+./magiskboot repack "$BOOTIMAGE" || exit $?
 
-ls -l "new-boot.img" | ui_print
+ls -l "new-boot.img" | echo
 
 # Reset any error code
 true
