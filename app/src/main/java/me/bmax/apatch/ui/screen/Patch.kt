@@ -198,19 +198,22 @@ fun patchBootimg(uri: Uri, superKey: String, logs: MutableList<String>): Boolean
         "sh boot_patch.sh $superKey ${srcBoot.path}",
     )
     shell.newJob().add(*cmds).to(logs, logs).exec()
-    val sdcardFile = File("/storage/emulated/0/Download/apatch/$outFilename")
+
+    val outFile = MediaStoreUtils.getFile(outFilename, true)
+    val outStream = outFile.uri.outputStream()
+
     try {
         val newBoot = patchDir.getChildFile("new-boot.img")
-        newBoot.copyTo(sdcardFile)
+        newBoot.newInputStream().copyAndClose(outStream)
         newBoot.delete()
         logs.add("")
         logs.add("****************************")
         logs.add(" Output file is written to ")
-        logs.add(" /storage/emulated/0/Download/apatch/$outFilename")
+        logs.add(" ${outFile}")
         logs.add("****************************")
     } catch (e: IOException) {
-        logs.add("! Failed to output to /storage/emulated/0/Download/apatch/$outFilename")
-        sdcardFile.delete()
+        logs.add("! Failed to output to $outFile")
+        outFile.delete()
         return false
     }
 
