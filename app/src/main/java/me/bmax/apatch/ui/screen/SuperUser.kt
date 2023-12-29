@@ -9,7 +9,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -37,8 +40,9 @@ import me.bmax.apatch.R
 import me.bmax.apatch.TAG
 import me.bmax.apatch.ui.component.ConfirmDialog
 import me.bmax.apatch.ui.component.SearchAppBar
+import me.bmax.apatch.ui.component.SwitchItem
 import me.bmax.apatch.ui.viewmodel.SuperUserViewModel
-import me.bmax.apatch.util.SUAllow
+import me.bmax.apatch.util.PkgConfig
 
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -104,9 +108,7 @@ fun SuperUserScreen(navigator: DestinationsNavigator) {
         floatingActionButton = {
         }
     ) { innerPadding ->
-
         ConfirmDialog()
-
         val refreshState = rememberPullRefreshState(
             refreshing = viewModel.isRefreshing,
             onRefresh = { scope.launch { viewModel.fetchAppList() } },
@@ -117,13 +119,9 @@ fun SuperUserScreen(navigator: DestinationsNavigator) {
                 .padding(innerPadding)
                 .pullRefresh(refreshState)
         ) {
-
             LazyColumn(Modifier.fillMaxSize()) {
                 items(viewModel.appList, key = { it.packageName + it.uid }) { app ->
-                    var edit by remember { mutableStateOf(false) }
-                    AppItem(app, edit) {
-                        edit = !edit
-                    }
+                    AppItem(app)
                 }
             }
             PullRefreshIndicator(
@@ -139,15 +137,15 @@ fun SuperUserScreen(navigator: DestinationsNavigator) {
 @Composable
 private fun AppItem(
     app: SuperUserViewModel.AppInfo,
-    edit: Boolean,
-    onClickListener: () -> Unit,
 ) {
-    var checked by remember {
-        mutableStateOf(app.profile != null)
-    }
-    var profile = app.profile
+    val config = app.config
+    var edit by remember { mutableStateOf(false) }
+    var checked by remember { mutableStateOf(config.allow != 0) }
+
     ListItem(
-        modifier = Modifier.clickable(onClick = onClickListener),
+        modifier = Modifier.clickable(onClick = {
+            edit = !edit
+        }),
         headlineContent = { Text(app.label) },
         leadingContent = {
             AsyncImage(
@@ -166,52 +164,88 @@ private fun AppItem(
             Column {
                 Text(app.packageName)
                 FlowRow {
-                    if (profile != null) {
-                        Row {
-                            LabelText(label = profile.uid.toString())
-                            LabelText(label = profile.toUid.toString())
-                            LabelText(label = when {
-                                // todo: valid scontext ?
-                                profile.scontext.isNotEmpty() -> profile.scontext
-                                else -> "bypass via hook"
-                            })
-                        }
+                    if(config.exclude != 0) {
+                        LabelText(label = "exclude")
+                    }
+                    if (config.allow != 0) {
+                        LabelText(label = config.profile.uid.toString())
+                        LabelText(label = config.profile.toUid.toString())
+                        LabelText(label = when {
+                            // todo: valid scontext ?
+                            config.profile.scontext.isNotEmpty() -> config.profile.scontext
+                            else -> "bypass via hook"
+                        })
                     }
                 }
             }
         },
         trailingContent = {
-            Row {
-                Switch(checked = checked
-                    , onCheckedChange = {
-                        checked = !checked
-                        if(checked) {
-                            Natives.grantSu(app.uid, 0, APApplication.MAGISK_SCONTEXT)
-                            runBlocking {
-                                launch(Dispatchers.IO) {
-                                    val new = Natives.Profile(app.packageName, app.uid, 0, APApplication.MAGISK_SCONTEXT)
-                                    Log.d(TAG, "add allow profile: " + new)
-                                    SUAllow.addProfile(new)
-                                }
-                            }
-                        } else {
-                            Natives.revokeSu(app.uid)
-                            runBlocking {
-                                launch(Dispatchers.IO) {
-                                    Log.d(TAG, "remove allow package: " + app.packageName)
-                                    SUAllow.removePackage(app.packageName)
-                                }
-                            }
+            Switch(checked = checked
+                , onCheckedChange = {
+                    checked = !checked
+                    config.allow = if(checked) 1 else 0
+                    if(checked) {
+                        Natives.grantSu(app.uid, 0, config.profile?.scontext)
+                    } else {
+                        Natives.revokeSu(app.uid)
+                    }
+                    runBlocking {
+                        launch(Dispatchers.IO) {
+                            PkgConfig.changeConfig(config)
                         }
-                    })
-            }
+                    }
+                })
         },
     )
+    if(edit) {
+        EditUser(app)
+    }
 }
 
 @Composable
-fun LabelText(label: String) {
+fun EditUser(app: SuperUserViewModel.AppInfo) {
+    var _viahook = app.config.profile?.scontext.isNullOrEmpty()
+    var viahook by remember { mutableStateOf(_viahook) }
+    var exclude by remember { mutableStateOf(app.config.exclude) }
 
+    Column(modifier = Modifier.padding(start = 24.dp, end = 24.dp)) {
+        SwitchItem(
+            icon = Icons.Filled.Security,
+            title = "SU Thread",
+            summary = "bypass selinux via hooks",
+            checked = viahook,
+            onCheckedChange = {
+                viahook = !viahook
+                if(viahook) app.config.profile.scontext = ""
+                else app.config.profile.scontext = APApplication.MAGISK_SCONTEXT
+                runBlocking {
+                    launch(Dispatchers.IO) {
+                        PkgConfig.changeConfig(app.config)
+                    }
+                }
+            },
+        )
+        SwitchItem(
+            icon = Icons.Filled.Security,
+            title = "Exclude",
+            summary = "for modules",
+            checked = exclude != 0,
+            onCheckedChange = {
+                exclude = if(it) 1 else 0
+                runBlocking {
+                    launch(Dispatchers.IO) {
+                        app.config.exclude = exclude
+                        PkgConfig.changeConfig(app.config)
+                    }
+                }
+            },
+        )
+    }
+}
+
+
+@Composable
+fun LabelText(label: String) {
     Box(
         modifier = Modifier
             .padding(top = 4.dp, end = 4.dp)

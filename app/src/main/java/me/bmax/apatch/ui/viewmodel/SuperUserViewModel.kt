@@ -13,9 +13,11 @@ import kotlinx.parcelize.Parcelize
 import me.bmax.apatch.Natives
 import me.bmax.apatch.apApp
 import me.bmax.apatch.util.HanziToPinyin
+import me.bmax.apatch.util.PkgConfig
 import me.bmax.apatch.util.ServicesUtil
 import java.text.Collator
 import java.util.*
+import kotlin.collections.HashMap
 import kotlin.concurrent.thread
 
 
@@ -29,7 +31,7 @@ class SuperUserViewModel : ViewModel() {
     data class AppInfo(
         val label: String,
         val packageInfo: PackageInfo,
-        val profile: Natives.Profile?,
+        val config: PkgConfig.Config
     ) : Parcelable {
         val packageName: String
             get() = packageInfo.packageName
@@ -45,8 +47,9 @@ class SuperUserViewModel : ViewModel() {
     private val sortedList by derivedStateOf {
         val comparator = compareBy<AppInfo> {
             when {
-                it.profile != null -> 0
-                else -> 1
+                it.config.allow != 0 -> 0
+                it.config.exclude == 0 -> 1
+                else -> 2
             }
         }.then(compareBy(Collator.getInstance(Locale.getDefault()), AppInfo::label))
         apps.sortedWith(comparator).also {
@@ -71,19 +74,28 @@ class SuperUserViewModel : ViewModel() {
         thread {
             Natives.su(0, "")
             val uids = Natives.suUids().toList()
-
             Log.d(TAG, "all allows: ${uids}")
+            val configs: HashMap<String, PkgConfig.Config> = PkgConfig.configs
+            Log.d(TAG, "all configs: ${configs}")
 
             val allPackages = ServicesUtil.getInstalledPackagesAll(apApp, 0)
 
             apps = allPackages.map { it ->
                 val appInfo = it.applicationInfo
                 val uid = appInfo.uid
-                val profile = if(uids.contains(uid)) Natives.suProfile(uid) else null
+                val actProfile = if(uids.contains(uid)) Natives.suProfile(uid) else null
+                val config = configs.getOrDefault(appInfo.packageName,
+                    PkgConfig.Config(appInfo.packageName, 1, 0, Natives.Profile(uid)))
+                config.allow = 0
+                // profile from kernel
+                if(actProfile != null) {
+                    config.allow = 1
+                    config.profile = actProfile
+                }
                 AppInfo(
                     label = appInfo.loadLabel(apApp.packageManager).toString(),
                     packageInfo = it,
-                    profile = profile,
+                    config = config
                 )
             }.filter { it.packageName != apApp.packageName }
         }

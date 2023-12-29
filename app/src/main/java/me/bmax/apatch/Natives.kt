@@ -15,22 +15,22 @@ object Natives {
     @Parcelize
     @Keep
     data class Profile (
-        var pkg: String,
         var uid: Int = 0,
         var toUid: Int = 0,
-        var scontext: String = "u:r:magisk:s0",
+        var scontext: String = APApplication.MAGISK_SCONTEXT,
     ) : Parcelable {
-        fun toLine(): String {
-            return "${pkg},${uid},${toUid},${scontext}"
-        }
-        companion object {
-            fun from(line: String): Profile {
-                val sp = line.split(',')
-                return Profile(sp[0], sp[1].toInt(), sp[2].toInt(), sp[3])
-            }
-        }
     }
 
+    @Immutable
+    @Parcelize
+    @Keep
+    data class KPMInfo(
+        var name: String,
+        var version: String,
+        var license: String,
+        var author: String,
+        var description: String
+    ): Parcelable{}
 
     private external fun nativeSu(superKey: String, to_uid: Int, scontext: String? ): Int
 

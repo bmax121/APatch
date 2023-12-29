@@ -250,8 +250,11 @@ fun FloatButton(navigator: DestinationsNavigator) {
         ) {
             ExtendedFloatingActionButton(
                 onClick = {
-//                    showSetKeyDialog.value = true
-                    permissionRequest.value = true
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                        permissionRequest.value = true
+                    } else {
+                        showSetKeyDialog.value = true
+                    }
                 },
                 icon = { Icon(Icons.Filled.InstallMobile, "install") },
                 text = { Text(text = "Patch") },

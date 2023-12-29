@@ -94,12 +94,12 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
                 val data = it.data ?: return@rememberLauncherForActivityResult
                 val uri = data.data ?: return@rememberLauncherForActivityResult
 
-                Log.d(TAG, "data: " + data)
-                Log.d(TAG, "uri: " + uri)
+                Log.i(TAG, "select kpm result: ${it.data}")
+
+                viewModel.loadModule(uri)
 
                 viewModel.markNeedRefresh()
 
-                Log.i(TAG, "select kpm result: ${it.data}")
             }
 
             ExtendedFloatingActionButton(
@@ -159,7 +159,7 @@ private fun ModuleList(
     val snackBarHost = LocalSnackbarHost.current
     val context = LocalContext.current
 
-    suspend fun onModuleUninstall(module: KPModuleViewModel.ModuleInfo) {
+    suspend fun onModuleUninstall(module: Natives.KPMInfo) {
         val confirmResult = dialogHost.showConfirm(
             moduleStr,
             content = moduleUninstallConfirm.format(module.name),
@@ -228,7 +228,7 @@ private fun ModuleList(
                 }
                 else -> {
                     items(viewModel.moduleList) { module ->
-                        var isChecked by rememberSaveable(module) { mutableStateOf(module.enabled) }
+                        var isChecked by rememberSaveable(module) { mutableStateOf(true) }
                         val scope = rememberCoroutineScope()
 
                         KPModuleItem(module, isChecked, onUninstall = {
@@ -285,18 +285,18 @@ private fun TopBar() {
 
 @Composable
 private fun KPModuleItem(
-    module: KPModuleViewModel.ModuleInfo,
+    module: Natives.KPMInfo,
     isChecked: Boolean,
-    onUninstall: (KPModuleViewModel.ModuleInfo) -> Unit,
+    onUninstall: (Natives.KPMInfo) -> Unit,
     onCheckChanged: (Boolean) -> Unit,
-    onUpdate: (KPModuleViewModel.ModuleInfo) -> Unit,
+    onUpdate: (Natives.KPMInfo) -> Unit,
 ) {
     ElevatedCard(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
 
-        val textDecoration = if (!module.remove) null else TextDecoration.LineThrough
+        val textDecoration = TextDecoration.LineThrough
 
         Column(modifier = Modifier.padding(24.dp, 16.dp, 24.dp, 0.dp)) {
             Row(
@@ -360,7 +360,7 @@ private fun KPModuleItem(
                 Spacer(modifier = Modifier.weight(1f, true))
 
                 TextButton(
-                    enabled = !module.remove,
+                    enabled = true,
                     onClick = { onUninstall(module) },
                 ) {
                     Text(

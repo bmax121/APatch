@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Build
 import android.system.Os
 import com.topjohnwu.superuser.ShellUtils
+import me.bmax.apatch.Natives
 import me.bmax.apatch.ui.screen.getManagerVersion
 import java.io.File
 import java.io.FileWriter
@@ -25,10 +26,10 @@ fun getBugreportFile(context: Context): File {
     val bootlogFile = File(bugreportDir, "bootlog.tar.gz")
     val mountsFile = File(bugreportDir, "mounts.txt")
     val fileSystemsFile = File(bugreportDir, "filesystems.txt")
-    val ksuFileTree = File(bugreportDir, "ksu_tree.txt")
+    val apFileTree = File(bugreportDir, "ap_tree.txt")
     val appListFile = File(bugreportDir, "packages.txt")
     val propFile = File(bugreportDir, "props.txt")
-    val allowListFile = File(bugreportDir, "allowlist.bin")
+    val packageConfigFile = File(bugreportDir, "package_config")
 
     val shell = getRootShell()
 
@@ -38,14 +39,14 @@ fun getBugreportFile(context: Context): File {
     shell.newJob().add("tar -czf ${dropboxFile.absolutePath} -C /data/system/dropbox .").exec()
     shell.newJob().add("tar -czf ${pstoreFile.absolutePath} -C /sys/fs/pstore .").exec()
     shell.newJob().add("tar -czf ${diagFile.absolutePath} -C /data/vendor/diag .").exec()
-    shell.newJob().add("tar -czf ${bootlogFile.absolutePath} -C /data/adb/ksu/log .").exec()
+    shell.newJob().add("tar -czf ${bootlogFile.absolutePath} -C /data/adb/ap/log .").exec()
 
     shell.newJob().add("cat /proc/1/mountinfo > ${mountsFile.absolutePath}").exec()
     shell.newJob().add("cat /proc/filesystems > ${fileSystemsFile.absolutePath}").exec()
-    shell.newJob().add("ls -alRZ /data/adb > ${ksuFileTree.absolutePath}").exec()
+    shell.newJob().add("ls -alRZ /data/adb > ${apFileTree.absolutePath}").exec()
     shell.newJob().add("cp /data/system/packages.list ${appListFile.absolutePath}").exec()
     shell.newJob().add("getprop > ${propFile.absolutePath}").exec()
-    shell.newJob().add("cp /data/adb/ksu/.allowlist ${allowListFile.absolutePath}").exec()
+    shell.newJob().add("cp /data/adb/ap/package_config ${packageConfigFile.absolutePath}").exec()
 
     val selinux = ShellUtils.fastCmd(shell, "getenforce");
 
@@ -71,8 +72,8 @@ fun getBugreportFile(context: Context): File {
         pw.println("Nodename: ${uname.nodename}")
         pw.println("Sysname: ${uname.sysname}")
 
-        val ksuKernel = 333
-        pw.println("APatch: $ksuKernel")
+        pw.println("KPatch: ${Natives.kerenlPatchVersion()}")
+        pw.println("APatch: ${getManagerVersion()}")
         val safeMode = false
         pw.println("SafeMode: $safeMode")
     }

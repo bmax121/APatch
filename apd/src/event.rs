@@ -1,5 +1,6 @@
 use anyhow::{bail, Context, Result};
 use log::{info, warn};
+use std::env;
 use std::{collections::HashMap, path::Path};
 
 use crate::module::prune_modules;
@@ -95,9 +96,29 @@ pub fn on_post_data_fs() -> Result<()> {
     #[cfg(unix)]
     let _ = catch_bootlog();
 
-    if utils::has_magisk() {
-        warn!("Magisk detected, skip post-fs-data!");
-        return Ok(());
+    // todo: test now
+    // if utils::has_magisk() {
+    //     warn!("Magisk detected, skip post-fs-data!");
+    //     return Ok(());
+    // }
+    info!("----------");
+
+    let key = "SUPERKEY";
+    match env::var(key) {
+        Ok(value) => println!("{}: {}", key, value),
+        Err(_) => println!("{} not found", key)
+    }
+
+    let key = "KERNEL_PATCH_VER";
+    match env::var(key) {
+        Ok(value) => println!("{}: {}", key, value),
+        Err(_) => println!("{} not found", key),
+    }
+
+    let key = "KERNEL_VER";
+    match env::var(key) {
+        Ok(value) => println!("{}: {}", key, value),
+        Err(_) => println!("{} not found", key),
     }
 
     let safe_mode = crate::utils::is_safe_mode();
@@ -250,16 +271,16 @@ fn catch_bootlog() -> Result<()> {
 
     let logdir = Path::new(defs::LOG_DIR);
     utils::ensure_dir_exists(logdir)?;
-    let bootlog = logdir.join("apatch.log");
-    let oldbootlog = logdir.join("apatch.old.log");
+    let aptchlog = logdir.join("apatch.log");
+    let oldapatchlog = logdir.join("apatch.old.log");
 
-    if bootlog.exists() {
-        std::fs::rename(&bootlog, oldbootlog)?;
+    if aptchlog.exists() {
+        std::fs::rename(&aptchlog, oldapatchlog)?;
     }
 
-    let bootlog = std::fs::File::create(bootlog)?;
+    let aptchlog = std::fs::File::create(aptchlog)?;
 
-    // timeout -s 9 30s logcat > boot.log
+    // timeout -s 9 30s logcat > apatch.log
     let result = unsafe {
         std::process::Command::new("timeout")
             .process_group(0)
@@ -271,7 +292,7 @@ fn catch_bootlog() -> Result<()> {
             .arg("9")
             .arg("30s")
             .arg("logcat")
-            .stdout(Stdio::from(bootlog))
+            .stdout(Stdio::from(aptchlog))
             .spawn()
     };
 

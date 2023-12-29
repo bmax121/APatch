@@ -17,7 +17,7 @@ import org.json.JSONObject
 import java.text.Collator
 import java.util.*
 
-class ModuleViewModel : ViewModel() {
+class APModuleViewModel : ViewModel() {
     companion object {
         private const val TAG = "ModuleViewModel"
         private var modules by mutableStateOf<List<ModuleInfo>>(emptyList())

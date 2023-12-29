@@ -10,15 +10,11 @@ import coil.Coil
 import coil.ImageLoader
 import com.topjohnwu.superuser.CallbackList
 import com.topjohnwu.superuser.Shell
-import com.topjohnwu.superuser.ShellUtils
 import me.bmax.apatch.ui.screen.getManagerVersion
-import me.bmax.apatch.util.getRootShell
 import me.zhanghai.android.appiconloader.coil.AppIconFetcher
 import me.zhanghai.android.appiconloader.coil.AppIconKeyer
 import java.io.File
-import java.nio.file.Paths
 import kotlin.concurrent.thread
-import kotlin.io.path.createSymbolicLinkPointingTo
 
 lateinit var apApp: APApplication
 
@@ -43,7 +39,7 @@ class APApplication : Application() {
         val APATCH_LOG_FLODER = "/data/adb/ap/log/"
         val APD_LINK_PATH = APATCH_BIN_FLODER + "apd"
         val KPATCH_LINK_PATH = APATCH_BIN_FLODER + "kpatch"
-        val ALLOW_UID_FILE = APATCH_FLODER + "allow_uid"
+        val PACKAGE_CONFIG_FILE = APATCH_FLODER + "package_config"
         val SU_PATH_FILE = APATCH_FLODER + "su_path"
         val SAFEMODE_FILE = "/dev/.sefemode"
 
@@ -81,7 +77,8 @@ class APApplication : Application() {
                 Natives.resetSuPath(DEFAULT_SU_PATH)
                 File(APATCH_VERSION_PATH).delete()
                 File(APD_PATH).delete()
-                File(KPATCH_PATH).delete()
+                // Reserved, used to obtain logs
+//                File(KPATCH_PATH).delete()
                 File(APATCH_FLODER).deleteRecursively()
 
                 Log.d(TAG, "APatch removed ...")
@@ -135,7 +132,7 @@ class APApplication : Application() {
                     "cp -f ${nativeDir}/libbusybox.so ${BUSYBOX_BIN_PATH}",
                     "chmod +x ${BUSYBOX_BIN_PATH}",
 
-                    "touch ${ALLOW_UID_FILE}",
+                    "touch ${PACKAGE_CONFIG_FILE}",
                     "touch ${SU_PATH_FILE}",
                     "[ -s ${SU_PATH_FILE} ] || echo ${LEGACY_SU_PATH} > ${SU_PATH_FILE}",
                     "echo ${getManagerVersion().second} > ${APATCH_VERSION_PATH}",

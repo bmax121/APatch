@@ -38,15 +38,16 @@ getdir() {
 # Switch to the location of the script file
 cd "$(getdir "${BASH_SOURCE:-$0}")"
 
+echo "APatch Boot Image Patcher"
+
 # Check if 64-bit
 if [ $(uname -m) = "aarch64" ]; then
-  echo "system is arm64"
+  echo "System is arm64"
 else
   echo "Not is arm64"
   exit
 fi
 
-echo "APatch Boot Image Patcher"
 
 SUPERKEY=$1
 BOOTIMAGE=$2
@@ -59,7 +60,7 @@ command -v ./magiskboot >/dev/null 2>&1 || { echo "magiskboot not found!"; exit 
 command -v ./kptools >/dev/null 2>&1 || { echo "kptools not found!"; exit 1; }
 
 echo "- Unpacking boot image"
-./magiskboot unpack "$BOOTIMAGE"
+./magiskboot unpack "$BOOTIMAGE" >/dev/null 2>&1
 
 mv kernel kernel.ori
 
@@ -72,7 +73,7 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "- Repacking boot image"
-./magiskboot repack "$BOOTIMAGE" || exit $?
+./magiskboot repack "$BOOTIMAGE" >/dev/null 2>&1 || exit $?
 
 ls -l "new-boot.img" | echo
 

@@ -34,13 +34,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.topjohnwu.superuser.Shell
-import com.topjohnwu.superuser.ShellUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.bmax.apatch.APApplication
-import me.bmax.apatch.Natives
 import me.bmax.apatch.util.DownloadListener
 import me.bmax.apatch.util.download
 import me.bmax.apatch.R
@@ -53,11 +50,9 @@ import me.bmax.apatch.util.reboot
 import me.bmax.apatch.util.toggleModule
 import me.bmax.apatch.util.uninstallModule
 import me.bmax.apatch.ui.screen.destinations.InstallScreenDestination
-import me.bmax.apatch.ui.viewmodel.ModuleViewModel
+import me.bmax.apatch.ui.viewmodel.APModuleViewModel
 import me.bmax.apatch.util.hasMagisk
 import okhttp3.OkHttpClient
-import java.io.File
-import kotlin.concurrent.thread
 
 @Destination
 @Composable
@@ -79,7 +74,7 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
         return
     }
 
-    val viewModel = viewModel<ModuleViewModel>()
+    val viewModel = viewModel<APModuleViewModel>()
 
     LaunchedEffect(Unit) {
         if (viewModel.moduleList.isEmpty() || viewModel.isNeedRefresh) {
@@ -91,7 +86,6 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
     var isSafeMode = false
     var hasMagisk = hasMagisk()
     val hideInstallButton = isSafeMode || hasMagisk
-
 
     Scaffold(topBar = {
         TopBar()
@@ -109,11 +103,11 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
                 val data = it.data ?: return@rememberLauncherForActivityResult
                 val uri = data.data ?: return@rememberLauncherForActivityResult
 
+                Log.i("ModuleScreen", "select zip result: ${uri}")
+
                 navigator.navigate(InstallScreenDestination(uri))
 
                 viewModel.markNeedRefresh()
-
-                Log.i("ModuleScreen", "select zip result: ${it.data}")
             }
 
             ExtendedFloatingActionButton(
@@ -164,7 +158,7 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun ModuleList(
-    viewModel: ModuleViewModel, modifier: Modifier = Modifier, onInstallModule: (Uri) -> Unit
+    viewModel: APModuleViewModel, modifier: Modifier = Modifier, onInstallModule: (Uri) -> Unit
 ) {
     val failedEnable = stringResource(R.string.module_failed_to_enable)
     val failedDisable = stringResource(R.string.module_failed_to_disable)
@@ -186,7 +180,7 @@ private fun ModuleList(
     val context = LocalContext.current
 
     suspend fun onModuleUpdate(
-        module: ModuleViewModel.ModuleInfo,
+        module: APModuleViewModel.ModuleInfo,
         changelogUrl: String,
         downloadUrl: String,
         fileName: String
@@ -238,7 +232,7 @@ private fun ModuleList(
         }
     }
 
-    suspend fun onModuleUninstall(module: ModuleViewModel.ModuleInfo) {
+    suspend fun onModuleUninstall(module: APModuleViewModel.ModuleInfo) {
         val confirmResult = dialogHost.showConfirm(
             moduleStr,
             content = moduleUninstallConfirm.format(module.name),
@@ -364,7 +358,6 @@ private fun ModuleList(
                                 )
                             }
                         })
-
                         // fix last item shadow incomplete in LazyColumn
                         Spacer(Modifier.height(1.dp))
                     }
@@ -372,7 +365,7 @@ private fun ModuleList(
             }
         }
 
-        DownloadListener(context, onInstallModule)
+//        DownloadListener(context, onInstallModule)
 
         PullRefreshIndicator(
             refreshing = viewModel.isRefreshing, state = refreshState, modifier = Modifier.align(
@@ -390,12 +383,12 @@ private fun TopBar() {
 
 @Composable
 private fun ModuleItem(
-    module: ModuleViewModel.ModuleInfo,
+    module: APModuleViewModel.ModuleInfo,
     isChecked: Boolean,
     updateUrl: String,
-    onUninstall: (ModuleViewModel.ModuleInfo) -> Unit,
+    onUninstall: (APModuleViewModel.ModuleInfo) -> Unit,
     onCheckChanged: (Boolean) -> Unit,
-    onUpdate: (ModuleViewModel.ModuleInfo) -> Unit,
+    onUpdate: (APModuleViewModel.ModuleInfo) -> Unit,
 ) {
     ElevatedCard(
         modifier = Modifier.fillMaxWidth(),
