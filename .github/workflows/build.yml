@@ -26,15 +26,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup need_upload
-        id: need_upload
-        run: |
-          if [ ! -z "${{ secrets.BOT_TOKEN }}" ]; then
-            echo "UPLOAD=true" >> $GITHUB_OUTPUT
-          else
-            echo "UPLOAD=false" >> $GITHUB_OUTPUT
-          fi
-
       - name: Write key
         if: ${{ ( github.event_name != 'pull_request' && github.ref == 'refs/heads/main' ) || github.ref_type == 'tag' }}
         run: |
@@ -45,7 +36,7 @@ jobs:
             echo KEYSTORE_FILE='../key.jks' >> gradle.properties
             echo ${{ secrets.KEYSTORE }} | base64 --decode > key.jks
           fi
-
+          
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
@@ -61,7 +52,12 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: apd-aarch64-linux-android
-          path: ../app/libs/arm64-v8a/libapd.so
+          path: app/libs/arm64-v8a/libapd.so
+
+      - name: test
+        run: |
+          ls
+          ls app/libs/arm64-v8a
 
       - name: Build with Gradle
         run: |
