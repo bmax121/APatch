@@ -50,23 +50,6 @@ fun SettingScreen(navigator: DestinationsNavigator) {
             val scope = rememberCoroutineScope()
             val dialogHost = LocalDialogHost.current
 
-            var umountChecked by rememberSaveable {
-//                mutableStateOf(Natives.isDefaultUmountModules())
-                mutableStateOf(false)
-            }
-
-            SwitchItem(
-                icon = Icons.Filled.RemoveModerator,
-                title = stringResource(id = R.string.settings_umount_modules_default),
-                summary = stringResource(id = R.string.settings_umount_modules_default_summary),
-                checked = umountChecked
-            ) {
-//                if (Natives.setDefaultUmountModules(it)) {
-                if (true) {
-                    umountChecked = it
-                }
-            }
-
             ListItem(
                 leadingContent = { Icon(Icons.Filled.BugReport, stringResource(id = R.string.send_log)) },
                 headlineContent = { Text(stringResource(id = R.string.send_log)) },

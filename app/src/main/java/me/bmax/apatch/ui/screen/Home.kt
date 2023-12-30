@@ -590,7 +590,7 @@ fun LearnMoreCard() {
                 )
                 Spacer(Modifier.height(4.dp))
                 Text(
-                    text = stringResource(R.string.home_click_to_learn_kernelsu),
+                    text = stringResource(R.string.home_click_to_learn_apatch),
                     style = MaterialTheme.typography.bodyMedium
                 )
             }

@@ -29,7 +29,6 @@
     <string name="home_superuser_count">Superusers: %d</string>
     <string name="home_module_count">Modules: %d</string>
     <string name="home_unsupported">Unsupported</string>
-    <string name="home_unsupported_reason">APatch only supports GKI kernels now</string>
 
     <string name="home_kernel">Kernel</string>
     <string name="home_manager_version">Manager Version</string>
@@ -63,7 +62,10 @@
     <string name="module_uninstall_success">%s uninstalled</string>
     <string name="module_uninstall_failed">Failed to uninstall: %s</string>
     <string name="module_version">Version</string>
+    <string name="module_license">License</string>
     <string name="module_author">Author</string>
+    <string name="module_desc">Desc</string>
+    <string name="module_args">Args</string>
     <string name="module_overlay_fs_not_available">overlayfs is not available, module cannot work!</string>
     <string name="refresh">Refresh</string>
     <string name="reset_su">Reset su path</string>
@@ -75,13 +77,11 @@
     <string name="module_magisk_conflict">Modules are disabled because it is conflict with Magisk\'s!</string>
     <string name="home_learn_apatch">Learn AndroidPatch</string>
     <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
-    <string name="home_click_to_learn_kernelsu">Learn about the features of AndroidPatch and how to use</string>
+    <string name="home_click_to_learn_apatch">Learn about the features of AndroidPatch and how to use</string>
     <string name="home_support_title">Support Us</string>
     <string name="home_support_content">APatch is, and always will be, free, and open source. You can however show us that you care by making a donation.</string>
     <string name="about_source_code"><![CDATA[View source code at %1$s<br/>Join our %2$s channel]]></string>
     <string name="failed_to_update_app_profile">Failed to update App Profile for %s</string>
-    <string name="settings_umount_modules_default">Umount modules by default</string>
-    <string name="settings_umount_modules_default_summary">The global default value for \"Umount modules\" in App Profiles. If enabled, it will remove all module modifications to the system for applications that do not have a Profile set.</string>
     <string name="profile_umount_modules_summary">Enabling this option will allow APatch to restore any modified files by the modules for this application.</string>
     <string name="module_update">Update</string>
     <string name="module_downloading">Downloading module: %s</string>

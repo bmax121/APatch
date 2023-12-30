@@ -29,7 +29,8 @@ object Natives {
         var version: String,
         var license: String,
         var author: String,
-        var description: String
+        var description: String,
+        var args: String
     ): Parcelable{}
 
     private external fun nativeSu(superKey: String, to_uid: Int, scontext: String? ): Int
@@ -60,9 +61,9 @@ object Natives {
     fun kerenlPatchVersion(): Long {
         return nativeKernelPatchVersion(APApplication.superKey)
     }
-    private external fun nativeLoadKernelPatchModule(superKey: String, modulePath: String): Long
-    fun loadKernelPatchModule(modulePath: String): Long {
-        return nativeLoadKernelPatchModule(APApplication.superKey, modulePath)
+    private external fun nativeLoadKernelPatchModule(superKey: String, modulePath: String, args: String): Long
+    fun loadKernelPatchModule(modulePath: String, args: String): Long {
+        return nativeLoadKernelPatchModule(APApplication.superKey, modulePath, args)
     }
     private external fun nativeUnloadKernelPatchModule(superKey: String, moduleName: String): Long
     fun unloadKernelPatchModule(moduleName: String): Long {
