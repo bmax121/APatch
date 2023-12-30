@@ -61,12 +61,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: apd-aarch64-linux-android
-          path: .
-
-      - name: Copy apd to app jniLibs
-        run: |
-          mkdir -p app/libs/arm64-v8a
-          cp -f ../aarch64-linux-android/release/apd ../app/libs/arm64-v8a/arm64-v8a/libpad.so
+          path: app/libs/arm64-v8a/libapd.so
 
       - name: Build with Gradle
         run: |
@@ -80,5 +75,5 @@ jobs:
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
         with:
-          name: manager
-          path: manager/app/build/outputs/apk/release/*.apk
+          name: APatch
+          path: app/build/outputs/apk/release/*.apk
