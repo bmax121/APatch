@@ -61,7 +61,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: apd-aarch64-linux-android
-          path: app/libs/arm64-v8a/libapd.so
+          path: ../app/libs/arm64-v8a/libapd.so
 
       - name: Build with Gradle
         run: |
