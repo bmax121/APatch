@@ -24,7 +24,7 @@ jobs:
           cache-targets: false
 
       - name: Install cross
-        run: cargo install cross
+        run: cargo install cross --locked
 
       - name: Build apd
         run: cross build --target aarch64-linux-android --release --manifest-path ./apd/Cargo.toml
