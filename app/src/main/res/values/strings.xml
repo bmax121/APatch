@@ -1,0 +1,95 @@
+<resources>
+    <string name="app_name" translatable="false">APatch</string>
+
+    <string name="home">Home</string>
+
+    <string name="super_key">SuperKey</string>
+    <string name="set_key_title">Set SuperKey</string>
+    <string name="set_key_desc">Only credential for KernelPatch</string>
+    <string name="next_step">Next Step</string>
+
+    <string name="patch_warnning">Installation comes with risks, please ensure your data is backed up.</string>
+
+    <string name="kernel_patch">KernelPatch</string>
+    <string name="android_patch">AndroidPatch</string>
+    <string name="home_not_installed">Not installed</string>
+    <string name="home_install_unknown">Unknown</string>
+    <string name="home_click_to_install">Click to install</string>
+    <string name="working">Working</string>
+    <string name="installing">Installing</string>
+    <string name="not_install">Not install</string>
+    <string name="need_update">Can update</string>
+    <string name="kpatch_version">version: %d.%d.%d</string>
+    <string name="apatch_version">version: %s</string>
+    <string name="apatch_version_update">version: %s -> %s</string>
+    <string name="home_su_path">su: %s</string>
+    <string name="home_su_path_ex">su: %s->%s</string>
+    <string name="kpatch_shadow_path">kpatch: %s->%s</string>
+    <string name="home_apatch_version">APatch: %s</string>
+    <string name="home_superuser_count">Superusers: %d</string>
+    <string name="home_module_count">Modules: %d</string>
+    <string name="home_unsupported">Unsupported</string>
+
+    <string name="home_kernel">Kernel</string>
+    <string name="home_manager_version">Manager Version</string>
+    <string name="home_fingerprint">Fingerprint</string>
+
+    <string name="home_selinux_status">SELinux status</string>
+    <string name="selinux_status_disabled">Disabled</string>
+    <string name="selinux_status_enforcing">Enforcing</string>
+    <string name="selinux_status_permissive">Permissive</string>
+    <string name="selinux_status_unknown">Unknown</string>
+    <string name="superuser">Superuser</string>
+    <string name="module_failed_to_enable">Failed to enable module: %s</string>
+    <string name="module_failed_to_disable">Failed to disable module: %s</string>
+    <string name="module_empty">No module installed</string>
+
+    <string name="kpm">KPModule</string>
+    <string name="apm">APModule</string>
+    <string name="uninstall">Uninstall</string>
+    <string name="kpm_load">Load</string>
+    <string name="module_install">Install</string>
+    <string name="install">Install</string>
+    <string name="reboot">Reboot</string>
+    <string name="settings">Settings</string>
+    <string name="reboot_userspace">Soft Reboot</string>
+    <string name="reboot_recovery">Reboot to Recovery</string>
+    <string name="reboot_bootloader">Reboot to Bootloader</string>
+    <string name="reboot_download">Reboot to Download</string>
+    <string name="reboot_edl">Reboot to EDL</string>
+    <string name="about">About</string>
+    <string name="module_uninstall_confirm">Are you sure you want to uninstall module %s?</string>
+    <string name="module_uninstall_success">%s uninstalled</string>
+    <string name="module_uninstall_failed">Failed to uninstall: %s</string>
+    <string name="module_version">Version</string>
+    <string name="module_license">License</string>
+    <string name="module_author">Author</string>
+    <string name="module_desc">Desc</string>
+    <string name="module_args">Args</string>
+    <string name="module_overlay_fs_not_available">overlayfs is not available, module cannot work!</string>
+    <string name="refresh">Refresh</string>
+    <string name="reset_su">Reset su path</string>
+    <string name="show_system_apps">Show system apps</string>
+    <string name="hide_system_apps">Hide system apps</string>
+    <string name="send_log">Send Log</string>
+    <string name="safe_mode">Safe mode</string>
+    <string name="reboot_to_apply">Reboot to take effect</string>
+    <string name="module_magisk_conflict">Modules are disabled because it is conflict with Magisk\'s!</string>
+    <string name="home_learn_apatch">Learn AndroidPatch</string>
+    <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
+    <string name="home_click_to_learn_apatch">Learn about the features of AndroidPatch and how to use</string>
+    <string name="home_support_title">Support Us</string>
+    <string name="home_support_content">APatch is, and always will be, free, and open source. You can however show us that you care by making a donation.</string>
+    <string name="about_source_code"><![CDATA[View source code at %1$s<br/>Join our %2$s channel]]></string>
+    <string name="failed_to_update_app_profile">Failed to update App Profile for %s</string>
+    <string name="profile_umount_modules_summary">Enabling this option will allow APatch to restore any modified files by the modules for this application.</string>
+    <string name="module_update">Update</string>
+    <string name="module_downloading">Downloading module: %s</string>
+    <string name="module_start_downloading">Start downloading: %s</string>
+    <string name="new_version_available">New version: %s is available, click to upgrade</string>
+    <string name="launch_app">Launch</string>
+    <string name="force_stop_app">Force Stop</string>
+    <string name="restart_app">Restart</string>
+    <string name="failed_to_update_sepolicy">Failed to update SELinux rules for: %s</string>
+    <string name="module_changelog">Changelog</string>
+</resources>

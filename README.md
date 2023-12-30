@@ -1,15 +1,20 @@
-# AndroidKernelPatch
+# APatch
 
-Patching, hooking, and rooting the Android kernel using only a stripped Linux kernel image.
+The patching of Android kernel and Android system.
 
-# Coming soon ...  
+``` shell
+    _    ____       _       _     
+   / \  |  _ \ __ _| |_ ___| |__  
+  / _ \ | |_) / _` | __/ __| '_ \ 
+ / ___ \|  __/ (_| | || (__| | | |
+/_/   \_\_|   \__,_|\__\___|_| |_|
+```
 
-# SU and KPM has been implemented and can be downloaded from KernelPatch release.   
+- Root
+- APM: Magisk module like support
+- KPM: Kernel level patch module support
 
-
-APatch relies on [KernelPatch](https://github.com/bmax121/KernelPatch/) 
-
-Want to learn more? Visit [KernelPatch](https://github.com/bmax121/KernelPatch/) .
+APatch relies on [KernelPatch](https://github.com/bmax121/KernelPatch/)
 
 ## Supported Versions
 
@@ -24,14 +29,12 @@ Android Kernel Version 3.18 - 6.1
 
 ## More Information
 
-[FAQ](./doc/en/faq.md)  
-[Documentation](./doc/en/)  
 
 ## Credits
 
-- [KernelPatch](https://github.com/bmax121/KernelPatch/): The core.  
-- [Magisk](https://github.com/topjohnwu/Magisk): Unpacking and repacking boot.img, and SELinux support. 
-- [KernelSU](https://github.com/tiann/KernelSU): The Android UI, and The module support. (In developing ...)
+- [KernelPatch](https://github.com/bmax121/KernelPatch/): The core.
+- [Magisk](https://github.com/topjohnwu/Magisk): magiskboot and magiskpolicy. 
+- [KernelSU](https://github.com/tiann/KernelSU): App UI, and magisk module like support.
 
 ## License
 

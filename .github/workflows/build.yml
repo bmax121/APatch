@@ -1,0 +1,84 @@
+name: Build Manager
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_call:
+
+jobs:
+  build-apd:
+    strategy:
+      matrix:
+        include:
+          - target: aarch64-linux-android
+    uses: ./.github/workflows/apd.yml
+    with:
+      target: ${{ matrix.target }}
+
+  build-manager:
+    needs: build-apd
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup need_upload
+        id: need_upload
+        run: |
+          if [ ! -z "${{ secrets.BOT_TOKEN }}" ]; then
+            echo "UPLOAD=true" >> $GITHUB_OUTPUT
+          else
+            echo "UPLOAD=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Write key
+        if: ${{ ( github.event_name != 'pull_request' && github.ref == 'refs/heads/main' ) || github.ref_type == 'tag' }}
+        run: |
+          if [ ! -z "${{ secrets.KEYSTORE }}" ]; then
+            echo KEYSTORE_PASSWORD='${{ secrets.KEYSTORE_PASSWORD }}' >> gradle.properties
+            echo KEY_ALIAS='${{ secrets.KEY_ALIAS }}' >> gradle.properties
+            echo KEY_PASSWORD='${{ secrets.KEY_PASSWORD }}' >> gradle.properties
+            echo KEYSTORE_FILE='../key.jks' >> gradle.properties
+            echo ${{ secrets.KEYSTORE }} | base64 --decode > key.jks
+          fi
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: "temurin"
+          java-version: "17"
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-home-cache-cleanup: true
+
+      - name: Download arm64 apd
+        uses: actions/download-artifact@v3
+        with:
+          name: apd-aarch64-linux-android
+          path: .
+
+      - name: Copy apd to app jniLibs
+        run: |
+          mkdir -p app/libs/arm64-v8a
+          cp -f ../aarch64-linux-android/release/apd ../app/libs/arm64-v8a/arm64-v8a/libpad.so
+
+      - name: Build with Gradle
+        run: |
+          echo 'org.gradle.parallel=true' >> gradle.properties
+          echo 'org.gradle.vfs.watch=true' >> gradle.properties
+          echo 'org.gradle.jvmargs=-Xmx2048m' >> gradle.properties
+          echo 'android.native.buildOutput=verbose' >> gradle.properties
+          sed -i 's/org.gradle.configuration-cache=true//g' gradle.properties
+          ./gradlew clean assembleRelease
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: manager
+          path: manager/app/build/outputs/apk/release/*.apk
