@@ -29,7 +29,8 @@ jobs:
       - name: Generate version
         id: parse_version
         run: |
-          VERSION=$(git rev-list --count HEAD)
+          COMMIT_NUM=$(git rev-list --count HEAD)
+          VERSION=$(echo "COMMIT_NUM + 200 + 10000" | bc)
           echo "Generated Version: $VERSION"
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
 
@@ -76,11 +77,11 @@ jobs:
           keyPassword: ${{ secrets.KEY_PASSWORD }}
 
       - name: Release apk
-        uses: ncipollo/release-action@v1
+        uses: ncipollo/release-action@v1.12.0
         with:
-          artifacts: ${{steps.sign_app.outputs.signedReleaseFile}}
           token: ${{ github.token }}
           tag: ${{ steps.parse_version.outputs.VERSION }}
+          artifacts: ${{steps.sign_app.outputs.signedReleaseFile}}
           generateReleaseNotes: true
           makeLatest: true
           replacesArtifacts: true
