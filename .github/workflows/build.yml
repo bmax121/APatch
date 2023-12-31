@@ -26,17 +26,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Write key
-        if: ${{ ( github.event_name != 'pull_request' && github.ref == 'refs/heads/main' ) || github.ref_type == 'tag' }}
-        run: |
-          if [ ! -z "${{ secrets.KEYSTORE }}" ]; then
-            echo KEYSTORE_PASSWORD='${{ secrets.KEYSTORE_PASSWORD }}' >> gradle.properties
-            echo KEY_ALIAS='${{ secrets.KEY_ALIAS }}' >> gradle.properties
-            echo KEY_PASSWORD='${{ secrets.KEY_PASSWORD }}' >> gradle.properties
-            echo KEYSTORE_FILE='../key.jks' >> gradle.properties
-            echo ${{ secrets.KEYSTORE }} | base64 --decode > key.jks
-          fi
-
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
