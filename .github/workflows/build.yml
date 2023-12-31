@@ -3,8 +3,15 @@ name: Build Manager
 on:
   push:
     branches: [ "main" ]
+    paths:
+#      - '.github/workflows/build.yml'
+      - 'app/**'
+      - 'apd/**'
   pull_request:
     branches: [ "main" ]
+    paths:
+      - 'app/**'
+      - 'apd/**'
   workflow_call:
 
 jobs:

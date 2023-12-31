@@ -21,6 +21,11 @@ APatch relies on [KernelPatch](https://github.com/bmax121/KernelPatch/)
 Only arm64.  
 Android Kernel Version 3.18 - 6.1 
 
+## Requirement
+
+CONFIG_KALLSYMS=y  
+CONFIG_KALLSYMS_ALL=y (CONFIG_KALLSYMS_ALL=n, Planned support)
+
 ## Get Help
 
 ## Discussions
