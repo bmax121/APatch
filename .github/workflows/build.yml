@@ -5,27 +5,32 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  workflow_call:
 
 jobs:
   build-apd:
-    uses: .github/workflows/apd.yml
+    uses: ./.github/workflows/apd.yml
     with:
       target: aarch64-linux-android
 
   build-manager:
     needs: build-apd
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Download arm64 apd
-        uses: actions/download-artifact@v3
-        with:
-          name: apd-aarch64-linux-android
-          path: app/libs/arm64-v8a/libapd.so
+      - name: Generate version
+        id: parse_version
+        run: |
+          COMMIT_NUM=$(git rev-list --count HEAD)
+          VERSION=$(echo "$COMMIT_NUM + 200 + 10000" | bc)
+          echo "Generated Version: $VERSION"
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Setup Java
         uses: actions/setup-java@v3
@@ -33,19 +38,38 @@ jobs:
           distribution: "temurin"
           java-version: "17"
 
-      - name: Gradle build
-      - uses: gradle/gradle-build-action@v2
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
         with:
-          gradle-version: current
-          arguments: assembleRelease
+          gradle-home-cache-cleanup: true
+
+      - name: Download arm64 apd
+        uses: actions/download-artifact@v3
+        with:
+          name: apd-aarch64-linux-android
+          path: .
+
+      - name: Copy Libs
+        run: |
+          mv aarch64-linux-android/release/apd app/libs/arm64-v8a/libapd.so
+
+      - name: Build with Gradle
+        run: |
+          echo 'org.gradle.parallel=true' >> gradle.properties
+          echo 'org.gradle.vfs.watch=true' >> gradle.properties
+          echo 'org.gradle.jvmargs=-Xmx2048m' >> gradle.properties
+          echo 'android.native.buildOutput=verbose' >> gradle.properties
+          sed -i 's/org.gradle.configuration-cache=true//g' gradle.properties
+          ./gradlew clean assembleRelease
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
         with:
-          name: APatch_apk
+          name: APatch
           path: app/build/outputs/apk/release/*.apk
 
-      - uses: r0adkll/sign-android-release@v1
+      - name: Sign Release
+        uses: r0adkll/sign-android-release@v1
         id: sign_app
         with:
           releaseDirectory: app/build/outputs/apk/release
@@ -54,9 +78,12 @@ jobs:
           keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
           keyPassword: ${{ secrets.KEY_PASSWORD }}
 
-      - uses: ncipollo/release-action@v1
+      - name: Release apk
+        uses: ncipollo/release-action@v1.12.0
         with:
-          artifacts: ${{steps.sign_app.outputs.signedReleaseFile}}
           token: ${{ github.token }}
+          tag: ${{ steps.parse_version.outputs.VERSION }}
+          artifacts: ${{steps.sign_app.outputs.signedReleaseFile}}
           generateReleaseNotes: true
-
+          makeLatest: true
+          replacesArtifacts: true
