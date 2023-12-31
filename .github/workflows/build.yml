@@ -5,6 +5,7 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  workflow_call:
 
 jobs:
   build-apd:
@@ -43,12 +44,6 @@ jobs:
           gradle-version: current
           arguments: assembleRelease
 
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: APatch_apk
-          path: app/build/outputs/apk/release/*.apk
-
       - name: Sign Apk
       - uses: r0adkll/sign-android-release@v1
         id: sign_app
@@ -58,6 +53,12 @@ jobs:
           alias: ${{ secrets.ALIAS }}
           keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
           keyPassword: ${{ secrets.KEY_PASSWORD }}
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: APatch_apk
+          path: ${{steps.sign_app.outputs.signedReleaseFile}}
 
       - name: Release apk
       - uses: ncipollo/release-action@v1
