@@ -12,7 +12,7 @@ The patching of Android kernel and Android system.
 
 - Root
 - APM: Magisk module like support
-- KPM: Kernel level patch module support
+- KPM: Kernel Patch Module support. (Allow you to inject any code into the kernel, Kernel function inline-hook and syscall-table-hook is available)
 
 APatch relies on [KernelPatch](https://github.com/bmax121/KernelPatch/)
 
