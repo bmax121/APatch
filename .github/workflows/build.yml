@@ -8,7 +8,7 @@ on:
 
 jobs:
   build-apd:
-    uses: .github/workflows/apd.yml
+    uses: ./.github/workflows/apd.yml
     with:
       target: aarch64-linux-android
 
