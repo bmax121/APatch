@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build-ksud:
+  build-apd:
     strategy:
       matrix:
         include:
@@ -49,6 +49,7 @@ jobs:
           name: APatch_apk
           path: app/build/outputs/apk/release/*.apk
 
+      - name: Sign Apk
       - uses: r0adkll/sign-android-release@v1
         id: sign_app
         with:
@@ -58,6 +59,7 @@ jobs:
           keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
           keyPassword: ${{ secrets.KEY_PASSWORD }}
 
+      - name: Release apk
       - uses: ncipollo/release-action@v1
         with:
           artifacts: ${{steps.sign_app.outputs.signedReleaseFile}}
