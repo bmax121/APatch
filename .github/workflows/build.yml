@@ -67,3 +67,10 @@ jobs:
           alias: ${{ secrets.ALIAS }}
           keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
           keyPassword: ${{ secrets.KEY_PASSWORD }}
+
+      - name: Release apk
+      - uses: ncipollo/release-action@v1
+        with:
+          artifacts: ${{steps.sign_app.outputs.signedReleaseFile}}
+          token: ${{ github.token }}
+          generateReleaseNotes: true
