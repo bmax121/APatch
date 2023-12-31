@@ -26,6 +26,13 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Generate version
+        id: parse_version
+        run: |
+          VERSION=$(git rev-list --count HEAD)
+          echo "Generated Version: $VERSION"
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
@@ -73,4 +80,7 @@ jobs:
         with:
           artifacts: ${{steps.sign_app.outputs.signedReleaseFile}}
           token: ${{ github.token }}
+          tag: ${{ steps.parse_version.outputs.VERSION }}
           generateReleaseNotes: true
+          makeLatest: true
+          replacesArtifacts: true
