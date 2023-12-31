@@ -7,10 +7,14 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build-apd:
+  build-ksud:
+    strategy:
+      matrix:
+        include:
+          - target: aarch64-linux-android
     uses: ./.github/workflows/apd.yml
     with:
-      target: aarch64-linux-android
+      target: ${{ matrix.target }}
 
   build-manager:
     needs: build-apd
