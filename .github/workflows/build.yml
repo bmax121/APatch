@@ -32,16 +32,17 @@ jobs:
           distribution: "temurin"
           java-version: "17"
 
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
-        with:
-          gradle-home-cache-cleanup: true
-
       - name: Download arm64 apd
         uses: actions/download-artifact@v3
         with:
           name: apd-aarch64-linux-android
           path: app/libs/arm64-v8a/libapd.so
+
+      - name: Gradle build
+      - uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: current
+          arguments: assembleRelease
 
       - name: Build with Gradle
         run: |
