@@ -437,5 +437,5 @@ POSTFSDATAD=$NVBASE/post-fs-data.d
 SERVICED=$NVBASE/service.d
 
 # Some modules dependents on this
-export MAGISK_VER=26.3.0
-export MAGISK_VER_CODE=26300
+export MAGISK_VER=26.4.0
+export MAGISK_VER_CODE=26400
