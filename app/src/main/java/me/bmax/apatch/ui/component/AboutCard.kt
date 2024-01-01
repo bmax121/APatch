@@ -99,8 +99,8 @@ private fun AboutCardContent() {
                 HtmlText(
                     html = stringResource(
                         id = R.string.about_source_code,
-                        "<b><a href=\"https://github.com/tiann/APatch\">GitHub</a></b>",
-                        "<b><a href=\"https://t.me/APatch\">Telegram</a></b>"
+                        "<b><a href=\"https://github.com/bmax121/APatch\">GitHub</a></b>",
+                        "<b><a href=\"https://t.me/+B5aYwCw4tY9hOWI9\">Telegram</a></b>"
                     )
                 )
             }

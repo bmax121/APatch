@@ -4,7 +4,7 @@ on:
   push:
     branches: [ "main" ]
     paths:
-#      - '.github/workflows/build.yml'
+      - '.github/workflows/build.yml'
       - 'app/**'
       - 'apd/**'
   pull_request:
