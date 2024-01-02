@@ -507,7 +507,7 @@ private fun AStatusCard(state: APApplication.State) {
 
 @Composable
 fun WarningCard() {
-    var show by rememberSaveable { mutableStateOf(true) }
+    var show by rememberSaveable { mutableStateOf(apApp.getBackupWarningState()) }
     if(show) {
         ElevatedCard(
             colors = CardDefaults.elevatedCardColors(containerColor = run {
@@ -547,7 +547,11 @@ fun WarningCard() {
 
                         Icon(Icons.Outlined.Clear,
                             contentDescription =  "",
-                            modifier = Modifier.clickable { show = false },
+                            modifier = Modifier
+                                .clickable {
+                                    show = false
+                                    apApp.updateBackupWarningState(false)
+                                },
                         )
                     }
                 }

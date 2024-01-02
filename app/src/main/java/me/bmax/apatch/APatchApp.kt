@@ -54,6 +54,7 @@ class APApplication : Application() {
 
         // todo: should we store super_key in SharedPreferences
         private const val SUPER_KEY = "super_key"
+        private const val SHOW_BACKUP_WARN = "show_backup_warning"
         private lateinit var sharedPreferences: SharedPreferences
 
         private val _apStateLiveData = MutableLiveData<State>(State.UNKNOWN_STATE)
@@ -215,5 +216,13 @@ class APApplication : Application() {
                 }
                 .build()
         )
+    }
+
+    fun getBackupWarningState(): Boolean {
+        return sharedPreferences.getBoolean(SHOW_BACKUP_WARN, true)
+    }
+
+    fun updateBackupWarningState(state: Boolean) {
+        sharedPreferences.edit().putBoolean(SHOW_BACKUP_WARN, state).apply()
     }
 }
