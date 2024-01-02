@@ -23,8 +23,8 @@
     <string name="apatch_version">version: %s</string>
     <string name="apatch_version_update">version: %s -> %s</string>
     <string name="home_su_path">su: %s</string>
-    <string name="home_su_path_ex">su: %s->%s</string>
-    <string name="kpatch_shadow_path">kpatch: %s->%s</string>
+    <string name="home_su_path_ex">su: %s -> %s</string>
+    <string name="kpatch_shadow_path">kpatch: %s -> %s</string>
     <string name="home_apatch_version">APatch: %s</string>
     <string name="home_superuser_count">Superusers: %d</string>
     <string name="home_module_count">Modules: %d</string>
