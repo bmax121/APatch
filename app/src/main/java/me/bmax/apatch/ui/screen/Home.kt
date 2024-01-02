@@ -356,7 +356,7 @@ private fun KStatusCard(state: APApplication.State) {
                     !state.equals(APApplication.State.UNKNOWN_STATE) -> {
                         val kernelPatchVersion = Natives.kerenlPatchVersion()
                         Column() {
-                            Text(text = stringResource(R.string.working),
+                            Text(text = stringResource(R.string.home_working),
                                 style = MaterialTheme.typography.titleMedium
                             )
                             Spacer(Modifier.height(6.dp))
@@ -421,17 +421,17 @@ private fun AStatusCard(state: APApplication.State) {
                     val managerVersion = getManagerVersion()
                     when {
                         state.equals(APApplication.State.KERNELPATCH_READY) -> {
-                            Text(text = stringResource(R.string.not_install),
+                            Text(text = stringResource(R.string.home_not_installed),
                                 style = MaterialTheme.typography.titleMedium
                             )
                         }
                         state.equals(APApplication.State.ANDROIDPATCH_INSTALLING) -> {
-                            Text(text = stringResource(R.string.installing),
+                            Text(text = stringResource(R.string.home_installing),
                                 style = MaterialTheme.typography.titleMedium
                             )
                         }
                         state.equals(APApplication.State.ANDROIDPATCH_INSTALLED) -> {
-                            Text(text = stringResource(R.string.working),
+                            Text(text = stringResource(R.string.home_working),
                                 style = MaterialTheme.typography.titleMedium
                             )
                             Spacer(Modifier.height(6.dp))
@@ -441,7 +441,7 @@ private fun AStatusCard(state: APApplication.State) {
                             )
                         }
                         state.equals(APApplication.State.ANDROIDPATCH_NEED_UPDATE) -> {
-                            Text(text = stringResource(R.string.need_update),
+                            Text(text = stringResource(R.string.home_need_update),
                                 style = MaterialTheme.typography.titleMedium
                             )
                             Spacer(Modifier.height(6.dp))
