@@ -511,31 +511,46 @@ fun WarningCard() {
     if(show) {
         ElevatedCard(
             colors = CardDefaults.elevatedCardColors(containerColor = run {
-                MaterialTheme.colorScheme.secondaryContainer
+                MaterialTheme.colorScheme.error
             })
         ) {
             Row (
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp)
-                    .align(Alignment.CenterHorizontally),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ){
-                Text(
-                    modifier = Modifier.weight(1f),
-                    text = stringResource(id = R.string.patch_warnning),
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        color = Color.Red,
-                        fontWeight = FontWeight.Bold
-                    )
-                )
+                    .padding(12.dp)
+            ) {
+                Column (
+                    modifier = Modifier
+                        .padding(12.dp),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Icon(Icons.Filled.Warning, contentDescription = "warning")
+                }
+                Column (
+                    modifier = Modifier
+                        .padding(12.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Row (
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.CenterHorizontally),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ){
+                        Text(
+                            modifier = Modifier.weight(1f),
+                            text = stringResource(id = R.string.patch_warnning),
+                        )
 
-                Spacer(Modifier.width(12.dp))
+                        Spacer(Modifier.width(12.dp))
 
-                Icon(Icons.Outlined.Clear,
-                    contentDescription =  "",
-                    modifier = Modifier.clickable { show = false },
-                )
+                        Icon(Icons.Outlined.Clear,
+                            contentDescription =  "",
+                            modifier = Modifier.clickable { show = false },
+                        )
+                    }
+                }
             }
         }
     }
