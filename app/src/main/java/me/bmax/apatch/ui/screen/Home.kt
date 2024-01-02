@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.InstallMobile
 import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.outlined.Cached
@@ -461,7 +462,6 @@ private fun AStatusCard(state: APApplication.State) {
                 if(!state.equals(APApplication.State.UNKNOWN_STATE)) {
                     Column (modifier = Modifier
                         .align(Alignment.CenterVertically)
-                        .weight(1f)
                     ) {
                         Button(
                             onClick = {
