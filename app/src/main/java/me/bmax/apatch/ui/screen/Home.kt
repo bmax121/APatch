@@ -351,7 +351,7 @@ private fun KStatusCard(state: APApplication.State) {
             }
             Row(modifier = Modifier
                 .fillMaxWidth()
-                .padding(6.dp), verticalAlignment = Alignment.CenterVertically) {
+                .padding(10.dp), verticalAlignment = Alignment.CenterVertically) {
                 when {
                     !state.equals(APApplication.State.UNKNOWN_STATE) -> {
                         val kernelPatchVersion = Natives.kerenlPatchVersion()
@@ -384,11 +384,10 @@ private fun KStatusCard(state: APApplication.State) {
                         }
                     }
                     else -> {
-                        Column(Modifier.padding(start = 12.dp)) {
+                        Column(Modifier.padding(start = 6.dp)) {
                             Text(text = stringResource(R.string.home_install_unknown),
                                 style = MaterialTheme.typography.titleMedium
                             )
-                            Spacer(Modifier.height(8.dp))
                         }
                     }
                 }
@@ -415,7 +414,7 @@ private fun AStatusCard(state: APApplication.State) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(6.dp), verticalAlignment = Alignment.CenterVertically) {
+                    .padding(10.dp), verticalAlignment = Alignment.CenterVertically) {
                 Column(Modifier
                     .weight(2f)
                 ) {
@@ -452,9 +451,11 @@ private fun AStatusCard(state: APApplication.State) {
                             )
                         }
                         else -> {
-                            Text(text = stringResource(R.string.home_install_unknown),
-                                style = MaterialTheme.typography.titleMedium
-                            )
+                            Column(Modifier.padding(start = 6.dp)) {
+                                Text(text = stringResource(R.string.home_install_unknown),
+                                    style = MaterialTheme.typography.titleMedium
+                                )
+                            }
                         }
                     }
                     Spacer(Modifier.height(6.dp))
