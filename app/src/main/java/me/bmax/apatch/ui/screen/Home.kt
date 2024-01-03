@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.InstallMobile
 import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.outlined.Cached
@@ -350,12 +351,12 @@ private fun KStatusCard(state: APApplication.State) {
             }
             Row(modifier = Modifier
                 .fillMaxWidth()
-                .padding(6.dp), verticalAlignment = Alignment.CenterVertically) {
+                .padding(10.dp), verticalAlignment = Alignment.CenterVertically) {
                 when {
                     !state.equals(APApplication.State.UNKNOWN_STATE) -> {
                         val kernelPatchVersion = Natives.kerenlPatchVersion()
                         Column() {
-                            Text(text = stringResource(R.string.working),
+                            Text(text = stringResource(R.string.home_working),
                                 style = MaterialTheme.typography.titleMedium
                             )
                             Spacer(Modifier.height(6.dp))
@@ -383,11 +384,10 @@ private fun KStatusCard(state: APApplication.State) {
                         }
                     }
                     else -> {
-                        Column(Modifier.padding(start = 12.dp)) {
+                        Column(Modifier.padding(start = 6.dp)) {
                             Text(text = stringResource(R.string.home_install_unknown),
                                 style = MaterialTheme.typography.titleMedium
                             )
-                            Spacer(Modifier.height(8.dp))
                         }
                     }
                 }
@@ -414,24 +414,24 @@ private fun AStatusCard(state: APApplication.State) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(6.dp), verticalAlignment = Alignment.CenterVertically) {
+                    .padding(10.dp), verticalAlignment = Alignment.CenterVertically) {
                 Column(Modifier
                     .weight(2f)
                 ) {
                     val managerVersion = getManagerVersion()
                     when {
                         state.equals(APApplication.State.KERNELPATCH_READY) -> {
-                            Text(text = stringResource(R.string.not_install),
+                            Text(text = stringResource(R.string.home_not_installed),
                                 style = MaterialTheme.typography.titleMedium
                             )
                         }
                         state.equals(APApplication.State.ANDROIDPATCH_INSTALLING) -> {
-                            Text(text = stringResource(R.string.installing),
+                            Text(text = stringResource(R.string.home_installing),
                                 style = MaterialTheme.typography.titleMedium
                             )
                         }
                         state.equals(APApplication.State.ANDROIDPATCH_INSTALLED) -> {
-                            Text(text = stringResource(R.string.working),
+                            Text(text = stringResource(R.string.home_working),
                                 style = MaterialTheme.typography.titleMedium
                             )
                             Spacer(Modifier.height(6.dp))
@@ -441,7 +441,7 @@ private fun AStatusCard(state: APApplication.State) {
                             )
                         }
                         state.equals(APApplication.State.ANDROIDPATCH_NEED_UPDATE) -> {
-                            Text(text = stringResource(R.string.need_update),
+                            Text(text = stringResource(R.string.home_need_update),
                                 style = MaterialTheme.typography.titleMedium
                             )
                             Spacer(Modifier.height(6.dp))
@@ -451,9 +451,11 @@ private fun AStatusCard(state: APApplication.State) {
                             )
                         }
                         else -> {
-                            Text(text = stringResource(R.string.home_install_unknown),
-                                style = MaterialTheme.typography.titleMedium
-                            )
+                            Column(Modifier.padding(start = 6.dp)) {
+                                Text(text = stringResource(R.string.home_install_unknown),
+                                    style = MaterialTheme.typography.titleMedium
+                                )
+                            }
                         }
                     }
                     Spacer(Modifier.height(6.dp))
@@ -461,7 +463,6 @@ private fun AStatusCard(state: APApplication.State) {
                 if(!state.equals(APApplication.State.UNKNOWN_STATE)) {
                     Column (modifier = Modifier
                         .align(Alignment.CenterVertically)
-                        .weight(1f)
                     ) {
                         Button(
                             onClick = {
@@ -506,35 +507,54 @@ private fun AStatusCard(state: APApplication.State) {
 
 @Composable
 fun WarningCard() {
-    var show by rememberSaveable { mutableStateOf(true) }
+    var show by rememberSaveable { mutableStateOf(apApp.getBackupWarningState()) }
     if(show) {
         ElevatedCard(
             colors = CardDefaults.elevatedCardColors(containerColor = run {
-                MaterialTheme.colorScheme.secondaryContainer
+                MaterialTheme.colorScheme.error
             })
         ) {
             Row (
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp)
-                    .align(Alignment.CenterHorizontally),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ){
-                Text(
-                    modifier = Modifier.weight(1f),
-                    text = stringResource(id = R.string.patch_warnning),
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        color = Color.Red,
-                        fontWeight = FontWeight.Bold
-                    )
-                )
+                    .padding(12.dp)
+            ) {
+                Column (
+                    modifier = Modifier
+                        .padding(12.dp),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Icon(Icons.Filled.Warning, contentDescription = "warning")
+                }
+                Column (
+                    modifier = Modifier
+                        .padding(12.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Row (
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.CenterHorizontally),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ){
+                        Text(
+                            modifier = Modifier.weight(1f),
+                            text = stringResource(id = R.string.patch_warnning),
+                        )
 
-                Spacer(Modifier.width(12.dp))
+                        Spacer(Modifier.width(12.dp))
 
-                Icon(Icons.Outlined.Clear,
-                    contentDescription =  "",
-                    modifier = Modifier.clickable { show = false },
-                )
+                        Icon(Icons.Outlined.Clear,
+                            contentDescription =  "",
+                            modifier = Modifier
+                                .clickable {
+                                    show = false
+                                    apApp.updateBackupWarningState(false)
+                                },
+                        )
+                    }
+                }
             }
         }
     }
