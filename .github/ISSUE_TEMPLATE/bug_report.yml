@@ -1,5 +1,5 @@
 name: Bug report
-description: Create a report to help us improve KernelSU
+description: Create a report to help us improve
 labels: [Bug]
 
 body:
@@ -10,7 +10,10 @@ body:
           - label: I have searched the issues and haven't found anything relevant
             required: true
 
-          - label: I will upload bugreport file in KernelSU Manager - Settings - Report log
+          - label: If patch failed, root failed, or device unable to boot after flashing the new boot.img. Please goto KernelPatch
+            required: true
+
+          - label: I will upload bugreport file in APatch Manager - Settings - Report log
             required: true
 
           - label: I know how to reproduce the issue which may not be specific to my device
@@ -60,7 +63,7 @@ body:
         value: |
           - Device:
           - OS Version:
-          - KernelSU Version:
+          - APatch Version:
           - Kernel Version:
     validations:
         required: true
