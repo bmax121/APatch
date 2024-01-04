@@ -70,6 +70,11 @@ command -v ./kptools >/dev/null 2>&1 || { echo "kptools not found!"; exit 1; }
 echo "- Unpacking boot image"
 ./magiskboot unpack "$BOOTIMAGE" >/dev/null 2>&1
 
+if [ $? -ne 0 ]; then
+  echo "Unpack error: $?"
+  exit $?
+fi
+
 mv kernel kernel.ori
 
 echo "- Patching kernel"
@@ -82,8 +87,6 @@ fi
 
 echo "- Repacking boot image"
 ./magiskboot repack "$BOOTIMAGE" >/dev/null 2>&1 || exit $?
-
-ls -l "new-boot.img" | echo
 
 # Reset any error code
 true

@@ -203,47 +203,46 @@ fun patchBootimg(uri: Uri?, superKey: String, logs: MutableList<String>): Boolea
         "cd $patchDir",
         patchCommand,
     )
-    shell.newJob().add(*cmds).to(logs, logs).exec()
+    val isSuccess = shell.newJob().add(*cmds).to(logs, logs).exec().isSuccess
     logs.add("****************************")
 
     var succ = true
-    if (uri != null) {
-        val newBootFile = patchDir.getChildFile("new-boot.img")
-        if(!newBootFile.exists()) {
-            logs.add(" Patch failed, no new-boot.img generated")
-            return false
-        }
-
-        val outDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-        if(!outDir.exists()) outDir.mkdirs()
-        outPath = File(outDir, outFilename)
-
-        val inputUri = UriUtils.getUriForFile(newBootFile)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val outUri = MediaStoreUtils.createDownloadUri(outFilename)
-            succ = MediaStoreUtils.insertDownload(outUri, inputUri)
-        } else {
-            newBootFile.inputStream().copyAndClose(outPath.outputStream())
-        }
-    }
-
-    if(succ) {
-        if (uri != null) {
-            logs.add(" Write patched boot.img was successful")
-            logs.add(" Output file is written to ")
-            logs.add(" ${outPath?.path}")
-        } else {
+    if (uri == null) {
+        if (isSuccess) {
             logs.add(" Boot patch was successful")
+        } else {
+            succ = false
+            logs.add(" Boot patch failed")
         }
     } else {
-        if (uri != null) {
-            logs.add(" Write patched boot.img failed")
+        val newBootFile = patchDir.getChildFile("new-boot.img")
+        if (newBootFile.exists()) {
+            val outDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+            if(!outDir.exists()) outDir.mkdirs()
+            outPath = File(outDir, outFilename)
+
+            val inputUri = UriUtils.getUriForFile(newBootFile)
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                val outUri = MediaStoreUtils.createDownloadUri(outFilename)
+                succ = MediaStoreUtils.insertDownload(outUri, inputUri)
+            } else {
+                newBootFile.inputStream().copyAndClose(outPath.outputStream())
+            }
+            
+            if (succ) {
+                logs.add(" Write patched boot.img was successful")
+                logs.add(" Output file is written to ")
+                logs.add(" ${outPath?.path}")
+            } else {
+                logs.add(" Write patched boot.img failed")
+            }
         } else {
-            logs.add(" Boot patch failed")
+            succ = false
+            logs.add(" Patch failed, no new-boot.img generated")
         }
     }
     logs.add("****************************")
 
-    return true
+    return succ
 }
