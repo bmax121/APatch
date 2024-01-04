@@ -14,6 +14,7 @@ on:
       - 'app/**'
       - 'apd/**'
   workflow_call:
+  workflow_dispatch:
 
 jobs:
   build-apd:
