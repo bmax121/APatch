@@ -194,6 +194,10 @@ class APApplication : Application() {
             }
     }
 
+    fun getSuperKey(): String {
+        return superKey
+    }
+
     fun updateSuperKey(password: String) {
         superKey = password
     }

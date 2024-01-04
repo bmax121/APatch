@@ -81,7 +81,7 @@ fun HomeScreen(navigator: DestinationsNavigator) {
         ) {
             WarningCard()
             KStatusCard(state)
-            AStatusCard(state)
+            AStatusCard(state, navigator)
             InfoCard()
             LearnMoreCard()
             Spacer(Modifier)
@@ -397,7 +397,7 @@ private fun KStatusCard(state: APApplication.State) {
 }
 
 @Composable
-private fun AStatusCard(state: APApplication.State) {
+private fun AStatusCard(state: APApplication.State, navigator: DestinationsNavigator) {
     ElevatedCard(
         colors = CardDefaults.elevatedCardColors(containerColor = run {
             MaterialTheme.colorScheme.secondaryContainer
@@ -470,6 +470,9 @@ private fun AStatusCard(state: APApplication.State) {
                                     state.equals(APApplication.State.KERNELPATCH_READY)
                                             || state.equals(APApplication.State.ANDROIDPATCH_NEED_UPDATE) -> {
                                         APApplication.install()
+                                        if (state.equals(APApplication.State.ANDROIDPATCH_NEED_UPDATE)) {
+                                            navigator.navigate(PatchScreenDestination(null, apApp.getSuperKey()))
+                                        }
                                     }
                                     state.equals(APApplication.State.ANDROIDPATCH_INSTALLED) -> {
                                         APApplication.uninstall()
