@@ -17,16 +17,16 @@ fun getSELinuxStatus(): String {
 
     if (result.isSuccess) {
         return when (output) {
-            "Enforcing" -> stringResource(R.string.selinux_status_enforcing)
-            "Permissive" -> stringResource(R.string.selinux_status_permissive)
-            "Disabled" -> stringResource(R.string.selinux_status_disabled)
-            else -> stringResource(R.string.selinux_status_unknown)
+            "Enforcing" -> stringResource(R.string.home_selinux_status_enforcing)
+            "Permissive" -> stringResource(R.string.home_selinux_status_permissive)
+            "Disabled" -> stringResource(R.string.home_selinux_status_disabled)
+            else -> stringResource(R.string.home_selinux_status_unknown)
         }
     }
 
     return if (output.endsWith("Permission denied")) {
-        stringResource(R.string.selinux_status_enforcing)
+        stringResource(R.string.home_selinux_status_enforcing)
     } else {
-        stringResource(R.string.selinux_status_unknown)
+        stringResource(R.string.home_selinux_status_unknown)
     }
 }

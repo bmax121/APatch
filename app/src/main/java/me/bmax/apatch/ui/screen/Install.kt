@@ -131,7 +131,7 @@ fun InstallScreen(navigator: DestinationsNavigator, uri: Uri) {
 @Composable
 private fun TopBar(onBack: () -> Unit = {}, onSave: () -> Unit = {}) {
     TopAppBar(
-        title = { Text(stringResource(R.string.install)) },
+        title = { Text(stringResource(R.string.apm_install)) },
         navigationIcon = {
             IconButton(
                 onClick = onBack

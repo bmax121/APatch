@@ -39,6 +39,23 @@ fun createRootShell(): Shell {
     }
 }
 
+fun createRootShellForLog(): Shell {
+    Shell.enableVerboseLogging = BuildConfig.DEBUG
+    val builder = Shell.Builder.create()
+    return try {
+        builder.build(getKPatchPath(), APApplication.superKey, "su", "-x", APApplication.MAGISK_SCONTEXT)
+    } catch (e: Throwable) {
+        Log.e(TAG, "su failed: ", e)
+        return try {
+            Log.e(TAG, "retry su: ", e)
+            builder.build("su")
+        } catch(e: Throwable) {
+            Log.e(TAG, "retry su failed: ", e)
+            builder.build("sh")
+        }
+    }
+}
+
 fun execApd(args: String): Boolean {
     val shell = getRootShell()
     return ShellUtils.fastCmdResult(shell, "${APApplication.APD_PATH} $args")

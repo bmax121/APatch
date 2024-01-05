@@ -79,7 +79,7 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
             horizontalAlignment = Alignment.CenterHorizontally) {
             Row {
                 Text(
-                    text = "Kernel Patch Not Installed",
+                    text = stringResource(id = R.string.kpm_kp_not_installed),
                     style = MaterialTheme.typography.titleMedium
                 )
             }
@@ -104,6 +104,9 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
             val context = LocalContext.current
 
             val moduleInstall = stringResource(id = R.string.kpm_load)
+            val succToastText = stringResource(id = R.string.kpm_load_toast_succ)
+            val failToastText = stringResource(id = R.string.kpm_load_toast_failed)
+
             val selectKpmLauncher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.StartActivityForResult()
             ) {
@@ -116,10 +119,11 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
                 // todo: args
                 scope.launch {
                     val succ = loadModule(dialogHost, uri, "") == 0
+                    val toastText = if(succ)  succToastText else failToastText
                     withContext(Dispatchers.Main) {
                         Toast.makeText(
                             context,
-                            "install ${if (succ) "succeed" else "failed"}",
+                            toastText,
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -181,8 +185,8 @@ private fun KPModuleList(
     viewModel: KPModuleViewModel, modifier: Modifier = Modifier
 ) {
     val moduleStr = stringResource(id = R.string.kpm)
-    val moduleUninstallConfirm = stringResource(id = R.string.module_uninstall_confirm)
-    val uninstall = stringResource(id = R.string.uninstall)
+    val moduleUninstallConfirm = stringResource(id = R.string.kpm_unload_confirm)
+    val uninstall = stringResource(id = R.string.kpm_unload)
     val cancel = stringResource(id = android.R.string.cancel)
 
     val dialogHost = LocalDialogHost.current
@@ -235,7 +239,7 @@ private fun KPModuleList(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                stringResource(R.string.module_empty),
+                                stringResource(R.string.kpm_apm_empty),
                                 textAlign = TextAlign.Center
                             )
                         }
@@ -285,11 +289,11 @@ private fun KPModuleItem(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
-                val moduleVersion = stringResource(id = R.string.module_version)
-                val moduleLicense = stringResource(id = R.string.module_license)
-                val moduleAuthor = stringResource(id = R.string.module_author)
-                val moduleDesc = stringResource(id = R.string.module_desc)
-                val moduleArgs = stringResource(id = R.string.module_args)
+                val moduleVersion = stringResource(id = R.string.kpm_version)
+                val moduleLicense = stringResource(id = R.string.kpm_license)
+                val moduleAuthor = stringResource(id = R.string.kpm_author)
+                val moduleDesc = stringResource(id = R.string.kpm_desc)
+                val moduleArgs = stringResource(id = R.string.kpm_args)
 
                 Column(modifier = Modifier.fillMaxWidth(0.8f)) {
                     Text(
@@ -367,7 +371,7 @@ private fun KPModuleItem(
                     Text(
                         fontFamily = MaterialTheme.typography.labelMedium.fontFamily,
                         fontSize = MaterialTheme.typography.labelMedium.fontSize,
-                        text = stringResource(R.string.uninstall),
+                        text = stringResource(R.string.kpm_unload),
                     )
                 }
             }

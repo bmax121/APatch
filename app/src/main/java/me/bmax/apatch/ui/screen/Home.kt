@@ -81,7 +81,7 @@ fun HomeScreen(navigator: DestinationsNavigator) {
         ) {
             WarningCard()
             KStatusCard(state)
-            AStatusCard(state)
+            AStatusCard(state, navigator)
             InfoCard()
             LearnMoreCard()
             Spacer(Modifier)
@@ -97,10 +97,10 @@ fun AuthSuperKey(showDialog: MutableState<Boolean>) {
     var enable by remember { mutableStateOf(false) }
     AlertDialog(
         onDismissRequest = { showDialog.value = false },
-        title = { Text("Enter SuperKey") },
+        title = { Text(stringResource(id = R.string.home_auth_key_title)) },
         text = {
             Column {
-                Text("Please enter the superkey set when patching")
+                Text(stringResource(id = R.string.home_auth_key_desc))
                 Spacer(modifier = Modifier.height(4.dp))
                 Box(
                     contentAlignment = Alignment.CenterEnd,
@@ -110,7 +110,7 @@ fun AuthSuperKey(showDialog: MutableState<Boolean>) {
                         onValueChange = {
                             key = it
                             enable = !key.isEmpty() },
-                        label = { Text("SuperKey") },
+                        label = { Text(stringResource(id = R.string.super_key)) },
                         visualTransformation = if (keyVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
                     )
@@ -134,7 +134,7 @@ fun AuthSuperKey(showDialog: MutableState<Boolean>) {
                     showDialog.value = false
                 }
             ) {
-                Text("Cancel")
+                Text(stringResource(id = android.R.string.cancel))
             }
         },
         confirmButton = {
@@ -145,7 +145,7 @@ fun AuthSuperKey(showDialog: MutableState<Boolean>) {
                     apApp.updateSuperKey(key)
                 }
             ) {
-                Text("Confirm")
+                Text(stringResource(id = android.R.string.ok))
             }
         },
     )
@@ -169,10 +169,10 @@ fun StartPatch(showDialog: MutableState<Boolean>, navigator: DestinationsNavigat
 
     AlertDialog(
         onDismissRequest = { showDialog.value = false },
-        title = { Text(stringResource(id = R.string.set_key_title)) },
+        title = { Text(stringResource(id = R.string.home_patch_set_key_title)) },
         text = {
             Column {
-                Text(stringResource(id = R.string.set_key_desc))
+                Text(stringResource(id = R.string.home_patch_set_key_desc))
                 Spacer(modifier = Modifier.height(4.dp))
                 TextField(
                     value = key,
@@ -196,7 +196,7 @@ fun StartPatch(showDialog: MutableState<Boolean>, navigator: DestinationsNavigat
                     selectBootimgLauncher.launch(intent)
                 }
             ) {
-                Text(stringResource(id = R.string.next_step))
+                Text(stringResource(id = R.string.home_patch_next_step))
             }
         },
     )
@@ -397,7 +397,7 @@ private fun KStatusCard(state: APApplication.State) {
 }
 
 @Composable
-private fun AStatusCard(state: APApplication.State) {
+private fun AStatusCard(state: APApplication.State, navigator: DestinationsNavigator) {
     ElevatedCard(
         colors = CardDefaults.elevatedCardColors(containerColor = run {
             MaterialTheme.colorScheme.secondaryContainer
@@ -470,6 +470,9 @@ private fun AStatusCard(state: APApplication.State) {
                                     state.equals(APApplication.State.KERNELPATCH_READY)
                                             || state.equals(APApplication.State.ANDROIDPATCH_NEED_UPDATE) -> {
                                         APApplication.install()
+                                        if (state.equals(APApplication.State.ANDROIDPATCH_NEED_UPDATE)) {
+                                            navigator.navigate(PatchScreenDestination(null, apApp.getSuperKey()))
+                                        }
                                     }
                                     state.equals(APApplication.State.ANDROIDPATCH_INSTALLED) -> {
                                         APApplication.uninstall()
@@ -482,17 +485,17 @@ private fun AStatusCard(state: APApplication.State) {
                             content = {
                                 when {
                                     state.equals(APApplication.State.KERNELPATCH_READY) -> {
-                                        Text(text = "Install", color = Color.Black)
+                                        Text(text = stringResource(id = R.string.home_ap_cando_install), color = Color.Black)
                                     }
                                     state.equals(APApplication.State.ANDROIDPATCH_UNINSTALLING)
                                             || state.equals(APApplication.State.ANDROIDPATCH_UNINSTALLING) -> {
                                         Icon(Icons.Outlined.Cached, contentDescription = "busy")
                                     }
                                     state.equals(APApplication.State.ANDROIDPATCH_NEED_UPDATE) -> {
-                                        Text(text = "Update", color = Color.Black)
+                                        Text(text = stringResource(id = R.string.home_ap_cando_update), color = Color.Black)
                                     }
                                     state.equals(APApplication.State.ANDROIDPATCH_INSTALLED) -> {
-                                        Text(text = "Uninstall", color = Color.Black)
+                                        Text(text = stringResource(id = R.string.home_ap_cando_uninstall), color = Color.Black)
                                     }
                                 }
                             }

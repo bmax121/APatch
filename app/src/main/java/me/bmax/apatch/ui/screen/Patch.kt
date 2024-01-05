@@ -43,7 +43,7 @@ import java.util.*
 
 @Composable
 @Destination
-fun PatchScreen(navigator: DestinationsNavigator, uri: Uri, superKey: String) {
+fun PatchScreen(navigator: DestinationsNavigator, uri: Uri?, superKey: String) {
     var text by remember { mutableStateOf("") }
     var showFloatAction by remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
@@ -113,7 +113,7 @@ fun PatchScreen(navigator: DestinationsNavigator, uri: Uri, superKey: String) {
 @Composable
 private fun TopBar(onBack: () -> Unit = {}) {
     TopAppBar(
-        title = { Text("Patch") },
+        title = { Text(stringResource(id = R.string.patch_title)) },
         navigationIcon = {
             IconButton(
                 onClick = onBack
@@ -153,23 +153,27 @@ private fun String.fsh() = ShellUtils.fastCmd(shell, this)
 private fun Array<String>.fsh() = ShellUtils.fastCmd(shell, *this)
 
 
-fun patchBootimg(uri: Uri, superKey: String, logs: MutableList<String>): Boolean {
+fun patchBootimg(uri: Uri?, superKey: String, logs: MutableList<String>): Boolean {
+    var outPath: File? = null
+    var srcBoot: ExtendedFile? = null
     var patchDir: ExtendedFile = FileSystemManager.getLocal().getFile(apApp.filesDir.parent, "patch")
     patchDir.deleteRecursively()
     patchDir.mkdirs()
 
-    val srcBoot = patchDir.getChildFile("boot.img")
+    if (uri != null) {
+        srcBoot = patchDir.getChildFile("boot.img")
 
-    // Process input file
-    try {
-        uri.inputStream().buffered().use { src ->
-            srcBoot.also {
-                src.copyAndCloseOut(it.newOutputStream())
+        // Process input file
+        try {
+            uri.inputStream().buffered().use { src ->
+                srcBoot.also {
+                    src.copyAndCloseOut(it.newOutputStream())
+                }
             }
+        } catch (e: IOException) {
+            logs.add("Copy boot image error: " + e)
+            return false
         }
-    } catch (e: IOException) {
-        logs.add("Copy boot image error: " + e)
-        return false
     }
 
     val execs = listOf("libkptools.so", "libmagiskboot.so", "libbusybox.so")
@@ -185,7 +189,7 @@ fun patchBootimg(uri: Uri, superKey: String, logs: MutableList<String>): Boolean
     }
 
     // Extract scripts
-    for (script in listOf("boot_patch.sh", "kpimg")) {
+    for (script in listOf("boot_patch.sh", "util_functions.sh", "kpimg")) {
         val dest = File(patchDir, script)
         apApp.assets.open(script).writeTo(dest)
     }
@@ -193,41 +197,52 @@ fun patchBootimg(uri: Uri, superKey: String, logs: MutableList<String>): Boolean
     val apVer = getManagerVersion().second
     val rand = (1..4).map { ('a'..'z').random() }.joinToString("")
     val outFilename = "apatch_${apVer}_${rand}_boot.img"
+    val patchCommand = if (uri != null) "sh boot_patch.sh $superKey ${srcBoot?.path}" else "sh boot_patch.sh $superKey"
 
     val cmds = arrayOf(
         "cd $patchDir",
-        "sh boot_patch.sh $superKey ${srcBoot.path}",
+        patchCommand,
     )
-    shell.newJob().add(*cmds).to(logs, logs).exec()
+    val isSuccess = shell.newJob().add(*cmds).to(logs, logs).exec().isSuccess
     logs.add("****************************")
-
-    val newBootFile = patchDir.getChildFile("new-boot.img")
-    if(!newBootFile.exists()) {
-        logs.add(" Patch failed, no new-boot.img generated")
-        return false
-    }
-
-    val outDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-    if(!outDir.exists()) outDir.mkdirs()
-    val outPath = File(outDir, outFilename)
-
-    val inputUri = UriUtils.getUriForFile(newBootFile)
 
     var succ = true
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-        val outUri = MediaStoreUtils.createDownloadUri(outFilename)
-        succ = MediaStoreUtils.insertDownload(outUri, inputUri)
+    if (uri == null) {
+        if (isSuccess) {
+            logs.add(" Boot patch was successful")
+        } else {
+            succ = false
+            logs.add(" Boot patch failed")
+        }
     } else {
-        newBootFile.inputStream().copyAndClose(outPath.outputStream())
-    }
+        val newBootFile = patchDir.getChildFile("new-boot.img")
+        if (newBootFile.exists()) {
+            val outDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+            if(!outDir.exists()) outDir.mkdirs()
+            outPath = File(outDir, outFilename)
 
-    if(succ) {
-        logs.add(" Output file is written to ")
-        logs.add(" ${outPath.path}")
-    } else {
-        logs.add(" Write patched boot.img failed ")
+            val inputUri = UriUtils.getUriForFile(newBootFile)
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                val outUri = MediaStoreUtils.createDownloadUri(outFilename)
+                succ = MediaStoreUtils.insertDownload(outUri, inputUri)
+            } else {
+                newBootFile.inputStream().copyAndClose(outPath.outputStream())
+            }
+            
+            if (succ) {
+                logs.add(" Write patched boot.img was successful")
+                logs.add(" Output file is written to ")
+                logs.add(" ${outPath?.path}")
+            } else {
+                logs.add(" Write patched boot.img failed")
+            }
+        } else {
+            succ = false
+            logs.add(" Patch failed, no new-boot.img generated")
+        }
     }
     logs.add("****************************")
 
-    return true
+    return succ
 }

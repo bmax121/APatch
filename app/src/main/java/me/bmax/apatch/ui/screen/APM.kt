@@ -38,7 +38,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.bmax.apatch.APApplication
-import me.bmax.apatch.util.DownloadListener
 import me.bmax.apatch.util.download
 import me.bmax.apatch.R
 import me.bmax.apatch.ui.component.ConfirmDialog
@@ -93,7 +92,7 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
         { /* Empty */ }
     } else {
         {
-            val moduleInstall = stringResource(id = R.string.module_install)
+            val moduleInstall = stringResource(id = R.string.apm_install)
             val selectZipLauncher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.StartActivityForResult()
             ) {
@@ -136,7 +135,7 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        stringResource(R.string.module_magisk_conflict),
+                        stringResource(R.string.apm_magisk_conflict),
                         textAlign = TextAlign.Center,
                     )
                 }
@@ -160,20 +159,20 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
 private fun ModuleList(
     viewModel: APModuleViewModel, modifier: Modifier = Modifier, onInstallModule: (Uri) -> Unit
 ) {
-    val failedEnable = stringResource(R.string.module_failed_to_enable)
-    val failedDisable = stringResource(R.string.module_failed_to_disable)
-    val failedUninstall = stringResource(R.string.module_uninstall_failed)
-    val successUninstall = stringResource(R.string.module_uninstall_success)
+    val failedEnable = stringResource(R.string.apm_failed_to_enable)
+    val failedDisable = stringResource(R.string.apm_failed_to_disable)
+    val failedUninstall = stringResource(R.string.apm_uninstall_failed)
+    val successUninstall = stringResource(R.string.apm_uninstall_success)
     val reboot = stringResource(id = R.string.reboot)
-    val rebootToApply = stringResource(id = R.string.reboot_to_apply)
+    val rebootToApply = stringResource(id = R.string.apm_reboot_to_apply)
     val moduleStr = stringResource(id = R.string.apm)
-    val uninstall = stringResource(id = R.string.uninstall)
+    val uninstall = stringResource(id = R.string.apm_uninstall)
     val cancel = stringResource(id = android.R.string.cancel)
-    val moduleUninstallConfirm = stringResource(id = R.string.module_uninstall_confirm)
-    val updateText = stringResource(R.string.module_update)
-    val changelogText = stringResource(R.string.module_changelog)
-    val downloadingText = stringResource(R.string.module_downloading)
-    val startDownloadingText = stringResource(R.string.module_start_downloading)
+    val moduleUninstallConfirm = stringResource(id = R.string.apm_uninstall_confirm)
+    val updateText = stringResource(R.string.apm_update)
+    val changelogText = stringResource(R.string.apm_changelog)
+    val downloadingText = stringResource(R.string.apm_downloading)
+    val startDownloadingText = stringResource(R.string.apm_start_downloading)
 
     val dialogHost = LocalDialogHost.current
     val snackBarHost = LocalSnackbarHost.current
@@ -293,7 +292,7 @@ private fun ModuleList(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                stringResource(R.string.module_overlay_fs_not_available),
+                                stringResource(R.string.apm_overlay_fs_not_available),
                                 textAlign = TextAlign.Center
                             )
                         }
@@ -307,7 +306,7 @@ private fun ModuleList(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                stringResource(R.string.module_empty),
+                                stringResource(R.string.apm_empty),
                                 textAlign = TextAlign.Center
                             )
                         }
@@ -402,8 +401,8 @@ private fun ModuleItem(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
-                val moduleVersion = stringResource(id = R.string.module_version)
-                val moduleAuthor = stringResource(id = R.string.module_author)
+                val moduleVersion = stringResource(id = R.string.apm_version)
+                val moduleAuthor = stringResource(id = R.string.apm_author)
 
                 Column(modifier = Modifier.fillMaxWidth(0.8f)) {
                     Text(
@@ -481,7 +480,7 @@ private fun ModuleItem(
                         Text(
                             fontFamily = MaterialTheme.typography.labelMedium.fontFamily,
                             fontSize = MaterialTheme.typography.labelMedium.fontSize,
-                            text = stringResource(R.string.module_update),
+                            text = stringResource(R.string.apm_update),
                         )
                     }
                 }
@@ -493,7 +492,7 @@ private fun ModuleItem(
                     Text(
                         fontFamily = MaterialTheme.typography.labelMedium.fontFamily,
                         fontSize = MaterialTheme.typography.labelMedium.fontSize,
-                        text = stringResource(R.string.uninstall),
+                        text = stringResource(R.string.apm_uninstall),
                     )
                 }
             }
