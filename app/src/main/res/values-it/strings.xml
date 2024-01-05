@@ -25,6 +25,7 @@
     <string name="safe_mode">Modalità provvisoria</string>
 
     <string name="super_key">SuperKey</string>
+    <string name="clear_super_key">Cancella chiave</string>
     <string name="home_patch_set_key_title">Imposta SuperKey</string>
     <string name="home_patch_set_key_desc">Credenziale solo per KernelPatch</string>
     <string name="home_patch_next_step">Avanti</string>

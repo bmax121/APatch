@@ -25,6 +25,7 @@
     <string name="safe_mode">Safe mode</string>
 
     <string name="super_key">SuperKey</string>
+    <string name="clear_super_key">Clear Key</string>
     <string name="home_patch_set_key_title">Set SuperKey</string>
     <string name="home_patch_set_key_desc">Only credential for KernelPatch</string>
     <string name="home_patch_next_step">Next Step</string>
