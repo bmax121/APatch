@@ -1,15 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">APatch</string>
-
     <string name="home">Главная</string>
-
     <string name="super_key">SuperKey</string>
     <string name="set_key_title">Установить SuperKey</string>
     <string name="set_key_desc">Применимо только для KernelPatch</string>
     <string name="next_step">Далее</string>
-
     <string name="patch_warnning">Установка связана с риском, поэтому позаботьтесь о резервном копировании данных.</string>
-
     <string name="kernel_patch">KernelPatch</string>
     <string name="android_patch">AndroidPatch</string>
     <string name="home_not_installed">Не установлено</string>
@@ -20,19 +17,17 @@
     <string name="home_need_update">Доступно обновление</string>
     <string name="kpatch_version">Версия: %d.%d.%d</string>
     <string name="apatch_version">Версия: %s</string>
-    <string name="apatch_version_update">Версия: %s -> %s</string>
+    <string name="apatch_version_update">Версия: %s -&gt; %s</string>
     <string name="home_su_path">su: %s</string>
-    <string name="home_su_path_ex">su: %s -> %s</string>
-    <string name="kpatch_shadow_path">kpatch: %s -> %s</string>
+    <string name="home_su_path_ex">su: %s -&gt; %s</string>
+    <string name="kpatch_shadow_path">kpatch: %s -&gt; %s</string>
     <string name="home_apatch_version">APatch: %s</string>
     <string name="home_superuser_count">Суперпользователи: %d</string>
     <string name="home_module_count">Модули: %d</string>
     <string name="home_unsupported">Не поддерживается</string>
-
     <string name="home_kernel">Ядро</string>
     <string name="home_manager_version">Версия менеджера</string>
     <string name="home_fingerprint">Подпись</string>
-
     <string name="home_selinux_status">Состояние SELinux</string>
     <string name="home_selinux_status_disabled">Выключен</string>
     <string name="home_selinux_status_enforcing">Принудительный</string>
@@ -42,7 +37,6 @@
     <string name="apm_failed_to_enable">Не удалось включить модуль: %s</string>
     <string name="apm_failed_to_disable">Не удалось отключить модуль: %s</string>
     <string name="apm_empty">Нет установленных модулей</string>
-
     <string name="kpm">KPModule</string>
     <string name="apm">APModule</string>
     <string name="apm_uninstall">Удалить</string>
@@ -91,4 +85,24 @@
     <string name="restart_app">Перезапустить</string>
     <string name="failed_to_update_sepolicy">Не удалось обновить правила SELinux для %s</string>
     <string name="apm_changelog">Список изменений</string>
+    <string name="home_patch_set_key_title">Установить SuperKey</string>
+    <string name="kpm_load_toast_failed">Ошибка загрузки</string>
+    <string name="home_auth_key_desc">Начало работы после сертификации</string>
+    <string name="home_patch_set_key_desc">Применимо для KernelPatch</string>
+    <string name="home_patch_next_step">Далее</string>
+    <string name="home_auth_key_title">Ввод SuperKey</string>
+    <string name="patch_title">Патч</string>
+    <string name="kpm_kp_not_installed">Kernel Patch не установлен</string>
+    <string name="kpm_load_toast_succ">Загрузка успешна</string>
+    <string name="kpm_unload">Удалить</string>
+    <string name="kpm_apm_empty">Нет установленных модулей</string>
+    <string name="kpm_version">Версия</string>
+    <string name="kpm_license">Лицензия</string>
+    <string name="kpm_author">Автор</string>
+    <string name="kpm_desc">Описание</string>
+    <string name="kpm_args">Аргументы</string>
+    <string name="su_selinux_via_hook">обход через hook</string>
+    <string name="su_pkg_excluded_label">исключить</string>
+    <string name="su_pkg_excluded_setting_title">Исключить</string>
+    <string name="su_pkg_excluded_setting_summary">для модулей</string>
 </resources>
