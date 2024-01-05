@@ -75,7 +75,6 @@
     <string name="kpm_desc">Desc</string>
     <string name="kpm_args">Args</string>
 
-
     <string name="su_title">Superuser</string>
     <string name="su_selinux_via_hook">bypass via hook</string>
     <string name="su_pkg_excluded_label">exclude</string>
@@ -86,6 +85,7 @@
     <string name="su_refresh">Refresh</string>
 
     <string name="apm">APModule</string>
+    <string name="apm_not_installed">Android Patch Not Installed</string>
     <string name="apm_failed_to_enable">Failed to enable module: %s</string>
     <string name="apm_failed_to_disable">Failed to disable module: %s</string>
     <string name="apm_empty">No module installed</string>
