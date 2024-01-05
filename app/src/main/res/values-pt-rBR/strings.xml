@@ -1,0 +1,105 @@
+<resources>
+    <string name="home">Início</string>
+
+    <string name="patch_warnning">A instalação apresenta riscos. Por favor, certifique-se de fazer backup de seus dados.</string>
+
+    <string name="kernel_patch">KernelPatch</string>
+    <string name="android_patch">AndroidPatch</string>
+
+    <string name="reboot">Reiniciar</string>
+    <string name="settings">Configurações</string>
+    <string name="reboot_userspace">Reinicialização suave</string>
+    <string name="reboot_recovery">Reiniciar em modo Recovery</string>
+    <string name="reboot_bootloader">Reiniciar em modo Bootloader</string>
+    <string name="reboot_download">Reiniciar em modo Download</string>
+    <string name="reboot_edl">Reiniciar em modo EDL</string>
+    <string name="about">Sobre</string>
+
+    <string name="home_learn_apatch">Leia mais sobre o AndroidPatch</string>
+    <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
+    <string name="home_click_to_learn_apatch">Conheça os recursos do AndroidPatch e como usá-lo</string>
+    <string name="about_source_code"><![CDATA[Veja o código-fonte no %1$s<br/>Junte-se ao nosso canal do %2$s]]></string>
+    <string name="send_log">Enviar registro</string>
+    <string name="safe_mode">Modo de segurança</string>
+
+    <string name="super_key">SuperChave</string>
+    <string name="home_patch_set_key_title">Definir SuperChave</string>
+    <string name="home_patch_set_key_desc">Apenas credencial para KernelPatch</string>
+    <string name="home_patch_next_step">Próximo passo</string>
+
+    <string name="home_not_installed">Não instalado</string>
+    <string name="home_install_unknown">Desconhecido</string>
+    <string name="home_click_to_install">Clique para instalar</string>
+    <string name="home_working">Trabalhando</string>
+    <string name="home_installing">Instalando</string>
+    <string name="home_need_update">Atualização disponível</string>
+    <string name="kpatch_version">Versão: %d.%d.%d</string>
+    <string name="apatch_version">Versão: %s</string>
+    <string name="apatch_version_update">Versão: %s -> %s</string>
+    <string name="home_su_path">su: %s</string>
+    <string name="home_su_path_ex">su: %s -> %s</string>
+    <string name="kpatch_shadow_path">kpatch: %s -> %s</string>
+    <string name="home_apatch_version">APatch: %s</string>
+    <string name="home_auth_key_title">Inserir SuperChave</string>
+    <string name="home_auth_key_desc">Comece a trabalhar após a certificação</string>
+
+    <string name="home_ap_cando_install">Instalar</string>
+    <string name="home_ap_cando_update">Atualizar</string>
+    <string name="home_ap_cando_uninstall">Desinstalar</string>
+
+    <string name="patch_title">Patch</string>
+
+    <string name="home_kernel">Kernel</string>
+    <string name="home_manager_version">Versão do gerenciador</string>
+    <string name="home_fingerprint">Impressão digital</string>
+
+    <string name="home_selinux_status">Status do SELinux</string>
+    <string name="home_selinux_status_disabled">Desativado</string>
+    <string name="home_selinux_status_enforcing">Impondo</string>
+    <string name="home_selinux_status_permissive">Permissivo</string>
+    <string name="home_selinux_status_unknown">Desconhecido</string>
+
+    <string name="kpm">KPMódulo</string>
+    <string name="kpm_kp_not_installed">Kernel Patch não instalado</string>
+    <string name="kpm_load">Carregar</string>
+    <string name="kpm_load_toast_succ">Carregado com sucesso</string>
+    <string name="kpm_load_toast_failed">Erro ao carregar</string>
+    <string name="kpm_unload_confirm">Tem certeza que deseja descarregar o módulo %s?</string>
+    <string name="kpm_unload">Descarregar</string>
+    <string name="kpm_apm_empty">Nenhum módulo carregado</string>
+    <string name="kpm_version">Versão</string>
+    <string name="kpm_license">Licença</string>
+    <string name="kpm_author">Autor</string>
+    <string name="kpm_desc">Descrição</string>
+    <string name="kpm_args">Argumentos</string>
+
+    <string name="su_title">SuperUsuário</string>
+    <string name="su_selinux_via_hook">ignorar via hook</string>
+    <string name="su_pkg_excluded_label">excluir</string>
+    <string name="su_pkg_excluded_setting_title">Excluir</string>
+    <string name="su_pkg_excluded_setting_summary">para módulos</string>
+    <string name="su_show_system_apps">Mostrar apps do sistema</string>
+    <string name="su_hide_system_apps">Ocultar apps do sistema</string>
+    <string name="su_refresh">Atualizar</string>
+
+    <string name="apm">APMódulo</string>
+    <string name="apm_failed_to_enable">Falha ao ativar o módulo: %s</string>
+    <string name="apm_failed_to_disable">Falha ao desativar o módulo: %s</string>
+    <string name="apm_empty">Nenhum módulo instalado</string>
+    <string name="apm_uninstall">Desinstalar</string>
+    <string name="apm_install">Instalar</string>
+    <string name="apm_uninstall_confirm">Tem certeza que deseja desinstalar o módulo %s?</string>
+    <string name="apm_uninstall_success">%s desinstalado</string>
+    <string name="apm_uninstall_failed">Falha ao desinstalar: %s</string>
+    <string name="apm_version">Versão</string>
+    <string name="apm_author">Autor</string>
+    <string name="apm_desc">Descrição</string>
+    <string name="apm_overlay_fs_not_available">overlayfs não está disponível, o módulo não pode funcionar!</string>
+    <string name="apm_magisk_conflict">Os módulos estão desativados porque estão em conflito com os do Magisk!</string>
+    <string name="apm_reboot_to_apply">Reinicie para entrar em vigor</string>
+    <string name="apm_changelog">Registro de alterações</string>
+    <string name="apm_update">Atualizar</string>
+    <string name="apm_downloading">Baixando módulo: %s</string>
+    <string name="apm_start_downloading">Iniciar download: %s</string>
+    <string name="apm_new_version_available">Nova versão: %s está disponível, clique para atualizar</string>
+</resources>
