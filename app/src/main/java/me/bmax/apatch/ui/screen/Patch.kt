@@ -34,6 +34,7 @@ import kotlinx.coroutines.withContext
 import me.bmax.apatch.R
 import me.bmax.apatch.TAG
 import me.bmax.apatch.apApp
+import me.bmax.apatch.util.reboot
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -61,8 +62,8 @@ fun PatchScreen(navigator: DestinationsNavigator, uri: Uri?, superKey: String) {
                     text += '\n'
                 }
             })
-            if(ret) {
-//                showFloatAction = true
+            if(ret && uri == null) {
+                showFloatAction = true
             }
         }
     }
@@ -79,7 +80,7 @@ fun PatchScreen(navigator: DestinationsNavigator, uri: Uri?, superKey: String) {
                     onClick = {
                         scope.launch {
                             withContext(Dispatchers.IO) {
-//                                reboot()
+                                reboot()
                             }
                         }
                     },
