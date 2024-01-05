@@ -113,7 +113,7 @@ fun PatchScreen(navigator: DestinationsNavigator, uri: Uri?, superKey: String) {
 @Composable
 private fun TopBar(onBack: () -> Unit = {}) {
     TopAppBar(
-        title = { Text("Patch") },
+        title = { Text(stringResource(id = R.string.patch_title)) },
         navigationIcon = {
             IconButton(
                 onClick = onBack

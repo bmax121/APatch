@@ -1,6 +1,5 @@
 package me.bmax.apatch.ui.screen
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -9,8 +8,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
@@ -34,10 +31,8 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import me.bmax.apatch.APApplication
 import me.bmax.apatch.Natives
 import me.bmax.apatch.R
-import me.bmax.apatch.TAG
 import me.bmax.apatch.ui.component.ConfirmDialog
 import me.bmax.apatch.ui.component.SearchAppBar
 import me.bmax.apatch.ui.component.SwitchItem
@@ -61,7 +56,7 @@ fun SuperUserScreen(navigator: DestinationsNavigator) {
     Scaffold(
         topBar = {
             SearchAppBar(
-                title = { Text(stringResource(R.string.superuser)) },
+                title = { Text(stringResource(R.string.su_title)) },
                 searchText = viewModel.search,
                 onSearchTextChange = { viewModel.search = it },
                 onClearClick = { viewModel.search = "" },
@@ -80,7 +75,7 @@ fun SuperUserScreen(navigator: DestinationsNavigator) {
                             showDropdown = false
                         }) {
                             DropdownMenuItem(text = {
-                                Text(stringResource(R.string.refresh))
+                                Text(stringResource(R.string.su_refresh))
                             }, onClick = {
                                 scope.launch {
                                     viewModel.fetchAppList()
@@ -91,9 +86,9 @@ fun SuperUserScreen(navigator: DestinationsNavigator) {
                             DropdownMenuItem(text = {
                                 Text(
                                     if (viewModel.showSystemApps) {
-                                        stringResource(R.string.hide_system_apps)
+                                        stringResource(R.string.su_hide_system_apps)
                                     } else {
-                                        stringResource(R.string.show_system_apps)
+                                        stringResource(R.string.su_show_system_apps)
                                     }
                                 )
                             }, onClick = {
@@ -165,7 +160,7 @@ private fun AppItem(
                 Text(app.packageName)
                 FlowRow {
                     if(config.exclude != 0) {
-                        LabelText(label = "exclude")
+                        LabelText(label = stringResource(id = R.string.su_pkg_excluded_label))
                     }
                     if (config.allow != 0) {
                         LabelText(label = config.profile.uid.toString())
@@ -173,7 +168,7 @@ private fun AppItem(
                         LabelText(label = when {
                             // todo: valid scontext ?
                             config.profile.scontext.isNotEmpty() -> config.profile.scontext
-                            else -> "bypass via hook"
+                            else -> stringResource(id = R.string.su_selinux_via_hook)
                         })
                     }
                 }
@@ -204,31 +199,31 @@ private fun AppItem(
 
 @Composable
 fun EditUser(app: SuperUserViewModel.AppInfo) {
-    var _viahook = app.config.profile?.scontext.isNullOrEmpty()
-    var viahook by remember { mutableStateOf(_viahook) }
+//    var _viahook = app.config.profile?.scontext.isNullOrEmpty()
+//    var viahook by remember { mutableStateOf(_viahook) }
     var exclude by remember { mutableStateOf(app.config.exclude) }
 
     Column(modifier = Modifier.padding(start = 24.dp, end = 24.dp)) {
+//        SwitchItem(
+//            icon = Icons.Filled.Security,
+//            title = "SU Thread",
+//            summary = "bypass selinux via hooks",
+//            checked = viahook,
+//            onCheckedChange = {
+//                viahook = !viahook
+//                if(viahook) app.config.profile.scontext = ""
+//                else app.config.profile.scontext = APApplication.MAGISK_SCONTEXT
+//                runBlocking {
+//                    launch(Dispatchers.IO) {
+//                        PkgConfig.changeConfig(app.config)
+//                    }
+//                }
+//            },
+//        )
         SwitchItem(
             icon = Icons.Filled.Security,
-            title = "SU Thread",
-            summary = "bypass selinux via hooks",
-            checked = viahook,
-            onCheckedChange = {
-                viahook = !viahook
-                if(viahook) app.config.profile.scontext = ""
-                else app.config.profile.scontext = APApplication.MAGISK_SCONTEXT
-                runBlocking {
-                    launch(Dispatchers.IO) {
-                        PkgConfig.changeConfig(app.config)
-                    }
-                }
-            },
-        )
-        SwitchItem(
-            icon = Icons.Filled.Security,
-            title = "Exclude",
-            summary = "for modules",
+            title = stringResource(id = R.string.su_pkg_excluded_setting_title),
+            summary = stringResource(id = R.string.su_pkg_excluded_setting_summary),
             checked = exclude != 0,
             onCheckedChange = {
                 exclude = if(it) 1 else 0

@@ -20,6 +20,6 @@ enum class BottomBarDestination(
 ) {
     Home(HomeScreenDestination, R.string.home, Icons.Filled.Home, Icons.Outlined.Home),
     KModule(KPModuleScreenDestination, R.string.kpm, Icons.Filled.Build, Icons.Outlined.Build),
-    SuperUser(SuperUserScreenDestination, R.string.superuser, Icons.Filled.Security, Icons.Outlined.Security),
+    SuperUser(SuperUserScreenDestination, R.string.su_title, Icons.Filled.Security, Icons.Outlined.Security),
     AModule(APModuleScreenDestination, R.string.apm, Icons.Filled.Apps, Icons.Outlined.Apps)
 }
