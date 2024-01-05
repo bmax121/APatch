@@ -105,4 +105,8 @@
     <string name="su_pkg_excluded_label">исключить</string>
     <string name="su_pkg_excluded_setting_title">Исключить</string>
     <string name="su_pkg_excluded_setting_summary">для модулей</string>
+    <string name="home_ap_cando_install">Установить</string>
+    <string name="home_ap_cando_update">Обновить</string>
+    <string name="home_ap_cando_uninstall">Удалить</string>
+    <string name="kpm_unload_confirm">Вы уверены, что хотите удалить модуль %s?</string>
 </resources>
