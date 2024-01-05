@@ -27,7 +27,10 @@ Additionally, KPM provides the ability to do inline-hook, syscall-table-hook in 
 
 ## Relationship between APatch and KernelPatch
 
-APatch depends on KernelPatch, inherits all its capabilities, and has been expanded.
+APatch depends on KernelPatch, inherits all its capabilities, and has been expanded.  
+
+You can install KernelPatch only, but this will not allow you to use the magisk module,  
+and to use superuser management, you needs to install AndroidPatch and then uninstall it.
 
 [Learn more about KernelPatch](https://github.com/bmax121/KernelPatch)
 
