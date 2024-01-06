@@ -25,4 +25,5 @@
     <string name="home_click_to_install">Klik untuk menginstal</string>
     <string name="home_patch_next_step">Langkah selanjutnya</string>
     <string name="home_not_installed">Tidak terinstal</string>
+    <string name="home">Beranda</string>
 </resources>
