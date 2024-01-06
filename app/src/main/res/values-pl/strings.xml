@@ -45,4 +45,15 @@
     <string name="kpm_license">Licencja</string>
     <string name="kpm_apm_empty">Brak załadowanych modułów</string>
     <string name="kpm_load_toast_succ">Pomyślnie załadowano</string>
+    <string name="apm_uninstall_success">%s odinstalowany</string>
+    <string name="apm_install">Instaluj</string>
+    <string name="apm_uninstall">Odinstaluj</string>
+    <string name="apm_uninstall_confirm">Jesteś pewien, że chcesz odinstalować moduł %s?</string>
+    <string name="apm_version">Wersja</string>
+    <string name="apm_overlay_fs_not_available">overlayfs nie jest dostępny, moduł nie może działać!</string>
+    <string name="apm_failed_to_disable">Nie udało się wyłączyć modułu: %s</string>
+    <string name="apm_uninstall_failed">Nie udało się zainstalować: %s</string>
+    <string name="apm_failed_to_enable">Nie udało się załadować modułu: %s</string>
+    <string name="apm_magisk_conflict">Moduły są wyłączone ponieważ istnieje konflikt z Magiskiem!</string>
+    <string name="apm_author">Autor</string>
 </resources>
