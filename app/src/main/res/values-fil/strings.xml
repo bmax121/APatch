@@ -20,4 +20,11 @@
     <string name="home_not_installed">Hindi naka-installed</string>
     <string name="home_need_update">May update</string>
     <string name="home_patch_next_step">Susunod na hakbang</string>
+    <string name="kpatch_shadow_path">kpatch: %s -&gt; %s</string>
+    <string name="home_auth_key_desc">Magsimula ng trabaho pagkatapos ng sertipikasyon</string>
+    <string name="super_key">SuperKey</string>
+    <string name="home_su_path_ex">su: %s -&gt; %s</string>
+    <string name="home_apatch_version">APatch: %s</string>
+    <string name="home_su_path">su: %s</string>
+    <string name="home_auth_key_title">Ilagay ang superkey</string>
 </resources>
