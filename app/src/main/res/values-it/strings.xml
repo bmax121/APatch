@@ -70,4 +70,14 @@
     <string name="home_manager_version">Versione Manager</string>
     <string name="kpm_load_toast_succ">Caricamento riuscito</string>
     <string name="apm_author">Autore</string>
+    <string name="su_pkg_excluded_label">escludi</string>
+    <string name="su_title">Superuser</string>
+    <string name="kpm_desc">Desc</string>
+    <string name="kpm_args">Args</string>
+    <string name="home_fingerprint">Fingerprint</string>
+    <string name="apm_desc">Desc</string>
+    <string name="kpm_unload">Rimuovi</string>
+    <string name="home_kernel">Kernel</string>
+    <string name="home_selinux_status_enforcing">Enforcing</string>
+    <string name="patch_title">Patch</string>
 </resources>
