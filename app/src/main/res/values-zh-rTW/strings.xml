@@ -2,4 +2,16 @@
 <resources>
     <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
     <string name="app_name" translatable="false">APatch</string>
+    <string name="android_patch">Android 補丁</string>
+    <string name="patch_warnning">安裝存在風險，請確保您的數據已備份。</string>
+    <string name="reboot_download">重新啟動進入 Download</string>
+    <string name="reboot_edl">重新啟動進入 EDL</string>
+    <string name="reboot_recovery">重新啟動進入恢復模式</string>
+    <string name="reboot_userspace">軟重啟</string>
+    <string name="kernel_patch">核心補丁</string>
+    <string name="about">關於</string>
+    <string name="reboot">重新啟動</string>
+    <string name="home">首頁</string>
+    <string name="settings">設定</string>
+    <string name="reboot_bootloader">重新啟動進入 Bootloader</string>
 </resources>
