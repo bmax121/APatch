@@ -51,4 +51,6 @@
     <string name="kpm_author">May-akda</string>
     <string name="home_selinux_status_disabled">Hindi pinagana</string>
     <string name="kpm_license">Lisensiya</string>
+    <string name="apm_install">I-install</string>
+    <string name="apm_uninstall">I-uninstall</string>
 </resources>
