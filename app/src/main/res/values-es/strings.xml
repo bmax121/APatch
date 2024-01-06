@@ -48,4 +48,19 @@
     <string name="home_manager_version">Versión del administrador</string>
     <string name="patch_title">Parchear</string>
     <string name="kpm_load_toast_succ">Cargado con éxito</string>
+    <string name="kpm_unload_confirm">¿Estás seguro de que quieres eliminar el módulo %s?</string>
+    <string name="su_pkg_excluded_setting_title">Excluir</string>
+    <string name="su_pkg_excluded_setting_summary">para módulos</string>
+    <string name="su_pkg_excluded_label">excluir</string>
+    <string name="su_title">Superusuario</string>
+    <string name="kpm_desc">Descripción</string>
+    <string name="su_selinux_via_hook">Eludir mediante hook</string>
+    <string name="kpm_args">Argumentos</string>
+    <string name="kpm_version">Versión</string>
+    <string name="su_show_system_apps">Mostrar aplicaciones del sistema</string>
+    <string name="kpm_author">Autor</string>
+    <string name="kpm_load_toast_failed">Carga fallida</string>
+    <string name="kpm_unload">Eliminar</string>
+    <string name="kpm_license">Licencia</string>
+    <string name="kpm_apm_empty">Ningún módulo cargado</string>
 </resources>
