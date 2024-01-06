@@ -37,7 +37,7 @@
     <string name="home_auth_key_desc">Berikan sertifikasi untuk memulai</string>
     <string name="home_ap_cando_update">Membarui</string>
     <string name="kpatch_shadow_path">kpatch: %s -&gt; %s</string>
-    <string name="home_ap_cando_uninstall">Menghapus</string>
+    <string name="home_ap_cando_uninstall">Hapus</string>
     <string name="home_ap_cando_install">Penginstalan</string>
     <string name="home_su_path_ex">su: %s -&gt; %s</string>
     <string name="home_apatch_version">APatch: %s</string>
@@ -46,8 +46,8 @@
     <string name="home_manager_version">Manager Version</string>
     <string name="patch_title">Patch</string>
     <string name="apm_uninstall_success">%s telah terhapus</string>
-    <string name="apm_install">Penginstalan</string>
-    <string name="apm_uninstall">Menghapus</string>
+    <string name="apm_install">Pasang</string>
+    <string name="apm_uninstall">Hapus</string>
     <string name="apm_uninstall_confirm">Yakin untuk menghapus modul %s?</string>
     <string name="apm_version">Versi</string>
     <string name="apm_overlay_fs_not_available">OverlayFS tidak tersedia, modul tidak dapat berfungsi!</string>
@@ -65,4 +65,8 @@
     <string name="apm_downloading">Unduh modul: %s</string>
     <string name="apm_new_version_available">Versi baru: %s tersedia, klik untuk membarui</string>
     <string name="apm_update">Memperbarui</string>
+    <string name="su_refresh">Refresh</string>
+    <string name="apm_failed_to_disable">Gagal untuk menonaktifkan modul: %s</string>
+    <string name="apm_failed_to_enable">Gagal mengaktifkan modul: %s</string>
+    <string name="su_hide_system_apps">Sembunyikan aplikasi sistem</string>
 </resources>
