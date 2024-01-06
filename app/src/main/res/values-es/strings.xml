@@ -36,4 +36,15 @@
     <string name="home_ap_cando_install">Instalar</string>
     <string name="home_auth_key_title">Ingresar SuperKey</string>
     <string name="home_ap_cando_update">Actualizar</string>
+    <string name="kpm_kp_not_installed">Kernel Patch no instalado</string>
+    <string name="home_fingerprint">Huella del dispositivo</string>
+    <string name="home_selinux_status_unknown">Desconocido</string>
+    <string name="home_selinux_status_permissive">Permisivo</string>
+    <string name="home_selinux_status">Estado de SELinux</string>
+    <string name="home_selinux_status_disabled">Deshabilitado</string>
+    <string name="kpm_load">Cargar</string>
+    <string name="home_kernel">Kernel</string>
+    <string name="home_selinux_status_enforcing">Obediente</string>
+    <string name="home_manager_version">Versión del administrador</string>
+    <string name="patch_title">Parchear</string>
 </resources>
