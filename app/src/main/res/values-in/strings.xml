@@ -45,4 +45,15 @@
     <string name="home_kernel">Kernel</string>
     <string name="home_manager_version">Manager Version</string>
     <string name="patch_title">Patch</string>
+    <string name="apm_uninstall_success">%s telah terhapus</string>
+    <string name="apm_install">Memasang</string>
+    <string name="apm_uninstall">Menghapus instalan</string>
+    <string name="apm_uninstall_confirm">Yakin untuk menghapus modul %s?</string>
+    <string name="apm_version">Versi</string>
+    <string name="apm_overlay_fs_not_available">OverlayFS tidak tersedia, modul tidak dapat berfungsi!</string>
+    <string name="apm_uninstall_failed">Gagal menginstal: %s</string>
+    <string name="apm_magisk_conflict">Modul tidak aktif, konflik dengan Magisk!</string>
+    <string name="apm_desc">Ket.</string>
+    <string name="apm_empty">Tidak ada modul terinstal</string>
+    <string name="apm_author">Pembuat</string>
 </resources>
