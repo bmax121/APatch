@@ -8,4 +8,8 @@
     <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
     <string name="app_name" translatable="false">APatch</string>
     <string name="kpm">KPModule</string>
+    <string name="reboot_recovery">Nyalakan ke Recovery</string>
+    <string name="reboot">Nyalakan ulang</string>
+    <string name="settings">Pengaturan</string>
+    <string name="reboot_bootloader">Nyalakan ke Bootloader</string>
 </resources>
