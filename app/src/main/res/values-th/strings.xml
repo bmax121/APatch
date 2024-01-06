@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="patch_warnning">การติดตั้งมีความเสี่ยง โปรดตรวจสอบให้แน่ใจว่าได้สำรองข้อมูลของคุณแล้ว</string>
+    <string name="patch_warnning">การติดตั้งด้วยความเสี่ยงโปรดตรวจสอบข้อมูลของคุณ.</string>
     <string name="home_learn_apatch">เรียนรู้เกี่ยวกับAndroidPatch</string>
     <string name="reboot">รีบูท</string>
     <string name="settings">ตั้งค่า</string>
