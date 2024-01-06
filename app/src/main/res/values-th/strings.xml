@@ -24,4 +24,12 @@
     <string name="home_manager_version">เวอร์ชัน</string>
     <string name="kpm_load">โหลด</string>
     <string name="kpm_load_toast_succ">โหลดสำเร็จ</string>
+    <string name="kpm_unload_confirm">คุณแน่ใจหรือไม่ว่าต้องการยกเลิกการโหลดโมดูล %s?</string>
+    <string name="kpm_desc">คำอธิบาย</string>
+    <string name="kpm_version">เวอร์ชัน</string>
+    <string name="kpm_author">ผู้เขียน</string>
+    <string name="kpm_load_toast_failed">โหลดไม่สำเร็จ</string>
+    <string name="kpm_unload">ยกเลิกการโหลด</string>
+    <string name="kpm_license">ใบอนุญาต</string>
+    <string name="kpm_apm_empty">ไม่มีการโหลดโมดูล</string>
 </resources>
