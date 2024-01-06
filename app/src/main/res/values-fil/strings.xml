@@ -72,4 +72,8 @@
     <string name="apm_uninstall_failed">Hindi tagumpay ang pag-uninstall ng: %s</string>
     <string name="apm_desc">Desc</string>
     <string name="apm_author">May-akda</string>
+    <string name="apm_version">Bersyon</string>
+    <string name="kpm_version">Bersyon</string>
+    <string name="apm_changelog">Mga Pagbabago</string>
+    <string name="apm_update">Update</string>
 </resources>
