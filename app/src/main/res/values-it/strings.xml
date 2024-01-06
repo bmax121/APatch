@@ -21,7 +21,7 @@
     <string name="su_pkg_excluded_setting_summary">per i moduli</string>
     <string name="reboot_edl">Riavvia in modalità EDL</string>
     <string name="home_installing">Installazione in corso</string>
-    <string name="apm_start_downloading">Inizia il download: %s</string>
+    <string name="apm_start_downloading">Download avviato: %s</string>
     <string name="su_selinux_via_hook">bypassa tramite hook</string>
     <string name="home_ap_cando_uninstall">Disinstalla</string>
     <string name="apatch_version">Versione: %s</string>
