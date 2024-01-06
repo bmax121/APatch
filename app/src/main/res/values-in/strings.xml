@@ -34,4 +34,5 @@
     <string name="apatch_version_update">Versi: %s-&gt;%s</string>
     <string name="home_auth_key_title">Masukan Superkey</string>
     <string name="reboot_download">Ke Download</string>
+    <string name="home_auth_key_desc">Mulai bekerja setelah sertifikasi</string>
 </resources>
