@@ -13,11 +13,11 @@
     <string name="reboot_download">重新启动到下载模式</string>
     <string name="home_click_to_learn_apatch">了解AndroidPatch的功能以及如何使用</string>
     <string name="reboot_edl">重新启动到edl模式</string>
-    <string name="home_installing">安装</string>
+    <string name="home_installing">安装中</string>
     <string name="safe_mode">安全模式</string>
     <string name="reboot_recovery">重启到恢复模式</string>
     <string name="reboot_userspace">软重启</string>
-    <string name="home_learn_apatch">学习安卓补丁</string>
+    <string name="home_learn_apatch">了解安卓补丁</string>
     <string name="kernel_patch">内核补丁</string>
     <string name="home_click_to_install">点击安装</string>
     <string name="about">关于</string>
@@ -26,12 +26,11 @@
     <string name="home">桌面</string>
     <string name="home_patch_set_key_title">设置 超级密钥</string>
     <string name="settings">设置</string>
-    <string name="home_working">工作</string>
+    <string name="home_working">工作中</string>
     <string name="home_patch_next_step">下一步</string>
     <string name="home_not_installed">未安装</string>
     <string name="reboot_bootloader">重新启动到引导加载程序</string>
-    <string name="about_source_code">在%1$s查看源代码
-\n加入我们的%2$s频道</string>
+    <string name="about_source_code">在%1$s查看源代码加入我们的%2$s<br/>频道</string>
     <string name="kpatch_shadow_path">补丁：%s -&gt; %s</string>
     <string name="home_auth_key_desc">认证通过后开始工作</string>
     <string name="kpatch_version">版本：%d.% d.% D</string>
