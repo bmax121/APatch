@@ -26,6 +26,10 @@ Android Kernel Version 3.18 - 6.1
 CONFIG_KALLSYMS=y  
 CONFIG_KALLSYMS_ALL=y (CONFIG_KALLSYMS_ALL=n, Planned support)
 
+## Translation
+
+To help translate APatch or improve existing translations, please use [Weblate](https://hosted.weblate.org/engage/apatch/). PR of APatch translation is no longer accepted, because it will conflict with Weblate.
+
 ## Get Help
 
 ## Discussions
