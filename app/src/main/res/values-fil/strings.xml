@@ -53,4 +53,18 @@
     <string name="kpm_license">Lisensiya</string>
     <string name="apm_install">I-install</string>
     <string name="apm_uninstall">I-uninstall</string>
+    <string name="apm_uninstall_confirm">Sigurado ka bang gusto mong i-uninstall ang module %s?</string>
+    <string name="su_pkg_excluded_setting_title">I-exclude</string>
+    <string name="su_pkg_excluded_setting_summary">para sa mga modules</string>
+    <string name="su_pkg_excluded_label">exclude</string>
+    <string name="su_title">Superuser</string>
+    <string name="apm">APModule</string>
+    <string name="su_selinux_via_hook">bypass via hook</string>
+    <string name="su_refresh">I-refresh</string>
+    <string name="su_show_system_apps">Ipakita ang mga system apps</string>
+    <string name="apm_failed_to_disable">Hindi tagumpay ang pagpapatigil ng module: %s</string>
+    <string name="apm_failed_to_enable">Hindi tagumpay ang pagpapagana ng module: %s</string>
+    <string name="su_hide_system_apps">Itago ang mga system apps</string>
+    <string name="apm_empty">Walang naka-install na module</string>
+    <string name="kpm_load">Mag Load</string>
 </resources>
