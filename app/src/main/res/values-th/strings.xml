@@ -32,4 +32,9 @@
     <string name="kpm_unload">ยกเลิกการโหลด</string>
     <string name="kpm_license">ใบอนุญาต</string>
     <string name="kpm_apm_empty">ไม่มีการโหลดโมดูล</string>
+    <string name="apm">APModule</string>
+    <string name="super_key">SuperKey</string>
+    <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
+    <string name="app_name" translatable="false">APatch</string>
+    <string name="kpm">KPModule</string>
 </resources>
