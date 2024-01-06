@@ -34,11 +34,11 @@
     <string name="apatch_version_update">Versi: %s-&gt;%s</string>
     <string name="home_auth_key_title">Masukan Superkey</string>
     <string name="reboot_download">Ke Download</string>
-    <string name="home_auth_key_desc">Mulai bekerja setelah sertifikasi</string>
+    <string name="home_auth_key_desc">Berikan sertifikasi untuk memulai</string>
     <string name="home_ap_cando_update">Membarui</string>
     <string name="kpatch_shadow_path">kpatch: %s -&gt; %s</string>
-    <string name="home_ap_cando_uninstall">Uninstall</string>
-    <string name="home_ap_cando_install">Instal</string>
+    <string name="home_ap_cando_uninstall">Menghapus</string>
+    <string name="home_ap_cando_install">Penginstalan</string>
     <string name="home_su_path_ex">su: %s -&gt; %s</string>
     <string name="home_apatch_version">APatch: %s</string>
     <string name="home_su_path">su: %s</string>
@@ -46,8 +46,8 @@
     <string name="home_manager_version">Manager Version</string>
     <string name="patch_title">Patch</string>
     <string name="apm_uninstall_success">%s telah terhapus</string>
-    <string name="apm_install">Memasang</string>
-    <string name="apm_uninstall">Menghapus instalan</string>
+    <string name="apm_install">Penginstalan</string>
+    <string name="apm_uninstall">Menghapus</string>
     <string name="apm_uninstall_confirm">Yakin untuk menghapus modul %s?</string>
     <string name="apm_version">Versi</string>
     <string name="apm_overlay_fs_not_available">OverlayFS tidak tersedia, modul tidak dapat berfungsi!</string>
@@ -56,4 +56,13 @@
     <string name="apm_desc">Ket.</string>
     <string name="apm_empty">Tidak ada modul terinstal</string>
     <string name="apm_author">Pembuat</string>
+    <string name="apm_reboot_to_apply">Nyalakan ulang untuk berfungsi</string>
+    <string name="apm_start_downloading">Mulai mengunduh: %s</string>
+    <string name="kpm_desc">Ket.</string>
+    <string name="su_show_system_apps">Tampilkan aplikasi sistem</string>
+    <string name="apm_changelog">Log perubahan</string>
+    <string name="kpm_author">Pembuat</string>
+    <string name="apm_downloading">Unduh modul: %s</string>
+    <string name="apm_new_version_available">Versi baru: %s tersedia, klik untuk membarui</string>
+    <string name="apm_update">Memperbarui</string>
 </resources>
