@@ -21,7 +21,7 @@
     <string name="safe_mode">Safemode</string>
     <string name="home_patch_set_key_desc">Kredensial untuk KernelPatch</string>
     <string name="home_patch_set_key_title">Atur SuperKey</string>
-    <string name="home_install_unknown">Tidak diketahui</string>
+    <string name="home_install_unknown">Tidak dikenal</string>
     <string name="home_click_to_install">Klik untuk menginstal</string>
     <string name="home_patch_next_step">Langkah selanjutnya</string>
     <string name="home_not_installed">Tidak terinstal</string>
@@ -43,14 +43,14 @@
     <string name="home_apatch_version">APatch: %s</string>
     <string name="home_su_path">su: %s</string>
     <string name="home_kernel">Kernel</string>
-    <string name="home_manager_version">Manager Version</string>
+    <string name="home_manager_version">Versi Manajer</string>
     <string name="patch_title">Patch</string>
     <string name="apm_uninstall_success">%s telah terhapus</string>
     <string name="apm_install">Instal</string>
     <string name="apm_uninstall">Hapus</string>
     <string name="apm_uninstall_confirm">Yakin untuk menghapus modul %s?</string>
     <string name="apm_version">Versi</string>
-    <string name="apm_overlay_fs_not_available">OverlayFS tidak tersedia, modul tidak dapat berfungsi!</string>
+    <string name="apm_overlay_fs_not_available">OverlayFS tidak tersedia, modul tidak bekerja!</string>
     <string name="apm_uninstall_failed">Gagal menghapus: %s</string>
     <string name="apm_magisk_conflict">Modul tidak aktif, konflik dengan Magisk!</string>
     <string name="apm_desc">Ket.</string>
@@ -65,7 +65,7 @@
     <string name="apm_downloading">Unduh modul: %s</string>
     <string name="apm_new_version_available">Versi baru: %s tersedia, klik untuk membarui</string>
     <string name="apm_update">Perbarui</string>
-    <string name="su_refresh">Refresh</string>
+    <string name="su_refresh">Muat ulang</string>
     <string name="apm_failed_to_disable">Gagal menonaktifkan modul: %s</string>
     <string name="apm_failed_to_enable">Gagal mengaktifkan modul: %s</string>
     <string name="su_hide_system_apps">Sembunyikan aplikasi sistem</string>
@@ -74,7 +74,7 @@
     <string name="su_pkg_excluded_setting_summary">untuk modul</string>
     <string name="su_pkg_excluded_label">kecualikan</string>
     <string name="su_title">Superuser</string>
-    <string name="su_selinux_via_hook">bypass via hook</string>
+    <string name="su_selinux_via_hook">Memintas via hook</string>
     <string name="kpm_version">Versi</string>
     <string name="reboot_userspace">Softreboot</string>
     <string name="home_selinux_status_unknown">Tidak diketahui</string>
@@ -89,4 +89,6 @@
     <string name="kpm_apm_empty">Tidak ada modul</string>
     <string name="kpm_unload_confirm">Yakin untuk melepas modul %s?</string>
     <string name="kpm_unload">Lepas</string>
+    <string name="kpm_args">Args</string>
+    <string name="home_fingerprint">Sidik jari</string>
 </resources>
