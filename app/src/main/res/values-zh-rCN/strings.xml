@@ -33,7 +33,7 @@
     <string name="about_source_code">在%1$s查看源代码加入我们的%2$s<br/>频道</string>
     <string name="kpatch_shadow_path">补丁：%s -&gt; %s</string>
     <string name="home_auth_key_desc">认证通过后开始工作</string>
-    <string name="kpatch_version">版本：%d.% d.% D</string>
+    <string name="kpatch_version">版本：%d.%d.%d</string>
     <string name="home_ap_cando_uninstall">卸载</string>
     <string name="apatch_version">版本：%s</string>
     <string name="home_ap_cando_install">安装</string>
