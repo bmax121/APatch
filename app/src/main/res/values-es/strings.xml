@@ -6,4 +6,15 @@
     <string name="app_name" translatable="false">APatch</string>
     <string name="patch_warnning">La instalación conlleva riesgos. Asegúrate de tener una copia de seguridad de tus datos.</string>
     <string name="home">Inicio</string>
+    <string name="reboot_download">Reiniciar en modo download</string>
+    <string name="home_click_to_learn_apatch">Conoce las funciones de AndroidPatch y cómo utilizarlas</string>
+    <string name="reboot_edl">Reiniciar en modo EDL</string>
+    <string name="reboot_recovery">Reiniciar en modo de recuperación</string>
+    <string name="reboot_userspace">Reinicio mínimo</string>
+    <string name="home_learn_apatch">Aprende más sobre AndroidPatch</string>
+    <string name="about">Acerca de</string>
+    <string name="reboot">Reiniciar</string>
+    <string name="settings">Ajustes</string>
+    <string name="reboot_bootloader">Reiniciar en modo de arranque</string>
+    <string name="about_source_code">Ver el código fuente en %1$s<br/>Únete a nuestro canal de %2$s</string>
 </resources>
