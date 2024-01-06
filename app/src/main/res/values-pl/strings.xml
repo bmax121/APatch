@@ -32,4 +32,17 @@
     <string name="patch_title">Załataj</string>
     <string name="home_selinux_status_disabled">Wyłączony</string>
     <string name="home_selinux_status_enforcing">Enforcing</string>
+    <string name="su_pkg_excluded_setting_summary">dla modułów</string>
+    <string name="su_title">Superuser</string>
+    <string name="kpm_version">Wersja</string>
+    <string name="su_refresh">Odśwież</string>
+    <string name="su_show_system_apps">Pokaż aplikacje systemowe</string>
+    <string name="home_selinux_status_permissive">Permissive</string>
+    <string name="kpm_author">Autor</string>
+    <string name="su_hide_system_apps">Ukryj aplikacje systemowe</string>
+    <string name="kpm_load_toast_failed">Załadowanie nie powiodło się</string>
+    <string name="kpm_load">Załaduj</string>
+    <string name="kpm_license">Licencja</string>
+    <string name="kpm_apm_empty">Brak załadowanych modułów</string>
+    <string name="kpm_load_toast_succ">Pomyślnie załadowano</string>
 </resources>
