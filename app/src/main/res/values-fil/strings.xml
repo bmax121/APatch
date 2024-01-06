@@ -6,4 +6,5 @@
     <string name="patch_warnning">Ang instalasyon na ito ay pwede ikaka-sira ng inyong kagamitan, tiyakin muna kung ang iyong data ay naka-backup.</string>
     <string name="kernel_patch">KernelPatch</string>
     <string name="reboot">Reboot</string>
+    <string name="settings">Mga setting</string>
 </resources>
