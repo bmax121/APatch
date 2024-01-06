@@ -27,7 +27,7 @@
     <string name="home_selinux_status">status SELinux</string>
     <string name="home_su_path">su: %s</string>
     <string name="apatch_version_update">Wersja: %s -&gt; %s</string>
-    <string name="home_kernel">Kernel</string>
+    <string name="home_kernel">Jądro</string>
     <string name="home_manager_version">Wersja Menedżera</string>
     <string name="patch_title">Załataj</string>
     <string name="home_selinux_status_disabled">Wyłączony</string>
