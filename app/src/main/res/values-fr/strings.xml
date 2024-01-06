@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
+    <string name="app_name" translatable="false">APatch</string>
+    <string name="kernel_patch">KernelPatch</string>
+    <string name="android_patch">AndroidPatch</string>
+    <string name="reboot_userspace">Redémarrage Logiciel</string>
+    <string name="reboot_recovery">Redémarrage en mode récupération</string>
+    <string name="reboot_download">Redémarrage vers le mode Téléchargement</string>
+    <string name="reboot_edl">Redémarrage vers le mode EDL</string>
+    <string name="about">À propos</string>
+    <string name="home_learn_apatch">En apprendre plus sur AndroidPatch</string>
+    <string name="home">Accueil</string>
+    <string name="patch_warnning">Cette installation peut poser un risque. Assurez-vous d\'avoir une sauvegarde complète avant de commencer.</string>
+    <string name="settings">Paramètres</string>
+    <string name="reboot_bootloader">Redémarrage vers le chargeur de démarrage</string>
+    <string name="reboot">Redémarrer</string>
+</resources>

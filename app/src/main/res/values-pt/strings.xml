@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
+    <string name="app_name" translatable="false">APatch</string>
+    <string name="home">Inicio</string>
+    <string name="patch_warnning">A instalação pode apresentar riscos. Certifique-se de fazer backup dos seus dados.</string>
+    <string name="kernel_patch">KernelPatch</string>
+    <string name="android_patch">AndroidPatch</string>
+    <string name="reboot">Reiniciar</string>
+    <string name="settings">Configurações</string>
+    <string name="reboot_recovery">Reiniciar para Recuperação</string>
+    <string name="about">Sobre</string>
+    <string name="home_learn_apatch">Aprender AndroidPatch</string>
+    <string name="home_click_to_learn_apatch">Conheça os recursos do AndroidPatch e como usá-lo</string>
+    <string name="super_key">SuperKey</string>
+    <string name="home_patch_set_key_title">Definir SuperKey</string>
+    <string name="home_patch_next_step">Próximo Passo</string>
+    <string name="home_install_unknown">Desconhecido</string>
+    <string name="home_click_to_install">Clique para instalar</string>
+    <string name="home_need_update">Atualização disponível</string>
+    <string name="apatch_version">Versão: %s</string>
+    <string name="home_auth_key_title">Digitar SuperKey</string>
+    <string name="home_ap_cando_update">Atualização</string>
+    <string name="home_ap_cando_uninstall">Desinstalar</string>
+    <string name="patch_title">Patch</string>
+    <string name="home_kernel">Kernel</string>
+    <string name="home_manager_version">Versão do Gerenciador</string>
+    <string name="home_selinux_status_disabled">Desabilitado</string>
+    <string name="kpm">KPModulo</string>
+    <string name="kpm_kp_not_installed">KernelPatch não instalado</string>
+    <string name="kpm_load_toast_succ">Carregado com sucesso!</string>
+    <string name="kpm_load_toast_failed">Falha no carregamento!</string>
+    <string name="send_log">Enviar Logs</string>
+    <string name="safe_mode">Modo Seguro</string>
+    <string name="home_patch_set_key_desc">Apenas credencial para KernelPatch</string>
+    <string name="home_not_installed">Não instalado</string>
+    <string name="kpatch_version">Versão: %d.%d.%d</string>
+    <string name="home_working">Funcionado</string>
+    <string name="home_installing">Instalando</string>
+    <string name="apatch_version_update">Versão: %s -&gt; %s</string>
+    <string name="home_ap_cando_install">Instalar</string>
+    <string name="home_selinux_status_unknown">Desconhecido</string>
+    <string name="kpm_load">Carregar</string>
+</resources>
