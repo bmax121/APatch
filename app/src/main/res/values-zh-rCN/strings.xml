@@ -24,7 +24,7 @@
     <string name="reboot">重启</string>
     <string name="home_need_update">可用更新</string>
     <string name="home">主页</string>
-    <string name="home_patch_set_key_title">设置 超级密钥</string>
+    <string name="home_patch_set_key_title">设置超级密钥</string>
     <string name="settings">设置</string>
     <string name="home_working">工作中</string>
     <string name="home_patch_next_step">下一步</string>
@@ -32,7 +32,7 @@
     <string name="reboot_bootloader">重启到Bootloader</string>
     <string name="about_source_code">在%1$s查看源代码加入我们的%2$s<br/>频道</string>
     <string name="kpatch_shadow_path">kpatch：%s -&gt; %s</string>
-    <string name="home_auth_key_desc">认证通过后开始工作</string>
+    <string name="home_auth_key_desc">认证通过后将开始工作</string>
     <string name="kpatch_version">版本：%d.%d.%d</string>
     <string name="home_ap_cando_uninstall">卸载</string>
     <string name="apatch_version">版本：%s</string>
