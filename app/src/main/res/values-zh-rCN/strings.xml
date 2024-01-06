@@ -17,7 +17,7 @@
     <string name="safe_mode">安全模式</string>
     <string name="reboot_recovery">重启到Recovery</string>
     <string name="reboot_userspace">软重启</string>
-    <string name="home_learn_apatch">了解安卓补丁</string>
+    <string name="home_learn_apatch">了解 Android 补丁</string>
     <string name="kernel_patch">内核补丁</string>
     <string name="home_click_to_install">点击安装</string>
     <string name="about">关于</string>
