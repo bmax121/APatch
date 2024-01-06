@@ -3,4 +3,23 @@
     <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
     <string name="app_name" translatable="false">APatch</string>
     <string name="home">ホーム</string>
+    <string name="android_patch">AndroidPatch</string>
+    <string name="kpm_unload_confirm">本当にモジュールをアンロードしますか？ %s?</string>
+    <string name="home_auth_key_desc">認定後の業務開始</string>
+    <string name="patch_warnning">インストールにはリスクが伴います。</string>
+    <string name="home_patch_set_key_desc">KernelPatchの資格情報のみ</string>
+    <string name="apm_uninstall_confirm">モジュールをアンインストールしますか？ %s?</string>
+    <string name="reboot_download">再起動してダウンロード</string>
+    <string name="home_click_to_learn_apatch">AndroidPatchの機能と使用方法について学ぶ</string>
+    <string name="reboot_edl">9008</string>
+    <string name="home_learn_apatch">学びますAndroidパッチ</string>
+    <string name="kernel_patch">KernelPatch</string>
+    <string name="home_need_update">更新可能</string>
+    <string name="apm_uninstall_failed">アンインストールに失敗： %s</string>
+    <string name="apm_failed_to_enable">モジュールの有効化に失敗： %s</string>
+    <string name="settings">設定</string>
+    <string name="kpm_apm_empty">モジュール搭載なし</string>
+    <string name="about_source_code">% 1 $sでソースコードを表示
+\n% 2 $sチャンネルに参加する</string>
+    <string name="home_manager_version">マネージャバージョン</string>
 </resources>
