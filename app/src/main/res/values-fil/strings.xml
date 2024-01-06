@@ -27,4 +27,6 @@
     <string name="home_apatch_version">APatch: %s</string>
     <string name="home_su_path">su: %s</string>
     <string name="home_auth_key_title">Ilagay ang superkey</string>
+    <string name="home_ap_cando_install">I-install</string>
+    <string name="home_ap_cando_update">Update</string>
 </resources>
