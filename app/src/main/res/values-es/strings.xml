@@ -35,4 +35,5 @@
     <string name="home_auth_key_desc">Comenzar la ejecución tras la certificación</string>
     <string name="home_ap_cando_install">Instalar</string>
     <string name="home_auth_key_title">Ingresar SuperKey</string>
+    <string name="home_ap_cando_update">Actualizar</string>
 </resources>
