@@ -27,16 +27,17 @@ CONFIG_KALLSYMS=y
 CONFIG_KALLSYMS_ALL=y (CONFIG_KALLSYMS_ALL=n, Planned support)
 
 ## Translation
-
 To help translate APatch or improve existing translations, please use [Weblate](https://hosted.weblate.org/engage/apatch/). PR of APatch translation is no longer accepted, because it will conflict with Weblate.
+[![Translation status](https://hosted.weblate.org/widget/APatch/apatch/multi-auto.svg)](https://hosted.weblate.org/engage/APatch/)
+
 
 ## Get Help
 
-## Discussions
+### Discussions
 
 - Telegram Group: <https://t.me/APatchGroup>
 
-## More Information
+### More Information
 
 - [FAQ](docs/en/faq.md)
 
