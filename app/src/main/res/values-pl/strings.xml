@@ -6,4 +6,17 @@
     <string name="app_name" translatable="false">APatch</string>
     <string name="kpm">KPModule</string>
     <string name="home">Strona główna</string>
+    <string name="send_log">Prześlij Log</string>
+    <string name="kpatch_version">"Wersja:  %d.%d.%d"</string>
+    <string name="home_click_to_learn_apatch">Dowiedz się o funkcjach AndroidPatcha i jak go używać</string>
+    <string name="home_installing">Instalowanie</string>
+    <string name="home_learn_apatch">Poznaj AndroidPatch</string>
+    <string name="home_click_to_install">Naciśnij żeby zainstalować</string>
+    <string name="about">O</string>
+    <string name="reboot">Uruchom ponownie</string>
+    <string name="home_need_update">Aktualizacja dostępna</string>
+    <string name="settings">Ustawienia</string>
+    <string name="home_patch_next_step">Kolejny krok</string>
+    <string name="home_not_installed">nie zainstalowano</string>
+    <string name="about_source_code">Zobacz kod źródłowy na %1$s<br/> Dołącz do naszego kanału na %2$s</string>
 </resources>
