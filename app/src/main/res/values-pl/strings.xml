@@ -59,4 +59,8 @@
     <string name="apm_changelog">Lista zmian</string>
     <string name="apm_downloading">Pobieranie modułu %s</string>
     <string name="apm_update">Aktualizacja</string>
+    <string name="android_patch">AndroidPatch</string>
+    <string name="apm_start_downloading">Rozpocznij pobieranie: %s</string>
+    <string name="kernel_patch">KernelPatch</string>
+    <string name="apm_new_version_available">Nowa wersja: %s jest dostępna, naciśnij aby zaktualizować</string>
 </resources>
