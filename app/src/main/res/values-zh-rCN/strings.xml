@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="apm">APModule</string>
+    <string name="apm">安卓补丁模块</string>
     <string name="super_key">超级密钥</string>
     <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
     <string name="app_name" translatable="false">APatch</string>
-    <string name="kpm">KPModule</string>
+    <string name="kpm">内核模块</string>
     <string name="android_patch">Android 补丁</string>
     <string name="send_log">发送日志</string>
     <string name="patch_warnning">安装有风险，请确保您的数据已备份。</string>
