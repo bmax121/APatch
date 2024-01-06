@@ -1,5 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
     <string name="app_name" translatable="false">APatch</string>
-</resources>
+
+    <string name="home">হোম</string>
+
+    <string name="patch_warnning">ইনস্টলেশন ঝুঁকিপূর্ণ, অনুগ্রহ করে নিশ্চিত করুন যে আপনার ডেটা ব্যাকআপ করা আছে।</string>
+
+    <string name="kernel_patch">কার্নেলপ্যাচ</string>
+    <string name="android_patch">অ্যান্ড্রয়েডপ্যাচ</string>
+
+    <string name="reboot">রিবুট করুন</string>
+    <string name="settings">সেটিংস</string>
+    <string name="reboot_userspace">সফট রিবুট করুন</string>
+    <string name="reboot_recovery">রিকভারিতে রিবুট করুন</string>
+    <string name="reboot_bootloader">বুটলোডারে রিবুট করুন</string>
+    <string name="reboot_download">ডাউনলোড মোডে রিবুট করুন</string>
+    <string name="reboot_edl">EDL এ রিবুট করুন</string>
+    <string name="about">তথ্য</string>
+
+    <string name="home_learn_apatch">অ্যান্ড্রয়েডপ্যাচ শিখুন</string>
+    <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
+    <string name="home_click_to_learn_apatch">অ্যান্ড্রয়েডপ্যাচের বৈশিষ্ট্য এবং কীভাবে ব্যবহার করবেন সে সম্পর্কে জানুন</string>
+    <string name="about_source_code"><![CDATA[সোর্স কোড দেখুন %1$s<br/>আমাদের চ্যানেল %2$s এ যোগ দিন]]></string>
+    <string name="send_log">লগ পাঠান</string>
+    <string name="safe_mode">সেফ মোড</string>
+
+    <string name="super_key">সুপারকি</string>
+    <string name="home_patch_set_key_title">সুপারকি সেট করুন</string>
+    <string name="home_patch_set_key_desc">কারনেলপ্যাচের এর জন্য শুধুমাত্র শংসাপত্র</string>
+    <string name="home_patch_next_step">পরবর্তী ধাপ</string>
+
+    <string name="home_not_installed">ইনস্টল করা হয়নি</string>
+    <string name="home_install_unknown">অজানা</string>
+    <string name="home_click_to_install">ইনস্টল করতে ক্লিক করুন</string>
+    <string name="home_working">কাজ করছে</string>
+    <string name="home_installing">ইনস্টল করা হচ্ছে</string>
+    <string name="home_need_update">আপডেট উপলব্ধ</string>
+    <string name="kpatch_version">সংস্করণ: %d.%d.%d</string>
+    <string name="apatch_version">সংস্করণ: %s</string>
+    <string name="apatch_version_update">সংস্করণ: %s -> %s</string>
+    <string name="home_su_path">su: %s</string>
+    <string name="home_su_path_ex">su: %s -> %s</string>
+    <string name="kpatch_shadow_path">কার্নেলপ্যাচ: %s -> %s</string>
+    <string name="home_apatch_version">অ্যান্ড্রয়েডপ্যাচ: %s</string>
+    <string name="home_auth_key_title">সুপারকি প্রবেশ করুন</string>
+    <string name="home_auth_key_desc">প্রত্যয়িতকরণের পরে কাজ শুরু করুন</string>
+
+    <string name="home_ap_cando_install">ইনস্টল করুন</string>
+    <string name="home_ap_cando_update">হালনাগাদ</string>
+    <string name="home_ap_cando_uninstall">আনইনস্টল করুন</string>
+
+    <string name="patch_title">প্যাচ</string>
+
+    <string name="home_kernel">কার্নেল</string>
+    <string name="home_manager_version">ম্যানেজার সংস্করণ</string>
+    <string name="home_fingerprint">আঙুলের ছাপ</string>
+
+    <string name="home_selinux_status">SELinux অবস্থা</string>
+    <string name="home_selinux_status_disabled">নিষ্ক্রিয়</string>
+    <string name="home_selinux_status_enforcing">এনফোর্সিং</string>
+    <string name="home_selinux_status_permissive">পারমিসিভ</string>
+    <string name="home_selinux_status_unknown">অজানা</string>
+
+    <string name="kpm">KPModule</string>
+    <string name="kpm_kp_not_installed">কার্নেল প্যাচ ইনস্টল করা হয়নি</string>
+    <string name="kpm_load">লোড করুন</string>
+    <string name="kpm_load_toast_succ">লোড সফল</string>
+    <string name="kpm_load_toast_failed">লোড ব্যর্থ হয়েছে</string>
+    <string name="kpm_unload_confirm">আপনি কি নিশ্চিত আপনি মডিউল %s আনলোড করতে চান?</string>
+    <string name="kpm_unload">আনলোড</string>
+    <string name="kpm_apm_empty">কোনো মডিউল লোড করা হয়নি</string>
+    <string name="kpm_version">সংস্করণ</string>
+    <string name="kpm_license">লাইসেন্স</string>
+    <string name="kpm_author">লেখক</string>
+    <string name="kpm_desc">বিবরণ</string>
+    <string name="kpm_args">আর্গস</string>
+
+
+    <string name="su_title">সুপারইউজার</string>
+    <string name="su_selinux_via_hook">হুকের মাধ্যমে বাইপাস করুন</string>
+    <string name="su_pkg_excluded_label">বাদ দিন</string>
+    <string name="su_pkg_excluded_setting_title">বাদ দিন</string>
+    <string name="su_pkg_excluded_setting_summary">মডিউলস এর জন্য</string>
+    <string name="su_show_system_apps">সিস্টেম অ্যাপ দেখান</string>
+    <string name="su_hide_system_apps">সিস্টেম অ্যাপ লুকান</string>
+    <string name="su_refresh">রিফ্রেশ</string>
+
+    <string name="apm">APModule</string>
+    <string name="apm_failed_to_enable">মডিউল সক্রিয় করতে ব্যর্থ: %s</string>
+    <string name="apm_failed_to_disable">মডিউল নিষ্ক্রিয় করতে ব্যর্থ হয়েছে: %s</string>
+    <string name="apm_empty">কোন মডিউল ইনস্টল করা নেই</string>
+    <string name="apm_uninstall">আনইনস্টল করুন</string>
+    <string name="apm_install">ইনস্টল করুন</string>
+    <string name="apm_uninstall_confirm">আপনি কি নিশ্চিত আপনি মডিউল %s আনইনস্টল করতে চান?</string>
+    <string name="apm_uninstall_success">%s আনইনস্টল করা হয়েছে</string>
+    <string name="apm_uninstall_failed">আনইনস্টল করতে ব্যর্থ: %s</string>
+    <string name="apm_version">সংস্করণ</string>
+    <string name="apm_author">লেখক</string>
+    <string name="apm_desc">বিবরণ</string>
+    <string name="apm_overlay_fs_not_available">ডিভাইসে overlayfs সাপোর্ট নেয়, মডিউল কাজ করবে না!</string>
+    <string name="apm_magisk_conflict">মডিউলগুলো নিষ্ক্রিয় করা হয়েছে কারণ এটি Magisk এর সাথে দ্বন্দ্বযুক্ত\'s!</string>
+    <string name="apm_reboot_to_apply">কার্যকর করতে রিবুট করুন</string>
+    <string name="apm_changelog">চেঞ্জলগ</string>
+    <string name="apm_update">হালনাগাদ</string>
+    <string name="apm_downloading">মডিউল ডাউনলোড হচ্ছে: %s</string>
+    <string name="apm_start_downloading">ডাউনলোড শুরু হচ্ছে: %s</string>
+    <string name="apm_new_version_available">নতুন সংস্করণ: %s পাওয়া গেছে, আপগ্রেড করতে ক্লিক করুন</string>
+</resources
