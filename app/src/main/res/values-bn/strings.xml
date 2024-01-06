@@ -106,4 +106,4 @@
     <string name="apm_downloading">মডিউল ডাউনলোড হচ্ছে: %s</string>
     <string name="apm_start_downloading">ডাউনলোড শুরু হচ্ছে: %s</string>
     <string name="apm_new_version_available">নতুন সংস্করণ: %s পাওয়া গেছে, আপগ্রেড করতে ক্লিক করুন</string>
-</resources
+</resources>
