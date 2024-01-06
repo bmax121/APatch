@@ -78,6 +78,9 @@ jobs:
           path: app/build/outputs/apk/release/*.apk
 
       - name: Sign Release
+        env: 
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+        if: ${{ env.SIGNING_KEY != '' }}
         uses: r0adkll/sign-android-release@v1
         id: sign_app
         with:
@@ -88,6 +91,9 @@ jobs:
           keyPassword: ${{ secrets.KEY_PASSWORD }}
 
       - name: Release apk
+        env: 
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+        if: ${{ env.SIGNING_KEY != '' }}
         uses: ncipollo/release-action@v1.12.0
         with:
           token: ${{ github.token }}
