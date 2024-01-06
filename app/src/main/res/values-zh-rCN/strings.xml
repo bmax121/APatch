@@ -67,7 +67,7 @@
     <string name="su_pkg_excluded_label">排除</string>
     <string name="su_title">超级用户</string>
     <string name="kpm_desc">描述</string>
-    <string name="su_selinux_via_hook">通过hook绕过</string>
+    <string name="su_selinux_via_hook">绕行</string>
     <string name="kpm_args">参数</string>
     <string name="su_refresh">刷新</string>
     <string name="su_show_system_apps">显示系统应用</string>
