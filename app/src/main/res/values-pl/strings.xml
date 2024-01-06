@@ -7,7 +7,7 @@
     <string name="kpm">KPModule</string>
     <string name="home">Strona główna</string>
     <string name="send_log">Prześlij Log</string>
-    <string name="kpatch_version">"Wersja:  %d.%d.%d"</string>
+    <string name="kpatch_version">Wersja: %d.%d.%d</string>
     <string name="home_click_to_learn_apatch">Dowiedz się o funkcjach AndroidPatcha i jak go używać</string>
     <string name="home_installing">Instalowanie</string>
     <string name="home_learn_apatch">Poznaj AndroidPatch</string>
@@ -19,4 +19,15 @@
     <string name="home_patch_next_step">Kolejny krok</string>
     <string name="home_not_installed">nie zainstalowano</string>
     <string name="about_source_code">Zobacz kod źródłowy na %1$s<br/> Dołącz do naszego kanału na %2$s</string>
+    <string name="kpatch_shadow_path">kpatch: %s -&gt; %s</string>
+    <string name="home_ap_cando_uninstall">Odinstaluj</string>
+    <string name="apatch_version">Wersja: %s</string>
+    <string name="home_ap_cando_install">Instaluj</string>
+    <string name="home_su_path_ex">su: %s -&gt; %s</string>
+    <string name="home_selinux_status">status SELinux</string>
+    <string name="home_su_path">su: %s</string>
+    <string name="apatch_version_update">Wersja: %s -&gt; %s</string>
+    <string name="home_kernel">Kernel</string>
+    <string name="home_manager_version">Wersja Menedżera</string>
+    <string name="patch_title">Załataj</string>
 </resources>
