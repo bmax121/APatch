@@ -60,7 +60,7 @@
     <string name="home_ap_cando_update">更新</string>
     <string name="kpm_load_toast_failed">載入失敗</string>
     <string name="kpm_unload">卸下</string>
-    <string name="home_selinux_status_disabled">已停用</string>
+    <string name="home_selinux_status_disabled">停用</string>
     <string name="apm_new_version_available">新版本：%s 可用，點擊升級</string>
     <string name="apatch_version_update">版本: %s -&gt; %s</string>
     <string name="home_working">運作中</string>
@@ -75,4 +75,20 @@
     <string name="kpm_load_toast_succ">載入成功</string>
     <string name="apm_author">作者</string>
     <string name="patch_title">補丁</string>
+    <string name="kpatch_shadow_path">kpatch: %s -&gt; %s</string>
+    <string name="send_log">傳送日誌</string>
+    <string name="home_auth_key_desc">通過認證後開始工作</string>
+    <string name="home_patch_set_key_desc">僅限 KernelPatch 的憑證</string>
+    <string name="apm">APModule</string>
+    <string name="safe_mode">安全模式</string>
+    <string name="super_key">超級金鑰</string>
+    <string name="home_su_path_ex">su: %s -&gt; %s</string>
+    <string name="home_apatch_version">APatch: %s</string>
+    <string name="home_patch_set_key_title">設定超級金鑰</string>
+    <string name="home_su_path">su: %s</string>
+    <string name="home_patch_next_step">下一步</string>
+    <string name="home_auth_key_title">輸入超級金鑰</string>
+    <string name="home_not_installed">未安裝</string>
+    <string name="kpm">KPModule</string>
+    <string name="about_source_code">查看源代碼：%1$s<br/>加入我們的 %2$s 頻道</string>
 </resources>
