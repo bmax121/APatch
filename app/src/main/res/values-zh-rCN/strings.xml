@@ -7,12 +7,12 @@
     <string name="kpm">内核模块</string>
     <string name="android_patch">Android 补丁</string>
     <string name="send_log">发送日志</string>
-    <string name="patch_warnning">安装有风险，请确保您的数据已备份。</string>
+    <string name="patch_warnning">安装有风险，请确保您的数据已备份</string>
     <string name="home_patch_set_key_desc">内核补丁的唯一密钥</string>
     <string name="home_install_unknown">未知</string>
     <string name="reboot_download">重启到Download</string>
     <string name="home_click_to_learn_apatch">了解AndroidPatch的功能以及如何使用</string>
-    <string name="reboot_edl">重启到EDL</string>
+    <string name="reboot_edl">重启到EDL(9008)模式</string>
     <string name="home_installing">安装中</string>
     <string name="safe_mode">安全模式</string>
     <string name="reboot_recovery">重启到Recovery</string>
@@ -23,7 +23,7 @@
     <string name="about">关于</string>
     <string name="reboot">重启</string>
     <string name="home_need_update">发现新版本</string>
-    <string name="home">家</string>
+    <string name="home">主页</string>
     <string name="home_patch_set_key_title">设置 超级密钥</string>
     <string name="settings">设置</string>
     <string name="home_working">工作中</string>
