@@ -22,7 +22,7 @@
     <string name="home_click_to_install">点击安装</string>
     <string name="about">关于</string>
     <string name="reboot">重启</string>
-    <string name="home_need_update">更新可用</string>
+    <string name="home_need_update">发现新版本</string>
     <string name="home">主页</string>
     <string name="home_patch_set_key_title">设置 超级密钥</string>
     <string name="settings">设置</string>
