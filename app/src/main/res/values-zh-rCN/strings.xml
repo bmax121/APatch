@@ -62,4 +62,15 @@
     <string name="kpm_license">许可证</string>
     <string name="kpm_apm_empty">未加载模块</string>
     <string name="kpm_load_toast_succ">加载成功</string>
+    <string name="su_pkg_excluded_setting_title">排除</string>
+    <string name="su_pkg_excluded_setting_summary">用于模块</string>
+    <string name="su_pkg_excluded_label">排除</string>
+    <string name="su_title">超级用户</string>
+    <string name="kpm_desc">描述</string>
+    <string name="su_selinux_via_hook">通过挂钩旁路</string>
+    <string name="kpm_args">参数</string>
+    <string name="su_refresh">刷新</string>
+    <string name="su_show_system_apps">显示系统应用</string>
+    <string name="apm_failed_to_enable">无法启用模块：%s</string>
+    <string name="su_hide_system_apps">隐藏系统应用</string>
 </resources>
