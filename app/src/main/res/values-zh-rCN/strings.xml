@@ -73,4 +73,6 @@
     <string name="su_show_system_apps">显示系统应用</string>
     <string name="apm_failed_to_enable">无法启用模块：%s</string>
     <string name="su_hide_system_apps">隐藏系统应用</string>
+    <string name="apm_failed_to_disable">无法禁用模块：%s</string>
+    <string name="apm_empty">模块未安装</string>
 </resources>
