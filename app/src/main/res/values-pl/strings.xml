@@ -70,4 +70,6 @@
     <string name="reboot_bootloader">Uruchom ponownie w Bootloaderze</string>
     <string name="home_apatch_version">APatch: %s</string>
     <string name="home_auth_key_title">Wpisz SuperKey</string>
+    <string name="apm_reboot_to_apply">Uruchom ponownie aby zadziałało</string>
+    <string name="apm_empty">Brak zainstalowanych modułów</string>
 </resources>
