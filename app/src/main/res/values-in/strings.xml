@@ -35,10 +35,10 @@
     <string name="home_auth_key_title">Masukan Superkey</string>
     <string name="reboot_download">Ke Download</string>
     <string name="home_auth_key_desc">Berikan sertifikasi untuk memulai</string>
-    <string name="home_ap_cando_update">Membarui</string>
+    <string name="home_ap_cando_update">Perbarui</string>
     <string name="kpatch_shadow_path">kpatch: %s -&gt; %s</string>
     <string name="home_ap_cando_uninstall">Hapus</string>
-    <string name="home_ap_cando_install">Pasang</string>
+    <string name="home_ap_cando_install">Instal</string>
     <string name="home_su_path_ex">su: %s -&gt; %s</string>
     <string name="home_apatch_version">APatch: %s</string>
     <string name="home_su_path">su: %s</string>
@@ -46,7 +46,7 @@
     <string name="home_manager_version">Manager Version</string>
     <string name="patch_title">Patch</string>
     <string name="apm_uninstall_success">%s telah terhapus</string>
-    <string name="apm_install">Pasang</string>
+    <string name="apm_install">Instal</string>
     <string name="apm_uninstall">Hapus</string>
     <string name="apm_uninstall_confirm">Yakin untuk menghapus modul %s?</string>
     <string name="apm_version">Versi</string>
@@ -64,7 +64,7 @@
     <string name="kpm_author">Pembuat</string>
     <string name="apm_downloading">Unduh modul: %s</string>
     <string name="apm_new_version_available">Versi baru: %s tersedia, klik untuk membarui</string>
-    <string name="apm_update">Memperbarui</string>
+    <string name="apm_update">Perbarui</string>
     <string name="su_refresh">Refresh</string>
     <string name="apm_failed_to_disable">Gagal menonaktifkan modul: %s</string>
     <string name="apm_failed_to_enable">Gagal mengaktifkan modul: %s</string>
@@ -87,4 +87,6 @@
     <string name="kpm_license">Lisensi</string>
     <string name="kpm_load_toast_succ">Berhasil memuat</string>
     <string name="kpm_apm_empty">Tidak ada modul</string>
+    <string name="kpm_unload_confirm">Yakin untuk melepas modul %s?</string>
+    <string name="kpm_unload">Lepas</string>
 </resources>
