@@ -47,4 +47,5 @@
     <string name="home_selinux_status_enforcing">Obediente</string>
     <string name="home_manager_version">Versión del administrador</string>
     <string name="patch_title">Parchear</string>
+    <string name="kpm_load_toast_succ">Cargado con éxito</string>
 </resources>
