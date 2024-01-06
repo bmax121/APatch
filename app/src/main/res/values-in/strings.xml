@@ -35,5 +35,14 @@
     <string name="home_auth_key_title">Masukan Superkey</string>
     <string name="reboot_download">Ke Download</string>
     <string name="home_auth_key_desc">Mulai bekerja setelah sertifikasi</string>
-    <string name="home_ap_cando_update">membarui</string>
+    <string name="home_ap_cando_update">Membarui</string>
+    <string name="kpatch_shadow_path">kpatch: %s -&gt; %s</string>
+    <string name="home_ap_cando_uninstall">Uninstall</string>
+    <string name="home_ap_cando_install">Instal</string>
+    <string name="home_su_path_ex">su: %s -&gt; %s</string>
+    <string name="home_apatch_version">APatch: %s</string>
+    <string name="home_su_path">su: %s</string>
+    <string name="home_kernel">Kernel</string>
+    <string name="home_manager_version">Manager Version</string>
+    <string name="patch_title">Patch</string>
 </resources>
