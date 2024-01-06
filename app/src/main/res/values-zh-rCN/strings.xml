@@ -52,13 +52,13 @@
     <string name="kpm_kp_not_installed">内核补丁未安装</string>
     <string name="kpm_version">版本</string>
     <string name="home_selinux_status_unknown">未知</string>
-    <string name="home_selinux_status_permissive">许可</string>
+    <string name="home_selinux_status_permissive">宽容</string>
     <string name="kpm_author">作者</string>
     <string name="kpm_load_toast_failed">加载失败</string>
     <string name="kpm_unload">卸载</string>
-    <string name="home_selinux_status_disabled">残疾</string>
+    <string name="home_selinux_status_disabled">关闭</string>
     <string name="kpm_load">加载</string>
-    <string name="home_selinux_status_enforcing">执行</string>
+    <string name="home_selinux_status_enforcing">强制执行</string>
     <string name="kpm_license">许可证</string>
     <string name="kpm_apm_empty">未加载模块</string>
     <string name="kpm_load_toast_succ">加载成功</string>
