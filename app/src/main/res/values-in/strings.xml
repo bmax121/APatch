@@ -19,4 +19,6 @@
     <string name="about_source_code">Lihat source code di %1$s<br/>Gabung ke %2$s channel</string>
     <string name="send_log">Kirim log</string>
     <string name="safe_mode">Safemode</string>
+    <string name="home_patch_set_key_desc">Kredensial untuk KernelPatch</string>
+    <string name="home_patch_set_key_title">SuperKey</string>
 </resources>
