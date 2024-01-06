@@ -48,4 +48,7 @@
     <string name="home_manager_version">Bersyon ng Manager</string>
     <string name="kpm_load_toast_succ">Tagumpay ang pag-load</string>
     <string name="patch_title">Patch</string>
+    <string name="kpm_author">May-akda</string>
+    <string name="home_selinux_status_disabled">Hindi pinagana</string>
+    <string name="kpm_license">Lisensiya</string>
 </resources>
