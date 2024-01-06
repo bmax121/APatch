@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="apm">安卓补丁模块</string>
+    <string name="apm">APModule</string>
     <string name="super_key">超级密钥</string>
     <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
     <string name="app_name" translatable="false">APatch</string>
@@ -12,7 +12,7 @@
     <string name="home_install_unknown">未知</string>
     <string name="reboot_download">重启到Download</string>
     <string name="home_click_to_learn_apatch">了解AndroidPatch的功能以及如何使用</string>
-    <string name="reboot_edl">重启到EDL(9008)模式</string>
+    <string name="reboot_edl">重启到EDL</string>
     <string name="home_installing">安装中</string>
     <string name="safe_mode">安全模式</string>
     <string name="reboot_recovery">重启到Recovery</string>
@@ -48,11 +48,11 @@
     <string name="home_fingerprint">系统指纹</string>
     <string name="home_selinux_status">SELinux状态</string>
     <string name="home_manager_version">管理器版本</string>
-    <string name="kpm_unload_confirm">确实要卸载模块%s吗？</string>
-    <string name="kpm_kp_not_installed">内核补丁未安装</string>
+    <string name="kpm_unload_confirm">确定要卸载模块%s吗？</string>
+    <string name="kpm_kp_not_installed">未安装内核补丁</string>
     <string name="kpm_version">版本</string>
     <string name="home_selinux_status_unknown">未知</string>
-    <string name="home_selinux_status_permissive">宽容</string>
+    <string name="home_selinux_status_permissive">宽容模式</string>
     <string name="kpm_author">作者</string>
     <string name="kpm_load_toast_failed">加载失败</string>
     <string name="kpm_unload">卸载</string>
@@ -60,21 +60,21 @@
     <string name="kpm_load">加载</string>
     <string name="home_selinux_status_enforcing">强制执行</string>
     <string name="kpm_license">许可证</string>
-    <string name="kpm_apm_empty">未加载模块</string>
+    <string name="kpm_apm_empty">未安装模块</string>
     <string name="kpm_load_toast_succ">加载成功</string>
     <string name="su_pkg_excluded_setting_title">排除</string>
     <string name="su_pkg_excluded_setting_summary">用于模块</string>
     <string name="su_pkg_excluded_label">排除</string>
     <string name="su_title">超级用户</string>
     <string name="kpm_desc">描述</string>
-    <string name="su_selinux_via_hook">通过挂钩旁路</string>
+    <string name="su_selinux_via_hook">通过hook绕过</string>
     <string name="kpm_args">参数</string>
     <string name="su_refresh">刷新</string>
     <string name="su_show_system_apps">显示系统应用</string>
     <string name="apm_failed_to_enable">无法启用模块：%s</string>
     <string name="su_hide_system_apps">隐藏系统应用</string>
     <string name="apm_failed_to_disable">无法禁用模块：%s</string>
-    <string name="apm_empty">模块未安装</string>
+    <string name="apm_empty">未安装任何模块</string>
     <string name="apm_reboot_to_apply">重启生效</string>
     <string name="apm_uninstall_success">%s 已卸载</string>
     <string name="apm_install">安装</string>
@@ -82,11 +82,11 @@
     <string name="apm_uninstall_confirm">确认要卸载模块%s吗？</string>
     <string name="apm_version">版本</string>
     <string name="apm_start_downloading">开始下载：%s</string>
-    <string name="apm_overlay_fs_not_available">overlayfs不可用，模块无法工作！</string>
-    <string name="apm_changelog">更改日志</string>
+    <string name="apm_overlay_fs_not_available">内核不支持 overlayfs，模块功能无法运作！</string>
+    <string name="apm_changelog">更新日志</string>
     <string name="apm_uninstall_failed">无法卸载：%s</string>
     <string name="apm_downloading">正在下载模块：%s</string>
-    <string name="apm_magisk_conflict">模块被禁用，因为它与Magisk的冲突！</string>
+    <string name="apm_magisk_conflict">模块已被禁用，因为它与Magisk的模块系统冲突！</string>
     <string name="apm_desc">描述</string>
     <string name="apm_new_version_available">新版本：%s可用，单击以升级</string>
     <string name="apm_update">更新</string>
