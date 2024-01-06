@@ -32,4 +32,7 @@
     <string name="home_working">Funcionando</string>
     <string name="home_patch_next_step">Siguiente paso</string>
     <string name="home_not_installed">No instalado</string>
+    <string name="home_auth_key_desc">Comenzar la ejecución tras la certificación</string>
+    <string name="home_ap_cando_install">Instalar</string>
+    <string name="home_auth_key_title">Ingresar SuperKey</string>
 </resources>
