@@ -67,4 +67,9 @@
     <string name="su_hide_system_apps">Itago ang mga system apps</string>
     <string name="apm_empty">Walang naka-install na module</string>
     <string name="kpm_load">Mag Load</string>
+    <string name="apm_reboot_to_apply">Mag restart para magkaruon ng epekto</string>
+    <string name="apm_overlay_fs_not_available">walang overlayfs, hindi maaaring gumana ang module!</string>
+    <string name="apm_uninstall_failed">Hindi tagumpay ang pag-uninstall ng: %s</string>
+    <string name="apm_desc">Desc</string>
+    <string name="apm_author">May-akda</string>
 </resources>
