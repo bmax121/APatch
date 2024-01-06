@@ -17,4 +17,6 @@
     <string name="home_learn_apatch">Pelajari AndroidPatch</string>
     <string name="about">Tentang</string>
     <string name="about_source_code">Lihat source code di %1$s<br/>Gabung ke %2$s channel</string>
+    <string name="send_log">Kirim log</string>
+    <string name="safe_mode">Safemode</string>
 </resources>
