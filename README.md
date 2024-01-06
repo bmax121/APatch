@@ -38,7 +38,7 @@ To help translate APatch or improve existing translations, please use [Weblate](
 
 ## More Information
 
-- [FAQ](doc/en/faq.md)
+- [FAQ](docs/en/faq.md)
 
 ## Credits
 
