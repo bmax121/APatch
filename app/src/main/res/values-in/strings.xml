@@ -9,32 +9,32 @@
     <string name="app_name" translatable="false">APatch</string>
     <string name="kpm">KPModule</string>
     <string name="reboot_recovery">Ke Recovery</string>
-    <string name="reboot">Nyalakan ulang</string>
+    <string name="reboot">Reboot</string>
     <string name="settings">Pengaturan</string>
     <string name="reboot_bootloader">Ke Bootloader</string>
     <string name="home_click_to_learn_apatch">Pelajari fitur dan penggunaan AndroidPatch</string>
     <string name="reboot_edl">Ke EDL</string>
     <string name="home_learn_apatch">Pelajari AndroidPatch</string>
-    <string name="about">Tentang</string>
+    <string name="about">Perihal</string>
     <string name="about_source_code">Lihat source code di %1$s<br/>Gabung saluran %2$s kami</string>
     <string name="send_log">Kirim log</string>
     <string name="safe_mode">Safemode</string>
     <string name="home_patch_set_key_desc">Kredensial untuk KernelPatch</string>
-    <string name="home_patch_set_key_title">Atur SuperKey</string>
-    <string name="home_install_unknown">Tidak dikenal</string>
+    <string name="home_patch_set_key_title">Pasang SuperKey</string>
+    <string name="home_install_unknown">Tidak teridentifikasi</string>
     <string name="home_click_to_install">Klik untuk menginstal</string>
     <string name="home_patch_next_step">Langkah selanjutnya</string>
     <string name="home_not_installed">Tidak terinstal</string>
     <string name="home">Beranda</string>
-    <string name="home_working">Bekerja</string>
+    <string name="home_working">Berfungsi</string>
     <string name="kpatch_version">Versi: %d%d%d</string>
     <string name="home_installing">Menginstal</string>
     <string name="apatch_version">Versi: %s</string>
     <string name="home_need_update">Pembaruan tersedia</string>
     <string name="apatch_version_update">Versi: %s-&gt;%s</string>
-    <string name="home_auth_key_title">Masukan Superkey</string>
+    <string name="home_auth_key_title">Masukan SuperKey</string>
     <string name="reboot_download">Ke Download</string>
-    <string name="home_auth_key_desc">Berikan sertifikasi untuk memulai</string>
+    <string name="home_auth_key_desc">Berikan persetujuan untuk memulai</string>
     <string name="home_ap_cando_update">Perbarui</string>
     <string name="kpatch_shadow_path">kpatch: %s -&gt; %s</string>
     <string name="home_ap_cando_uninstall">Hapus</string>
@@ -54,9 +54,9 @@
     <string name="apm_uninstall_failed">Gagal menghapus: %s</string>
     <string name="apm_magisk_conflict">Modul tidak aktif, konflik dengan Magisk!</string>
     <string name="apm_desc">Ket.</string>
-    <string name="apm_empty">Tidak ada modul terinstal</string>
+    <string name="apm_empty">Tidak ada modul</string>
     <string name="apm_author">Pembuat</string>
-    <string name="apm_reboot_to_apply">Nyalakan ulang untuk berfungsi</string>
+    <string name="apm_reboot_to_apply">Reboot untuk berfungsi</string>
     <string name="apm_start_downloading">Mulai mengunduh: %s</string>
     <string name="kpm_desc">Ket.</string>
     <string name="su_show_system_apps">Tampilkan aplikasi sistem</string>
@@ -77,7 +77,7 @@
     <string name="su_selinux_via_hook">Memintas via hook</string>
     <string name="kpm_version">Versi</string>
     <string name="reboot_userspace">Softreboot</string>
-    <string name="home_selinux_status_unknown">Tidak diketahui</string>
+    <string name="home_selinux_status_unknown">Tidak teridentifikasi</string>
     <string name="home_selinux_status_permissive">Permisif</string>
     <string name="home_selinux_status">Status SELinux</string>
     <string name="kpm_load_toast_failed">Gagal memuat</string>
@@ -90,5 +90,5 @@
     <string name="kpm_unload_confirm">Yakin untuk melepas modul %s?</string>
     <string name="kpm_unload">Lepas</string>
     <string name="kpm_args">Args</string>
-    <string name="home_fingerprint">Sidik jari</string>
+    <string name="home_fingerprint">Identitas</string>
 </resources>
