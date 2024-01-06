@@ -8,19 +8,19 @@
     <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
     <string name="app_name" translatable="false">APatch</string>
     <string name="kpm">KPModule</string>
-    <string name="reboot_recovery">Nyalakan ke Recovery</string>
+    <string name="reboot_recovery">Ke Recovery</string>
     <string name="reboot">Nyalakan ulang</string>
     <string name="settings">Pengaturan</string>
-    <string name="reboot_bootloader">Nyalakan ke Bootloader</string>
+    <string name="reboot_bootloader">Ke Bootloader</string>
     <string name="home_click_to_learn_apatch">Pelajari fitur dan penggunaan AndroidPatch</string>
-    <string name="reboot_edl">Nyalakan ke EDL</string>
+    <string name="reboot_edl">Ke EDL</string>
     <string name="home_learn_apatch">Pelajari AndroidPatch</string>
     <string name="about">Tentang</string>
     <string name="about_source_code">Lihat source code di %1$s<br/>Gabung ke %2$s channel</string>
     <string name="send_log">Kirim log</string>
     <string name="safe_mode">Safemode</string>
     <string name="home_patch_set_key_desc">Kredensial untuk KernelPatch</string>
-    <string name="home_patch_set_key_title">SuperKey</string>
+    <string name="home_patch_set_key_title">Atur SuperKey</string>
     <string name="home_install_unknown">Tidak diketahui</string>
     <string name="home_click_to_install">Klik untuk menginstal</string>
     <string name="home_patch_next_step">Langkah selanjutnya</string>
@@ -33,4 +33,5 @@
     <string name="home_need_update">Tersedia Pembaharuan</string>
     <string name="apatch_version_update">Versi: %s-&gt;%s</string>
     <string name="home_auth_key_title">Masukan Superkey</string>
+    <string name="reboot_download">Ke Download</string>
 </resources>
