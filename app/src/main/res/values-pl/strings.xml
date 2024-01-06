@@ -68,4 +68,6 @@
     <string name="reboot_recovery">Uruchom ponownie w Recovery</string>
     <string name="home_patch_set_key_title">ustaw SuperKey</string>
     <string name="reboot_bootloader">Uruchom ponownie w Bootloaderze</string>
+    <string name="home_apatch_version">APatch: %s</string>
+    <string name="home_auth_key_title">Wpisz SuperKey</string>
 </resources>
