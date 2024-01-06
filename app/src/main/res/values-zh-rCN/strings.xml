@@ -32,4 +32,18 @@
     <string name="reboot_bootloader">重新启动到引导加载程序</string>
     <string name="about_source_code">在%1$s查看源代码
 \n加入我们的%2$s频道</string>
+    <string name="kpatch_shadow_path">补丁：%s -&gt; %s</string>
+    <string name="home_auth_key_desc">认证通过后开始工作</string>
+    <string name="kpatch_version">版本：%d.% d.% D</string>
+    <string name="home_ap_cando_uninstall">卸载</string>
+    <string name="apatch_version">版本：%s</string>
+    <string name="home_ap_cando_install">安装</string>
+    <string name="home_su_path_ex">su：%s -&gt; %s</string>
+    <string name="home_apatch_version">安卓补丁：%s</string>
+    <string name="home_su_path">su：%s</string>
+    <string name="home_ap_cando_update">更新</string>
+    <string name="apatch_version_update">版本：%s -&gt; %s</string>
+    <string name="home_auth_key_title">输入超级密钥</string>
+    <string name="home_kernel">内核</string>
+    <string name="patch_title">补丁</string>
 </resources>
