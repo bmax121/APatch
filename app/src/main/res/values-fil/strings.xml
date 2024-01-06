@@ -28,5 +28,24 @@
     <string name="home_su_path">su: %s</string>
     <string name="home_auth_key_title">Ilagay ang superkey</string>
     <string name="home_ap_cando_install">I-install</string>
-    <string name="home_ap_cando_update">Update</string>
+    <string name="home_ap_cando_update">I-update</string>
+    <string name="kpm_unload_confirm">Sigurado ka bang nais mong i-unload ang module %s?</string>
+    <string name="kpm_kp_not_installed">Hindi naka install ang Kernel Patch</string>
+    <string name="kpm_desc">Desc</string>
+    <string name="home_ap_cando_uninstall">I-uninstall</string>
+    <string name="kpm_args">Args</string>
+    <string name="home_fingerprint">Fingerprint</string>
+    <string name="safe_mode">Safe mode</string>
+    <string name="home_selinux_status_unknown">Hindi alam</string>
+    <string name="home_selinux_status_permissive">Pamahinang (Permissive)</string>
+    <string name="home_selinux_status">SELinux status</string>
+    <string name="kpm_load_toast_failed">Nabigo ang pag-load</string>
+    <string name="kpm_unload">I-unload</string>
+    <string name="home_kernel">Kernel</string>
+    <string name="kpm">KPModule</string>
+    <string name="home_selinux_status_enforcing">Pinapatupad (Enforcing)</string>
+    <string name="kpm_apm_empty">Walang naka-load na module</string>
+    <string name="home_manager_version">Bersyon ng Manager</string>
+    <string name="kpm_load_toast_succ">Tagumpay ang pag-load</string>
+    <string name="patch_title">Patch</string>
 </resources>
