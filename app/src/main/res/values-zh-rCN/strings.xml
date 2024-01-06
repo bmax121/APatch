@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="apm">APModule</string>
+    <string name="apm">AP模块</string>
     <string name="super_key">超级密钥</string>
     <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
     <string name="app_name" translatable="false">APatch</string>
-    <string name="kpm">KPModule</string>
+    <string name="kpm">KP模块</string>
     <string name="android_patch">AndroidPatch</string>
     <string name="send_log">发送日志</string>
     <string name="patch_warnning">安装APatch存在风险，请确保您的数据已备份</string>
     <string name="home_patch_set_key_desc">KernelPatch的唯一密钥</string>
     <string name="home_install_unknown">未知</string>
-    <string name="reboot_download">重启到Download</string>
+    <string name="reboot_download">重启至Download</string>
     <string name="home_click_to_learn_apatch">了解AndroidPatch的功能以及使用方法</string>
-    <string name="reboot_edl">重启到EDL</string>
+    <string name="reboot_edl">重启至EDL</string>
     <string name="home_installing">安装中</string>
     <string name="safe_mode">安全模式</string>
-    <string name="reboot_recovery">重启到Recovery</string>
+    <string name="reboot_recovery">重启至Recovery</string>
     <string name="reboot_userspace">软重启</string>
     <string name="home_learn_apatch">了解AndroidPatch</string>
     <string name="kernel_patch">KernelPatch</string>
@@ -24,13 +24,14 @@
     <string name="reboot">重启</string>
     <string name="home_need_update">可用更新</string>
     <string name="home">主页</string>
-    <string name="home_patch_set_key_title">设置超级密钥</string>
+    <string name="home_patch_set_key_title">设定超级密钥</string>
     <string name="settings">设置</string>
     <string name="home_working">工作中</string>
     <string name="home_patch_next_step">下一步</string>
     <string name="home_not_installed">未安装</string>
-    <string name="reboot_bootloader">重启到Bootloader</string>
-    <string name="about_source_code">查看源码 %1$s<br/>加入我们的 %2$s 频道</string>
+    <string name="reboot_bootloader">重启至Bootloader</string>
+    <string name="about_source_code">在%1$s<br/>查看源码
+\n加入我们的 %2$s 频道</string>
     <string name="kpatch_shadow_path">kpatch：%s -&gt; %s</string>
     <string name="home_auth_key_desc">将在认证通过后开始工作</string>
     <string name="kpatch_version">版本：%d.%d.%d</string>
@@ -43,13 +44,13 @@
     <string name="home_ap_cando_update">更新</string>
     <string name="apatch_version_update">版本：%s -&gt; %s</string>
     <string name="home_auth_key_title">输入超级密钥</string>
-    <string name="home_kernel">内核</string>
-    <string name="patch_title">补丁</string>
+    <string name="home_kernel">内核版本</string>
+    <string name="patch_title">修补</string>
     <string name="home_fingerprint">系统指纹</string>
     <string name="home_selinux_status">SELinux状态</string>
     <string name="home_manager_version">管理器版本</string>
     <string name="kpm_unload_confirm">确定要卸载模块%s吗？</string>
-    <string name="kpm_kp_not_installed">未安装Kernel Patch</string>
+    <string name="kpm_kp_not_installed">未安装 KernelPatch</string>
     <string name="kpm_version">版本</string>
     <string name="home_selinux_status_unknown">未知</string>
     <string name="home_selinux_status_permissive">宽容模式</string>
@@ -67,7 +68,7 @@
     <string name="su_pkg_excluded_label">移除模块</string>
     <string name="su_title">超级用户</string>
     <string name="kpm_desc">描述</string>
-    <string name="su_selinux_via_hook">通过hook绕行</string>
+    <string name="su_selinux_via_hook">通过hook绕过</string>
     <string name="kpm_args">参数</string>
     <string name="su_refresh">刷新</string>
     <string name="su_show_system_apps">显示系统应用</string>
