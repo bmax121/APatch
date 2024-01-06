@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="apm">APModule</string>
-    <string name="super_key">SuperKey</string>
+    <string name="super_key">超级密钥</string>
     <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
     <string name="app_name" translatable="false">APatch</string>
     <string name="kpm">KPModule</string>
@@ -10,12 +10,12 @@
     <string name="patch_warnning">安装有风险，请确保您的数据已备份。</string>
     <string name="home_patch_set_key_desc">内核补丁的唯一密钥</string>
     <string name="home_install_unknown">未知</string>
-    <string name="reboot_download">重新启动到下载模式</string>
+    <string name="reboot_download">重启到Download</string>
     <string name="home_click_to_learn_apatch">了解AndroidPatch的功能以及如何使用</string>
-    <string name="reboot_edl">重新启动到edl模式</string>
+    <string name="reboot_edl">重启到EDL</string>
     <string name="home_installing">安装中</string>
     <string name="safe_mode">安全模式</string>
-    <string name="reboot_recovery">重启到恢复模式</string>
+    <string name="reboot_recovery">重启到Recovery</string>
     <string name="reboot_userspace">软重启</string>
     <string name="home_learn_apatch">了解安卓补丁</string>
     <string name="kernel_patch">内核补丁</string>
@@ -23,13 +23,13 @@
     <string name="about">关于</string>
     <string name="reboot">重启</string>
     <string name="home_need_update">更新可用</string>
-    <string name="home">桌面</string>
+    <string name="home">主页</string>
     <string name="home_patch_set_key_title">设置 超级密钥</string>
     <string name="settings">设置</string>
     <string name="home_working">工作中</string>
     <string name="home_patch_next_step">下一步</string>
     <string name="home_not_installed">未安装</string>
-    <string name="reboot_bootloader">重新启动到引导加载程序</string>
+    <string name="reboot_bootloader">重启到Bootloader</string>
     <string name="about_source_code">在%1$s查看源代码加入我们的%2$s<br/>频道</string>
     <string name="kpatch_shadow_path">补丁：%s -&gt; %s</string>
     <string name="home_auth_key_desc">认证通过后开始工作</string>
@@ -38,7 +38,7 @@
     <string name="apatch_version">版本：%s</string>
     <string name="home_ap_cando_install">安装</string>
     <string name="home_su_path_ex">su：%s -&gt; %s</string>
-    <string name="home_apatch_version">安卓补丁：%s</string>
+    <string name="home_apatch_version">Apatch：%s</string>
     <string name="home_su_path">su：%s</string>
     <string name="home_ap_cando_update">更新</string>
     <string name="apatch_version_update">版本：%s -&gt; %s</string>
