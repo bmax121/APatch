@@ -52,7 +52,7 @@
     <string name="apm_failed_to_enable">ไม่สามารถเปิดใช้งานโมดูล: %s</string>
     <string name="su_hide_system_apps">ซ่อนแอประบบ</string>
     <string name="apm_magisk_conflict">โมดูลถูกปิดใช้งานเนื่องจากขัดแย้งกับ Magisk\'s!</string>
-    <string name="apm_new_version_available">เวอร์ชันใหม่: %s พร้อมใช้งานแล้ว คลิกเพื่ออัปเกรด</string>
+    <string name="apm_new_version_available">รุ่นใหม่: %s พร้อมใช้งาน</string>
     <string name="apm_empty">ไม่มีการติดตั้งโมดูล</string>
     <string name="apm_author">ผู้เขียน</string>
     <string name="home">หน้าเเรก</string>
