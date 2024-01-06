@@ -102,7 +102,7 @@
     <string name="kpm_desc">Описание</string>
     <string name="kpm_args">Аргументы</string>
     <string name="su_selinux_via_hook">обход через hook</string>
-    <string name="su_pkg_excluded_label">исключить</string>
+    <string name="su_pkg_excluded_label">exclude</string>
     <string name="su_pkg_excluded_setting_title">Исключить</string>
     <string name="su_pkg_excluded_setting_summary">для модулей</string>
     <string name="home_ap_cando_install">Установить</string>
