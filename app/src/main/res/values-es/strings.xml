@@ -17,4 +17,19 @@
     <string name="settings">Ajustes</string>
     <string name="reboot_bootloader">Reiniciar en modo de arranque</string>
     <string name="about_source_code">Ver el código fuente en %1$s<br/>Únete a nuestro canal de %2$s</string>
+    <string name="send_log">Enviar registro de informes</string>
+    <string name="kpatch_version">Versión: %d.%d.%d</string>
+    <string name="home_patch_set_key_desc">Clave única para KernelPatch</string>
+    <string name="home_install_unknown">Desconocido</string>
+    <string name="home_installing">Instalando</string>
+    <string name="apatch_version">Versión: %s</string>
+    <string name="safe_mode">Modo seguro</string>
+    <string name="home_click_to_install">Toca para instalar</string>
+    <string name="home_need_update">Actualización disponible</string>
+    <string name="home_patch_set_key_title">Definir SuperKey</string>
+    <string name="home_su_path">su: %s</string>
+    <string name="apatch_version_update">Versión: %s -&gt; %s</string>
+    <string name="home_working">Funcionando</string>
+    <string name="home_patch_next_step">Siguiente paso</string>
+    <string name="home_not_installed">No instalado</string>
 </resources>
