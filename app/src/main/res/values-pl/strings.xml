@@ -63,4 +63,9 @@
     <string name="apm_start_downloading">Rozpocznij pobieranie: %s</string>
     <string name="kernel_patch">KernelPatch</string>
     <string name="apm_new_version_available">Nowa wersja: %s jest dostępna, naciśnij aby zaktualizować</string>
+    <string name="reboot_download">Uruchom ponownie w Download</string>
+    <string name="reboot_edl">Uruchom ponownie w EDL</string>
+    <string name="reboot_recovery">Uruchom ponownie w Recovery</string>
+    <string name="home_patch_set_key_title">ustaw SuperKey</string>
+    <string name="reboot_bootloader">Uruchom ponownie w Bootloaderze</string>
 </resources>
