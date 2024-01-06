@@ -56,4 +56,7 @@
     <string name="apm_failed_to_enable">Nie udało się załadować modułu: %s</string>
     <string name="apm_magisk_conflict">Moduły są wyłączone ponieważ istnieje konflikt z Magiskiem!</string>
     <string name="apm_author">Autor</string>
+    <string name="apm_changelog">Lista zmian</string>
+    <string name="apm_downloading">Pobieranie modułu %s</string>
+    <string name="apm_update">Aktualizacja</string>
 </resources>
