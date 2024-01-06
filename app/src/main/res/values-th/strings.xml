@@ -22,4 +22,6 @@
     <string name="home_patch_next_step">ขั้นตอนต่อไป</string>
     <string name="home_not_installed">ไม่ได้ติดตั้ง</string>
     <string name="home_manager_version">เวอร์ชัน</string>
+    <string name="kpm_load">โหลด</string>
+    <string name="kpm_load_toast_succ">โหลดสำเร็จ</string>
 </resources>
