@@ -280,7 +280,15 @@ fun FloatButton(navigator: DestinationsNavigator) {
                     }
                 },
                 icon = { Icon(Icons.Filled.Key, "") },
-                text = { Text(text = if(state != APApplication.State.UNKNOWN_STATE) "Clear Key" else "SuperKey" )},
+                text = {
+                    Text(
+                        text = if (state != APApplication.State.UNKNOWN_STATE) {
+                            stringResource(id = R.string.clear_super_key)
+                        } else {
+                            stringResource(id = R.string.super_key)
+                        }
+                    )
+                },
             )
         }
     }
