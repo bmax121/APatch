@@ -75,4 +75,20 @@
     <string name="su_hide_system_apps">隐藏系统应用</string>
     <string name="apm_failed_to_disable">无法禁用模块：%s</string>
     <string name="apm_empty">模块未安装</string>
+    <string name="apm_reboot_to_apply">重启生效</string>
+    <string name="apm_uninstall_success">%s 已卸载</string>
+    <string name="apm_install">安装</string>
+    <string name="apm_uninstall">卸载</string>
+    <string name="apm_uninstall_confirm">确认要卸载模块%s吗？</string>
+    <string name="apm_version">版本</string>
+    <string name="apm_start_downloading">开始下载：%s</string>
+    <string name="apm_overlay_fs_not_available">overlayfs不可用，模块无法工作！</string>
+    <string name="apm_changelog">更改日志</string>
+    <string name="apm_uninstall_failed">无法卸载：%s</string>
+    <string name="apm_downloading">正在下载模块：%s</string>
+    <string name="apm_magisk_conflict">模块被禁用，因为它与Magisk的冲突！</string>
+    <string name="apm_desc">描述</string>
+    <string name="apm_new_version_available">新版本：%s可用，单击以升级</string>
+    <string name="apm_update">更新</string>
+    <string name="apm_author">作者</string>
 </resources>
