@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="apm">APModule</string>
+    <string name="apm">常规模块</string>
     <string name="super_key">超级密钥</string>
     <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
     <string name="app_name" translatable="false">APatch</string>
     <string name="kpm">内核模块</string>
-    <string name="android_patch">Android 补丁</string>
+    <string name="android_patch">AndroidPatch</string>
     <string name="send_log">发送日志</string>
-    <string name="patch_warnning">安装有风险，请确保您的数据已备份</string>
-    <string name="home_patch_set_key_desc">内核补丁的唯一密钥</string>
+    <string name="patch_warnning">安装存在风险，请确保您的数据已备份</string>
+    <string name="home_patch_set_key_desc">KernelPatch的唯一密钥</string>
     <string name="home_install_unknown">未知</string>
     <string name="reboot_download">重启到Download</string>
-    <string name="home_click_to_learn_apatch">了解AndroidPatch的功能以及如何使用</string>
+    <string name="home_click_to_learn_apatch">了解AndroidPatch的功能以及使用方法</string>
     <string name="reboot_edl">重启到EDL</string>
     <string name="home_installing">安装中</string>
     <string name="safe_mode">安全模式</string>
     <string name="reboot_recovery">重启到Recovery</string>
     <string name="reboot_userspace">软重启</string>
-    <string name="home_learn_apatch">了解 Android 补丁</string>
-    <string name="kernel_patch">内核补丁</string>
+    <string name="home_learn_apatch">了解AndroidPatch</string>
+    <string name="kernel_patch">KernelPatch</string>
     <string name="home_click_to_install">点击安装</string>
     <string name="about">关于</string>
     <string name="reboot">重启</string>
-    <string name="home_need_update">发现新版本</string>
+    <string name="home_need_update">可用更新</string>
     <string name="home">主页</string>
     <string name="home_patch_set_key_title">设置 超级密钥</string>
     <string name="settings">设置</string>
@@ -49,7 +49,7 @@
     <string name="home_selinux_status">SELinux状态</string>
     <string name="home_manager_version">管理器版本</string>
     <string name="kpm_unload_confirm">确定要卸载模块%s吗？</string>
-    <string name="kpm_kp_not_installed">未安装内核补丁</string>
+    <string name="kpm_kp_not_installed">未安装Kernel Patch</string>
     <string name="kpm_version">版本</string>
     <string name="home_selinux_status_unknown">未知</string>
     <string name="home_selinux_status_permissive">宽容模式</string>
@@ -88,7 +88,7 @@
     <string name="apm_downloading">正在下载模块：%s</string>
     <string name="apm_magisk_conflict">模块已被禁用，因为它与Magisk的模块系统冲突！</string>
     <string name="apm_desc">描述</string>
-    <string name="apm_new_version_available">新版本：%s可用，点击此处更新</string>
+    <string name="apm_new_version_available">新版本：%s可用，点击更新</string>
     <string name="apm_update">更新</string>
     <string name="apm_author">作者</string>
 </resources>
