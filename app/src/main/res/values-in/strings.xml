@@ -28,9 +28,9 @@
     <string name="home">Beranda</string>
     <string name="home_working">Bekerja</string>
     <string name="kpatch_version">Versi: %d%d%d</string>
-    <string name="home_installing">Memasang</string>
+    <string name="home_installing">Menginstal</string>
     <string name="apatch_version">Versi: %s</string>
-    <string name="home_need_update">Terdapat pembaharuan</string>
+    <string name="home_need_update">Pembaruan tersedia</string>
     <string name="apatch_version_update">Versi: %s-&gt;%s</string>
     <string name="home_auth_key_title">Masukan Superkey</string>
     <string name="reboot_download">Ke Download</string>
@@ -51,7 +51,7 @@
     <string name="apm_uninstall_confirm">Yakin untuk menghapus modul %s?</string>
     <string name="apm_version">Versi</string>
     <string name="apm_overlay_fs_not_available">OverlayFS tidak tersedia, modul tidak dapat berfungsi!</string>
-    <string name="apm_uninstall_failed">Gagal menginstal: %s</string>
+    <string name="apm_uninstall_failed">Gagal menghapus: %s</string>
     <string name="apm_magisk_conflict">Modul tidak aktif, konflik dengan Magisk!</string>
     <string name="apm_desc">Ket.</string>
     <string name="apm_empty">Tidak ada modul terinstal</string>
@@ -66,7 +66,7 @@
     <string name="apm_new_version_available">Versi baru: %s tersedia, klik untuk membarui</string>
     <string name="apm_update">Memperbarui</string>
     <string name="su_refresh">Refresh</string>
-    <string name="apm_failed_to_disable">Gagal untuk menonaktifkan modul: %s</string>
+    <string name="apm_failed_to_disable">Gagal menonaktifkan modul: %s</string>
     <string name="apm_failed_to_enable">Gagal mengaktifkan modul: %s</string>
     <string name="su_hide_system_apps">Sembunyikan aplikasi sistem</string>
     <string name="kpm_kp_not_installed">KernelPatch tidak terinstal</string>
@@ -86,4 +86,5 @@
     <string name="home_selinux_status_enforcing">Memaksa</string>
     <string name="kpm_license">Lisensi</string>
     <string name="kpm_load_toast_succ">Berhasil memuat</string>
+    <string name="kpm_apm_empty">Tidak ada modul</string>
 </resources>
