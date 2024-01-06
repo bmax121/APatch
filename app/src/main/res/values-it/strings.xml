@@ -41,7 +41,7 @@
     <string name="about">Informazioni</string>
     <string name="reboot">Riavvia</string>
     <string name="home_need_update">Aggiornamento disponibile</string>
-    <string name="home_selinux_status">Stato SELinux</string>
+    <string name="home_selinux_status">Stato di SELinux</string>
     <string name="apm_uninstall_failed">Impossibile disinstallare: %s</string>
     <string name="kpm_author">Autore</string>
     <string name="apm_failed_to_enable">Impossibile abilitare il modulo: %s</string>
@@ -67,7 +67,7 @@
     <string name="reboot_bootloader">Riavvia in modalità Bootloader</string>
     <string name="kpm_apm_empty">Nessun modulo caricato</string>
     <string name="about_source_code">Visualizza il codice sorgente su %1$s<br/>Unisciti al nostro canale %2$s</string>
-    <string name="home_manager_version">Versione Manager</string>
+    <string name="home_manager_version">Versione del Manager</string>
     <string name="kpm_load_toast_succ">Caricamento riuscito</string>
     <string name="apm_author">Autore</string>
     <string name="su_pkg_excluded_label">escludi</string>
@@ -84,7 +84,7 @@
     <string name="home_su_path_ex">su: %s -&gt; %s</string>
     <string name="home_apatch_version">APatch: %s</string>
     <string name="home_selinux_status_permissive">Permissive</string>
-    <string name="apm_changelog">Lista modifiche</string>
+    <string name="apm_changelog">Registro modifiche</string>
     <string name="home_su_path">su: %s</string>
     <string name="apm">APModule</string>
     <string name="super_key">SuperKey</string>
