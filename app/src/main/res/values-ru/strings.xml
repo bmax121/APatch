@@ -33,7 +33,7 @@
     <string name="home_selinux_status_enforcing">Принудительный</string>
     <string name="home_selinux_status_permissive">Разрешающий</string>
     <string name="home_selinux_status_unknown">Неизвестно</string>
-    <string name="su_title">Суперпользователь</string>
+    <string name="su_title">SU</string>
     <string name="apm_failed_to_enable">Не удалось включить модуль: %s</string>
     <string name="apm_failed_to_disable">Не удалось отключить модуль: %s</string>
     <string name="apm_empty">Нет установленных модулей</string>
