@@ -21,4 +21,8 @@
     <string name="safe_mode">Safemode</string>
     <string name="home_patch_set_key_desc">Kredensial untuk KernelPatch</string>
     <string name="home_patch_set_key_title">SuperKey</string>
+    <string name="home_install_unknown">Tidak diketahui</string>
+    <string name="home_click_to_install">Klik untuk menginstal</string>
+    <string name="home_patch_next_step">Langkah selanjutnya</string>
+    <string name="home_not_installed">Tidak terinstal</string>
 </resources>
