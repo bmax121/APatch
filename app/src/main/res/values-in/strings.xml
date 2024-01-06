@@ -2,4 +2,5 @@
 <resources>
     <string name="patch_warnning">Beresiko, lakukan pencadangan data terlebihdahulu.</string>
     <string name="kernel_patch">KernelPatch</string>
+    <string name="android_patch">AndroidPatch</string>
 </resources>
