@@ -41,7 +41,7 @@ To help translate APatch or improve existing translations, please use [Weblate](
 
 - [FAQ](docs/en/faq.md)
 - [常见问题解答](docs/cn/faq_cn.md)
-- [常见问题解答](docs/cn_tw/faq_cn_tw.md)
+- [常見問題解答](docs/cn_tw/faq_cn_tw.md)
 
 ## Credits
 
