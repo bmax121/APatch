@@ -40,6 +40,7 @@ To help translate APatch or improve existing translations, please use [Weblate](
 ### More Information
 
 - [FAQ](docs/en/faq.md)
+- [常见问题解答](docs/cn/faq_cn.md)
 
 ## Credits
 
