@@ -9,17 +9,20 @@
     <string name="patch_warnning">インストールにはリスクが伴います。</string>
     <string name="home_patch_set_key_desc">KernelPatchの資格情報のみ</string>
     <string name="apm_uninstall_confirm">モジュールをアンインストールしますか？ %s?</string>
-    <string name="reboot_download">再起動してダウンロード</string>
+    <string name="reboot_download">ダウンロードモードに再起動</string>
     <string name="home_click_to_learn_apatch">AndroidPatchの機能と使用方法について学ぶ</string>
-    <string name="reboot_edl">9008</string>
-    <string name="home_learn_apatch">学びますAndroidパッチ</string>
+    <string name="reboot_edl">EDLモードに再起動</string>
+    <string name="home_learn_apatch">AndroidPatchを学ぶ</string>
     <string name="kernel_patch">KernelPatch</string>
     <string name="home_need_update">更新可能</string>
     <string name="apm_uninstall_failed">アンインストールに失敗： %s</string>
     <string name="apm_failed_to_enable">モジュールの有効化に失敗： %s</string>
     <string name="settings">設定</string>
     <string name="kpm_apm_empty">モジュール搭載なし</string>
-    <string name="about_source_code">% 1 $sでソースコードを表示
-\n% 2 $sチャンネルに参加する</string>
+    <string name="about_source_code">%1$s でソースコードを表示<br/>%2$s チャンネルに参加する</string>
     <string name="home_manager_version">マネージャバージョン</string>
+    <string name="reboot">再起動</string>
+    <string name="reboot_recovery">リカバリーに再起動</string>
+    <string name="reboot_bootloader">ブートローダーに再起動</string>
+    <string name="safe_mode">セーフモード</string>
 </resources>

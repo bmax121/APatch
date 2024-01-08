@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">APatch</string>
+    <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
+    <string name="patch_warnning">Η εγκατάσταση συνοδεύεται από κινδύνους, βεβαιωθείτε ότι έχουν δημιουργηθεί αντίγραφα ασφαλείας των δεδομένων σας.</string>
+    <string name="kernel_patch">KernelPatch</string>
+    <string name="android_patch">AndroidPatch</string>
+    <string name="reboot">Επανεκκίνηση</string>
+    <string name="settings">Ρυθμίσεις</string>
+    <string name="reboot_bootloader">Επανεκκίνηση στο Bootloader</string>
+</resources>

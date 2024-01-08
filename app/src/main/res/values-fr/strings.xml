@@ -15,4 +15,20 @@
     <string name="settings">Paramètres</string>
     <string name="reboot_bootloader">Redémarrage vers le chargeur de démarrage</string>
     <string name="reboot">Redémarrer</string>
+    <string name="home_click_to_learn_apatch">Découvrez les caractéristiques d’AndroidPatch et comment utiliser</string>
+    <string name="safe_mode">Mode sécurisé</string>
+    <string name="home_not_installed">Non installé</string>
+    <string name="home_click_to_install">Cliquez pour installer</string>
+    <string name="home_installing">Installation en cours…</string>
+    <string name="home_need_update">Mise à jour disponible</string>
+    <string name="apatch_version">Version : %s</string>
+    <string name="home_patch_next_step">Étape suivante</string>
+    <string name="home_install_unknown">Inconnu</string>
+    <string name="kpatch_version">Version : %d.%d.%d</string>
+    <string name="clear_super_key">Effacer la clé</string>
+    <string name="home_su_path">su %s</string>
+    <string name="home_su_path_ex">su %s → %s</string>
+    <string name="home_apatch_version">APatch %s</string>
+    <string name="apatch_version_update">Version %s → %s</string>
+    <string name="kpatch_shadow_path">kpatch %s → %s</string>
 </resources>
