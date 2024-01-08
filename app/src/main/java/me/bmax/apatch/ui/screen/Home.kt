@@ -114,15 +114,16 @@ fun AuthSuperKey(showDialog: MutableState<Boolean>) {
                         visualTransformation = if (keyVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
                     )
-                    Spacer(modifier = Modifier.height(4.dp))
                     IconButton(
-                        modifier = Modifier.size(24.dp),
+                        modifier = Modifier
+                            .size(40.dp)
+                            .padding(end = 12.dp),
                         onClick = { keyVisible = !keyVisible }
                     ) {
                         Icon(
                             imageVector = if (keyVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
                             contentDescription = null,
-                            tint = if (keyVisible) Color.Gray else Color.Black
+                            tint = Color.Gray
                         )
                     }
                 }
