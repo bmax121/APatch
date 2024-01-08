@@ -63,7 +63,7 @@
     <string name="home_selinux_status_disabled">停用</string>
     <string name="apm_new_version_available">點擊以安裝新版本，%s。</string>
     <string name="apatch_version_update">版本 %s -&gt; %s</string>
-    <string name="home_working">運作中</string>
+    <string name="home_working">運作中…</string>
     <string name="apm_empty">尚未安裝模組</string>
     <string name="kpm_load">載入</string>
     <string name="apm_update">更新</string>
