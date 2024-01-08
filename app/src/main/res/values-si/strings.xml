@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
+    <string name="app_name" translatable="false">APatch</string>
+    <string name="home">ප්‍රධාන පිටුව</string>
+    <string name="reboot">Restart කරන්න</string>
+    <string name="about">මෙම ව්‍යාපෘතිය පිළිබඳ</string>
+    <string name="super_key">මුර පදය</string>
+    <string name="home_patch_set_key_title">නව මුර පදයක් සෑදීම</string>
+    <string name="home_patch_set_key_desc">KernelPatch සඳහා මුර පදය</string>
+    <string name="home_patch_next_step">ඊලඟ පියවර</string>
+    <string name="home_not_installed">ස්ථාපනය වී නොමැත</string>
+    <string name="home_click_to_install">Install කරන්න</string>
+    <string name="home_need_update">අලුත් Update එකක් තිබේ</string>
+    <string name="home_ap_cando_install">ස්ථාපනය කරන්න</string>
+    <string name="home_ap_cando_uninstall">ඉවත් කරන්න</string>
+    <string name="kpm_kp_not_installed">Kernel Patch ස්ථාපනය වී නොමැත</string>
+    <string name="kpm_author">නිර්මාණකරු</string>
+    <string name="apm_not_installed">Android Patch ස්ථාපනය වී නොමැත</string>
+    <string name="apm_empty">කිසිම Module එකක් ස්ථාපනය කර නොමැත</string>
+    <string name="apm_install">ස්ථාපනය කරන්න</string>
+    <string name="apm_uninstall_confirm">මෙම Module එක අයින් කිරීමට අවශ්‍ය ද %s ?</string>
+    <string name="apm_uninstall_success">%s ඉවත් කරන ලදී</string>
+    <string name="apm_uninstall_failed">ඉවත් කිරීමට නොහැකි විය: %s</string>
+    <string name="apm_failed_to_disable">මෙම Module එක off කිරීමට නොහැකි විය: %s</string>
+    <string name="apm_reboot_to_apply">Apply කරන්න reboot කරන්න</string>
+    <string name="apm_new_version_available">අලුත් Update එකක් තියෙනවා : %s, Update කිරීමට මෙය click කරන්න</string>
+    <string name="home_learn_apatch">AndroidPatch ගැන ඉගෙන ගන්න</string>
+    <string name="home_click_to_learn_apatch">AndroidPatch ගැන තොරතුරු, සහ මේක පාවිච්චි කරන විදිය මෙතනින් ඉගෙන ගන්න</string>
+    <string name="patch_warnning">Install කරද්දි මොකක්ම හරි අවුලක් ආවොත් ඔයාගේ Data lost වේවි. ඒක නිසා වැදගත් දේවල් Backup කරගෙන ඉන්න.</string>
+    <string name="send_log">Logs යවන්න</string>
+    <string name="clear_super_key">මුර පදය මකා දමන්න</string>
+    <string name="home_install_unknown">හඳුනා ගැනීමට නොහැක</string>
+    <string name="home_auth_key_desc">මුර පදය ඇතුළු කළ පසුව ආරම්භ වේ</string>
+    <string name="home_working">වැඩ කරනවා</string>
+    <string name="su_hide_system_apps">System Apps පෙන්වීම නතර කරන්න</string>
+    <string name="home_installing">ස්ථාපනය කරමින්</string>
+    <string name="su_show_system_apps">System Apps ද පෙන්වන්න</string>
+    <string name="home_auth_key_title">මුර පදය ඇතුළත් කරන්න</string>
+    <string name="apm_overlay_fs_not_available">ඔයාගේ Kernel එකේ OverlayFS කියන function එක enable වෙලා නැහැ. මේකට අපිටම කියලා OverlayFS enable කරපු Kernel එකක් compiled කරගන්න ඕනි 😕!</string>
+    <string name="apm_uninstall">අයින් කරන්න</string>
+    <string name="apm_magisk_conflict">Magisk එකේ modules සමග ගැටෙන නිසා, මෙම විශේෂාංගය තාවකාලිකව ක්‍රියා විරහිත කර ඇත!</string>
+    <string name="apm_failed_to_enable">මෙම Module එක ක්‍රියාත්මක කිරීමට නොහැකි විය: %s</string>
+</resources>

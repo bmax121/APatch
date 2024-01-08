@@ -3,9 +3,6 @@
     <string name="app_name" translatable="false">APatch</string>
     <string name="home">Главная</string>
     <string name="super_key">SuperKey</string>
-    <string name="set_key_title">Установить SuperKey</string>
-    <string name="set_key_desc">Применимо только для KernelPatch</string>
-    <string name="next_step">Далее</string>
     <string name="patch_warnning">Установка связана с риском, поэтому позаботьтесь о резервном копировании данных.</string>
     <string name="kernel_patch">KernelPatch</string>
     <string name="android_patch">AndroidPatch</string>
@@ -22,9 +19,6 @@
     <string name="home_su_path_ex">su: %s -&gt; %s</string>
     <string name="kpatch_shadow_path">kpatch: %s -&gt; %s</string>
     <string name="home_apatch_version">APatch: %s</string>
-    <string name="home_superuser_count">Суперпользователи: %d</string>
-    <string name="home_module_count">Модули: %d</string>
-    <string name="home_unsupported">Не поддерживается</string>
     <string name="home_kernel">Ядро</string>
     <string name="home_manager_version">Версия менеджера</string>
     <string name="home_fingerprint">Подпись</string>
@@ -42,7 +36,6 @@
     <string name="apm_uninstall">Удалить</string>
     <string name="kpm_load">Загрузить</string>
     <string name="apm_install">Установить</string>
-    <string name="install">Установка</string>
     <string name="reboot">Перезагрузить</string>
     <string name="settings">Настройки</string>
     <string name="reboot_userspace">Мягкая перезагрузка</string>
@@ -55,13 +48,10 @@
     <string name="apm_uninstall_success">%s удален</string>
     <string name="apm_uninstall_failed">Не удалось удалить: %s</string>
     <string name="apm_version">Версия</string>
-    <string name="module_license">Лицензия</string>
     <string name="apm_author">Автор</string>
     <string name="apm_desc">Описание</string>
-    <string name="apm_args">Аргументы</string>
     <string name="apm_overlay_fs_not_available">overlayfs недоступен, модуль не может работать!</string>
     <string name="su_refresh">Обновить страницу</string>
-    <string name="reset_su">Сбросить путь до su</string>
     <string name="su_show_system_apps">Показать системные приложения</string>
     <string name="su_hide_system_apps">Скрыть системные приложения</string>
     <string name="send_log">Отправить лог</string>
@@ -71,19 +61,11 @@
     <string name="home_learn_apatch">Узнайте о AndroidPatch</string>
     <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
     <string name="home_click_to_learn_apatch">Узнайте, как установить AndroidPatch и как его использовать</string>
-    <string name="home_support_title">Поддержите нас</string>
-    <string name="home_support_content">APatch был и всегда будет бесплатным и открытым проектом. Однако Вы всегда можете поддержать нас, отправив небольшое пожертвование.</string>
     <string name="about_source_code"><![CDATA[Посмотреть исходный код на %1$s<br/>Присоединяйтесь к нашему %2$s каналу]]></string>
-    <string name="failed_to_update_app_profile">Не удалось обновить App Profile для %s</string>
-    <string name="profile_umount_modules_summary">Включение этой опции позволит APatch восстанавливать любые измененные модулями файлы для данного приложения.</string>
     <string name="apm_update">Обновить</string>
     <string name="apm_downloading">Скачивание модуля: %s</string>
     <string name="apm_start_downloading">Начало скачивания: %s</string>
     <string name="apm_new_version_available">Новая версия: %s доступна, нажмите, чтобы скачать</string>
-    <string name="launch_app">Запустить</string>
-    <string name="force_stop_app">Принудительно остановить</string>
-    <string name="restart_app">Перезапустить</string>
-    <string name="failed_to_update_sepolicy">Не удалось обновить правила SELinux для %s</string>
     <string name="apm_changelog">Список изменений</string>
     <string name="home_patch_set_key_title">Установить SuperKey</string>
     <string name="kpm_load_toast_failed">Ошибка загрузки</string>
@@ -109,4 +91,6 @@
     <string name="home_ap_cando_update">Обновить</string>
     <string name="home_ap_cando_uninstall">Удалить</string>
     <string name="kpm_unload_confirm">Вы уверены, что хотите удалить модуль %s?</string>
+    <string name="clear_super_key">Удалить ключ</string>
+    <string name="apm_not_installed">Android Patch не установлен</string>
 </resources>

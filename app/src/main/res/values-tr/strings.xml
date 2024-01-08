@@ -3,14 +3,14 @@
     <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
     <string name="app_name" translatable="false">APatch</string>
     <string name="apm_reboot_to_apply">Değişikleri uygulamak için yeniden başlatın</string>
-    <string name="kpatch_shadow_path">KernelPatch: %s -&gt; %s</string>
+    <string name="kpatch_shadow_path">KernelPatch %s → %s</string>
     <string name="android_patch">AndroidPatch</string>
-    <string name="kpm_unload_confirm">%s modülünün yüklemesini kaldırmak istediğinizden emin misiniz?</string>
+    <string name="kpm_unload_confirm">%s modülünü kaldır?</string>
     <string name="apm_uninstall_success">%s kaldırıldı</string>
     <string name="send_log">Kayıtları gönder</string>
     <string name="apm_install">Yükle</string>
-    <string name="home_auth_key_desc">Sertifikalama işleminden sonra çalışmaya başlar</string>
-    <string name="kpatch_version">Sürüm: %d.%d.%d</string>
+    <string name="home_auth_key_desc">Sertifikasyondan sonra başlayın</string>
+    <string name="kpatch_version">Sürüm %d.%d.%d</string>
     <string name="apm_uninstall">Kaldır</string>
     <string name="patch_warnning">Yükleme işlemi risklidir. Lütfen verilerinizi yedeklediğinizden emin olun.</string>
     <string name="kpm_kp_not_installed">KernelPatch yüklü değil</string>
@@ -23,7 +23,7 @@
     <string name="apm_version">Sürüm</string>
     <string name="su_pkg_excluded_setting_summary">modüller için</string>
     <string name="reboot_edl">EDL modunda yeniden başlat</string>
-    <string name="home_installing">Yükleniyor</string>
+    <string name="home_installing">Yükleniyor…</string>
     <string name="apm_start_downloading">İndirme başladı: %s</string>
     <string name="su_pkg_excluded_label">dahil etme</string>
     <string name="su_title">Superuser</string>
@@ -33,7 +33,7 @@
     <string name="home_ap_cando_uninstall">Kaldır</string>
     <string name="kpm_args">Argümanlar</string>
     <string name="home_fingerprint">Parmak izi</string>
-    <string name="apatch_version">Sürüm: %s</string>
+    <string name="apatch_version">Sürüm %s</string>
     <string name="apm_overlay_fs_not_available">overlayfs mevcut değil, modül çalışamaz!</string>
     <string name="kpm_version">Sürüm</string>
     <string name="su_refresh">Yenile</string>
@@ -43,17 +43,17 @@
     <string name="super_key">Super Anahtar</string>
     <string name="reboot_recovery">Kurtarma modunda yeniden başlat</string>
     <string name="reboot_userspace">Hızlı yeniden başlat</string>
-    <string name="home_su_path_ex">SU: %s -&gt; %s</string>
+    <string name="home_su_path_ex">SU %s → %s</string>
     <string name="home_learn_apatch">AndroidPatch\'i öğrenin</string>
     <string name="apm_failed_to_disable">%s modülü devre dışı bırakılamadı</string>
     <string name="kernel_patch">KernelPatch</string>
     <string name="home_click_to_install">Yüklemek için tıklayın</string>
     <string name="home_selinux_status_unknown">Bilinmiyor</string>
-    <string name="home_apatch_version">APatch: %s</string>
+    <string name="home_apatch_version">APatch %s</string>
     <string name="about">Hakkında</string>
     <string name="home_selinux_status_permissive">Permissive</string>
     <string name="reboot">Yeniden başlat</string>
-    <string name="home_need_update">Güncelleme mevcut</string>
+    <string name="home_need_update">Yeni sürüm mevcut</string>
     <string name="home_selinux_status">SELinux durumu</string>
     <string name="apm_changelog">Değişiklik listesi</string>
     <string name="apm_uninstall_failed">%s kaldırılamadı</string>
@@ -63,17 +63,17 @@
     <string name="home_patch_set_key_title">Super Anahtar\'ı ayarla</string>
     <string name="apm_downloading">%s modülü indiriliyor</string>
     <string name="su_hide_system_apps">Sistem uygulamalarını gizle</string>
-    <string name="home_su_path">SU: %s</string>
+    <string name="home_su_path">SU %s</string>
     <string name="apm_magisk_conflict">Magisk ile çakıştığı için modüller devre dışı bırakıldı!</string>
     <string name="apm_desc">Açıklama</string>
     <string name="home_ap_cando_update">Güncelle</string>
     <string name="kpm_load_toast_failed">Yüklenemedi</string>
     <string name="kpm_unload">Yüklemeyi kaldır</string>
-    <string name="home_selinux_status_disabled">Devre dışı</string>
+    <string name="home_selinux_status_disabled">Kapalı</string>
     <string name="settings">Ayarlar</string>
     <string name="apm_new_version_available">Yeni sürüm: %s mevcut, güncellemek için tıklayın</string>
-    <string name="apatch_version_update">Sürüm: %s -&gt; %s</string>
-    <string name="home_working">Çalışıyor</string>
+    <string name="apatch_version_update">Sürüm %s →%s</string>
+    <string name="home_working">Çalışıyor…</string>
     <string name="apm_empty">Yüklü modül yok</string>
     <string name="kpm_load">Yükle</string>
     <string name="home_patch_next_step">Sonraki adım</string>
@@ -91,4 +91,6 @@
     <string name="kpm_load_toast_succ">Başarıyla yüklendi</string>
     <string name="apm_author">Geliştirici</string>
     <string name="patch_title">Yamalama</string>
+    <string name="clear_super_key">Anahtarı sil</string>
+    <string name="apm_not_installed">AndroidPatch yüklü değil</string>
 </resources>
