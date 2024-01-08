@@ -65,7 +65,7 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
             horizontalAlignment = Alignment.CenterHorizontally) {
             Row {
                 Text(
-                    text = "Android Patch Not Installed",
+                    text = stringResource(id = R.string.apm_not_installed),
                     style = MaterialTheme.typography.titleMedium
                 )
             }

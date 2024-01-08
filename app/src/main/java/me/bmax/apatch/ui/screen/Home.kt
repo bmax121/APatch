@@ -206,9 +206,6 @@ fun StartPatch(showDialog: MutableState<Boolean>, navigator: DestinationsNavigat
 fun FloatButton(navigator: DestinationsNavigator) {
     val state by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
 
-    var patchOff by remember { mutableStateOf(IntOffset.Zero) }
-    var skeyOff by remember { mutableStateOf(IntOffset.Zero) }
-
     var showAuthKeyDialog = remember { mutableStateOf(false)  }
     var showSetKeyDialog = remember { mutableStateOf(false)  }
     var permissionRequest = remember { mutableStateOf(false)  }
@@ -239,16 +236,8 @@ fun FloatButton(navigator: DestinationsNavigator) {
         StartPatch(showDialog = showSetKeyDialog, navigator)
     }
 
-    Column() {
-        Box(Modifier
-            .offset { patchOff }
-            .pointerInput(Unit) {
-                detectDragGestures { change, dragAmount ->
-                    change.consume()
-                    patchOff += dragAmount.round()
-                }
-            }
-        ) {
+    Column(horizontalAlignment = Alignment.End) {
+        Box() {
             ExtendedFloatingActionButton(
                 onClick = {
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
@@ -262,15 +251,7 @@ fun FloatButton(navigator: DestinationsNavigator) {
             )
         }
         Spacer(Modifier.height(8.dp))
-        Box(Modifier
-            .offset { skeyOff }
-            .pointerInput(Unit) {
-                detectDragGestures { change, dragAmount ->
-                    change.consume()
-                    skeyOff += dragAmount.round()
-                }
-            }
-        ) {
+        Box() {
             ExtendedFloatingActionButton(
                 onClick = {
                     if(state != APApplication.State.UNKNOWN_STATE) {
@@ -280,7 +261,15 @@ fun FloatButton(navigator: DestinationsNavigator) {
                     }
                 },
                 icon = { Icon(Icons.Filled.Key, "") },
-                text = { Text(text = if(state != APApplication.State.UNKNOWN_STATE) "Clear Key" else "SuperKey" )},
+                text = {
+                    Text(
+                        text = if (state != APApplication.State.UNKNOWN_STATE) {
+                            stringResource(id = R.string.clear_super_key)
+                        } else {
+                            stringResource(id = R.string.super_key)
+                        }
+                    )
+                },
             )
         }
     }
