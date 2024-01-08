@@ -36,6 +36,7 @@ To help translate APatch or improve existing translations, please use [Weblate](
 ### Discussions
 
 - Telegram Group: <https://t.me/APatchGroup>
+- 中文: <https://t.me/APatch_CN_Group>
 
 ### More Information
 
