@@ -4,6 +4,7 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
+import android.util.Patterns
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -229,11 +230,16 @@ private fun ModuleList(
     ) {
         val changelog = dialogHost.withLoading {
             withContext(Dispatchers.IO) {
-                OkHttpClient().newCall(
-                    okhttp3.Request.Builder().url(changelogUrl).build()
-                ).execute().body!!.string()
+                if (Patterns.WEB_URL.matcher(changelogUrl).matches()) {
+                    OkHttpClient().newCall(
+                        okhttp3.Request.Builder().url(changelogUrl).build()
+                    ).execute().body!!.string()
+                } else {
+                    changelogUrl
+                }
             }
         }
+
 
         if (changelog.isNotEmpty()) {
             // changelog is not empty, show it and wait for confirm
