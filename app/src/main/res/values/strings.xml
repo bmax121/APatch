@@ -33,16 +33,16 @@
     <string name="home_not_installed">Not installed</string>
     <string name="home_install_unknown">Unknown</string>
     <string name="home_click_to_install">Click to install</string>
-    <string name="home_working">Working…</string>
-    <string name="home_installing">Installing…</string>
+    <string name="home_working">Working</string>
+    <string name="home_installing">Installing</string>
     <string name="home_need_update">New version available</string>
-    <string name="kpatch_version">Version %d.%d.%d</string>
-    <string name="apatch_version">Version %s</string>
-    <string name="apatch_version_update">Version %s → %s</string>
-    <string name="home_su_path">su %s</string>
-    <string name="home_su_path_ex">su %s → %s</string>
-    <string name="kpatch_shadow_path">kpatch %s → %s</string>
-    <string name="home_apatch_version">APatch %s</string>
+    <string name="kpatch_version">Version: %d.%d.%d</string>
+    <string name="apatch_version">Version:\n%s</string>
+    <string name="apatch_version_update">Version:\n%s -&gt; %s</string>
+    <string name="home_su_path">su: %s</string>
+    <string name="home_su_path_ex">su: %s -&gt; %s</string>
+    <string name="kpatch_shadow_path">kpatch: %s -&gt; %s</string>
+    <string name="home_apatch_version">APatch: %s</string>
     <string name="home_auth_key_title">Enter SuperKey</string>
     <string name="home_auth_key_desc">Start after certification</string>
 
