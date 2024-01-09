@@ -10,6 +10,11 @@ The patching of Android kernel and Android system.
 /_/   \_\_|   \__,_|\__\___|_| |_|
 ```
 
+[![latest release badge](https://img.shields.io/github/v/release/bmax121/APatch?label=Release&logo=github)](https://github.com/bmax121/APatch/releases/latest)
+[![weblate](https://img.shields.io/badge/Localization-Weblate-teal?logo=weblate)](https://hosted.weblate.org/engage/APatch)
+[![Channel](https://img.shields.io/badge/Follow-Telegram-blue.svg?logo=telegram)](https://t.me/APatchGroup)
+[![GitHub License](https://img.shields.io/github/license/wxt1221/KernelSU?logo=gnu)](/LICENSE)
+
 - Root
 - APM: Magisk module like support
 - KPM: Kernel Patch Module support. (Allow you to inject any code into the kernel, Kernel function inline-hook and syscall-table-hook is available)
