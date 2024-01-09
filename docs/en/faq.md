@@ -12,7 +12,7 @@ APatch is a root solution similar to Magisk or KernelSU, but APatch offers even 
 
 - KernelSU require source. Only boot.img for APatch is enough.
 
-## APatch vs Magisk, KerenlSU
+## APatch vs Magisk, KernelSU
 
 - Optionally don't modify SELinux. Root in android app context, no libsu and IPC needed
 - **Kernel Patch Module** provided
