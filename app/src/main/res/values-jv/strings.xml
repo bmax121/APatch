@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
+    <string name="app_name" translatable="false">APatch</string>
+    <string name="android_patch">AndroidPatch</string>
+    <string name="reboot">Reboot</string>
+    <string name="settings">Aturan</string>
+    <string name="reboot_userspace">Soft Reboot</string>
+    <string name="reboot_download">Mbalek nang Donlot</string>
+    <string name="about_source_code">Delok kode sumber nang %1$s%1$sGabong saluran %2$s awakdewe</string>
+    <string name="send_log">Kirem catatan</string>
+    <string name="clear_super_key">Apos Kunci</string>
+    <string name="home_patch_set_key_title">Set SuperKey</string>
+    <string name="home">Omah</string>
+    <string name="patch_warnning">Tindakan bahaya lur, backup data data mu disek.</string>
+    <string name="kernel_patch">KernelPatch</string>
+    <string name="reboot_recovery">Mbalek nang Recovery</string>
+    <string name="reboot_bootloader">Mbalek nang Bootloader</string>
+    <string name="reboot_edl">Mbalek nang EDL</string>
+    <string name="about">Tentang</string>
+    <string name="home_learn_apatch">Sinau AndroidPatch</string>
+    <string name="home_click_to_learn_apatch">Sinau fitur AndroidPatch lan coro ngunakno</string>
+    <string name="safe_mode">Mode aman</string>
+    <string name="super_key">SuperKey</string>
+</resources>
