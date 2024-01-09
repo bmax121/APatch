@@ -7,9 +7,21 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
@@ -17,10 +29,30 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarResult
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -38,31 +70,34 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.bmax.apatch.APApplication
-import me.bmax.apatch.util.download
 import me.bmax.apatch.R
 import me.bmax.apatch.ui.component.ConfirmDialog
 import me.bmax.apatch.ui.component.ConfirmResult
 import me.bmax.apatch.ui.component.LoadingDialog
+import me.bmax.apatch.ui.screen.destinations.InstallScreenDestination
+import me.bmax.apatch.ui.viewmodel.APModuleViewModel
 import me.bmax.apatch.util.LocalDialogHost
 import me.bmax.apatch.util.LocalSnackbarHost
+import me.bmax.apatch.util.download
+import me.bmax.apatch.util.hasMagisk
+import me.bmax.apatch.util.isScrollingUp
 import me.bmax.apatch.util.reboot
 import me.bmax.apatch.util.toggleModule
 import me.bmax.apatch.util.uninstallModule
-import me.bmax.apatch.ui.screen.destinations.InstallScreenDestination
-import me.bmax.apatch.ui.viewmodel.APModuleViewModel
-import me.bmax.apatch.util.hasMagisk
 import okhttp3.OkHttpClient
 
 @Destination
 @Composable
 fun APModuleScreen(navigator: DestinationsNavigator) {
     val state by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
-    if(state != APApplication.State.ANDROIDPATCH_INSTALLED && state != APApplication.State.ANDROIDPATCH_NEED_UPDATE) {
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(12.dp),
+    if (state != APApplication.State.ANDROIDPATCH_INSTALLED && state != APApplication.State.ANDROIDPATCH_NEED_UPDATE) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(12.dp),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally) {
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Row {
                 Text(
                     text = stringResource(id = R.string.apm_not_installed),
@@ -85,6 +120,8 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
     var isSafeMode = false
     var hasMagisk = hasMagisk()
     val hideInstallButton = isSafeMode || hasMagisk
+
+    val moduleListState = rememberLazyListState()
 
     Scaffold(topBar = {
         TopBar()
@@ -116,6 +153,7 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
                     intent.type = "application/zip"
                     selectZipLauncher.launch(intent)
                 },
+                expanded = moduleListState.isScrollingUp(),
                 icon = { Icon(Icons.Filled.Add, moduleInstall) },
                 text = { Text(text = moduleInstall) },
             )
@@ -143,9 +181,11 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
 
             else -> {
                 ModuleList(
-                    viewModel = viewModel, modifier = Modifier
+                    viewModel = viewModel,
+                    modifier = Modifier
                         .padding(innerPadding)
-                        .fillMaxSize()
+                        .fillMaxSize(),
+                    state = moduleListState
                 ) {
                     navigator.navigate(InstallScreenDestination(it))
                 }
@@ -157,7 +197,10 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun ModuleList(
-    viewModel: APModuleViewModel, modifier: Modifier = Modifier, onInstallModule: (Uri) -> Unit
+    viewModel: APModuleViewModel,
+    modifier: Modifier = Modifier,
+    state: LazyListState,
+    onInstallModule: (Uri) -> Unit
 ) {
     val failedEnable = stringResource(R.string.apm_failed_to_enable)
     val failedDisable = stringResource(R.string.apm_failed_to_disable)
@@ -274,6 +317,7 @@ private fun ModuleList(
 
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
+            state = state,
             verticalArrangement = Arrangement.spacedBy(16.dp),
             contentPadding = remember {
                 PaddingValues(

@@ -7,37 +7,53 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -48,35 +64,32 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.bmax.apatch.APApplication
 import me.bmax.apatch.Natives
-import me.bmax.apatch.util.DownloadListener
 import me.bmax.apatch.R
 import me.bmax.apatch.apApp
 import me.bmax.apatch.ui.component.ConfirmDialog
 import me.bmax.apatch.ui.component.ConfirmResult
 import me.bmax.apatch.ui.component.DialogHostState
 import me.bmax.apatch.ui.component.LoadingDialog
-import me.bmax.apatch.util.LocalDialogHost
-import me.bmax.apatch.util.LocalSnackbarHost
-import me.bmax.apatch.util.reboot
-import me.bmax.apatch.util.toggleModule
-import me.bmax.apatch.ui.screen.destinations.InstallScreenDestination
 import me.bmax.apatch.ui.viewmodel.KPModuleViewModel
-import me.bmax.apatch.util.uninstallModule
-import okhttp3.OkHttpClient
+import me.bmax.apatch.util.LocalDialogHost
+import me.bmax.apatch.util.isScrollingUp
 import java.io.IOException
 
 
 private val TAG = "KernelPatchModule"
+
 @Destination
 @Composable
 fun KPModuleScreen(navigator: DestinationsNavigator) {
     val state by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
-    if(state == APApplication.State.UNKNOWN_STATE) {
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(12.dp),
+    if (state == APApplication.State.UNKNOWN_STATE) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(12.dp),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally) {
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Row {
                 Text(
                     text = stringResource(id = R.string.kpm_kp_not_installed),
@@ -94,6 +107,8 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
             viewModel.fetchModuleList()
         }
     }
+
+    val kpModuleListState = rememberLazyListState()
 
     Scaffold(topBar = {
         TopBar()
@@ -119,7 +134,7 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
                 // todo: args
                 scope.launch {
                     val succ = loadModule(dialogHost, uri, "") == 0
-                    val toastText = if(succ)  succToastText else failToastText
+                    val toastText = if (succ) succToastText else failToastText
                     withContext(Dispatchers.Main) {
                         Toast.makeText(
                             context,
@@ -127,7 +142,7 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
                             Toast.LENGTH_SHORT
                         ).show()
                     }
-                    if(succ) {
+                    if (succ) {
                         viewModel.markNeedRefresh()
                     }
                 }
@@ -139,6 +154,7 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
                     intent.type = "*/*"
                     selectKpmLauncher.launch(intent)
                 },
+                expanded = kpModuleListState.isScrollingUp(),
                 icon = { Icon(Icons.Filled.Add, moduleInstall) },
                 text = { Text(text = moduleInstall) },
             )
@@ -148,32 +164,36 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
         LoadingDialog()
 
         KPModuleList(
-            viewModel = viewModel, modifier = Modifier
+            viewModel = viewModel,
+            modifier = Modifier
                 .padding(innerPadding)
-                .fillMaxSize()
+                .fillMaxSize(),
+            state = kpModuleListState
         )
     }
 }
 
 suspend fun loadModule(dialogHost: DialogHostState, uri: Uri, args: String): Int {
     val rc = dialogHost.withLoading {
-        withContext(Dispatchers.IO) {run {
-            var kpmDir: ExtendedFile = FileSystemManager.getLocal().getFile(apApp.filesDir.parent, "kpm")
-            kpmDir.deleteRecursively()
-            kpmDir.mkdirs()
-            val rand = (1..4).map { ('a'..'z').random() }.joinToString("")
-            val kpm = kpmDir.getChildFile("${rand}.kpm")
-            Log.d(TAG, "save tmp kpm: ${kpm.path}")
-            var rc = -1
-            try {
-                uri.inputStream().buffered().writeTo(kpm)
-                rc = Natives.loadKernelPatchModule(kpm.path, args).toInt()
-            } catch (e: IOException) {
-                Log.e(TAG, "Copy kpm error: " + e)
+        withContext(Dispatchers.IO) {
+            run {
+                var kpmDir: ExtendedFile =
+                    FileSystemManager.getLocal().getFile(apApp.filesDir.parent, "kpm")
+                kpmDir.deleteRecursively()
+                kpmDir.mkdirs()
+                val rand = (1..4).map { ('a'..'z').random() }.joinToString("")
+                val kpm = kpmDir.getChildFile("${rand}.kpm")
+                Log.d(TAG, "save tmp kpm: ${kpm.path}")
+                var rc = -1
+                try {
+                    uri.inputStream().buffered().writeTo(kpm)
+                    rc = Natives.loadKernelPatchModule(kpm.path, args).toInt()
+                } catch (e: IOException) {
+                    Log.e(TAG, "Copy kpm error: " + e)
+                }
+                Log.d(TAG, "load ${kpm.path} rc: ${rc}")
+                rc
             }
-            Log.d(TAG, "load ${kpm.path} rc: ${rc}")
-            rc
-        }
         }
     }
     return rc
@@ -182,7 +202,9 @@ suspend fun loadModule(dialogHost: DialogHostState, uri: Uri, args: String): Int
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun KPModuleList(
-    viewModel: KPModuleViewModel, modifier: Modifier = Modifier
+    viewModel: KPModuleViewModel,
+    modifier: Modifier = Modifier,
+    state: LazyListState
 ) {
     val moduleStr = stringResource(id = R.string.kpm)
     val moduleUninstallConfirm = stringResource(id = R.string.kpm_unload_confirm)
@@ -221,6 +243,7 @@ private fun KPModuleList(
 
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
+            state = state,
             verticalArrangement = Arrangement.spacedBy(16.dp),
             contentPadding = remember {
                 PaddingValues(
@@ -245,12 +268,16 @@ private fun KPModuleList(
                         }
                     }
                 }
+
                 else -> {
                     items(viewModel.moduleList) { module ->
                         val scope = rememberCoroutineScope()
-                        KPModuleItem(module, onUninstall = {
-                            scope.launch { onModuleUninstall(module) }
-                        }, )
+                        KPModuleItem(
+                            module,
+                            onUninstall = {
+                                scope.launch { onModuleUninstall(module) }
+                            },
+                        )
 
                         // fix last item shadow incomplete in LazyColumn
                         Spacer(Modifier.height(1.dp))
