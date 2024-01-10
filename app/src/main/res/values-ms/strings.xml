@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
+    <string name="app_name" translatable="false">APatch</string>
+    <string name="home">Halaman Utama</string>
+    <string name="patch_warnning">Pemasangan datang dengan risiko. Sila pastikan data anda telah disimpan.</string>
+    <string name="reboot">But semula (Reboot)</string>
+    <string name="settings">Tetapan</string>
+    <string name="reboot_userspace">But semula lembut (Soft reboot)</string>
+    <string name="about">Tentang</string>
+    <string name="home_learn_apatch">Belajar AndroidPatch</string>
+</resources>

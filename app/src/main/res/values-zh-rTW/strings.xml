@@ -18,7 +18,7 @@
     <string name="kpm_unload_confirm">卸載“%s”模組？</string>
     <string name="apm_uninstall_success">%s 已卸載</string>
     <string name="apm_install">安裝</string>
-    <string name="kpatch_version">版本 %d.%d.%d</string>
+    <string name="kpatch_version">版本：%d.%d.%d</string>
     <string name="apm_uninstall">解除安裝</string>
     <string name="kpm_kp_not_installed">KernelPatch 未安裝</string>
     <string name="home_install_unknown">未知</string>
@@ -27,7 +27,7 @@
     <string name="home_click_to_learn_apatch">學習有關 AndroidPatch 的功能及使用方式</string>
     <string name="apm_version">版本</string>
     <string name="su_pkg_excluded_setting_summary">用於模組</string>
-    <string name="home_installing">安裝中……</string>
+    <string name="home_installing">安裝中</string>
     <string name="apm_start_downloading">開始下載 %s</string>
     <string name="su_pkg_excluded_label">排除</string>
     <string name="su_title">超級用戶</string>
@@ -36,7 +36,8 @@
     <string name="home_ap_cando_uninstall">解除安裝</string>
     <string name="kpm_args">參數</string>
     <string name="home_fingerprint">指紋</string>
-    <string name="apatch_version">版本 %s</string>
+    <string name="apatch_version">版本：
+\n%s</string>
     <string name="apm_overlay_fs_not_available">OverlayFS 不可用，模組無法運作。</string>
     <string name="kpm_version">版本</string>
     <string name="su_refresh">重新整理</string>
@@ -62,8 +63,9 @@
     <string name="kpm_unload">卸下</string>
     <string name="home_selinux_status_disabled">停用</string>
     <string name="apm_new_version_available">點擊以安裝新版本，%s。</string>
-    <string name="apatch_version_update">版本 %s -&gt; %s</string>
-    <string name="home_working">運作中…</string>
+    <string name="apatch_version_update">版本：
+\n%s -&gt; %s</string>
+    <string name="home_working">運作中</string>
     <string name="apm_empty">尚未安裝模組</string>
     <string name="kpm_load">載入</string>
     <string name="apm_update">更新</string>
@@ -75,17 +77,17 @@
     <string name="kpm_load_toast_succ">載入成功</string>
     <string name="apm_author">作者</string>
     <string name="patch_title">修補</string>
-    <string name="kpatch_shadow_path">kpatch %s -&gt; %s</string>
+    <string name="kpatch_shadow_path">kpatch: %s -&gt; %s</string>
     <string name="send_log">傳送日誌</string>
     <string name="home_auth_key_desc">通過認證後開始工作</string>
     <string name="home_patch_set_key_desc">KernelPatch 之唯一憑證</string>
     <string name="apm">AP模組</string>
     <string name="safe_mode">安全模式</string>
     <string name="super_key">超級密鑰</string>
-    <string name="home_su_path_ex">su %s -&gt; %s</string>
-    <string name="home_apatch_version">APatch %s</string>
+    <string name="home_su_path_ex">su: %s -&gt; %s</string>
+    <string name="home_apatch_version">APatch: %s</string>
     <string name="home_patch_set_key_title">設定超級密鑰</string>
-    <string name="home_su_path">su %s</string>
+    <string name="home_su_path">su: %s</string>
     <string name="home_patch_next_step">下一步</string>
     <string name="home_auth_key_title">輸入超級密鑰</string>
     <string name="home_not_installed">未安裝</string>
