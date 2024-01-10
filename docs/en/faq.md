@@ -14,9 +14,8 @@ It combines Magisk's convenient and easy install method through `boot.img` with 
 - KernelSU requires the source code for your device's kernel which is not always provided by the OEM. APatch works with just your stock `boot.img`.
 
 
-<!-- This is too weirdly written to even understand what it's trying to say -->
 ## APatch vs Magisk, KernelSU
-- Optionally don't modify SELinux. Root in android app context, no libsu and IPC needed
+- APatch allows you to optionally not modify SELinux. It also allows you to root an app's thread without creating a new one, so libsu and IPC are not required.
 - **Kernel Patch Module** provided
 
 
