@@ -50,6 +50,7 @@ To help translate APatch or improve existing translations, please use [Weblate](
 - [常见问题解答](docs/cn/faq_cn.md)
 - [常見問題解答](docs/cn_tw/faq_cn_tw.md)
 - [Perguntas frequentes](docs/pt_br/faq_pt_br.md)
+- [Domande frequenti](docs/it/faq_it.md)
 
 ## Credits
 
