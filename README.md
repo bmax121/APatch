@@ -1,6 +1,8 @@
 # APatch
 
-<img src="https://github.com/bmax121/APatch/assets/92950980/70a840b5-eaff-46da-b8f3-2b6a21b85e1b" style="width: 96px;" alt="logo">
+<img src="https://github.com/bmax121/APatch/assets/92950980/70a840b5-eaff-46da-b8f3-2b6a21b85e1b" style="width: 100px;" alt="logo">
+
+</br>
 
 [![latest release badge](https://img.shields.io/github/v/release/bmax121/APatch?label=Release&logo=github)](https://github.com/bmax121/APatch/releases/latest)
 [![weblate](https://img.shields.io/badge/Localization-Weblate-teal?logo=weblate)](https://hosted.weblate.org/engage/APatch)
@@ -34,10 +36,13 @@ Kernel configs
 ## Translation
 To help translate APatch or improve existing translations, please use [Weblate](https://hosted.weblate.org/engage/apatch/). PR of APatch translation is no longer accepted, because it will conflict with Weblate.
 
+<div align="center">
+
 [![Translation status](https://hosted.weblate.org/widget/APatch/apatch/horizontal-auto.svg)](https://hosted.weblate.org/engage/APatch/)
 
 [![Translation status](https://hosted.weblate.org/widget/APatch/apatch/287x66-black.png)](https://hosted.weblate.org/engage/APatch/)
 
+</div>
 
 ## Get Help
 
