@@ -56,6 +56,10 @@ android {
         }
     }
 
+    androidResources {
+        generateLocaleConfig = true
+    }
+
     sourceSets["main"].jniLibs.srcDir("libs")
 
     applicationVariants.all {

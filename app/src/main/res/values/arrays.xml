@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="languages">
+        <item>@string/system_default</item>
+        <item>Deutsch</item>
+        <item>English</item>
+        <item>Español</item>
+        <item>Filipino</item>
+        <item>Français</item>
+        <item>Indonesia</item>
+        <item>Italiano</item>
+        <item>Jawa</item>
+        <item>Norsk bokmål</item>
+        <item>Polski</item>
+        <item>Português</item>
+        <item>Português (Brasil)</item>
+        <item>Română</item>
+        <item>Tiếng Việt</item>
+        <item>Türkçe</item>
+        <item>Ελληνικά</item>
+        <item>Русский</item>
+        <item>Українська</item>
+        <item>الْعَرَبيّة</item>
+        <item>বাংলা</item>
+        <item>සිංහල</item>
+        <item>ไทย</item>
+        <item>日本語</item>
+        <item>粤语(简体)</item>
+        <item>粵語(繁體)</item>
+    </string-array>
+
+    <string-array name="languages_values">
+        <item>default</item>
+        <item>de</item>
+        <item>en</item>
+        <item>es</item>
+        <item>fil</item>
+        <item>fr</item>
+        <item>in</item>
+        <item>it</item>
+        <item>jv</item>
+        <item>nb-rNO</item>
+        <item>pl</item>
+        <item>pt</item>
+        <item>pt-rBR</item>
+        <item>ro</item>
+        <item>vi</item>
+        <item>tr</item>
+        <item>el</item>
+        <item>ru</item>
+        <item>uk</item>
+        <item>ar</item>
+        <item>bn</item>
+        <item>si</item>
+        <item>th</item>
+        <item>ja</item>
+        <item>zh-rCN</item>
+        <item>zh-rTW</item>
+    </string-array>
+</resources>
