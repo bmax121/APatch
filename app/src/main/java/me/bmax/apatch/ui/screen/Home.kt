@@ -24,8 +24,12 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.outlined.Block
 import androidx.compose.material.icons.outlined.Cached
+import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Clear
+import androidx.compose.material.icons.outlined.InstallMobile
+import androidx.compose.material.icons.outlined.SystemUpdate
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -345,7 +349,8 @@ private fun KStatusCard(state: APApplication.State) {
                 when {
                     !state.equals(APApplication.State.UNKNOWN_STATE) -> {
                         val kernelPatchVersion = Natives.kerenlPatchVersion()
-                        Column() {
+                        Icon(Icons.Outlined.CheckCircle, stringResource(R.string.home_working))
+                        Column(Modifier.padding(start = 16.dp)) {
                             Text(text = stringResource(R.string.home_working),
                                 style = MaterialTheme.typography.titleMedium
                             )
@@ -374,7 +379,8 @@ private fun KStatusCard(state: APApplication.State) {
                         }
                     }
                     else -> {
-                        Column(Modifier.padding(start = 6.dp)) {
+                        Icon(Icons.Outlined.Block, stringResource(R.string.home_install_unknown))
+                        Column(Modifier.padding(start = 16.dp)) {
                             Text(text = stringResource(R.string.home_install_unknown),
                                 style = MaterialTheme.typography.titleMedium
                             )
@@ -405,8 +411,26 @@ private fun AStatusCard(state: APApplication.State, navigator: DestinationsNavig
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(10.dp), verticalAlignment = Alignment.CenterVertically) {
+                when {
+                    state.equals(APApplication.State.KERNELPATCH_READY) -> {
+                        Icon(Icons.Outlined.Block, stringResource(R.string.home_not_installed))
+                    }
+                    state.equals(APApplication.State.ANDROIDPATCH_INSTALLING) -> {
+                        Icon(Icons.Outlined.InstallMobile, stringResource(R.string.home_installing))
+                    }
+                    state.equals(APApplication.State.ANDROIDPATCH_INSTALLED) -> {
+                        Icon(Icons.Outlined.CheckCircle, stringResource(R.string.home_working))
+                    }
+                    state.equals(APApplication.State.ANDROIDPATCH_NEED_UPDATE) -> {
+                        Icon(Icons.Outlined.SystemUpdate, stringResource(R.string.home_need_update))
+                    }
+                    else -> {
+                        Icon(Icons.Outlined.Block, stringResource(R.string.home_install_unknown))
+                    }
+                }
                 Column(Modifier
                     .weight(2f)
+                    .padding(start = 16.dp)
                 ) {
                     val managerVersion = getManagerVersion()
                     when {
