@@ -2,20 +2,38 @@ package me.bmax.apatch.ui.screen
 
 import android.content.Intent
 import android.net.Uri
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.ContactPage
-import androidx.compose.material.icons.filled.RemoveModerator
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.filled.Translate
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.core.content.FileProvider
+import androidx.core.os.LocaleListCompat
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.Dispatchers
@@ -25,9 +43,9 @@ import me.bmax.apatch.BuildConfig
 import me.bmax.apatch.R
 import me.bmax.apatch.ui.component.AboutDialog
 import me.bmax.apatch.ui.component.LoadingDialog
-import me.bmax.apatch.ui.component.SwitchItem
 import me.bmax.apatch.util.LocalDialogHost
 import me.bmax.apatch.util.getBugreportFile
+import java.util.Locale
 
 @Destination
 @Composable
@@ -44,14 +62,26 @@ fun SettingScreen(navigator: DestinationsNavigator) {
         val showAboutDialog = remember { mutableStateOf(false) }
         AboutDialog(showAboutDialog)
 
-        Column(modifier = Modifier.padding(paddingValues)) {
+        val showLanguageDialog = rememberSaveable { mutableStateOf(false) }
+        LanguageDialog(showLanguageDialog)
+
+        Column(
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxWidth()
+        ) {
 
             val context = LocalContext.current
             val scope = rememberCoroutineScope()
             val dialogHost = LocalDialogHost.current
 
             ListItem(
-                leadingContent = { Icon(Icons.Filled.BugReport, stringResource(id = R.string.send_log)) },
+                leadingContent = {
+                    Icon(
+                        Icons.Filled.BugReport,
+                        stringResource(id = R.string.send_log)
+                    )
+                },
                 headlineContent = { Text(stringResource(id = R.string.send_log)) },
                 modifier = Modifier.clickable {
                     scope.launch {
@@ -60,14 +90,12 @@ fun SettingScreen(navigator: DestinationsNavigator) {
                                 getBugreportFile(context)
                             }
                         }
-
                         val uri: Uri =
                             FileProvider.getUriForFile(
                                 context,
                                 "${BuildConfig.APPLICATION_ID}.fileprovider",
                                 bugreport
                             )
-
                         val shareIntent = Intent(Intent.ACTION_SEND)
                         shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
                         shareIntent.setDataAndType(uri, "application/zip")
@@ -83,15 +111,77 @@ fun SettingScreen(navigator: DestinationsNavigator) {
                 }
             )
 
+            ListItem(
+                headlineContent = {
+                    Text(text = stringResource(id = R.string.settings_app_language))
+                },
+                modifier = Modifier.clickable {
+                    showLanguageDialog.value = true
+                },
+                supportingContent = {
+                    Text(
+                        text = AppCompatDelegate.getApplicationLocales()[0]?.displayLanguage?.replaceFirstChar {
+                            if (it.isLowerCase()) it.titlecase(
+                                Locale.getDefault()
+                            ) else it.toString()
+                        } ?: stringResource(id = R.string.system_default)
+                    )
+                },
+                leadingContent = { Icon(Icons.Filled.Translate, null) }
+            )
+
             val about = stringResource(id = R.string.about)
             ListItem(
-                leadingContent = { Icon(Icons.Filled.ContactPage, stringResource(id = R.string.about)) },
+                leadingContent = {
+                    Icon(
+                        Icons.Filled.ContactPage,
+                        stringResource(id = R.string.about)
+                    )
+                },
                 headlineContent = { Text(about) },
                 modifier = Modifier.clickable {
                     showAboutDialog.value = true
                 }
             )
         }
+    }
+}
+
+@Composable
+fun LanguageDialog(showLanguageDialog: MutableState<Boolean>) {
+
+    val languages = stringArrayResource(id = R.array.languages)
+    val languagesValues = stringArrayResource(id = R.array.languages_values)
+
+    if (showLanguageDialog.value) {
+        AlertDialog(
+            onDismissRequest = { showLanguageDialog.value = false },
+            text = {
+                LazyColumn {
+                    itemsIndexed(languages) { index, item ->
+                        ListItem(
+                            headlineContent = { Text(item) },
+                            modifier = Modifier.clickable {
+                                showLanguageDialog.value = false
+                                if (index == 0) {
+                                    AppCompatDelegate.setApplicationLocales(
+                                        LocaleListCompat.getEmptyLocaleList()
+                                    )
+                                } else {
+                                    AppCompatDelegate.setApplicationLocales(
+                                        LocaleListCompat.forLanguageTags(
+                                            languagesValues[index]
+                                        )
+                                    )
+                                }
+                            }
+                        )
+                    }
+                }
+            },
+            confirmButton = {},
+            dismissButton = {}
+        )
     }
 }
 
