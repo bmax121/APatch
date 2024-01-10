@@ -40,7 +40,7 @@ To help translate APatch or improve existing translations, please use [Weblate](
 ## Get Help
 
 ### Discussions
-
+- Telegram Channel : <https://t.me/APatchChannel>
 - Telegram Group: <https://t.me/APatchGroup>
 - 中文: <https://t.me/APatch_CN_Group>
 
