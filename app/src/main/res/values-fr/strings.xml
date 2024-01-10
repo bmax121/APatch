@@ -19,27 +19,29 @@
     <string name="safe_mode">Mode sécurisé</string>
     <string name="home_not_installed">Non installé</string>
     <string name="home_click_to_install">Cliquez pour installer</string>
-    <string name="home_installing">Installation en cours…</string>
+    <string name="home_installing">Installation</string>
     <string name="home_need_update">Mise à jour disponible</string>
-    <string name="apatch_version">Version %s</string>
+    <string name="apatch_version">Version :
+\n%s</string>
     <string name="home_patch_next_step">Suivant</string>
     <string name="home_install_unknown">Inconnu</string>
-    <string name="kpatch_version">Version %d.%d.%d</string>
+    <string name="kpatch_version">Version : %d.%d.%d</string>
     <string name="clear_super_key">Effacer la clé</string>
-    <string name="home_su_path">su %s</string>
-    <string name="home_su_path_ex">su %s → %s</string>
-    <string name="home_apatch_version">APatch %s</string>
-    <string name="apatch_version_update">Version %s → %s</string>
-    <string name="kpatch_shadow_path">kpatch %s → %s</string>
+    <string name="home_su_path">su : %s</string>
+    <string name="home_su_path_ex">su : %s -&gt; %s</string>
+    <string name="home_apatch_version">APatch : %s</string>
+    <string name="apatch_version_update">Version :
+\n%s -&gt; %s</string>
+    <string name="kpatch_shadow_path">kpatch : %s -&gt; %s</string>
     <string name="about_source_code">Voir le code source sur %1$s<br/>Rejoindre le canal %2$s</string>
     <string name="home_patch_set_key_title">Initialiser la clé</string>
     <string name="send_log">Envoyer le log</string>
     <string name="home_kernel">Noyau</string>
     <string name="kpm">KPModule</string>
     <string name="apm_version">Version</string>
-    <string name="home_working">En fonctionnement…</string>
+    <string name="home_working">Fonctionnel</string>
     <string name="home_patch_set_key_desc">Authentification unique pour KernelPatch</string>
-    <string name="home_auth_key_title">Renseignez votre clé</string>
+    <string name="home_auth_key_title">Renseignez la clé</string>
     <string name="home_ap_cando_install">Installer</string>
     <string name="home_ap_cando_update">Mettre à jour</string>
     <string name="home_ap_cando_uninstall">Désinstaller</string>
@@ -54,7 +56,7 @@
     <string name="su_pkg_excluded_label">exclure</string>
     <string name="su_show_system_apps">Afficher les applications système</string>
     <string name="su_hide_system_apps">Masquer les applications système</string>
-    <string name="su_selinux_via_hook">contournement via crochet</string>
+    <string name="su_selinux_via_hook">bypass via hook</string>
     <string name="su_refresh">Rafraîchir</string>
     <string name="apm">APModule</string>
     <string name="apm_empty">Aucun module installé</string>
@@ -67,7 +69,7 @@
     <string name="apm_update">Mettre à jour</string>
     <string name="apm_start_downloading">Démarrer le téléchargement de %s</string>
     <string name="home_selinux_status_disabled">Inactif</string>
-    <string name="home_auth_key_desc">Démarrer après la certification</string>
+    <string name="home_auth_key_desc">Démarrage après certification</string>
     <string name="kpm_unload_confirm">Décharger le module \"%s\" ?</string>
     <string name="apm_not_installed">AndroidPatch non installé</string>
     <string name="apm_failed_to_disable">Impossible de désactiver le module \"%s\"</string>
