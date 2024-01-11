@@ -472,7 +472,6 @@ private fun AStatusCard(state: APApplication.State, navigator: DestinationsNavig
                             }
                         }
                     }
-                    Spacer(Modifier.height(6.dp))
                 }
                 if(!state.equals(APApplication.State.UNKNOWN_STATE)) {
                     Column (modifier = Modifier
