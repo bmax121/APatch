@@ -62,6 +62,7 @@ Installation guide (coming soon)
 - [常見問題解答](docs/cn_tw/faq_cn_tw.md)
 - [Perguntas frequentes](docs/pt_br/faq_pt_br.md)
 - [Domande frequenti](docs/it/faq_it.md)
+- [Sık sorulan sorular](docs/tr/faq_tr.md)
 
 ## Credits
 
