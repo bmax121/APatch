@@ -39,10 +39,10 @@
         <item>in</item>
         <item>it</item>
         <item>jv</item>
-        <item>nb-rNO</item>
+        <item>nb-NO</item>
         <item>pl</item>
         <item>pt</item>
-        <item>pt-rBR</item>
+        <item>pt-BR</item>
         <item>ro</item>
         <item>vi</item>
         <item>tr</item>
@@ -54,7 +54,7 @@
         <item>si</item>
         <item>th</item>
         <item>ja</item>
-        <item>zh-rCN</item>
-        <item>zh-rTW</item>
+        <item>zh-CN</item>
+        <item>zh-TW</item>
     </string-array>
 </resources>

@@ -1,7 +1,6 @@
 # APatch
 
-<img src="https://github.com/bmax121/APatch/assets/92950980/70a840b5-eaff-46da-b8f3-2b6a21b85e1b" style="width: 100px;" alt="logo">
-
+<a href="https://github.com/bmax121/APatch/releases/latest"><img src="https://raw.githubusercontent.com/bmax121/APatch/main/app/src/main/ic_launcher-playstore.png" style="width: 128px;" alt="logo"></a>
 </br>
 
 [![latest release badge](https://img.shields.io/github/v/release/bmax121/APatch?label=Release&logo=github)](https://github.com/bmax121/APatch/releases/latest)
@@ -48,6 +47,9 @@ To help translate APatch or improve existing translations, please use [Weblate](
 
 Installation guide (coming soon)
 
+### Updates
+- Telegram Channel: [@APatchChannel](https://t.me/APatchChannel)
+
 ### Discussions
 
 - Telegram Group: [@APatchGroup](https://t.me/APatchGroup)
@@ -56,13 +58,15 @@ Installation guide (coming soon)
 
 ### More Information
 
-- [FAQ](docs/en/faq.md)
-- [Preguntas frecuentes](docs/es/faq_es.md)
-- [常见问题解答](docs/cn/faq_cn.md)
-- [常見問題解答](docs/cn_tw/faq_cn_tw.md)
-- [Perguntas frequentes](docs/pt_br/faq_pt_br.md)
-- [Domande frequenti](docs/it/faq_it.md)
-- [ЧАВО](docs/ru/faq_ru.md)
+- [FAQ (EN)](docs/en/faq.md)
+- [常见问题解答 (CN)](docs/cn/faq_cn.md)
+- [常見問題解答 (CN_TW)](docs/cn_tw/faq_cn_tw.md)
+- [Preguntas frecuentes (ES)](docs/es/faq_es.md)
+- [Foire aux questions (FR)](docs/fr/faq_fr.md)
+- [Domande frequenti (IT)](docs/it/faq_it.md)
+- [Perguntas frequentes (PT_BR)](docs/pt_br/faq_pt_br.md)
+- [Sık sorulan sorular (TR)](docs/tr/faq_tr.md)
+- [Часто задаваемые вопросы (RU)](docs/tr/faq_ru.md)
 
 ## Credits
 
