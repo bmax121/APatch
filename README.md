@@ -1,16 +1,15 @@
 # APatch
 
-<a href="https://github.com/bmax121/APatch/releases/latest"><img src="https://raw.githubusercontent.com/bmax121/APatch/main/app/src/main/ic_launcher-playstore.png" style="width: 128px;" alt="logo"></a>
-</br>
-
 <div align="center">
+<a href="https://github.com/bmax121/APatch/releases/latest"><img src="https://images.weserv.nl/?url=https://raw.githubusercontent.com/bmax121/APatch/main/app/src/main/ic_launcher-playstore.png&mask=circle" style="width: 128px;" alt="logo"></a>
+</br>
 
 [![latest release badge](https://img.shields.io/github/v/release/bmax121/APatch?label=Release&logo=github)](https://github.com/bmax121/APatch/releases/latest)
 [![weblate](https://img.shields.io/badge/Localization-Weblate-teal?logo=weblate)](https://hosted.weblate.org/engage/APatch)
 [![Channel](https://img.shields.io/badge/Follow-Telegram-blue.svg?logo=telegram)](https://t.me/APatchGroup)
 [![GitHub License](https://img.shields.io/github/license/bmax121/APatch?logo=gnu)](/LICENSE)
 
-</dev>
+</div>
 
 The patching of Android kernel and Android system.
 
