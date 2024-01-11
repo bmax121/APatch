@@ -66,6 +66,7 @@ Installation guide (coming soon)
 - [Domande frequenti (IT)](docs/it/faq_it.md)
 - [Perguntas frequentes (PT_BR)](docs/pt_br/faq_pt_br.md)
 - [Sık sorulan sorular (TR)](docs/tr/faq_tr.md)
+- [Часто задаваемые вопросы (RU)](docs/tr/faq_ru.md)
 
 ## Credits
 
