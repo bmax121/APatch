@@ -81,7 +81,7 @@ jobs:
         env: 
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
         if: ${{ env.SIGNING_KEY != '' }}
-        uses: r0adkll/sign-android-release@v1
+        uses: kevin-david/zipalign-sign-android-release@v1.1
         id: sign_app
         with:
           releaseDirectory: app/build/outputs/apk/release

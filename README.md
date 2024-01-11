@@ -20,10 +20,8 @@ The source code for both APatch UI and APM has been copied and modified from [Ke
 
 ## Supported Versions
 
-Android Kernel Version from `3.18` to `6.1`
-
-Currently, only support `arm64-v8a`
-
+- ARM64 only
+- Android Kernel Version 3.18 - 6.1
 
 ## Requirement
 
@@ -31,7 +29,7 @@ Kernel configs
 
 - `CONFIG_KALLSYMS=y`  
 - `CONFIG_KALLSYMS_ALL=y` 
-- `CONFIG_KALLSYMS_ALL=n` (Not supported, Maybe in the future)
+- `CONFIG_KALLSYMS_ALL=n` (Next version of KernelPatch will support)
 
 ## Translation
 To help translate APatch or improve existing translations, please use [Weblate](https://hosted.weblate.org/engage/apatch/). PR of APatch translation is no longer accepted, because it will conflict with Weblate.
@@ -55,9 +53,11 @@ Installation guide (coming soon)
 - Telegram Group: [@APatchGroup](https://t.me/APatchGroup)
 - 中文: [@APatch_CN_Group](https://t.me/APatch_CN_Group)
 
+
 ### More Information
 
 - [FAQ](docs/en/faq.md)
+- [Preguntas frecuentes](docs/es/faq_es.md)
 - [常见问题解答](docs/cn/faq_cn.md)
 - [常見問題解答](docs/cn_tw/faq_cn_tw.md)
 - [Perguntas frequentes](docs/pt_br/faq_pt_br.md)
