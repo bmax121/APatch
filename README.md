@@ -1,50 +1,58 @@
 # APatch
 
-The patching of Android kernel and Android system.
+<img src="https://github.com/bmax121/APatch/assets/92950980/70a840b5-eaff-46da-b8f3-2b6a21b85e1b" style="width: 100px;" alt="logo">
 
-``` shell
-    _    ____       _       _     
-   / \  |  _ \ __ _| |_ ___| |__  
-  / _ \ | |_) / _` | __/ __| '_ \ 
- / ___ \|  __/ (_| | || (__| | | |
-/_/   \_\_|   \__,_|\__\___|_| |_|
-```
+</br>
 
 [![latest release badge](https://img.shields.io/github/v/release/bmax121/APatch?label=Release&logo=github)](https://github.com/bmax121/APatch/releases/latest)
 [![weblate](https://img.shields.io/badge/Localization-Weblate-teal?logo=weblate)](https://hosted.weblate.org/engage/APatch)
 [![Channel](https://img.shields.io/badge/Follow-Telegram-blue.svg?logo=telegram)](https://t.me/APatchGroup)
-[![GitHub License](https://img.shields.io/github/license/wxt1221/KernelSU?logo=gnu)](/LICENSE)
+[![GitHub License](https://img.shields.io/github/license/bmax121/APatch?logo=gnu)](/LICENSE)
 
-- Root
+The patching of Android kernel and Android system.
+
+- A new Kernel-based root solution for Android devices.
 - APM: Magisk module like support
 - KPM: Kernel Patch Module support. (Allow you to inject any code into the kernel, Kernel function inline-hook and syscall-table-hook is available)
+- APatch relies on [KernelPatch](https://github.com/bmax121/KernelPatch/)
 
-APatch relies on [KernelPatch](https://github.com/bmax121/KernelPatch/)  
-The source code for both APatch UI and APM has been copied and modified from [KernelSU](https://github.com/tiann/KernelSU)  
+The source code for both APatch UI and APM has been copied and modified from [KernelSU](https://github.com/tiann/KernelSU)
 
 ## Supported Versions
 
 - ARM64 only
 - Android Kernel Version 3.18 - 6.1
 
-## Requirements
-The following options need to be enabled in your kernel's build config for APatch to work:
-```shell
-CONFIG_KALLSYMS=y
-CONFIG_KALLSYMS_ALL=y (CONFIG_KALLSYMS_ALL=n, Planned support)
-```
+## Requirement
+
+Kernel configs
+
+- `CONFIG_KALLSYMS=y`  
+- `CONFIG_KALLSYMS_ALL=y` 
+- `CONFIG_KALLSYMS_ALL=n` (Next version of KernelPatch will support)
 
 ## Translation
 To help translate APatch or improve existing translations, please use [Weblate](https://hosted.weblate.org/engage/apatch/). PR of APatch translation is no longer accepted, because it will conflict with Weblate.
-[![Translation status](https://hosted.weblate.org/widget/APatch/apatch/multi-auto.svg)](https://hosted.weblate.org/engage/APatch/)
 
+<div align="center">
+
+[![Translation status](https://hosted.weblate.org/widget/APatch/apatch/horizontal-auto.svg)](https://hosted.weblate.org/engage/APatch/)
+
+[![Translation status](https://hosted.weblate.org/widget/APatch/apatch/287x66-black.png)](https://hosted.weblate.org/engage/APatch/)
+
+</div>
 
 ## Get Help
 
+### Usage
+
+Installation guide (coming soon)
+
 ### Discussions
-- Telegram Channel : <https://t.me/APatchChannel>
-- Telegram Group: <https://t.me/APatchGroup>
-- 中文: <https://t.me/APatch_CN_Group>
+
+- Telegram Group: [@APatchGroup](https://t.me/APatchGroup)
+- 中文: [@APatch_CN_Group](https://t.me/APatch_CN_Group)
+
 
 ### More Information
 
