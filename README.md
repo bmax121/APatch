@@ -57,12 +57,12 @@ Installation guide (coming soon)
 ### More Information
 
 - [FAQ](docs/en/faq.md)
-- [Preguntas frecuentes](docs/es/faq_es.md)
 - [常见问题解答](docs/cn/faq_cn.md)
 - [常見問題解答](docs/cn_tw/faq_cn_tw.md)
-- [Perguntas frequentes](docs/pt_br/faq_pt_br.md)
+- [Preguntas frecuentes](docs/es/faq_es.md)
+- [Foire aux questions](docs/fr/faq_fr.md)
 - [Domande frequenti](docs/it/faq_it.md)
-- [FAQ (Foire aux questions)](docs/fr/faq_fr.md)
+- [Perguntas frequentes](docs/pt_br/faq_pt_br.md)
 
 ## Credits
 
