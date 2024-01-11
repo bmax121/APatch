@@ -2,6 +2,7 @@
 
 <div align="center">
 <a href="https://github.com/bmax121/APatch/releases/latest"><img src="https://images.weserv.nl/?url=https://raw.githubusercontent.com/bmax121/APatch/main/app/src/main/ic_launcher-playstore.png&mask=circle" style="width: 128px;" alt="logo"></a>
+	
 </br>
 
 [![latest release badge](https://img.shields.io/github/v/release/bmax121/APatch?label=Release&logo=github)](https://github.com/bmax121/APatch/releases/latest)
@@ -69,8 +70,9 @@ Installation guide (coming soon)
 - [Foire aux questions (FR)](docs/fr/faq_fr.md)
 - [Domande frequenti (IT)](docs/it/faq_it.md)
 - [Perguntas frequentes (PT_BR)](docs/pt_br/faq_pt_br.md)
-- [Sık sorulan sorular (TR)](docs/tr/faq_tr.md)
 - [Часто задаваемые вопросы (RU)](docs/ru/faq_ru.md)
+- [Sık sorulan sorular (TR)](docs/tr/faq_tr.md)
+
 
 ## Credits
 
