@@ -155,7 +155,7 @@ class APApplication : Application() {
             private set(value) {
                 field = value
                 val ready = Natives.nativeReady(value)
-                _apStateLiveData.value = if(ready) State.KERNELPATCH_READY else  State.UNKNOWN_STATE
+                _apStateLiveData.value = if(ready) State.KERNELPATCH_READY else State.UNKNOWN_STATE
                 Log.d(TAG, "state: " + _apStateLiveData.value)
                 sharedPreferences.edit().putString(SUPER_KEY, value).apply()
 
