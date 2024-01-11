@@ -63,7 +63,7 @@
     <string name="home_learn_apatch">Узнайте о AndroidPatch</string>
     <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
     <string name="home_click_to_learn_apatch">Узнайте, как установить AndroidPatch и как его использовать</string>
-    <string name="about_source_code"><![CDATA[Посмотреть исходный код на %1$s<br/>Присоединяйтесь к нашему %2$s каналу]]></string>
+    <string name="about_source_code">Посмотреть исходный код на %1$s<br/>Присоединяйтесь к нашему %2$s каналу</string>
     <string name="apm_update">Обновить</string>
     <string name="apm_downloading">Скачивание модуля \"%s\"…</string>
     <string name="apm_start_downloading">Начало скачивания \"%s\"</string>
