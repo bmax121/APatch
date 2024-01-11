@@ -16,7 +16,7 @@ It combines Magisk's convenient and easy install method through `boot.img` with 
 
 ## APatch vs Magisk, KernelSU
 - APatch allows you to optionally not modify SELinux. It also allows you to root an app's thread without creating a new one, so libsu and IPC are not required.
-- **Kernel Patch Module** provided
+- **Kernel Patch Module** provided.
 
 
 ## What is Kernel Patch Module?
@@ -43,7 +43,7 @@ When an app/program tries to invoke **SuperCall**, it needs to provide an access
 
 
 ## How about SELinux?
-- KernelPatch don't modify the SELinux context and bypasses SELinux via a hook,
+- KernelPatch don't modify the SELinux context and bypasses SELinux via a hook.
   This allows you to root an Android thread within the app context without the need to use libsu to start a new process and then perform IPC.
   This is very convenient.
 - In addition, APatch directly utilizes magiskpolicy to provide additional SELinux support.  
