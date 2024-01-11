@@ -2,11 +2,11 @@
 
 ## 什么是APatch？
 
-APatch是一种类似于Magisk或KernelSU的根解决方案，但APatch提供更多功能。
+APatch是一种类似于Magisk或KernelSU的root解决方案，但APatch提供更多功能。APatch结合了Magisk方便易用的通过`boot.img`的安装方法，以及KernelSU强大的内核修补能力。
 
 ## APatch与Magisk的区别？
 
-- Magisk修改init，APatch则对Linux内核进行补丁。
+- Magisk修改启动映像中的ramdisk的init，APatch则直接Linux内核进行修补。
 
 ## APatch与KernelSU的区别？
 
