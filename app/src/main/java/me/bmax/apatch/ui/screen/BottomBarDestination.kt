@@ -17,9 +17,11 @@ enum class BottomBarDestination(
     @StringRes val label: Int,
     val iconSelected: ImageVector,
     val iconNotSelected: ImageVector,
+    val kPatchRequired: Boolean,
+    val aPatchRequired: Boolean,
 ) {
-    Home(HomeScreenDestination, R.string.home, Icons.Filled.Home, Icons.Outlined.Home),
-    KModule(KPModuleScreenDestination, R.string.kpm, Icons.Filled.Build, Icons.Outlined.Build),
-    SuperUser(SuperUserScreenDestination, R.string.su_title, Icons.Filled.Security, Icons.Outlined.Security),
-    AModule(APModuleScreenDestination, R.string.apm, Icons.Filled.Apps, Icons.Outlined.Apps)
+    Home(HomeScreenDestination, R.string.home, Icons.Filled.Home, Icons.Outlined.Home, false, false),
+    KModule(KPModuleScreenDestination, R.string.kpm, Icons.Filled.Build, Icons.Outlined.Build, true, false),
+    SuperUser(SuperUserScreenDestination, R.string.su_title, Icons.Filled.Security, Icons.Outlined.Security, true, false),
+    AModule(APModuleScreenDestination, R.string.apm, Icons.Filled.Apps, Icons.Outlined.Apps, false, true)
 }
