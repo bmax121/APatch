@@ -1,7 +1,6 @@
 # APatch
 
-<a href="https://github.com/bmax121/APatch/releases/latest"><img src="https://github.com/Traaanaelle/APatch/assets/63869398/aed937ed-6545-420f-a048-b65fafce15c0" style="width: 128px;" alt="logo"></a>
-
+<a href="https://github.com/bmax121/APatch/releases/latest"><img src="https://raw.githubusercontent.com/bmax121/APatch/main/app/src/main/ic_launcher-playstore.png" style="width: 128px;" alt="logo"></a>
 </br>
 
 [![latest release badge](https://img.shields.io/github/v/release/bmax121/APatch?label=Release&logo=github)](https://github.com/bmax121/APatch/releases/latest)
