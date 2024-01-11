@@ -1,45 +1,62 @@
-# Preguntas frecuentes
-
-## ¿Qué es APatch?
-APatch es una solución de root similar a Magisk o KernelSU que une lo mejor de ambos.
-Combina el método de instalación conveniente y fácil de Magisk a través de un patche en `boot.img` y las potentes capacidades de KernelSU para parchear el kernel.
+# FAQ
 
 
-## Diferencias entre APatch y Magisk
-- Magisk modifica el sistema de init (el sistema que inicializa todos los subsistemas del dispositivo) con un parche en la ramdisk de tu imagen `boot.img`, mientras que APatch parchea el kernel directamente.
+## What is APatch?
+APatch is a root solution similar to Magisk or KernelSU that unites the best of
+both. It combines Magisk's convenient and easy install method through `boot.img`
+with KernelSU's powerful kernel patching abilities.
 
 
-## Diferencias entre APatch y KernelSU
-- KernelSU requiere el código fuente del kernel del dispositivo, que no siempre es brindado por el fabricante del mismo. APatch solo requiere la imagen `boot.img`
+## What's the difference between APatch and Magisk?
+- Magisk modifies the init system with a patch in your boot image's ramdisk,
+  while APatch patches the kernel directly.
+
+## APatch vs KernelSU
+- KernelSU requires the source code for your device's kernel which is not always
+  provided by the OEM. APatch works with just your stock `boot.img`.
+
+## APatch vs Magisk, KernelSU
+- APatch allows you to optionally not modify SELinux. It also allows you to root
+  an app's thread without creating a new one, so libsu and IPC are not required.
+- **Kernel Patch Module** provided.
+
+## What is Kernel Patch Module?
+Some code runs in Kernel Space, similar to Loadable Kernel Modules (LKM).
+
+Additionally, KPM provides the ability to do inline-hook, syscall-table-hook in
+kernel space.
+
+For more information, see [How to write a
+KPM](https://github.com/bmax121/KernelPatch/blob/main/doc/module.md)
 
 
-## Diferencias entre APatch y ambas soluciones de root
-- APatch permite opcionalmente no modificar el contexto de SELinux. También da acceso root a las apps en su propio contexto, lo cual significa que no hay necesidad de usar libsu ni IPC.
-- Se añaden los **KPM** (Kernel Patch Modules), explicados abajo
+## Relationship between APatch and KernelPatch
+
+APatch depends on KernelPatch, inherits all its capabilities, and has been
+expanded.
+
+You can install KernelPatch only, but this will not allow you to use Magisk
+modules, and to use superuser management, you need to install AndroidPatch and
+then uninstall it.
+
+[Learn more about KernelPatch](https://github.com/bmax121/KernelPatch)
 
 
-## ¿Qué es un Kernel Patch Module (KPM, Módulo de Parche del Kernel)?
-Permite implementar código personalizado que corra en kernelspace, es decir, en el mismo entorno que el kernel. Funciona similar a los módulos de kernel (los LKM, Loadable Kernel Modules) que se cargan con insmod/rmmod/modprobe/etc.
-
-Además, KPM permite hacer inline-hooks ("engancharse" a una función en el mismo lugar de memoria, he de ahí el "inline") y syscall-table-hook (modificar la tabla de syscalls)
-
-Para más información, lee [Como escribir un KPM](https://github.com/bmax121/KernelPatch/blob/main/doc/module.md) (en Inglés)
-
-
-## Relación entre APatch y KernelPatch
-APatch depende de KernelPatch, hereda todas sus capacidades y las expande.
-
-Puedes instalar solo KernelPatch, pero esto no va a permitir que uses módulos de Magisk, y para poder administrar el acceso root vas a tener que instalar AndroidPatch y desinstalarlo.
-
-[Aprende más de KernelPatch](https://github.com/bmax121/KernelPatch) (en Inglés)
+## What is SuperKey?
+KernelPatch adds a new system call (syscall) to provide all capabilities to apps
+and programs in userspace, this syscall is referred to as **SuperCall**. When an
+app/program tries to invoke **SuperCall**, it needs to provide an access
+credential, known as the **SuperKey**. **SuperCall** can only be successfully
+invoked if the **SuperKey** is correct and if it's not the caller will remain
+unaffected.
 
 
-## ¿Qué es SuperKey?
-KernelPatch agrega una nueva syscall (llamada al sistema) para dar todas las capacidades a apps y programas en userspace (el espacio del usuario fuera del kernel), y esta syscall se llama **SuperCall**.
-Cuando una app o programa intenta llamar **SuperCall**, necesita proveer una credencial de acceso llamada **SuperKey**.
-**SuperCall** solo se puede llamar si se provee una **SuperKey** correcta, caso contrario la app/programa que lo llame quedará intacta.
-
-
-## ¿Y qué pasa con SELinux?
-- KernelPatch no modifica el contexto de SELinux y simplemente se lo salta a través de un hook, lo cual permite que des acceso root a un hilo de Android dentro del contexto de la aplicación sin necesidad de usar libsu para iniciar un nuevo proceso y luego comunicarte con él a través de IPC (Inter-Process Communication)
-- Además, APatch usa magiskpolicy directamente para obtener mayor soporte de SELinux. Solo esto va a ser detectado como Magisk, y cualquiera que lo desee puede intentar evitar esto ya que el problema ya está bastante claro.
+## How about SELinux?
+- KernelPatch don't modify the SELinux context and bypasses SELinux via a hook.
+  This allows you to root an Android thread within the app context without the
+  need to use libsu to start a new process and then perform IPC. This is very
+  convenient.
+- In addition, APatch directly utilizes magiskpolicy to provide additional
+  SELinux support.\
+  However, only this will be detected as Magisk. Anyone interested can try to
+  bypass it, the issue is already quite clear.

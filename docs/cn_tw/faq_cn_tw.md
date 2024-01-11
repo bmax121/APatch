@@ -1,48 +1,62 @@
-# 常見問題解答
+# FAQ
 
-## 什麼是APatch？
 
-APatch是一種類似於Magisk或KernelSU的根解決方案，但APatch提供更多功能。
+## What is APatch?
+APatch is a root solution similar to Magisk or KernelSU that unites the best of
+both. It combines Magisk's convenient and easy install method through `boot.img`
+with KernelSU's powerful kernel patching abilities.
 
-## APatch與Magisk的區別？
 
-- Magisk修改init，APatch則對Linux內核進行補丁。
+## What's the difference between APatch and Magisk?
+- Magisk modifies the init system with a patch in your boot image's ramdisk,
+  while APatch patches the kernel directly.
 
-## APatch與KernelSU的區別？
+## APatch vs KernelSU
+- KernelSU requires the source code for your device's kernel which is not always
+  provided by the OEM. APatch works with just your stock `boot.img`.
 
-- KernelSU需要原始碼，而APatch僅需要boot.img。
+## APatch vs Magisk, KernelSU
+- APatch allows you to optionally not modify SELinux. It also allows you to root
+  an app's thread without creating a new one, so libsu and IPC are not required.
+- **Kernel Patch Module** provided.
 
-## APatch與Magisk、KernelSU的區別？
+## What is Kernel Patch Module?
+Some code runs in Kernel Space, similar to Loadable Kernel Modules (LKM).
 
-- 可選擇不修改SELinux。在Android應用程式上下文中進行root，無需libsu和IPC。
-- 提供**Kernel Patch Module**。
+Additionally, KPM provides the ability to do inline-hook, syscall-table-hook in
+kernel space.
 
-## 什麼是Kernel Patch Module？
+For more information, see [How to write a
+KPM](https://github.com/bmax121/KernelPatch/blob/main/doc/module.md)
 
-一些代碼在內核空間運行，類似於可加載內核模組（LKM）。
 
-此外，KPM提供在內核空間進行內聯挂鉤、系統調用表挂鉤的能力。
+## Relationship between APatch and KernelPatch
 
-[如何編寫KPM](https://github.com/bmax121/KernelPatch/blob/main/doc/module.md)
+APatch depends on KernelPatch, inherits all its capabilities, and has been
+expanded.
 
-## APatch與KernelPatch的關係
+You can install KernelPatch only, but this will not allow you to use Magisk
+modules, and to use superuser management, you need to install AndroidPatch and
+then uninstall it.
 
-APatch依賴於KernelPatch，繼承了其所有功能並進行了擴展。
+[Learn more about KernelPatch](https://github.com/bmax121/KernelPatch)
 
-您可以僅安裝KernelPatch，但這將不允許您使用Magisk模組，  
-要使用超級用戶管理，您需要安裝AndroidPatch，然後卸載它。
 
-[了解更多關於KernelPatch的資訊](https://github.com/bmax121/KernelPatch)
+## What is SuperKey?
+KernelPatch adds a new system call (syscall) to provide all capabilities to apps
+and programs in userspace, this syscall is referred to as **SuperCall**. When an
+app/program tries to invoke **SuperCall**, it needs to provide an access
+credential, known as the **SuperKey**. **SuperCall** can only be successfully
+invoked if the **SuperKey** is correct and if it's not the caller will remain
+unaffected.
 
-## 什麼是SuperKey？
 
-KernelPatch透過挂鉤系統調用提供所有功能給用戶空間，這個系統調用被稱為**SuperCall**。  
-調用SuperCall需要傳遞一種憑證，稱為**SuperKey**。  
-只有在SuperKey正確的情況下，SuperCall才能成功調用；如果SuperKey不正確，調用者將不受影響。
-
-## 關於SELinux如何處理？
-
-- KernelPatch不修改SELinux上下文，透過挂鉤繞過SELinux，  
-  這允許您在應用程式上下文中root Android線程，無需使用libsu啟動新進程，然後執行IPC。這非常方便。
-- 此外，APatch直接利用magiskpolicy提供額外的SELinux支援。  
-  但是，僅這樣會被檢測為Magisk。有興趣的人可以嘗試繞過，問題已經很明確。
+## How about SELinux?
+- KernelPatch don't modify the SELinux context and bypasses SELinux via a hook.
+  This allows you to root an Android thread within the app context without the
+  need to use libsu to start a new process and then perform IPC. This is very
+  convenient.
+- In addition, APatch directly utilizes magiskpolicy to provide additional
+  SELinux support.\
+  However, only this will be detected as Magisk. Anyone interested can try to
+  bypass it, the issue is already quite clear.

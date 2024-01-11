@@ -1,48 +1,62 @@
-## Foire aux questions (FAQ)
+# FAQ
 
-## Qu'est-ce qu'APatch ?
 
-APatch est une méthode de root, similaire à Magisk ou KernelSU, offrant encore plus de fonctionnalités.
+## What is APatch?
+APatch is a root solution similar to Magisk or KernelSU that unites the best of
+both. It combines Magisk's convenient and easy install method through `boot.img`
+with KernelSU's powerful kernel patching abilities.
 
-## Quelle est la différence entre APatch et Magisk ?
 
-- Magisk modifie init, tandis qu'APatch patche le noyau Linux.
+## What's the difference between APatch and Magisk?
+- Magisk modifies the init system with a patch in your boot image's ramdisk,
+  while APatch patches the kernel directly.
 
-## Quelle est la différence entre APatch et KernelSU ?
+## APatch vs KernelSU
+- KernelSU requires the source code for your device's kernel which is not always
+  provided by the OEM. APatch works with just your stock `boot.img`.
 
-- KernelSU nécessite le code source. APatch n'a besoin que du fichier boot.img.
+## APatch vs Magisk, KernelSU
+- APatch allows you to optionally not modify SELinux. It also allows you to root
+  an app's thread without creating a new one, so libsu and IPC are not required.
+- **Kernel Patch Module** provided.
 
-## Quelle est la différence entre APatch, Magisk et KernelSU ?
+## What is Kernel Patch Module?
+Some code runs in Kernel Space, similar to Loadable Kernel Modules (LKM).
 
-- Optionnellement, ne modifie pas SELinux. Root dans le contexte d'application Android, libsu et d'IPC non nécessaires
-- Fournit **Kernel Patch Module**
+Additionally, KPM provides the ability to do inline-hook, syscall-table-hook in
+kernel space.
 
-## Qu'est-ce que Kernel Patch Module ?
+For more information, see [How to write a
+KPM](https://github.com/bmax121/KernelPatch/blob/main/doc/module.md)
 
-Certains codes s'exécutent dans l'espace du noyau, à l'instar des modules noyau chargeables (LKM, Loadable Kernel Modules).
 
-De plus, KPM offre la possibilité d'effectuer des inline-hook, syscall-table-hook dans l'espace noyau.
+## Relationship between APatch and KernelPatch
 
-[Comment écrire un module KPM](https://github.com/bmax121/KernelPatch/blob/main/doc/fr/module.md)
+APatch depends on KernelPatch, inherits all its capabilities, and has been
+expanded.
 
-## Relation entre APatch et KernelPatch
+You can install KernelPatch only, but this will not allow you to use Magisk
+modules, and to use superuser management, you need to install AndroidPatch and
+then uninstall it.
 
-APatch dépend de KernelPatch, héritant de toutes ses fonctionnalités, et l'étendant.
+[Learn more about KernelPatch](https://github.com/bmax121/KernelPatch)
 
-Vous pouvez installer KernelPatch seul, mais cela ne vous permettra pas d'utiliser de module Magisk.
-Pour utiliser la gestion super utilisateur, vous devez installer AndroidPatch puis le désinstaller.
 
-[En savoir plus sur KernelPatch](https://github.com/bmax121/KernelPatch)
+## What is SuperKey?
+KernelPatch adds a new system call (syscall) to provide all capabilities to apps
+and programs in userspace, this syscall is referred to as **SuperCall**. When an
+app/program tries to invoke **SuperCall**, it needs to provide an access
+credential, known as the **SuperKey**. **SuperCall** can only be successfully
+invoked if the **SuperKey** is correct and if it's not the caller will remain
+unaffected.
 
-## Qu'est-ce que la clé (SuperKey) ?
 
-KernelPatch fournit toutes les fonctionnalités à l'espace utilisateur en effectuant un appel système appelé **SuperCall**.  
-L'appel du SuperCall nécessite le passage d'un type d'informations d'identification appelé **SuperKey**.  
-Un SuperCall ne peut être effectué avec succès que si la clé est correcte. Si la clé est incorrecte, l'appelant ne sera pas affecté.
-
-## Qu'en est-il de SELinux ?
-
-- KernelPatch ne modifie pas le contexte SELinux et contourne SELinux via des hooks.  
-  Cela vous permet de rooter un processus Android dans le contexte de applicatif, sans avoir à démarrer un nouveau processus avec libsu et ensuite exécuter l'IPC.
-- De plus, APatch fournit un support SELinux supplémentaire directement via magiskpolicy.  
-  Cependant, seul ce dernier sera détecté en tant que Magisk. Toute personne intéressée peut essayer de le contourner, le problème est déjà très clair.
+## How about SELinux?
+- KernelPatch don't modify the SELinux context and bypasses SELinux via a hook.
+  This allows you to root an Android thread within the app context without the
+  need to use libsu to start a new process and then perform IPC. This is very
+  convenient.
+- In addition, APatch directly utilizes magiskpolicy to provide additional
+  SELinux support.\
+  However, only this will be detected as Magisk. Anyone interested can try to
+  bypass it, the issue is already quite clear.
