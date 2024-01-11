@@ -484,9 +484,9 @@ private fun AStatusCard(state: APApplication.State, navigator: DestinationsNavig
                                     state.equals(APApplication.State.KERNELPATCH_READY)
                                             || state.equals(APApplication.State.ANDROIDPATCH_NEED_UPDATE) -> {
                                         APApplication.install()
-                                        if (state.equals(APApplication.State.ANDROIDPATCH_NEED_UPDATE)) {
-                                            navigator.navigate(PatchScreenDestination(null, apApp.getSuperKey()))
-                                        }
+//                                        if (state.equals(APApplication.State.ANDROIDPATCH_NEED_UPDATE)) {
+//                                            navigator.navigate(PatchScreenDestination(null, apApp.getSuperKey()))
+//                                        }
                                     }
                                     state.equals(APApplication.State.ANDROIDPATCH_INSTALLED) -> {
                                         APApplication.uninstall()
