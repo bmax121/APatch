@@ -1,6 +1,6 @@
 # APatch
 
-<img src="https://github.com/bmax121/APatch/assets/92950980/70a840b5-eaff-46da-b8f3-2b6a21b85e1b" style="width: 100px;" alt="logo">
+<img src="https://github.com/Traaanaelle/APatch/assets/63869398/aed937ed-6545-420f-a048-b65fafce15c0" style="width: 128px;" alt="logo">
 
 </br>
 
