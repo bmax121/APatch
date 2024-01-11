@@ -47,6 +47,9 @@ To help translate APatch or improve existing translations, please use [Weblate](
 
 Installation guide (coming soon)
 
+### Updates
+- Telegram Channel: [@APatchChannel](https://t.me/APatchChannel)
+
 ### Discussions
 
 - Telegram Group: [@APatchGroup](https://t.me/APatchGroup)
