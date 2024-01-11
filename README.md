@@ -1,6 +1,6 @@
 # APatch
 
-<a href="https://github.com/bmax121/APatch/releases/latest<img src="https://github.com/Traaanaelle/APatch/assets/63869398/aed937ed-6545-420f-a048-b65fafce15c0" style="width: 128px;" alt="logo"></a>
+<a href="https://github.com/bmax121/APatch/releases/latest><img src="https://github.com/Traaanaelle/APatch/assets/63869398/aed937ed-6545-420f-a048-b65fafce15c0" style="width: 128px;" alt="logo"></a>
 
 </br>
 
