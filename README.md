@@ -55,8 +55,6 @@ Installation guide (coming soon)
 - Telegram Channel: [@APatchChannel](https://t.me/APatchChannel)
 
 ### Discussions
-
-- Telegram Channel: [@APatchChannel](https://t.me/APatchChannel)
 - Telegram Group: [@APatchGroup](https://t.me/APatchGroup)
 - 中文: [@APatch_CN_Group](https://t.me/APatch_CN_Group)
 
