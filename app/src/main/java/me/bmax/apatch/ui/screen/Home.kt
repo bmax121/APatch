@@ -466,11 +466,9 @@ private fun AStatusCard(state: APApplication.State, navigator: DestinationsNavig
                             )
                         }
                         else -> {
-                            Column(Modifier.padding(start = 6.dp)) {
-                                Text(text = stringResource(R.string.home_install_unknown),
-                                    style = MaterialTheme.typography.titleMedium
-                                )
-                            }
+                            Text(text = stringResource(R.string.home_install_unknown),
+                                style = MaterialTheme.typography.titleMedium
+                            )
                         }
                     }
                 }
