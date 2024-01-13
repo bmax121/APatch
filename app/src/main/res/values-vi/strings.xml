@@ -20,23 +20,24 @@
     <string name="home_not_installed">Chưa cài đặt</string>
     <string name="home_install_unknown">Không xác định</string>
     <string name="home_click_to_install">Bấm để cài đặt</string>
-    <string name="home_working">Đang làm việc…</string>
+    <string name="home_working">Đang làm việc</string>
     <string name="home_installing">Cài đặt…</string>
     <string name="home_need_update">Có bản cập nhật mới</string>
-    <string name="kpatch_version">Phiên bản %d.%d.%d</string>
-    <string name="apatch_version_update">Phiên bản: %s → %s</string>
+    <string name="kpatch_version">Phiên bản: %d.%d.%d</string>
+    <string name="apatch_version_update">Phiên bản:
+\n%s -&gt; %s</string>
     <string name="home_auth_key_title">Nhập Siêu Khóa</string>
     <string name="home_auth_key_desc">Bắt đầu sau khi được chứng nhận</string>
     <string name="home_ap_cando_install">Cài đặt</string>
     <string name="home_ap_cando_update">Cập nhật</string>
     <string name="home_ap_cando_uninstall">Gỡ cài đặt</string>
-    <string name="patch_title">Vá</string>
+    <string name="patch_title">Vá boot</string>
     <string name="home_manager_version">Phiên bản Trình quản lý</string>
     <string name="home_fingerprint">Vân tay</string>
     <string name="home_selinux_status">Trạng thái SELinux</string>
     <string name="home_selinux_status_disabled">Vô hiệu hóa</string>
     <string name="home_selinux_status_enforcing">Đang thực thi</string>
-    <string name="home_selinux_status_permissive">Permissive</string>
+    <string name="home_selinux_status_permissive">Cho phép</string>
     <string name="home_selinux_status_unknown">Không xác định</string>
     <string name="kpm_kp_not_installed">KernelPatch chưa được cài đặt</string>
     <string name="kpm_load_toast_succ">Tải thành công</string>
@@ -71,7 +72,8 @@
     <string name="patch_warnning">Việc cài đặt đi kèm với rủi ro. Hãy đảm bảo dữ liệu của bạn đã được sao lưu.</string>
     <string name="super_key">Siêu khóa</string>
     <string name="home_patch_set_key_title">Đặt siêu khóa</string>
-    <string name="apatch_version">Phiên bản %s</string>
+    <string name="apatch_version">Phiên bản:
+\n%s</string>
     <string name="home_learn_apatch">Tìm hiểu AndroidPatch</string>
     <string name="home_patch_set_key_desc">Chỉ có thông tin xác thực cho KernelPatch</string>
     <string name="kpm_author">Tác giả</string>
@@ -85,12 +87,14 @@
     <string name="clear_super_key">Xóa khóa</string>
     <string name="apm_magisk_conflict">Các module đã bị vô hiệu hóa do xung đột với module của Magisk.</string>
     <string name="about_source_code">Xem mã nguồn tại %1$s<br/>Tham gia kênh %2$s của chúng tôi</string>
-    <string name="home_su_path">su %s</string>
-    <string name="home_su_path_ex">su %s → %s</string>
-    <string name="kpatch_shadow_path">kpatch %s → %s</string>
-    <string name="home_apatch_version">APatch %s</string>
+    <string name="home_su_path">su: %s</string>
+    <string name="home_su_path_ex">su: %s -&gt; %s</string>
+    <string name="kpatch_shadow_path">kpatch: %s -&gt; %s</string>
     <string name="home_kernel">Kernel</string>
     <string name="kpm">KPModule</string>
     <string name="su_title">Superuser</string>
     <string name="apm">APModule</string>
+    <string name="settings_app_language">Ngôn ngữ</string>
+    <string name="system_default">Mặc định hệ thống</string>
+    <string name="home_apatch_version">APatch: %s</string>
 </resources>

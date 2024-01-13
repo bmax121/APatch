@@ -95,4 +95,7 @@
     <string name="apm_uninstall">Désinstaller</string>
     <string name="su_pkg_excluded_setting_title">Exclure</string>
     <string name="apm_overlay_fs_not_available">OverlayFS n\'est pas disponible. Le module ne peut pas fonctionner.</string>
+    <string name="patch">Patcher</string>
+    <string name="settings_app_language">Langage</string>
+    <string name="system_default">Par défaut</string>
 </resources>

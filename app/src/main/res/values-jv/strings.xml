@@ -12,7 +12,7 @@
     <string name="clear_super_key">Apos Kunci</string>
     <string name="home_patch_set_key_title">Set SuperKey</string>
     <string name="home">Omah</string>
-    <string name="patch_warnning">Tindakan bahaya lur, backup data data mu disek.</string>
+    <string name="patch_warnning">Tindakan bahaya lur, backup data mu disek.</string>
     <string name="kernel_patch">KernelPatch</string>
     <string name="reboot_recovery">Mbalek nang Recovery</string>
     <string name="reboot_bootloader">Mbalek nang Bootloader</string>

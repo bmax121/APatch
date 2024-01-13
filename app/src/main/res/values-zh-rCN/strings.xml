@@ -30,13 +30,12 @@
     <string name="home_patch_next_step">下一步</string>
     <string name="home_not_installed">未安装</string>
     <string name="reboot_bootloader">重启至 Bootloader</string>
-    <string name="about_source_code">查看源码 %1$s<br/>加入我们的 %2$s 频道</string>
+    <string name="about_source_code">查看源码 %1$s，<br/>加入我们的 %2$s 频道</string>
     <string name="kpatch_shadow_path">kpatch: %s -&gt; %s</string>
     <string name="home_auth_key_desc">通过认证后开始工作</string>
     <string name="kpatch_version">版本：%d.%d.%d</string>
     <string name="home_ap_cando_uninstall">卸载</string>
-    <string name="apatch_version">版本：
-\n%s</string>
+    <string name="apatch_version">版本：%s</string>
     <string name="home_ap_cando_install">安装</string>
     <string name="home_su_path_ex">su: %s -&gt; %s</string>
     <string name="home_apatch_version">APatch: %s</string>
@@ -90,9 +89,12 @@
     <string name="apm_downloading">正在下载“%s”模块……</string>
     <string name="apm_magisk_conflict">由于与Magisk中的模块发生冲突，模块已被关闭。</string>
     <string name="apm_desc">描述</string>
-    <string name="apm_new_version_available">点击以安装新版本，%s</string>
+    <string name="apm_new_version_available">点击安装新版本，%s</string>
     <string name="apm_update">更新</string>
     <string name="apm_author">作者</string>
     <string name="clear_super_key">清除密钥</string>
     <string name="apm_not_installed">AndroidPatch 未安装</string>
+    <string name="system_default">系统默认</string>
+    <string name="settings_app_language">语言</string>
+    <string name="patch">修补</string>
 </resources>

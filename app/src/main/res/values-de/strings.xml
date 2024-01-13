@@ -9,7 +9,8 @@
     <string name="settings">Einstellungen</string>
     <string name="home_install_unknown">Unbekannt</string>
     <string name="home_need_update">Eine neue Version ist verfügbar</string>
-    <string name="apatch_version">Version %s</string>
+    <string name="apatch_version">Version:
+\n%s</string>
     <string name="home_ap_cando_install">Installieren</string>
     <string name="home_ap_cando_update">Aktualisieren</string>
     <string name="home_ap_cando_uninstall">Deinstallieren</string>
@@ -23,8 +24,9 @@
     <string name="home_learn_apatch">Lernen Sie AndroidPatch</string>
     <string name="home_patch_set_key_desc">Nur Anmeldedaten für KernelPatch</string>
     <string name="home_patch_next_step">Nächster Schritt</string>
-    <string name="kpatch_version">Version %d.%d.%d</string>
-    <string name="apatch_version_update">Version %s → %s</string>
+    <string name="kpatch_version">Version: %d.%d.%d</string>
+    <string name="apatch_version_update">Version:
+\n%s -&gt; %s</string>
     <string name="home_auth_key_desc">Start nach Zertifizierung</string>
     <string name="home_manager_version">Manager Version</string>
     <string name="su_pkg_excluded_setting_summary">für Module</string>
@@ -35,8 +37,8 @@
     <string name="apm_start_downloading">Starten Sie das Herunterladen von %s</string>
     <string name="kpm_unload_confirm">Modul \"%s\" entladen?</string>
     <string name="apm_failed_to_enable">Das Modul \"%s\" konnte nicht eingeschaltet werden</string>
-    <string name="kpatch_shadow_path">kpatch %s → %s</string>
-    <string name="home_apatch_version">APatch %s</string>
+    <string name="kpatch_shadow_path">kpatch: %s -&gt; %s</string>
+    <string name="home_apatch_version">APatch: %s</string>
     <string name="home_selinux_status">SELinux-Status</string>
     <string name="reboot_recovery">Neustart zur Recovery</string>
     <string name="reboot_download">Neustart zum Herunterladen</string>
@@ -45,9 +47,9 @@
     <string name="send_log">Verlauf senden</string>
     <string name="safe_mode">Sicherer Modus</string>
     <string name="home_click_to_install">Zum Installieren klicken</string>
-    <string name="home_working">Arbeitet…</string>
-    <string name="home_su_path">su %s</string>
-    <string name="home_su_path_ex">su %s → %s</string>
+    <string name="home_working">In Arbeit</string>
+    <string name="home_su_path">su: %s</string>
+    <string name="home_su_path_ex">su: %s -&gt; %s</string>
     <string name="patch_title">Patch</string>
     <string name="su_pkg_excluded_label">Absondern</string>
     <string name="home_selinux_status_enforcing">Enforcing</string>
@@ -56,7 +58,7 @@
     <string name="super_key">Superschlüssel</string>
     <string name="clear_super_key">Schlüssel löschen</string>
     <string name="home_patch_set_key_title">Setze den Superschlüssel</string>
-    <string name="home_installing">Installiert…</string>
+    <string name="home_installing">Am installieren</string>
     <string name="home_auth_key_title">Superschlüssel eingeben</string>
     <string name="kpm">KPModule</string>
     <string name="home_selinux_status_unknown">Unbekannt</string>
@@ -93,4 +95,6 @@
     <string name="su_refresh">Auffrischen</string>
     <string name="apm_desc">Desc</string>
     <string name="apm_changelog">Änderungsverlauf</string>
+    <string name="settings_app_language">Sprache</string>
+    <string name="system_default">Systemstandard</string>
 </resources>
