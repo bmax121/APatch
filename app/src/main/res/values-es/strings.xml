@@ -95,4 +95,7 @@
     <string name="apm_author">Autor</string>
     <string name="clear_super_key">Remover clave</string>
     <string name="apm_not_installed">AndroidPatch no está instalado</string>
+    <string name="settings_app_language">Idioma</string>
+    <string name="system_default">Predeterminado del sistema</string>
+    <string name="patch">Parche</string>
 </resources>
