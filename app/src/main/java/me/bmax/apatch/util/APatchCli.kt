@@ -1,7 +1,6 @@
 package me.bmax.apatch.util
 
 import android.net.Uri
-import android.os.SystemClock
 import android.util.Log
 import com.topjohnwu.superuser.CallbackList
 import com.topjohnwu.superuser.Shell
@@ -32,7 +31,13 @@ fun createRootShell(): Shell {
     Shell.enableVerboseLogging = BuildConfig.DEBUG
     val builder = Shell.Builder.create()
     return try {
-        builder.build(getKPatchPath(), APApplication.superKey, "su", "-x", APApplication.MAGISK_SCONTEXT)
+        builder.build(
+            getKPatchPath(),
+            APApplication.superKey,
+            "su",
+            "-x",
+            APApplication.MAGISK_SCONTEXT
+        )
     } catch (e: Throwable) {
         Log.e(TAG, "su failed: ", e)
         builder.build("sh")
@@ -43,13 +48,19 @@ fun createRootShellForLog(): Shell {
     Shell.enableVerboseLogging = BuildConfig.DEBUG
     val builder = Shell.Builder.create()
     return try {
-        builder.build(getKPatchPath(), APApplication.superKey, "su", "-x", APApplication.MAGISK_SCONTEXT)
+        builder.build(
+            getKPatchPath(),
+            APApplication.superKey,
+            "su",
+            "-x",
+            APApplication.MAGISK_SCONTEXT
+        )
     } catch (e: Throwable) {
         Log.e(TAG, "su failed: ", e)
         return try {
             Log.e(TAG, "retry su: ", e)
             builder.build("su")
-        } catch(e: Throwable) {
+        } catch (e: Throwable) {
             Log.e(TAG, "retry su failed: ", e)
             builder.build("sh")
         }
@@ -100,7 +111,12 @@ fun uninstallModule(id: String): Boolean {
     return result
 }
 
-fun installModule(uri: Uri, onFinish: (Boolean) -> Unit, onStdout: (String) -> Unit, onStderr: (String) -> Unit): Boolean {
+fun installModule(
+    uri: Uri,
+    onFinish: (Boolean) -> Unit,
+    onStdout: (String) -> Unit,
+    onStderr: (String) -> Unit
+): Boolean {
     val resolver = apApp.contentResolver
     with(resolver.openInputStream(uri)) {
         val file = File(apApp.cacheDir, "module.zip")
@@ -124,7 +140,8 @@ fun installModule(uri: Uri, onFinish: (Boolean) -> Unit, onStdout: (String) -> U
         }
 
         val result =
-            shell.newJob().add("${APApplication.APD_PATH} $cmd").to(stdoutCallback, stderrCallback).exec()
+            shell.newJob().add("${APApplication.APD_PATH} $cmd").to(stdoutCallback, stderrCallback)
+                .exec()
         Log.i(TAG, "install module $uri result: $result")
 
         file.delete()
@@ -157,6 +174,21 @@ fun hasMagisk(): Boolean {
     return result.isSuccess
 }
 
+fun isGlobalNamespaceEnabled(): Boolean {
+    val result =
+        ShellUtils.fastCmd("nsenter --mount=/proc/1/ns/mnt cat ${APApplication.GLOBAL_NAMESPACE_FILE}")
+    Log.i(TAG, "is global namespace enabled: $result")
+    return result == "1"
+}
+
+fun setGlobalNamespaceEnabled(value: String) {
+    getRootShell().newJob()
+        .add("nsenter --mount=/proc/1/ns/mnt echo $value > ${APApplication.GLOBAL_NAMESPACE_FILE}")
+        .submit { result ->
+            Log.i(TAG, "setGlobalNamespaceEnabled result: ${result.isSuccess} [${result.out}]")
+        }
+}
+
 fun forceStopApp(packageName: String) {
     val shell = getRootShell()
     val result = shell.newJob().add("am force-stop $packageName").exec()
@@ -165,7 +197,8 @@ fun forceStopApp(packageName: String) {
 
 fun launchApp(packageName: String) {
     val shell = getRootShell()
-    val result = shell.newJob().add("monkey -p $packageName -c android.intent.category.LAUNCHER 1").exec()
+    val result =
+        shell.newJob().add("monkey -p $packageName -c android.intent.category.LAUNCHER 1").exec()
     Log.i(TAG, "launch $packageName result: $result")
 }
 

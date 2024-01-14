@@ -44,6 +44,7 @@ class APApplication : Application() {
         val PACKAGE_CONFIG_FILE = APATCH_FLODER + "package_config"
         val SU_PATH_FILE = APATCH_FLODER + "su_path"
         val SAFEMODE_FILE = "/dev/.safemode"
+        val GLOBAL_NAMESPACE_FILE = "/data/adb/.global_namespace_enable"
 
         val KPATCH_VERSION_PATH = APATCH_FLODER + "kpatch_version"
         val APATCH_VERSION_PATH = APATCH_FLODER + "apatch_version"

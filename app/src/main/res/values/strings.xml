@@ -19,6 +19,8 @@
     <string name="about">About</string>
     <string name="settings_app_language">Language</string>
     <string name="system_default">System default</string>
+    <string name="settings_global_namespace_mode">Global Namespace Mode</string>
+    <string name="settings_global_namespace_mode_summary">All root sessions use the global mount namespace</string>
 
     <string name="home_learn_apatch">Learn AndroidPatch</string>
     <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
