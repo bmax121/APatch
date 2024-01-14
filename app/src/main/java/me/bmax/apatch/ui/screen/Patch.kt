@@ -33,6 +33,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.bmax.apatch.R
 import me.bmax.apatch.TAG
+import me.bmax.apatch.APApplication
 import me.bmax.apatch.apApp
 import me.bmax.apatch.util.reboot
 import java.io.File
@@ -195,7 +196,7 @@ fun patchBootimg(uri: Uri?, superKey: String, logs: MutableList<String>): Boolea
         apApp.assets.open(script).writeTo(dest)
     }
 
-    val apVer = getManagerVersion().second
+    val apVer = APApplication.getManagerVersion().second
     val rand = (1..4).map { ('a'..'z').random() }.joinToString("")
     val outFilename = "apatch_${apVer}_${rand}_boot.img"
     val patchCommand = if (uri != null) "sh boot_patch.sh $superKey ${srcBoot?.path}" else "sh boot_patch.sh $superKey"
@@ -230,7 +231,7 @@ fun patchBootimg(uri: Uri?, superKey: String, logs: MutableList<String>): Boolea
             } else {
                 newBootFile.inputStream().copyAndClose(outPath.outputStream())
             }
-            
+
             if (succ) {
                 logs.add(" Write patched boot.img was successful")
                 logs.add(" Output file is written to ")

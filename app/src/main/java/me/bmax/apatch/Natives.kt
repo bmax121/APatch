@@ -58,7 +58,7 @@ object Natives {
     }
 
     private external fun nativeKernelPatchVersion(superKey: String): Long
-    fun kerenlPatchVersion(): Long {
+    fun kernelPatchVersion(): Long {
         return nativeKernelPatchVersion(APApplication.superKey)
     }
     private external fun nativeLoadKernelPatchModule(superKey: String, modulePath: String, args: String): Long
