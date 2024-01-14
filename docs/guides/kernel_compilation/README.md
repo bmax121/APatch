@@ -1,8 +1,14 @@
 # How to compile the kernel for unsupported devices like Samsung..?
 <h3><p><hr>
-<b>Requiremenets :</b> A Working brain 🧠, PC/RDP with any linux GUI distro, Knowledge of basic commands in Linux.
+<b>What you'll need :</b> A Working brain 🧠, PC/RDP with any linux GUI distro, Knowledge of basic commands in Linux.
 </p>
-<br>The video Guide for this tutorial can be found here : Open in YouTube </h3><hr>
+	
+### Requirements for compiling kernels : (Paste this in terminal.)
+ ```
+sudo apt update -y
+sudo apt install default-jdk git-core gnupg flex bison gperf build-essential zip curl libc6-dev libncurses5-dev x11proto-core-dev libx11-dev libreadline6-dev libgl1-mesa-glx libgl1-mesa-dev python3 make sudo gcc g++ bc grep tofrodos python3-markdown libxml2-utils xsltproc zlib1g-dev libncurses5 python-is-python3 libc6-dev libtinfo5 ncurses-dev make -y
+```
+<br>❗The video Guide for this tutorial can be found here : Open in YouTube </h3><hr>
 
 ### 01. Download the kernel source from the [Samsung Opensource]( https://opensource.samsung.com/main).
 <img src="https://github.com/ravindu644/APatch/assets/126038496/aad04d45-e1b3-4baf-a8e0-2ef27d7dae55" width="45%">
