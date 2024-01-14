@@ -4,8 +4,8 @@ import android.content.Context
 import android.os.Build
 import android.system.Os
 import com.topjohnwu.superuser.ShellUtils
+import me.bmax.apatch.APApplication
 import me.bmax.apatch.Natives
-import me.bmax.apatch.ui.screen.getManagerVersion
 import java.io.File
 import java.io.FileWriter
 import java.io.PrintWriter
@@ -62,7 +62,7 @@ fun getBugreportFile(context: Context): File {
         pw.println("PREVIEW_SDK: " + Build.VERSION.PREVIEW_SDK_INT)
         pw.println("FINGERPRINT: " + Build.FINGERPRINT)
         pw.println("DEVICE: " + Build.DEVICE)
-        pw.println("Manager: " + getManagerVersion())
+        pw.println("Manager: " + APApplication.getManagerVersion())
         pw.println("SELinux: $selinux")
 
         val uname = Os.uname()
@@ -72,8 +72,8 @@ fun getBugreportFile(context: Context): File {
         pw.println("Nodename: ${uname.nodename}")
         pw.println("Sysname: ${uname.sysname}")
 
-        pw.println("KPatch: ${Natives.kerenlPatchVersion()}")
-        pw.println("APatch: ${getManagerVersion()}")
+        pw.println("KPatch: ${APApplication.getKernelPatchVersion()}")
+        pw.println("APatch: ${APApplication.getManagerVersion()}")
         val safeMode = false
         pw.println("SafeMode: $safeMode")
     }

@@ -76,6 +76,12 @@ fun getModuleCount(): Int {
     }.getOrElse { return 0 }
 }
 
+fun getSuperuserCount(): Int {
+    val shell = getRootShell()
+    val out = shell.newJob().add("${APApplication.KPATCH_PATH} ${APApplication.superKey} sumgr list | wc -l").to(ArrayList(), null).exec().out
+    return out[0].toIntOrNull() ?: 0
+}
+
 fun toggleModule(id: String, enable: Boolean): Boolean {
     val cmd = if (enable) {
         "module enable $id"
