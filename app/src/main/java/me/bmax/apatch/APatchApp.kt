@@ -11,11 +11,12 @@ import coil.Coil
 import coil.ImageLoader
 import com.topjohnwu.superuser.CallbackList
 import com.topjohnwu.superuser.Shell
-import me.bmax.apatch.ui.screen.getManagerVersion
+import me.bmax.apatch.util.*
 import me.zhanghai.android.appiconloader.coil.AppIconFetcher
 import me.zhanghai.android.appiconloader.coil.AppIconKeyer
 import java.io.File
 import kotlin.concurrent.thread
+import org.json.JSONArray
 
 lateinit var apApp: APApplication
 
@@ -24,13 +25,15 @@ val TAG = "APatch"
 class APApplication : Application() {
     enum class State {
         UNKNOWN_STATE,
-        KERNELPATCH_READY,
+        KERNELPATCH_INSTALLED,
         KERNELPATCH_NEED_UPDATE,
-        ANDROIDPATCH_NEED_UPDATE,
-        ANDROIDPATCH_INSTALLING,
-        ANDROIDPATCH_UNINSTALLING,
+        ANDROIDPATCH_READY,
         ANDROIDPATCH_INSTALLED,
+        ANDROIDPATCH_INSTALLING,
+        ANDROIDPATCH_NEED_UPDATE,
+        ANDROIDPATCH_UNINSTALLING,
     }
+
     companion object {
         val APD_PATH = "/data/adb/apd"
         val KPATCH_PATH = "/data/adb/kpatch"
@@ -42,10 +45,11 @@ class APApplication : Application() {
         val KPATCH_LINK_PATH = APATCH_BIN_FLODER + "kpatch"
         val PACKAGE_CONFIG_FILE = APATCH_FLODER + "package_config"
         val SU_PATH_FILE = APATCH_FLODER + "su_path"
-        val SAFEMODE_FILE = "/dev/.sefemode"
+        val SAFEMODE_FILE = "/dev/.safemode"
         val GLOBAL_NAMESPACE_FILE = "/data/adb/.global_namespace_enable"
 
-        val APATCH_VERSION_PATH = APATCH_FLODER + "version"
+        val KPATCH_VERSION_PATH = APATCH_FLODER + "kpatch_version"
+        val APATCH_VERSION_PATH = APATCH_FLODER + "apatch_version"
         val MAGISKPOLICY_BIN_PATH = APATCH_BIN_FLODER + "magiskpolicy"
         val BUSYBOX_BIN_PATH = APATCH_BIN_FLODER + "busybox"
         val RESETPROP_BIN_PATH = APATCH_BIN_FLODER + "resetprop"
@@ -54,23 +58,58 @@ class APApplication : Application() {
         val DEFAULT_SU_PATH = "/system/bin/kp"
         val LEGACY_SU_PATH = "/system/bin/su"
 
-        // todo: should we store super_key in SharedPreferences
+        // TODO: encrypt super_key before saving it on SharedPreferences
         private const val SUPER_KEY = "super_key"
         private const val SHOW_BACKUP_WARN = "show_backup_warning"
         private lateinit var sharedPreferences: SharedPreferences
 
+        private val logCallback: CallbackList<String?> = object : CallbackList<String?>() {
+            override fun onAddElement(s: String?) {
+                Log.d(TAG, s.toString())
+            }
+        }
+
+        private val _kpStateLiveData = MutableLiveData<State>(State.UNKNOWN_STATE)
+        val kpStateLiveData: LiveData<State> = _kpStateLiveData
+
         private val _apStateLiveData = MutableLiveData<State>(State.UNKNOWN_STATE)
         val apStateLiveData: LiveData<State> = _apStateLiveData
 
-        var apatchVersion: Int = 0
+        var kPatchVersion: String = ""
+        var aPatchVersion: Int = 0
 
-        fun uninstall() {
-            if(_apStateLiveData.value != State.ANDROIDPATCH_INSTALLED) return
+        fun installKpatch() {
+            if (_kpStateLiveData.value != State.KERNELPATCH_NEED_UPDATE) {
+                return
+            }
+
+            thread {
+                val rc = Natives.su(0, null)
+                if (!rc) {
+                    Log.e(TAG, "Native.su failed: " + rc)
+                    return@thread
+                }
+
+                kPatchVersion = getKPatchVersion()
+
+                val cmds = arrayOf(
+                    "echo ${kPatchVersion} > ${KPATCH_VERSION_PATH}",
+                )
+
+                Shell.getShell().newJob().add(*cmds).to(logCallback, logCallback).exec()
+
+                Log.d(TAG, "KPatch installed ...")
+                _kpStateLiveData.postValue(State.KERNELPATCH_INSTALLED)
+            }
+        }
+
+        fun uninstallApatch() {
+            if (_apStateLiveData.value != State.ANDROIDPATCH_INSTALLED) return
             _apStateLiveData.value = State.ANDROIDPATCH_UNINSTALLING
 
             thread {
                 val rc = Natives.su(0, null)
-                if(!rc) {
+                if (!rc) {
                     Log.e(TAG, "Native.su failed: " + rc)
                     _apStateLiveData.postValue(State.ANDROIDPATCH_INSTALLED)
                     return@thread
@@ -81,33 +120,28 @@ class APApplication : Application() {
                 File(APATCH_VERSION_PATH).delete()
                 File(APD_PATH).delete()
                 // Reserved, used to obtain logs
-//                File(KPATCH_PATH).delete()
+                // File(KPATCH_PATH).delete()
                 File(APATCH_FLODER).deleteRecursively()
 
                 Log.d(TAG, "APatch removed ...")
 
-                _apStateLiveData.postValue(State.KERNELPATCH_READY)
+                _apStateLiveData.postValue(State.ANDROIDPATCH_READY)
             }
         }
 
-        fun install() {
+        fun installApatch() {
             val state = _apStateLiveData.value
-            if(_apStateLiveData.value != State.KERNELPATCH_READY
-                && _apStateLiveData.value != State.ANDROIDPATCH_NEED_UPDATE) {
+            if (_apStateLiveData.value != State.ANDROIDPATCH_READY &&
+                _apStateLiveData.value != State.ANDROIDPATCH_NEED_UPDATE) {
                 return
             }
             _apStateLiveData.value = State.ANDROIDPATCH_INSTALLING
 
             val nativeDir = apApp.applicationInfo.nativeLibraryDir
-            val logCallback: CallbackList<String?> = object : CallbackList<String?>() {
-                override fun onAddElement(s: String?) {
-                    Log.d(TAG, s.toString())
-                }
-            }
 
             thread {
                 val rc = Natives.su(0, null)
-                if(!rc) {
+                if (!rc) {
                     Log.e(TAG, "Native.su failed: " + rc)
                     // revert state
                     _apStateLiveData.postValue(state)
@@ -140,6 +174,9 @@ class APApplication : Application() {
                     "[ -s ${SU_PATH_FILE} ] || echo ${LEGACY_SU_PATH} > ${SU_PATH_FILE}",
                     "echo ${getManagerVersion().second} > ${APATCH_VERSION_PATH}",
 
+                    "touch ${KPATCH_VERSION_PATH}",
+                    "[ -s ${KPATCH_VERSION_PATH} ] || echo ${getKernelPatchVersion()} > ${KPATCH_VERSION_PATH}",
+
                     "restorecon -R ${APATCH_FLODER}",
 
                     "${KPATCH_PATH} ${superKey} android_user init",
@@ -147,9 +184,26 @@ class APApplication : Application() {
 
                 Shell.getShell().newJob().add(*cmds).to(logCallback, logCallback).exec()
 
+                aPatchVersion = getManagerVersion().second
+                kPatchVersion = getKernelPatchVersion()
+
                 Log.d(TAG, "APatch installed ...")
                 _apStateLiveData.postValue(State.ANDROIDPATCH_INSTALLED)
             }
+        }
+
+        fun getManagerVersion(): Pair<String, Int> {
+            val packageInfo = apApp.packageManager.getPackageInfo(apApp.packageName, 0)
+            return Pair(packageInfo.versionName, packageInfo.versionCode)
+        }
+
+        fun getKernelPatchVersion(): String {
+            val kernelPatchVersion = Natives.kernelPatchVersion()
+            return "%d.%d.%d".format(
+                kernelPatchVersion.and(0xff0000).shr(16),
+                kernelPatchVersion.and(0xff00).shr(8),
+                kernelPatchVersion.and(0xff)
+            )
         }
 
         var superKey: String = ""
@@ -157,41 +211,55 @@ class APApplication : Application() {
             private set(value) {
                 field = value
                 val ready = Natives.nativeReady(value)
-                _apStateLiveData.value = if(ready) State.KERNELPATCH_READY else State.UNKNOWN_STATE
-                Log.d(TAG, "state: " + _apStateLiveData.value)
+                _kpStateLiveData.value = if (ready) State.KERNELPATCH_INSTALLED else State.UNKNOWN_STATE
+                _apStateLiveData.value = if (ready) State.ANDROIDPATCH_READY else State.UNKNOWN_STATE
+                Log.d(TAG, "state: " + _kpStateLiveData.value)
                 sharedPreferences.edit().putString(SUPER_KEY, value).apply()
 
                 thread {
                     val rc = Natives.su(0, null)
-                    if(!rc) {
+                    if (!rc) {
                         Log.e(TAG, "su failed: " + rc)
                         return@thread
                     }
 
-                    val vf = File(APATCH_VERSION_PATH)
+                    val kv = File(KPATCH_VERSION_PATH)
+                    val kvn = getKPatchVersion()
+                    if (kv.exists()) {
+                        kPatchVersion = kv.readLines().get(0)
+                        if (kPatchVersion == kvn) {
+                            _kpStateLiveData.postValue(State.KERNELPATCH_INSTALLED)
+                            Log.d(TAG, "state: " + State.KERNELPATCH_INSTALLED + ", version: " + kPatchVersion)
+                        } else {
+                            _kpStateLiveData.postValue(State.KERNELPATCH_NEED_UPDATE)
+                            Log.d(TAG, "state: " + State.KERNELPATCH_NEED_UPDATE + ", version: " + kPatchVersion + "->" + kvn)
+                        }
+                    }
+
+                    val av = File(APATCH_VERSION_PATH)
                     val mgv = getManagerVersion().second
-                    if(vf.exists()) {
-                        //
-                        apatchVersion = vf.readLines().get(0).toInt()
-                        if(apatchVersion == mgv) {
+                    if (av.exists()) {
+                        aPatchVersion = av.readLines().get(0).toInt()
+                        if (aPatchVersion == mgv) {
                             _apStateLiveData.postValue(State.ANDROIDPATCH_INSTALLED)
-                            Log.d(TAG, "state: " + State.ANDROIDPATCH_INSTALLED + ", version: " + apatchVersion)
+                            Log.d(TAG, "state: " + State.ANDROIDPATCH_INSTALLED + ", version: " + aPatchVersion)
                         } else {
                             _apStateLiveData.postValue(State.ANDROIDPATCH_NEED_UPDATE)
-                            Log.d(TAG, "state: " + State.ANDROIDPATCH_NEED_UPDATE + ", version: " + apatchVersion + "->" + mgv)
+                            Log.d(TAG, "state: " + State.ANDROIDPATCH_NEED_UPDATE + ", version: " + aPatchVersion + "->" + mgv)
                         }
 
                         // su path
                         val suPathFile = File(SU_PATH_FILE)
-                        if(suPathFile.exists()) {
+                        if (suPathFile.exists()) {
                             val suPath = suPathFile.readLines()[0].trim()
-                            if(!Natives.suPath().equals(suPath)) {
+                            if (!Natives.suPath().equals(suPath)) {
                                 Log.d(TAG, "su path: " + suPath)
                                 Natives.resetSuPath(suPath)
                             }
                         }
-                        return@thread
                     }
+
+                    return@thread
                 }
             }
     }
@@ -208,7 +276,6 @@ class APApplication : Application() {
         super.onCreate()
         apApp = this
 
-        // todo:
         sharedPreferences = getSharedPreferences("config", Context.MODE_PRIVATE)
         superKey = sharedPreferences.getString(SUPER_KEY, "") ?: ""
 
