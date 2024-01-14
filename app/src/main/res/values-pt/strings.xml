@@ -17,7 +17,7 @@
     <string name="home_patch_next_step">Próximo Passo</string>
     <string name="home_install_unknown">Desconhecido</string>
     <string name="home_click_to_install">Clique para instalar</string>
-    <string name="home_need_update">Atualização disponível</string>
+    <string name="home_need_update">Nova versão Disponível</string>
     <string name="apatch_version">Versão: %s</string>
     <string name="home_auth_key_title">Digitar SuperKey</string>
     <string name="home_ap_cando_update">Atualização</string>
@@ -52,7 +52,7 @@
     <string name="home_selinux_status">Estado do SELinux</string>
     <string name="home_selinux_status_enforcing">A impor</string>
     <string name="home_selinux_status_permissive">Permissivo</string>
-    <string name="kpm_unload_confirm">Tem certeza que deseja descarregar o módulo %s?</string>
+    <string name="kpm_unload_confirm">Descarregar \"%s\" módulo ?</string>
     <string name="kpm_unload">Descarregar</string>
     <string name="kpm_apm_empty">Nenhum módulo carregado</string>
     <string name="su_selinux_via_hook">ignorar via hook</string>
@@ -79,18 +79,21 @@
     <string name="apm_empty">Nenhum módulo instalado</string>
     <string name="apm_uninstall">Desinstalar</string>
     <string name="apm_install">Instalar</string>
-    <string name="apm_uninstall_confirm">Tem certeza que deseja desinstalar o módulo %s?</string>
+    <string name="apm_uninstall_confirm">Desinstalar\"%s\"módulo ?</string>
     <string name="apm_uninstall_success">%s desinstalado</string>
     <string name="apm_uninstall_failed">Falha ao desinstalar: %s</string>
     <string name="apm_version">Versão</string>
     <string name="apm_author">Autor</string>
     <string name="apm_desc">Descrição</string>
-    <string name="apm_overlay_fs_not_available">overlayfs não está disponível, o módulo não pode funcionar!</string>
-    <string name="apm_magisk_conflict">Os módulos estão desativados porque estão em conflito com os do Magisk!</string>
+    <string name="apm_overlay_fs_not_available">OverlayFS não está disponível, o módulo não pode funcionar!</string>
+    <string name="apm_magisk_conflict">Os módulos estão desativados porque estão em conflito com os do Magisk.</string>
     <string name="apm_reboot_to_apply">Reinicie para entrar em vigor</string>
     <string name="apm_changelog">Registo de alterações</string>
-    <string name="apm_start_downloading">Iniciar a descarga: %s</string>
+    <string name="apm_start_downloading">Começando download: %s</string>
     <string name="apm_update">Atualizar</string>
     <string name="apm_new_version_available">Nova versão: %s está disponível, clique para atualizar</string>
     <string name="apm_not_installed">Android Patch não instalado</string>
+    <string name="system_default">Padrão do sistema</string>
+    <string name="settings_app_language">Linguagem</string>
+    <string name="patch">Patch</string>
 </resources>

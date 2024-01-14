@@ -95,4 +95,7 @@
     <string name="kpm_unload_confirm">Выгрузить модуль \"%s\"?</string>
     <string name="clear_super_key">Удалить ключ</string>
     <string name="apm_not_installed">AndroidPatch не установлен</string>
+    <string name="settings_app_language">Язык</string>
+    <string name="system_default">Системный по умолчанию</string>
+    <string name="patch">Пропатчить</string>
 </resources>

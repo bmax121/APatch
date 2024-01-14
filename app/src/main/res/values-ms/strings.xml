@@ -3,10 +3,24 @@
     <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
     <string name="app_name" translatable="false">APatch</string>
     <string name="home">Halaman Utama</string>
-    <string name="patch_warnning">Pemasangan datang dengan risiko. Sila pastikan data anda telah disimpan.</string>
+    <string name="patch_warnning">Pemasangan datang dengan risiko. Sila pastikan anda telah membuat sandaran data.</string>
     <string name="reboot">But semula (Reboot)</string>
     <string name="settings">Tetapan</string>
     <string name="reboot_userspace">But semula lembut (Soft reboot)</string>
     <string name="about">Tentang</string>
-    <string name="home_learn_apatch">Belajar AndroidPatch</string>
+    <string name="home_learn_apatch">Ketahui tentang AndroidPatch</string>
+    <string name="reboot_recovery">But semula ke Recovery</string>
+    <string name="kernel_patch">KernelPatch</string>
+    <string name="android_patch">AndroidPatch</string>
+    <string name="reboot_bootloader">But semula ke Bootloader</string>
+    <string name="reboot_download">But semula ke Download</string>
+    <string name="reboot_edl">But semula ke EDL</string>
+    <string name="about_source_code">Lihat kod sumber di %1$s<br/>Sertai saluran kami di %2$s</string>
+    <string name="send_log">Hantar log</string>
+    <string name="safe_mode">Safe mode</string>
+    <string name="super_key">SuperKey</string>
+    <string name="clear_super_key">Clear Key</string>
+    <string name="settings_app_language">Bahasa</string>
+    <string name="home_click_to_learn_apatch">Ketahui tentang ciri-ciri AndroidPatch dan cara menggunakannya</string>
+    <string name="system_default">Lalai sistem</string>
 </resources>

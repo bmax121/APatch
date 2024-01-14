@@ -68,7 +68,8 @@
     <string name="kpm_license">Licenza</string>
     <string name="reboot_bootloader">Riavvia in modalità Bootloader</string>
     <string name="kpm_apm_empty">Nessun modulo caricato</string>
-    <string name="about_source_code">Visualizza il codice sorgente su %1$s<br/>Unisciti al nostro canale %2$s</string>
+    <string name="about_source_code">Visualizza il codice sorgente su %1$s<br/>
+\nUnisciti al nostro canale %2$s</string>
     <string name="home_manager_version">Versione del Manager</string>
     <string name="kpm_load_toast_succ">Caricamento riuscito</string>
     <string name="apm_author">Autore</string>
@@ -95,4 +96,7 @@
     <string name="kpm">KPModule</string>
     <string name="clear_super_key">Elimina Chiave</string>
     <string name="apm_not_installed">AndroidPatch non installato</string>
+    <string name="system_default">Predefinito di sistema</string>
+    <string name="settings_app_language">Lingua</string>
+    <string name="patch">Patch</string>
 </resources>

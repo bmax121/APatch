@@ -4,6 +4,7 @@
     <string name="home">Home</string>
 
     <string name="patch_warnning">Installation comes with risks. Please ensure your data is backed up.</string>
+    <string name="patch">Patch</string>
 
     <string name="kernel_patch">KernelPatch</string>
     <string name="android_patch">AndroidPatch</string>

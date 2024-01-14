@@ -74,4 +74,5 @@
     <string name="apm_empty">Ingen modul installert</string>
     <string name="apm_uninstall_failed">Kunne ikke avinstallere: %s</string>
     <string name="apm_overlay_fs_not_available">OverlayFS er ikke tilgjengelig. Modulen kan ikke fungere.</string>
+    <string name="clear_super_key">Fjern tast</string>
 </resources>

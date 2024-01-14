@@ -252,7 +252,7 @@ fun FloatButton(navigator: DestinationsNavigator) {
                     }
                 },
                 icon = { Icon(Icons.Filled.InstallMobile, "install") },
-                text = { Text(text = "Patch") },
+                text = { Text(text = stringResource(id = R.string.patch)) },
             )
         }
         Spacer(Modifier.height(8.dp))
@@ -428,9 +428,10 @@ private fun AStatusCard(state: APApplication.State, navigator: DestinationsNavig
                         Icon(Icons.Outlined.Block, stringResource(R.string.home_install_unknown))
                     }
                 }
-                Column(Modifier
-                    .weight(2f)
-                    .padding(start = 16.dp)
+                Column(
+                    Modifier
+                        .weight(2f)
+                        .padding(start = 16.dp)
                 ) {
                     val managerVersion = getManagerVersion()
                     when {
@@ -465,11 +466,9 @@ private fun AStatusCard(state: APApplication.State, navigator: DestinationsNavig
                             )
                         }
                         else -> {
-                            Column(Modifier.padding(start = 6.dp)) {
-                                Text(text = stringResource(R.string.home_install_unknown),
-                                    style = MaterialTheme.typography.titleMedium
-                                )
-                            }
+                            Text(text = stringResource(R.string.home_install_unknown),
+                                style = MaterialTheme.typography.titleMedium
+                            )
                         }
                     }
                 }
