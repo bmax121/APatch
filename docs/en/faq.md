@@ -47,4 +47,3 @@ When an app/program tries to invoke **SuperCall**, it needs to provide an access
   This allows you to root an Android thread within the app context without the need to use libsu to start a new process and then perform IPC.
   This is very convenient.
 - In addition, APatch directly utilizes magiskpolicy to provide additional SELinux support.
-  However, only this will be detected as Magisk sometimes.
