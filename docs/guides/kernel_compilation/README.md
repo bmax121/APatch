@@ -1,7 +1,10 @@
 # How to compile the kernel for unsupported devices like Samsung..?
 <h3><p><hr>
-<b>What you'll need :</b> A Working brain 🧠, PC/RDP with any linux GUI distro, Knowledge of basic commands in Linux.
+<b>What you'll need :</b> A Working brain 🧠, PC/RDP with any linux GUI distro , Knowledge of basic commands in Linux.
 </p>
+
+#### Additional notes :
+- You can use [Gitpod](https://gitpod.io/workspaces) too; if you lazy to install a linux distro but it will be more challenging.
 	
 ### Requirements for compiling kernels : (Paste this in terminal.)
  ```
