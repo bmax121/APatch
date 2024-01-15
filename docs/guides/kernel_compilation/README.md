@@ -87,20 +87,26 @@ KERNEL_LLVM_BIN=/path/to/compiler/clang
 ### 04. ```→ Kernel Features``` => Disable "```Enable RKP (Realtime Kernel Protection) UH feature```", "```Enable LKM authentication by micro hypervisor```", "```Block LKM by micro hypervisor```", "```Enable micro hypervisor feature of Samsung```" respectively.
 - Image : <br><br><img src="https://github.com/ravindu644/APatch/assets/126038496/d821da9f-0b45-4701-b681-3996bec509be" width="75%">
 
-#### Additional notes : If you can't find them in the "```→ Kernel Features```", they are in "```→ Boot options```". In samsung S/N 10 series, there's a thing called "JOPP Prevention", disable these things too.
-### 05. ```→ Boot options``` => enable "```Build a concatenated Image.gz/dtb by default```" and "```Kernel compression method (Build compressed kernel image)```"  ---> "```(X) Build compressed kernel image```"
+### 05. ```→ Kernel Features → Control Flow Protection``` => Disable "```JOP Prevention```", "```ROP Prevention```" and "```JOPP and ROPP```" Respectively.
+- Image : <br><br><img src="https://github.com/ravindu644/APatch/assets/126038496/58e0680a-8052-4df8-aba1-cb282d6963ee" width="75%">
+
+### Additional notes : 
+- If you can't find them (04 and 05) in the "```→ Kernel Features```", they are located in the "```→ Boot options```".
+<hr>
+
+### 06. ```→ Boot options``` => enable "```Build a concatenated Image.gz/dtb by default```" and "```Kernel compression method (Build compressed kernel image)```"  ---> "```(X) Build compressed kernel image```"
 - Image : <br><br><img src="https://github.com/ravindu644/APatch/assets/126038496/3c7704a7-ea16-4bee-a0bf-6ecd0424f2b7" width="75%">
-### 06. ```→ File systems``` => Enable "```<*> Overlay filesystem support```".
+### 07. ```→ File systems``` => Enable "```<*> Overlay filesystem support```".
 - Image : <br><br><img src="https://github.com/ravindu644/APatch/assets/126038496/0cbff894-ba4c-4f51-a1bd-3ffa1963cd51" width="75%">
-### 07. ```→ Security options``` => Disable "```Integrity subsystem```" and "```Defex Support```".
+### 08. ```→ Security options``` => Disable "```Integrity subsystem```" and "```Defex Support```".
 - Image : <br><br><img src="https://github.com/ravindu644/APatch/assets/126038496/ca396e53-26fc-4ee4-99ea-c8359926ea51" width="75%">
 <hr>
 
-### 08. Exit and Save the config.
+### 09. Exit and Save the config.
 - When you see "```configuration written```", stop the compilation process with ```ctrl+c``` and replace the ".config"'s content with your defconfig.
 <hr>
 
-### 09. Compile using ```./build.sh``` --> Skip the menuconfig and wait until the compilation finishes..!
+### 10. Compile using ```./build.sh``` --> Skip the menuconfig and wait until the compilation finishes..!
 
 Notes : if you encountred errors, you should search these errors in github and find a solution.
 <hr>
