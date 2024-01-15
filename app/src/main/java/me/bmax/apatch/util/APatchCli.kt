@@ -29,7 +29,9 @@ fun getRootShell(): Shell {
 
 fun createRootShell(): Shell {
     Shell.enableVerboseLogging = BuildConfig.DEBUG
-    val builder = Shell.Builder.create()
+    val builder = Shell.Builder.create().apply {
+        setFlags(Shell.FLAG_MOUNT_MASTER)
+    }
     return try {
         builder.build(
             getKPatchPath(),
@@ -175,8 +177,9 @@ fun hasMagisk(): Boolean {
 }
 
 fun isGlobalNamespaceEnabled(): Boolean {
+    val shell = getRootShell()
     val result =
-        ShellUtils.fastCmd("nsenter --mount=/proc/1/ns/mnt cat ${APApplication.GLOBAL_NAMESPACE_FILE}")
+        ShellUtils.fastCmd(shell, "nsenter --mount=/proc/1/ns/mnt cat ${APApplication.GLOBAL_NAMESPACE_FILE}")
     Log.i(TAG, "is global namespace enabled: $result")
     return result == "1"
 }
