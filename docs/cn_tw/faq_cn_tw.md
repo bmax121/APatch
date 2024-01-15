@@ -45,4 +45,3 @@ KernelPatch透過挂鉤系統調用提供所有功能給用戶空間，這個系
 - KernelPatch不修改SELinux上下文，透過挂鉤繞過SELinux，  
   這允許您在應用程式上下文中root Android線程，無需使用libsu啟動新進程，然後執行IPC。這非常方便。
 - 此外，APatch直接利用magiskpolicy提供額外的SELinux支援。  
-  但是，僅這樣會被檢測為Magisk。有興趣的人可以嘗試繞過，問題已經很明確。

@@ -45,4 +45,3 @@ KernelPatch 添加了一个新的系统调用（syscall），为应用程序和�
 
 - KernelPatch不修改SELinux上下文，而是通过hook绕过SELinux。 这允许您在应用程序上下文中root Android线程，无需使用libsu启动新进程，然后执行IPC。这非常方便。
 - 此外，APatch直接利用magiskpolicy提供额外的SELinux支持。  
-  但是，仅这样会被检测为Magisk。有兴趣的人可以尝试绕过，问题已经很明确。
