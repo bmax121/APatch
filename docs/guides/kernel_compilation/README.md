@@ -97,6 +97,12 @@ KERNEL_LLVM_BIN=/path/to/compiler/clang
 - If you can't find them (04 and 05) in the "```→ Kernel Features```", they are located in the "```→ Boot options```".
 <hr>
 
+## ❗In Android 14 sources, they are located in ```→ Hypervisor```. Disable them ALL!
+- Image : <br><br><img src="https://github.com/ravindu644/APatch/assets/126038496/eb67e7fd-46ff-4aa7-a424-73e22f1d29da" width="75%">
+- As I meantioned at the beginning of this guide, your must use your brain..! 🧠
+
+<hr>
+
 ### 06. ```→ Boot options``` => enable "```Build a concatenated Image.gz/dtb by default```" and "```Kernel compression method (Build compressed kernel image)```"  ---> "```(X) Build compressed kernel image```"
 - Image : <br><br><img src="https://github.com/ravindu644/APatch/assets/126038496/3c7704a7-ea16-4bee-a0bf-6ecd0424f2b7" width="75%">
 ### 07. ```→ File systems``` => Enable "```<*> Overlay filesystem support```".
