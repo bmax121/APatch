@@ -109,18 +109,24 @@ Notes : if you encountred errors, you should search these errors in github and f
 ### 01. Extract the boot.img from the stock ROM. I prefer https://github.com/ravindu644/Scamsung to do this online.
 	- Use exact build number to download the firmware.
 ### 02. Unpack the boot.img using AIK-Linux which can be found in here : https://github.com/ravindu644/AIK-Linux
-- Image : <br><br><img src="https://github.com/ravindu644/APatch/assets/126038496/d5fee81a-6768-4848-a4a6-37fec6cb355f" width="70%">
-### 03. Open the split_img folder and see your kernel uses "```gzip```" compression. If it is, use ```Image.gz```. else use normal "```Image```".
+- Image : <br><br><img src="https://github.com/ravindu644/APatch/assets/126038496/d5fee81a-6768-4848-a4a6-37fec6cb355f" width="70%"><hr>
+## How to check "Which kernel format should I use"..?
 - Kernel without GZIP compression : <br><br><img src="https://github.com/ravindu644/APatch/assets/126038496/cb1d0ff3-32cb-4d98-9892-5a00d1922680" width="70%">
-- Kernel <b>with</b> GZIP compression : <br><br><img src="https://github.com/ravindu644/APatch/assets/126038496/30ee541e-211c-4a84-971b-f67299ee8793" width="70%">
-### 04. If your boot.img has a GZIP kernel, use the "```Image.gz```". Else use "```Image```".
-### 05. Rename your compiled kernel to "```boot.img-kernel```" and copy and replace it with the ```boot.img-kernel```, which is in the split_img folder.
-### 06. Repack --> rename "image-new.img" to "boot.img" and make a tar file using this command :
+- Kernel <b>with</b> GZIP compression : <br><br><img src="https://github.com/ravindu644/APatch/assets/126038496/30ee541e-211c-4a84-971b-f67299ee8793" width="70%"><br><br>
+# Notes :
+- If your split_img has a boot.img-dtb + Uncompressed Kernel => Use "Image".
+- If your split_img has a boot.img-dtb + GZIP compressed Kernel => Use "Image.gz".
+- If your split_img don't has a boot.img-dtb + uncompressed Kernel => Use "Image.gz-dtb".
+- If your split_img don't has a boot.img-dtb + GZIP compressed Kernel => Use "Image.gz-dtb.gz".
+<hr>
+
+### 03. Choose the required kernel as I mentioned above > Rename it to "```boot.img-kernel```" and copy and replace it with the ```boot.img-kernel```, which is in the split_img folder.
+### 04. Repack --> rename "image-new.img" to "boot.img" and make a tar file using this command :
 ```
 tar cvf "DEVICE NAME (APatch Support).tar" boot.img
 ```
-### 07. Flash it using Fastboot/ODIN..!
-### 08. DONE..!
+### 05. Flash it using Fastboot/ODIN..!
+### 06. DONE..!
 - Proof : <br><br><img src="https://github.com/ravindu644/APatch/assets/126038496/f0dd204d-e398-4ce1-9897-96e6a51b5673" width="75%">
 <hr>
 
