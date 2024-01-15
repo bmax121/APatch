@@ -29,9 +29,9 @@ For more information, see [How to write a KPM](https://github.com/bmax121/Kernel
 
 ## Relationship between APatch and KernelPatch
 
-APatch depends on KernelPatch, inherits all its capabilities, and has been expanded.  
+APatch depends on KernelPatch, inherits all its capabilities, and has been expanded.
 
-You can install KernelPatch only, but this will not allow you to use Magisk modules, and to use superuser management, you need to install AndroidPatch and then uninstall it.
+You can install KernelPatch only, but this will not allow you to use Magisk modules, and to use superuser management, you need to install APatch and then uninstall it.
 
 [Learn more about KernelPatch](https://github.com/bmax121/KernelPatch)
 
@@ -43,8 +43,8 @@ When an app/program tries to invoke **SuperCall**, it needs to provide an access
 
 
 ## How about SELinux?
-- KernelPatch don't modify the SELinux context and bypasses SELinux via a hook.
+- KernelPatch doesn't modify the SELinux context and bypasses SELinux via a hook.
   This allows you to root an Android thread within the app context without the need to use libsu to start a new process and then perform IPC.
   This is very convenient.
-- In addition, APatch directly utilizes magiskpolicy to provide additional SELinux support.  
+- In addition, APatch directly utilizes magiskpolicy to provide additional SELinux support.
   However, only this will be detected as Magisk. Anyone interested can try to bypass it, the issue is already quite clear.
