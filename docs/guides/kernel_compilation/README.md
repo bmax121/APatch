@@ -99,7 +99,7 @@ KERNEL_LLVM_BIN=/path/to/compiler/clang
 
 ## ❗In Android 14 sources, they are located in ```→ Hypervisor```. Disable them ALL!
 - Image : <br><br><img src="https://github.com/ravindu644/APatch/assets/126038496/eb67e7fd-46ff-4aa7-a424-73e22f1d29da" width="75%">
-- As I meantioned at the beginning of this guide, your must use your brain..! 🧠
+- As I mentioned at the beginning of this guide, your must use your brain..! 🧠
 
 <hr>
 
