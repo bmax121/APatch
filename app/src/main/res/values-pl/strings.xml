@@ -97,4 +97,5 @@
     <string name="home_patch_set_key_desc">Tylko dane uwierzytelniające dla KernelPatch</string>
     <string name="home_auth_key_desc">Rozpocznij po uzyskaniu certyfikatu</string>
     <string name="kpm_unload">Rozpakuj</string>
+    <string name="patch">Załataj</string>
 </resources>

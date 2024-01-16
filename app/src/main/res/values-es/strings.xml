@@ -98,4 +98,6 @@
     <string name="settings_app_language">Idioma</string>
     <string name="system_default">Predeterminado del sistema</string>
     <string name="patch">Parche</string>
+    <string name="settings_global_namespace_mode">Modo del espacio de los nombres globales</string>
+    <string name="settings_global_namespace_mode_summary">Todas las sesiones root utilizan el espacio de nombres de montaje global</string>
 </resources>

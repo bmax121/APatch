@@ -20,7 +20,7 @@
     <string name="apm_install">安裝</string>
     <string name="kpatch_version">版本：%d.%d.%d</string>
     <string name="apm_uninstall">解除安裝</string>
-    <string name="kpm_kp_not_installed">KernelPatch 未安裝</string>
+    <string name="kpm_kp_not_installed">KernelPatch 尚未安裝</string>
     <string name="home_install_unknown">未知</string>
     <string name="apm_uninstall_confirm">卸載“%s”模組？</string>
     <string name="su_pkg_excluded_setting_title">排除</string>
@@ -93,8 +93,10 @@
     <string name="kpm">KP模組</string>
     <string name="about_source_code">查看源代碼：%1$s，<br/>加入我們的 %2$s 頻道</string>
     <string name="clear_super_key">清除密鑰</string>
-    <string name="apm_not_installed">AndroidPatch 未安裝</string>
+    <string name="apm_not_installed">AndroidPatch 尚未安裝</string>
     <string name="system_default">系統預設</string>
     <string name="settings_app_language">語言</string>
     <string name="patch">修補</string>
+    <string name="settings_global_namespace_mode_summary">所有 Root 會話都使用全域掛載命名空間</string>
+    <string name="settings_global_namespace_mode">全域命名空間模式</string>
 </resources>

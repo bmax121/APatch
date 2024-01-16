@@ -97,4 +97,5 @@
     <string name="settings_app_language">Ngôn ngữ</string>
     <string name="system_default">Mặc định hệ thống</string>
     <string name="home_apatch_version">APatch: %s</string>
+    <string name="patch">Vá</string>
 </resources>
