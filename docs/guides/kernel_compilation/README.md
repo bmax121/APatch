@@ -1,10 +1,13 @@
-# How to compile the kernel for unsupported devices like Samsung..?
-<h3><p><hr>
-<b>What you'll need :</b> A Working brain 🧠, PC/RDP with any linux GUI distro , Knowledge of basic commands in Linux.
-</p>
+# How to Compile the Kernel for Unsupported Devices like Samsung...?
 
-#### Additional notes :
-- You can use [Gitpod](https://gitpod.io/workspaces) too; if you lazy to install a linux distro but it will be more challenging.
+---
+
+**What You'll Need:**
+A Working Brain 🧠, PC/RDP with any Linux GUI distro, Knowledge of basic commands in Linux.
+
+#### Additional Notes:
+
+- If you're feeling a bit lazy to install a Linux distro, you can also use [Gitpod](https://gitpod.io/workspaces). Keep in mind, though, it might be more challenging.
 	
 ### Requirements for compiling kernels : (Paste this in terminal.)
  ```
@@ -97,7 +100,7 @@ KERNEL_LLVM_BIN=/path/to/compiler/clang
 - If you can't find them (04 and 05) in the "```→ Kernel Features```", they are located in the "```→ Boot options```".
 <hr>
 
-## ❗In Android 14 sources, they are located in ```→ Hypervisor```. Disable them ALL!
+## ❗In Android 14 and some Android 13 sources, they are located in ```→ Hypervisor```. Disable them ALL!
 - Image : <br><br><img src="https://github.com/ravindu644/APatch/assets/126038496/eb67e7fd-46ff-4aa7-a424-73e22f1d29da" width="75%">
 - As I mentioned at the beginning of this guide, your must use your brain..! 🧠
 
@@ -112,13 +115,16 @@ KERNEL_LLVM_BIN=/path/to/compiler/clang
 <hr>
 
 ### 09. Exit and Save the config.
-- When you see "```configuration written```", stop the compilation process with ```ctrl+c``` and replace the ".config"'s content with your defconfig.
+- When you see "```configuration written```", stop the compilation process with ```Ctrl+C``` and replace the content of ".config" with your desired defconfig.
 <hr>
 
 ### 10. Compile using ```./build.sh``` --> Skip the menuconfig and wait until the compilation finishes..!
 
-Notes : if you encountred errors, you should search these errors in github and find a solution.
-<hr>
+#### Notes:
+
+- If you encounter errors during the compilation process, it's advisable to search for these errors on GitHub and find a solution.
+  
+---
 
 # How to put the compiled kernel, inside our boot.img..?
 ### 01. Extract the boot.img from the stock ROM. I prefer https://github.com/ravindu644/Scamsung to do this online.
