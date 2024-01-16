@@ -29,9 +29,7 @@ fun getRootShell(): Shell {
 
 fun createRootShell(): Shell {
     Shell.enableVerboseLogging = BuildConfig.DEBUG
-    val builder = Shell.Builder.create().apply {
-        setFlags(Shell.FLAG_MOUNT_MASTER)
-    }
+    val builder = Shell.Builder.create()
     return try {
         builder.build(
             getKPatchPath(),
