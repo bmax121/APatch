@@ -222,6 +222,18 @@ class APApplication : Application() {
                         Log.e(TAG, "su failed: " + rc)
                         return@thread
                     }
+                    
+                    // Ensure migration scenario temporarily
+                    var tmp = File(APATCH_FLODER + "version")
+                    if (tmp.exists()) {
+                        val version = tmp.readLines().get(0).toInt()
+                        tmp.delete()
+                        File(APATCH_VERSION_PATH).writeText(version.toString())
+                        tmp = File(KPATCH_VERSION_PATH)
+                        if (!tmp.exists()) {
+                            File(KPATCH_VERSION_PATH).writeText(getKernelPatchVersion())
+                        }
+                    }
 
                     val kv = File(KPATCH_VERSION_PATH)
                     val kvn = getKPatchVersion()
