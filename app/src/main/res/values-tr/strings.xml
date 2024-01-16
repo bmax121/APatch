@@ -26,8 +26,8 @@
     <string name="home_installing">Yükleniyor</string>
     <string name="apm_start_downloading">İndirme başladı: \"%s\"</string>
     <string name="su_pkg_excluded_label">dahil etme</string>
-    <string name="su_title">Superuser</string>
-    <string name="apm">APModule</string>
+    <string name="su_title">Super kullanıcı</string>
+    <string name="apm">AP Modül</string>
     <string name="kpm_desc">Açıklama</string>
     <string name="su_selinux_via_hook">kanca ile bypass et</string>
     <string name="home_ap_cando_uninstall">Kaldır</string>
@@ -41,7 +41,7 @@
     <string name="safe_mode">Güvenli mod</string>
     <string name="su_show_system_apps">Sistem uygulamalarını göster</string>
     <string name="home_ap_cando_install">Yükle</string>
-    <string name="super_key">Super Anahtar</string>
+    <string name="super_key">Süper Anahtar</string>
     <string name="reboot_recovery">Kurtarma modunda yeniden başlat</string>
     <string name="reboot_userspace">Hızlı yeniden başlat</string>
     <string name="home_su_path_ex">su: %s -&gt; %s</string>
@@ -61,7 +61,7 @@
     <string name="kpm_author">Geliştirici</string>
     <string name="apm_failed_to_enable">\"%s\" modülü aktifleştirilemedi</string>
     <string name="home">Anasayfa</string>
-    <string name="home_patch_set_key_title">Super Anahtar\'ı ayarla</string>
+    <string name="home_patch_set_key_title">Süper Anahtar\'ı ayarla</string>
     <string name="apm_downloading">\"%s\"modülü indiriliyor…</string>
     <string name="su_hide_system_apps">Sistem uygulamalarını gizle</string>
     <string name="home_su_path">su: %s</string>
@@ -83,12 +83,12 @@
     <string name="apm_update">Güncelle</string>
     <string name="home_kernel">Kernel</string>
     <string name="home_not_installed">Yüklü değil</string>
-    <string name="kpm">KPModule</string>
+    <string name="kpm">KP Modül</string>
     <string name="home_selinux_status_enforcing">Enforcing</string>
     <string name="kpm_license">Lisans</string>
     <string name="reboot_bootloader">Önyükleyici modunda yeniden başlat</string>
     <string name="kpm_apm_empty">Yüklü modül yok</string>
-    <string name="about_source_code">Kaynak koduna göz atın: %1$s<br/>Kanalımıza katılın: %2$s</string>
+    <string name="about_source_code">Kaynak koduna göz atın: %1$s<br/><br/>Kanalımıza katılın: %2$s</string>
     <string name="home_manager_version">Yönetici sürümü</string>
     <string name="kpm_load_toast_succ">Başarıyla yüklendi</string>
     <string name="apm_author">Geliştirici</string>
@@ -98,4 +98,6 @@
     <string name="settings_app_language">Dil</string>
     <string name="system_default">Sistem varsayılanı</string>
     <string name="patch">Yamala</string>
+    <string name="settings_global_namespace_mode">Küresel ad alanı modu</string>
+    <string name="settings_global_namespace_mode_summary">Tüm root oturumları global bağlama ad alanını kullanır</string>
 </resources>

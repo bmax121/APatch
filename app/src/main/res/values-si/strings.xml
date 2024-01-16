@@ -49,20 +49,20 @@
     <string name="apm_update">යාවත්කාලීන කරන්න</string>
     <string name="about_source_code">මූල කේතය බලන්න %1$s<br/> අපේ ටෙලිග්‍රෑම් චැනලයට එකතු වන්න %2$s</string>
     <string name="settings">සැකසුම්</string>
-    <string name="reboot_userspace">ඉක්මනින් Restart කිරීම</string>
+    <string name="reboot_userspace">ඉක්මනින් Restart කරන්න</string>
     <string name="reboot_recovery">Recovery එකට</string>
     <string name="reboot_bootloader">Fastboot mode එකට</string>
     <string name="reboot_download">Download mode එකට</string>
     <string name="kpatch_version">වර්ෂන් එක: %d.%d.%d</string>
     <string name="apatch_version_update">වර්ෂන් එක:
 \n%s -&gt; %s</string>
-    <string name="android_patch">ඇන්ඩ්‍රොයිඩ්-පැච්</string>
+    <string name="android_patch">AndroidPatch</string>
     <string name="home_su_path">රූට්:%s</string>
     <string name="home_su_path_ex">රූට්: %s -&gt; %s</string>
     <string name="home_ap_cando_update">යාවත්කාලීන කරන්න</string>
     <string name="home_selinux_status_disabled">ඕෆ් කරන්න</string>
     <string name="home_selinux_status_unknown">හඳුනාගත නොහැක</string>
-    <string name="kpm">කර්නල් මොඩියුල්ස්</string>
+    <string name="kpm">KP-මොඩියුල්ස්</string>
     <string name="kpm_load">එකතු කරන්න</string>
     <string name="kpm_load_toast_failed">එකතු කිරීමට නොහැකි විය</string>
     <string name="kpm_unload_confirm">මෙම \"%s\" මොඩියුල් එක ඉවත් කිරීමට අවශ්‍ය ද?</string>
@@ -76,7 +76,7 @@
     <string name="home_apatch_version">A-පැච්: %s</string>
     <string name="home_kernel">කර්නල් එක</string>
     <string name="home_manager_version">මෘදුකාංගයෙහි වර්ෂන් එක</string>
-    <string name="home_fingerprint">ආරක්ෂක සළකුණක</string>
+    <string name="home_fingerprint">ආරක්ෂක සළකුණ</string>
     <string name="su_refresh">නැවත අලුත් කරන්න</string>
     <string name="apm">මොඩියුල්ස්</string>
     <string name="system_default">Android හි භාෂාවම</string>
@@ -91,4 +91,5 @@
 \n%s</string>
     <string name="patch_title">පැච් කරන්න</string>
     <string name="apm_author">කතෲ</string>
+    <string name="patch">පැච් කරන්න</string>
 </resources>

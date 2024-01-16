@@ -97,4 +97,5 @@
     <string name="apm_changelog">Änderungsverlauf</string>
     <string name="settings_app_language">Sprache</string>
     <string name="system_default">Systemstandard</string>
+    <string name="patch">Patch</string>
 </resources>

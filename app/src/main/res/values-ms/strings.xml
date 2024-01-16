@@ -23,4 +23,15 @@
     <string name="settings_app_language">Bahasa</string>
     <string name="home_click_to_learn_apatch">Ketahui tentang ciri-ciri AndroidPatch dan cara menggunakannya</string>
     <string name="system_default">Lalai sistem</string>
+    <string name="home_installing">Memasang</string>
+    <string name="apatch_version_update">Versi:
+\n%s -&gt; %s</string>
+    <string name="home_patch_next_step">Langkah Seterusnya</string>
+    <string name="home_not_installed">Tidak di pasang</string>
+    <string name="home_install_unknown">Tidak diketahui</string>
+    <string name="home_click_to_install">Tekan untuk pasang</string>
+    <string name="home_need_update">Versi baharu tersedia</string>
+    <string name="kpatch_version">Versi: %d.%d.%d</string>
+    <string name="apatch_version">Versi:
+\n%s</string>
 </resources>

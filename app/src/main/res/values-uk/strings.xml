@@ -95,4 +95,7 @@
     <string name="kpm_unload_confirm">Видалити \"%s\" module?</string>
     <string name="apm_new_version_available">Натисніть, щоб встановити нову версію, %s.</string>
     <string name="apm_failed_to_disable">Не вдалося вимкнути модуль \"%s\"</string>
+    <string name="settings_app_language">Мова</string>
+    <string name="system_default">За замовчуванням у системі</string>
+    <string name="patch">Пропатчити</string>
 </resources>
