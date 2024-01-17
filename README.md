@@ -70,6 +70,7 @@ Installation guide (coming soon)
 - [Perguntas frequentes (PT_BR)](docs/pt_br/faq_pt_br.md)
 - [Часто задаваемые вопросы (RU)](docs/ru/faq_ru.md)
 - [Sık sorulan sorular (TR)](docs/tr/faq_tr.md)
+- [Tez-tez soruşulan suallar (AZ)](docs/az/faq_az.md)
 
 
 ## Credits
