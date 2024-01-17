@@ -171,14 +171,14 @@ fun hasMagisk(): Boolean {
 fun isGlobalNamespaceEnabled(): Boolean {
     val shell = getRootShell()
     val result =
-        ShellUtils.fastCmd(shell, "nsenter --mount=/proc/1/ns/mnt cat ${APApplication.GLOBAL_NAMESPACE_FILE}")
+        ShellUtils.fastCmd(shell, "cat ${APApplication.GLOBAL_NAMESPACE_FILE}")
     Log.i(TAG, "is global namespace enabled: $result")
     return result == "1"
 }
 
 fun setGlobalNamespaceEnabled(value: String) {
     getRootShell().newJob()
-        .add("nsenter --mount=/proc/1/ns/mnt echo $value > ${APApplication.GLOBAL_NAMESPACE_FILE}")
+        .add("echo $value > ${APApplication.GLOBAL_NAMESPACE_FILE}")
         .submit { result ->
             Log.i(TAG, "setGlobalNamespaceEnabled result: ${result.isSuccess} [${result.out}]")
         }
