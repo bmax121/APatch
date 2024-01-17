@@ -2,6 +2,7 @@ package me.bmax.apatch
 
 import android.app.Application
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -210,6 +211,8 @@ class APApplication : Application() {
         // todo:
         sharedPreferences = getSharedPreferences("config", Context.MODE_PRIVATE)
         superKey = sharedPreferences.getString(SUPER_KEY, "") ?: ""
+
+
 
         val context = this
         val iconSize = resources.getDimensionPixelSize(android.R.dimen.app_icon_size)
