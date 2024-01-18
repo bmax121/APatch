@@ -149,11 +149,9 @@ fun InputStream.writeTo(file: File) = copyAndClose(file.outputStream())
 
 private fun InputStream.copyAndCloseOut(out: OutputStream) = out.use { copyTo(it) }
 
-
 private val shell = Shell.getShell()
 private fun String.fsh() = ShellUtils.fastCmd(shell, this)
 private fun Array<String>.fsh() = ShellUtils.fastCmd(shell, *this)
-
 
 fun patchBootimg(uri: Uri?, superKey: String, logs: MutableList<String>): Boolean {
     var outPath: File? = null
@@ -205,20 +203,15 @@ fun patchBootimg(uri: Uri?, superKey: String, logs: MutableList<String>): Boolea
         "cd $patchDir",
         patchCommand,
     )
-    val isSuccess = shell.newJob().add(*cmds).to(logs, logs).exec().isSuccess
+    shell.newJob().add(*cmds).to(logs, logs).exec()
     logs.add("****************************")
 
     var succ = true
-    if (uri == null) {
-        if (isSuccess) {
+    val newBootFile = patchDir.getChildFile("new-boot.img")
+    if (newBootFile.exists()) {
+        if (uri == null) {
             logs.add(" Boot patch was successful")
         } else {
-            succ = false
-            logs.add(" Boot patch failed")
-        }
-    } else {
-        val newBootFile = patchDir.getChildFile("new-boot.img")
-        if (newBootFile.exists()) {
             val outDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
             if(!outDir.exists()) outDir.mkdirs()
             outPath = File(outDir, outFilename)
@@ -239,10 +232,10 @@ fun patchBootimg(uri: Uri?, superKey: String, logs: MutableList<String>): Boolea
             } else {
                 logs.add(" Write patched boot.img failed")
             }
-        } else {
-            succ = false
-            logs.add(" Patch failed, no new-boot.img generated")
         }
+    } else {
+        succ = false
+        logs.add(" Patch failed, no new-boot.img generated")
     }
     logs.add("****************************")
 

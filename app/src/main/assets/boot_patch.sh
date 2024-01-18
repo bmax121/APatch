@@ -53,9 +53,19 @@ fi
 
 SUPERKEY=$1
 BOOTIMAGE=$2
+BACKUPDIR="../backup"
+BACKUPIMAGE="$BACKUPDIR/boot.img"
 
 if [ -z "$BOOTIMAGE" ]; then
+  ISDIRECTINSTALL=true
+  if [ ! -f "$BACKUPIMAGE" ]; then
+    echo "Direct flash is not possible!"
+    exit 1
+  fi
   find_boot_image
+elif [ ! -f "$BACKUPIMAGE" ]; then
+  mkdir -p "$BACKUPDIR"
+  cp "$BOOTIMAGE" "$BACKUPIMAGE"
 fi
 
 [ -z "$SUPERKEY" ] && { echo "SuperKey empty!"; exit 1; }
@@ -68,7 +78,11 @@ command -v ./magiskboot >/dev/null 2>&1 || { echo "magiskboot not found!"; exit 
 command -v ./kptools >/dev/null 2>&1 || { echo "kptools not found!"; exit 1; }
 
 echo "- Unpacking boot image"
-./magiskboot unpack "$BOOTIMAGE" >/dev/null 2>&1
+if [ "$ISDIRECTINSTALL" ]; then
+  ./magiskboot unpack "$BACKUPIMAGE" >/dev/null 2>&1
+else
+  ./magiskboot unpack "$BOOTIMAGE" >/dev/null 2>&1
+fi
 
 if [ $? -ne 0 ]; then
   echo "Unpack error: $?"
@@ -86,7 +100,25 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "- Repacking boot image"
-./magiskboot repack "$BOOTIMAGE" >/dev/null 2>&1 || exit $?
+if [ "$ISDIRECTINSTALL" ]; then
+  ./magiskboot repack "$BACKUPIMAGE" >/dev/null 2>&1 || exit $?
+else
+  ./magiskboot repack "$BOOTIMAGE" >/dev/null 2>&1 || exit $?
+fi
+
+echo "- Cleaning up"
+./magiskboot cleanup >/dev/null 2>&1
+rm -f kernel.ori
+
+if [ "$ISDIRECTINSTALL" ] && [ -f "new-boot.img" ]; then
+  echo "- Flashing patched boot image"
+  flash_image new-boot.img "$BOOTIMAGE"
+
+  if [ $? -ne 0 ]; then
+    echo "Flash error: $?"
+    exit $?
+  fi
+fi
 
 # Reset any error code
 true

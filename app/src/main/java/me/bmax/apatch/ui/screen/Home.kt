@@ -577,14 +577,13 @@ private fun AStatusCard(apState: APApplication.State) {
                                     apState.equals(APApplication.State.ANDROIDPATCH_READY) -> {
                                         Text(text = stringResource(id = R.string.home_ap_cando_install), color = Color.Black)
                                     }
-                                    apState.equals(APApplication.State.ANDROIDPATCH_UNINSTALLING) ||
                                     apState.equals(APApplication.State.ANDROIDPATCH_UNINSTALLING) -> {
                                         Icon(Icons.Outlined.Cached, contentDescription = "busy")
                                     }
                                     apState.equals(APApplication.State.ANDROIDPATCH_NEED_UPDATE) -> {
                                         Text(text = stringResource(id = R.string.home_ap_cando_update), color = Color.Black)
                                     }
-                                    apState.equals(APApplication.State.ANDROIDPATCH_INSTALLED) -> {
+                                    else -> {
                                         Text(text = stringResource(id = R.string.home_ap_cando_uninstall), color = Color.Black)
                                     }
                                 }

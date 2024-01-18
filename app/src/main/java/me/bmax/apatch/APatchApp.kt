@@ -78,9 +78,7 @@ class APApplication : Application() {
         var aPatchVersion: Int = 0
 
         fun installKpatch() {
-            if (_kpStateLiveData.value != State.KERNELPATCH_NEED_UPDATE) {
-                return
-            }
+            if (_kpStateLiveData.value != State.KERNELPATCH_NEED_UPDATE) return
 
             kPatchVersion = getKPatchVersion()
 
