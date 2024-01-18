@@ -28,6 +28,8 @@ import me.bmax.apatch.util.HanziToPinyin
 import me.bmax.apatch.util.PkgConfig
 import java.text.Collator
 import java.util.*
+import kotlin.collections.HashMap
+import kotlin.concurrent.thread
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -121,7 +123,12 @@ class SuperUserViewModel : ViewModel() {
             val uids = Natives.suUids().toList()
             Log.d(TAG, "all allows: ${uids}")
 
-            val configs: HashMap<String, PkgConfig.Config> = PkgConfig.configs
+            var configs: HashMap<String, PkgConfig.Config> = HashMap()
+            thread {
+                Natives.su()
+                configs = PkgConfig.readConfigs()
+            }.join()
+
             Log.d(TAG, "all configs: ${configs}")
 
             apps = allPackages.list.map { it ->

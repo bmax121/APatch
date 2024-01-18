@@ -1,6 +1,5 @@
 package me.bmax.apatch.services;
 
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -19,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.bmax.apatch.IAPRootService;
-import me.bmax.apatch.Natives;
 import rikka.parcelablelist.ParcelableListSlice;
 
 public class RootServices extends RootService {
@@ -32,6 +30,7 @@ public class RootServices extends RootService {
             Log.i(TAG, "getPackages: " + list.size());
             return new ParcelableListSlice<>(list);
         }
+
     }
 
     @Override
