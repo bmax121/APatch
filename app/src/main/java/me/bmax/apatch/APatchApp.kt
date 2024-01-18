@@ -48,8 +48,7 @@ class APApplication : Application() {
         val SAFEMODE_FILE = "/dev/.safemode"
         val GLOBAL_NAMESPACE_FILE = "/data/adb/.global_namespace_enable"
 
-        val KPATCH_VERSION_PATH = APATCH_FLODER + "kpatch_version"
-        val APATCH_VERSION_PATH = APATCH_FLODER + "apatch_version"
+        val APATCH_VERSION_PATH = APATCH_FLODER + "version"
         val MAGISKPOLICY_BIN_PATH = APATCH_BIN_FLODER + "magiskpolicy"
         val BUSYBOX_BIN_PATH = APATCH_BIN_FLODER + "busybox"
         val RESETPROP_BIN_PATH = APATCH_BIN_FLODER + "resetprop"
@@ -83,24 +82,10 @@ class APApplication : Application() {
                 return
             }
 
-            thread {
-                val rc = Natives.su(0, null)
-                if (!rc) {
-                    Log.e(TAG, "Native.su failed: " + rc)
-                    return@thread
-                }
+            kPatchVersion = getKPatchVersion()
 
-                kPatchVersion = getKPatchVersion()
-
-                val cmds = arrayOf(
-                    "echo ${kPatchVersion} > ${KPATCH_VERSION_PATH}",
-                )
-
-                Shell.getShell().newJob().add(*cmds).to(logCallback, logCallback).exec()
-
-                Log.d(TAG, "KPatch installed ...")
-                _kpStateLiveData.postValue(State.KERNELPATCH_INSTALLED)
-            }
+            Log.d(TAG, "KPatch installed ...")
+            _kpStateLiveData.postValue(State.KERNELPATCH_INSTALLED)
         }
 
         fun uninstallApatch() {
@@ -174,9 +159,6 @@ class APApplication : Application() {
                     "[ -s ${SU_PATH_FILE} ] || echo ${LEGACY_SU_PATH} > ${SU_PATH_FILE}",
                     "echo ${getManagerVersion().second} > ${APATCH_VERSION_PATH}",
 
-                    "touch ${KPATCH_VERSION_PATH}",
-                    "[ -s ${KPATCH_VERSION_PATH} ] || echo ${getKernelPatchVersion()} > ${KPATCH_VERSION_PATH}",
-
                     "restorecon -R ${APATCH_FLODER}",
 
                     "${KPATCH_PATH} ${superKey} android_user init",
@@ -222,36 +204,21 @@ class APApplication : Application() {
                         Log.e(TAG, "su failed: " + rc)
                         return@thread
                     }
-                    
-                    // Ensure migration scenario temporarily
-                    var tmp = File(APATCH_FLODER + "version")
-                    if (tmp.exists()) {
-                        val version = tmp.readLines().get(0).toInt()
-                        tmp.delete()
-                        File(APATCH_VERSION_PATH).writeText(version.toString())
-                        tmp = File(KPATCH_VERSION_PATH)
-                        if (!tmp.exists()) {
-                            File(KPATCH_VERSION_PATH).writeText(getKernelPatchVersion())
-                        }
-                    }
 
-                    val kv = File(KPATCH_VERSION_PATH)
-                    val kvn = getKPatchVersion()
-                    if (kv.exists()) {
-                        kPatchVersion = kv.readLines().get(0)
-                        if (kPatchVersion == kvn) {
-                            _kpStateLiveData.postValue(State.KERNELPATCH_INSTALLED)
-                            Log.d(TAG, "state: " + State.KERNELPATCH_INSTALLED + ", version: " + kPatchVersion)
-                        } else {
-                            _kpStateLiveData.postValue(State.KERNELPATCH_NEED_UPDATE)
-                            Log.d(TAG, "state: " + State.KERNELPATCH_NEED_UPDATE + ", version: " + kPatchVersion + "->" + kvn)
-                        }
+                    kPatchVersion = getKernelPatchVersion()
+                    val kpv = getKPatchVersion()
+                    if (kPatchVersion == kpv) {
+                        _kpStateLiveData.postValue(State.KERNELPATCH_INSTALLED)
+                        Log.d(TAG, "state: " + State.KERNELPATCH_INSTALLED + ", version: " + kPatchVersion)
+                    } else {
+                        _kpStateLiveData.postValue(State.KERNELPATCH_NEED_UPDATE)
+                        Log.d(TAG, "state: " + State.KERNELPATCH_NEED_UPDATE + ", version: " + kPatchVersion + "->" + kpv)
                     }
 
                     val av = File(APATCH_VERSION_PATH)
-                    val mgv = getManagerVersion().second
                     if (av.exists()) {
                         aPatchVersion = av.readLines().get(0).toInt()
+                        val mgv = getManagerVersion().second
                         if (aPatchVersion == mgv) {
                             _apStateLiveData.postValue(State.ANDROIDPATCH_INSTALLED)
                             Log.d(TAG, "state: " + State.ANDROIDPATCH_INSTALLED + ", version: " + aPatchVersion)
