@@ -377,7 +377,10 @@ private fun KStatusCard(kpState: APApplication.State, navigator: DestinationsNav
                                 style = MaterialTheme.typography.titleMedium
                             )
                             Spacer(Modifier.height(6.dp))
-                            Text(text = stringResource(R.string.kpatch_version, APApplication.kPatchVersion),
+                            // Ensure it doesnt crash on non-updated translations
+                            var tmp = stringResource(R.string.kpatch_version)
+                            tmp = tmp.replace("%d.%d.%d", "%s")
+                            Text(text = tmp.format(APApplication.kPatchVersion),
                                 style = MaterialTheme.typography.bodyMedium
                             )
                         }
