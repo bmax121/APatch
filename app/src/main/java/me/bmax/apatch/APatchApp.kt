@@ -10,7 +10,6 @@ import androidx.lifecycle.MutableLiveData
 import coil.Coil
 import coil.ImageLoader
 import com.topjohnwu.superuser.CallbackList
-import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.nio.ExtendedFile
 import com.topjohnwu.superuser.nio.FileSystemManager
 import me.bmax.apatch.util.*
@@ -81,7 +80,7 @@ class APApplication : Application() {
 
         fun installKpatch() {
             if (_kpStateLiveData.value != State.KERNELPATCH_NEED_UPDATE) return
-            
+
             val patchDir: ExtendedFile = FileSystemManager.getLocal().getFile(apApp.filesDir.parent, "patch")
             val newBootFile = patchDir.getChildFile("new-boot.img")
 
@@ -97,30 +96,25 @@ class APApplication : Application() {
             if (_apStateLiveData.value != State.ANDROIDPATCH_INSTALLED) return
             _apStateLiveData.value = State.ANDROIDPATCH_UNINSTALLING
 
+            Natives.resetSuPath(DEFAULT_SU_PATH)
+
             thread {
-                val rc = Natives.su(0, null)
-                if (!rc) {
-                    Log.e(TAG, "Native.su failed: " + rc)
-                    _apStateLiveData.postValue(State.ANDROIDPATCH_INSTALLED)
-                    return@thread
-                }
-                Log.d(TAG, "APatch uninstalling...")
+                val cmds = arrayOf(
+                    "rm -f ${APATCH_VERSION_PATH}",
+                    "rm -f ${APD_PATH}",
+                    // "rm -f ${KPATCH_PATH}", // Reserved, used to obtain logs
+                    "rm -rf ${APATCH_FOLDER}",
+                )
 
-                Natives.resetSuPath(DEFAULT_SU_PATH)
-                File(APATCH_VERSION_PATH).delete()
-                File(APD_PATH).delete()
-                // Reserved, used to obtain logs
-                // File(KPATCH_PATH).delete()
-                File(APATCH_FOLDER).deleteRecursively()
+                val shell = getRootShell()
+                shell.newJob().add(*cmds).to(logCallback, logCallback).exec()
 
-                Log.d(TAG, "APatch removed...")
-
+                Log.d(TAG, "APatch uninstalled...")
                 _apStateLiveData.postValue(State.ANDROIDPATCH_READY)
             }
         }
 
         fun installApatch() {
-            val state = _apStateLiveData.value
             if (_apStateLiveData.value != State.ANDROIDPATCH_READY &&
                 _apStateLiveData.value != State.ANDROIDPATCH_NEED_UPDATE) {
                 return
@@ -130,14 +124,6 @@ class APApplication : Application() {
             val nativeDir = apApp.applicationInfo.nativeLibraryDir
 
             thread {
-                val rc = Natives.su(0, null)
-                if (!rc) {
-                    Log.e(TAG, "Native.su failed: " + rc)
-                    // revert state
-                    _apStateLiveData.postValue(state)
-                    return@thread
-                }
-
                 val cmds = arrayOf(
                     "mkdir -p ${APATCH_BIN_FOLDER}",
                     "mkdir -p ${APATCH_LOG_FOLDER}",
@@ -169,7 +155,8 @@ class APApplication : Application() {
                     "${KPATCH_PATH} ${superKey} android_user init",
                 )
 
-                Shell.getShell().newJob().add(*cmds).to(logCallback, logCallback).exec()
+                val shell = getRootShell()
+                shell.newJob().add(*cmds).to(logCallback, logCallback).exec()
 
                 aPatchVersion = getManagerVersion().second
                 kPatchVersion = getKernelPatchVersion()

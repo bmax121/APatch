@@ -22,8 +22,6 @@ import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.topjohnwu.superuser.CallbackList
-import com.topjohnwu.superuser.Shell
-import com.topjohnwu.superuser.ShellUtils
 import com.topjohnwu.superuser.nio.ExtendedFile
 import com.topjohnwu.superuser.nio.FileSystemManager
 import dev.utils.app.MediaStoreUtils
@@ -35,7 +33,7 @@ import me.bmax.apatch.R
 import me.bmax.apatch.TAG
 import me.bmax.apatch.APApplication
 import me.bmax.apatch.apApp
-import me.bmax.apatch.util.reboot
+import me.bmax.apatch.util.*
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -149,10 +147,6 @@ fun InputStream.writeTo(file: File) = copyAndClose(file.outputStream())
 
 private fun InputStream.copyAndCloseOut(out: OutputStream) = out.use { copyTo(it) }
 
-private val shell = Shell.getShell()
-private fun String.fsh() = ShellUtils.fastCmd(shell, this)
-private fun Array<String>.fsh() = ShellUtils.fastCmd(shell, *this)
-
 fun patchBootimg(uri: Uri?, superKey: String, logs: MutableList<String>): Boolean {
     var outPath: File? = null
     var srcBoot: ExtendedFile? = null
@@ -203,6 +197,7 @@ fun patchBootimg(uri: Uri?, superKey: String, logs: MutableList<String>): Boolea
         "cd $patchDir",
         patchCommand,
     )
+    val shell = getRootShell()
     shell.newJob().add(*cmds).to(logs, logs).exec()
     logs.add("****************************")
 
