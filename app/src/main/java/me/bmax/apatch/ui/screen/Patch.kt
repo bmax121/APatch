@@ -156,7 +156,7 @@ private fun Array<String>.fsh() = ShellUtils.fastCmd(shell, *this)
 fun patchBootimg(uri: Uri?, superKey: String, logs: MutableList<String>): Boolean {
     var outPath: File? = null
     var srcBoot: ExtendedFile? = null
-    var patchDir: ExtendedFile = FileSystemManager.getLocal().getFile(apApp.filesDir.parent, "patch")
+    val patchDir: ExtendedFile = FileSystemManager.getLocal().getFile(apApp.filesDir.parent, "patch")
     patchDir.deleteRecursively()
     patchDir.mkdirs()
 
