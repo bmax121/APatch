@@ -11,6 +11,8 @@ import coil.Coil
 import coil.ImageLoader
 import com.topjohnwu.superuser.CallbackList
 import com.topjohnwu.superuser.Shell
+import com.topjohnwu.superuser.nio.ExtendedFile
+import com.topjohnwu.superuser.nio.FileSystemManager
 import me.bmax.apatch.util.*
 import me.zhanghai.android.appiconloader.coil.AppIconFetcher
 import me.zhanghai.android.appiconloader.coil.AppIconKeyer
@@ -38,20 +40,20 @@ class APApplication : Application() {
         val APD_PATH = "/data/adb/apd"
         val KPATCH_PATH = "/data/adb/kpatch"
         val KPATCH_SHADOW_PATH = "/system/bin/truncate"
-        val APATCH_FLODER = "/data/adb/ap/"
-        val APATCH_BIN_FLODER = "/data/adb/ap/bin/"
-        val APATCH_LOG_FLODER = "/data/adb/ap/log/"
-        val APD_LINK_PATH = APATCH_BIN_FLODER + "apd"
-        val KPATCH_LINK_PATH = APATCH_BIN_FLODER + "kpatch"
-        val PACKAGE_CONFIG_FILE = APATCH_FLODER + "package_config"
-        val SU_PATH_FILE = APATCH_FLODER + "su_path"
+        val APATCH_FOLDER = "/data/adb/ap/"
+        val APATCH_BIN_FOLDER = "/data/adb/ap/bin/"
+        val APATCH_LOG_FOLDER = "/data/adb/ap/log/"
+        val APD_LINK_PATH = APATCH_BIN_FOLDER + "apd"
+        val KPATCH_LINK_PATH = APATCH_BIN_FOLDER + "kpatch"
+        val PACKAGE_CONFIG_FILE = APATCH_FOLDER + "package_config"
+        val SU_PATH_FILE = APATCH_FOLDER + "su_path"
         val SAFEMODE_FILE = "/dev/.safemode"
         val GLOBAL_NAMESPACE_FILE = "/data/adb/.global_namespace_enable"
 
-        val APATCH_VERSION_PATH = APATCH_FLODER + "version"
-        val MAGISKPOLICY_BIN_PATH = APATCH_BIN_FLODER + "magiskpolicy"
-        val BUSYBOX_BIN_PATH = APATCH_BIN_FLODER + "busybox"
-        val RESETPROP_BIN_PATH = APATCH_BIN_FLODER + "resetprop"
+        val APATCH_VERSION_PATH = APATCH_FOLDER + "version"
+        val MAGISKPOLICY_BIN_PATH = APATCH_BIN_FOLDER + "magiskpolicy"
+        val BUSYBOX_BIN_PATH = APATCH_BIN_FOLDER + "busybox"
+        val RESETPROP_BIN_PATH = APATCH_BIN_FOLDER + "resetprop"
         val MAGISK_SCONTEXT = "u:r:magisk:s0"
 
         val DEFAULT_SU_PATH = "/system/bin/kp"
@@ -79,11 +81,16 @@ class APApplication : Application() {
 
         fun installKpatch() {
             if (_kpStateLiveData.value != State.KERNELPATCH_NEED_UPDATE) return
+            
+            val patchDir: ExtendedFile = FileSystemManager.getLocal().getFile(apApp.filesDir.parent, "patch")
+            val newBootFile = patchDir.getChildFile("new-boot.img")
 
-            kPatchVersion = getKPatchVersion()
+            if (newBootFile.exists()) {
+                kPatchVersion = getKPatchVersion()
 
-            Log.d(TAG, "KPatch installed ...")
-            _kpStateLiveData.postValue(State.KERNELPATCH_INSTALLED)
+                Log.d(TAG, "KPatch installed...")
+                _kpStateLiveData.postValue(State.KERNELPATCH_INSTALLED)
+            }
         }
 
         fun uninstallApatch() {
@@ -97,16 +104,16 @@ class APApplication : Application() {
                     _apStateLiveData.postValue(State.ANDROIDPATCH_INSTALLED)
                     return@thread
                 }
-                Log.d(TAG, "APatch uninstalling ...")
+                Log.d(TAG, "APatch uninstalling...")
 
                 Natives.resetSuPath(DEFAULT_SU_PATH)
                 File(APATCH_VERSION_PATH).delete()
                 File(APD_PATH).delete()
                 // Reserved, used to obtain logs
                 // File(KPATCH_PATH).delete()
-                File(APATCH_FLODER).deleteRecursively()
+                File(APATCH_FOLDER).deleteRecursively()
 
-                Log.d(TAG, "APatch removed ...")
+                Log.d(TAG, "APatch removed...")
 
                 _apStateLiveData.postValue(State.ANDROIDPATCH_READY)
             }
@@ -132,8 +139,8 @@ class APApplication : Application() {
                 }
 
                 val cmds = arrayOf(
-                    "mkdir -p ${APATCH_BIN_FLODER}",
-                    "mkdir -p ${APATCH_LOG_FLODER}",
+                    "mkdir -p ${APATCH_BIN_FOLDER}",
+                    "mkdir -p ${APATCH_LOG_FOLDER}",
 
                     "cp -f ${nativeDir}/libkpatch.so ${KPATCH_PATH}",
                     "chmod +x ${KPATCH_PATH}",
@@ -157,7 +164,7 @@ class APApplication : Application() {
                     "[ -s ${SU_PATH_FILE} ] || echo ${LEGACY_SU_PATH} > ${SU_PATH_FILE}",
                     "echo ${getManagerVersion().second} > ${APATCH_VERSION_PATH}",
 
-                    "restorecon -R ${APATCH_FLODER}",
+                    "restorecon -R ${APATCH_FOLDER}",
 
                     "${KPATCH_PATH} ${superKey} android_user init",
                 )
@@ -167,7 +174,7 @@ class APApplication : Application() {
                 aPatchVersion = getManagerVersion().second
                 kPatchVersion = getKernelPatchVersion()
 
-                Log.d(TAG, "APatch installed ...")
+                Log.d(TAG, "APatch installed...")
                 _apStateLiveData.postValue(State.ANDROIDPATCH_INSTALLED)
             }
         }
