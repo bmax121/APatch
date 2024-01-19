@@ -410,7 +410,7 @@ private fun KStatusCard(kpState: APApplication.State, navigator: DestinationsNav
                         )
                     }
                 }
-                if (kpState.equals(APApplication.State.KERNELPATCH_NEED_UPDATE)) {
+                if (kpState.equals(APApplication.State.KERNELPATCH_NEED_UPDATE) && isDirectInstallAvailable()) {
                     Column (modifier = Modifier
                         .align(Alignment.CenterVertically)
                     ) {
