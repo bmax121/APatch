@@ -46,11 +46,33 @@ find_block() {
   return 1
 }
 
+grep_cmdline() {
+  local REGEX="s/^$1=//p"
+  { echo $(cat /proc/cmdline)$(sed -e 's/[^"]//g' -e 's/""//g' /proc/cmdline) | xargs -n 1; \
+    sed -e 's/ = /=/g' -e 's/, /,/g' -e 's/"//g' /proc/bootconfig; \
+  } 2>/dev/null | sed -n "$REGEX"
+}
+
+find_slot() {
+  # Check A/B slot
+  SLOT=$(grep_cmdline androidboot.slot_suffix)
+  if [ -z $SLOT ]; then
+    SLOT=$(grep_cmdline androidboot.slot)
+    [ -z $SLOT ] || SLOT=_${SLOT}
+  fi
+  if [ -z $SLOT ]; then
+    SLOT=$(getprop ro.boot.slot_suffix)
+  fi
+  [ "$SLOT" = "normal" ] && unset SLOT
+  [ -z $SLOT ] || echo "- Current boot slot: $SLOT"
+}
+
 find_boot_image() {
-  SLOT=$(getprop ro.boot.slot_suffix)
+  find_slot
   if [ ! -z $SLOT ]; then
     BOOTIMAGE=$(find_block "ramdisk$SLOT" "recovery_ramdisk$SLOT" "init_boot$SLOT" "boot$SLOT")
-  else
+  fi
+  if [ -z $BOOTIMAGE ]; then
     BOOTIMAGE=$(find_block ramdisk recovery_ramdisk kern-a android_boot kernel bootimg init_boot boot lnx boot_a)
   fi
   if [ -z $BOOTIMAGE ]; then
