@@ -50,6 +50,11 @@ To help translate APatch or improve existing translations, please use [Weblate](
 ### Usage
 
 Installation guide (coming soon)
+<hr>
+
+### ℹ️ Universal Kernel Compilation Guide for Unsupported Devices with APatch : [Click here](https://github.com/ravindu644/Android-Kernel-Tutorials)
+- ❗ In this guide, you'll discover how to enable crucial features like **Kallsyms** and **OverlayFS** for any device. Additionally, it provides instructions on disabling **Samsung** securities to ensure APatch functions correctly.
+<hr>
 
 ### Updates
 - Telegram Channel: [@APatchChannel](https://t.me/APatchChannel)
