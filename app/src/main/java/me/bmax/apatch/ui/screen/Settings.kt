@@ -61,8 +61,8 @@ fun SettingScreen(navigator: DestinationsNavigator) {
     val state by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
     val kPatchReady = state != APApplication.State.UNKNOWN_STATE
     val aPatchReady = (state == APApplication.State.ANDROIDPATCH_INSTALLING ||
-            state == APApplication.State.ANDROIDPATCH_INSTALLED ||
-            state == APApplication.State.ANDROIDPATCH_NEED_UPDATE)
+                       state == APApplication.State.ANDROIDPATCH_INSTALLED ||
+                       state == APApplication.State.ANDROIDPATCH_NEED_UPDATE)
     var isGlobalNamespaceEnabled by rememberSaveable {
         mutableStateOf(false)
     }
@@ -93,6 +93,44 @@ fun SettingScreen(navigator: DestinationsNavigator) {
             val context = LocalContext.current
             val scope = rememberCoroutineScope()
             val dialogHost = LocalDialogHost.current
+
+            if (kPatchReady && aPatchReady) {
+                SwitchItem(
+                    icon = Icons.Filled.Engineering,
+                    title = stringResource(id = R.string.settings_global_namespace_mode),
+                    summary = stringResource(id = R.string.settings_global_namespace_mode_summary),
+                    checked = isGlobalNamespaceEnabled,
+                    onCheckedChange = {
+                        setGlobalNamespaceEnabled(
+                            if (isGlobalNamespaceEnabled) {
+                                "0"
+                            } else {
+                                "1"
+                            }
+                        )
+                        isGlobalNamespaceEnabled = it
+                    }
+                )
+            }
+
+            ListItem(
+                headlineContent = {
+                    Text(text = stringResource(id = R.string.settings_app_language))
+                },
+                modifier = Modifier.clickable {
+                    showLanguageDialog.value = true
+                },
+                supportingContent = {
+                    Text(
+                        text = AppCompatDelegate.getApplicationLocales()[0]?.displayLanguage?.replaceFirstChar {
+                            if (it.isLowerCase()) it.titlecase(
+                                Locale.getDefault()
+                            ) else it.toString()
+                        } ?: stringResource(id = R.string.system_default)
+                    )
+                },
+                leadingContent = { Icon(Icons.Filled.Translate, null) }
+            )
 
             ListItem(
                 leadingContent = {
@@ -129,44 +167,6 @@ fun SettingScreen(navigator: DestinationsNavigator) {
                     }
                 }
             )
-
-            ListItem(
-                headlineContent = {
-                    Text(text = stringResource(id = R.string.settings_app_language))
-                },
-                modifier = Modifier.clickable {
-                    showLanguageDialog.value = true
-                },
-                supportingContent = {
-                    Text(
-                        text = AppCompatDelegate.getApplicationLocales()[0]?.displayLanguage?.replaceFirstChar {
-                            if (it.isLowerCase()) it.titlecase(
-                                Locale.getDefault()
-                            ) else it.toString()
-                        } ?: stringResource(id = R.string.system_default)
-                    )
-                },
-                leadingContent = { Icon(Icons.Filled.Translate, null) }
-            )
-
-            if (kPatchReady && aPatchReady) {
-                SwitchItem(
-                    icon = Icons.Filled.Engineering,
-                    title = stringResource(id = R.string.settings_global_namespace_mode),
-                    summary = stringResource(id = R.string.settings_global_namespace_mode_summary),
-                    checked = isGlobalNamespaceEnabled,
-                    onCheckedChange = {
-                        setGlobalNamespaceEnabled(
-                            if (isGlobalNamespaceEnabled) {
-                                "0"
-                            } else {
-                                "1"
-                            }
-                        )
-                        isGlobalNamespaceEnabled = it
-                    }
-                )
-            }
 
             val about = stringResource(id = R.string.about)
             ListItem(
