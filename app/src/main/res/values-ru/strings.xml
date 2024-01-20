@@ -98,4 +98,6 @@
     <string name="settings_app_language">Язык</string>
     <string name="system_default">Системный по умолчанию</string>
     <string name="patch">Пропатчить</string>
+    <string name="settings_global_namespace_mode">Режим Global Namespace</string>
+    <string name="settings_global_namespace_mode_summary">Все root сессии используют global mount namespace</string>
 </resources>

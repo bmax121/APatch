@@ -2,6 +2,7 @@ package me.bmax.apatch
 
 import android.app.Application
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -42,6 +43,7 @@ class APApplication : Application() {
         val PACKAGE_CONFIG_FILE = APATCH_FLODER + "package_config"
         val SU_PATH_FILE = APATCH_FLODER + "su_path"
         val SAFEMODE_FILE = "/dev/.sefemode"
+        val GLOBAL_NAMESPACE_FILE = "/data/adb/.global_namespace_enable"
 
         val APATCH_VERSION_PATH = APATCH_FLODER + "version"
         val MAGISKPOLICY_BIN_PATH = APATCH_BIN_FLODER + "magiskpolicy"
@@ -209,6 +211,8 @@ class APApplication : Application() {
         // todo:
         sharedPreferences = getSharedPreferences("config", Context.MODE_PRIVATE)
         superKey = sharedPreferences.getString(SUPER_KEY, "") ?: ""
+
+
 
         val context = this
         val iconSize = resources.getDimensionPixelSize(android.R.dimen.app_icon_size)

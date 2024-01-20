@@ -97,4 +97,7 @@
     <string name="apm_failed_to_disable">Nu se poate opri modulul \"%s\"</string>
     <string name="settings_app_language">Limbă</string>
     <string name="system_default">Implicit de sistem</string>
+    <string name="patch">Patch</string>
+    <string name="settings_global_namespace_mode">Modul de spațiu de nume global</string>
+    <string name="settings_global_namespace_mode_summary">Toate sesiunile root folosesc spațiul de nume de montare global</string>
 </resources>

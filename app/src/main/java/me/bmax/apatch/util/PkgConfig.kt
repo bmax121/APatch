@@ -20,8 +20,6 @@ object PkgConfig {
 
     private val CSV_HEADER = "pkg,exclude,allow,uid,to_uid,sctx"
 
-    val configs: HashMap<String, Config> = readConfigs()
-
     @Immutable
     @Parcelize
     @Keep
@@ -46,26 +44,30 @@ object PkgConfig {
         }
     }
 
-    private fun readConfigs(): HashMap<String,Config> {
+    public fun readConfigs(): HashMap<String,Config> {
         val configs = HashMap<String,Config>()
         val file = File(APApplication.PACKAGE_CONFIG_FILE)
         if(file.exists()) {
             file.readLines().drop(1).filter { !it.isEmpty() }.forEach {
                 Log.d(TAG, it)
                 val p = Config.fromLine(it)
-                configs[p.pkg] = p
+                if(! p.isDefault()) {
+                    configs[p.pkg] = p
+                }
             }
         }
         return configs
     }
 
-    private fun writeConfigs() {
+    private fun writeConfigs(configs: HashMap<String,Config> ) {
         val file = File(APApplication.PACKAGE_CONFIG_FILE)
         if(!file.parentFile.exists()) file.parentFile.mkdirs()
         val writer = FileWriter(file, false)
         writer.write(CSV_HEADER + '\n')
         configs.values.forEach {
-            writer.write(it.toLine() + '\n')
+            if(!it.isDefault()) {
+                writer.write(it.toLine() + '\n')
+            }
         }
         writer.flush()
         writer.close()
@@ -75,9 +77,10 @@ object PkgConfig {
         mutex.withLock {
             thread {
                 Natives.su()
+                val configs = readConfigs()
                 Log.d(TAG, "change config: " + config)
                 configs[config.pkg] = config
-                writeConfigs()
+                writeConfigs(configs)
             }.join()
         }
     }

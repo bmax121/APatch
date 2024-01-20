@@ -120,7 +120,7 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
     // todo
     var isSafeMode = false
     var hasMagisk = hasMagisk()
-    val hideInstallButton = isSafeMode || hasMagisk
+    val hideInstallButton = isSafeMode || hasMagisk || !viewModel.isOverlayAvailable
 
     val moduleListState = rememberLazyListState()
 

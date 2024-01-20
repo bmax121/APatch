@@ -99,4 +99,6 @@
     <string name="system_default">Predefinito di sistema</string>
     <string name="settings_app_language">Lingua</string>
     <string name="patch">Patch</string>
+    <string name="settings_global_namespace_mode">Modalità Namespace Globale</string>
+    <string name="settings_global_namespace_mode_summary">Tutte le sessioni di root erediteranno il namespace globale</string>
 </resources>

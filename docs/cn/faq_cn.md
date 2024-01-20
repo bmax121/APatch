@@ -15,7 +15,7 @@ APatch分别结合了Magisk方便易用的通过`boot.img`安装的方法，和K
 
 ## APatch与Magisk、KernelSU的区别？
 
-- APatch可选择不修改SELinux。APatch还允许您在不创建新线程的情况下，在Android应用程序上下文中进行root，因此无需libsu和IPC。
+- APatch可选择不修改SELinux，这意味着Android应用程序线程可以被root，无需libsu和IPC。
 - APatch提供**Kernel Patch Module（KP模块）**。
 
 ## 什么是Kernel Patch Module（KP模块）？
@@ -45,4 +45,3 @@ KernelPatch 添加了一个新的系统调用（syscall），为应用程序和�
 
 - KernelPatch不修改SELinux上下文，而是通过hook绕过SELinux。 这允许您在应用程序上下文中root Android线程，无需使用libsu启动新进程，然后执行IPC。这非常方便。
 - 此外，APatch直接利用magiskpolicy提供额外的SELinux支持。  
-  但是，仅这样会被检测为Magisk。有兴趣的人可以尝试绕过，问题已经很明确。

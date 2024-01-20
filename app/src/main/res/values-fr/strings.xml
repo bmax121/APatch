@@ -98,4 +98,6 @@
     <string name="patch">Patcher</string>
     <string name="settings_app_language">Langage</string>
     <string name="system_default">Par défaut</string>
+    <string name="settings_global_namespace_mode">Mode espace de nommage global</string>
+    <string name="settings_global_namespace_mode_summary">Toutes les sessions root utilisent l\'espace de nommage global</string>
 </resources>

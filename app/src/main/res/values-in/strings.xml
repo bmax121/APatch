@@ -36,7 +36,7 @@
 \n%s → %s</string>
     <string name="home_auth_key_title">Masukkan SuperKey</string>
     <string name="reboot_download">Ke Download</string>
-    <string name="home_auth_key_desc">Mulai proses setelah sertifikasi</string>
+    <string name="home_auth_key_desc">Mulai proses setelah terverifikasi</string>
     <string name="home_ap_cando_update">Perbarui</string>
     <string name="kpatch_shadow_path">kpatch: %s → %s</string>
     <string name="home_ap_cando_uninstall">Hapus</string>
@@ -74,9 +74,9 @@
     <string name="kpm_kp_not_installed">KernelPatch tidak terinstal</string>
     <string name="su_pkg_excluded_setting_title">Kecualikan</string>
     <string name="su_pkg_excluded_setting_summary">untuk modul</string>
-    <string name="su_pkg_excluded_label">kecualikan</string>
+    <string name="su_pkg_excluded_label">dikecualikan</string>
     <string name="su_title">Superuser</string>
-    <string name="su_selinux_via_hook">memintas via hook</string>
+    <string name="su_selinux_via_hook">bypass via hook</string>
     <string name="kpm_version">Versi</string>
     <string name="reboot_userspace">SoftReboot</string>
     <string name="home_selinux_status_unknown">Unknown</string>
@@ -98,4 +98,6 @@
     <string name="settings_app_language">Bahasa</string>
     <string name="system_default">Bawaan sistem</string>
     <string name="patch">Patch</string>
+    <string name="settings_global_namespace_mode_summary">Mount namespace ke semua root set</string>
+    <string name="settings_global_namespace_mode">Global Namespace</string>
 </resources>
