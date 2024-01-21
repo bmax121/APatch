@@ -3,7 +3,7 @@
     <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
     <string name="app_name" translatable="false">APatch</string>
     <string name="apm_reboot_to_apply">Değişikleri uygulamak için yeniden başlatın</string>
-    <string name="kpatch_shadow_path">KernelPatch: %s -&gt; %s</string>
+    <string name="kpatch_shadow_path">kpatch: %s -&gt; %s</string>
     <string name="android_patch">AndroidPatch</string>
     <string name="kpm_unload_confirm">\"%s\" modülünü kaldır?</string>
     <string name="apm_uninstall_success">\"%s\" kaldırıldı</string>
@@ -35,7 +35,7 @@
     <string name="home_fingerprint">Parmak izi</string>
     <string name="apatch_version">Sürüm:
 \n%s</string>
-    <string name="apm_overlay_fs_not_available">OverlayFS mevcut değil, modül çalışamaz.</string>
+    <string name="apm_overlay_fs_not_available">OverlayFS, kernel tarafından devre dışı bırakıldığından modüllere erişilemiyor.</string>
     <string name="kpm_version">Sürüm</string>
     <string name="su_refresh">Yenile</string>
     <string name="safe_mode">Güvenli mod</string>
@@ -65,7 +65,7 @@
     <string name="apm_downloading">\"%s\"modülü indiriliyor…</string>
     <string name="su_hide_system_apps">Sistem uygulamalarını gizle</string>
     <string name="home_su_path">su: %s</string>
-    <string name="apm_magisk_conflict">Magisk\'tekiler ile çakıştığı için modüller devre dışı bırakıldı.</string>
+    <string name="apm_magisk_conflict">Magisk ile çakıştığı için modüllere erişilemiyor.</string>
     <string name="apm_desc">Açıklama</string>
     <string name="home_ap_cando_update">Güncelle</string>
     <string name="kpm_load_toast_failed">Yüklenemedi</string>
@@ -88,7 +88,7 @@
     <string name="kpm_license">Lisans</string>
     <string name="reboot_bootloader">Önyükleyici modunda yeniden başlat</string>
     <string name="kpm_apm_empty">Yüklü modül yok</string>
-    <string name="about_source_code">Kaynak koduna göz atın: %1$s<br/><br/>Kanalımıza katılın: %2$s</string>
+    <string name="about_source_code">%1$s üzerinden kaynak koduna göz atın. <br/>%2$s kanalımıza katılın.</string>
     <string name="home_manager_version">Yönetici sürümü</string>
     <string name="kpm_load_toast_succ">Başarıyla yüklendi</string>
     <string name="apm_author">Geliştirici</string>

@@ -5,7 +5,7 @@
     <string name="home">ホーム</string>
     <string name="android_patch">AndroidPatch</string>
     <string name="kpm_unload_confirm">モジュール %sを無効するか</string>
-    <string name="home_auth_key_desc">認定後に動作開始</string>
+    <string name="home_auth_key_desc">認定後に開始</string>
     <string name="patch_warnning">インストールにはリスクが伴います。データがバックアップされていることを確認してください。</string>
     <string name="home_patch_set_key_desc">KernelPatchの資格情報のみ</string>
     <string name="apm_uninstall_confirm">モジュール%sをアンインストールしますか?</string>
@@ -27,8 +27,8 @@
     <string name="safe_mode">セーフモード</string>
     <string name="reboot_userspace">ソフトリブート</string>
     <string name="about">プロジェクトについて</string>
-    <string name="home_patch_next_step">次へ</string>
-    <string name="home_not_installed">まだインストールされてない</string>
+    <string name="home_patch_next_step">次のステップ</string>
+    <string name="home_not_installed">未インストール</string>
     <string name="send_log">ログを送信</string>
     <string name="super_key">パスワード(SuperKey)</string>
     <string name="home_patch_set_key_title">パスワード(SuperKey)設定</string>
@@ -36,7 +36,7 @@
     <string name="home_auth_key_title">SuperKeyパスワードを入力</string>
     <string name="kpm_kp_not_installed">カーネルパッチインストールされてない</string>
     <string name="kpm_load">ロードする</string>
-    <string name="kpm_author">作成者</string>
+    <string name="kpm_author">制作者</string>
     <string name="kpm_desc">説明</string>
     <string name="su_title">SuperUser</string>
     <string name="kpm_license">ライセンス</string>
@@ -47,15 +47,15 @@
     <string name="apm_uninstall_success">%sアンインストール成功</string>
     <string name="apm_downloading">モジュール%sをダウンロードする</string>
     <string name="apm_update">アップデート</string>
-    <string name="home_install_unknown">未確定</string>
-    <string name="home_click_to_install">ここに押すとインストール開始</string>
-    <string name="home_working">作動中</string>
+    <string name="home_install_unknown">未知</string>
+    <string name="home_click_to_install">タップでインストール</string>
+    <string name="home_working">動作中</string>
     <string name="home_ap_cando_install">インストール</string>
     <string name="home_ap_cando_update">アップデート</string>
-    <string name="home_ap_cando_uninstall">アンインストールする</string>
+    <string name="home_ap_cando_uninstall">アンインストール</string>
     <string name="home_kernel">カーネル</string>
     <string name="home_fingerprint">指紋</string>
-    <string name="home_selinux_status">SELinux状態</string>
+    <string name="home_selinux_status">SELinuxの状態</string>
     <string name="home_selinux_status_unknown">SELinux状態未確定</string>
     <string name="kpm_load_toast_succ">ロード成功</string>
     <string name="kpm_load_toast_failed">ロード失敗</string>
@@ -72,7 +72,7 @@
     <string name="apm_desc">説明</string>
     <string name="apm_overlay_fs_not_available">OverlayFS未確定 モジュール動作失敗</string>
     <string name="apm_reboot_to_apply">有効するには再起動</string>
-    <string name="apm_changelog">バージョン歴史</string>
+    <string name="apm_changelog">変更履歴</string>
     <string name="kpatch_version">バージョン%d.%d.%d</string>
     <string name="apatch_version">バージョン%s</string>
     <string name="apatch_version_update">バージョン%s → %s</string>
@@ -94,4 +94,7 @@
     <string name="patch">パッチ</string>
     <string name="settings_app_language">言葉</string>
     <string name="system_default">システムのデフォルト</string>
+    <string name="settings_global_namespace_mode">グローバル名前空間モード</string>
+    <string name="settings_global_namespace_mode_summary">すべての root セッションはグローバル マウント名前空間を使用します</string>
+    <string name="kpm_args">パラメータ</string>
 </resources>

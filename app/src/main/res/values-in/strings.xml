@@ -32,16 +32,16 @@
     <string name="apatch_version">Versi:
 \n%s</string>
     <string name="home_need_update">Tersedia versi terbaru</string>
-    <string name="apatch_version_update">Versi:
-\n%s → %s</string>
+    <string name="apatch_version_update">Version:
+\n%s -&gt; %s</string>
     <string name="home_auth_key_title">Masukkan SuperKey</string>
     <string name="reboot_download">Ke Download</string>
     <string name="home_auth_key_desc">Mulai proses setelah terverifikasi</string>
     <string name="home_ap_cando_update">Perbarui</string>
-    <string name="kpatch_shadow_path">kpatch: %s → %s</string>
+    <string name="kpatch_shadow_path">kpatch: %s -&gt; %s</string>
     <string name="home_ap_cando_uninstall">Hapus</string>
     <string name="home_ap_cando_install">Instal</string>
-    <string name="home_su_path_ex">su: %s → %s</string>
+    <string name="home_su_path_ex">su: %s -&gt; %s</string>
     <string name="home_apatch_version">APatch: %s</string>
     <string name="home_su_path">su: %s</string>
     <string name="home_kernel">Kernel</string>
@@ -52,9 +52,9 @@
     <string name="apm_uninstall">Hapus</string>
     <string name="apm_uninstall_confirm">Hapus modul %s?</string>
     <string name="apm_version">Versi</string>
-    <string name="apm_overlay_fs_not_available">OverlayFS tidak tersedia. Modul tidak berfungsi.</string>
+    <string name="apm_overlay_fs_not_available">Kernel tidak mendukung OverlayFS, fungsi modul ditiadakan.</string>
     <string name="apm_uninstall_failed">Gagal menghapus %s</string>
-    <string name="apm_magisk_conflict">Modul dinonaktifkan, ada konflik dengan modul lain.</string>
+    <string name="apm_magisk_conflict">Konflik dengan Magisk, fungsi modul ditiadakan.</string>
     <string name="apm_desc">Ket.</string>
     <string name="apm_empty">Tidak ada modul</string>
     <string name="apm_author">Oleh</string>

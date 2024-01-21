@@ -26,7 +26,7 @@
     <string name="home_ap_cando_uninstall">Disinstalla</string>
     <string name="apatch_version">Versione:
 \n %s</string>
-    <string name="apm_overlay_fs_not_available">OverlayFS non è disponibile. Il modulo non può funzionare.</string>
+    <string name="apm_overlay_fs_not_available">I moduli non sono disponibili poiché OverlayFS è disabilitato dal kernel.</string>
     <string name="kpm_version">Versione</string>
     <string name="su_refresh">Aggiorna</string>
     <string name="safe_mode">Modalità provvisoria</string>
@@ -50,7 +50,7 @@
     <string name="home_patch_set_key_title">Imposta SuperKey</string>
     <string name="apm_downloading">Download del modulo \"%s\" in corso…</string>
     <string name="su_hide_system_apps">Nascondi app di sistema</string>
-    <string name="apm_magisk_conflict">I moduli sono disattivati a causa di un conflitto con quelli di Magisk.</string>
+    <string name="apm_magisk_conflict">I moduli non sono disponibili a causa di un conflitto con Magisk.</string>
     <string name="home_ap_cando_update">Aggiorna</string>
     <string name="kpm_load_toast_failed">Caricamento fallito</string>
     <string name="home_selinux_status_disabled">Disabilitato</string>
@@ -68,8 +68,7 @@
     <string name="kpm_license">Licenza</string>
     <string name="reboot_bootloader">Riavvia in modalità Bootloader</string>
     <string name="kpm_apm_empty">Nessun modulo caricato</string>
-    <string name="about_source_code">Visualizza il codice sorgente su %1$s<br/>
-\nUnisciti al nostro canale %2$s</string>
+    <string name="about_source_code">Visualizza il codice sorgente su %1$s\\nUnisciti al nostro canale %2$s</string>
     <string name="home_manager_version">Versione del Manager</string>
     <string name="kpm_load_toast_succ">Caricamento riuscito</string>
     <string name="apm_author">Autore</string>

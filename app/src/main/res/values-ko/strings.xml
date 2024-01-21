@@ -41,8 +41,8 @@
     <string name="home_fingerprint">기기 서명</string>
     <string name="home_selinux_status">SELinux 상태</string>
     <string name="home_selinux_status_disabled">꺼짐</string>
-    <string name="home_selinux_status_enforcing">정상 작동중</string>
-    <string name="home_selinux_status_permissive">허용 모드</string>
+    <string name="home_selinux_status_enforcing">Enforcing</string>
+    <string name="home_selinux_status_permissive">Permissive</string>
     <string name="home_selinux_status_unknown">알 수 없음</string>
     <string name="kpm">커널 패치 모듈</string>
     <string name="kpm_kp_not_installed">커널패치가 설치되지 않았습니다</string>
@@ -95,4 +95,9 @@
     <string name="apm_downloading">\"%s\"모듈을 다운로드 중입니다…</string>
     <string name="apm_start_downloading">%s 다운로드를 시작합니다</string>
     <string name="apm_new_version_available">새로운 버전을 설치하려면 눌러주세요, %s.</string>
+    <string name="kpm_desc">설명</string>
+    <string name="kpm_args">토론</string>
+    <string name="apm_desc">설명</string>
+    <string name="settings_global_namespace_mode">글로벌 네임스페이스 모드</string>
+    <string name="settings_global_namespace_mode_summary">모든 루트 세션은 글로벌 마운트 세션을 사용합니다</string>
 </resources>

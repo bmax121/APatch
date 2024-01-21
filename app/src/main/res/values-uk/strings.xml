@@ -89,8 +89,8 @@
     <string name="apm_uninstall_success">%s видалено</string>
     <string name="apm_uninstall_failed">Неможливо встановити %s</string>
     <string name="apm_version">Версія</string>
-    <string name="apm_overlay_fs_not_available">OverlayFS недоступний. Модуль не може працювати.</string>
-    <string name="apm_magisk_conflict">Модулі вимкнені через конфлікт з тими що встановлені в Magisk.</string>
+    <string name="apm_overlay_fs_not_available">Модулі недоступні, оскільки OverlayFS вимкнено ядром.</string>
+    <string name="apm_magisk_conflict">Модулі недоступні через конфлікт з Magisk.</string>
     <string name="apm_downloading">Завантаження модуля \"%s\"…</string>
     <string name="kpm_unload_confirm">Видалити \"%s\" module?</string>
     <string name="apm_new_version_available">Натисніть, щоб встановити нову версію, %s.</string>
@@ -98,4 +98,6 @@
     <string name="settings_app_language">Мова</string>
     <string name="system_default">За замовчуванням у системі</string>
     <string name="patch">Пропатчити</string>
+    <string name="settings_global_namespace_mode">Режим глобального простору імен</string>
+    <string name="settings_global_namespace_mode_summary">Усі сеанси root використовують монтування глобального простору імен</string>
 </resources>

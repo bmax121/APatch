@@ -19,8 +19,8 @@
     <string name="safe_mode">Trygt modus</string>
     <string name="home_patch_next_step">Neste steg</string>
     <string name="home_click_to_install">Klikk for å installere</string>
-    <string name="home_working">Arbeider …</string>
-    <string name="home_installing">Installerer …</string>
+    <string name="home_working">Arbeider</string>
+    <string name="home_installing">Installerer</string>
     <string name="home_need_update">Ny versjon tilgjengelig</string>
     <string name="kpatch_version">Versjon: %d.%d.%d</string>
     <string name="apatch_version_update">Versjon: %s → %s</string>
