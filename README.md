@@ -31,7 +31,8 @@ The source code for both APatch UI and APM has been copied and modified from [Ke
 Kernel configs
 
 - `CONFIG_KALLSYMS=y`  
-- `CONFIG_KALLSYMS_ALL=y` 
+- `CONFIG_KALLSYMS_ALL=y`
+- `DEBUG_KERNEL=y`
 - `CONFIG_KALLSYMS_ALL=n` (Next version of KernelPatch will support)
 
 ## Translation
