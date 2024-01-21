@@ -55,6 +55,11 @@ SUPERKEY=$1
 BOOTIMAGE=$2
 BACKUPDIR="../backup"
 BACKUPIMAGE="$BACKUPDIR/boot.img"
+LEGACYSAR=false
+PATCHEDKERNEL=false
+
+mount_partitions
+find_boot_image
 
 if [ -z "$BOOTIMAGE" ]; then
   ISDIRECTINSTALL=true
@@ -62,7 +67,6 @@ if [ -z "$BOOTIMAGE" ]; then
     echo "Direct flash is not possible!"
     exit 1
   fi
-  find_boot_image
 elif [ ! -f "$BACKUPIMAGE" ]; then
   mkdir -p "$BACKUPDIR"
   cp "$BOOTIMAGE" "$BACKUPIMAGE"
@@ -98,6 +102,30 @@ if [ $? -ne 0 ]; then
   echo "Patch error: $?"
   exit $?
 fi
+
+cp kernel kernel.ori
+
+# Remove Samsung RKP
+./magiskboot hexpatch kernel \
+49010054011440B93FA00F71E9000054010840B93FA00F7189000054001840B91FA00F7188010054 \
+A1020054011440B93FA00F7140020054010840B93FA00F71E0010054001840B91FA00F7181010054 \
+&& PATCHEDKERNEL=true
+
+# Remove Samsung defex
+# Before: [mov w2, #-221]   (-__NR_execve)
+# After:  [mov w2, #-32768]
+./magiskboot hexpatch kernel 821B8012 E2FF8F12 && PATCHEDKERNEL=true
+
+# Force kernel to load rootfs for legacy SAR devices
+# skip_initramfs -> want_initramfs
+$LEGACYSAR && ./magiskboot hexpatch kernel \
+736B69705F696E697472616D667300 \
+77616E745F696E697472616D667300 \
+&& PATCHEDKERNEL=true
+
+# If the kernel doesn't need to be patched at all,
+# keep raw kernel to avoid bootloops on some weird devices
+$PATCHEDKERNEL || mv kernel.ori kernel
 
 echo "- Repacking boot image"
 if [ "$ISDIRECTINSTALL" ]; then

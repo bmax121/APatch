@@ -7,6 +7,13 @@ toupper() {
   echo "$@" | tr '[:lower:]' '[:upper:]'
 }
 
+grep_cmdline() {
+  local REGEX="s/^$1=//p"
+  { echo $(cat /proc/cmdline)$(sed -e 's/[^"]//g' -e 's/""//g' /proc/cmdline) | xargs -n 1; \
+    sed -e 's/ = /=/g' -e 's/, /,/g' -e 's/"//g' /proc/bootconfig; \
+  } 2>/dev/null | sed -n "$REGEX"
+}
+
 grep_prop() {
   local REGEX="s/^$1=//p"
   shift
@@ -46,15 +53,10 @@ find_block() {
   return 1
 }
 
-grep_cmdline() {
-  local REGEX="s/^$1=//p"
-  { echo $(cat /proc/cmdline)$(sed -e 's/[^"]//g' -e 's/""//g' /proc/cmdline) | xargs -n 1; \
-    sed -e 's/ = /=/g' -e 's/, /,/g' -e 's/"//g' /proc/bootconfig; \
-  } 2>/dev/null | sed -n "$REGEX"
-}
-
-find_slot() {
-  # Check A/B slot
+# After calling this method, the following variables will be set:
+# SLOT, LEGACYSAR
+mount_partitions() {
+    # Check A/B slot
   SLOT=$(grep_cmdline androidboot.slot_suffix)
   if [ -z $SLOT ]; then
     SLOT=$(grep_cmdline androidboot.slot)
@@ -65,10 +67,15 @@ find_slot() {
   fi
   [ "$SLOT" = "normal" ] && unset SLOT
   [ -z $SLOT ] || echo "- Current boot slot: $SLOT"
+
+  LEGACYSAR=false
+  if grep ' / ' /proc/mounts | grep -q '/dev/root'; then
+    LEGACYSAR=true
+    echo "- Legacy SAR, force kernel to load rootfs"
+  fi
 }
 
 find_boot_image() {
-  find_slot
   if [ ! -z $SLOT ]; then
     BOOTIMAGE=$(find_block "ramdisk$SLOT" "recovery_ramdisk$SLOT" "init_boot$SLOT" "boot$SLOT")
   fi
