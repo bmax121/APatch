@@ -68,6 +68,7 @@ body:
           - OS Version:
           - APatch Version:
           - Kernel Version:
+          - KernelPatch Version:
     validations:
         required: true
 
