@@ -82,7 +82,7 @@ jobs:
       - name: Sign Release
         env: 
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
-        if: ${{ env.SIGNING_KEY != '' }}
+        if: ${{ env.SIGNING_KEY != '' && github.ref == 'refs/heads/main' }}
         continue-on-error: true
         uses: kevin-david/zipalign-sign-android-release@v1.1
         id: sign_app
@@ -96,7 +96,7 @@ jobs:
       - name: Release apk
         env: 
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
-        if: ${{ env.SIGNING_KEY != '' }}
+        if: ${{ env.SIGNING_KEY != '' && github.ref == 'refs/heads/main' }}
         continue-on-error: true
         uses: ncipollo/release-action@v1.12.0
         with:
