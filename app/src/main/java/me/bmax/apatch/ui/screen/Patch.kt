@@ -193,7 +193,7 @@ fun patchBootimg(uri: Uri?, superKey: String, isInstall: Boolean, logs: MutableL
     val outFilename = "apatch_${apVer}_${rand}_boot.img"
     val patchCommand = when {
         uri == null && isInstall -> "sh boot_patch.sh $superKey"
-        uri == null -> "sh boot_unpatch.sh $superKey"
+        uri == null -> "sh boot_unpatch.sh"
         else -> "sh boot_patch.sh $superKey ${srcBoot?.path}"
     }
 

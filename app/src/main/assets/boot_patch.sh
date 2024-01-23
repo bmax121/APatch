@@ -57,6 +57,7 @@ SUPERKEY=$1
 BOOTIMAGE=$2
 LEGACYSAR=false
 PATCHEDKERNEL=false
+BACKUPIMAGE="/data/adb/apatch_backup_boot.img"
 
 mount_partitions
 
@@ -80,6 +81,10 @@ echo "- Unpacking boot image"
 if [ $? -ne 0 ]; then
   echo "- Unpack error: $?"
   exit $?
+fi
+
+if [ ! "$ISDIRECTINSTALL" ]; then
+  backup_boot_image
 fi
 
 cp kernel kernel.ori
@@ -109,7 +114,7 @@ $PATCHEDKERNEL || mv kernel.ori kernel
 mv kernel kernel.ori
 
 echo "- Patching kernel"
-./kptools -p kernel.ori --skey "$SUPERKEY" --kpimg kpimg --out kernel
+./kptools -p --image kernel.ori --skey "$SUPERKEY" --kpimg kpimg --out kernel
 
 if [ $? -ne 0 ]; then
   echo "- Patch error: $?"
@@ -129,7 +134,7 @@ echo "- Cleaning up"
 rm -f kernel.ori
 
 if [ "$ISDIRECTINSTALL" ] && [ -f "new-boot.img" ]; then
-  echo "- Flashing patched boot image"
+  echo "- Flashing new boot image"
   flash_image new-boot.img "$BOOTIMAGE"
 
   if [ $? -ne 0 ]; then

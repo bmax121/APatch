@@ -2,22 +2,6 @@
 #######################################################################################
 # APatch Boot Image Unpatcher
 #######################################################################################
-#
-# Usage: boot_unpatch.sh <superkey> <bootimage>
-#
-# This script should be placed in a directory with the following files:
-#
-# File name          Type          Description
-#
-# boot_unpatch.sh    script        A script to unpatch boot image for APatch.
-#                  (this file)      The script will use files in its same
-#                                  directory to complete the patching process.
-# bootimg            binary        The target boot image
-# kpimg              binary        KernelPatch core Image
-# kptools            executable    The KernelPatch tools binary to inject kpimg to kernel Image
-# magiskboot         executable    Magisk tool to unpack boot.img.
-#
-#######################################################################################
 
 ARCH=$(getprop ro.product.cpu.abi)
 
@@ -53,79 +37,82 @@ else
   exit 1
 fi
 
-SUPERKEY=$1
-BOOTIMAGE=$2
 LEGACYSAR=false
 PATCHEDKERNEL=false
+BACKUPIMAGE="/data/adb/apatch_backup_boot.img"
 
 mount_partitions
 find_boot_image
 
-[ -z "$SUPERKEY" ] && { echo "- SuperKey empty!"; exit 1; }
 [ -e "$BOOTIMAGE" ] || { echo "- $BOOTIMAGE does not exist!"; exit 1; }
 
 echo "- Target image: $BOOTIMAGE"
 
-# Check for dependencies
-command -v ./magiskboot >/dev/null 2>&1 || { echo "- Command magiskboot not found!"; exit 1; }
-command -v ./kptools >/dev/null 2>&1 || { echo "- Command kptools not found!"; exit 1; }
+if [ -f "$BACKUPIMAGE" ]; then
+  echo "- Stock boot image detected"
+  cp "$BACKUPIMAGE" "new-boot.img"
+else
+  # Check for dependencies
+  command -v ./magiskboot >/dev/null 2>&1 || { echo "- Command magiskboot not found!"; exit 1; }
+  command -v ./kptools >/dev/null 2>&1 || { echo "- Command kptools not found!"; exit 1; }
 
-echo "- Unpacking boot image"
-./magiskboot unpack "$BOOTIMAGE" >/dev/null 2>&1
+  echo "- Unpacking boot image"
+  ./magiskboot unpack "$BOOTIMAGE" >/dev/null 2>&1
 
-if [ $? -ne 0 ]; then
-  echo "- Unpack error: $?"
-  exit $?
+  if [ $? -ne 0 ]; then
+    echo "- Unpack error: $?"
+    exit $?
+  fi
+
+  mv kernel kernel.ori
+
+  echo "- Unpatching kernel"
+  ./kptools -u --image kernel.ori --out kernel
+
+  if [ $? -ne 0 ]; then
+    echo "- Unpatch error: $?"
+    exit $?
+  fi
+
+  cp kernel kernel.ori
+
+  # Reapply Samsung RKP
+  ./magiskboot hexpatch kernel \
+  A1020054011440B93FA00F7140020054010840B93FA00F71E0010054001840B91FA00F7181010054 \
+  49010054011440B93FA00F71E9000054010840B93FA00F7189000054001840B91FA00F7188010054 \
+  && PATCHEDKERNEL=true
+
+  # Reapply Samsung defex
+  # Before:  [mov w2, #-32768]
+  # After: [mov w2, #-221]   (-__NR_execve)
+  ./magiskboot hexpatch kernel E2FF8F12 821B8012 && PATCHEDKERNEL=true
+
+  # Force kernel to skip rootfs for legacy SAR devices
+  # want_initramfs -> skip_initramfs
+  $LEGACYSAR && ./magiskboot hexpatch kernel \
+  77616E745F696E697472616D667300 \
+  736B69705F696E697472616D667300 \
+  && PATCHEDKERNEL=true
+
+  # If the kernel doesn't need to be patched at all,
+  # keep raw kernel to avoid bootloops on some weird devices
+  $PATCHEDKERNEL || mv kernel.ori kernel
+
+  echo "- Repacking boot image"
+  ./magiskboot repack "$BOOTIMAGE" >/dev/null 2>&1
+
+  if [ $? -ne 0 ]; then
+    echo "- Repack error: $?"
+    exit $?
+  fi
+
+  echo "- Cleaning up"
+  ./magiskboot cleanup >/dev/null 2>&1
+  rm -f kernel.ori
 fi
-
-mv kernel kernel.ori
-
-echo "- Unpatching kernel"
-./kptools -u --image kernel.ori --skey "$SUPERKEY" --kpimg kpimg --out kernel
-
-if [ $? -ne 0 ]; then
-  echo "- Unpatch error: $?"
-  exit $?
-fi
-
-cp kernel kernel.ori
-
-# # Reapply Samsung RKP
-# ./magiskboot hexpatch kernel \
-# A1020054011440B93FA00F7140020054010840B93FA00F71E0010054001840B91FA00F7181010054 \
-# 49010054011440B93FA00F71E9000054010840B93FA00F7189000054001840B91FA00F7188010054 \
-# && PATCHEDKERNEL=true
-
-# # Reapply Samsung defex
-# # Before:  [mov w2, #-32768]
-# # After: [mov w2, #-221]   (-__NR_execve)
-# ./magiskboot hexpatch kernel E2FF8F12 821B8012 && PATCHEDKERNEL=true
-
-# # Force kernel to skip rootfs for legacy SAR devices
-# # want_initramfs -> skip_initramfs
-# $LEGACYSAR && ./magiskboot hexpatch kernel \
-# 77616E745F696E697472616D667300 \
-# 736B69705F696E697472616D667300 \
-# && PATCHEDKERNEL=true
-
-# # If the kernel doesn't need to be patched at all,
-# # keep raw kernel to avoid bootloops on some weird devices
-# $PATCHEDKERNEL || mv kernel.ori kernel
-
-echo "- Repacking boot image"
-./magiskboot repack "$BOOTIMAGE" >/dev/null 2>&1
-
-if [ $? -ne 0 ]; then
-  echo "- Repack error: $?"
-  exit $?
-fi
-
-echo "- Cleaning up"
-./magiskboot cleanup >/dev/null 2>&1
-rm -f kernel.ori
 
 if [ -f "new-boot.img" ]; then
-  echo "- Flashing unpatched boot image"
+  echo "- Restoring stock boot image"
   flash_image new-boot.img "$BOOTIMAGE"
 
   if [ $? -ne 0 ]; then
