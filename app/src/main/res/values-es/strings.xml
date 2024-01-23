@@ -75,7 +75,7 @@
     <string name="apm_version">Versión</string>
     <string name="apm_start_downloading">Iniciar descarga %s</string>
     <string name="home_ap_cando_uninstall">Desinstalar</string>
-    <string name="apm_overlay_fs_not_available">OverlayFS no está disponible. El módulo no puede funcionar.</string>
+    <string name="apm_overlay_fs_not_available">Los módulos no están disponibles ya que OverlayFS está desactivado por el kernel.</string>
     <string name="su_refresh">Recargar</string>
     <string name="home_su_path_ex">su: %s → %s</string>
     <string name="apm_failed_to_disable">No se ha podido desactivar el módulo \"%s</string>
@@ -86,7 +86,7 @@
     <string name="apm_failed_to_enable">No se ha podido activar el módulo \"%s</string>
     <string name="apm_downloading">Descargando el módulo \"%s\"…</string>
     <string name="su_hide_system_apps">Ocultar applicaciones del sistema</string>
-    <string name="apm_magisk_conflict">Los módulos están desactivados debido a un conflicto con los de Magisk.</string>
+    <string name="apm_magisk_conflict">Los módulos no están disponibles debido a un conflicto con Magisk.</string>
     <string name="apm_desc">Descripción</string>
     <string name="apm_new_version_available">Haga clic para instalar la nueva versión, %s.</string>
     <string name="apm_empty">No hay ningún módulo instalado</string>

@@ -12,10 +12,10 @@
     <string name="reboot_download">Yükləmə rejiminə yenidən başlat</string>
     <string name="about">Haqqında</string>
     <string name="settings_app_language">Dil</string>
-    <string name="home_learn_apatch">AndroidPatch haqqında öyrənin</string>
+    <string name="home_learn_apatch">AndroidYamağı haqqında öyrənin</string>
     <string name="about_source_code">Mənbə koduna %1$s ünvanında baxın<br/>%2$s kanalımıza qoşulun</string>
     <string name="system_default">Sistem defoltu</string>
-    <string name="send_log">Log-u göndərin</string>
+    <string name="send_log">Gündəliyi göndərin</string>
     <string name="safe_mode">Təhlükəsiz rejim</string>
     <string name="clear_super_key">Açarı silin</string>
     <string name="super_key">SuperAçar</string>
@@ -39,7 +39,7 @@
     <string name="home_auth_key_title">SuperAçarı daxil edin</string>
     <string name="home_auth_key_desc">Sertifikasiyadan sonra başlayın</string>
     <string name="home_ap_cando_install">Quraşdır</string>
-    <string name="home_ap_cando_uninstall">Quraşdırmanı ləğv et</string>
+    <string name="home_ap_cando_uninstall">Sil</string>
     <string name="patch_title">Yamaq</string>
     <string name="home_kernel">Nüvə</string>
     <string name="home_fingerprint">Barmaq izi</string>
@@ -59,8 +59,8 @@
     <string name="kpm_author">Sahib</string>
     <string name="kpm_desc">Açıqlama</string>
     <string name="kpm_args">Arqumentlər</string>
-    <string name="su_title">Superİstifadəçi</string>
-    <string name="su_selinux_via_hook">Hook ilə bypass edin</string>
+    <string name="su_title">Superistifadəçi</string>
+    <string name="su_selinux_via_hook">Çəngəl ilə yan keçin</string>
     <string name="su_pkg_excluded_label">istisna</string>
     <string name="su_pkg_excluded_setting_title">İstisna et</string>
     <string name="su_pkg_excluded_setting_summary">modullar üçün</string>
@@ -78,7 +78,7 @@
     <string name="apm_version">Versiya</string>
     <string name="apm_author">Sahib</string>
     <string name="apm_desc">Açıqlama</string>
-    <string name="apm_magisk_conflict">Modullar Magisk modullarıyla ziddiyyət təşkil etdiyindən söndürülür.</string>
+    <string name="apm_magisk_conflict">Modullar Magisk ilə ziddiyyət səbəbindən əlçatan deyil.</string>
     <string name="home_ap_cando_update">Güncəllə</string>
     <string name="apm_reboot_to_apply">Effektiv olmağı üçün yenidən başladın</string>
     <string name="apm_changelog">Dəyişikliklər jurnalı</string>
@@ -97,7 +97,7 @@
     <string name="kpm_version">Versiya</string>
     <string name="apm_install">Quraşdır</string>
     <string name="apm_not_installed">AndroidYamağı quraşdırılmayıb</string>
-    <string name="apm_overlay_fs_not_available">OverlayFS mövcud deyil. Modul işləyə bilməz.</string>
+    <string name="apm_overlay_fs_not_available">OverlayFS nüvə tərəfindən deaktiv edildiyi üçün modullar əlçatan deyil.</string>
     <string name="settings_global_namespace_mode">Qlobal Adməkanı rejimi</string>
     <string name="settings_global_namespace_mode_summary">Bütün kök sessiyaları qlobal bağlama adməkanından istifadə edir</string>
 </resources>
