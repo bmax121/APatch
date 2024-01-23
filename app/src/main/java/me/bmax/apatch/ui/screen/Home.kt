@@ -359,7 +359,8 @@ private fun KStatusCard(kpState: APApplication.State, navigator: DestinationsNav
                     kpState.equals(APApplication.State.KERNELPATCH_INSTALLED) -> {
                         Icon(Icons.Outlined.CheckCircle, stringResource(R.string.home_working))
                     }
-                    kpState.equals(APApplication.State.KERNELPATCH_NEED_UPDATE) -> {
+                    kpState.equals(APApplication.State.KERNELPATCH_NEED_UPDATE) ||
+                    kpState.equals(APApplication.State.KERNELPATCH_NEED_REBOOT) -> {
                         Icon(Icons.Outlined.SystemUpdate, stringResource(R.string.home_need_update))
                     }
                     else -> {
@@ -384,7 +385,8 @@ private fun KStatusCard(kpState: APApplication.State, navigator: DestinationsNav
                                 style = MaterialTheme.typography.bodyMedium
                             )
                         }
-                        kpState.equals(APApplication.State.KERNELPATCH_NEED_UPDATE) -> {
+                        kpState.equals(APApplication.State.KERNELPATCH_NEED_UPDATE) ||
+                        kpState.equals(APApplication.State.KERNELPATCH_NEED_REBOOT) -> {
                             Text(text = stringResource(R.string.home_need_update),
                                 style = MaterialTheme.typography.titleMedium
                             )
@@ -410,17 +412,32 @@ private fun KStatusCard(kpState: APApplication.State, navigator: DestinationsNav
                         )
                     }
                 }
-                if (kpState.equals(APApplication.State.KERNELPATCH_NEED_UPDATE) && isDirectInstallAvailable()) {
+                if (kpState.equals(APApplication.State.KERNELPATCH_NEED_UPDATE) ||
+                    kpState.equals(APApplication.State.KERNELPATCH_NEED_REBOOT)) {
                     Column (modifier = Modifier
                         .align(Alignment.CenterVertically)
                     ) {
                         Button(
                             onClick = {
-                                APApplication.installKpatch()
-                                navigator.navigate(PatchScreenDestination(null, apApp.getSuperKey()))
+                                when {
+                                    kpState.equals(APApplication.State.KERNELPATCH_NEED_UPDATE) -> {
+                                        navigator.navigate(PatchScreenDestination(null, apApp.getSuperKey()))
+                                        APApplication.installKpatch()
+                                    }
+                                    else -> {
+                                        reboot()
+                                    }
+                                }
                             },
                             content = {
-                                Text(text = stringResource(id = R.string.home_ap_cando_update), color = Color.Black)
+                                when {
+                                    kpState.equals(APApplication.State.KERNELPATCH_NEED_UPDATE) -> {
+                                        Text(text = stringResource(id = R.string.home_ap_cando_update), color = Color.Black)
+                                    }
+                                    else -> {
+                                        Text(text = stringResource(id = R.string.home_ap_cando_reboot), color = Color.Black)
+                                    }
+                                }
                             }
                         )
                     }

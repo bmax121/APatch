@@ -28,6 +28,7 @@ class APApplication : Application() {
         UNKNOWN_STATE,
         KERNELPATCH_INSTALLED,
         KERNELPATCH_NEED_UPDATE,
+        KERNELPATCH_NEED_REBOOT,
         ANDROIDPATCH_READY,
         ANDROIDPATCH_INSTALLED,
         ANDROIDPATCH_INSTALLING,
@@ -85,10 +86,11 @@ class APApplication : Application() {
             val newBootFile = patchDir.getChildFile("new-boot.img")
 
             if (newBootFile.exists()) {
-                kPatchVersion = getKPatchVersion()
+                val rebootFile = patchDir.getChildFile(".reboot")
+                rebootFile.createNewFile()
 
                 Log.d(TAG, "KPatch installed...")
-                _kpStateLiveData.postValue(State.KERNELPATCH_INSTALLED)
+                _kpStateLiveData.postValue(State.KERNELPATCH_NEED_REBOOT)
             }
         }
 
@@ -199,24 +201,35 @@ class APApplication : Application() {
 
                     kPatchVersion = getKernelPatchVersion()
                     val kpv = getKPatchVersion()
-                    if (kPatchVersion == kpv) {
-                        _kpStateLiveData.postValue(State.KERNELPATCH_INSTALLED)
-                        Log.d(TAG, "state: " + State.KERNELPATCH_INSTALLED + ", version: " + kPatchVersion)
-                    } else {
+
+                    val patchDir: ExtendedFile = FileSystemManager.getLocal().getFile(apApp.filesDir.parent, "patch")
+                    val rebootFile = patchDir.getChildFile(".reboot")
+
+                    val backupDir: ExtendedFile = FileSystemManager.getLocal().getFile(apApp.filesDir.parent, "backup")
+                    val origBootFile = backupDir.getChildFile("boot.img")
+
+                    if (kPatchVersion != kpv && rebootFile.exists()) {
+                        _kpStateLiveData.postValue(State.KERNELPATCH_NEED_REBOOT)
+                        Log.d(TAG, "state: " + State.KERNELPATCH_NEED_REBOOT + ", version: " + kPatchVersion + "->" + kpv)
+                    } else if (kPatchVersion != kpv && origBootFile.exists()) { // TODO: remove the last condition on kpatch v0.9.0
                         _kpStateLiveData.postValue(State.KERNELPATCH_NEED_UPDATE)
                         Log.d(TAG, "state: " + State.KERNELPATCH_NEED_UPDATE + ", version: " + kPatchVersion + "->" + kpv)
+                    } else {
+                        rebootFile.delete()
+                        _kpStateLiveData.postValue(State.KERNELPATCH_INSTALLED)
+                        Log.d(TAG, "state: " + State.KERNELPATCH_INSTALLED + ", version: " + kPatchVersion)
                     }
 
                     val av = File(APATCH_VERSION_PATH)
                     if (av.exists()) {
                         aPatchVersion = av.readLines().get(0).toInt()
                         val mgv = getManagerVersion().second
-                        if (aPatchVersion == mgv) {
-                            _apStateLiveData.postValue(State.ANDROIDPATCH_INSTALLED)
-                            Log.d(TAG, "state: " + State.ANDROIDPATCH_INSTALLED + ", version: " + aPatchVersion)
-                        } else {
+                        if (aPatchVersion != mgv) {
                             _apStateLiveData.postValue(State.ANDROIDPATCH_NEED_UPDATE)
                             Log.d(TAG, "state: " + State.ANDROIDPATCH_NEED_UPDATE + ", version: " + aPatchVersion + "->" + mgv)
+                        } else {
+                            _apStateLiveData.postValue(State.ANDROIDPATCH_INSTALLED)
+                            Log.d(TAG, "state: " + State.ANDROIDPATCH_INSTALLED + ", version: " + aPatchVersion)
                         }
 
                         // su path

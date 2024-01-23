@@ -236,9 +236,3 @@ fun patchBootimg(uri: Uri?, superKey: String, logs: MutableList<String>): Boolea
 
     return succ
 }
-
-fun isDirectInstallAvailable(): Boolean {
-    val backupDir: ExtendedFile = FileSystemManager.getLocal().getFile(apApp.filesDir.parent, "backup")
-    val origBoot = backupDir.getChildFile("boot.img")
-    return origBoot.exists()
-}
