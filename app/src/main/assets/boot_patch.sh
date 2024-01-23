@@ -95,16 +95,6 @@ if [ $? -ne 0 ]; then
   exit $?
 fi
 
-mv kernel kernel.ori
-
-echo "- Patching kernel"
-./kptools -p kernel.ori --skey "$SUPERKEY" --kpimg kpimg --out kernel
-
-if [ $? -ne 0 ]; then
-  echo "- Patch error: $?"
-  exit $?
-fi
-
 cp kernel kernel.ori
 
 # Remove Samsung RKP
@@ -128,6 +118,16 @@ $LEGACYSAR && ./magiskboot hexpatch kernel \
 # If the kernel doesn't need to be patched at all,
 # keep raw kernel to avoid bootloops on some weird devices
 $PATCHEDKERNEL || mv kernel.ori kernel
+
+mv kernel kernel.ori
+
+echo "- Patching kernel"
+./kptools -p kernel.ori --skey "$SUPERKEY" --kpimg kpimg --out kernel
+
+if [ $? -ne 0 ]; then
+  echo "- Patch error: $?"
+  exit $?
+fi
 
 echo "- Repacking boot image"
 if [ "$ISDIRECTINSTALL" ]; then
