@@ -47,11 +47,11 @@ object PkgConfig {
     public fun readConfigs(): HashMap<String,Config> {
         val configs = HashMap<String,Config>()
         val file = File(APApplication.PACKAGE_CONFIG_FILE)
-        if(file.exists()) {
+        if (file.exists()) {
             file.readLines().drop(1).filter { !it.isEmpty() }.forEach {
                 Log.d(TAG, it)
                 val p = Config.fromLine(it)
-                if(! p.isDefault()) {
+                if (! p.isDefault()) {
                     configs[p.pkg] = p
                 }
             }
@@ -61,11 +61,11 @@ object PkgConfig {
 
     private fun writeConfigs(configs: HashMap<String,Config> ) {
         val file = File(APApplication.PACKAGE_CONFIG_FILE)
-        if(!file.parentFile.exists()) file.parentFile.mkdirs()
+        if (!file.parentFile.exists()) file.parentFile.mkdirs()
         val writer = FileWriter(file, false)
         writer.write(CSV_HEADER + '\n')
         configs.values.forEach {
-            if(!it.isDefault()) {
+            if (!it.isDefault()) {
                 writer.write(it.toLine() + '\n')
             }
         }

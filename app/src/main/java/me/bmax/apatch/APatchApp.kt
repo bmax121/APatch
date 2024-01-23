@@ -29,6 +29,7 @@ class APApplication : Application() {
         KERNELPATCH_INSTALLED,
         KERNELPATCH_NEED_UPDATE,
         KERNELPATCH_NEED_REBOOT,
+        KERNELPATCH_UNINSTALLING,
         ANDROIDPATCH_READY,
         ANDROIDPATCH_INSTALLED,
         ANDROIDPATCH_INSTALLING,
@@ -79,6 +80,24 @@ class APApplication : Application() {
         var kPatchVersion: String = ""
         var aPatchVersion: Int = 0
 
+        fun uninstallKpatch() {
+            if (_kpStateLiveData.value != State.KERNELPATCH_INSTALLED) return
+            _kpStateLiveData.value = State.KERNELPATCH_UNINSTALLING
+
+            val patchDir: ExtendedFile = FileSystemManager.getLocal().getFile(apApp.filesDir.parent, "patch")
+            val newBootFile = patchDir.getChildFile("new-boot.img")
+
+            if (newBootFile.exists()) {
+                // Trigger APatch uninstallation as it won't work without KPatch anyway
+                uninstallApatch()
+
+                Log.d(TAG, "KPatch uninstalled ...")
+                _kpStateLiveData.postValue(State.UNKNOWN_STATE)
+            } else {
+                _kpStateLiveData.value = State.KERNELPATCH_INSTALLED
+            }
+        }
+
         fun installKpatch() {
             if (_kpStateLiveData.value != State.KERNELPATCH_NEED_UPDATE) return
 
@@ -86,9 +105,6 @@ class APApplication : Application() {
             val newBootFile = patchDir.getChildFile("new-boot.img")
 
             if (newBootFile.exists()) {
-                val rebootFile = patchDir.getChildFile(".reboot")
-                rebootFile.createNewFile()
-
                 val rebootFile = patchDir.getChildFile(".reboot")
                 rebootFile.createNewFile()
 
@@ -115,7 +131,11 @@ class APApplication : Application() {
                 shell.newJob().add(*cmds).to(logCallback, logCallback).exec()
 
                 Log.d(TAG, "APatch uninstalled...")
-                _apStateLiveData.postValue(State.ANDROIDPATCH_READY)
+                if (_kpStateLiveData.value == State.UNKNOWN_STATE) {
+                    _apStateLiveData.postValue(State.UNKNOWN_STATE)
+                } else {
+                    _apStateLiveData.postValue(State.ANDROIDPATCH_READY)
+                }
             }
         }
 

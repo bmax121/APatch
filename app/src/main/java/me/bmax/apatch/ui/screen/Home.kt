@@ -170,7 +170,7 @@ fun StartPatch(showDialog: MutableState<Boolean>, navigator: DestinationsNavigat
         }
         val data = it.data ?: return@rememberLauncherForActivityResult
         val uri = data.data ?: return@rememberLauncherForActivityResult
-        navigator.navigate(PatchScreenDestination(uri, key))
+        navigator.navigate(PatchScreenDestination(uri, key, true))
     }
 
     AlertDialog(
@@ -412,8 +412,7 @@ private fun KStatusCard(kpState: APApplication.State, navigator: DestinationsNav
                         )
                     }
                 }
-                if (kpState.equals(APApplication.State.KERNELPATCH_NEED_UPDATE) ||
-                    kpState.equals(APApplication.State.KERNELPATCH_NEED_REBOOT)) {
+                if (!kpState.equals(APApplication.State.UNKNOWN_STATE)) {
                     Column (modifier = Modifier
                         .align(Alignment.CenterVertically)
                     ) {
@@ -421,11 +420,18 @@ private fun KStatusCard(kpState: APApplication.State, navigator: DestinationsNav
                             onClick = {
                                 when {
                                     kpState.equals(APApplication.State.KERNELPATCH_NEED_UPDATE) -> {
-                                        navigator.navigate(PatchScreenDestination(null, apApp.getSuperKey()))
+                                        navigator.navigate(PatchScreenDestination(null, apApp.getSuperKey(), true))
                                         APApplication.installKpatch()
                                     }
-                                    else -> {
+                                    kpState.equals(APApplication.State.KERNELPATCH_NEED_REBOOT) -> {
                                         reboot()
+                                    }
+                                    kpState.equals(APApplication.State.KERNELPATCH_UNINSTALLING) -> {
+                                        // Do nothing
+                                    }
+                                    else -> {
+                                        APApplication.uninstallKpatch()
+                                        navigator.navigate(PatchScreenDestination(null, apApp.getSuperKey(), false))
                                     }
                                 }
                             },
@@ -434,8 +440,14 @@ private fun KStatusCard(kpState: APApplication.State, navigator: DestinationsNav
                                     kpState.equals(APApplication.State.KERNELPATCH_NEED_UPDATE) -> {
                                         Text(text = stringResource(id = R.string.home_ap_cando_update), color = Color.Black)
                                     }
-                                    else -> {
+                                    kpState.equals(APApplication.State.KERNELPATCH_NEED_REBOOT) -> {
                                         Text(text = stringResource(id = R.string.home_ap_cando_reboot), color = Color.Black)
+                                    }
+                                    kpState.equals(APApplication.State.KERNELPATCH_UNINSTALLING) -> {
+                                        Icon(Icons.Outlined.Cached, contentDescription = "busy")
+                                    }
+                                    else -> {
+                                        Text(text = stringResource(id = R.string.home_ap_cando_uninstall), color = Color.Black)
                                     }
                                 }
                             }
@@ -587,6 +599,9 @@ private fun AStatusCard(apState: APApplication.State) {
                                     apState.equals(APApplication.State.ANDROIDPATCH_NEED_UPDATE) -> {
                                         APApplication.installApatch()
                                     }
+                                    apState.equals(APApplication.State.ANDROIDPATCH_UNINSTALLING) -> {
+                                        // Do nothing
+                                    }
                                     else -> {
                                         APApplication.uninstallApatch()
                                     }
@@ -597,11 +612,11 @@ private fun AStatusCard(apState: APApplication.State) {
                                     apState.equals(APApplication.State.ANDROIDPATCH_READY) -> {
                                         Text(text = stringResource(id = R.string.home_ap_cando_install), color = Color.Black)
                                     }
-                                    apState.equals(APApplication.State.ANDROIDPATCH_UNINSTALLING) -> {
-                                        Icon(Icons.Outlined.Cached, contentDescription = "busy")
-                                    }
                                     apState.equals(APApplication.State.ANDROIDPATCH_NEED_UPDATE) -> {
                                         Text(text = stringResource(id = R.string.home_ap_cando_update), color = Color.Black)
+                                    }
+                                    apState.equals(APApplication.State.ANDROIDPATCH_UNINSTALLING) -> {
+                                        Icon(Icons.Outlined.Cached, contentDescription = "busy")
                                     }
                                     else -> {
                                         Text(text = stringResource(id = R.string.home_ap_cando_uninstall), color = Color.Black)

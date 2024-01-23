@@ -43,7 +43,7 @@ import java.util.*
 
 @Composable
 @Destination
-fun PatchScreen(navigator: DestinationsNavigator, uri: Uri?, superKey: String) {
+fun PatchScreen(navigator: DestinationsNavigator, uri: Uri?, superKey: String, isInstall: Boolean) {
     var text by remember { mutableStateOf("") }
     var showFloatAction by remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
@@ -53,7 +53,7 @@ fun PatchScreen(navigator: DestinationsNavigator, uri: Uri?, superKey: String) {
             return@LaunchedEffect
         }
         withContext(Dispatchers.IO) {
-            val ret = patchBootimg(uri, superKey, object : CallbackList<String>() {
+            val ret = patchBootimg(uri, superKey, isInstall, object : CallbackList<String>() {
                 override fun onAddElement(e: String?) {
                     e ?: return
                     text += e
@@ -61,7 +61,7 @@ fun PatchScreen(navigator: DestinationsNavigator, uri: Uri?, superKey: String) {
                     text += '\n'
                 }
             })
-            if(ret && uri == null) {
+            if (ret && uri == null) {
                 showFloatAction = true
             }
         }
@@ -147,7 +147,7 @@ fun InputStream.writeTo(file: File) = copyAndClose(file.outputStream())
 
 private fun InputStream.copyAndCloseOut(out: OutputStream) = out.use { copyTo(it) }
 
-fun patchBootimg(uri: Uri?, superKey: String, logs: MutableList<String>): Boolean {
+fun patchBootimg(uri: Uri?, superKey: String, isInstall: Boolean, logs: MutableList<String>): Boolean {
     var outPath: File? = null
     var srcBoot: ExtendedFile? = null
     val patchDir: ExtendedFile = FileSystemManager.getLocal().getFile(apApp.filesDir.parent, "patch")
@@ -183,7 +183,7 @@ fun patchBootimg(uri: Uri?, superKey: String, logs: MutableList<String>): Boolea
     }
 
     // Extract scripts
-    for (script in listOf("boot_patch.sh", "util_functions.sh", "kpimg")) {
+    for (script in listOf("boot_patch.sh", "boot_unpatch.sh", "util_functions.sh", "kpimg")) {
         val dest = File(patchDir, script)
         apApp.assets.open(script).writeTo(dest)
     }
@@ -191,7 +191,11 @@ fun patchBootimg(uri: Uri?, superKey: String, logs: MutableList<String>): Boolea
     val apVer = APApplication.getManagerVersion().second
     val rand = (1..4).map { ('a'..'z').random() }.joinToString("")
     val outFilename = "apatch_${apVer}_${rand}_boot.img"
-    val patchCommand = if (uri != null) "sh boot_patch.sh $superKey ${srcBoot?.path}" else "sh boot_patch.sh $superKey"
+    val patchCommand = when {
+        uri == null && isInstall -> "sh boot_patch.sh $superKey"
+        uri == null -> "sh boot_unpatch.sh $superKey"
+        else -> "sh boot_patch.sh $superKey ${srcBoot?.path}"
+    }
 
     val cmds = arrayOf(
         "cd $patchDir",
@@ -205,10 +209,10 @@ fun patchBootimg(uri: Uri?, superKey: String, logs: MutableList<String>): Boolea
     val newBootFile = patchDir.getChildFile("new-boot.img")
     if (newBootFile.exists()) {
         if (uri == null) {
-            logs.add(" Boot patch was successful")
+            logs.add(" Patch was successful")
         } else {
             val outDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-            if(!outDir.exists()) outDir.mkdirs()
+            if (!outDir.exists()) outDir.mkdirs()
             outPath = File(outDir, outFilename)
 
             val inputUri = UriUtils.getUriForFile(newBootFile)
