@@ -89,6 +89,9 @@ class APApplication : Application() {
                 val rebootFile = patchDir.getChildFile(".reboot")
                 rebootFile.createNewFile()
 
+                val rebootFile = patchDir.getChildFile(".reboot")
+                rebootFile.createNewFile()
+
                 Log.d(TAG, "KPatch installed...")
                 _kpStateLiveData.postValue(State.KERNELPATCH_NEED_REBOOT)
             }
