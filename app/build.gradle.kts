@@ -78,28 +78,28 @@ android {
 
 
 tasks.register<Download>("downloadKpimg") {
-    src("https://github.com/bmax121/KernelPatch/releases/download/${kernelPatchVersion}/kpimg-android")
+    src("https://github.com/ponces/KernelPatch/releases/download/${kernelPatchVersion}/kpimg-android")
     dest(file("${project.projectDir}/src/main/assets/kpimg"))
     onlyIfNewer(true)
     overwrite(true)
 }
 
 tasks.register<Download>("downloadKpatch") {
-    src("https://github.com/bmax121/KernelPatch/releases/download/${kernelPatchVersion}/kpatch-android")
+    src("https://github.com/ponces/KernelPatch/releases/download/${kernelPatchVersion}/kpatch-android")
     dest(file("${project.projectDir}/libs/arm64-v8a/libkpatch.so"))
     onlyIfNewer(true)
     overwrite(true)
 }
 
 tasks.register<Download>("downloadKptools") {
-    src("https://github.com/bmax121/KernelPatch/releases/download/${kernelPatchVersion}/kptools-android")
+    src("https://github.com/ponces/KernelPatch/releases/download/${kernelPatchVersion}/kptools-android")
     dest(file("${project.projectDir}/libs/arm64-v8a/libkptools.so"))
     onlyIfNewer(true)
     overwrite(true)
 }
 
 tasks.register<Download>("downloadApjni") {
-    src("https://github.com/bmax121/KernelPatch/releases/download/${kernelPatchVersion}/libapjni.so")
+    src("https://github.com/ponces/KernelPatch/releases/download/${kernelPatchVersion}/libapjni.so")
     dest(file("${project.projectDir}/libs/arm64-v8a/libapjni.so"))
     onlyIfNewer(true)
     overwrite(true)

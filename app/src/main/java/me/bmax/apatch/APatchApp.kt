@@ -204,17 +204,15 @@ class APApplication : Application() {
 
                     kPatchVersion = getKernelPatchVersion()
                     val kpv = getKPatchVersion()
+                    val kpMinorVersion = kPatchVersion.split(".").let { if (it.size > 1) it[1].toInt() else 0 }
 
                     val patchDir: ExtendedFile = FileSystemManager.getLocal().getFile(apApp.filesDir.parent, "patch")
                     val rebootFile = patchDir.getChildFile(".reboot")
 
-                    val backupDir: ExtendedFile = FileSystemManager.getLocal().getFile(apApp.filesDir.parent, "backup")
-                    val origBootFile = backupDir.getChildFile("boot.img")
-
                     if (kPatchVersion != kpv && rebootFile.exists()) {
                         _kpStateLiveData.postValue(State.KERNELPATCH_NEED_REBOOT)
                         Log.d(TAG, "state: " + State.KERNELPATCH_NEED_REBOOT + ", version: " + kPatchVersion + "->" + kpv)
-                    } else if (kPatchVersion != kpv && origBootFile.exists()) { // TODO: remove the last condition on kpatch v0.9.0
+                    } else if (kPatchVersion != kpv && kpMinorVersion >= 9) { // TODO: remove the last condition after kpatch v0.9.0
                         _kpStateLiveData.postValue(State.KERNELPATCH_NEED_UPDATE)
                         Log.d(TAG, "state: " + State.KERNELPATCH_NEED_UPDATE + ", version: " + kPatchVersion + "->" + kpv)
                     } else {
