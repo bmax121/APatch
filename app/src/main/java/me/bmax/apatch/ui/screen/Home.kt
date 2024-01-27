@@ -65,17 +65,21 @@ import me.bmax.apatch.ui.screen.destinations.SettingScreenDestination
 @Destination
 @Composable
 fun HomeScreen(navigator: DestinationsNavigator) {
+    var showPatchFloatAction by remember { mutableStateOf(true) }
     val kpState by APApplication.kpStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
     val apState by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
+
+    val kpMinorVersion = APApplication.kPatchVersion.split(".").let { if (it.size > 1) it[1].toInt() else 0 }
+    if (!kpState.equals(APApplication.State.UNKNOWN_STATE) && kpMinorVersion >= 9) { // TODO: remove the last condition after kpatch v0.9.0
+        showPatchFloatAction = false
+    }
 
     Scaffold(topBar = {
         TopBar(onSettingsClick = {
             navigator.navigate(SettingScreenDestination)
         })
     }, floatingActionButton = {
-
-        FloatButton(navigator)
-
+        FloatButton(showPatchFloatAction, navigator)
     }) { innerPadding ->
         Column(
             modifier = Modifier
@@ -209,7 +213,7 @@ fun StartPatch(showDialog: MutableState<Boolean>, navigator: DestinationsNavigat
 }
 
 @Composable
-fun FloatButton(navigator: DestinationsNavigator) {
+fun FloatButton(showPatchFloatAction: Boolean, navigator: DestinationsNavigator) {
     val apState by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
 
     var showAuthKeyDialog = remember { mutableStateOf(false)  }
@@ -243,20 +247,22 @@ fun FloatButton(navigator: DestinationsNavigator) {
     }
 
     Column(horizontalAlignment = Alignment.End) {
-        Box() {
-            ExtendedFloatingActionButton(
-                onClick = {
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-                        permissionRequest.value = true
-                    } else {
-                        showSetKeyDialog.value = true
-                    }
-                },
-                icon = { Icon(Icons.Filled.InstallMobile, "install") },
-                text = { Text(text = stringResource(id = R.string.patch)) },
-            )
+        if (showPatchFloatAction) {
+            Box() {
+                ExtendedFloatingActionButton(
+                    onClick = {
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                            permissionRequest.value = true
+                        } else {
+                            showSetKeyDialog.value = true
+                        }
+                    },
+                    icon = { Icon(Icons.Filled.InstallMobile, "install") },
+                    text = { Text(text = stringResource(id = R.string.patch)) },
+                )
+            }
+            Spacer(Modifier.height(8.dp))
         }
-        Spacer(Modifier.height(8.dp))
         Box() {
             ExtendedFloatingActionButton(
                 onClick = {

@@ -209,7 +209,7 @@ fun patchBootimg(uri: Uri?, superKey: String, isInstall: Boolean, logs: MutableL
     val newBootFile = patchDir.getChildFile("new-boot.img")
     if (newBootFile.exists()) {
         if (uri == null) {
-            logs.add(" Patch was successful")
+            logs.add(" Flash was successful")
         } else {
             val outDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
             if (!outDir.exists()) outDir.mkdirs()

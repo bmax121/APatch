@@ -139,6 +139,7 @@ if [ "$ISDIRECTINSTALL" ] && [ -f "new-boot.img" ]; then
 
   if [ $? -ne 0 ]; then
     echo "- Flash error: $?"
+    rm -f new-boot.img
     exit $?
   fi
 fi
