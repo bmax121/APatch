@@ -117,7 +117,11 @@ backup_boot_image() {
     patched=$(./kptools -l --image kernel | grep "patched=" | cut -d'=' -f2)
     if [[ "$patched" == "false" ]]; then
       echo "- Backing up boot image"
-      cp "$BOOTIMAGE" "$BACKUPIMAGE" 2>/dev/null
+      # Cleanup if temporary backup image exists
+      rm -rf "$TMPBACKUPIMAGE"
+      # If kpatch is not installed yet, we don't have permissions
+      # to use the regular backup path, so we use a temporary path
+      cp "$BOOTIMAGE" "$BACKUPIMAGE" 2>/dev/null || cp "$BOOTIMAGE" "$TMPBACKUPIMAGE"
     fi
   fi
 }

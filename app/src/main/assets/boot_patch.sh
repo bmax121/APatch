@@ -58,6 +58,7 @@ BOOTIMAGE=$2
 LEGACYSAR=false
 PATCHEDKERNEL=false
 BACKUPIMAGE="/data/adb/apatch_backup_boot.img"
+TMPBACKUPIMAGE="/data/data/me.bmax.apatch/apatch_backup_boot.img"
 
 mount_partitions
 
