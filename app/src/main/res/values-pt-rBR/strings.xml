@@ -86,8 +86,8 @@
     <string name="apm_version">Versão</string>
     <string name="apm_author">Autor</string>
     <string name="apm_desc">Descrição</string>
-    <string name="apm_overlay_fs_not_available">OverlayFS não está disponível. O módulo não pode funcionar!</string>
-    <string name="apm_magisk_conflict">Os módulos estão desativados porque estão em conflito com os do Magisk!</string>
+    <string name="apm_overlay_fs_not_available">Os módulos não estão disponíveis porque o OverlayFS está desabilitado pelo kernel.</string>
+    <string name="apm_magisk_conflict">Os módulos estão indisponíveis devido a um conflito com Magisk.</string>
     <string name="apm_changelog">Registro de alterações</string>
     <string name="apm_update">Atualizar</string>
     <string name="apm_downloading">Baixando módulo %s…</string>

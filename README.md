@@ -1,9 +1,7 @@
-# APatch
-
 <div align="center">
 <a href="https://github.com/bmax121/APatch/releases/latest"><img src="https://images.weserv.nl/?url=https://raw.githubusercontent.com/bmax121/APatch/main/app/src/main/ic_launcher-playstore.png&mask=circle" style="width: 128px;" alt="logo"></a>
-	
-</br>
+
+<h1 align="center">APatch</h1>
 
 [![latest release badge](https://img.shields.io/github/v/release/bmax121/APatch?label=Release&logo=github)](https://github.com/bmax121/APatch/releases/latest)
 [![weblate](https://img.shields.io/badge/Localization-Weblate-teal?logo=weblate)](https://hosted.weblate.org/engage/APatch)
@@ -31,7 +29,8 @@ The source code for both APatch UI and APM has been copied and modified from [Ke
 Kernel configs
 
 - `CONFIG_KALLSYMS=y`  
-- `CONFIG_KALLSYMS_ALL=y` 
+- `CONFIG_KALLSYMS_ALL=y`
+- `DEBUG_KERNEL=y`
 - `CONFIG_KALLSYMS_ALL=n` (Next version of KernelPatch will support)
 
 ## Translation
@@ -50,6 +49,11 @@ To help translate APatch or improve existing translations, please use [Weblate](
 ### Usage
 
 Installation guide (coming soon)
+<hr>
+
+### ℹ️ Universal Kernel Compilation Guide for Unsupported Devices with APatch : [Click here](https://github.com/ravindu644/Android-Kernel-Tutorials)
+- ❗ In this guide, you'll discover how to enable crucial features like **Kallsyms** and **OverlayFS** for any device. Additionally, it provides instructions on disabling **Samsung** securities to ensure APatch functions correctly.
+<hr>
 
 ### Updates
 - Telegram Channel: [@APatchChannel](https://t.me/APatchChannel)

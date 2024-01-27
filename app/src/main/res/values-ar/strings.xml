@@ -79,8 +79,8 @@
     <string name="apm_uninstall_confirm">الغاء تثبيت \"%s\" module ?</string>
     <string name="apm_uninstall_success">تم الغاء التثبيت %s</string>
     <string name="apm_uninstall_failed">غير قادر على تثبيت %s</string>
-    <string name="apm_overlay_fs_not_available">ال OverlayFS غير متاحة. الوحدة لا تستطيع العمل.</string>
-    <string name="apm_magisk_conflict">تم إيقاف الوحدة بسبب تعارض مع ماغيسك.</string>
+    <string name="apm_overlay_fs_not_available">الوحدات غير متاحة نظرًا لتعطيل OverlayFS بواسطة kernel.</string>
+    <string name="apm_magisk_conflict">الوحدات غير متاحة بسبب تعارض مع ماغيسك.</string>
     <string name="apm_reboot_to_apply">اعادة التشغيل لإتخاذ التأثير</string>
     <string name="system_default">النظام الافتراضي</string>
     <string name="settings_app_language">اللغة</string>
@@ -98,4 +98,6 @@
     <string name="apm_desc">Desc</string>
     <string name="apm_downloading">تحميل وحدة %s…</string>
     <string name="patch">باتش</string>
+    <string name="settings_global_namespace_mode_summary">تستخدم جميع جلسات الرووت مساحة الاسم العامة للتثبيت</string>
+    <string name="settings_global_namespace_mode">Global Namespace Mode</string>
 </resources>

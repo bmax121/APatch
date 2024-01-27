@@ -75,7 +75,7 @@
     <string name="apm_failed_to_disable">Impossible de désactiver le module \"%s\"</string>
     <string name="apm_uninstall_confirm">Désinstaller le module \"%s\" ?</string>
     <string name="apm_uninstall_failed">Impossible de désinstaller %s</string>
-    <string name="apm_magisk_conflict">Les modules sont désactivés en raison d\'un conflit avec ceux présents dans Magisk.</string>
+    <string name="apm_magisk_conflict">Les modules sont indisponibles en raison d\'un conflit avec Magisk.</string>
     <string name="apm_downloading">Téléchargement du module \"%s\"…</string>
     <string name="apm_new_version_available">Cliquez pour installer la nouvelle version, %s.</string>
     <string name="home_selinux_status_permissive">Permissif</string>
@@ -94,7 +94,7 @@
     <string name="su_pkg_excluded_setting_summary">pour les modules</string>
     <string name="apm_uninstall">Désinstaller</string>
     <string name="su_pkg_excluded_setting_title">Exclure</string>
-    <string name="apm_overlay_fs_not_available">OverlayFS n\'est pas disponible. Le module ne peut pas fonctionner.</string>
+    <string name="apm_overlay_fs_not_available">Les modules sont indisponibles car OverlayFS est désactivé par le noyau.</string>
     <string name="patch">Patcher</string>
     <string name="settings_app_language">Langage</string>
     <string name="system_default">Par défaut</string>
