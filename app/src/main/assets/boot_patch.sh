@@ -55,23 +55,15 @@ fi
 
 SUPERKEY=$1
 BOOTIMAGE=$2
-BACKUPDIR="../backup"
-BACKUPIMAGE="$BACKUPDIR/boot.img"
 LEGACYSAR=false
 PATCHEDKERNEL=false
+BACKUPIMAGE="/data/adb/apatch_backup_boot.img"
 
 mount_partitions
 
 if [ -z "$BOOTIMAGE" ]; then
   ISDIRECTINSTALL=true
   find_boot_image
-  if [ ! -f "$BACKUPIMAGE" ]; then
-    echo "Direct flash is not possible!"
-    exit 1
-  fi
-elif [ ! -f "$BACKUPIMAGE" ]; then
-  mkdir -p "$BACKUPDIR"
-  cp "$BOOTIMAGE" "$BACKUPIMAGE"
 fi
 
 [ -z "$SUPERKEY" ] && { echo "- SuperKey empty!"; exit 1; }
@@ -84,15 +76,15 @@ command -v ./magiskboot >/dev/null 2>&1 || { echo "- Command magiskboot not foun
 command -v ./kptools >/dev/null 2>&1 || { echo "- Command kptools not found!"; exit 1; }
 
 echo "- Unpacking boot image"
-if [ "$ISDIRECTINSTALL" ]; then
-  ./magiskboot unpack "$BACKUPIMAGE" >/dev/null 2>&1
-else
-  ./magiskboot unpack "$BOOTIMAGE" >/dev/null 2>&1
-fi
+./magiskboot unpack "$BOOTIMAGE" >/dev/null 2>&1
 
 if [ $? -ne 0 ]; then
   echo "- Unpack error: $?"
   exit $?
+fi
+
+if [ ! "$ISDIRECTINSTALL" ]; then
+  backup_boot_image
 fi
 
 cp kernel kernel.ori
@@ -122,7 +114,7 @@ $PATCHEDKERNEL || mv kernel.ori kernel
 mv kernel kernel.ori
 
 echo "- Patching kernel"
-./kptools -p kernel.ori --skey "$SUPERKEY" --kpimg kpimg --out kernel
+./kptools -p --image kernel.ori --skey "$SUPERKEY" --kpimg kpimg --out kernel
 
 if [ $? -ne 0 ]; then
   echo "- Patch error: $?"
@@ -130,11 +122,7 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "- Repacking boot image"
-if [ "$ISDIRECTINSTALL" ]; then
-  ./magiskboot repack "$BACKUPIMAGE" >/dev/null 2>&1
-else
-  ./magiskboot repack "$BOOTIMAGE" >/dev/null 2>&1
-fi
+./magiskboot repack "$BOOTIMAGE" >/dev/null 2>&1
 
 if [ $? -ne 0 ]; then
   echo "- Repack error: $?"
@@ -146,11 +134,12 @@ echo "- Cleaning up"
 rm -f kernel.ori
 
 if [ "$ISDIRECTINSTALL" ] && [ -f "new-boot.img" ]; then
-  echo "- Flashing patched boot image"
+  echo "- Flashing new boot image"
   flash_image new-boot.img "$BOOTIMAGE"
 
   if [ $? -ne 0 ]; then
     echo "- Flash error: $?"
+    rm -f new-boot.img
     exit $?
   fi
 fi

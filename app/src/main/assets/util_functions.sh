@@ -111,3 +111,13 @@ flash_image() {
   fi
   return 0
 }
+
+backup_boot_image() {
+  if [ -f kernel ]; then
+    patched=$(./kptools -l --image kernel | grep "patched=" | cut -d'=' -f2)
+    if [[ "$patched" == "false" ]]; then
+      echo "- Backing up boot image"
+      cp "$BOOTIMAGE" "$BACKUPIMAGE"
+    fi
+  fi
+}

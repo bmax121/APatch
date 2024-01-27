@@ -29,6 +29,7 @@ class APApplication : Application() {
         KERNELPATCH_INSTALLED,
         KERNELPATCH_NEED_UPDATE,
         KERNELPATCH_NEED_REBOOT,
+        KERNELPATCH_UNINSTALLING,
         ANDROIDPATCH_READY,
         ANDROIDPATCH_INSTALLED,
         ANDROIDPATCH_INSTALLING,
@@ -41,8 +42,8 @@ class APApplication : Application() {
         val KPATCH_PATH = "/data/adb/kpatch"
         val KPATCH_SHADOW_PATH = "/system/bin/truncate"
         val APATCH_FOLDER = "/data/adb/ap/"
-        val APATCH_BIN_FOLDER = "/data/adb/ap/bin/"
-        val APATCH_LOG_FOLDER = "/data/adb/ap/log/"
+        val APATCH_BIN_FOLDER = APATCH_FOLDER + "bin/"
+        val APATCH_LOG_FOLDER = APATCH_FOLDER + "log/"
         val APD_LINK_PATH = APATCH_BIN_FOLDER + "apd"
         val KPATCH_LINK_PATH = APATCH_BIN_FOLDER + "kpatch"
         val PACKAGE_CONFIG_FILE = APATCH_FOLDER + "package_config"
@@ -79,6 +80,24 @@ class APApplication : Application() {
         var kPatchVersion: String = ""
         var aPatchVersion: Int = 0
 
+        fun uninstallKpatch() {
+            if (_kpStateLiveData.value != State.KERNELPATCH_INSTALLED) return
+            _kpStateLiveData.value = State.KERNELPATCH_UNINSTALLING
+
+            val patchDir: ExtendedFile = FileSystemManager.getLocal().getFile(apApp.filesDir.parent, "patch")
+            val newBootFile = patchDir.getChildFile("new-boot.img")
+
+            if (newBootFile.exists()) {
+                // Trigger APatch uninstallation as it won't work without KPatch anyway
+                uninstallApatch()
+
+                Log.d(TAG, "KPatch uninstalled ...")
+                _kpStateLiveData.postValue(State.UNKNOWN_STATE)
+            } else {
+                _kpStateLiveData.value = State.KERNELPATCH_INSTALLED
+            }
+        }
+
         fun installKpatch() {
             if (_kpStateLiveData.value != State.KERNELPATCH_NEED_UPDATE) return
 
@@ -112,7 +131,11 @@ class APApplication : Application() {
                 shell.newJob().add(*cmds).to(logCallback, logCallback).exec()
 
                 Log.d(TAG, "APatch uninstalled...")
-                _apStateLiveData.postValue(State.ANDROIDPATCH_READY)
+                if (_kpStateLiveData.value == State.UNKNOWN_STATE) {
+                    _apStateLiveData.postValue(State.UNKNOWN_STATE)
+                } else {
+                    _apStateLiveData.postValue(State.ANDROIDPATCH_READY)
+                }
             }
         }
 
@@ -201,17 +224,15 @@ class APApplication : Application() {
 
                     kPatchVersion = getKernelPatchVersion()
                     val kpv = getKPatchVersion()
+                    val kpMinorVersion = kPatchVersion.split(".").let { if (it.size > 1) it[1].toInt() else 0 }
 
                     val patchDir: ExtendedFile = FileSystemManager.getLocal().getFile(apApp.filesDir.parent, "patch")
                     val rebootFile = patchDir.getChildFile(".reboot")
 
-                    val backupDir: ExtendedFile = FileSystemManager.getLocal().getFile(apApp.filesDir.parent, "backup")
-                    val origBootFile = backupDir.getChildFile("boot.img")
-
                     if (kPatchVersion != kpv && rebootFile.exists()) {
                         _kpStateLiveData.postValue(State.KERNELPATCH_NEED_REBOOT)
                         Log.d(TAG, "state: " + State.KERNELPATCH_NEED_REBOOT + ", version: " + kPatchVersion + "->" + kpv)
-                    } else if (kPatchVersion != kpv && origBootFile.exists()) { // TODO: remove the last condition on kpatch v0.9.0
+                    } else if (kPatchVersion != kpv && kpMinorVersion >= 9) { // TODO: remove the last condition after kpatch v0.9.0
                         _kpStateLiveData.postValue(State.KERNELPATCH_NEED_UPDATE)
                         Log.d(TAG, "state: " + State.KERNELPATCH_NEED_UPDATE + ", version: " + kPatchVersion + "->" + kpv)
                     } else {

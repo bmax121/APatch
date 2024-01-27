@@ -159,7 +159,7 @@ private fun AppItem(
             Column {
                 Text(app.packageName)
                 FlowRow {
-                    if(config.exclude != 0) {
+                    if (config.exclude != 0) {
                         LabelText(label = stringResource(id = R.string.su_pkg_excluded_label))
                     }
                     if (config.allow != 0) {
@@ -178,8 +178,8 @@ private fun AppItem(
             Switch(checked = checked
                 , onCheckedChange = {
                     checked = !checked
-                    config.allow = if(checked) 1 else 0
-                    if(checked) {
+                    config.allow = if (checked) 1 else 0
+                    if (checked) {
                         Natives.grantSu(app.uid, 0, config.profile?.scontext)
                     } else {
                         Natives.revokeSu(app.uid)
@@ -192,7 +192,7 @@ private fun AppItem(
                 })
         },
     )
-    if(edit) {
+    if (edit) {
         EditUser(app)
     }
 }
@@ -211,7 +211,7 @@ fun EditUser(app: SuperUserViewModel.AppInfo) {
 //            checked = viahook,
 //            onCheckedChange = {
 //                viahook = !viahook
-//                if(viahook) app.config.profile.scontext = ""
+//                if (viahook) app.config.profile.scontext = ""
 //                else app.config.profile.scontext = APApplication.MAGISK_SCONTEXT
 //                runBlocking {
 //                    launch(Dispatchers.IO) {
@@ -226,7 +226,7 @@ fun EditUser(app: SuperUserViewModel.AppInfo) {
             summary = stringResource(id = R.string.su_pkg_excluded_setting_summary),
             checked = exclude != 0,
             onCheckedChange = {
-                exclude = if(it) 1 else 0
+                exclude = if (it) 1 else 0
                 runBlocking {
                     launch(Dispatchers.IO) {
                         app.config.exclude = exclude
