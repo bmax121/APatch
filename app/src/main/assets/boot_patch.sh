@@ -58,7 +58,7 @@ BOOTIMAGE=$2
 LEGACYSAR=false
 PATCHEDKERNEL=false
 BACKUPIMAGE="/data/adb/apatch_backup_boot.img"
-TMPBACKUPIMAGE="/data/data/me.bmax.apatch/apatch_backup_boot.img"
+TMPBACKUPIMAGE="/data/data/me.bmax.apatch/backup/boot.img"
 
 mount_partitions
 
@@ -85,7 +85,16 @@ if [ $? -ne 0 ]; then
 fi
 
 if [ ! "$ISDIRECTINSTALL" ]; then
-  backup_boot_image
+  patched=$(./kptools -l --image kernel | grep "patched=" | cut -d'=' -f2)
+  if [[ "$patched" == "false" ]]; then
+    echo "- Stock boot image detected"
+    backup_boot_image
+  else
+    echo "- Patched boot image detected"
+  fi
+else
+  mv "$TMPBACKUPIMAGE" "$BACKUPIMAGE"
+  rmdir $(dirname "$TMPBACKUPIMAGE") 2>/dev/null
 fi
 
 cp kernel kernel.ori

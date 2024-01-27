@@ -40,7 +40,7 @@ fi
 LEGACYSAR=false
 PATCHEDKERNEL=false
 BACKUPIMAGE="/data/adb/apatch_backup_boot.img"
-TMPBACKUPIMAGE="/data/data/me.bmax.apatch/apatch_backup_boot.img"
+TMPBACKUPIMAGE="/data/data/me.bmax.apatch/backup/boot.img"
 
 mount_partitions
 find_boot_image
@@ -50,10 +50,7 @@ find_boot_image
 echo "- Target image: $BOOTIMAGE"
 
 if [ -f "$BACKUPIMAGE" ] || [ -f "$TMPBACKUPIMAGE" ]; then
-  echo "- Stock boot image detected"
-  # If kpatch is not installed yet, we don't have permissions
-  # to use the regular backup path, so we use a temporary path
-  cp "$BACKUPIMAGE" "new-boot.img" 2>/dev/null || cp "$TMPBACKUPIMAGE" "new-boot.img"
+  restore_boot_image
 else
   # Check for dependencies
   command -v ./magiskboot >/dev/null 2>&1 || { echo "- Command magiskboot not found!"; exit 1; }

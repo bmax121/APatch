@@ -56,7 +56,7 @@ find_block() {
 # After calling this method, the following variables will be set:
 # SLOT, LEGACYSAR
 mount_partitions() {
-    # Check A/B slot
+  # Check A/B slot
   SLOT=$(grep_cmdline androidboot.slot_suffix)
   if [ -z $SLOT ]; then
     SLOT=$(grep_cmdline androidboot.slot)
@@ -113,15 +113,20 @@ flash_image() {
 }
 
 backup_boot_image() {
-  if [ -f kernel ]; then
-    patched=$(./kptools -l --image kernel | grep "patched=" | cut -d'=' -f2)
-    if [[ "$patched" == "false" ]]; then
-      echo "- Backing up boot image"
-      # Cleanup if temporary backup image exists
-      rm -rf "$TMPBACKUPIMAGE"
-      # If kpatch is not installed yet, we don't have permissions
-      # to use the regular backup path, so we use a temporary path
-      cp "$BOOTIMAGE" "$BACKUPIMAGE" 2>/dev/null || cp "$BOOTIMAGE" "$TMPBACKUPIMAGE"
-    fi
+  if [ ! -z "$BOOTIMAGE" ] && ([ ! -z "$BACKUPIMAGE" ] || [ ! -z "$TMPBACKUPIMAGE" ]); then
+    echo "- Backing up boot image"
+    # If kpatch is not installed yet, we don't have permissions
+    # to use the regular backup path, so we use a temporary path
+    mkdir $(dirname "$TMPBACKUPIMAGE") 2>/dev/null
+    cp "$BOOTIMAGE" "$BACKUPIMAGE" 2>/dev/null || cp "$BOOTIMAGE" "$TMPBACKUPIMAGE"
+  fi
+}
+
+restore_boot_image() {
+  if [ -f "$BACKUPIMAGE" ] || [ -f "$TMPBACKUPIMAGE" ]; then
+    echo "- Restoring stock boot image"
+    # If kpatch is not installed yet, we don't have permissions
+    # to use the regular backup path, so we use a temporary path
+    cp "$BACKUPIMAGE" new-boot.img 2>/dev/null || cp "$TMPBACKUPIMAGE" new-boot.img
   fi
 }
