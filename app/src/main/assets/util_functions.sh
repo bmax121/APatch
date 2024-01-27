@@ -117,7 +117,7 @@ backup_boot_image() {
     patched=$(./kptools -l --image kernel | grep "patched=" | cut -d'=' -f2)
     if [[ "$patched" == "false" ]]; then
       echo "- Backing up boot image"
-      cp "$BOOTIMAGE" "$BACKUPIMAGE"
+      cp "$BOOTIMAGE" "$BACKUPIMAGE" 2>/dev/null
     fi
   fi
 }
