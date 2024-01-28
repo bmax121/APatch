@@ -21,6 +21,7 @@
     <string name="system_default">System default</string>
     <string name="settings_global_namespace_mode">Global Namespace Mode</string>
     <string name="settings_global_namespace_mode_summary">All root sessions use the global mount namespace</string>
+    <string name="settings_clear_super_key_dialog">Do you really want to proceed?</string>
 
     <string name="home_learn_apatch">Learn AndroidPatch</string>
     <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
@@ -30,7 +31,7 @@
     <string name="safe_mode">Safe mode</string>
 
     <string name="super_key">SuperKey</string>
-    <string name="clear_super_key">Clear Key</string>
+    <string name="clear_super_key">Clear SuperKey</string>
     <string name="home_patch_set_key_title">Set SuperKey</string>
     <string name="home_patch_set_key_desc">Only credential for KernelPatch</string>
     <string name="home_patch_next_step">Next Step</string>

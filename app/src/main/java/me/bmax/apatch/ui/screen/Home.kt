@@ -79,7 +79,7 @@ fun HomeScreen(navigator: DestinationsNavigator) {
             navigator.navigate(SettingScreenDestination)
         })
     }, floatingActionButton = {
-        FloatButton(showPatchFloatAction, navigator)
+        PatchFloatButton(showPatchFloatAction, navigator)
     }) { innerPadding ->
         Column(
             modifier = Modifier
@@ -110,7 +110,7 @@ fun AuthSuperKey(showDialog: MutableState<Boolean>) {
         text = {
             Column {
                 Text(stringResource(id = R.string.home_auth_key_desc))
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(8.dp))
                 Box(
                     contentAlignment = Alignment.CenterEnd,
                 ) {
@@ -183,7 +183,7 @@ fun StartPatch(showDialog: MutableState<Boolean>, navigator: DestinationsNavigat
         text = {
             Column {
                 Text(stringResource(id = R.string.home_patch_set_key_desc))
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(8.dp))
                 TextField(
                     value = key,
                     onValueChange = {
@@ -194,7 +194,7 @@ fun StartPatch(showDialog: MutableState<Boolean>, navigator: DestinationsNavigat
                     visualTransformation = VisualTransformation.None,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
                 )
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(8.dp))
             }
         },
         confirmButton = {
@@ -213,16 +213,11 @@ fun StartPatch(showDialog: MutableState<Boolean>, navigator: DestinationsNavigat
 }
 
 @Composable
-fun FloatButton(showPatchFloatAction: Boolean, navigator: DestinationsNavigator) {
+fun PatchFloatButton(showPatchFloatAction: Boolean, navigator: DestinationsNavigator) {
     val apState by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
 
-    var showAuthKeyDialog = remember { mutableStateOf(false)  }
     var showSetKeyDialog = remember { mutableStateOf(false)  }
     var permissionRequest = remember { mutableStateOf(false)  }
-
-    if (showAuthKeyDialog.value) {
-        AuthSuperKey(showDialog = showAuthKeyDialog)
-    }
 
     if (permissionRequest.value) {
         PermissionUtils.permission(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -261,28 +256,6 @@ fun FloatButton(showPatchFloatAction: Boolean, navigator: DestinationsNavigator)
                     text = { Text(text = stringResource(id = R.string.patch)) },
                 )
             }
-            Spacer(Modifier.height(8.dp))
-        }
-        Box() {
-            ExtendedFloatingActionButton(
-                onClick = {
-                    if (apState != APApplication.State.UNKNOWN_STATE) {
-                        apApp.updateSuperKey("")
-                    } else {
-                        showAuthKeyDialog.value = true
-                    }
-                },
-                icon = { Icon(Icons.Filled.Key, "") },
-                text = {
-                    Text(
-                        text = if (apState != APApplication.State.UNKNOWN_STATE) {
-                            stringResource(id = R.string.clear_super_key)
-                        } else {
-                            stringResource(id = R.string.super_key)
-                        }
-                    )
-                },
-            )
         }
     }
 }
@@ -338,10 +311,16 @@ private fun TopBar(onSettingsClick: () -> Unit) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun KStatusCard(kpState: APApplication.State, navigator: DestinationsNavigator) {
+    var showAuthKeyDialog = remember { mutableStateOf(false)  }
+    if (showAuthKeyDialog.value) {
+        AuthSuperKey(showDialog = showAuthKeyDialog)
+    }
+
     val showInfoDialog = remember { mutableStateOf(false) }
     if (showInfoDialog.value) {
         InfoDialog(showDialog = showInfoDialog)
     }
+
     ElevatedCard(
         onClick = { showInfoDialog.value = true },
         colors = CardDefaults.elevatedCardColors(containerColor = run {
@@ -418,47 +397,51 @@ private fun KStatusCard(kpState: APApplication.State, navigator: DestinationsNav
                         )
                     }
                 }
-                if (!kpState.equals(APApplication.State.UNKNOWN_STATE)) {
-                    Column (modifier = Modifier
-                        .align(Alignment.CenterVertically)
-                    ) {
-                        Button(
-                            onClick = {
-                                when {
-                                    kpState.equals(APApplication.State.KERNELPATCH_NEED_UPDATE) -> {
-                                        navigator.navigate(PatchScreenDestination(null, apApp.getSuperKey(), true))
-                                        APApplication.installKpatch()
-                                    }
-                                    kpState.equals(APApplication.State.KERNELPATCH_NEED_REBOOT) -> {
-                                        reboot()
-                                    }
-                                    kpState.equals(APApplication.State.KERNELPATCH_UNINSTALLING) -> {
-                                        // Do nothing
-                                    }
-                                    else -> {
-                                        APApplication.uninstallKpatch()
-                                        navigator.navigate(PatchScreenDestination(null, apApp.getSuperKey(), false))
-                                    }
+                Column (modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                ) {
+                    Button(
+                        onClick = {
+                            when {
+                                kpState.equals(APApplication.State.UNKNOWN_STATE) -> {
+                                    showAuthKeyDialog.value = true
                                 }
-                            },
-                            content = {
-                                when {
-                                    kpState.equals(APApplication.State.KERNELPATCH_NEED_UPDATE) -> {
-                                        Text(text = stringResource(id = R.string.home_ap_cando_update), color = Color.Black)
-                                    }
-                                    kpState.equals(APApplication.State.KERNELPATCH_NEED_REBOOT) -> {
-                                        Text(text = stringResource(id = R.string.home_ap_cando_reboot), color = Color.Black)
-                                    }
-                                    kpState.equals(APApplication.State.KERNELPATCH_UNINSTALLING) -> {
-                                        Icon(Icons.Outlined.Cached, contentDescription = "busy")
-                                    }
-                                    else -> {
-                                        Text(text = stringResource(id = R.string.home_ap_cando_uninstall), color = Color.Black)
-                                    }
+                                kpState.equals(APApplication.State.KERNELPATCH_NEED_UPDATE) -> {
+                                    navigator.navigate(PatchScreenDestination(null, apApp.getSuperKey(), true))
+                                    APApplication.installKpatch()
+                                }
+                                kpState.equals(APApplication.State.KERNELPATCH_NEED_REBOOT) -> {
+                                    reboot()
+                                }
+                                kpState.equals(APApplication.State.KERNELPATCH_UNINSTALLING) -> {
+                                    // Do nothing
+                                }
+                                else -> {
+                                    APApplication.uninstallKpatch()
+                                    navigator.navigate(PatchScreenDestination(null, apApp.getSuperKey(), false))
                                 }
                             }
-                        )
-                    }
+                        },
+                        content = {
+                            when {
+                                kpState.equals(APApplication.State.UNKNOWN_STATE) -> {
+                                    Text(text = stringResource(id = R.string.super_key))
+                                }
+                                kpState.equals(APApplication.State.KERNELPATCH_NEED_UPDATE) -> {
+                                    Text(text = stringResource(id = R.string.home_ap_cando_update))
+                                }
+                                kpState.equals(APApplication.State.KERNELPATCH_NEED_REBOOT) -> {
+                                    Text(text = stringResource(id = R.string.home_ap_cando_reboot))
+                                }
+                                kpState.equals(APApplication.State.KERNELPATCH_UNINSTALLING) -> {
+                                    Icon(Icons.Outlined.Cached, contentDescription = "busy")
+                                }
+                                else -> {
+                                    Text(text = stringResource(id = R.string.home_ap_cando_uninstall))
+                                }
+                            }
+                        }
+                    )
                 }
             }
         }
@@ -616,16 +599,16 @@ private fun AStatusCard(apState: APApplication.State) {
                             content = {
                                 when {
                                     apState.equals(APApplication.State.ANDROIDPATCH_READY) -> {
-                                        Text(text = stringResource(id = R.string.home_ap_cando_install), color = Color.Black)
+                                        Text(text = stringResource(id = R.string.home_ap_cando_install))
                                     }
                                     apState.equals(APApplication.State.ANDROIDPATCH_NEED_UPDATE) -> {
-                                        Text(text = stringResource(id = R.string.home_ap_cando_update), color = Color.Black)
+                                        Text(text = stringResource(id = R.string.home_ap_cando_update))
                                     }
                                     apState.equals(APApplication.State.ANDROIDPATCH_UNINSTALLING) -> {
                                         Icon(Icons.Outlined.Cached, contentDescription = "busy")
                                     }
                                     else -> {
-                                        Text(text = stringResource(id = R.string.home_ap_cando_uninstall), color = Color.Black)
+                                        Text(text = stringResource(id = R.string.home_ap_cando_uninstall))
                                     }
                                 }
                             }

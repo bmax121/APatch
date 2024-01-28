@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.ContactPage
 import androidx.compose.material.icons.filled.Engineering
+import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.Translate
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,6 +23,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -46,6 +48,7 @@ import kotlinx.coroutines.withContext
 import me.bmax.apatch.APApplication
 import me.bmax.apatch.BuildConfig
 import me.bmax.apatch.R
+import me.bmax.apatch.apApp
 import me.bmax.apatch.ui.component.AboutDialog
 import me.bmax.apatch.ui.component.LoadingDialog
 import me.bmax.apatch.ui.component.SwitchItem
@@ -78,6 +81,9 @@ fun SettingScreen(navigator: DestinationsNavigator) {
     ) { paddingValues ->
         LoadingDialog()
 
+        val showClearSuperKeyDialog = remember { mutableStateOf(false) }
+        ClearSuperKeyDialog(showClearSuperKeyDialog)
+
         val showAboutDialog = remember { mutableStateOf(false) }
         AboutDialog(showAboutDialog)
 
@@ -93,6 +99,21 @@ fun SettingScreen(navigator: DestinationsNavigator) {
             val context = LocalContext.current
             val scope = rememberCoroutineScope()
             val dialogHost = LocalDialogHost.current
+            
+            if (kPatchReady) {
+                ListItem(
+                    leadingContent = {
+                        Icon(
+                            Icons.Filled.Key,
+                            stringResource(id = R.string.super_key)
+                        )
+                    },
+                    headlineContent = { Text(stringResource(id = R.string.clear_super_key)) },
+                    modifier = Modifier.clickable {
+                        showClearSuperKeyDialog.value = true
+                    }
+                )
+            }
 
             if (kPatchReady && aPatchReady) {
                 SwitchItem(
@@ -234,4 +255,32 @@ private fun TopBar(onBack: () -> Unit = {}) {
             ) { Icon(Icons.Filled.ArrowBack, contentDescription = null) }
         },
     )
+}
+
+@Composable
+private fun ClearSuperKeyDialog(showClearSuperKeyDialog: MutableState<Boolean>) {
+    if (showClearSuperKeyDialog.value) {
+        AlertDialog(
+            onDismissRequest = { showClearSuperKeyDialog.value = false },
+            title = { Text(stringResource(id = R.string.clear_super_key)) },
+            text = { Text(stringResource(id = R.string.settings_clear_super_key_dialog)) },
+            dismissButton = {
+                TextButton(
+                    onClick = { showClearSuperKeyDialog.value = false }
+                ) {
+                    Text(stringResource(id = android.R.string.no))
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showClearSuperKeyDialog.value = false
+                        apApp.updateSuperKey("")
+                    }
+                ) {
+                    Text(stringResource(id = android.R.string.yes))
+                }
+            }
+        )
+    }
 }
