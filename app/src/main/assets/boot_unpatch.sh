@@ -29,14 +29,6 @@ echo "****************************"
 echo " APatch Boot Image Unpatcher"
 echo "****************************"
 
-# Check if 64-bit
-if [ $(uname -m) = "aarch64" ]; then
-  echo "- System arch: arm64"
-else
-  echo "- System arch: not arm64"
-  exit 1
-fi
-
 LEGACYSAR=false
 PATCHEDKERNEL=false
 BACKUPIMAGE="/data/adb/apatch_backup_boot.img"
