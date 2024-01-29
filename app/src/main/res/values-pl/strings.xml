@@ -52,11 +52,11 @@
     <string name="apm_uninstall">Odinstaluj</string>
     <string name="apm_uninstall_confirm">Jesteś pewien, że chcesz odinstalować moduł \"%s\"?</string>
     <string name="apm_version">Wersja</string>
-    <string name="apm_overlay_fs_not_available">OverlayFS nie jest dostępne. Nie można uruchomić modułu.</string>
+    <string name="apm_overlay_fs_not_available">OverlayFS nie jest dostępne. Nie można uruchomić modułu. Moduły są niedostępne, ponieważ jądro OverlayFS jest wyłączone.</string>
     <string name="apm_failed_to_disable">Nie udało się wyłączyć modułu: %s</string>
     <string name="apm_uninstall_failed">Nie udało się odinstalować %s</string>
     <string name="apm_failed_to_enable">Nie udało się załadować modułu: \"%s\"</string>
-    <string name="apm_magisk_conflict">Moduły są wyłączone ponieważ istnieje konflikt z Magisk.</string>
+    <string name="apm_magisk_conflict">Moduły są niedostępne ponieważ istnieje konflikt z Magisk.</string>
     <string name="apm_author">Autor</string>
     <string name="apm_changelog">Lista zmian</string>
     <string name="apm_downloading">Pobieranie modułu \"%s\"…</string>
@@ -98,4 +98,6 @@
     <string name="home_auth_key_desc">Rozpocznij po uzyskaniu certyfikatu</string>
     <string name="kpm_unload">Rozpakuj</string>
     <string name="patch">Załataj</string>
+    <string name="settings_global_namespace_mode">Tryb globalnej przestrzeni nazw</string>
+    <string name="settings_global_namespace_mode_summary">Wszystkie sesje root korzystają z globalnej przestrzeni montowania nazw</string>
 </resources>
