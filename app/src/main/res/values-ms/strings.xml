@@ -7,7 +7,7 @@
     <string name="reboot">But semula (Reboot)</string>
     <string name="settings">Tetapan</string>
     <string name="reboot_userspace">But semula lembut (Soft reboot)</string>
-    <string name="about">Tentang</string>
+    <string name="about">Perihal</string>
     <string name="home_learn_apatch">Ketahui tentang AndroidPatch</string>
     <string name="reboot_recovery">But semula ke Recovery</string>
     <string name="kernel_patch">KernelPatch</string>

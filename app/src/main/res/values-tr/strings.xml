@@ -26,7 +26,7 @@
     <string name="home_installing">Yükleniyor</string>
     <string name="apm_start_downloading">İndirme başladı: \"%s\"</string>
     <string name="su_pkg_excluded_label">dahil etme</string>
-    <string name="su_title">Super kullanıcı</string>
+    <string name="su_title">SU</string>
     <string name="apm">AP Modül</string>
     <string name="kpm_desc">Açıklama</string>
     <string name="su_selinux_via_hook">kanca ile bypass et</string>
@@ -88,7 +88,7 @@
     <string name="kpm_license">Lisans</string>
     <string name="reboot_bootloader">Önyükleyici modunda yeniden başlat</string>
     <string name="kpm_apm_empty">Yüklü modül yok</string>
-    <string name="about_source_code">%1$s üzerinden kaynak koduna göz atın. <br/>%2$s kanalımıza katılın.</string>
+    <string name="about_source_code">%1$s üzerinden kaynak koduna göz atın. <br/>%2$s kanalımıza katılın</string>
     <string name="home_manager_version">Yönetici sürümü</string>
     <string name="kpm_load_toast_succ">Başarıyla yüklendi</string>
     <string name="apm_author">Geliştirici</string>
