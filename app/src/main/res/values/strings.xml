@@ -46,14 +46,12 @@
     <string name="apatch_version">Version: %s</string>
     <string name="apatch_version_update">Version: %s -&gt; %s</string>
     <string name="kpatch_version_update">Version: %s -&gt; %s</string>
-    <string name="home_su_path_title">su</string>
+    <string name="home_su_path">su: %s</string>
     <string name="kpatch_shadow_path_title">kpatch</string>
     <string name="home_apatch_version">APatch: %s</string>
     <string name="home_auth_key_title">Enter SuperKey</string>
     <string name="home_auth_key_desc">Start after certification</string>
     <string name="home_kpatch_info_title">Info</string>
-    <string name="home_superuser_count">Superusers: %d</string>
-    <string name="home_module_count">Modules: %d</string>
 
     <string name="home_ap_cando_install">Install</string>
     <string name="home_ap_cando_update">Update</string>
@@ -61,6 +59,12 @@
     <string name="home_ap_cando_reboot">Reboot</string>
 
     <string name="patch_title">Patch</string>
+
+
+    <string name="patch_config_title">Config Patches</string>
+    <string name="patch_mode_bootimg_patch">Patch boot.img</string>
+    <string name="patch_mode_update_patch">Update my patches</string>
+    <string name="patch_select_bootimg">Select boot.img</string>
 
     <string name="home_kernel">Kernel</string>
     <string name="home_manager_version">Manager Version</string>
@@ -71,6 +75,7 @@
     <string name="home_selinux_status_enforcing">Enforcing</string>
     <string name="home_selinux_status_permissive">Permissive</string>
     <string name="home_selinux_status_unknown">Unknown</string>
+
 
     <string name="kpm">KPModule</string>
     <string name="kpm_kp_not_installed">KernelPatch not installed</string>

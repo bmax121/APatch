@@ -2,7 +2,6 @@ package me.bmax.apatch
 
 import android.app.Application
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -10,6 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import coil.Coil
 import coil.ImageLoader
 import com.topjohnwu.superuser.CallbackList
+import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.nio.ExtendedFile
 import com.topjohnwu.superuser.nio.FileSystemManager
 import me.bmax.apatch.util.*
@@ -17,7 +17,6 @@ import me.zhanghai.android.appiconloader.coil.AppIconFetcher
 import me.zhanghai.android.appiconloader.coil.AppIconKeyer
 import java.io.File
 import kotlin.concurrent.thread
-import org.json.JSONArray
 
 lateinit var apApp: APApplication
 
@@ -26,11 +25,13 @@ val TAG = "APatch"
 class APApplication : Application() {
     enum class State {
         UNKNOWN_STATE,
+
         KERNELPATCH_INSTALLED,
         KERNELPATCH_NEED_UPDATE,
         KERNELPATCH_NEED_REBOOT,
         KERNELPATCH_UNINSTALLING,
-        ANDROIDPATCH_READY,
+
+        ANDROIDPATCH_NOT_INSTALLED,
         ANDROIDPATCH_INSTALLED,
         ANDROIDPATCH_INSTALLING,
         ANDROIDPATCH_NEED_UPDATE,
@@ -49,6 +50,7 @@ class APApplication : Application() {
         val PACKAGE_CONFIG_FILE = APATCH_FOLDER + "package_config"
         val SU_PATH_FILE = APATCH_FOLDER + "su_path"
         val SAFEMODE_FILE = "/dev/.safemode"
+        val NEED_REBOOT_FILE = "/dev/.need_reboot"
         val GLOBAL_NAMESPACE_FILE = "/data/adb/.global_namespace_enable"
 
         val APATCH_VERSION_PATH = APATCH_FOLDER + "version"
@@ -77,8 +79,6 @@ class APApplication : Application() {
         private val _apStateLiveData = MutableLiveData<State>(State.UNKNOWN_STATE)
         val apStateLiveData: LiveData<State> = _apStateLiveData
 
-        var kPatchVersion: String = ""
-        var aPatchVersion: Int = 0
 
         fun uninstallKpatch() {
             if (_kpStateLiveData.value != State.KERNELPATCH_INSTALLED) return
@@ -98,21 +98,6 @@ class APApplication : Application() {
             }
         }
 
-        fun installKpatch() {
-            if (_kpStateLiveData.value != State.KERNELPATCH_NEED_UPDATE) return
-
-            val patchDir: ExtendedFile = FileSystemManager.getLocal().getFile(apApp.filesDir.parent, "patch")
-            val newBootFile = patchDir.getChildFile("new-boot.img")
-
-            if (newBootFile.exists()) {
-                val rebootFile = patchDir.getChildFile(".reboot")
-                rebootFile.createNewFile()
-
-                Log.d(TAG, "KPatch installed...")
-                _kpStateLiveData.postValue(State.KERNELPATCH_NEED_REBOOT)
-            }
-        }
-
         fun uninstallApatch() {
             if (_apStateLiveData.value != State.ANDROIDPATCH_INSTALLED) return
             _apStateLiveData.value = State.ANDROIDPATCH_UNINSTALLING
@@ -123,7 +108,6 @@ class APApplication : Application() {
                 val cmds = arrayOf(
                     "rm -f ${APATCH_VERSION_PATH}",
                     "rm -f ${APD_PATH}",
-                    // "rm -f ${KPATCH_PATH}", // Reserved, used to obtain logs
                     "rm -rf ${APATCH_FOLDER}",
                 )
 
@@ -134,14 +118,15 @@ class APApplication : Application() {
                 if (_kpStateLiveData.value == State.UNKNOWN_STATE) {
                     _apStateLiveData.postValue(State.UNKNOWN_STATE)
                 } else {
-                    _apStateLiveData.postValue(State.ANDROIDPATCH_READY)
+                    _apStateLiveData.postValue(State.ANDROIDPATCH_NOT_INSTALLED)
                 }
             }
         }
 
         fun installApatch() {
-            if (_apStateLiveData.value != State.ANDROIDPATCH_READY &&
-                _apStateLiveData.value != State.ANDROIDPATCH_NEED_UPDATE) {
+            val state = _apStateLiveData.value
+            if (state != State.ANDROIDPATCH_NOT_INSTALLED &&
+                state != State.ANDROIDPATCH_NEED_UPDATE) {
                 return
             }
             _apStateLiveData.value = State.ANDROIDPATCH_INSTALLING
@@ -149,6 +134,12 @@ class APApplication : Application() {
             val nativeDir = apApp.applicationInfo.nativeLibraryDir
 
             thread {
+                val rc = Natives.su(0, null)
+                if(!rc) {
+                    Log.e(TAG, "Native.su failed: " + rc)
+                    return@thread
+                }
+
                 val cmds = arrayOf(
                     "mkdir -p ${APATCH_BIN_FOLDER}",
                     "mkdir -p ${APATCH_LOG_FOLDER}",
@@ -173,36 +164,18 @@ class APApplication : Application() {
                     "touch ${PACKAGE_CONFIG_FILE}",
                     "touch ${SU_PATH_FILE}",
                     "[ -s ${SU_PATH_FILE} ] || echo ${LEGACY_SU_PATH} > ${SU_PATH_FILE}",
-                    "echo ${getManagerVersion().second} > ${APATCH_VERSION_PATH}",
+                    "echo ${Version.getManagerVersion().second} > ${APATCH_VERSION_PATH}",
 
                     "restorecon -R ${APATCH_FOLDER}",
 
                     "${KPATCH_PATH} ${superKey} android_user init",
                 )
 
-                val shell = getRootShell()
-                shell.newJob().add(*cmds).to(logCallback, logCallback).exec()
-
-                aPatchVersion = getManagerVersion().second
-                kPatchVersion = getKernelPatchVersion()
+                Shell.getShell().newJob().add(*cmds).to(logCallback, logCallback).exec()
 
                 Log.d(TAG, "APatch installed...")
                 _apStateLiveData.postValue(State.ANDROIDPATCH_INSTALLED)
             }
-        }
-
-        fun getManagerVersion(): Pair<String, Int> {
-            val packageInfo = apApp.packageManager.getPackageInfo(apApp.packageName, 0)
-            return Pair(packageInfo.versionName, packageInfo.versionCode)
-        }
-
-        fun getKernelPatchVersion(): String {
-            val kernelPatchVersion = Natives.kernelPatchVersion()
-            return "%d.%d.%d".format(
-                kernelPatchVersion.and(0xff0000).shr(16),
-                kernelPatchVersion.and(0xff00).shr(8),
-                kernelPatchVersion.and(0xff)
-            )
         }
 
         var superKey: String = ""
@@ -211,7 +184,8 @@ class APApplication : Application() {
                 field = value
                 val ready = Natives.nativeReady(value)
                 _kpStateLiveData.value = if (ready) State.KERNELPATCH_INSTALLED else State.UNKNOWN_STATE
-                _apStateLiveData.value = if (ready) State.ANDROIDPATCH_READY else State.UNKNOWN_STATE
+                _apStateLiveData.value = if (ready) State.ANDROIDPATCH_NOT_INSTALLED else State.UNKNOWN_STATE
+
                 Log.d(TAG, "state: " + _kpStateLiveData.value)
                 sharedPreferences.edit().putString(SUPER_KEY, value).apply()
 
@@ -222,35 +196,30 @@ class APApplication : Application() {
                         return@thread
                     }
 
-                    kPatchVersion = getKernelPatchVersion()
-                    val kpv = getKPatchVersion()
-                    val kpMinorVersion = kPatchVersion.split(".").let { if (it.size > 1) it[1].toInt() else 0 }
+                    // KernelPatch version
+                    val buildV = Version.buildKPVUInt()
+                    val installedV = Version.installedKPVUInt()
+                    Log.d(TAG, "kp installed version: ${installedV}, build version: ${buildV}")
 
-                    val patchDir: ExtendedFile = FileSystemManager.getLocal().getFile(apApp.filesDir.parent, "patch")
-                    val rebootFile = patchDir.getChildFile(".reboot")
-
-                    if (kPatchVersion != kpv && rebootFile.exists()) {
-                        _kpStateLiveData.postValue(State.KERNELPATCH_NEED_REBOOT)
-                        Log.d(TAG, "state: " + State.KERNELPATCH_NEED_REBOOT + ", version: " + kPatchVersion + "->" + kpv)
-                    } else if (kPatchVersion != kpv && kpMinorVersion >= 9) { // TODO: remove the last condition after kpatch v0.9.0
-                        _kpStateLiveData.postValue(State.KERNELPATCH_NEED_UPDATE)
-                        Log.d(TAG, "state: " + State.KERNELPATCH_NEED_UPDATE + ", version: " + kPatchVersion + "->" + kpv)
-                    } else {
-                        rebootFile.delete()
-                        _kpStateLiveData.postValue(State.KERNELPATCH_INSTALLED)
-                        Log.d(TAG, "state: " + State.KERNELPATCH_INSTALLED + ", version: " + kPatchVersion)
+                    // use != instead of > to enable downgrade,
+                    if (buildV != installedV) {
+                        if(File(NEED_REBOOT_FILE).exists()) {
+                            _kpStateLiveData.postValue(State.KERNELPATCH_NEED_REBOOT)
+                        } else {
+                            _kpStateLiveData.postValue(State.KERNELPATCH_NEED_UPDATE)
+                        }
                     }
+                    Log.d(TAG, "kp state: " + _kpStateLiveData.value)
 
-                    val av = File(APATCH_VERSION_PATH)
-                    if (av.exists()) {
-                        aPatchVersion = av.readLines().get(0).toInt()
-                        val mgv = getManagerVersion().second
-                        if (aPatchVersion != mgv) {
+                    // AndroidPatch version
+                    val avf = File(APATCH_VERSION_PATH)
+                    if (avf.exists()) {
+                        val apv = avf.readLines().get(0).toInt()
+                        val mgv = Version.getManagerVersion().second
+                        if (apv != mgv) {
                             _apStateLiveData.postValue(State.ANDROIDPATCH_NEED_UPDATE)
-                            Log.d(TAG, "state: " + State.ANDROIDPATCH_NEED_UPDATE + ", version: " + aPatchVersion + "->" + mgv)
                         } else {
                             _apStateLiveData.postValue(State.ANDROIDPATCH_INSTALLED)
-                            Log.d(TAG, "state: " + State.ANDROIDPATCH_INSTALLED + ", version: " + aPatchVersion)
                         }
 
                         // su path
@@ -262,6 +231,20 @@ class APApplication : Application() {
                                 Natives.resetSuPath(suPath)
                             }
                         }
+                    }
+                    Log.d(TAG, "ap state: " + _apStateLiveData.value)
+
+                    // todo: embed kpatch to kernel and extract it after kernel boot
+                    // update kpatch binary
+                    // use != instead of > to enable downgrade,
+                    val kpbinv = Version.installedKPBinVUInt()
+                    if(installedV != kpbinv) {
+                        val nativeDir = apApp.applicationInfo.nativeLibraryDir
+                        val cmds = arrayOf(
+                            "cp -f ${nativeDir}/libkpatch.so ${KPATCH_PATH}",
+                            "restorecon -R ${APATCH_FOLDER}",
+                        )
+                        Shell.getShell().newJob().add(*cmds).exec()
                     }
 
                     return@thread

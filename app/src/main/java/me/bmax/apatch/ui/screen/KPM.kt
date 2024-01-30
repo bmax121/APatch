@@ -70,10 +70,13 @@ import me.bmax.apatch.ui.component.ConfirmDialog
 import me.bmax.apatch.ui.component.ConfirmResult
 import me.bmax.apatch.ui.component.DialogHostState
 import me.bmax.apatch.ui.component.LoadingDialog
+import me.bmax.apatch.ui.viewmodel.KPModel
 import me.bmax.apatch.ui.viewmodel.KPModuleViewModel
 import me.bmax.apatch.util.LocalDialogHost
 import me.bmax.apatch.util.isScrollingUp
+import me.bmax.apatch.util.*
 import java.io.IOException
+
 
 
 private val TAG = "KernelPatchModule"
@@ -142,9 +145,7 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
                             Toast.LENGTH_SHORT
                         ).show()
                     }
-                    if (succ) {
-                        viewModel.markNeedRefresh()
-                    }
+                    viewModel.markNeedRefresh()
                 }
             }
 
@@ -214,7 +215,7 @@ private fun KPModuleList(
     val dialogHost = LocalDialogHost.current
     val context = LocalContext.current
 
-    suspend fun onModuleUninstall(module: Natives.KPMInfo) {
+    suspend fun onModuleUninstall(module: KPModel.KPMInfo) {
         val confirmResult = dialogHost.showConfirm(
             moduleStr,
             content = moduleUninstallConfirm.format(module.name),
@@ -302,8 +303,8 @@ private fun TopBar() {
 
 @Composable
 private fun KPModuleItem(
-    module: Natives.KPMInfo,
-    onUninstall: (Natives.KPMInfo) -> Unit,
+    module: KPModel.KPMInfo,
+    onUninstall: (KPModel.KPMInfo) -> Unit,
 ) {
     ElevatedCard(
         modifier = Modifier.fillMaxWidth(),

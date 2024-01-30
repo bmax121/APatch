@@ -62,7 +62,7 @@ fun getBugreportFile(context: Context): File {
         pw.println("PREVIEW_SDK: " + Build.VERSION.PREVIEW_SDK_INT)
         pw.println("FINGERPRINT: " + Build.FINGERPRINT)
         pw.println("DEVICE: " + Build.DEVICE)
-        pw.println("Manager: " + APApplication.getManagerVersion())
+        pw.println("Manager: " + Version.getManagerVersion())
         pw.println("SELinux: $selinux")
 
         val uname = Os.uname()
@@ -72,8 +72,8 @@ fun getBugreportFile(context: Context): File {
         pw.println("Nodename: ${uname.nodename}")
         pw.println("Sysname: ${uname.sysname}")
 
-        pw.println("KPatch: ${APApplication.getKernelPatchVersion()}")
-        pw.println("APatch: ${APApplication.getManagerVersion()}")
+        pw.println("KPatch: ${Version.installedKPVString()}")
+        pw.println("APatch: ${Version.installedApVersionString}")
         val safeMode = false
         pw.println("SafeMode: $safeMode")
     }

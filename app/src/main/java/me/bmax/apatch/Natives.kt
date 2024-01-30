@@ -21,18 +21,6 @@ object Natives {
     ) : Parcelable {
     }
 
-    @Immutable
-    @Parcelize
-    @Keep
-    data class KPMInfo(
-        var name: String,
-        var version: String,
-        var license: String,
-        var author: String,
-        var description: String,
-        var args: String
-    ): Parcelable{}
-
     private external fun nativeSu(superKey: String, to_uid: Int, scontext: String? ): Int
 
     fun su(to_uid: Int, scontext: String?): Boolean {

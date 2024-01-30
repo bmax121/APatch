@@ -134,19 +134,6 @@ inline fun <In : InputStream, Out : OutputStream> withStreams(
     }
 }
 
-private val cr get() = apApp.contentResolver
-
-fun Uri.inputStream() = cr.openInputStream(this) ?: throw FileNotFoundException()
-
-fun Uri.outputStream() = cr.openOutputStream(this, "rwt") ?: throw FileNotFoundException()
-
-fun Uri.fileDescriptor(mode: String) = cr.openFileDescriptor(this, mode) ?: throw FileNotFoundException()
-
-fun InputStream.copyAndClose(out: OutputStream) = withStreams(this, out) { i, o -> i.copyTo(o) }
-fun InputStream.writeTo(file: File) = copyAndClose(file.outputStream())
-
-private fun InputStream.copyAndCloseOut(out: OutputStream) = out.use { copyTo(it) }
-
 fun patchBootimg(uri: Uri?, superKey: String, isInstall: Boolean, logs: MutableList<String>): Boolean {
     var outPath: File? = null
     var srcBoot: ExtendedFile? = null
@@ -188,7 +175,7 @@ fun patchBootimg(uri: Uri?, superKey: String, isInstall: Boolean, logs: MutableL
         apApp.assets.open(script).writeTo(dest)
     }
 
-    val apVer = APApplication.getManagerVersion().second
+    val apVer = Version.getManagerVersion().second
     val rand = (1..4).map { ('a'..'z').random() }.joinToString("")
     val outFilename = "apatch_${apVer}_${rand}_boot.img"
     val patchCommand = when {

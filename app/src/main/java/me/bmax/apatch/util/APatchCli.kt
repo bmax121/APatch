@@ -67,11 +67,6 @@ fun createRootShellForLog(): Shell {
     }
 }
 
-fun execKpatch(args: String): Boolean {
-    val shell = getRootShell()
-    return ShellUtils.fastCmdResult(shell, "${APApplication.KPATCH_PATH} $args")
-}
-
 fun execApd(args: String): Boolean {
     val shell = getRootShell()
     return ShellUtils.fastCmdResult(shell, "${APApplication.APD_PATH} $args")
@@ -82,20 +77,6 @@ fun listModules(): String {
     val out =
         shell.newJob().add("${APApplication.APD_PATH} module list").to(ArrayList(), null).exec().out
     return out.joinToString("\n").ifBlank { "[]" }
-}
-
-fun getModuleCount(): Int {
-    val result = listModules()
-    runCatching {
-        val array = JSONArray(result)
-        return array.length()
-    }.getOrElse { return 0 }
-}
-
-fun getSuperuserCount(): Int {
-    val shell = getRootShell()
-    val out = shell.newJob().add("${APApplication.KPATCH_PATH} ${APApplication.superKey} sumgr num").to(ArrayList(), null).exec().out
-    return out[0].toIntOrNull() ?: 0
 }
 
 fun toggleModule(id: String, enable: Boolean): Boolean {
@@ -213,14 +194,3 @@ fun restartApp(packageName: String) {
     launchApp(packageName)
 }
 
-fun getKPatchVersion(): String {
-    val shell = getRootShell()
-    val out = shell.newJob().add("${APApplication.KPATCH_PATH} -v").to(ArrayList(), null).exec().out
-    val outInt = out[0].toIntOrNull() ?: 0
-    val kernelPatchVersion = Integer.decode("0x${outInt}")
-    return "%d.%d.%d".format(
-        kernelPatchVersion.and(0xff0000).shr(16),
-        kernelPatchVersion.and(0xff00).shr(8),
-        kernelPatchVersion.and(0xff)
-    )
-}

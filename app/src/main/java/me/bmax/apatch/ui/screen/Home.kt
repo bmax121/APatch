@@ -11,14 +11,12 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.InstallMobile
-import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Warning
@@ -37,17 +35,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.round
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -58,6 +52,7 @@ import me.bmax.apatch.*
 import me.bmax.apatch.R
 import me.bmax.apatch.ui.component.ConfirmDialog
 import me.bmax.apatch.ui.screen.destinations.PatchScreenDestination
+import me.bmax.apatch.ui.screen.destinations.PatchSettingDestination
 import me.bmax.apatch.util.reboot
 import me.bmax.apatch.ui.screen.destinations.SettingScreenDestination
 
@@ -69,17 +64,24 @@ fun HomeScreen(navigator: DestinationsNavigator) {
     val kpState by APApplication.kpStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
     val apState by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
 
-    val kpMinorVersion = APApplication.kPatchVersion.split(".").let { if (it.size > 1) it[1].toInt() else 0 }
-    if (!kpState.equals(APApplication.State.UNKNOWN_STATE) && kpMinorVersion >= 9) { // TODO: remove the last condition after kpatch v0.9.0
+    if (!kpState.equals(APApplication.State.UNKNOWN_STATE)) {
         showPatchFloatAction = false
     }
 
     Scaffold(topBar = {
         TopBar(onSettingsClick = {
-            navigator.navigate(SettingScreenDestination)
+            navigator.navigate(SettingScreenDestination, true)
         })
     }, floatingActionButton = {
-        PatchFloatButton(showPatchFloatAction, navigator)
+        if(showPatchFloatAction) {
+            ExtendedFloatingActionButton(
+                onClick = {
+                    navigator.navigate(PatchSettingDestination(true))
+                },
+                icon = { Icon(Icons.Filled.InstallMobile, "install") },
+                text = { Text(text = stringResource(id = R.string.patch)) },
+            )
+        }
     }) { innerPadding ->
         Column(
             modifier = Modifier
@@ -213,54 +215,6 @@ fun StartPatch(showDialog: MutableState<Boolean>, navigator: DestinationsNavigat
 }
 
 @Composable
-fun PatchFloatButton(showPatchFloatAction: Boolean, navigator: DestinationsNavigator) {
-    val apState by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
-
-    var showSetKeyDialog = remember { mutableStateOf(false)  }
-    var permissionRequest = remember { mutableStateOf(false)  }
-
-    if (permissionRequest.value) {
-        PermissionUtils.permission(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
-            .callback( object : PermissionCallback{
-                override fun onGranted() {
-                    permissionRequest.value = false
-                    showSetKeyDialog.value = true
-                }
-                override fun onDenied(
-                    grantedList: MutableList<String>?,
-                    deniedList: MutableList<String>?,
-                    notFoundList: MutableList<String>?
-                ) {
-                    permissionRequest.value = false
-                }
-            })
-            .request(LocalContext.current as Activity)
-    }
-
-    if (showSetKeyDialog.value) {
-        StartPatch(showDialog = showSetKeyDialog, navigator)
-    }
-
-    Column(horizontalAlignment = Alignment.End) {
-        if (showPatchFloatAction) {
-            Box() {
-                ExtendedFloatingActionButton(
-                    onClick = {
-                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-                            permissionRequest.value = true
-                        } else {
-                            showSetKeyDialog.value = true
-                        }
-                    },
-                    icon = { Icon(Icons.Filled.InstallMobile, "install") },
-                    text = { Text(text = stringResource(id = R.string.patch)) },
-                )
-            }
-        }
-    }
-}
-
-@Composable
 fun RebootDropdownItem(@StringRes id: Int, reason: String = "") {
     DropdownMenuItem(text = {
         Text(stringResource(id))
@@ -316,13 +270,8 @@ private fun KStatusCard(kpState: APApplication.State, navigator: DestinationsNav
         AuthSuperKey(showDialog = showAuthKeyDialog)
     }
 
-    val showInfoDialog = remember { mutableStateOf(false) }
-    if (showInfoDialog.value) {
-        InfoDialog(showDialog = showInfoDialog)
-    }
-
     ElevatedCard(
-        onClick = { showInfoDialog.value = true },
+        onClick = {  },
         colors = CardDefaults.elevatedCardColors(containerColor = run {
             MaterialTheme.colorScheme.secondaryContainer
         })
@@ -366,7 +315,7 @@ private fun KStatusCard(kpState: APApplication.State, navigator: DestinationsNav
                             // Ensure it doesnt crash on non-updated translations
                             var tmp = stringResource(R.string.kpatch_version)
                             tmp = tmp.replace("%d.%d.%d", "%s")
-                            Text(text = tmp.format(APApplication.kPatchVersion),
+                            Text(text = tmp.format(Version.installedKPVString()),
                                 style = MaterialTheme.typography.bodyMedium
                             )
                         }
@@ -376,7 +325,7 @@ private fun KStatusCard(kpState: APApplication.State, navigator: DestinationsNav
                                 style = MaterialTheme.typography.titleMedium
                             )
                             Spacer(Modifier.height(6.dp))
-                            Text(text = stringResource(R.string.kpatch_version_update, APApplication.kPatchVersion, getKPatchVersion()),
+                            Text(text = stringResource(R.string.kpatch_version_update, Version.installedKPVString(), Version.buildKPVString()),
                                 style = MaterialTheme.typography.bodyMedium
                             )
                         }
@@ -388,12 +337,8 @@ private fun KStatusCard(kpState: APApplication.State, navigator: DestinationsNav
                     }
                     if (!kpState.equals(APApplication.State.UNKNOWN_STATE)) {
                         Spacer(Modifier.height(4.dp))
-                        Text(text = stringResource(R.string.home_superuser_count, getSuperuserCount()),
+                        Text(text = stringResource(R.string.home_su_path, Natives.suPath()),
                              style = MaterialTheme.typography.bodyMedium
-                        )
-                        Spacer(Modifier.height(4.dp))
-                        Text(text = stringResource(R.string.home_module_count, getModuleCount()),
-                            style = MaterialTheme.typography.bodyMedium
                         )
                     }
                 }
@@ -408,7 +353,6 @@ private fun KStatusCard(kpState: APApplication.State, navigator: DestinationsNav
                                 }
                                 kpState.equals(APApplication.State.KERNELPATCH_NEED_UPDATE) -> {
                                     navigator.navigate(PatchScreenDestination(null, apApp.getSuperKey(), true))
-                                    APApplication.installKpatch()
                                 }
                                 kpState.equals(APApplication.State.KERNELPATCH_NEED_REBOOT) -> {
                                     reboot()
@@ -449,56 +393,6 @@ private fun KStatusCard(kpState: APApplication.State, navigator: DestinationsNav
 }
 
 @Composable
-fun InfoDialog(showDialog: MutableState<Boolean>) {
-    val apState by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
-
-    AlertDialog(
-        onDismissRequest = { showDialog.value = false },
-        title = { Text(stringResource(id = R.string.home_kpatch_info_title)) },
-        text = {
-            Column {
-                Text(text = stringResource(R.string.home_su_path_title),
-                    style = MaterialTheme.typography.bodyLarge
-                )
-                when {
-                    apState.equals(APApplication.State.ANDROIDPATCH_INSTALLED) ||
-                    apState.equals(APApplication.State.ANDROIDPATCH_NEED_UPDATE) -> {
-                        val suPath = "%s -> %s".format(Natives.suPath(), APApplication.APD_PATH)
-                        Text(text = suPath,
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-
-                        Spacer(Modifier.height(16.dp))
-                        Text(text = stringResource(R.string.kpatch_shadow_path_title),
-                            style = MaterialTheme.typography.bodyLarge
-                        )
-                        val kpPath = "%s -> %s".format(APApplication.KPATCH_SHADOW_PATH, APApplication.KPATCH_PATH)
-                        Text(text = kpPath,
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                    }
-                    else -> {
-                        val suPath = "%s".format(Natives.suPath())
-                        Text(text = suPath,
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                    }
-                }
-            }
-        },
-        confirmButton = {
-            Button(
-                onClick = {
-                    showDialog.value = false
-                }
-            ) {
-                Text(stringResource(id = android.R.string.ok))
-            }
-        }
-    )
-}
-
-@Composable
 private fun AStatusCard(apState: APApplication.State) {
     ElevatedCard(
         colors = CardDefaults.elevatedCardColors(containerColor = run {
@@ -519,7 +413,7 @@ private fun AStatusCard(apState: APApplication.State) {
                     .fillMaxWidth()
                     .padding(10.dp), verticalAlignment = Alignment.CenterVertically) {
                 when {
-                    apState.equals(APApplication.State.ANDROIDPATCH_READY) -> {
+                    apState.equals(APApplication.State.ANDROIDPATCH_NOT_INSTALLED) -> {
                         Icon(Icons.Outlined.Block, stringResource(R.string.home_not_installed))
                     }
                     apState.equals(APApplication.State.ANDROIDPATCH_INSTALLING) -> {
@@ -540,9 +434,9 @@ private fun AStatusCard(apState: APApplication.State) {
                         .weight(2f)
                         .padding(start = 16.dp)
                 ) {
-                    val managerVersion = APApplication.getManagerVersion()
+                    val managerVersion = Version.getManagerVersion()
                     when {
-                        apState.equals(APApplication.State.ANDROIDPATCH_READY) -> {
+                        apState.equals(APApplication.State.ANDROIDPATCH_NOT_INSTALLED) -> {
                             Text(text = stringResource(R.string.home_not_installed),
                                 style = MaterialTheme.typography.titleMedium
                             )
@@ -566,7 +460,7 @@ private fun AStatusCard(apState: APApplication.State) {
                                 style = MaterialTheme.typography.titleMedium
                             )
                             Spacer(Modifier.height(6.dp))
-                            Text(text = stringResource(R.string.apatch_version_update, APApplication.aPatchVersion, managerVersion.second),
+                            Text(text = stringResource(R.string.apatch_version_update, Version.installedApVersionString, managerVersion.second),
                                 style = MaterialTheme.typography.bodyMedium
                             )
                         }
@@ -584,7 +478,7 @@ private fun AStatusCard(apState: APApplication.State) {
                         Button(
                             onClick = {
                                 when {
-                                    apState.equals(APApplication.State.ANDROIDPATCH_READY) ||
+                                    apState.equals(APApplication.State.ANDROIDPATCH_NOT_INSTALLED) ||
                                     apState.equals(APApplication.State.ANDROIDPATCH_NEED_UPDATE) -> {
                                         APApplication.installApatch()
                                     }
@@ -598,7 +492,7 @@ private fun AStatusCard(apState: APApplication.State) {
                             },
                             content = {
                                 when {
-                                    apState.equals(APApplication.State.ANDROIDPATCH_READY) -> {
+                                    apState.equals(APApplication.State.ANDROIDPATCH_NOT_INSTALLED) -> {
                                         Text(text = stringResource(id = R.string.home_ap_cando_install))
                                     }
                                     apState.equals(APApplication.State.ANDROIDPATCH_NEED_UPDATE) -> {

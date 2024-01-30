@@ -33,10 +33,15 @@ android {
         }
     }
 
+
     buildFeatures {
         aidl = true
         buildConfig = true
         compose = true
+    }
+
+    defaultConfig {
+        buildConfigField("String", "buildKPV", """"$kernelPatchVersion"""")
     }
 
     kotlinOptions {
@@ -105,11 +110,19 @@ tasks.register<Download>("downloadApjni") {
     overwrite(true)
 }
 
+tasks.register<Download>("downloadKpmHello") {
+    src("https://github.com/bmax121/KernelPatch/releases/download/${kernelPatchVersion}/demo-hello.kpm")
+    dest(file("${project.projectDir}/src/main/assets/demo-hello.kpm"))
+    onlyIfNewer(true)
+    overwrite(true)
+}
+
 tasks.getByName("preBuild").dependsOn(
     "downloadKpimg",
     "downloadKpatch",
     "downloadKptools",
     "downloadApjni",
+    "downloadKpmHello",
 )
 
 
