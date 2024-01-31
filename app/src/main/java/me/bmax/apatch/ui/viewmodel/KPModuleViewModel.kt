@@ -51,6 +51,7 @@ class KPModuleViewModel : ViewModel() {
                     val infoline = Natives.kernelPatchModuleInfo(it)
                     val spi = infoline.split('\n')
                     val info = KPModel.KPMInfo(
+                        KPModel.ExtraType.KPM,
                         spi[0].split('=')[1],
                         spi[1].split('=')[1],
                         spi[2].split('=')[1],

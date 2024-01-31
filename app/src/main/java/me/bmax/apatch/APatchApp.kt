@@ -202,7 +202,7 @@ class APApplication : Application() {
                     Log.d(TAG, "kp installed version: ${installedV}, build version: ${buildV}")
 
                     // use != instead of > to enable downgrade,
-                    if (buildV != installedV) {
+                    if (buildV != installedV && installedV > 0x900u) {
                         if(File(NEED_REBOOT_FILE).exists()) {
                             _kpStateLiveData.postValue(State.KERNELPATCH_NEED_REBOOT)
                         } else {

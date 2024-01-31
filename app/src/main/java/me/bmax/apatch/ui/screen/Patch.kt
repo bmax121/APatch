@@ -31,11 +31,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.bmax.apatch.R
 import me.bmax.apatch.TAG
-import me.bmax.apatch.APApplication
 import me.bmax.apatch.apApp
 import me.bmax.apatch.util.*
 import java.io.File
-import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream

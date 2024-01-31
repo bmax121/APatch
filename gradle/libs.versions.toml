@@ -75,3 +75,4 @@ appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "a
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 timber = { group = "com.jakewharton.timber", name = "timber", version = "5.0.1" }
 devappx = { group = "io.github.afkt", name = "DevAppX", version = "2.4.3" }
+ini4j = { group = "org.ini4j", name = "ini4j", version = "0.5.4" }

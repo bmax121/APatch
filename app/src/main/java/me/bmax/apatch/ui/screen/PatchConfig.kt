@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ExperimentalMaterialApi
@@ -46,9 +47,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -59,6 +63,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -79,9 +86,11 @@ import me.bmax.apatch.ui.component.ConfirmDialog
 import me.bmax.apatch.ui.component.ConfirmResult
 import me.bmax.apatch.ui.component.LoadingDialog
 import me.bmax.apatch.ui.screen.destinations.PatchScreenDestination
+import me.bmax.apatch.ui.viewmodel.KPModel
 import me.bmax.apatch.ui.viewmodel.KPModuleViewModel
 import me.bmax.apatch.ui.viewmodel.PatchViewModel
 import me.bmax.apatch.util.LocalDialogHost
+import me.bmax.apatch.util.Version
 import me.bmax.apatch.util.getSELinuxStatus
 import java.net.URI
 
@@ -97,6 +106,9 @@ fun PatchSetting(navigator: DestinationsNavigator, newPatch: Boolean) {
 
     val viewModel = viewModel<PatchViewModel>()
 
+    SideEffect {
+        viewModel.prepareAndParseKpimg()
+    }
 
     Scaffold(topBar = {
         TopBar()
@@ -131,15 +143,30 @@ fun PatchSetting(navigator: DestinationsNavigator, newPatch: Boolean) {
 
             PatchMode(newPatch)
 
+            ErrorView(error = viewModel.error)
+            KernelPatchImageView(kpImgInfo = viewModel.imgPatchInfo.kpimgInfo)
+            KernelImageView(viewModel.imgPatchInfo.kimgInfo)
+
+            if(viewModel.imgPatchInfo.kimgInfo.banner.isEmpty()) {
+                SelectFileButton(
+                    text = stringResource(id = R.string.patch_select_bootimg),
+                    onSelected = {data, uri ->
+                        Log.d(TAG, "select boot.img, data: ${data}, uri: ${uri}")
+                        viewModel.copyAndParseBootimg(uri)
+                    }
+                )
+            }
+
+
+            AddedKPMView(viewModel.imgPatchInfo.addedExtras)
+
             SelectFileButton(
-                text = stringResource(id = R.string.patch_select_bootimg),
-                show = !bootimgExist,
+                text = stringResource(id = R.string.patch_embed_kpm),
                 onSelected = {data, uri ->
-                    Log.d(TAG, "select boot.img, data: ${data}, uri: ${uri}")
-                    viewModel.copyAndParseBootimg(uri)
+                    Log.d(TAG, "select kpm, data: ${data}, uri: ${uri}")
+                    viewModel.embedKPM(uri)
                 }
             )
-
 
             if(viewModel.running) {
                 Box(
@@ -155,49 +182,186 @@ fun PatchSetting(navigator: DestinationsNavigator, newPatch: Boolean) {
                     )
                 }
             }
+
         }
     }
 }
 
 
-
 @Composable
-private fun BootimgView() {
-
-}
-
-@Composable
-private fun SelectFileButton(text: String, show: Boolean, onSelected: (data: Intent, uri: Uri)-> Unit,) {
-    if(show) {
-        val selectFileLauncher = rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.StartActivityForResult()
-        ) {
-            if (it.resultCode != Activity.RESULT_OK) {
-                return@rememberLauncherForActivityResult
-            }
-            val data = it.data ?: return@rememberLauncherForActivityResult
-            val uri = data.data ?: return@rememberLauncherForActivityResult
-            onSelected(data, uri)
-        }
-
+private fun SetSuperKeyView(skey: MutableState<String>) {
+    ElevatedCard(
+        colors = CardDefaults.elevatedCardColors(containerColor = run {
+            MaterialTheme.colorScheme.secondaryContainer
+        })
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 12.dp, top = 12.dp, end = 12.dp, bottom = 12.dp),
-            horizontalAlignment = Alignment.End
         ) {
-            Button(
-                onClick = {
-                    val intent = Intent(Intent.ACTION_GET_CONTENT)
-                    intent.type = "*/*"
-                    selectFileLauncher.launch(intent)
-                } ,
-                content = { Text(text = text) }
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(text = stringResource(id = R.string.patch_item_set_skey), style = MaterialTheme.typography.bodyLarge)
+            }
+            TextField(value = kpmInfo.args,
+                onValueChange = {
+                    kpmInfo.args = it
+                },
+                label = { Text(stringResource(id = R.string.patch_item_extra_kpm_set_args)) },
             )
+        }
+    }
+
+}
+
+@Composable
+private fun AddedKPMView(addedExtras: MutableList<KPModel.IExtraInfo>) {
+    if(addedExtras.isEmpty()) return
+    addedExtras.forEach( action = {
+        ElevatedCard(
+            colors = CardDefaults.elevatedCardColors(containerColor = run {
+                MaterialTheme.colorScheme.secondaryContainer
+            })
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 12.dp, top = 12.dp, end = 12.dp, bottom = 12.dp),
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(text = stringResource(id = R.string.patch_item_add_extra) + " " + it.type.toString(), style = MaterialTheme.typography.bodyLarge)
+                }
+                if(it.type == KPModel.ExtraType.KPM) {
+                    val kpmInfo: KPModel.KPMInfo = it as KPModel.KPMInfo
+                    Text(text = stringResource(id = R.string.patch_item_extra_name) + kpmInfo.name, style = MaterialTheme.typography.bodyMedium)
+                    Text(text = stringResource(id = R.string.patch_item_extra_version) + kpmInfo.version, style = MaterialTheme.typography.bodyMedium)
+                    Text(text = stringResource(id = R.string.patch_item_extra_author) + kpmInfo.license, style = MaterialTheme.typography.bodyMedium)
+                    Text(text = stringResource(id = R.string.patch_item_extra_kpm_license) + kpmInfo.author, style = MaterialTheme.typography.bodyMedium)
+                    Text(text = stringResource(id = R.string.patch_item_extra_kpm_desciption) + kpmInfo.description, style = MaterialTheme.typography.bodyMedium)
+                    TextField(value = kpmInfo.args,
+                        onValueChange = {
+                            kpmInfo.args = it
+                        },
+                        label = { Text(stringResource(id = R.string.patch_item_extra_kpm_set_args)) },
+                    )
+                }
+            }
+        }
+    })
+}
+
+@Composable
+private fun KernelPatchImageView(kpImgInfo: KPModel.KPImgInfo) {
+    if(kpImgInfo.version.isEmpty()) return
+
+    ElevatedCard(
+        colors = CardDefaults.elevatedCardColors(containerColor = run {
+            MaterialTheme.colorScheme.secondaryContainer
+        })
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 12.dp, top = 12.dp, end = 12.dp, bottom = 12.dp),
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(text = stringResource(id = R.string.patch_item_kpimg), style = MaterialTheme.typography.bodyLarge)
+            }
+            Text(text = stringResource(id = R.string.patch_item_kpimg_version) + Version.uInt2String(kpImgInfo.version.substring(2).toUInt(16)), style = MaterialTheme.typography.bodyMedium)
+            Text(text = stringResource(id = R.string.patch_item_kpimg_comile_time) + kpImgInfo.compileTime, style = MaterialTheme.typography.bodyMedium)
+            Text(text = stringResource(id = R.string.patch_item_kpimg_config) + kpImgInfo.config, style = MaterialTheme.typography.bodyMedium)
         }
     }
 }
 
+@Composable
+private fun KernelImageView(kImgInfo: KPModel.KImgInfo) {
+    if(kImgInfo.banner.isEmpty()) return
+
+    ElevatedCard(
+        colors = CardDefaults.elevatedCardColors(containerColor = run {
+            MaterialTheme.colorScheme.secondaryContainer
+        })
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 12.dp, top = 12.dp, end = 12.dp, bottom = 12.dp),
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(text = stringResource(id = R.string.patch_item_kernel), style = MaterialTheme.typography.bodyLarge)
+            }
+            Text(text = kImgInfo.banner, style = MaterialTheme.typography.bodyMedium)
+        }
+    }
+}
+
+@Composable
+private fun SelectFileButton(text: String, onSelected: (data: Intent, uri: Uri)-> Unit,) {
+    val selectFileLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) {
+        if (it.resultCode != Activity.RESULT_OK) {
+            return@rememberLauncherForActivityResult
+        }
+        val data = it.data ?: return@rememberLauncherForActivityResult
+        val uri = data.data ?: return@rememberLauncherForActivityResult
+        onSelected(data, uri)
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 12.dp, top = 12.dp, end = 12.dp, bottom = 12.dp),
+        horizontalAlignment = Alignment.End
+    ) {
+        Button(
+            onClick = {
+                val intent = Intent(Intent.ACTION_GET_CONTENT)
+                intent.type = "*/*"
+                selectFileLauncher.launch(intent)
+            } ,
+            content = { Text(text = text) }
+        )
+    }
+}
+
+
+@Composable
+private fun ErrorView(error: String) {
+    if(error.isEmpty()) return
+    ElevatedCard(
+        colors = CardDefaults.elevatedCardColors(containerColor = run {
+            MaterialTheme.colorScheme.error
+        })
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 12.dp, top = 12.dp, end = 12.dp, bottom = 12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(text = stringResource(id = R.string.patch_item_error), style = MaterialTheme.typography.bodyLarge)
+            Text(text = error, style = MaterialTheme.typography.bodyMedium)
+        }
+    }
+}
 
 
 @Composable
@@ -221,8 +385,6 @@ private fun PatchMode(newPatch: Boolean) {
         }
     }
 }
-
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
