@@ -1,6 +1,5 @@
 package me.bmax.apatch.ui.screen
 
-import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -231,8 +230,7 @@ private fun TopBar(onSettingsClick: () -> Unit) {
         IconButton(onClick = {
             showDropdown = true
         }) {
-            Icon(
-                imageVector = Icons.Filled.Refresh,
+            Icon(imageVector = Icons.Filled.Refresh,
                 contentDescription = stringResource(id = R.string.reboot)
             )
 

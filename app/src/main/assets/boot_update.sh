@@ -3,7 +3,7 @@
 # APatch Boot Image Patcher
 #######################################################################################
 #
-# Usage: boot_patch.sh <superkey> <bootimage> [ARGS_PASS_TO_KPTOOLS]
+# Usage: boot_patch.sh <superkey> <bootimage>
 #
 # This script should be placed in a directory with the following files:
 #
@@ -16,7 +16,6 @@
 # kpimg              binary        KernelPatch core Image
 # kptools            executable    The KernelPatch tools binary to inject kpimg to kernel Image
 # magiskboot         executable    Magisk tool to unpack boot.img.
-# extra files        kpm/exec/shell/bin
 #
 #######################################################################################
 
@@ -52,6 +51,13 @@ PATCHEDKERNEL=false
 BACKUPIMAGE="/data/adb/apatch_backup_boot.img"
 TMPBACKUPIMAGE="/data/data/me.bmax.apatch/backup/boot.img"
 
+mount_partitions
+
+if [ -z "$BOOTIMAGE" ]; then
+  ISDIRECTINSTALL=true
+  find_boot_image
+fi
+
 [ -z "$SUPERKEY" ] && { echo "- SuperKey empty!"; exit 1; }
 [ -e "$BOOTIMAGE" ] || { echo "- $BOOTIMAGE does not exist!"; exit 1; }
 
@@ -61,13 +67,25 @@ echo "- Target image: $BOOTIMAGE"
 command -v ./magiskboot >/dev/null 2>&1 || { echo "- Command magiskboot not found!"; exit 1; }
 command -v ./kptools >/dev/null 2>&1 || { echo "- Command kptools not found!"; exit 1; }
 
-if [ ! -f kernel ]; then
 echo "- Unpacking boot image"
 ./magiskboot unpack "$BOOTIMAGE" >/dev/null 2>&1
-  if [ $? -ne 0 ]; then
-    echo "- Unpack error: $?"
-    exit $?
+
+if [ $? -ne 0 ]; then
+  echo "- Unpack error: $?"
+  exit $?
+fi
+
+if [ ! "$ISDIRECTINSTALL" ]; then
+  patched=$(./kptools -l --image kernel | grep "patched=" | cut -d'=' -f2)
+  if [[ "$patched" == "false" ]]; then
+    echo "- Stock boot image detected"
+    backup_boot_image
+  else
+    echo "- Patched boot image detected"
   fi
+else
+  mv "$TMPBACKUPIMAGE" "$BACKUPIMAGE"
+  rmdir $(dirname "$TMPBACKUPIMAGE") 2>/dev/null
 fi
 
 cp kernel kernel.ori

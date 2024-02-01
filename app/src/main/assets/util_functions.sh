@@ -54,7 +54,7 @@ find_block() {
 }
 
 # After calling this method, the following variables will be set:
-# SLOT, LEGACYSAR
+# SLOT,
 mount_partitions() {
   # Check A/B slot
   SLOT=$(grep_cmdline androidboot.slot_suffix)
@@ -67,12 +67,6 @@ mount_partitions() {
   fi
   [ "$SLOT" = "normal" ] && unset SLOT
   [ -z $SLOT ] || echo "- Current boot slot: $SLOT"
-
-  LEGACYSAR=false
-  if grep ' / ' /proc/mounts | grep -q '/dev/root'; then
-    LEGACYSAR=true
-    echo "- Legacy SAR, force kernel to load rootfs"
-  fi
 }
 
 find_boot_image() {

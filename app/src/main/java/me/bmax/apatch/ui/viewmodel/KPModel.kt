@@ -39,7 +39,7 @@ object KPModel {
         var version: String,
         var compileTime: String,
         var config: String,
-        val superKey: String
+        var superKey: String
     ): Parcelable {}
 
     @Immutable
