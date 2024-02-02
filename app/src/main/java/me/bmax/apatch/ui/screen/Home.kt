@@ -54,6 +54,7 @@ import me.bmax.apatch.ui.screen.destinations.PatchScreenDestination
 import me.bmax.apatch.ui.screen.destinations.PatchSettingDestination
 import me.bmax.apatch.util.reboot
 import me.bmax.apatch.ui.screen.destinations.SettingScreenDestination
+import me.bmax.apatch.ui.viewmodel.PatchViewModel
 
 @RootNavGraph(start = true)
 @Destination
@@ -75,7 +76,7 @@ fun HomeScreen(navigator: DestinationsNavigator) {
         if(showPatchFloatAction) {
             ExtendedFloatingActionButton(
                 onClick = {
-                    navigator.navigate(PatchSettingDestination(true))
+                    navigator.navigate(PatchSettingDestination(PatchViewModel.PatchMode.PATCH))
                 },
                 icon = { Icon(Icons.Filled.InstallMobile, "install") },
                 text = { Text(text = stringResource(id = R.string.patch)) },

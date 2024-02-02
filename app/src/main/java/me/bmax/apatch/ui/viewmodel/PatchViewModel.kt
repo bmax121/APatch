@@ -1,6 +1,8 @@
 package me.bmax.apatch.ui.viewmodel
 
 import android.net.Uri
+import android.os.Build
+import android.os.Environment
 import android.system.Os
 import android.util.Log
 import androidx.compose.runtime.getValue
@@ -9,9 +11,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.topjohnwu.superuser.CallbackList
 import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.nio.ExtendedFile
 import com.topjohnwu.superuser.nio.FileSystemManager
+import dev.utils.app.MediaStoreUtils
+import dev.utils.app.UriUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.bmax.apatch.R
@@ -143,7 +148,7 @@ class PatchViewModel : ViewModel() {
 
                 }
             } else {
-                error = err.joinToString("\n")
+                error = "Invalid boot.img\n"
             }
             running = false
         }
@@ -198,7 +203,7 @@ class PatchViewModel : ViewModel() {
                     addedExtrasFileName.add(kpmFileName)
                 }
             } else {
-                error = err.joinToString("\n")
+                error = "Invalid KPM\n"
             }
             running = false
         }
@@ -214,17 +219,66 @@ class PatchViewModel : ViewModel() {
             val rand = (1..4).map { ('a'..'z').random() }.joinToString("")
             val outFilename = "apatch_${apVer}_${rand}_boot.img"
 
-            val patchCommand = when(mode) {
-                PatchMode.PATCH -> "sh boot_patch.sh $superkey"
-                PatchMode.UPDATE -> "sh boot_patch.sh $superkey"
-                PatchMode.UNPATCH -> "sh boot_unpatch.sh"
-                else -> "sh boot_patch.sh $superkey ${srcBoot?.path}"
+            val logs = object: CallbackList<String>(){
+                override fun onAddElement(e: String?) {
+                    patchLog += e
+                    Log.d(TAG, "" + e)
+                    patchLog += "\n"
+                }
             }
 
+            logs.add("****************************")
+
+            var patchCommand = "sh boot_patch.sh $superkey boot.img "
+
+            for(i in 0..addedExtrasFileName.size - 1) {
+                patchCommand += "-E ${addedExtrasFileName[i]} "
+                if(imgPatchInfo.addedExtras[i].type.equals(KPModel.ExtraType.KPM)) {
+                    val args = (imgPatchInfo.addedExtras[i] as KPModel.KPMInfo).args
+                    if(args.isNotEmpty()){
+                        patchCommand += "-A ${args} "
+                    }
+                }
+            }
+            Log.d(TAG, "patchCommand: ${patchCommand}")
+
+            val cmds = arrayOf(
+                "cd $patchDir",
+                patchCommand,
+            )
 
             val shell: Shell = if(mode.equals(PatchMode.PATCH)) Shell.getShell() else getRootShell()
+            shell.newJob().add(*cmds).to(logs, logs).exec()
 
+            var succ = true
+            val newBootFile = patchDir.getChildFile("new-boot.img")
+            if (newBootFile.exists()) {
+                val outDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                if (!outDir.exists()) outDir.mkdirs()
+                val outPath = File(outDir, outFilename)
 
+                val inputUri = UriUtils.getUriForFile(newBootFile)
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    val outUri = MediaStoreUtils.createDownloadUri(outFilename)
+                    succ = MediaStoreUtils.insertDownload(outUri, inputUri)
+                } else {
+                    newBootFile.inputStream().copyAndClose(outPath.outputStream())
+                }
+
+                if (succ) {
+                    logs.add(" Write patched boot.img was successful")
+                    logs.add(" Output file is written to ")
+                    logs.add(" ${outPath?.path}")
+                } else {
+                    logs.add(" Write patched boot.img failed")
+                }
+            } else {
+                val msg = "Patch failed."
+                error = msg
+                logs.add(msg)
+            }
+            logs.add("****************************")
 
             patchdone = true
             patching = false

@@ -48,14 +48,10 @@ echo "****************************"
 
 SUPERKEY=$1
 BOOTIMAGE=$2
-PATCHEDKERNEL=false
-BACKUPIMAGE="/data/adb/apatch_backup_boot.img"
-TMPBACKUPIMAGE="/data/data/me.bmax.apatch/backup/boot.img"
+shift 2
 
 [ -z "$SUPERKEY" ] && { echo "- SuperKey empty!"; exit 1; }
 [ -e "$BOOTIMAGE" ] || { echo "- $BOOTIMAGE does not exist!"; exit 1; }
-
-echo "- Target image: $BOOTIMAGE"
 
 # Check for dependencies
 command -v ./magiskboot >/dev/null 2>&1 || { echo "- Command magiskboot not found!"; exit 1; }
@@ -70,28 +66,42 @@ echo "- Unpacking boot image"
   fi
 fi
 
-cp kernel kernel.ori
-
-# TODO: copied from magisk, figure out why and then ...
-# Remove Samsung RKP
-./magiskboot hexpatch kernel \
-49010054011440B93FA00F71E9000054010840B93FA00F7189000054001840B91FA00F7188010054 \
-A1020054011440B93FA00F7140020054010840B93FA00F71E0010054001840B91FA00F7181010054 \
-&& PATCHEDKERNEL=true
-
-# Remove Samsung defex
-# Before: [mov w2, #-221]   (-__NR_execve)
-# After:  [mov w2, #-32768]
-./magiskboot hexpatch kernel 821B8012 E2FF8F12 && PATCHEDKERNEL=true
-
-# If the kernel doesn't need to be patched at all,
-# keep raw kernel to avoid bootloops on some weird devices
-$PATCHEDKERNEL || mv kernel.ori kernel
+#cp kernel kernel.ori
+#
+## TODO: copied from magisk, figure out why and then ...
+#IS_SAMSUNG_PATCH=false
+## Remove Samsung RKP
+#./magiskboot hexpatch kernel \
+#49010054011440B93FA00F71E9000054010840B93FA00F7189000054001840B91FA00F7188010054 \
+#A1020054011440B93FA00F7140020054010840B93FA00F71E0010054001840B91FA00F7181010054 \
+#&& IS_SAMSUNG_PATCH=true
+#
+## Remove Samsung defex
+## Before: [mov w2, #-221]   (-__NR_execve)
+## After:  [mov w2, #-32768]
+#./magiskboot hexpatch kernel 821B8012 E2FF8F12 && IS_SAMSUNG_PATCH=true
+#
+## If the kernel doesn't need to be patched at all,
+## keep raw kernel to avoid bootloops on some weird devices
+#$IS_SAMSUNG_PATCHL || mv kernel.ori kernel
+#
+#echo "$IS_SAMSUNG_PATCHL"
+#
+#if [[ $IS_SAMSUNG_PATCH == true ]]; then
+#  ADDITION_ARGS="-a samsung=true "
+#  echo "======= Warning ======="
+#  echo "Hex patching kernel of Samsung, this behavior is performed as Magisk, If your devices is not Samsung, Please report this issue."
+#  echo "======= Warning ======="
+#fi
+#
 
 mv kernel kernel.ori
 
 echo "- Patching kernel"
-./kptools -p --image kernel.ori --skey "$SUPERKEY" --kpimg kpimg --out kernel
+
+set -x
+./kptools -p --image kernel.ori --skey "$SUPERKEY" --kpimg kpimg --out kernel "$@"
+set +x
 
 if [ $? -ne 0 ]; then
   echo "- Patch error: $?"
@@ -108,18 +118,7 @@ fi
 
 echo "- Cleaning up"
 ./magiskboot cleanup >/dev/null 2>&1
-rm -f kernel.ori
-
-if [ "$ISDIRECTINSTALL" ] && [ -f "new-boot.img" ]; then
-  echo "- Flashing new boot image"
-  flash_image new-boot.img "$BOOTIMAGE"
-
-  if [ $? -ne 0 ]; then
-    echo "- Flash error: $?"
-    rm -f new-boot.img
-    exit $?
-  fi
-fi
+rm kernel.ori
 
 # Reset any error code
 true
