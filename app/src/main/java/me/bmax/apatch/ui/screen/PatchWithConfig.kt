@@ -8,44 +8,26 @@ import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material.icons.outlined.Clear
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.ElevatedFilterChip
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -58,53 +40,58 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dev.utils.app.permission.PermissionUtils
-import me.bmax.apatch.APApplication
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.bmax.apatch.R
-import me.bmax.apatch.apApp
-import me.bmax.apatch.ui.component.ConfirmDialog
-import me.bmax.apatch.ui.component.ConfirmResult
-import me.bmax.apatch.ui.component.LoadingDialog
-import me.bmax.apatch.ui.screen.destinations.PatchScreenDestination
 import me.bmax.apatch.ui.viewmodel.KPModel
-import me.bmax.apatch.ui.viewmodel.KPModuleViewModel
 import me.bmax.apatch.ui.viewmodel.PatchViewModel
-import me.bmax.apatch.util.LocalDialogHost
 import me.bmax.apatch.util.Version
-import me.bmax.apatch.util.getSELinuxStatus
-import java.net.URI
+import me.bmax.apatch.util.reboot
 
 private val TAG = "PatchSetting"
 
-@OptIn(ExperimentalMaterialApi::class)
 @Destination
 @Composable
-fun PatchSetting(navigator: DestinationsNavigator, mode: PatchViewModel.PatchMode) {
+fun PatchWithConfig(navigator: DestinationsNavigator, mode: PatchViewModel.PatchMode) {
     var permissionRequest = remember { mutableStateOf(false)  }
     val scrollState = rememberScrollState()
+    val scope = rememberCoroutineScope()
 
     val viewModel = viewModel<PatchViewModel>()
     SideEffect {
-        viewModel.prepareAndParseKpimg()
+        viewModel.prepare(mode)
     }
 
     Scaffold(topBar = {
         TopBar()
     }, floatingActionButton = {
-
+        if (viewModel.needReboot) {
+            val reboot = stringResource(id = R.string.reboot)
+            ExtendedFloatingActionButton(
+                onClick = {
+                    scope.launch {
+                        withContext(Dispatchers.IO) {
+                            reboot()
+                        }
+                    }
+                },
+                icon = { Icon(Icons.Filled.Refresh, reboot) },
+                text = { Text(text = reboot) },
+            )
+        }
     }) { innerPadding ->
         Column(
             modifier = Modifier
@@ -134,11 +121,10 @@ fun PatchSetting(navigator: DestinationsNavigator, mode: PatchViewModel.PatchMod
 
             PatchMode(mode)
             ErrorView(viewModel.error)
-            KernelPatchImageView(viewModel.imgPatchInfo.kpimgInfo)
-            KernelImageView(viewModel.imgPatchInfo.kimgInfo)
+            KernelPatchImageView(viewModel.kpimgInfo)
 
             // select boot.img
-            if(viewModel.imgPatchInfo.kimgInfo.banner.isEmpty()) {
+            if(mode.equals(PatchViewModel.PatchMode.PATCH) && viewModel.kimgInfo.banner.isEmpty()) {
                 SelectFileButton(
                     text = stringResource(id = R.string.patch_select_bootimg_btn),
                     onSelected = { data, uri ->
@@ -148,8 +134,15 @@ fun PatchSetting(navigator: DestinationsNavigator, mode: PatchViewModel.PatchMod
                 )
             }
 
-            // set superkey
-            if(viewModel.imgPatchInfo.kimgInfo.banner.isNotEmpty()) {
+            if(viewModel.bootSlot.isNotEmpty() || viewModel.bootDev.isNotEmpty()) {
+                BootimgView(slot = viewModel.bootSlot, boot = viewModel.bootDev)
+            }
+
+            if(viewModel.kimgInfo.banner.isNotEmpty()) {
+                KernelImageView(viewModel.kimgInfo)
+            }
+
+            if(!mode.equals(PatchViewModel.PatchMode.UNPATCH) && !viewModel.kimgInfo.banner.isEmpty() ) {
                 SetSuperKeyView(viewModel)
             }
 
@@ -164,11 +157,17 @@ fun PatchSetting(navigator: DestinationsNavigator, mode: PatchViewModel.PatchMod
                 )
             }
 
-            AddedKPMView(viewModel.imgPatchInfo.addedExtras)
+            AddedKPMView(viewModel.addedExtras)
 
-            // start patch
-            if(viewModel.superkey.isNotEmpty() && !viewModel.patching && !viewModel.patchdone) {
-                StartPatch(viewModel, mode)
+            if(!viewModel.patching && !viewModel.patchdone) {
+                // patch start
+                if(!mode.equals(PatchViewModel.PatchMode.UNPATCH) && viewModel.superkey.isNotEmpty()) {
+                    StartButton(stringResource(id = R.string.patch_start_patch_btn), {viewModel.doPatch()} )
+                }
+                // unpatch
+                if(mode.equals(PatchViewModel.PatchMode.UNPATCH) && viewModel.kimgInfo.banner.isNotEmpty()) {
+                    StartButton(stringResource(id = R.string.patch_start_unpatch_btn), {viewModel.doUnpatch()} )
+                }
             }
 
             // patch log
@@ -205,17 +204,17 @@ fun PatchSetting(navigator: DestinationsNavigator, mode: PatchViewModel.PatchMod
 
 
 @Composable
-private fun StartPatch(viewModel: PatchViewModel, mode: PatchViewModel.PatchMode) {
+private fun StartButton(text: String, onClick: ()-> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth(),
         horizontalAlignment = Alignment.End
     ) {
         Button(
-            onClick = {
-                viewModel.doPatch(mode)
-            } ,
-            content = { Text(text = stringResource(id = R.string.patch_start_patch_btn)) }
+            onClick = onClick,
+            content = {
+                Text(text = text)
+            }
         )
     }
 }
@@ -274,14 +273,14 @@ private fun AddedKPMView(addedExtras: MutableList<KPModel.IExtraInfo>) {
     })
 }
 
-private fun PatchLogView() {
-
-}
 
 @Composable
 private fun SetSuperKeyView(viewModel: PatchViewModel) {
-    var skey by remember { mutableStateOf(viewModel.imgPatchInfo.kpimgInfo.superKey) }
-    var showWarn by remember { mutableStateOf(true) }
+    val checked: (skey: String)-> Boolean = {
+        it.length >= 8 && it.any { it.isDigit() } && it.any{ it.isLetter()}
+    }
+    var skey by remember { mutableStateOf(viewModel.superkey) }
+    var showWarn by remember { mutableStateOf(!checked(skey))}
     ElevatedCard(
         colors = CardDefaults.elevatedCardColors(containerColor = run {
             MaterialTheme.colorScheme.secondaryContainer
@@ -306,17 +305,18 @@ private fun SetSuperKeyView(viewModel: PatchViewModel) {
                     text = stringResource(id = R.string.patch_item_set_skey_label),
                     style = MaterialTheme.typography.bodyMedium)
             }
-            TextField(
-                modifier = Modifier
+            TextField(modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 6.dp),
                 value = skey,
                 onValueChange = {
                     skey = it
-                    viewModel.superkey = ""
-                    if(skey.length >= 8 && skey.any { it.isDigit() } && skey.any{it.isLetter()}) {
-                        showWarn = false
+                    if(checked(it)){
                         viewModel.superkey = it
+                        showWarn = false
+                    } else {
+                        viewModel.superkey = ""
+                        showWarn = true
                     }
                 },
             )
@@ -351,10 +351,35 @@ private fun KernelPatchImageView(kpImgInfo: KPModel.KPImgInfo) {
     }
 }
 
+
+@Composable
+private fun BootimgView(slot: String, boot: String) {
+    ElevatedCard(
+        colors = CardDefaults.elevatedCardColors(containerColor = run {
+            MaterialTheme.colorScheme.secondaryContainer
+        })
+    ) {
+        Column(modifier = Modifier
+            .fillMaxWidth()
+            .padding(12.dp),
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(text = stringResource(id = R.string.patch_item_bootimg), style = MaterialTheme.typography.bodyLarge)
+            }
+            Text(text = stringResource(id = R.string.patch_item_bootimg_slot) + " " + slot, style = MaterialTheme.typography.bodyMedium)
+            Text(text = stringResource(id = R.string.patch_item_bootimg_dev) + " " + boot, style = MaterialTheme.typography.bodyMedium)
+        }
+    }
+}
+
+
+
 @Composable
 private fun KernelImageView(kImgInfo: KPModel.KImgInfo) {
-    if(kImgInfo.banner.isEmpty()) return
-
     ElevatedCard(
         colors = CardDefaults.elevatedCardColors(containerColor = run {
             MaterialTheme.colorScheme.secondaryContainer
@@ -363,7 +388,7 @@ private fun KernelImageView(kImgInfo: KPModel.KImgInfo) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 12.dp, top = 12.dp, end = 12.dp, bottom = 12.dp),
+                .padding(12.dp),
         ) {
             Column(
                 modifier = Modifier

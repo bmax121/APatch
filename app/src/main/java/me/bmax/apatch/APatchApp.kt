@@ -185,13 +185,14 @@ class APApplication : Application() {
                 val ready = Natives.nativeReady(value)
                 _kpStateLiveData.value = if (ready) State.KERNELPATCH_INSTALLED else State.UNKNOWN_STATE
                 _apStateLiveData.value = if (ready) State.ANDROIDPATCH_NOT_INSTALLED else State.UNKNOWN_STATE
-
                 Log.d(TAG, "state: " + _kpStateLiveData.value)
+                if(!ready) return
+
                 sharedPreferences.edit().putString(SUPER_KEY, value).apply()
 
                 thread {
                     val rc = Natives.su(0, null)
-                    if (!rc) {
+                    if (rc) {
                         Log.e(TAG, "su failed: " + rc)
                         return@thread
                     }
@@ -266,8 +267,6 @@ class APApplication : Application() {
 
         sharedPreferences = getSharedPreferences("config", Context.MODE_PRIVATE)
         superKey = sharedPreferences.getString(SUPER_KEY, "") ?: ""
-
-
 
         val context = this
         val iconSize = resources.getDimensionPixelSize(android.R.dimen.app_icon_size)

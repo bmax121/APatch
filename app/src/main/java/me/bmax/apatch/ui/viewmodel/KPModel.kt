@@ -47,18 +47,7 @@ object KPModel {
     @Keep
     data class KImgInfo(
         var banner: String,
-        var patched: Boolean
+        var patched: Boolean,
     ): Parcelable {}
-
-
-    @Immutable
-    @Parcelize
-    @Keep
-    data class ImgPatchInfo(
-        var kimgInfo: KImgInfo,
-        var kpimgInfo: KPImgInfo,
-        var existedExtras: MutableList<IExtraInfo>,
-        var addedExtras: MutableList<IExtraInfo>
-    ): Parcelable{}
 
 }

@@ -44,14 +44,11 @@ import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import dev.utils.app.permission.PermissionUtils
-import dev.utils.app.permission.PermissionUtils.PermissionCallback
 import me.bmax.apatch.util.*
 import me.bmax.apatch.*
 import me.bmax.apatch.R
 import me.bmax.apatch.ui.component.ConfirmDialog
-import me.bmax.apatch.ui.screen.destinations.PatchScreenDestination
-import me.bmax.apatch.ui.screen.destinations.PatchSettingDestination
+import me.bmax.apatch.ui.screen.destinations.PatchWithConfigDestination
 import me.bmax.apatch.util.reboot
 import me.bmax.apatch.ui.screen.destinations.SettingScreenDestination
 import me.bmax.apatch.ui.viewmodel.PatchViewModel
@@ -65,7 +62,8 @@ fun HomeScreen(navigator: DestinationsNavigator) {
     val apState by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
 
     if (!kpState.equals(APApplication.State.UNKNOWN_STATE)) {
-        showPatchFloatAction = false
+//        showPatchFloatAction = false
+
     }
 
     Scaffold(topBar = {
@@ -76,7 +74,7 @@ fun HomeScreen(navigator: DestinationsNavigator) {
         if(showPatchFloatAction) {
             ExtendedFloatingActionButton(
                 onClick = {
-                    navigator.navigate(PatchSettingDestination(PatchViewModel.PatchMode.PATCH))
+                    navigator.navigate(PatchWithConfigDestination(PatchViewModel.PatchMode.PATCH))
                 },
                 icon = { Icon(Icons.Filled.InstallMobile, "install") },
                 text = { Text(text = stringResource(id = R.string.patch)) },
@@ -158,57 +156,6 @@ fun AuthSuperKey(showDialog: MutableState<Boolean>) {
                 }
             ) {
                 Text(stringResource(id = android.R.string.ok))
-            }
-        },
-    )
-}
-
-@Composable
-fun StartPatch(showDialog: MutableState<Boolean>, navigator: DestinationsNavigator) {
-    var key by remember { mutableStateOf("") }
-    var enable by remember { mutableStateOf(false) }
-
-    val selectBootimgLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult()
-    ) {
-        if (it.resultCode != Activity.RESULT_OK) {
-            return@rememberLauncherForActivityResult
-        }
-        val data = it.data ?: return@rememberLauncherForActivityResult
-        val uri = data.data ?: return@rememberLauncherForActivityResult
-        navigator.navigate(PatchScreenDestination(uri, key, true))
-    }
-
-    AlertDialog(
-        onDismissRequest = { showDialog.value = false },
-        title = { Text(stringResource(id = R.string.home_patch_set_key_title)) },
-        text = {
-            Column {
-                Text(stringResource(id = R.string.home_patch_set_key_desc))
-                Spacer(modifier = Modifier.height(8.dp))
-                TextField(
-                    value = key,
-                    onValueChange = {
-                        key = it;
-                        enable = ! it.isEmpty()
-                    },
-                    label = { Text(stringResource(id = R.string.super_key)) },
-                    visualTransformation = VisualTransformation.None,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-            }
-        },
-        confirmButton = {
-            Button(
-                enabled = enable,
-                onClick = {
-                    val intent = Intent(Intent.ACTION_GET_CONTENT)
-                    intent.type = "*/*"
-                    selectBootimgLauncher.launch(intent)
-                }
-            ) {
-                Text(stringResource(id = R.string.home_patch_next_step))
             }
         },
     )
@@ -351,7 +298,7 @@ private fun KStatusCard(kpState: APApplication.State, navigator: DestinationsNav
                                     showAuthKeyDialog.value = true
                                 }
                                 kpState.equals(APApplication.State.KERNELPATCH_NEED_UPDATE) -> {
-                                    navigator.navigate(PatchScreenDestination(null, apApp.getSuperKey(), true))
+                                    navigator.navigate(PatchWithConfigDestination(PatchViewModel.PatchMode.UPDATE))
                                 }
                                 kpState.equals(APApplication.State.KERNELPATCH_NEED_REBOOT) -> {
                                     reboot()
@@ -361,7 +308,7 @@ private fun KStatusCard(kpState: APApplication.State, navigator: DestinationsNav
                                 }
                                 else -> {
                                     APApplication.uninstallKpatch()
-                                    navigator.navigate(PatchScreenDestination(null, apApp.getSuperKey(), false))
+                                    navigator.navigate(PatchWithConfigDestination(PatchViewModel.PatchMode.UNPATCH))
                                 }
                             }
                         },

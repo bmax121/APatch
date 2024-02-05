@@ -66,7 +66,7 @@ mount_partitions() {
     SLOT=$(getprop ro.boot.slot_suffix)
   fi
   [ "$SLOT" = "normal" ] && unset SLOT
-  [ -z $SLOT ] || echo "- Current boot slot: $SLOT"
+  [ -z $SLOT ] || echo "SLOT=$SLOT"
 }
 
 find_boot_image() {
@@ -80,6 +80,7 @@ find_boot_image() {
     # Lets see what fstabs tells me
     BOOTIMAGE=$(grep -v '#' /etc/*fstab* | grep -E '/boot(img)?[^a-zA-Z]' | grep -oE '/dev/[a-zA-Z0-9_./-]*' | head -n 1)
   fi
+  [ -z $BOOTIMAGE ] || echo "BOOTIMAGE=$BOOTIMAGE"
 }
 
 flash_image() {
@@ -100,27 +101,8 @@ flash_image() {
     flash_eraseall "$2" >&2
     eval "$CMD1" | nandwrite -p "$2" - >&2
   else
-    echo "- Not block or char device, storing image"
+    echo "- Not block or char device"
     eval "$CMD1" > "$2" 2>/dev/null
   fi
   return 0
-}
-
-backup_boot_image() {
-  if [ ! -z "$BOOTIMAGE" ] && ([ ! -z "$BACKUPIMAGE" ] || [ ! -z "$TMPBACKUPIMAGE" ]); then
-    echo "- Backing up boot image"
-    # If kpatch is not installed yet, we don't have permissions
-    # to use the regular backup path, so we use a temporary path
-    mkdir $(dirname "$TMPBACKUPIMAGE") 2>/dev/null
-    cp "$BOOTIMAGE" "$BACKUPIMAGE" 2>/dev/null || cp "$BOOTIMAGE" "$TMPBACKUPIMAGE"
-  fi
-}
-
-restore_boot_image() {
-  if [ -f "$BACKUPIMAGE" ] || [ -f "$TMPBACKUPIMAGE" ]; then
-    echo "- Restoring stock boot image"
-    # If kpatch is not installed yet, we don't have permissions
-    # to use the regular backup path, so we use a temporary path
-    cp "$BACKUPIMAGE" new-boot.img 2>/dev/null || cp "$TMPBACKUPIMAGE" new-boot.img
-  fi
 }

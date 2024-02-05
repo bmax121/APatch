@@ -5,7 +5,9 @@ import android.os.Build
 import android.os.Environment
 import android.system.Os
 import android.util.Log
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
@@ -13,12 +15,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.topjohnwu.superuser.CallbackList
 import com.topjohnwu.superuser.Shell
+import com.topjohnwu.superuser.Shell.FLAG_NON_ROOT_SHELL
+import com.topjohnwu.superuser.Shell.getShell
+import com.topjohnwu.superuser.ShellUtils
 import com.topjohnwu.superuser.nio.ExtendedFile
 import com.topjohnwu.superuser.nio.FileSystemManager
 import dev.utils.app.MediaStoreUtils
 import dev.utils.app.UriUtils
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import me.bmax.apatch.BuildConfig
 import me.bmax.apatch.R
 import me.bmax.apatch.apApp
 import me.bmax.apatch.util.*
@@ -35,121 +42,150 @@ class PatchViewModel : ViewModel() {
         UNPATCH(R.string.patch_mode_uninstall_patch),
     }
 
+    var bootSlot by mutableStateOf("")
+    var bootDev by mutableStateOf("")
+    var kimgInfo by mutableStateOf(KPModel.KImgInfo("", false))
+    var kpimgInfo by mutableStateOf(KPModel.KPImgInfo("","","", ""))
+    var superkey by mutableStateOf("")
+    var existedExtras = mutableListOf<KPModel.IExtraInfo>()
+    var addedExtras = mutableListOf<KPModel.IExtraInfo>()
+    var addedExtrasFileName = mutableListOf<String>()
+
     var running by mutableStateOf(false)
     var patching by mutableStateOf(false)
     var patchdone by mutableStateOf(false)
-    var error by mutableStateOf("")
-    var superkey by mutableStateOf("")
-    var patchLog by mutableStateOf("")
+    var needReboot by mutableStateOf(false)
 
-    var imgPatchInfo by mutableStateOf<KPModel.ImgPatchInfo>(KPModel.ImgPatchInfo(
-        kimgInfo = KPModel.KImgInfo("", false),
-        kpimgInfo = KPModel.KPImgInfo("","","", ""),
-        existedExtras = mutableListOf(),
-        addedExtras = mutableListOf(),
-    ))
-    private var addedExtrasFileName = mutableListOf<String>()
+    var error by mutableStateOf("")
+    var patchLog by mutableStateOf("")
 
     private val patchDir: ExtendedFile = FileSystemManager.getLocal().getFile(apApp.filesDir.parent, "patch")
     private var srcBoot: ExtendedFile = patchDir.getChildFile("boot.img")
-    private var kpimg: ExtendedFile = patchDir.getChildFile("kpimg")
+    private val currentBootPath: String = ""
+    private var shell: Shell = tryGetRootShell()
 
+    private fun prepare() {
+        patchDir.deleteRecursively()
+        patchDir.mkdirs()
+        val execs = listOf("libkptools.so", "libmagiskboot.so", "libbusybox.so", "libkpatch.so")
+        error = ""
 
-    fun prepareAndParseKpimg() {
-        viewModelScope.launch(Dispatchers.IO) {
-            running = true
-            error = ""
-            patchDir.deleteRecursively()
-            patchDir.mkdirs()
-            val execs = listOf("libkptools.so", "libmagiskboot.so", "libbusybox.so")
+        val info = apApp.applicationInfo
+        var libs = File(info.nativeLibraryDir).listFiles { _, name ->
+            execs.contains(name)
+        } ?: emptyArray()
 
-            val info = apApp.applicationInfo
-            var libs = File(info.nativeLibraryDir).listFiles { _, name ->
-                execs.contains(name)
-            } ?: emptyArray()
+        for (lib in libs) {
+            val name = lib.name.substring(3, lib.name.length - 3)
+            Os.symlink(lib.path, "$patchDir/$name")
+        }
 
-            for (lib in libs) {
-                val name = lib.name.substring(3, lib.name.length - 3)
-                Os.symlink(lib.path, "$patchDir/$name")
-            }
+        // Extract scripts
+        for (script in listOf(
+            "boot_patch.sh",
+            "boot_unpatch.sh",
+            "boot_extract.sh",
+            "util_functions.sh",
+            "kpimg"
+        )) {
+            val dest = File(patchDir, script)
+            apApp.assets.open(script).writeTo(dest)
+        }
 
-            // Extract scripts
-            for (script in listOf("boot_patch.sh", "boot_unpatch.sh", "util_functions.sh", "kpimg")) {
-                val dest = File(patchDir, script)
-                apApp.assets.open(script).writeTo(dest)
-            }
+    }
+    private fun parseKpimg() {
+        val result = shellForResult(
+            shell,
+            "cd $patchDir",
+            "./kptools -l -k kpimg"
+        )
 
-            var cmds = arrayOf(
-                "cd $patchDir",
-                "./kptools -l -k kpimg"
-            )
-            val out = ArrayList<String>()
-            val err = ArrayList<String>()
-
-            val shell = Shell.getShell()
-            val result = shell.newJob().add(*cmds).to(out, err).exec()
-
-            if(result.isSuccess) {
-                val ini = Ini(StringReader(result.out.joinToString("\n")))
-                var kpimg = ini.get("kpimg")
-                if (kpimg != null) {
-                    imgPatchInfo.kpimgInfo = KPModel.KPImgInfo(
-                        kpimg["version"].toString(),
-                        kpimg["compile_time"].toString(),
-                        kpimg["config"].toString(),
-                        kpimg["superkey"].toString(),
-                    )
-                } else {
-                    error += "no kpimg section\n";
-                }
+        if(result.isSuccess) {
+            val ini = Ini(StringReader(result.out.joinToString("\n")))
+            var kpimg = ini.get("kpimg")
+            if (kpimg != null) {
+                kpimgInfo = KPModel.KPImgInfo(
+                    kpimg["version"].toString(),
+                    kpimg["compile_time"].toString(),
+                    kpimg["config"].toString(),
+                    kpimg["superkey"].toString(),   // empty
+                )
+                superkey = kpimgInfo.superKey
             } else {
-                error = err.joinToString("\n")
+                error += "parse kpimg error\n";
             }
-
-            out.clear()
-            err.clear()
-            running = false
+        } else {
+            error = result.err.joinToString("\n")
         }
     }
 
+    private fun parseBootimg(bootimg: String) {
+        val result = shellForResult(shell,
+            "cd $patchDir",
+            "./magiskboot unpack ${bootimg} >/dev/null 2>&1",
+            "./kptools -l -i kernel",
+        )
+        if(result.isSuccess) {
+            val ini = Ini(StringReader(result.out.joinToString("\n")))
+            Log.d(TAG, "kernel image info: " + ini.toString())
+            var kernel = ini.get("kernel")
+            if (kernel != null) {
+                kimgInfo = KPModel.KImgInfo(kernel["banner"].toString(), kernel["patched"].toBoolean())
+            }
+            if(kimgInfo.patched) {
+                superkey = ini.get("kpimg")?.getOrDefault("superkey", "") ?: ""
+            }
+        } else {
+            error += result.err.joinToString("\n")
+        }
+    }
+
+
     fun copyAndParseBootimg(uri: Uri) {
         viewModelScope.launch(Dispatchers.IO) {
-            if(running) return@launch
+            if (running) return@launch
             running = true
-            error = ""
-
             try { uri.inputStream().buffered().use { src ->
                 srcBoot.also {
                     src.copyAndCloseOut(it.newOutputStream())
                 }
             } } catch (e: IOException) {
-                Log.d(TAG, "Copy boot image error: " + e)
+                Log.d(TAG, "copy boot image error: " + e)
+            }
+            parseBootimg(srcBoot.path)
+            running = false
+        }
+    }
+
+    fun extractAndParseBootimg() {
+        val result = shellForResult(shell,
+            "cd $patchDir",
+            "sh boot_extract.sh",
+        )
+        if(result.isSuccess) {
+            bootSlot = result.out.filter { it.startsWith("SLOT=") }[0].removePrefix("SLOT=")
+            bootDev = result.out.filter { it.startsWith("BOOTIMAGE=") }[0].removePrefix("BOOTIMAGE=")
+            Log.d(TAG, "current slot: ${bootSlot}")
+            Log.d(TAG, "current bootimg: ${bootDev}")
+            parseBootimg(bootDev)
+        } else {
+            error = result.err.joinToString("\n")
+        }
+        running = false
+    }
+
+    fun prepare(mode: PatchMode) {
+        viewModelScope.launch(Dispatchers.IO) {
+            running = true
+            shell = if(mode.equals(PatchMode.PATCH)) getShell() else getRootShell()
+            prepare()
+            if (!mode.equals(PatchMode.UNPATCH)) {
+                parseKpimg()
+            }
+            if (mode.equals(PatchMode.UPDATE) || mode.equals(PatchMode.UNPATCH)) {
+                extractAndParseBootimg()
             }
 
-            var cmds = arrayOf(
-                "cd $patchDir",
-                "./magiskboot unpack boot.img >/dev/null 2>&1",
-                "./kptools -l -i kernel"
-            )
-            val out = ArrayList<String>()
-            val err = ArrayList<String>()
-
-            val shell = Shell.getShell()
-            val result = shell.newJob().add(*cmds).to(out, err).exec()
-
-            if(result.isSuccess) {
-                val ini = Ini(StringReader(result.out.joinToString("\n")))
-                Log.d(TAG, "kernel image info: " + ini.toString())
-                var kernel = ini.get("kernel")
-                if (kernel != null) {
-                    imgPatchInfo.kimgInfo = KPModel.KImgInfo(kernel["banner"].toString(), kernel["patched"].toBoolean())
-                }
-                if(imgPatchInfo.kimgInfo.patched) {
-
-                }
-            } else {
-                error = "Invalid boot.img\n"
-            }
             running = false
         }
     }
@@ -175,15 +211,10 @@ class PatchViewModel : ViewModel() {
                 Log.d(TAG, "Copy kpm error: " + e)
             }
 
-            var cmds = arrayOf(
+            val result = shellForResult(shell,
                 "cd $patchDir",
                 "./kptools -l -M ${kpmFile.path}"
             )
-            val out = ArrayList<String>()
-            val err = ArrayList<String>()
-
-            val shell = Shell.getShell()
-            val result = shell.newJob().add(*cmds).to(out, err).exec()
 
             if (result.isSuccess) {
                 val ini = Ini(StringReader(result.out.joinToString("\n")))
@@ -199,7 +230,7 @@ class PatchViewModel : ViewModel() {
                         kpm["description"].toString(),
                         ""
                         )
-                    imgPatchInfo.addedExtras.add(kpmInfo)
+                    addedExtras.add(kpmInfo)
                     addedExtrasFileName.add(kpmFileName)
                 }
             } else {
@@ -210,14 +241,48 @@ class PatchViewModel : ViewModel() {
 
     }
 
-    fun doPatch(mode: PatchMode) {
+
+    fun doUnpatch() {
         viewModelScope.launch(Dispatchers.IO) {
             patching = true
-            Log.d(TAG, "starting patching..., final patch info: ${imgPatchInfo}")
+            patchLog = ""
+            Log.d(TAG, "starting unpatching...")
+
+            val logs = object : CallbackList<String>() {
+                override fun onAddElement(e: String?) {
+                    patchLog += e
+                    Log.d(TAG, "" + e)
+                    patchLog += "\n"
+                }
+            }
+
+            val result = shell.newJob().add(
+                "cd $patchDir",
+                "sh boot_unpatch.sh ${bootDev}",
+            ).to(logs, logs).exec()
+
+            if (result.isSuccess) {
+                logs.add(" Unpatch successful")
+                needReboot = true
+            } else {
+                logs.add(" Unpatched failed")
+                error = result.err.toString()
+            }
+            logs.add("****************************")
+
+            patchdone = true
+            patching = false
+        }
+    }
+
+    fun doPatch() {
+        viewModelScope.launch(Dispatchers.IO) {
+            patching = true
+            Log.d(TAG, "starting patching...")
 
             val apVer = Version.getManagerVersion().second
             val rand = (1..4).map { ('a'..'z').random() }.joinToString("")
-            val outFilename = "apatch_${apVer}_${rand}_boot.img"
+            val outFilename = "apatch_${apVer}_${BuildConfig.buildKPV}_${rand}.img"
 
             val logs = object: CallbackList<String>(){
                 override fun onAddElement(e: String?) {
@@ -233,8 +298,8 @@ class PatchViewModel : ViewModel() {
 
             for(i in 0..addedExtrasFileName.size - 1) {
                 patchCommand += "-E ${addedExtrasFileName[i]} "
-                if(imgPatchInfo.addedExtras[i].type.equals(KPModel.ExtraType.KPM)) {
-                    val args = (imgPatchInfo.addedExtras[i] as KPModel.KPMInfo).args
+                if(addedExtras[i].type.equals(KPModel.ExtraType.KPM)) {
+                    val args = (addedExtras[i] as KPModel.KPMInfo).args
                     if(args.isNotEmpty()){
                         patchCommand += "-A ${args} "
                     }
@@ -242,13 +307,10 @@ class PatchViewModel : ViewModel() {
             }
             Log.d(TAG, "patchCommand: ${patchCommand}")
 
-            val cmds = arrayOf(
+            shell.newJob().add(
                 "cd $patchDir",
                 patchCommand,
-            )
-
-            val shell: Shell = if(mode.equals(PatchMode.PATCH)) Shell.getShell() else getRootShell()
-            shell.newJob().add(*cmds).to(logs, logs).exec()
+            ).to(logs, logs).exec()
 
             var succ = true
             val newBootFile = patchDir.getChildFile("new-boot.img")
@@ -256,7 +318,6 @@ class PatchViewModel : ViewModel() {
                 val outDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
                 if (!outDir.exists()) outDir.mkdirs()
                 val outPath = File(outDir, outFilename)
-
                 val inputUri = UriUtils.getUriForFile(newBootFile)
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {

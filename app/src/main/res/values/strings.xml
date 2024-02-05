@@ -61,14 +61,18 @@
     <string name="patch_title">Patch</string>
 
 
-    <string name="patch_config_title">Config Patches</string>
-    <string name="patch_mode_bootimg_patch">Mode: Patch boot.img</string>
-    <string name="patch_mode_update_patch">Mode: Update patch</string>
-    <string name="patch_mode_uninstall_patch">Mode: Uninstall</string>
+    <string name="patch_config_title">Patches</string>
+    <string name="patch_mode_bootimg_patch">Mode: Patch</string>
+    <string name="patch_mode_update_patch">Mode: Update</string>
+    <string name="patch_mode_uninstall_patch">Mode: UnPatch</string>
     <string name="patch_select_bootimg_btn">Select boot</string>
     <string name="patch_embed_kpm_btn">KPM</string>
     <string name="patch_start_patch_btn">Start</string>
+    <string name="patch_start_unpatch_btn">UnPatch</string>
     <string name="patch_item_error">!!ERROR!!</string>
+    <string name="patch_item_bootimg">bootimg</string>
+    <string name="patch_item_bootimg_slot">slot: </string>
+    <string name="patch_item_bootimg_dev">device: </string>
     <string name="patch_item_kernel">kernel</string>
     <string name="patch_item_kpimg">kpimg</string>
     <string name="patch_item_kpimg_version">version: </string>
@@ -82,7 +86,7 @@
     <string name="patch_item_extra_kpm_desciption">description: </string>
     <string name="patch_item_extra_kpm_args">args: </string>
     <string name="patch_item_skey">superkey</string>
-    <string name="patch_item_set_skey_label">The length should be at least 8 characters and include both numbers and letters</string>
+    <string name="patch_item_set_skey_label">The length of superkey should be at least 8 characters and include both numbers and letters</string>
 
 
     <string name="home_kernel">Kernel</string>
