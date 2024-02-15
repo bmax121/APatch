@@ -78,7 +78,7 @@ fi
 mv kernel kernel.ori
 
 echo "- Patching kernel"
-./kptools -p kernel.ori --skey "$SUPERKEY" --kpimg kpimg --out kernel
+./kptools -p --image kernel.ori --skey "$SUPERKEY" --kpimg kpimg --out kernel
 
 if [ $? -ne 0 ]; then
   echo "Patch error: $?"
