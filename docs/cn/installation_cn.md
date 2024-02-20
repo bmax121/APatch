@@ -29,7 +29,9 @@ su -c "zcat /proc/config.gz" | grep DEBUG_KERNEL
 
 - 接下来选择要修补的boot文件。
 
-> 修补后，如果无误，修补过的boot镜像将会保存在`/storage/emulated/0/Download/apatch-{VERSIONCODE}-{随机字母}-boot.img`
+> 修补后，如果无误，修补过的boot镜像将会保存在`/storage/emulated/0/Download/apatch-*.img`
+
+> 已知部分内核无法正常修补安装。这类内核请自行寻找办法。
 
 ### 刷入
 
@@ -46,7 +48,7 @@ fastboot flash boot {修补过的boot镜像路径}
 
 > 请确保设备已正确连接到用来执行fastboot的设备！
 
-> 你也可以使用其他的分区刷写软件，甚至可以在开机状态下使用分区刷写app刷写noot分区。
+> 你也可以使用其他的分区刷写软件，甚至可以在开机状态下使用分区刷写app刷写boot分区。
 
 ### 激活
 
