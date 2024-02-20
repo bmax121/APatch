@@ -25,7 +25,7 @@ su -c "zcat /proc/config.gz" | grep DEBUG_KERNEL
 
 - 点击app主页的`Patch/修补`按钮，并给你之后将要刷入的内核创建一个 密码，即`superkey`。
 
-> 关于superkey是什么，请前往APatch EN群组内使用Rose Bot的notes功能自行查看。
+> [SuperKey是什么？](https://github.com/bmax121/APatch/blob/main/docs/cn/faq_cn.md#%E4%BB%80%E4%B9%88%E6%98%AFsuperkey%E8%B6%85%E7%BA%A7%E5%AF%86%E9%92%A5)
 
 - 接下来选择要修补的boot文件。
 
