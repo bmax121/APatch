@@ -16,7 +16,8 @@
     <string name="reboot_edl">Ke EDL</string>
     <string name="home_learn_apatch">Pelajari AndroidPatch</string>
     <string name="about">Tentang</string>
-    <string name="about_source_code">Lihat kode sumber di %1$s<br/>. Gabung ke saluran %2$s kami</string>
+    <string name="about_source_code">Lihat kode sumber di %1$s<br/>
+\nGabung ke saluran %2$s kami</string>
     <string name="send_log">Kirim Log</string>
     <string name="safe_mode">Mode aman</string>
     <string name="home_patch_set_key_desc">Kredensial untuk KernelPatch</string>

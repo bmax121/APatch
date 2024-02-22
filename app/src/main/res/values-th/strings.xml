@@ -98,4 +98,6 @@
     <string name="settings_app_language">ภาษา</string>
     <string name="patch">Patch</string>
     <string name="system_default">ค่าเริ่มต้นของระบบ</string>
+    <string name="settings_global_namespace_mode">Global Namespace Mode</string>
+    <string name="settings_global_namespace_mode_summary">All root sessions use the global mount namespace</string>
 </resources>

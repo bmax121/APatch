@@ -6,6 +6,8 @@ use anyhow::Context;
 use retry::delay::NoDelay;
 #[cfg(any(target_os = "linux", target_os = "android"))]
 use sys_mount::{unmount, FilesystemType, Mount, MountFlags, Unmount, UnmountFlags};
+#[cfg(any(target_os = "linux", target_os = "android"))]
+use rustix::{fd::AsFd, fs::CWD, mount::*};
 
 use crate::defs::AP_OVERLAY_SOURCE;
 use log::{info, warn};
@@ -160,6 +162,34 @@ fn mount_overlayfs(
         })?;
     Ok(())
 }
+
+#[cfg(any(target_os = "linux", target_os = "android"))]
+pub fn mount_tmpfs(dest: impl AsRef<Path>) -> Result<()> {
+    info!("mount tmpfs on {}", dest.as_ref().display());
+    if let Result::Ok(fs) = fsopen("tmpfs", FsOpenFlags::FSOPEN_CLOEXEC) {
+        let fs = fs.as_fd();
+        fsconfig_set_string(fs, "source", AP_OVERLAY_SOURCE)?;
+        fsconfig_create(fs)?;
+        let mount = fsmount(fs, FsMountFlags::FSMOUNT_CLOEXEC, MountAttrFlags::empty())?;
+        move_mount(
+            mount.as_fd(),
+            "",
+            CWD,
+            dest.as_ref(),
+            MoveMountFlags::MOVE_MOUNT_F_EMPTY_PATH,
+        )?;
+    } else {
+        mount(
+            AP_OVERLAY_SOURCE,
+            dest.as_ref(),
+            "tmpfs",
+            rustix::fs::MountFlags::empty(),
+            "",
+        )?;
+    }
+    Ok(())
+}
+
 
 #[cfg(any(target_os = "linux", target_os = "android"))]
 fn bind_mount(from: impl AsRef<Path>, to: impl AsRef<Path>) -> Result<()> {

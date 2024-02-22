@@ -96,12 +96,10 @@ pub fn on_post_data_fs() -> Result<()> {
     #[cfg(unix)]
     let _ = catch_bootlog();
 
-    // todo: test now
-    // if utils::has_magisk() {
-    //     warn!("Magisk detected, skip post-fs-data!");
-    //     return Ok(());
-    // }
-    info!("----------");
+    if utils::has_magisk() {
+        warn!("Magisk detected, skip post-fs-data!");
+        return Ok(());
+    }
 
     let key = "SUPERKEY";
     match env::var(key) {
@@ -191,6 +189,10 @@ pub fn on_post_data_fs() -> Result<()> {
     // load sepolicy.rule
     if crate::module::load_sepolicy_rule().is_err() {
         warn!("load sepolicy.rule failed");
+    }
+    
+    if let Err(e) = mount::mount_tmpfs(utils::get_tmp_path()) {
+        warn!("do temp dir mount failed: {}", e);
     }
 
     // exec modules post-fs-data scripts

@@ -23,11 +23,17 @@ The patching of Android kernel and Android system.
 - ARM64 only
 - Android Kernel Version 3.18 - 6.1
 
+Support for Samsung devices with security protection: planned
+
 ## Requirement
 
 Kernel configs
 
 - `CONFIG_KALLSYMS=y`  
+
+Universal Kernel Compilation Guide for Unsupported Devices with APatch : [Click here](https://github.com/ravindu644/Android-Kernel-Tutorials)  
+In this guide, you'll discover how to enable crucial features like **Kallsyms** and **OverlayFS** for any device. Additionally, it provides instructions on disabling **Samsung** securities to ensure APatch functions correctly.  
+
 
 ## Translation
 To help translate APatch or improve existing translations, please use [Weblate](https://hosted.weblate.org/engage/apatch/). PR of APatch translation is no longer accepted, because it will conflict with Weblate.
