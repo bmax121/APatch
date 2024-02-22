@@ -96,12 +96,10 @@ pub fn on_post_data_fs() -> Result<()> {
     #[cfg(unix)]
     let _ = catch_bootlog();
 
-    // todo: test now
-    // if utils::has_magisk() {
-    //     warn!("Magisk detected, skip post-fs-data!");
-    //     return Ok(());
-    // }
-    info!("----------");
+    if utils::has_magisk() {
+        warn!("Magisk detected, skip post-fs-data!");
+        return Ok(());
+    }
 
     let key = "SUPERKEY";
     match env::var(key) {
