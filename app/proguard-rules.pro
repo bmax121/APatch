@@ -14,3 +14,14 @@
 # Keep ini4j Service Provider Interface
 -keepnames class * implements org.ini4j.spi.*Provider
 -keep public class org.ini4j.spi.*
+
+# Kotlin
+-assumenosideeffects class kotlin.jvm.internal.Intrinsics {
+    public static void check*(...);
+    public static void throw*(...);
+}
+
+-repackageclasses
+-allowaccessmodification
+-overloadaggressively
+-renamesourcefileattribute SourceFile

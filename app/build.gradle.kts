@@ -26,9 +26,17 @@ android {
     namespace = "me.bmax.apatch"
 
     buildTypes {
+        debug {
+            isDebuggable = true
+            isMinifyEnabled = false
+            isShrinkResources = false
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
         release {
             isMinifyEnabled = true
             isShrinkResources = true
+            isDebuggable = false
+            multiDexEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
@@ -58,6 +66,11 @@ android {
         }
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "okhttp3/**"
+            excludes += "kotlin/**"
+            excludes += "org/**"
+            excludes += "**.properties"
+            excludes += "**.bin"
         }
     }
 
