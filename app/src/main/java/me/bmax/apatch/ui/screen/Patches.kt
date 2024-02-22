@@ -8,20 +8,24 @@ import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
@@ -35,7 +39,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -57,21 +60,21 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.bmax.apatch.R
 import me.bmax.apatch.ui.viewmodel.KPModel
-import me.bmax.apatch.ui.viewmodel.PatchViewModel
+import me.bmax.apatch.ui.viewmodel.PatchesViewModel
 import me.bmax.apatch.util.Version
 import me.bmax.apatch.util.reboot
 
-private val TAG = "PatchSetting"
+private val TAG = "Patches"
 
 @Destination
 @Composable
-fun PatchWithConfig(navigator: DestinationsNavigator, mode: PatchViewModel.PatchMode) {
+fun Patches(navigator: DestinationsNavigator, mode: PatchesViewModel.PatchMode) {
     var permissionRequest = remember { mutableStateOf(false)  }
     val scrollState = rememberScrollState()
     val scope = rememberCoroutineScope()
 
-    val viewModel = viewModel<PatchViewModel>()
-    SideEffect {
+    val viewModel = viewModel<PatchesViewModel>()
+    SideEffect() {
         viewModel.prepare(mode)
     }
 
@@ -124,7 +127,7 @@ fun PatchWithConfig(navigator: DestinationsNavigator, mode: PatchViewModel.Patch
             KernelPatchImageView(viewModel.kpimgInfo)
 
             // select boot.img
-            if(mode.equals(PatchViewModel.PatchMode.PATCH) && viewModel.kimgInfo.banner.isEmpty()) {
+            if(mode.equals(PatchesViewModel.PatchMode.PATCH) && viewModel.kimgInfo.banner.isEmpty()) {
                 SelectFileButton(
                     text = stringResource(id = R.string.patch_select_bootimg_btn),
                     onSelected = { data, uri ->
@@ -142,12 +145,32 @@ fun PatchWithConfig(navigator: DestinationsNavigator, mode: PatchViewModel.Patch
                 KernelImageView(viewModel.kimgInfo)
             }
 
-            if(!mode.equals(PatchViewModel.PatchMode.UNPATCH) && !viewModel.kimgInfo.banner.isEmpty() ) {
+            if(!mode.equals(PatchesViewModel.PatchMode.UNPATCH) && !viewModel.kimgInfo.banner.isEmpty() ) {
                 SetSuperKeyView(viewModel)
             }
 
+            // existed extras
+            if(mode.equals(PatchesViewModel.PatchMode.UPDATE)) {
+                viewModel.existedExtras.forEach( action = {
+                    ExtraItem(extra = it, true, onDelete = {
+                        viewModel.existedExtras.remove(it)
+                    })
+                })
+            }
+
+            // add new extras
+            if(!mode.equals(PatchesViewModel.PatchMode.UNPATCH)) {
+                viewModel.newExtras.forEach( action = {
+                    ExtraItem(extra = it, false, onDelete = {
+                        val idx = viewModel.newExtras.indexOf(it)
+                        viewModel.newExtras.remove(it)
+                        viewModel.newExtrasFileName.removeAt(idx)
+                    })
+                })
+            }
+
             // add new KPM
-            if(viewModel.superkey.isNotEmpty() && !viewModel.patching && !viewModel.patchdone) {
+            if(viewModel.superkey.isNotEmpty() && !viewModel.patching && !viewModel.patchdone && !mode.equals(PatchesViewModel.PatchMode.UNPATCH)) {
                 SelectFileButton(
                     text = stringResource(id = R.string.patch_embed_kpm_btn),
                     onSelected = {data, uri ->
@@ -157,15 +180,14 @@ fun PatchWithConfig(navigator: DestinationsNavigator, mode: PatchViewModel.Patch
                 )
             }
 
-            AddedKPMView(viewModel.addedExtras)
-
+            // do patch, update, unpatch
             if(!viewModel.patching && !viewModel.patchdone) {
                 // patch start
-                if(!mode.equals(PatchViewModel.PatchMode.UNPATCH) && viewModel.superkey.isNotEmpty()) {
-                    StartButton(stringResource(id = R.string.patch_start_patch_btn), {viewModel.doPatch()} )
+                if(!mode.equals(PatchesViewModel.PatchMode.UNPATCH) && viewModel.superkey.isNotEmpty()) {
+                    StartButton(stringResource(id = R.string.patch_start_patch_btn), {viewModel.doPatch(mode)} )
                 }
                 // unpatch
-                if(mode.equals(PatchViewModel.PatchMode.UNPATCH) && viewModel.kimgInfo.banner.isNotEmpty()) {
+                if(mode.equals(PatchesViewModel.PatchMode.UNPATCH) && viewModel.kimgInfo.banner.isNotEmpty()) {
                     StartButton(stringResource(id = R.string.patch_start_unpatch_btn), {viewModel.doUnpatch()} )
                 }
             }
@@ -183,6 +205,8 @@ fun PatchWithConfig(navigator: DestinationsNavigator, mode: PatchViewModel.Patch
                     scrollState.animateScrollTo(scrollState.maxValue)
                 }
             }
+
+            Spacer(modifier = Modifier.height(12.dp))
 
             // loading progress
             if(viewModel.running) {
@@ -220,67 +244,85 @@ private fun StartButton(text: String, onClick: ()-> Unit) {
 }
 
 @Composable
-private fun AddedKPMView(addedExtras: MutableList<KPModel.IExtraInfo>) {
-    if(addedExtras.isEmpty()) return
-    addedExtras.forEach( action = {
-        ElevatedCard(
-            colors = CardDefaults.elevatedCardColors(containerColor = run {
-                MaterialTheme.colorScheme.secondaryContainer
-            })
+private fun ExtraItem(extra: KPModel.IExtraInfo, existed: Boolean, onDelete: ()->Unit) {
+    ElevatedCard(
+        colors = CardDefaults.elevatedCardColors(containerColor = run {
+            MaterialTheme.colorScheme.secondaryContainer
+        }),
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(12.dp),
-            ) {
-                Column(
+            Row {
+                Text(text = stringResource(id =
+                if(existed) R.string.patch_item_existed_extra_kpm else R.string.patch_item_new_extra_kpm) +
+                        " " + extra.type.toString().lowercase(),
+                    style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                        .padding(end = 8.dp)
+                        .weight(1f)
+                        .wrapContentWidth(Alignment.CenterHorizontally))
+                Icon(imageVector = Icons.Default.Close,
+                    contentDescription = "Delete",
+                    tint = Color.Red,
+                    modifier = Modifier
+                        .padding(end = 8.dp)
+                        .clickable { onDelete() })
+            }
+            if(extra.type.equals(KPModel.ExtraType.KPM)) {
+                val kpmInfo: KPModel.KPMInfo = extra as KPModel.KPMInfo
+                Text(text = stringResource(id = R.string.patch_item_extra_name) + kpmInfo.name, style = MaterialTheme.typography.bodyMedium)
+                Text(text = stringResource(id = R.string.patch_item_extra_version) + kpmInfo.version, style = MaterialTheme.typography.bodyMedium)
+                Text(text = stringResource(id = R.string.patch_item_extra_author) + kpmInfo.license, style = MaterialTheme.typography.bodyMedium)
+                Text(text = stringResource(id = R.string.patch_item_extra_kpm_license) + kpmInfo.author, style = MaterialTheme.typography.bodyMedium)
+                Text(text = stringResource(id = R.string.patch_item_extra_kpm_desciption) + kpmInfo.description, style = MaterialTheme.typography.bodyMedium)
+                var event by remember { mutableStateOf(kpmInfo.event) }
+                Row(modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.LightGray)
                 ) {
-                    Text(text = stringResource(id = R.string.patch_item_add_extra_kpm) +
-                            " " + it.type.toString().lowercase(),
-                        style = MaterialTheme.typography.bodyLarge)
+                    Text(
+                        text = stringResource(id = R.string.patch_item_extra_event),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    BasicTextField(
+                        modifier = Modifier.fillMaxWidth(),
+                        value = event,
+                        textStyle = MaterialTheme.typography.bodyMedium,
+                        onValueChange = {
+                            event = it
+                            kpmInfo.event = it
+                        },
+                    )
                 }
-                if(it.type == KPModel.ExtraType.KPM) {
-                    val kpmInfo: KPModel.KPMInfo = it as KPModel.KPMInfo
-                    var args by remember {
-                        mutableStateOf(kpmInfo.args)
-                    }
-                    Text(text = stringResource(id = R.string.patch_item_extra_name) + kpmInfo.name, style = MaterialTheme.typography.bodyMedium)
-                    Text(text = stringResource(id = R.string.patch_item_extra_version) + kpmInfo.version, style = MaterialTheme.typography.bodyMedium)
-                    Text(text = stringResource(id = R.string.patch_item_extra_author) + kpmInfo.license, style = MaterialTheme.typography.bodyMedium)
-                    Text(text = stringResource(id = R.string.patch_item_extra_kpm_license) + kpmInfo.author, style = MaterialTheme.typography.bodyMedium)
-                    Text(text = stringResource(id = R.string.patch_item_extra_kpm_desciption) + kpmInfo.description, style = MaterialTheme.typography.bodyMedium)
-                    Row(modifier = Modifier
-                        .fillMaxWidth()
-                        .background(Color.LightGray)
-                    ) {
-                        Text(text = stringResource(id = R.string.patch_item_extra_kpm_args), style = MaterialTheme.typography.bodyMedium)
-                        BasicTextField(
-                            modifier = Modifier.fillMaxWidth(),
-                            value = args,
-                            textStyle = MaterialTheme.typography.bodyMedium,
-                            onValueChange = {
-                                args = it
-                                kpmInfo.args = it
-                            },
-                        )
-                    }
+                var args by remember { mutableStateOf(kpmInfo.args) }
+                Row(modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.LightGray)
+                ) {
+                    Text(text = stringResource(id = R.string.patch_item_extra_args), style = MaterialTheme.typography.bodyMedium)
+                    BasicTextField(
+                        modifier = Modifier.fillMaxWidth(),
+                        value = args,
+                        textStyle = MaterialTheme.typography.bodyMedium,
+                        onValueChange = {
+                            args = it
+                            kpmInfo.args = it
+                        },
+                    )
                 }
             }
         }
-    })
+    }
 }
 
 
 @Composable
-private fun SetSuperKeyView(viewModel: PatchViewModel) {
-    val checked: (skey: String)-> Boolean = {
-        it.length >= 8 && it.any { it.isDigit() } && it.any{ it.isLetter()}
-    }
-    var skey by remember { mutableStateOf(viewModel.superkey) }
-    var showWarn by remember { mutableStateOf(!checked(skey))}
+private fun SetSuperKeyView(viewModel: PatchesViewModel) {
+    var skey by remember { mutableStateOf(viewModel.kpimgInfo.superKey) }
+    var showWarn by remember { mutableStateOf(!viewModel.keyChecked(skey))}
     ElevatedCard(
         colors = CardDefaults.elevatedCardColors(containerColor = run {
             MaterialTheme.colorScheme.secondaryContainer
@@ -289,7 +331,7 @@ private fun SetSuperKeyView(viewModel: PatchViewModel) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(12.dp),
+                .padding(start = 12.dp, end = 12.dp, bottom = 12.dp),
         ) {
             Column(
                 modifier = Modifier
@@ -306,12 +348,12 @@ private fun SetSuperKeyView(viewModel: PatchViewModel) {
                     style = MaterialTheme.typography.bodyMedium)
             }
             TextField(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 6.dp),
+                .fillMaxWidth()
+                .padding(top = 6.dp),
                 value = skey,
                 onValueChange = {
                     skey = it
-                    if(checked(it)){
+                    if(viewModel.keyChecked(it)){
                         viewModel.superkey = it
                         showWarn = false
                     } else {
@@ -351,7 +393,6 @@ private fun KernelPatchImageView(kpImgInfo: KPModel.KPImgInfo) {
     }
 }
 
-
 @Composable
 private fun BootimgView(slot: String, boot: String) {
     ElevatedCard(
@@ -375,8 +416,6 @@ private fun BootimgView(slot: String, boot: String) {
         }
     }
 }
-
-
 
 @Composable
 private fun KernelImageView(kImgInfo: KPModel.KImgInfo) {
@@ -453,7 +492,7 @@ private fun ErrorView(error: String) {
 }
 
 @Composable
-private fun PatchMode(mode: PatchViewModel.PatchMode) {
+private fun PatchMode(mode: PatchesViewModel.PatchMode) {
     ElevatedCard(
         colors = CardDefaults.elevatedCardColors(containerColor = run {
             MaterialTheme.colorScheme.secondaryContainer

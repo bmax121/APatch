@@ -66,7 +66,7 @@
     <string name="patch_mode_update_patch">Mode: Update</string>
     <string name="patch_mode_uninstall_patch">Mode: UnPatch</string>
     <string name="patch_select_bootimg_btn">Select boot</string>
-    <string name="patch_embed_kpm_btn">KPM</string>
+    <string name="patch_embed_kpm_btn">Embed KPM</string>
     <string name="patch_start_patch_btn">Start</string>
     <string name="patch_start_unpatch_btn">UnPatch</string>
     <string name="patch_item_error">!!ERROR!!</string>
@@ -78,13 +78,15 @@
     <string name="patch_item_kpimg_version">version: </string>
     <string name="patch_item_kpimg_comile_time">time: </string>
     <string name="patch_item_kpimg_config">config: </string>
-    <string name="patch_item_add_extra_kpm">embed </string>
+    <string name="patch_item_new_extra_kpm">embed new </string>
+    <string name="patch_item_existed_extra_kpm">existed </string>
     <string name="patch_item_extra_name">name: </string>
     <string name="patch_item_extra_version">version: </string>
     <string name="patch_item_extra_author">author: </string>
     <string name="patch_item_extra_kpm_license">license: </string>
     <string name="patch_item_extra_kpm_desciption">description: </string>
-    <string name="patch_item_extra_kpm_args">args: </string>
+    <string name="patch_item_extra_args">args: </string>
+    <string name="patch_item_extra_event">event: </string>
     <string name="patch_item_skey">superkey</string>
     <string name="patch_item_set_skey_label">The length of superkey should be at least 8 characters and include both numbers and letters</string>
 

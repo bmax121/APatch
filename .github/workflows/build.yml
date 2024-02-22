@@ -2,14 +2,14 @@ name: Build Manager
 
 on:
   push:
-    branches: [ "main", "dev" ]
+    branches: [ "dev" ]
     paths:
       - '.github/workflows/build.yml'
       - 'app/**'
       - 'apd/**'
       - 'build.gradle.kts'
   pull_request:
-    branches: [ "main" ]
+    branches: [ "dev" ]
     paths:
       - '.github/workflows/build.yml'
       - 'app/**'

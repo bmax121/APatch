@@ -51,7 +51,8 @@ object Version {
      * version of /data/adb/kpatch
      */
     fun installedKPBinVUInt(): UInt {
-        val result = ShellUtils.fastCmd("${APApplication.KPATCH_SHADOW_PATH} ${APApplication.superKey} -v")
+        val result = ShellUtils.fastCmd("${APApplication.SUPERCMD} ${APApplication.superKey} " +
+                "${APApplication.KPATCH_PATH} ${APApplication.superKey} -v")
         var verUInt = 0u
         if(!result.isNullOrEmpty()) {
             verUInt = result.trim().toUInt(0x10)

@@ -53,11 +53,11 @@ mv kernel kernel.ori
 echo "- Patching kernel"
 
 set -x
-./kptools -p --image kernel.ori --skey "$SUPERKEY" --kpimg kpimg --out kernel "$@"
+./kptools -p -i kernel.ori -s "$SUPERKEY" -k kpimg -o kernel "$@"
 set +x
 
 if [ $? -ne 0 ]; then
-  echo "- Patch error: $?"
+  echo "- Patch kernel error: $?"
   exit $?
 fi
 
@@ -69,9 +69,14 @@ if [ $? -ne 0 ]; then
   exit $?
 fi
 
-#echo "- Cleaning up"
-#./magiskboot cleanup >/dev/null 2>&1
-#rm kernel.ori
+# flash
+if [ -b "$BOOTIMAGE" ] || [ -c "$BOOTIMAGE" ] && [ -f "new-boot.img" ]; then
+  echo "- Flashing new boot image"
+  flash_image new-boot.img "$BOOTIMAGE"
+  if [ $? -ne 0 ]; then
+    echo "- Flash error: $?"
+    exit $?
+  fi
+fi
 
-# Reset any error code
-true
+echo "- Flash successful"

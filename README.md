@@ -16,8 +16,7 @@ The patching of Android kernel and Android system.
 - APM: Magisk module like support
 - KPM: Kernel Patch Module support. (Allow you to inject any code into the kernel, Kernel function inline-hook and syscall-table-hook is available)
 - APatch relies on [KernelPatch](https://github.com/bmax121/KernelPatch/)
-
-The source code for both APatch UI and APM has been copied and modified from [KernelSU](https://github.com/tiann/KernelSU)
+- The source code for both APatch UI and APM has been copied and modified from [KernelSU](https://github.com/tiann/KernelSU)
 
 ## Supported Versions
 
@@ -29,9 +28,6 @@ The source code for both APatch UI and APM has been copied and modified from [Ke
 Kernel configs
 
 - `CONFIG_KALLSYMS=y`  
-- `CONFIG_KALLSYMS_ALL=y`
-- `DEBUG_KERNEL=y`
-- `CONFIG_KALLSYMS_ALL=n` (Next version of KernelPatch will support)
 
 ## Translation
 To help translate APatch or improve existing translations, please use [Weblate](https://hosted.weblate.org/engage/apatch/). PR of APatch translation is no longer accepted, because it will conflict with Weblate.
@@ -51,10 +47,6 @@ To help translate APatch or improve existing translations, please use [Weblate](
 Installation guide (coming soon)
 <hr>
 
-### ℹ️ Universal Kernel Compilation Guide for Unsupported Devices with APatch : [Click here](https://github.com/ravindu644/Android-Kernel-Tutorials)
-- ❗ In this guide, you'll discover how to enable crucial features like **Kallsyms** and **OverlayFS** for any device. Additionally, it provides instructions on disabling **Samsung** securities to ensure APatch functions correctly.
-<hr>
-
 ### Updates
 - Telegram Channel: [@APatchChannel](https://t.me/APatchChannel)
 
@@ -65,17 +57,7 @@ Installation guide (coming soon)
 
 ### More Information
 
-- [FAQ (EN)](docs/en/faq.md)
-- [常见问题解答 (CN)](docs/cn/faq_cn.md)
-- [常見問題解答 (CN_TW)](docs/cn_tw/faq_cn_tw.md)
-- [Preguntas frecuentes (ES)](docs/es/faq_es.md)
-- [Foire aux questions (FR)](docs/fr/faq_fr.md)
-- [Domande frequenti (IT)](docs/it/faq_it.md)
-- [Perguntas frequentes (PT_BR)](docs/pt_br/faq_pt_br.md)
-- [Часто задаваемые вопросы (RU)](docs/ru/faq_ru.md)
-- [Sık sorulan sorular (TR)](docs/tr/faq_tr.md)
-- [Tez-tez soruşulan suallar (AZ)](docs/az/faq_az.md)
-
+- [Documents](docs/)
 
 ## Credits
 

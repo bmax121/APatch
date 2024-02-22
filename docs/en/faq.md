@@ -31,7 +31,7 @@ For more information, see [How to write a KPM](https://github.com/bmax121/Kernel
 
 APatch depends on KernelPatch, inherits all its capabilities, and has been expanded.
 
-You can install KernelPatch only, but this will not allow you to use Magisk modules, and to use superuser management, you need to install AndroidPatch and then uninstall it.
+You can install KernelPatch only, but this will not allow you to use Magisk modules
 
 [Learn more about KernelPatch](https://github.com/bmax121/KernelPatch)
 

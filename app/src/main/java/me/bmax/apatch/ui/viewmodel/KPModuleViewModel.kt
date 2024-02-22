@@ -50,14 +50,22 @@ class KPModuleViewModel : ViewModel() {
                 modules = nameList.filter{!it.isNullOrEmpty()}.map{
                     val infoline = Natives.kernelPatchModuleInfo(it)
                     val spi = infoline.split('\n')
+                    val name = spi.find { it.startsWith("name=") }?.removePrefix("name=")
+                    val version = spi.find { it.startsWith("version=") }?.removePrefix("version=")
+                    val license = spi.find { it.startsWith("license=") }?.removePrefix("license=")
+                    val author = spi.find { it.startsWith("author=") }?.removePrefix("author=")
+                    val description = spi.find { it.startsWith("description=") }?.removePrefix("description=")
+                    val args = spi.find { it.startsWith("args=") }?.removePrefix("args=")
                     val info = KPModel.KPMInfo(
                         KPModel.ExtraType.KPM,
-                        spi[0].split('=')[1],
-                        spi[1].split('=')[1],
-                        spi[2].split('=')[1],
-                        spi[3].split('=')[1],
-                        spi[4].split('=')[1],
-                        spi[5].split('=')[1])
+                        name?:"",
+                        "",
+                        args?:"",
+                        version?:"",
+                        license?:"",
+                        author?:"",
+                        description?:""
+                    )
                     info
                 }
                 isNeedRefresh = false

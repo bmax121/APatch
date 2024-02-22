@@ -1,13 +1,9 @@
 package me.bmax.apatch.ui.screen
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.os.Build
 import android.os.PowerManager
 import android.system.Os
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -48,10 +44,10 @@ import me.bmax.apatch.util.*
 import me.bmax.apatch.*
 import me.bmax.apatch.R
 import me.bmax.apatch.ui.component.ConfirmDialog
-import me.bmax.apatch.ui.screen.destinations.PatchWithConfigDestination
+import me.bmax.apatch.ui.screen.destinations.PatchesDestination
 import me.bmax.apatch.util.reboot
 import me.bmax.apatch.ui.screen.destinations.SettingScreenDestination
-import me.bmax.apatch.ui.viewmodel.PatchViewModel
+import me.bmax.apatch.ui.viewmodel.PatchesViewModel
 
 @RootNavGraph(start = true)
 @Destination
@@ -62,8 +58,7 @@ fun HomeScreen(navigator: DestinationsNavigator) {
     val apState by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
 
     if (!kpState.equals(APApplication.State.UNKNOWN_STATE)) {
-//        showPatchFloatAction = false
-
+        showPatchFloatAction = false
     }
 
     Scaffold(topBar = {
@@ -74,7 +69,7 @@ fun HomeScreen(navigator: DestinationsNavigator) {
         if(showPatchFloatAction) {
             ExtendedFloatingActionButton(
                 onClick = {
-                    navigator.navigate(PatchWithConfigDestination(PatchViewModel.PatchMode.PATCH))
+                    navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.PATCH))
                 },
                 icon = { Icon(Icons.Filled.InstallMobile, "install") },
                 text = { Text(text = stringResource(id = R.string.patch)) },
@@ -298,7 +293,7 @@ private fun KStatusCard(kpState: APApplication.State, navigator: DestinationsNav
                                     showAuthKeyDialog.value = true
                                 }
                                 kpState.equals(APApplication.State.KERNELPATCH_NEED_UPDATE) -> {
-                                    navigator.navigate(PatchWithConfigDestination(PatchViewModel.PatchMode.UPDATE))
+                                    navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.UPDATE))
                                 }
                                 kpState.equals(APApplication.State.KERNELPATCH_NEED_REBOOT) -> {
                                     reboot()
@@ -307,8 +302,8 @@ private fun KStatusCard(kpState: APApplication.State, navigator: DestinationsNav
                                     // Do nothing
                                 }
                                 else -> {
-                                    APApplication.uninstallKpatch()
-                                    navigator.navigate(PatchWithConfigDestination(PatchViewModel.PatchMode.UNPATCH))
+                                    APApplication.uninstallApatch()
+                                    navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.UNPATCH))
                                 }
                             }
                         },

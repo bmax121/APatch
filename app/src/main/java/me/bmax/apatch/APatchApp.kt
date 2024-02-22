@@ -10,8 +10,6 @@ import coil.Coil
 import coil.ImageLoader
 import com.topjohnwu.superuser.CallbackList
 import com.topjohnwu.superuser.Shell
-import com.topjohnwu.superuser.nio.ExtendedFile
-import com.topjohnwu.superuser.nio.FileSystemManager
 import me.bmax.apatch.util.*
 import me.zhanghai.android.appiconloader.coil.AppIconFetcher
 import me.zhanghai.android.appiconloader.coil.AppIconKeyer
@@ -41,7 +39,7 @@ class APApplication : Application() {
     companion object {
         val APD_PATH = "/data/adb/apd"
         val KPATCH_PATH = "/data/adb/kpatch"
-        val KPATCH_SHADOW_PATH = "/system/bin/truncate"
+        val SUPERCMD = "/system/bin/truncate"
         val APATCH_FOLDER = "/data/adb/ap/"
         val APATCH_BIN_FOLDER = APATCH_FOLDER + "bin/"
         val APATCH_LOG_FOLDER = APATCH_FOLDER + "log/"
@@ -79,25 +77,6 @@ class APApplication : Application() {
         private val _apStateLiveData = MutableLiveData<State>(State.UNKNOWN_STATE)
         val apStateLiveData: LiveData<State> = _apStateLiveData
 
-
-        fun uninstallKpatch() {
-            if (_kpStateLiveData.value != State.KERNELPATCH_INSTALLED) return
-            _kpStateLiveData.value = State.KERNELPATCH_UNINSTALLING
-
-            val patchDir: ExtendedFile = FileSystemManager.getLocal().getFile(apApp.filesDir.parent, "patch")
-            val newBootFile = patchDir.getChildFile("new-boot.img")
-
-            if (newBootFile.exists()) {
-                // Trigger APatch uninstallation as it won't work without KPatch anyway
-                uninstallApatch()
-
-                Log.d(TAG, "KPatch uninstalled ...")
-                _kpStateLiveData.postValue(State.UNKNOWN_STATE)
-            } else {
-                _kpStateLiveData.value = State.KERNELPATCH_INSTALLED
-            }
-        }
-
         fun uninstallApatch() {
             if (_apStateLiveData.value != State.ANDROIDPATCH_INSTALLED) return
             _apStateLiveData.value = State.ANDROIDPATCH_UNINSTALLING
@@ -108,6 +87,7 @@ class APApplication : Application() {
                 val cmds = arrayOf(
                     "rm -f ${APATCH_VERSION_PATH}",
                     "rm -f ${APD_PATH}",
+                    "rm -f ${KPATCH_PATH}",
                     "rm -rf ${APATCH_FOLDER}",
                 )
 
@@ -136,7 +116,7 @@ class APApplication : Application() {
             thread {
                 val rc = Natives.su(0, null)
                 if(!rc) {
-                    Log.e(TAG, "Native.su failed: " + rc)
+                    Log.e(TAG, "Native.su failed: ")
                     return@thread
                 }
 
@@ -178,6 +158,7 @@ class APApplication : Application() {
             }
         }
 
+
         var superKey: String = ""
             get
             private set(value) {
@@ -192,8 +173,8 @@ class APApplication : Application() {
 
                 thread {
                     val rc = Natives.su(0, null)
-                    if (rc) {
-                        Log.e(TAG, "su failed: " + rc)
+                    if (!rc) {
+                        Log.e(TAG, "Native.su failed")
                         return@thread
                     }
 
@@ -203,7 +184,7 @@ class APApplication : Application() {
                     Log.d(TAG, "kp installed version: ${installedV}, build version: ${buildV}")
 
                     // use != instead of > to enable downgrade,
-                    if (buildV != installedV && installedV > 0x900u) {
+                    if (buildV != installedV && installedV >= 0x900u) {
                         if(File(NEED_REBOOT_FILE).exists()) {
                             _kpStateLiveData.postValue(State.KERNELPATCH_NEED_REBOOT)
                         } else {
@@ -235,30 +216,13 @@ class APApplication : Application() {
                     }
                     Log.d(TAG, "ap state: " + _apStateLiveData.value)
 
-                    // todo: embed kpatch to kernel and extract it after kernel boot
-                    // update kpatch binary
-                    // use != instead of > to enable downgrade,
-                    val kpbinv = Version.installedKPBinVUInt()
-                    if(installedV != kpbinv) {
-                        val nativeDir = apApp.applicationInfo.nativeLibraryDir
-                        val cmds = arrayOf(
-                            "cp -f ${nativeDir}/libkpatch.so ${KPATCH_PATH}",
-                            "restorecon -R ${APATCH_FOLDER}",
-                        )
-                        Shell.getShell().newJob().add(*cmds).exec()
-                    }
-
                     return@thread
                 }
             }
     }
 
-    fun getSuperKey(): String {
-        return superKey
-    }
-
-    fun updateSuperKey(password: String) {
-        superKey = password
+    fun updateSuperKey(superKey: String) {
+        APApplication.superKey = superKey
     }
 
     override fun onCreate() {
