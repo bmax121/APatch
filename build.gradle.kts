@@ -39,7 +39,6 @@ val androidMinSdkVersion = 26
 val androidTargetSdkVersion = 34
 val androidCompileSdkVersion = 34
 
-val androidBuildToolsVersion = "33.0.2"
 val androidCompileNdkVersion = "25.2.9519653"
 
 val androidSourceCompatibility = JavaVersion.VERSION_17
@@ -86,7 +85,6 @@ subprojects {
         extensions.configure(CommonExtension::class.java) {
             compileSdk = androidCompileSdkVersion
             ndkVersion = androidCompileNdkVersion
-            buildToolsVersion = androidBuildToolsVersion
 
             defaultConfig {
                 minSdk = androidMinSdkVersion
