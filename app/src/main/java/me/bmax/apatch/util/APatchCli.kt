@@ -27,6 +27,13 @@ fun getRootShell(): Shell {
     return APatchCli.SHELL
 }
 
+fun shellForResult(shell: Shell, vararg cmds: String): Shell.Result {
+    val out = ArrayList<String>()
+    val err = ArrayList<String>()
+    val result = shell.newJob().add(*cmds).to(out, err).exec()
+    return result
+}
+
 fun createRootShell(): Shell {
     Shell.enableVerboseLogging = BuildConfig.DEBUG
     val builder = Shell.Builder.create()
@@ -44,7 +51,7 @@ fun createRootShell(): Shell {
     }
 }
 
-fun createRootShellForLog(): Shell {
+fun tryGetRootShell(): Shell {
     Shell.enableVerboseLogging = BuildConfig.DEBUG
     val builder = Shell.Builder.create()
     return try {
@@ -77,14 +84,6 @@ fun listModules(): String {
     val out =
         shell.newJob().add("${APApplication.APD_PATH} module list").to(ArrayList(), null).exec().out
     return out.joinToString("\n").ifBlank { "[]" }
-}
-
-fun getModuleCount(): Int {
-    val result = listModules()
-    runCatching {
-        val array = JSONArray(result)
-        return array.length()
-    }.getOrElse { return 0 }
 }
 
 fun toggleModule(id: String, enable: Boolean): Boolean {
@@ -146,14 +145,11 @@ fun installModule(
 }
 
 fun reboot(reason: String = "") {
-    thread {
-        Natives.su(0, "")
-        if (reason == "recovery") {
-            // KEYCODE_POWER = 26, hide incorrect "Factory data reset" message
-            ShellUtils.fastCmd("/system/bin/input keyevent 26")
-        }
-        ShellUtils.fastCmd("/system/bin/svc power reboot $reason || /system/bin/reboot $reason")
+    if (reason == "recovery") {
+        // KEYCODE_POWER = 26, hide incorrect "Factory data reset" message
+        getRootShell().newJob().add("/system/bin/input keyevent 26").exec()
     }
+    getRootShell().newJob().add("/system/bin/svc power reboot $reason || /system/bin/reboot $reason").exec()
 }
 
 fun overlayFsAvailable(): Boolean {
@@ -201,3 +197,4 @@ fun restartApp(packageName: String) {
     forceStopApp(packageName)
     launchApp(packageName)
 }
+

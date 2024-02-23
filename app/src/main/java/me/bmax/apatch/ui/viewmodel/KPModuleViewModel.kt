@@ -1,6 +1,5 @@
 package me.bmax.apatch.ui.viewmodel
 
-import android.net.Uri
 import android.os.SystemClock
 import android.util.Log
 import androidx.compose.runtime.derivedStateOf
@@ -18,14 +17,14 @@ import java.util.*
 class KPModuleViewModel : ViewModel() {
     companion object {
         private const val TAG = "KPModuleViewModel"
-        private var modules by mutableStateOf<List<Natives.KPMInfo>>(emptyList())
+        private var modules by mutableStateOf<List<KPModel.KPMInfo>>(emptyList())
     }
 
     var isRefreshing by mutableStateOf(false)
         private set
 
     val moduleList by derivedStateOf {
-        val comparator = compareBy(Collator.getInstance(Locale.getDefault()), Natives.KPMInfo::name)
+        val comparator = compareBy(Collator.getInstance(Locale.getDefault()), KPModel.KPMInfo::name)
         modules.sortedWith(comparator).also {
             isRefreshing = false
         }
@@ -51,13 +50,22 @@ class KPModuleViewModel : ViewModel() {
                 modules = nameList.filter{!it.isNullOrEmpty()}.map{
                     val infoline = Natives.kernelPatchModuleInfo(it)
                     val spi = infoline.split('\n')
-                    val info = Natives.KPMInfo(
-                        spi[0].split('=')[1],
-                        spi[1].split('=')[1],
-                        spi[2].split('=')[1],
-                        spi[3].split('=')[1],
-                        spi[4].split('=')[1],
-                        spi[5].split('=')[1])
+                    val name = spi.find { it.startsWith("name=") }?.removePrefix("name=")
+                    val version = spi.find { it.startsWith("version=") }?.removePrefix("version=")
+                    val license = spi.find { it.startsWith("license=") }?.removePrefix("license=")
+                    val author = spi.find { it.startsWith("author=") }?.removePrefix("author=")
+                    val description = spi.find { it.startsWith("description=") }?.removePrefix("description=")
+                    val args = spi.find { it.startsWith("args=") }?.removePrefix("args=")
+                    val info = KPModel.KPMInfo(
+                        KPModel.ExtraType.KPM,
+                        name?:"",
+                        "",
+                        args?:"",
+                        version?:"",
+                        license?:"",
+                        author?:"",
+                        description?:""
+                    )
                     info
                 }
                 isNeedRefresh = false

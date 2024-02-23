@@ -21,18 +21,6 @@ object Natives {
     ) : Parcelable {
     }
 
-    @Immutable
-    @Parcelize
-    @Keep
-    data class KPMInfo(
-        var name: String,
-        var version: String,
-        var license: String,
-        var author: String,
-        var description: String,
-        var args: String
-    ): Parcelable{}
-
     private external fun nativeSu(superKey: String, to_uid: Int, scontext: String? ): Int
 
     fun su(to_uid: Int, scontext: String?): Boolean {
@@ -58,7 +46,7 @@ object Natives {
     }
 
     private external fun nativeKernelPatchVersion(superKey: String): Long
-    fun kerenlPatchVersion(): Long {
+    fun kernelPatchVersion(): Long {
         return nativeKernelPatchVersion(APApplication.superKey)
     }
     private external fun nativeLoadKernelPatchModule(superKey: String, modulePath: String, args: String): Long

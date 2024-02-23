@@ -60,6 +60,8 @@
     <string name="apm_install">インストール</string>
     <string name="apm_author">制作者</string>
     <string name="apm_desc">説明</string>
+    <string name="apm_overlay_fs_not_available">OverlayFS未確定 モジュール動作失敗</string>
+    <string name="apm_reboot_to_apply">有効するには再起動</string>
     <string name="apm_changelog">変更履歴</string>
     <string name="kpatch_version">バージョン: %d.%d.%d</string>
     <string name="apatch_version">バージョン:

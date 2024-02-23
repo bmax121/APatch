@@ -7,6 +7,13 @@ toupper() {
   echo "$@" | tr '[:lower:]' '[:upper:]'
 }
 
+grep_cmdline() {
+  local REGEX="s/^$1=//p"
+  { echo $(cat /proc/cmdline)$(sed -e 's/[^"]//g' -e 's/""//g' /proc/cmdline) | xargs -n 1; \
+    sed -e 's/ = /=/g' -e 's/, /,/g' -e 's/"//g' /proc/bootconfig; \
+  } 2>/dev/null | sed -n "$REGEX"
+}
+
 grep_prop() {
   local REGEX="s/^$1=//p"
   shift
@@ -46,15 +53,56 @@ find_block() {
   return 1
 }
 
+# After calling this method, the following variables will be set:
+# SLOT,
+mount_partitions() {
+  # Check A/B slot
+  SLOT=$(grep_cmdline androidboot.slot_suffix)
+  if [ -z $SLOT ]; then
+    SLOT=$(grep_cmdline androidboot.slot)
+    [ -z $SLOT ] || SLOT=_${SLOT}
+  fi
+  if [ -z $SLOT ]; then
+    SLOT=$(getprop ro.boot.slot_suffix)
+  fi
+  [ "$SLOT" = "normal" ] && unset SLOT
+  [ -z $SLOT ] || echo "SLOT=$SLOT"
+}
+
 find_boot_image() {
-  SLOT=$(getprop ro.boot.slot_suffix)
   if [ ! -z $SLOT ]; then
     BOOTIMAGE=$(find_block "ramdisk$SLOT" "recovery_ramdisk$SLOT" "init_boot$SLOT" "boot$SLOT")
-  else
+  fi
+  if [ -z $BOOTIMAGE ]; then
     BOOTIMAGE=$(find_block ramdisk recovery_ramdisk kern-a android_boot kernel bootimg init_boot boot lnx boot_a)
   fi
   if [ -z $BOOTIMAGE ]; then
     # Lets see what fstabs tells me
     BOOTIMAGE=$(grep -v '#' /etc/*fstab* | grep -E '/boot(img)?[^a-zA-Z]' | grep -oE '/dev/[a-zA-Z0-9_./-]*' | head -n 1)
   fi
+  [ -z $BOOTIMAGE ] || echo "BOOTIMAGE=$BOOTIMAGE"
+}
+
+flash_image() {
+  local CMD1
+  case "$1" in
+    *.gz) CMD1="gzip -d < '$1' 2>/dev/null";;
+    *)    CMD1="cat '$1'";;
+  esac
+  if [ -b "$2" ]; then
+    local img_sz=$(stat -c '%s' "$1")
+    local blk_sz=$(blockdev --getsize64 "$2")
+    [ "$img_sz" -gt "$blk_sz" ] && return 1
+    blockdev --setrw "$2"
+    local blk_ro=$(blockdev --getro "$2")
+    [ "$blk_ro" -eq 1 ] && return 2
+    eval "$CMD1" | cat - /dev/zero > "$2" 2>/dev/null
+  elif [ -c "$2" ]; then
+    flash_eraseall "$2" >&2
+    eval "$CMD1" | nandwrite -p "$2" - >&2
+  else
+    echo "- Not block or char device"
+    eval "$CMD1" > "$2" 2>/dev/null
+  fi
+  return 0
 }

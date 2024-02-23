@@ -3,7 +3,7 @@
 # APatch Boot Image Patcher
 #######################################################################################
 #
-# Usage: boot_patch.sh <superkey> <bootimage>
+# Usage: boot_patch.sh <superkey> <bootimage> [ARGS_PASS_TO_KPTOOLS]
 #
 # This script should be placed in a directory with the following files:
 #
@@ -21,72 +21,62 @@
 
 ARCH=$(getprop ro.product.cpu.abi)
 
-getdir() {
-  case "$1" in
-    */*)
-      dir=${1%/*}
-      if [ ! -d $dir ]; then
-        echo "/"
-      else
-        echo $dir
-      fi
-    ;;
-    *) echo "." ;;
-  esac
-}
-
-# Switch to the location of the script file
-cd "$(getdir "${BASH_SOURCE:-$0}")"
-
 # Load utility functions
 . ./util_functions.sh
 
-echo "APatch Boot Image Patcher"
-
-# Check if 64-bit
-if [ $(uname -m) = "aarch64" ]; then
-  echo "System is arm64"
-else
-  echo "System is not arm64"
-  exit 1
-fi
+echo "****************************"
+echo " APatch Boot Image Patcher"
+echo "****************************"
 
 SUPERKEY=$1
 BOOTIMAGE=$2
+shift 2
 
-if [ -z "$BOOTIMAGE" ]; then
-  find_boot_image
-fi
-
-[ -z "$SUPERKEY" ] && { echo "SuperKey empty!"; exit 1; }
-[ -e "$BOOTIMAGE" ] || { echo "$BOOTIMAGE does not exist!"; exit 1; }
-
-echo "- Target image: $BOOTIMAGE"
+[ -z "$SUPERKEY" ] && { echo "- SuperKey empty!"; exit 1; }
+[ -e "$BOOTIMAGE" ] || { echo "- $BOOTIMAGE does not exist!"; exit 1; }
 
 # Check for dependencies
-command -v ./magiskboot >/dev/null 2>&1 || { echo "magiskboot not found!"; exit 1; }
-command -v ./kptools >/dev/null 2>&1 || { echo "kptools not found!"; exit 1; }
+command -v ./magiskboot >/dev/null 2>&1 || { echo "- Command magiskboot not found!"; exit 1; }
+command -v ./kptools >/dev/null 2>&1 || { echo "- Command kptools not found!"; exit 1; }
 
+if [ ! -f kernel ]; then
 echo "- Unpacking boot image"
 ./magiskboot unpack "$BOOTIMAGE" >/dev/null 2>&1
-
-if [ $? -ne 0 ]; then
-  echo "Unpack error: $?"
-  exit $?
+  if [ $? -ne 0 ]; then
+    echo "- Unpack error: $?"
+    exit $?
+  fi
 fi
 
 mv kernel kernel.ori
 
 echo "- Patching kernel"
-./kptools -p kernel.ori --skey "$SUPERKEY" --kpimg kpimg --out kernel
+
+set -x
+./kptools -p -i kernel.ori -s "$SUPERKEY" -k kpimg -o kernel "$@"
+set +x
 
 if [ $? -ne 0 ]; then
-  echo "Patch error: $?"
+  echo "- Patch kernel error: $?"
   exit $?
 fi
 
 echo "- Repacking boot image"
-./magiskboot repack "$BOOTIMAGE" >/dev/null 2>&1 || exit $?
+./magiskboot repack "$BOOTIMAGE" >/dev/null 2>&1
 
-# Reset any error code
-true
+if [ $? -ne 0 ]; then
+  echo "- Repack error: $?"
+  exit $?
+fi
+
+# flash
+if [ -b "$BOOTIMAGE" ] || [ -c "$BOOTIMAGE" ] && [ -f "new-boot.img" ]; then
+  echo "- Flashing new boot image"
+  flash_image new-boot.img "$BOOTIMAGE"
+  if [ $? -ne 0 ]; then
+    echo "- Flash error: $?"
+    exit $?
+  fi
+fi
+
+echo "- Flash successful"

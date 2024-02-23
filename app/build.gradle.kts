@@ -33,10 +33,15 @@ android {
         }
     }
 
+
     buildFeatures {
         aidl = true
         buildConfig = true
         compose = true
+    }
+
+    defaultConfig {
+        buildConfigField("String", "buildKPV", """"$kernelPatchVersion"""")
     }
 
     kotlinOptions {
@@ -126,6 +131,7 @@ dependencies {
     implementation(libs.androidx.runtime.livedata)
     implementation(libs.timber)
     implementation(libs.devappx)
+    implementation(libs.ini4j)
 
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
