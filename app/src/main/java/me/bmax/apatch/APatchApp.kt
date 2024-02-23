@@ -111,7 +111,6 @@ class APApplication : Application() {
                 return
             }
             _apStateLiveData.value = State.ANDROIDPATCH_INSTALLING
-
             val nativeDir = apApp.applicationInfo.nativeLibraryDir
 
             thread {
@@ -155,6 +154,8 @@ class APApplication : Application() {
 
                 Shell.getShell().newJob().add(*cmds).to(logCallback, logCallback).exec()
 
+                Natives.resetSuPath(LEGACY_SU_PATH)
+
                 Log.d(TAG, "APatch installed...")
                 _apStateLiveData.postValue(State.ANDROIDPATCH_INSTALLED)
             }
@@ -185,7 +186,6 @@ class APApplication : Application() {
                     val installedV = Version.installedKPVUInt()
 
                     Log.d(TAG, "kp installed version: ${installedV}, build version: ${buildV}")
-
 
                     // use != instead of > to enable downgrade,
                     if (buildV != installedV) {

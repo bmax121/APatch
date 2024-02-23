@@ -15,7 +15,7 @@ object Version {
     fun string2UInt(ver: String): UInt {
         val v = ver.trim().split("-")[0]
         val vn = v.split('.')
-        val vi = vn[0].toInt(16).shl(16) + vn[1].toInt(16).shl(8) + vn[2].toInt(16)
+        val vi = vn[0].toInt().shl(16) + vn[1].toInt().shl(8) + vn[2].toInt()
         return vi.toUInt()
     }
 
