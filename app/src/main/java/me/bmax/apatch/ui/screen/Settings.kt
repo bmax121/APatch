@@ -275,7 +275,7 @@ private fun ClearSuperKeyDialog(showClearSuperKeyDialog: MutableState<Boolean>) 
                 TextButton(
                     onClick = {
                         showClearSuperKeyDialog.value = false
-                        apApp.updateSuperKey("")
+                        apApp.clearKey()
                     }
                 ) {
                     Text(stringResource(id = android.R.string.yes))

@@ -147,7 +147,7 @@ fun AuthSuperKey(showDialog: MutableState<Boolean>) {
                 enabled = enable,
                 onClick = {
                     showDialog.value = false
-                    apApp.updateSuperKey(key)
+                    APApplication.superKey = key
                 }
             ) {
                 Text(stringResource(id = android.R.string.ok))
@@ -293,7 +293,12 @@ private fun KStatusCard(kpState: APApplication.State, navigator: DestinationsNav
                                     showAuthKeyDialog.value = true
                                 }
                                 kpState.equals(APApplication.State.KERNELPATCH_NEED_UPDATE) -> {
-                                    navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.UPDATE))
+                                    // todo: remove legacy compact for kp < 0.9.0
+                                    if(Version.installedKPVUInt() < 0x900u) {
+                                        navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.PATCH))
+                                    } else {
+                                        navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.UPDATE))
+                                    }
                                 }
                                 kpState.equals(APApplication.State.KERNELPATCH_NEED_REBOOT) -> {
                                     reboot()

@@ -10,6 +10,7 @@ import coil.Coil
 import coil.ImageLoader
 import com.topjohnwu.superuser.CallbackList
 import com.topjohnwu.superuser.Shell
+import com.topjohnwu.superuser.ShellUtils
 import me.bmax.apatch.util.*
 import me.zhanghai.android.appiconloader.coil.AppIconFetcher
 import me.zhanghai.android.appiconloader.coil.AppIconKeyer
@@ -124,6 +125,7 @@ class APApplication : Application() {
                     "mkdir -p ${APATCH_BIN_FOLDER}",
                     "mkdir -p ${APATCH_LOG_FOLDER}",
 
+                    // todo: remove when we can make sure kpatch released succeed from kernel
                     "cp -f ${nativeDir}/libkpatch.so ${KPATCH_PATH}",
                     "chmod +x ${KPATCH_PATH}",
                     "ln -s ${KPATCH_PATH} ${KPATCH_LINK_PATH}",
@@ -161,7 +163,7 @@ class APApplication : Application() {
 
         var superKey: String = ""
             get
-            private set(value) {
+            set(value) {
                 field = value
                 val ready = Natives.nativeReady(value)
                 _kpStateLiveData.value = if (ready) State.KERNELPATCH_INSTALLED else State.UNKNOWN_STATE
@@ -181,15 +183,13 @@ class APApplication : Application() {
                     // KernelPatch version
                     val buildV = Version.buildKPVUInt()
                     val installedV = Version.installedKPVUInt()
+
                     Log.d(TAG, "kp installed version: ${installedV}, build version: ${buildV}")
 
+
                     // use != instead of > to enable downgrade,
-                    if (buildV != installedV && installedV >= 0x900u) {
-                        if(File(NEED_REBOOT_FILE).exists()) {
-                            _kpStateLiveData.postValue(State.KERNELPATCH_NEED_REBOOT)
-                        } else {
-                            _kpStateLiveData.postValue(State.KERNELPATCH_NEED_UPDATE)
-                        }
+                    if (buildV != installedV) {
+                        _kpStateLiveData.postValue(State.KERNELPATCH_NEED_UPDATE)
                     }
                     Log.d(TAG, "kp state: " + _kpStateLiveData.value)
 
@@ -221,8 +221,10 @@ class APApplication : Application() {
             }
     }
 
-    fun updateSuperKey(superKey: String) {
-        APApplication.superKey = superKey
+    fun clearKey() {
+        _kpStateLiveData.value = State.UNKNOWN_STATE
+        _apStateLiveData.value = State.UNKNOWN_STATE
+        sharedPreferences.edit().putString(SUPER_KEY, "").apply()
     }
 
     override fun onCreate() {

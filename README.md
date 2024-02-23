@@ -29,13 +29,10 @@ Support for Samsung devices with security protection: planned
 
 Kernel configs
 
-- `CONFIG_KALLSYMS=y`  
+- `CONFIG_KALLSYMS=y` and `CONFIG_KALLSYMS_ALL=y`
+- `CONFIG_KALLSYMS=y` and `CONFIG_KALLSYMS_ALL=n`: Early support
 
-Universal Kernel Compilation Guide for Unsupported Devices with APatch : [Click here](https://github.com/ravindu644/Android-Kernel-Tutorials)  
-In this guide, you'll discover how to enable crucial features like **Kallsyms** and **OverlayFS** for any device. Additionally, it provides instructions on disabling **Samsung** securities to ensure APatch functions correctly.  
-
-
-## Translation
+## Translationv
 To help translate APatch or improve existing translations, please use [Weblate](https://hosted.weblate.org/engage/apatch/). PR of APatch translation is no longer accepted, because it will conflict with Weblate.
 
 <div align="center">

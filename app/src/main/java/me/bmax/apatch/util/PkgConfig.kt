@@ -44,7 +44,7 @@ object PkgConfig {
         }
     }
 
-    public fun readConfigs(): HashMap<String,Config> {
+    fun readConfigs(): HashMap<String,Config> {
         val configs = HashMap<String,Config>()
         val file = File(APApplication.PACKAGE_CONFIG_FILE)
         if (file.exists()) {
@@ -78,8 +78,19 @@ object PkgConfig {
             thread {
                 Natives.su()
                 val configs = readConfigs()
-                Log.d(TAG, "change config: " + config)
-                configs[config.pkg] = config
+                val pkg = config.pkg
+                val uid = config.profile.uid
+                if(config.allow == 0) {
+                    // revoke all uid
+                    val toRemove = configs.filter { it.key == pkg || it.value.profile.uid == uid }
+                    toRemove.forEach {
+                        Log.d(TAG, "remove config: " + it)
+                        configs.remove(it.key)
+                    }
+                } else {
+                    Log.d(TAG, "change config: " + config)
+                    configs[config.pkg] = config
+                }
                 writeConfigs(configs)
             }.join()
         }
