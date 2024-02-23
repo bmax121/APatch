@@ -47,31 +47,40 @@ object Version {
         return uInt2String(installedKPVUInt())
     }
 
-    /**
-     * version of /data/adb/kpatch
-     */
-    fun installedKPBinVUInt(): UInt {
+
+    fun installedKPatchVString(): String {
         val result = ShellUtils.fastCmd("${APApplication.SUPERCMD} ${APApplication.superKey} " +
                 "${APApplication.KPATCH_PATH} ${APApplication.superKey} -v")
-        var verUInt = 0u
-        if(!result.isNullOrEmpty()) {
-            verUInt = result.trim().toUInt(0x10)
-        }
+        return if(result.trim().isEmpty()) "0" else result.trim()
+    }
+
+    fun installedKPatchVUInt(): UInt {
+        val vstr = installedKPatchVString()
+        val verUInt = vstr.trim().toUInt(0x10)
         return verUInt
     }
 
-    fun installedKPatchVString(): String {
-        return uInt2String(installedKPBinVUInt())
+    fun installedApdVString(): String {
+        val result = ShellUtils.fastCmd("${APApplication.SUPERCMD} ${APApplication.superKey} " +
+                "${APApplication.APD_PATH} -V")
+        installedApdVString = if(result.trim().isEmpty()) "0" else {
+            Regex("\\d+").find(result)!!.value
+        }
+        return installedApdVString
     }
+
+    fun installedApdVUInt(): Int {
+        val vstr = installedApdVString()
+        installedApdVInt = vstr.toInt()
+        return installedApdVInt
+    }
+
 
     fun getManagerVersion(): Pair<String, Int> {
         val packageInfo = apApp.packageManager.getPackageInfo(apApp.packageName, 0)
         return Pair(packageInfo.versionName, packageInfo.versionCode)
     }
 
-    var installedApVersion: Int = -1
-    var installedApVersionString: String = "0"
-
-//    var buildApVersion =
-
+    var installedApdVInt: Int = 0
+    var installedApdVString: String = "0"
 }

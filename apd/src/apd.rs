@@ -3,9 +3,6 @@ use anyhow::{Ok, Result};
 #[cfg(unix)]
 use getopts::Options;
 use std::env;
-use std::fs::File;
-use std::io::BufRead;
-use std::io;
 #[cfg(unix)]
 use std::os::unix::process::CommandExt;
 use std::path::PathBuf;
@@ -226,13 +223,3 @@ fn add_path_to_env(path: &str) -> Result<()> {
     env::set_var("PATH", new_path_env);
     Ok(())
 }
-
-pub fn get_version()-> i32 {
-    let file = File::open(defs::AP_VERSION_PATH).unwrap();
-    let reader = io::BufReader::new(file);
-    let ver = reader.lines().next().and_then(|line| line.ok())
-    .and_then(|s| s.parse::<i32>().ok())
-    .unwrap_or_default();
-    ver
-}
-

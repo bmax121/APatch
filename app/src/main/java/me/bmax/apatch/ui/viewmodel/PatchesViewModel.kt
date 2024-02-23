@@ -292,7 +292,6 @@ class PatchesViewModel : ViewModel() {
             }
 
             val result = shell.newJob().add(
-                "rm -f ${APApplication.APATCH_VERSION_PATH}",
                 "rm -f ${APApplication.APD_PATH}",
                 "rm -rf ${APApplication.APATCH_FOLDER}",
                 "cd $patchDir",

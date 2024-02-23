@@ -4,8 +4,6 @@ import android.content.Context
 import android.os.Build
 import android.system.Os
 import com.topjohnwu.superuser.ShellUtils
-import me.bmax.apatch.APApplication
-import me.bmax.apatch.Natives
 import java.io.File
 import java.io.FileWriter
 import java.io.PrintWriter
@@ -73,7 +71,7 @@ fun getBugreportFile(context: Context): File {
         pw.println("Sysname: ${uname.sysname}")
 
         pw.println("KPatch: ${Version.installedKPVString()}")
-        pw.println("APatch: ${Version.installedApVersionString}")
+        pw.println("APatch: ${Version.installedApdVString}")
         val safeMode = false
         pw.println("SafeMode: $safeMode")
     }

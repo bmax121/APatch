@@ -111,10 +111,10 @@ tasks.register<Download>("downloadApjni") {
 }
 
 tasks.getByName("preBuild").dependsOn(
-    "downloadKpimg",
-    "downloadKpatch",
-    "downloadKptools",
-    "downloadApjni",
+//    "downloadKpimg",
+//    "downloadKpatch",
+//    "downloadKptools",
+//    "downloadApjni",
 )
 
 

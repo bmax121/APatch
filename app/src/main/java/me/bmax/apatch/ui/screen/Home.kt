@@ -406,7 +406,7 @@ private fun AStatusCard(apState: APApplication.State) {
                                 style = MaterialTheme.typography.titleMedium
                             )
                             Spacer(Modifier.height(6.dp))
-                            Text(text = stringResource(R.string.apatch_version_update, Version.installedApVersionString, managerVersion.second),
+                            Text(text = stringResource(R.string.apatch_version_update, Version.installedApdVString, managerVersion.second),
                                 style = MaterialTheme.typography.bodyMedium
                             )
                         }

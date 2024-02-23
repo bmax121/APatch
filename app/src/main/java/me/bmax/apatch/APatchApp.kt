@@ -9,8 +9,6 @@ import androidx.lifecycle.MutableLiveData
 import coil.Coil
 import coil.ImageLoader
 import com.topjohnwu.superuser.CallbackList
-import com.topjohnwu.superuser.Shell
-import com.topjohnwu.superuser.ShellUtils
 import me.bmax.apatch.util.*
 import me.zhanghai.android.appiconloader.coil.AppIconFetcher
 import me.zhanghai.android.appiconloader.coil.AppIconKeyer
@@ -52,7 +50,6 @@ class APApplication : Application() {
         val NEED_REBOOT_FILE = "/dev/.need_reboot"
         val GLOBAL_NAMESPACE_FILE = "/data/adb/.global_namespace_enable"
 
-        val APATCH_VERSION_PATH = APATCH_FOLDER + "version"
         val MAGISKPOLICY_BIN_PATH = APATCH_BIN_FOLDER + "magiskpolicy"
         val BUSYBOX_BIN_PATH = APATCH_BIN_FOLDER + "busybox"
         val RESETPROP_BIN_PATH = APATCH_BIN_FOLDER + "resetprop"
@@ -84,23 +81,19 @@ class APApplication : Application() {
 
             Natives.resetSuPath(DEFAULT_SU_PATH)
 
-            thread {
-                val cmds = arrayOf(
-                    "rm -f ${APATCH_VERSION_PATH}",
-                    "rm -f ${APD_PATH}",
-                    "rm -f ${KPATCH_PATH}",
-                    "rm -rf ${APATCH_FOLDER}",
-                )
+            val cmds = arrayOf(
+                "rm -f ${APD_PATH}",
+                "rm -rf ${APATCH_FOLDER}",
+            )
 
-                val shell = getRootShell()
-                shell.newJob().add(*cmds).to(logCallback, logCallback).exec()
+            val shell = getRootShell()
+            shell.newJob().add(*cmds).to(logCallback, logCallback).exec()
 
-                Log.d(TAG, "APatch uninstalled...")
-                if (_kpStateLiveData.value == State.UNKNOWN_STATE) {
-                    _apStateLiveData.postValue(State.UNKNOWN_STATE)
-                } else {
-                    _apStateLiveData.postValue(State.ANDROIDPATCH_NOT_INSTALLED)
-                }
+            Log.d(TAG, "APatch uninstalled...")
+            if (_kpStateLiveData.value == State.UNKNOWN_STATE) {
+                _apStateLiveData.postValue(State.UNKNOWN_STATE)
+            } else {
+                _apStateLiveData.postValue(State.ANDROIDPATCH_NOT_INSTALLED)
             }
         }
 
@@ -113,52 +106,44 @@ class APApplication : Application() {
             _apStateLiveData.value = State.ANDROIDPATCH_INSTALLING
             val nativeDir = apApp.applicationInfo.nativeLibraryDir
 
-            thread {
-                val rc = Natives.su(0, null)
-                if(!rc) {
-                    Log.e(TAG, "Native.su failed: ")
-                    return@thread
-                }
+            Natives.resetSuPath(LEGACY_SU_PATH)
 
-                val cmds = arrayOf(
-                    "mkdir -p ${APATCH_BIN_FOLDER}",
-                    "mkdir -p ${APATCH_LOG_FOLDER}",
+            val cmds = arrayOf(
+                "mkdir -p ${APATCH_BIN_FOLDER}",
+                "mkdir -p ${APATCH_LOG_FOLDER}",
 
-                    // todo: remove when we can make sure kpatch released succeed from kernel
-                    "cp -f ${nativeDir}/libkpatch.so ${KPATCH_PATH}",
-                    "chmod +x ${KPATCH_PATH}",
-                    "ln -s ${KPATCH_PATH} ${KPATCH_LINK_PATH}",
-                    "restorecon ${KPATCH_PATH}",
+                // kpatch extracted from kernel
+                "[ -s ${KPATCH_PATH} ] || cp -f ${nativeDir}/libkpatch.so ${KPATCH_PATH}",
+                "chmod +x ${KPATCH_PATH}",
+                "ln -s ${KPATCH_PATH} ${KPATCH_LINK_PATH}",
+                "restorecon ${KPATCH_PATH}",
 
-                    "cp -f ${nativeDir}/libapd.so ${APD_PATH}",
-                    "chmod +x ${APD_PATH}",
-                    "ln -s ${APD_PATH} ${APD_LINK_PATH}",
-                    "restorecon ${APD_PATH}",
+                "cp -f ${nativeDir}/libapd.so ${APD_PATH}",
+                "chmod +x ${APD_PATH}",
+                "ln -s ${APD_PATH} ${APD_LINK_PATH}",
+                "restorecon ${APD_PATH}",
 
-                    "cp -f ${nativeDir}/libmagiskpolicy.so ${MAGISKPOLICY_BIN_PATH}",
-                    "chmod +x ${MAGISKPOLICY_BIN_PATH}",
-                    "cp -f ${nativeDir}/libresetprop.so ${RESETPROP_BIN_PATH}",
-                    "chmod +x ${RESETPROP_BIN_PATH}",
-                    "cp -f ${nativeDir}/libbusybox.so ${BUSYBOX_BIN_PATH}",
-                    "chmod +x ${BUSYBOX_BIN_PATH}",
+                "cp -f ${nativeDir}/libmagiskpolicy.so ${MAGISKPOLICY_BIN_PATH}",
+                "chmod +x ${MAGISKPOLICY_BIN_PATH}",
+                "cp -f ${nativeDir}/libresetprop.so ${RESETPROP_BIN_PATH}",
+                "chmod +x ${RESETPROP_BIN_PATH}",
+                "cp -f ${nativeDir}/libbusybox.so ${BUSYBOX_BIN_PATH}",
+                "chmod +x ${BUSYBOX_BIN_PATH}",
 
-                    "touch ${PACKAGE_CONFIG_FILE}",
-                    "touch ${SU_PATH_FILE}",
-                    "[ -s ${SU_PATH_FILE} ] || echo ${LEGACY_SU_PATH} > ${SU_PATH_FILE}",
-                    "echo ${Version.getManagerVersion().second} > ${APATCH_VERSION_PATH}",
+                "touch ${PACKAGE_CONFIG_FILE}",
+                "touch ${SU_PATH_FILE}",
+                "[ -s ${SU_PATH_FILE} ] || echo ${LEGACY_SU_PATH} > ${SU_PATH_FILE}",
 
-                    "restorecon -R ${APATCH_FOLDER}",
+                "restorecon -R ${APATCH_FOLDER}",
 
-                    "${KPATCH_PATH} ${superKey} android_user init",
-                )
+                "${KPATCH_PATH} ${superKey} android_user init",
+            )
 
-                Shell.getShell().newJob().add(*cmds).to(logCallback, logCallback).exec()
+            val shell = getRootShell()
+            shell.newJob().add(*cmds).to(logCallback, logCallback).exec()
 
-                Natives.resetSuPath(LEGACY_SU_PATH)
-
-                Log.d(TAG, "APatch installed...")
-                _apStateLiveData.postValue(State.ANDROIDPATCH_INSTALLED)
-            }
+            Log.d(TAG, "APatch installed...")
+            _apStateLiveData.postValue(State.ANDROIDPATCH_INSTALLED)
         }
 
 
@@ -194,16 +179,16 @@ class APApplication : Application() {
                     Log.d(TAG, "kp state: " + _kpStateLiveData.value)
 
                     // AndroidPatch version
-                    val avf = File(APATCH_VERSION_PATH)
-                    if (avf.exists()) {
-                        val apv = avf.readLines().get(0).toInt()
-                        val mgv = Version.getManagerVersion().second
-                        if (apv != mgv) {
-                            _apStateLiveData.postValue(State.ANDROIDPATCH_NEED_UPDATE)
-                        } else {
-                            _apStateLiveData.postValue(State.ANDROIDPATCH_INSTALLED)
-                        }
+                    val mgv = Version.getManagerVersion().second
+                    val installedApdVInt = Version.installedApdVUInt()
+                    Log.d(TAG, "manager version: $mgv, installed apd version: $installedApdVInt")
 
+                    if(Version.installedApdVInt > 0) {
+                        _apStateLiveData.postValue(State.ANDROIDPATCH_INSTALLED)
+                    }
+
+                    if (Version.installedApdVInt > 0 && mgv != Version.installedApdVInt) {
+                        _apStateLiveData.postValue(State.ANDROIDPATCH_NEED_UPDATE)
                         // su path
                         val suPathFile = File(SU_PATH_FILE)
                         if (suPathFile.exists()) {
