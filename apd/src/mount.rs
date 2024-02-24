@@ -1,4 +1,4 @@
-use anyhow::{anyhow,bail, Ok, Result};
+use anyhow::{anyhow, bail, Ok, Result};
 
 #[cfg(any(target_os = "linux", target_os = "android"))]
 use anyhow::Context;
@@ -58,12 +58,9 @@ impl Drop for AutoMountExt4 {
 
 #[allow(dead_code)]
 #[cfg(any(target_os = "linux", target_os = "android"))]
-fn mount_image(src: &str, target: &str, autodrop: bool) -> Result<()> {
+pub fn mount_image(src: &str, target: &str, autodrop: bool) -> Result<()> {
     mount_ext4(src, target)?;
-        Ok(Self {
-            target: target.to_string(),
-            true,
-        })
+        Ok(())
 }
 
 #[cfg(any(target_os = "linux", target_os = "android"))]

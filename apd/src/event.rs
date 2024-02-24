@@ -10,7 +10,7 @@ use crate::{
     utils::{self, ensure_clean_dir, ensure_dir_exists},
 };
 
-fn mount_partition(partition: &str, lowerdir: &Vec<String>) -> Result<()> {
+fn mount_partition(partition_name: &str, lowerdir: &Vec<String>) -> Result<()> {
     if lowerdir.is_empty() {
         warn!("partition: {partition_name} lowerdir is empty");
         return Ok(());
