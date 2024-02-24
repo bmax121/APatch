@@ -1,4 +1,4 @@
-use anyhow::{bail, Ok, Result};
+use anyhow::{anyhow,bail, Ok, Result};
 
 #[cfg(any(target_os = "linux", target_os = "android"))]
 use anyhow::Context;
@@ -14,6 +14,7 @@ use log::{info, warn};
 #[cfg(any(target_os = "linux", target_os = "android"))]
 use procfs::process::Process;
 use std::path::Path;
+use std::path::PathBuf;
 
 pub struct AutoMountExt4 {
     target: String,
@@ -46,7 +47,7 @@ impl Drop for AutoMountExt4 {
     fn drop(&mut self) {
         log::info!(
             "AutoMountExt4 drop: {}, auto_umount: {}",
-            self.mnt,
+            self.target,
             self.auto_umount
         );
         if self.auto_umount {
@@ -58,10 +59,10 @@ impl Drop for AutoMountExt4 {
 #[allow(dead_code)]
 #[cfg(any(target_os = "linux", target_os = "android"))]
 fn mount_image(src: &str, target: &str, autodrop: bool) -> Result<()> {
-    mount_ext4(source, target)?;
+    mount_ext4(src, target)?;
         Ok(Self {
             target: target.to_string(),
-            auto_umount,
+            true,
         })
 }
 
