@@ -275,8 +275,8 @@ private fun ExtraItem(extra: KPModel.IExtraInfo, existed: Boolean, onDelete: ()-
                 val kpmInfo: KPModel.KPMInfo = extra as KPModel.KPMInfo
                 Text(text = stringResource(id = R.string.patch_item_extra_name) + kpmInfo.name, style = MaterialTheme.typography.bodyMedium)
                 Text(text = stringResource(id = R.string.patch_item_extra_version) + kpmInfo.version, style = MaterialTheme.typography.bodyMedium)
-                Text(text = stringResource(id = R.string.patch_item_extra_author) + kpmInfo.license, style = MaterialTheme.typography.bodyMedium)
-                Text(text = stringResource(id = R.string.patch_item_extra_kpm_license) + kpmInfo.author, style = MaterialTheme.typography.bodyMedium)
+                Text(text = stringResource(id = R.string.patch_item_extra_kpm_license) + kpmInfo.license, style = MaterialTheme.typography.bodyMedium)
+                Text(text = stringResource(id = R.string.patch_item_extra_author) + kpmInfo.author, style = MaterialTheme.typography.bodyMedium)
                 Text(text = stringResource(id = R.string.patch_item_extra_kpm_desciption) + kpmInfo.description, style = MaterialTheme.typography.bodyMedium)
                 var event by remember { mutableStateOf(kpmInfo.event) }
                 Row(modifier = Modifier
