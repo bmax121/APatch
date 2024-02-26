@@ -83,6 +83,7 @@ class APApplication : Application() {
 
             val cmds = arrayOf(
                 "rm -f ${APD_PATH}",
+                "rm -f ${KPATCH_PATH}",
                 "rm -rf ${APATCH_FOLDER}",
             )
 
@@ -113,7 +114,7 @@ class APApplication : Application() {
                 "mkdir -p ${APATCH_LOG_FOLDER}",
 
                 // kpatch extracted from kernel
-                "[ -s ${KPATCH_PATH} ] || cp -f ${nativeDir}/libkpatch.so ${KPATCH_PATH}",
+                "cp -f ${nativeDir}/libkpatch.so ${KPATCH_PATH}",
                 "chmod +x ${KPATCH_PATH}",
                 "ln -s ${KPATCH_PATH} ${KPATCH_LINK_PATH}",
                 "restorecon ${KPATCH_PATH}",
