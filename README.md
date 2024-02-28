@@ -3,8 +3,8 @@
 
 <h1 align="center">APatch</h1>
 
-[![latest release badge](https://img.shields.io/github/v/release/bmax121/APatch?label=Release&logo=github)](https://github.com/bmax121/APatch/releases/latest)
-[![weblate](https://img.shields.io/badge/Localization-Weblate-teal?logo=weblate)](https://hosted.weblate.org/engage/APatch)
+[![Latest release](https://img.shields.io/github/v/release/bmax121/APatch?label=Release&logo=github)](https://github.com/bmax121/APatch/releases/latest)
+[![Weblate](https://img.shields.io/badge/Localization-Weblate-teal?logo=weblate)](https://hosted.weblate.org/engage/APatch)
 [![Channel](https://img.shields.io/badge/Follow-Telegram-blue.svg?logo=telegram)](https://t.me/APatchGroup)
 [![GitHub License](https://img.shields.io/github/license/bmax121/APatch?logo=gnu)](/LICENSE)
 
@@ -13,10 +13,10 @@
 The patching of Android kernel and Android system.
 
 - A new Kernel-based root solution for Android devices.
-- APM: Magisk module like support
+- APM: Magisk module like support.
 - KPM: Kernel Patch Module support. (Allow you to inject any code into the kernel, Kernel function inline-hook and syscall-table-hook is available)
-- APatch relies on [KernelPatch](https://github.com/bmax121/KernelPatch/)
-- The source code for both APatch UI and APM has been copied and modified from [KernelSU](https://github.com/tiann/KernelSU)
+- APatch relies on [KernelPatch](https://github.com/bmax121/KernelPatch/).
+- The source code for both APatch UI and APM has been copied and modified from [KernelSU](https://github.com/tiann/KernelSU).
 
 ## Supported Versions
 
@@ -32,7 +32,7 @@ Kernel configs
 - `CONFIG_KALLSYMS=y` and `CONFIG_KALLSYMS_ALL=y`
 - `CONFIG_KALLSYMS=y` and `CONFIG_KALLSYMS_ALL=n`: Early support
 
-## Translationv
+## Translation
 To help translate APatch or improve existing translations, please use [Weblate](https://hosted.weblate.org/engage/apatch/). PR of APatch translation is no longer accepted, because it will conflict with Weblate.
 
 <div align="center">
@@ -70,4 +70,4 @@ Installation guide (coming soon)
 
 ## License
 
-APatch is licensed under the GNU General Public License v3 (GPL-3) (<http://www.gnu.org/copyleft/gpl.html>).  
+APatch is licensed under the GNU General Public License v3 [GPL-3](http://www.gnu.org/copyleft/gpl.html).
