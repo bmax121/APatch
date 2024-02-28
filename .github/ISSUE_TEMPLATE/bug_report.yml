@@ -16,7 +16,7 @@ body:
           - label: I will upload bugreport file in APatch Manager - Settings - Report log
             required: true
 
-          - label: My problem is fully stated in English. 请使用英文，不然会被关闭。
+          - label: My problem is fully stated in English. 
             required: true
 
           - label: I know how to reproduce the issue which may not be specific to my device
