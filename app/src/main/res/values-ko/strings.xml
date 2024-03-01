@@ -28,8 +28,6 @@
     <string name="apatch_version_update">버전
 \n%s -&gt; %s</string>
     <string name="home_su_path">su 명령어 경로: %s</string>
-    <string name="home_su_path_ex">su 명령어 경로: %s -&gt; %s</string>
-    <string name="kpatch_shadow_path">커널 패치: %s -&gt; %s</string>
     <string name="home_apatch_version">안드로이드 패치: %s</string>
     <string name="home_auth_key_title">루팅 비밀번호를 입력해주세요</string>
     <string name="home_auth_key_desc">인증 후 시작하기</string>

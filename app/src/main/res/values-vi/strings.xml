@@ -88,8 +88,6 @@
     <string name="apm_magisk_conflict">Modules không khả dụng do xung đột với Magisk.</string>
     <string name="about_source_code">Xem mã nguồn tại %1$s<br/>Tham gia kênh %2$s của chúng tôi</string>
     <string name="home_su_path">su: %s</string>
-    <string name="home_su_path_ex">su: %s -&gt; %s</string>
-    <string name="kpatch_shadow_path">kpatch: %s -&gt; %s</string>
     <string name="home_kernel">Kernel</string>
     <string name="kpm">KPModule</string>
     <string name="su_title">Superuser</string>

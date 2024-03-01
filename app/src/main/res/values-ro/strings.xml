@@ -33,7 +33,6 @@
     <string name="apatch_version_update">Versiune:
 \n%s -&gt; %s</string>
     <string name="home_su_path">su: %s</string>
-    <string name="home_su_path_ex">su: %s -&gt; %s</string>
     <string name="home_apatch_version">APatch: %s</string>
     <string name="home_auth_key_title">Introdu Superkey</string>
     <string name="home_auth_key_desc">Pornește după certificare</string>
@@ -78,8 +77,8 @@
     <string name="apm_new_version_available">Apasă pentru a instala noua versiune, %s.</string>
     <string name="apm_author">Autor</string>
     <string name="apm_desc">Descriere</string>
-    <string name="apm_overlay_fs_not_available">OverlayFS indisponibil. Modulul nu poate funcționa.</string>
-    <string name="apm_magisk_conflict">Modulele sunt oprite din cauza unui conflict cu cele din Magisk.</string>
+    <string name="apm_overlay_fs_not_available">Modulele nu sunt disponibile deoarece OverlayFS este dezactivat de nucleu.</string>
+    <string name="apm_magisk_conflict">Modulele nu sunt disponibile din cauza unui conflict cu Magisk.</string>
     <string name="apm_reboot_to_apply">Repornește pentru a intra în vigoare</string>
     <string name="apm_changelog">Jurnalul modificărilor</string>
     <string name="apm_update">Actualizează</string>
@@ -88,7 +87,6 @@
     <string name="home_click_to_learn_apatch">Află despre funcțiile AndroidPatch și cum să le folosești</string>
     <string name="safe_mode">Mod sigur</string>
     <string name="super_key">SuperKey</string>
-    <string name="kpatch_shadow_path">kpatch: %s -&gt; %s</string>
     <string name="home_manager_version">Versiune manager</string>
     <string name="home_selinux_status">Stare SELinux</string>
     <string name="home_selinux_status_disabled">Oprit</string>
