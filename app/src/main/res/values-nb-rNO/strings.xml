@@ -25,8 +25,6 @@
     <string name="kpatch_version">Versjon: %d.%d.%d</string>
     <string name="apatch_version_update">Versjon: %s → %s</string>
     <string name="home_su_path">su: %s</string>
-    <string name="home_su_path_ex">su: %s → %s</string>
-    <string name="kpatch_shadow_path">kpatch: %s → %s</string>
     <string name="home_auth_key_desc">Start kjøring etter sertifisering</string>
     <string name="home_ap_cando_install">Installer</string>
     <string name="home_kernel">Kjerne</string>

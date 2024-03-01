@@ -82,8 +82,6 @@
     <string name="home_kernel">Kernel</string>
     <string name="home_selinux_status_enforcing">Enforcing</string>
     <string name="patch_title">Patch</string>
-    <string name="kpatch_shadow_path">kpatch: %s -&gt; %s</string>
-    <string name="home_su_path_ex">su: %s -&gt; %s</string>
     <string name="home_apatch_version">APatch: %s</string>
     <string name="home_selinux_status_permissive">Permissive</string>
     <string name="apm_changelog">Registro modifiche</string>

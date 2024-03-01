@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
+    <string name="app_name" translatable="false">APatch</string>
+    <string name="home">Fogar</string>
+    <string name="patch_warnning">A instalación conleva uns riscos. Por favor, asegura os teus datos.</string>
+    <string name="patch">Parche</string>
+    <string name="kernel_patch">Parche do Kernel</string>
+    <string name="android_patch">Parche de Android</string>
+    <string name="reboot">Reiniciar</string>
+    <string name="settings">Configuración</string>
+    <string name="reboot_userspace">Reinicio suave</string>
+    <string name="reboot_bootloader">Reiniciar no cargador de arranque</string>
+    <string name="reboot_download">Reiniciar para descargar</string>
+    <string name="reboot_edl">Reiniciar a EDL</string>
+    <string name="about">Acerca de</string>
+    <string name="system_default">Por defecto do sistema</string>
+    <string name="reboot_recovery">Reiniciar para recuperar</string>
+    <string name="settings_app_language">Lingua</string>
+</resources>

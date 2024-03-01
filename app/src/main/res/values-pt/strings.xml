@@ -26,7 +26,7 @@
     <string name="patch_title">Patch</string>
     <string name="home_kernel">Kernel</string>
     <string name="home_manager_version">Versão do Gerenciador</string>
-    <string name="home_selinux_status_disabled">Desabilitado</string>
+    <string name="home_selinux_status_disabled">Desligado</string>
     <string name="kpm">KPModulo</string>
     <string name="kpm_kp_not_installed">KernelPatch não instalado</string>
     <string name="kpm_load_toast_succ">Carregado com sucesso</string>
@@ -48,7 +48,6 @@
     <string name="reboot_download">Reiniciar no modo Download</string>
     <string name="reboot_edl">Reiniciar no modo EDL</string>
     <string name="home_su_path">su: %s</string>
-    <string name="home_su_path_ex">su: %s -&gt; %s</string>
     <string name="home_auth_key_desc">Comece trabalho após a certificação</string>
     <string name="home_fingerprint">Impressão digital</string>
     <string name="home_selinux_status">Estado do SELinux</string>
@@ -62,7 +61,6 @@
     <string name="apm_downloading">Baixando \"%s\" módulo…</string>
     <string name="about_source_code">Veja o código-fonte no %1$s<br/>Junte-se ao nosso canal do %2$s</string>
     <string name="clear_super_key">Limpar chave</string>
-    <string name="kpatch_shadow_path">kpatch: %s -&gt; %s</string>
     <string name="home_apatch_version">APatch: %s</string>
     <string name="kpm_license">Licença</string>
     <string name="kpm_author">Autor</string>
@@ -94,7 +92,7 @@
     <string name="apm_start_downloading">Começando download: %s</string>
     <string name="apm_update">Atualizar</string>
     <string name="apm_new_version_available">Clique para instalar a nova versão, %s.</string>
-    <string name="apm_not_installed">Android Patch não instalado</string>
+    <string name="apm_not_installed">AndroidPatch não instalado</string>
     <string name="system_default">Padrão do sistema</string>
     <string name="settings_app_language">Linguagem</string>
     <string name="patch">Aplicar o Patch</string>

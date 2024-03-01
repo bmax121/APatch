@@ -89,8 +89,6 @@
     <string name="reboot_edl">Təcili yükləmə rejiminə yenidən başlat</string>
     <string name="home_click_to_install">Quraşdırmaq üçün toxunun</string>
     <string name="settings">Ayarlar</string>
-    <string name="home_su_path_ex">su: %s -&gt; %s</string>
-    <string name="kpatch_shadow_path">kpatch: %s -&gt; %s</string>
     <string name="home_click_to_learn_apatch">AndroidPatch-in xüsusiyyətləri və necə istifadə olunacağını öyrənin</string>
     <string name="home_manager_version">Menecer versiyası</string>
     <string name="kpm_kp_not_installed">NüvəYamağı quraşdırılmayıb</string>

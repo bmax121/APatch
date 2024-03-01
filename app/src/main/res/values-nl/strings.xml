@@ -60,8 +60,6 @@
     <string name="home_ap_cando_update">Werk bij</string>
     <string name="apatch_version_update">Versie:
 \n%s -&gt; %s</string>
-    <string name="home_su_path_ex">su: %s -&gt; %s</string>
-    <string name="kpatch_shadow_path">kpatch: %s -&gt; %s</string>
     <string name="home_apatch_version">APatch: %s</string>
     <string name="home_ap_cando_install">Installeer</string>
     <string name="home_manager_version">Managerversie</string>

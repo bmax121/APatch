@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
+    <string name="app_name" translatable="false">APatch</string>
+    <string name="kpatch_version">Verzió: %d.%d.%d</string>
+    <string name="home_apatch_version">APatch: %s</string>
+    <string name="reboot">Újraindítás</string>
+    <string name="settings">Beállítások</string>
+    <string name="home_install_unknown">Ismeretlen</string>
+    <string name="home_click_to_install">Kattintson a telepítéshez</string>
+    <string name="home_installing">Telepítés alatt</string>
+    <string name="home_need_update">Új verzió érhető el</string>
+    <string name="apatch_version_update">Verzió:
+\n%s -&gt; %s</string>
+    <string name="home_su_path">su: %s</string>
+    <string name="home_ap_cando_install">Telepítés</string>
+    <string name="home_ap_cando_update">Frissítés</string>
+    <string name="home_ap_cando_uninstall">Eltávolítás</string>
+    <string name="home_kernel">Kernel</string>
+    <string name="home_fingerprint">Ujjlenyomat</string>
+    <string name="home_selinux_status">SELinux státusz</string>
+    <string name="home_selinux_status_disabled">Ki</string>
+    <string name="home_selinux_status_unknown">Ismeretlen</string>
+    <string name="kpm_load">Betöltés</string>
+    <string name="kpm_load_toast_succ">Betöltés sikerül</string>
+    <string name="kpm_load_toast_failed">Betöltés sikertelen</string>
+    <string name="kpm_apm_empty">Nincs modul betöltve</string>
+    <string name="kpm_version">Verzió</string>
+    <string name="kpm_license">Licensz</string>
+    <string name="kpm_author">Szerző</string>
+    <string name="su_pkg_excluded_label">kizárás</string>
+    <string name="su_pkg_excluded_setting_title">Kizárás</string>
+    <string name="settings_app_language">Nyelv</string>
+    <string name="system_default">Rendszer alapértelmezett</string>
+    <string name="apm_desc">Leírás</string>
+    <string name="apm_version">Verzió</string>
+    <string name="apm_author">Szerző</string>
+    <string name="home_patch_next_step">Következő lépés</string>
+    <string name="home_not_installed">Nincs telepítve</string>
+    <string name="apatch_version">Verzió:
+\n%s</string>
+    <string name="su_pkg_excluded_setting_summary">modulok</string>
+    <string name="apm_uninstall_confirm">A \"%s\" modul eltávolítása?</string>
+    <string name="apm_uninstall_success">%s eltávolítva</string>
+    <string name="apm_uninstall_failed">Nem sikerült eltávolítani a(z) %s-t</string>
+    <string name="apm_magisk_conflict">A modulok nem érhetők el a Magiskkal való konfliktus miatt.</string>
+    <string name="apm">APModule</string>
+    <string name="apm_not_installed">Az AndroidPatch nem telepített</string>
+    <string name="apm_failed_to_disable">Nem kapcsolható ki a \"%s\" modul</string>
+    <string name="apm_empty">Nincs telepített modul</string>
+    <string name="su_show_system_apps">Rendszeralkalmazások megjelenítése</string>
+    <string name="su_hide_system_apps">Rendszeralkalmazások elrejtése</string>
+    <string name="su_refresh">Frissítés</string>
+    <string name="apm_uninstall">Eltávolítás</string>
+    <string name="apm_install">Telepítés</string>
+    <string name="apm_reboot_to_apply">Újraindítsa a hatás eléréséhez</string>
+    <string name="apm_changelog">Változásnapló</string>
+    <string name="apm_update">Frissítés</string>
+    <string name="apm_downloading">\"%s\" modul letöltés alatt…</string>
+    <string name="apm_start_downloading">%s letöltésének elkezdése</string>
+    <string name="apm_new_version_available">Kattintson az új verzió telepítéséhez, %s.</string>
+</resources>

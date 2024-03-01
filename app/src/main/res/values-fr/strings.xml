@@ -28,11 +28,9 @@
     <string name="kpatch_version">Version : %d.%d.%d</string>
     <string name="clear_super_key">Effacer la clé</string>
     <string name="home_su_path">su : %s</string>
-    <string name="home_su_path_ex">su : %s -&gt; %s</string>
     <string name="home_apatch_version">APatch : %s</string>
     <string name="apatch_version_update">Version :
 \n%s -&gt; %s</string>
-    <string name="kpatch_shadow_path">kpatch : %s -&gt; %s</string>
     <string name="about_source_code">Voir le code source sur %1$s<br/>Rejoindre le canal %2$s</string>
     <string name="home_patch_set_key_title">Initialiser la clé</string>
     <string name="send_log">Envoyer le log</string>
@@ -56,7 +54,7 @@
     <string name="su_pkg_excluded_label">exclure</string>
     <string name="su_show_system_apps">Afficher les applications système</string>
     <string name="su_hide_system_apps">Masquer les applications système</string>
-    <string name="su_selinux_via_hook">Contournement via hook</string>
+    <string name="su_selinux_via_hook">contournement via hook</string>
     <string name="su_refresh">Rafraîchir</string>
     <string name="apm">APModule</string>
     <string name="apm_empty">Aucun module installé</string>
@@ -96,8 +94,15 @@
     <string name="su_pkg_excluded_setting_title">Exclure</string>
     <string name="apm_overlay_fs_not_available">Les modules sont indisponibles car OverlayFS est désactivé par le noyau.</string>
     <string name="patch">Patcher</string>
-    <string name="settings_app_language">Langue</string>
+    <string name="settings_app_language">Langage</string>
     <string name="system_default">Par défaut</string>
     <string name="settings_global_namespace_mode">Mode espace de nommage global</string>
     <string name="settings_global_namespace_mode_summary">Toutes les sessions root utilisent l\'espace de nommage global</string>
+    <string name="settings_clear_super_key_dialog">Voulez-vous vraiment continuer ?</string>
+    <string name="kpatch_version_update">Version : %s -&gt; %s</string>
+    <string name="home_kpatch_info_title">Info</string>
+    <string name="home_ap_cando_reboot">Redémarrer</string>
+    <string name="patch_config_title">Patches</string>
+    <string name="patch_item_kernel">noyau</string>
+    <string name="patch_item_set_skey_label">La longueur de la super-clé devrait être d\'au moins 8 caractères et inclure les numéros et les lettres</string>
 </resources>

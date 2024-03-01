@@ -15,7 +15,7 @@
     <string name="home_learn_apatch">Дізнайтеся більше про AndroidPatch</string>
     <string name="safe_mode">Безпечний режим</string>
     <string name="super_key">SuperKey</string>
-    <string name="clear_super_key">Очистити ключ</string>
+    <string name="clear_super_key">Очистити SuperKey</string>
     <string name="home_patch_set_key_title">Встановити SuperKey</string>
     <string name="home_patch_set_key_desc">Пароль для KernelPatch</string>
     <string name="home_patch_next_step">Наступний крок</string>
@@ -24,12 +24,9 @@
     <string name="home_click_to_install">Натисніть щоб встановити</string>
     <string name="home_working">Працює</string>
     <string name="home_installing">Встановлення</string>
-    <string name="kpatch_version">Версія %d.%d.%d</string>
-    <string name="apatch_version">Версія:
-\n%s</string>
+    <string name="kpatch_version">Версія: %s</string>
+    <string name="apatch_version">Версія: %s</string>
     <string name="home_su_path">su %s</string>
-    <string name="home_su_path_ex">su %s → %s</string>
-    <string name="kpatch_shadow_path">kpatch %s → %s</string>
     <string name="home_auth_key_title">Введіть SuperKey</string>
     <string name="home_ap_cando_update">Оновити</string>
     <string name="patch_title">Патч</string>
@@ -59,13 +56,12 @@
     <string name="apm_changelog">Список змін</string>
     <string name="apm_update">Оновлення</string>
     <string name="apm_start_downloading">Початок завантаження %s</string>
-    <string name="patch_warnning">Інсталяція має ризик. Будь-ласка перевірте чи маєте ви бекап.</string>
+    <string name="patch_warnning">Інсталяція має ризики. Будь ласка, створіть резервну копію ваших даних.</string>
     <string name="reboot_edl">Перезавантаження в EDL</string>
     <string name="home_click_to_learn_apatch">Дізнайтеся більше про можливості AndroidPatch і про його використання</string>
     <string name="about_source_code">Перегляньте вихідний код на %1$s<br/> Приєднуйтеся до нашого %2$s каналу</string>
     <string name="send_log">Надіслати звіт</string>
-    <string name="apatch_version_update">Версія:
-\n%s → %s</string>
+    <string name="apatch_version_update">Версія: %s → %s</string>
     <string name="home_apatch_version">APatch %s</string>
     <string name="home_need_update">Доступне оновлення</string>
     <string name="home_auth_key_desc">Почати після сертифікації</string>
@@ -100,4 +96,37 @@
     <string name="patch">Пропатчити</string>
     <string name="settings_global_namespace_mode">Режим глобального простору імен</string>
     <string name="settings_global_namespace_mode_summary">Усі сеанси root використовують монтування глобального простору імен</string>
+    <string name="kpatch_shadow_path_title">kpatch</string>
+    <string name="home_ap_cando_reboot">Перезавантаження</string>
+    <string name="patch_config_title">Патчі</string>
+    <string name="patch_mode_bootimg_patch">Режим: Патч</string>
+    <string name="patch_mode_update_patch">Режим: Оновлення</string>
+    <string name="patch_mode_uninstall_patch">Режим: Скасування патчу</string>
+    <string name="patch_select_bootimg_btn">Виберіть boot</string>
+    <string name="patch_embed_kpm_btn">Вбудований KPM</string>
+    <string name="patch_start_patch_btn">Старт</string>
+    <string name="patch_start_unpatch_btn">Скасування патчу</string>
+    <string name="patch_item_error">!!ОШИБКА!!</string>
+    <string name="patch_item_bootimg">bootimg</string>
+    <string name="patch_item_bootimg_slot">слот:</string>
+    <string name="patch_item_bootimg_dev">пристрій:</string>
+    <string name="patch_item_kernel">kernel</string>
+    <string name="patch_item_kpimg">kpimg</string>
+    <string name="patch_item_kpimg_version">версія:</string>
+    <string name="patch_item_kpimg_comile_time">час:</string>
+    <string name="patch_item_kpimg_config">налаштування:</string>
+    <string name="patch_item_new_extra_kpm">вбудувати новий</string>
+    <string name="patch_item_existed_extra_kpm">існуючий</string>
+    <string name="patch_item_extra_name">ім\'я:</string>
+    <string name="patch_item_extra_version">версія:</string>
+    <string name="patch_item_extra_author">автор:</string>
+    <string name="patch_item_extra_kpm_license">ліцензія:</string>
+    <string name="patch_item_extra_kpm_desciption">опис:</string>
+    <string name="patch_item_extra_args">аргументи:</string>
+    <string name="patch_item_extra_event">подія:</string>
+    <string name="patch_item_set_skey_label">Довжина суперключа повинна бути не менше 8 символів і включати числа і букви</string>
+    <string name="patch_item_skey">суперключ</string>
+    <string name="settings_clear_super_key_dialog">Ви дійсно хочете продовжити?</string>
+    <string name="kpatch_version_update">Версія: %s -&gt; %s</string>
+    <string name="home_kpatch_info_title">Інфо</string>
 </resources>
