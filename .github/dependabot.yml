@@ -5,7 +5,7 @@ updates:
     schedule:
       interval: daily
       time: "21:00"
-    target-branch: master
+    target-branch: main
     registries:
       - maven-google
       - gradle-plugin
