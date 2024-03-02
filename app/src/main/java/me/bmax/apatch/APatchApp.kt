@@ -50,6 +50,7 @@ class APApplication : Application() {
         val NEED_REBOOT_FILE = "/dev/.need_reboot"
         val GLOBAL_NAMESPACE_FILE = "/data/adb/.global_namespace_enable"
 
+        val APATCH_VERSION_PATH = APATCH_FOLDER + "version"
         val MAGISKPOLICY_BIN_PATH = APATCH_BIN_FOLDER + "magiskpolicy"
         val BUSYBOX_BIN_PATH = APATCH_BIN_FOLDER + "busybox"
         val RESETPROP_BIN_PATH = APATCH_BIN_FOLDER + "resetprop"
@@ -133,7 +134,7 @@ class APApplication : Application() {
                 "touch ${PACKAGE_CONFIG_FILE}",
                 "touch ${SU_PATH_FILE}",
                 "[ -s ${SU_PATH_FILE} ] || echo ${LEGACY_SU_PATH} > ${SU_PATH_FILE}",
-
+                "echo ${Version.getManagerVersion().second} > ${APATCH_VERSION_PATH}",
                 "restorecon -R ${APATCH_FOLDER}",
 
                 "${KPATCH_PATH} ${superKey} android_user init",
