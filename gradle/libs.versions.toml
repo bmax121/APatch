@@ -1,14 +1,14 @@
 [versions]
-agp = "8.2.2"
+agp = "8.3.0"
 kotlin = "1.9.22"
-ksp = "1.9.22-1.0.17"
-compose-bom = "2024.02.00"
+ksp = "1.9.22-1.0.18"
+compose-bom = "2024.02.01"
 lifecycle = "2.7.0"
-accompanist = "0.30.1"
+accompanist = "0.34.0"
 navigation = "2.7.7"
-compose-destination = "1.9.42-beta"
+compose-destination = "1.11.0-alpha"
 libsu = "5.2.2"
-sheets-compose-dialogs = "1.2.0"
+sheets-compose-dialogs = "1.3.0"
 markdown = "4.6.2"
 ui = "1.7.0-alpha03"
 androidx-compose-compiler = "1.5.8"
@@ -18,8 +18,8 @@ agp-app = { id = "com.android.application", version.ref = "agp" }
 agp-lib = { id = "com.android.library", version.ref = "agp" }
 kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-lsplugin-apksign = { id = "org.lsposed.lsplugin.apksign", version = "1.1" }
-lsplugin-cmaker = { id = "org.lsposed.lsplugin.cmaker", version = "1.1" }
+lsplugin-apksign = { id = "org.lsposed.lsplugin.apksign", version = "1.4" }
+lsplugin-cmaker = { id = "org.lsposed.lsplugin.cmaker", version = "1.2" }
 
 [libraries]
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version = "1.8.2" }
@@ -49,9 +49,9 @@ com-github-topjohnwu-libsu-nio = { group = "com.github.topjohnwu.libsu", name = 
 
 dev-rikka-rikkax-parcelablelist = { module = "dev.rikka.rikkax.parcelablelist:parcelablelist", version = "2.0.1" }
 
-io-coil-kt-coil-compose = { group = "io.coil-kt", name = "coil-compose", version = "2.3.0" }
+io-coil-kt-coil-compose = { group = "io.coil-kt", name = "coil-compose", version = "2.6.0" }
 
-kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version = "1.7.1" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version = "1.8.0" }
 
 me-zhanghai-android-appiconloader-coil = { group = "me.zhanghai.android.appiconloader", name = "appiconloader-coil", version = "1.5.0" }
 
@@ -65,5 +65,5 @@ sheet-compose-dialogs-input = { group = "com.maxkeppeler.sheets-compose-dialogs"
 markdown = { group = "io.noties.markwon", name = "core", version.ref = "markdown" }
 
 timber = { group = "com.jakewharton.timber", name = "timber", version = "5.0.1" }
-devappx = { group = "io.github.afkt", name = "DevAppX", version = "2.4.3" }
+devappx = { group = "io.github.afkt", name = "DevAppX", version = "2.4.4" }
 ini4j = { group = "org.ini4j", name = "ini4j", version = "0.5.4" }
