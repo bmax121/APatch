@@ -2,14 +2,15 @@ name: Build Manager
 
 on:
   push:
-    branches: [ "dev" ]
+    tags: [ "*" ]
+    branches: [ "main" ]
     paths:
       - '.github/workflows/build.yml'
       - 'app/**'
       - 'apd/**'
       - 'build.gradle.kts'
   pull_request:
-    branches: [ "dev" ]
+    branches: [ "main" ]
     paths:
       - '.github/workflows/build.yml'
       - 'app/**'
@@ -19,13 +20,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-apd:
-    uses: ./.github/workflows/apd.yml
-    with:
-      target: aarch64-linux-android
-
   build-manager:
-    needs: build-apd
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -54,15 +49,18 @@ jobs:
         with:
           gradle-home-cache-cleanup: true
 
-      - name: Download arm64 apd
-        uses: actions/download-artifact@v3
-        with:
-          name: apd-aarch64-linux-android
-          path: .
+      - name: Install toolchain
+        # cross build failed after Rust 1.68, see https://github.com/cross-rs/cross/issues/1222
+        run: rustup default 1.67.0
 
-      - name: Copy Libs
-        run: |
-          mv aarch64-linux-android/release/apd app/libs/arm64-v8a/libapd.so
+      - name: Cache Rust
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: apd
+          cache-targets: false
+
+      - name: Install cross
+        run: cargo install cross --locked
 
       - name: Build with Gradle
         run: |
@@ -82,7 +80,7 @@ jobs:
       - name: Sign Release
         env: 
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
-        if: ${{ env.SIGNING_KEY != '' && github.ref == 'refs/heads/main' }}
+        if: ${{ env.SIGNING_KEY != '' }}
         continue-on-error: true
         uses: kevin-david/zipalign-sign-android-release@v1.1
         id: sign_app
@@ -96,7 +94,7 @@ jobs:
       - name: Release apk
         env: 
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
-        if: ${{ env.SIGNING_KEY != '' && github.ref == 'refs/heads/main' }}
+        if: ${{ env.SIGNING_KEY != '' && github.ref_type == 'tag' }}
         continue-on-error: true
         uses: ncipollo/release-action@v1
         with:
