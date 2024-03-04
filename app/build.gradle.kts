@@ -127,10 +127,12 @@ tasks.getByName("preBuild").dependsOn(
     "downloadApjni",
 )
 
+// https://github.com/bbqsrc/cargo-ndk
+// cargo ndk -t arm64-v8a build --release
 tasks.register<Exec>("cargoBuild") {
     executable("cargo")
-    args("build", "--release", "--target", "aarch64-linux-android", "--manifest-path", "./apd/Cargo.toml")
-    workingDir("${project.rootDir}")
+    args("ndk", "-t", "arm64-v8a", "build", "--release")
+    workingDir("${project.rootDir}/apd")
 }
 
 tasks.register<Copy>("buildApd") {
