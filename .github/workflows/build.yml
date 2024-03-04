@@ -62,7 +62,6 @@ jobs:
           rustup default stable
           cargo install cargo-ndk
           rustup target install aarch64-linux-android
-          rustup target add aarch64-linux-android
 
       - name: Cache Rust
         uses: Swatinem/rust-cache@v2
@@ -78,8 +77,6 @@ jobs:
           echo 'android.native.buildOutput=verbose' >> gradle.properties
           sed -i 's/org.gradle.configuration-cache=true//g' gradle.properties
           ./gradlew clean assembleRelease
-        env:
-          ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
