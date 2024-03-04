@@ -113,10 +113,10 @@ fun AuthSuperKey(showDialog: MutableState<Boolean>) {
                         value = key,
                         onValueChange = {
                             key = it
-                            enable = !key.isEmpty() },
+                            enable = key.isNotEmpty()
+                        },
                         label = { Text(stringResource(id = R.string.super_key)) },
                         visualTransformation = if (keyVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
                     )
                     IconButton(
                         modifier = Modifier
