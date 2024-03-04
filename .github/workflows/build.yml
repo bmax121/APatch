@@ -50,7 +50,9 @@ jobs:
           gradle-home-cache-cleanup: true
 
       - name: Install toolchain
-        run: rustup default stable
+        run: |
+          rustup default stable
+          rustup target add aarch64-linux-android
 
       - name: Cache Rust
         uses: Swatinem/rust-cache@v2
