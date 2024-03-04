@@ -80,13 +80,6 @@ fun getVersionName(): String {
     return getGitDescribe()
 }
 
-tasks.register("printVersion") {
-    doLast {
-        println("Version code: $managerVersionCode")
-        println("Version name: $managerVersionName")
-    }
-}
-
 subprojects {
     plugins.withType(AndroidBasePlugin::class.java) {
         extensions.configure(CommonExtension::class.java) {
