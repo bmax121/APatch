@@ -52,7 +52,8 @@ jobs:
       - name: Install toolchain
         run: |
           rustup default stable
-          rustup target add aarch64-linux-android
+          cargo install cross --locked
+#          rustup target add aarch64-linux-android
 
       - name: Cache Rust
         uses: Swatinem/rust-cache@v2
