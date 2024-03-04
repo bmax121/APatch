@@ -128,7 +128,7 @@ tasks.getByName("preBuild").dependsOn(
 )
 
 tasks.register<Exec>("cargoBuild") {
-    executable("cross")
+    executable("cargo")
     args("build", "--release", "--target", "aarch64-linux-android", "--manifest-path", "./apd/Cargo.toml")
     workingDir("${project.rootDir}")
 }
