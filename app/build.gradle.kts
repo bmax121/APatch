@@ -9,9 +9,11 @@ plugins {
     id("kotlin-parcelize")
 }
 
+
 val managerVersionCode: Int by rootProject.extra
 val managerVersionName: String by rootProject.extra
 val kernelPatchVersion: String by rootProject.extra
+
 
 apksign {
     storeFileProperty = "KEYSTORE_FILE"
@@ -47,7 +49,7 @@ android {
     }
 
     defaultConfig {
-        buildConfigField("String", "buildKPV", "\"$kernelPatchVersion\"")
+        buildConfigField("String", "buildKPV", """"$kernelPatchVersion"""")
     }
 
     kotlinOptions {
@@ -92,6 +94,7 @@ android {
     }
 }
 
+
 tasks.register<Download>("downloadKpimg") {
     src("https://github.com/bmax121/KernelPatch/releases/download/${kernelPatchVersion}/kpimg-android")
     dest(file("${project.projectDir}/src/main/assets/kpimg"))
@@ -127,39 +130,6 @@ tasks.getByName("preBuild").dependsOn(
     "downloadApjni",
 )
 
-tasks.register<Exec>("cargoBuild") {
-    executable("cross")
-    args("build", "--release", "--target", "aarch64-linux-android", "--manifest-path", "./apd/Cargo.toml")
-    workingDir("${project.rootDir}")
-}
-
-tasks.register<Copy>("buildApd") {
-    dependsOn("cargoBuild")
-    from("${project.rootDir}/apd/target/aarch64-linux-android/release/apd")
-    into("${project.projectDir}/libs/arm64-v8a")
-    rename("apd", "libapd.so")
-}
-
-tasks.configureEach {
-    if (name == "mergeDebugJniLibFolders" || name == "mergeReleaseJniLibFolders") {
-        dependsOn("buildApd")
-    }
-}
-
-tasks.register<Exec>("cargoClean") {
-    executable("cargo")
-    args("clean")
-    workingDir("${project.rootDir}/apd")
-}
-
-tasks.register<Delete>("apdClean") {
-    dependsOn("cargoClean")
-    delete(file("${project.projectDir}/libs/arm64-v8a/libapd.so"))
-}
-
-tasks.clean {
-    dependsOn("apdClean")
-}
 
 dependencies {
     implementation(libs.androidx.activity.compose)
