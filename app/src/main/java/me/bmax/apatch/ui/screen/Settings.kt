@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.ContactPage
 import androidx.compose.material.icons.filled.Engineering
@@ -69,58 +69,6 @@ import me.bmax.apatch.util.isGlobalNamespaceEnabled
 import me.bmax.apatch.util.setGlobalNamespaceEnabled
 import java.util.Locale
 
-@Composable
-fun RandomizePkgNameDialog(showDialog: MutableState<Boolean>) {
-    val context = LocalContext.current
-    val scope = rememberCoroutineScope()
-
-    var newPackageName by remember { mutableStateOf("") }
-    var enable by remember { mutableStateOf(false) }
-    AlertDialog(
-        onDismissRequest = { showDialog.value = false },
-        title = { Text(stringResource(id = R.string.hide_apatch_manager)) },
-        text = {
-            Column {
-                Text(stringResource(id = R.string.hide_apatch_dialog_summary))
-                Spacer(modifier = Modifier.height(8.dp))
-                Box(
-                    contentAlignment = Alignment.CenterEnd,
-                ) {
-                    TextField(
-                        value = newPackageName,
-                        onValueChange = {
-                            newPackageName = it
-                            enable = newPackageName.isNotEmpty()
-                        },
-                        label = { Text(stringResource(id = R.string.hide_apatch_dialog_new_manager_name)) },
-                        visualTransformation = VisualTransformation.None,
-                    )
-                }
-            }
-        },
-        dismissButton = {
-            Button(
-                onClick = {
-                    showDialog.value = false
-                }
-            ) {
-                Text(stringResource(id = android.R.string.cancel))
-            }
-        },
-        confirmButton = {
-            Button(
-                enabled = enable,
-                onClick = {
-                    showDialog.value = false
-                    scope.launch { HideAPK.hide(context, newPackageName) }
-
-                }
-            ) {
-                Text(stringResource(id = android.R.string.ok))
-            }
-        },
-    )
-}
 
 @Destination
 @Composable
@@ -204,7 +152,7 @@ fun SettingScreen(navigator: DestinationsNavigator) {
                 )
             }
 
-            if (kPatchReady && aPatchReady && !bIsManagerHide) {
+            if (kPatchReady && !bIsManagerHide) {
                 ListItem(
                     leadingContent = {
                         Icon(
@@ -297,6 +245,61 @@ fun SettingScreen(navigator: DestinationsNavigator) {
     }
 }
 
+
+@Composable
+fun RandomizePkgNameDialog(showDialog: MutableState<Boolean>) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
+    var newPackageName by remember { mutableStateOf("") }
+    var enable by remember { mutableStateOf(false) }
+    AlertDialog(
+        onDismissRequest = { showDialog.value = false },
+        title = { Text(stringResource(id = R.string.hide_apatch_manager)) },
+        text = {
+            Column {
+                Text(stringResource(id = R.string.hide_apatch_dialog_summary))
+                Spacer(modifier = Modifier.height(8.dp))
+                Box(
+                    contentAlignment = Alignment.CenterEnd,
+                ) {
+                    TextField(
+                        value = newPackageName,
+                        onValueChange = {
+                            newPackageName = it
+                            enable = newPackageName.isNotEmpty()
+                        },
+                        label = { Text(stringResource(id = R.string.hide_apatch_dialog_new_manager_name)) },
+                        visualTransformation = VisualTransformation.None,
+                    )
+                }
+            }
+        },
+        dismissButton = {
+            Button(
+                onClick = {
+                    showDialog.value = false
+                }
+            ) {
+                Text(stringResource(id = android.R.string.cancel))
+            }
+        },
+        confirmButton = {
+            Button(
+                enabled = enable,
+                onClick = {
+                    showDialog.value = false
+                    scope.launch { HideAPK.hide(context, newPackageName) }
+
+                }
+            ) {
+                Text(stringResource(id = android.R.string.ok))
+            }
+        },
+    )
+}
+
+
 @Composable
 fun LanguageDialog(showLanguageDialog: MutableState<Boolean>) {
 
@@ -343,7 +346,7 @@ private fun TopBar(onBack: () -> Unit = {}) {
         navigationIcon = {
             IconButton(
                 onClick = onBack
-            ) { Icon(Icons.Filled.ArrowBack, contentDescription = null) }
+            ) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null) }
         },
     )
 }
@@ -359,7 +362,7 @@ private fun ClearSuperKeyDialog(showClearSuperKeyDialog: MutableState<Boolean>) 
                 TextButton(
                     onClick = { showClearSuperKeyDialog.value = false }
                 ) {
-                    Text(stringResource(id = android.R.string.no))
+                    Text(stringResource(id = android.R.string.cancel))
                 }
             },
             confirmButton = {
@@ -369,7 +372,7 @@ private fun ClearSuperKeyDialog(showClearSuperKeyDialog: MutableState<Boolean>) 
                         apApp.clearKey()
                     }
                 ) {
-                    Text(stringResource(id = android.R.string.yes))
+                    Text(stringResource(id = android.R.string.ok))
                 }
             }
         )

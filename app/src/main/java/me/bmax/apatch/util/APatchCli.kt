@@ -7,31 +7,13 @@ import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.ShellUtils
 import me.bmax.apatch.APApplication
 import me.bmax.apatch.BuildConfig
-import me.bmax.apatch.Natives
 import me.bmax.apatch.apApp
-import org.json.JSONArray
 import java.io.File
-import kotlin.concurrent.thread
 
 private const val TAG = "APatchCli"
 
 private fun getKPatchPath(): String {
     return apApp.applicationInfo.nativeLibraryDir + File.separator + "libkpatch.so"
-}
-
-object APatchCli {
-    val SHELL: Shell = createRootShell()
-}
-
-fun getRootShell(): Shell {
-    return APatchCli.SHELL
-}
-
-fun shellForResult(shell: Shell, vararg cmds: String): Shell.Result {
-    val out = ArrayList<String>()
-    val err = ArrayList<String>()
-    val result = shell.newJob().add(*cmds).to(out, err).exec()
-    return result
 }
 
 fun createRootShell(): Shell {
@@ -49,6 +31,14 @@ fun createRootShell(): Shell {
         Log.e(TAG, "su failed: ", e)
         builder.build("sh")
     }
+}
+
+object APatchCli {
+    val SHELL: Shell = createRootShell()
+}
+
+fun getRootShell(): Shell {
+    return APatchCli.SHELL
 }
 
 fun tryGetRootShell(): Shell {
@@ -72,6 +62,20 @@ fun tryGetRootShell(): Shell {
             builder.build("sh")
         }
     }
+}
+
+fun shellForResult(shell: Shell, vararg cmds: String): Shell.Result {
+    val out = ArrayList<String>()
+    val err = ArrayList<String>()
+    val result = shell.newJob().add(*cmds).to(out, err).exec()
+    return result
+}
+
+fun rootShellForResult(vararg cmds: String): Shell.Result {
+    val out = ArrayList<String>()
+    val err = ArrayList<String>()
+    val result = getRootShell().newJob().add(*cmds).to(out, err).exec()
+    return result
 }
 
 fun execApd(args: String): Boolean {
