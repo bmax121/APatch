@@ -7,10 +7,10 @@ ARCH=$(getprop ro.product.cpu.abi)
 
 mount_partitions
 
-[ -z $SLOT ] && { echo "- can't determined current boot slot!"; exit 1; }
+[ -z $SLOT ] && { >&2 echo "- can't determined current boot slot!"; exit 1; }
 
 find_boot_image
 
-[ -e "$BOOTIMAGE" ] || { echo "- can't find boot.img!"; exit 1; }
+[ -e "$BOOTIMAGE" ] || { >&2 echo "- can't find boot.img!"; exit 1; }
 
 true

@@ -35,6 +35,7 @@ class APApplication : Application() {
         ANDROIDPATCH_UNINSTALLING,
     }
 
+
     companion object {
         val APD_PATH = "/data/adb/apd"
         val KPATCH_PATH = "/data/adb/kpatch"
@@ -50,6 +51,7 @@ class APApplication : Application() {
         val NEED_REBOOT_FILE = "/dev/.need_reboot"
         val GLOBAL_NAMESPACE_FILE = "/data/adb/.global_namespace_enable"
 
+        @Deprecated("Use 'apd -V'")
         val APATCH_VERSION_PATH = APATCH_FOLDER + "version"
         val MAGISKPOLICY_BIN_PATH = APATCH_BIN_FOLDER + "magiskpolicy"
         val BUSYBOX_BIN_PATH = APATCH_BIN_FOLDER + "busybox"
@@ -148,6 +150,11 @@ class APApplication : Application() {
             _apStateLiveData.postValue(State.ANDROIDPATCH_INSTALLED)
         }
 
+        fun markNeedReboot() {
+            val result = rootShellForResult("touch ${NEED_REBOOT_FILE}")
+            _kpStateLiveData.postValue(State.KERNELPATCH_NEED_REBOOT)
+            Log.d(TAG, "mark reboot ${result.code}")
+        }
 
         var superKey: String = ""
             get
@@ -177,6 +184,11 @@ class APApplication : Application() {
                     // use != instead of > to enable downgrade,
                     if (buildV != installedV) {
                         _kpStateLiveData.postValue(State.KERNELPATCH_NEED_UPDATE)
+                    }
+                    Log.d(TAG, "kp state: " + _kpStateLiveData.value)
+
+                    if(File(NEED_REBOOT_FILE).exists()) {
+                        _kpStateLiveData.postValue(State.KERNELPATCH_NEED_REBOOT)
                     }
                     Log.d(TAG, "kp state: " + _kpStateLiveData.value)
 

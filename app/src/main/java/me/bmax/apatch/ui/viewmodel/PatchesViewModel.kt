@@ -55,7 +55,7 @@ class PatchesViewModel : ViewModel() {
     var patchLog by mutableStateOf("")
 
     private val patchDir: ExtendedFile = FileSystemManager.getLocal().getFile(apApp.filesDir.parent, "patch")
-    private var srcBoot: ExtendedFile = patchDir.getChildFile("boot.img")
+    private val srcBoot: ExtendedFile = patchDir.getChildFile("boot.img")
     private var shell: Shell = tryGetRootShell()
     private var prepared: Boolean = false
 
@@ -116,7 +116,9 @@ class PatchesViewModel : ViewModel() {
     private fun parseBootimg(bootimg: String) {
         val result = shellForResult(shell,
             "cd $patchDir",
-            "./magiskboot unpack ${bootimg} >/dev/null 2>&1",
+            "cp $bootimg boot.img",
+            "./magiskboot unpack boot.img",
+            "[ $? -ne 0 ] && >&2 echo - magiskboot unpack error",
             "./kptools -l -i kernel",
         )
         if(result.isSuccess) {
@@ -172,7 +174,7 @@ class PatchesViewModel : ViewModel() {
     }
 
     val keyChecked: (skey: String)-> Boolean = {
-        it.length >= 8 && it.any { it.isDigit() } && it.any{ it.isLetter()}
+        it.length in 8..63 && it.any { it.isDigit() } && it.any{ it.isLetter()}
     }
 
     fun copyAndParseBootimg(uri: Uri) {
@@ -201,7 +203,6 @@ class PatchesViewModel : ViewModel() {
             bootDev = result.out.filter { it.startsWith("BOOTIMAGE=") }[0].removePrefix("BOOTIMAGE=")
             Log.d(TAG, "current slot: ${bootSlot}")
             Log.d(TAG, "current bootimg: ${bootDev}")
-            srcBoot = FileSystemManager.getLocal().getFile(bootDev)
             parseBootimg(bootDev)
         } else {
             error = result.err.joinToString("\n")
@@ -301,6 +302,7 @@ class PatchesViewModel : ViewModel() {
             if (result.isSuccess) {
                 logs.add(" Unpatch successful")
                 needReboot = true
+                APApplication.markNeedReboot()
             } else {
                 logs.add(" Unpatched failed")
                 error = result.err.toString()
@@ -376,6 +378,7 @@ class PatchesViewModel : ViewModel() {
             if(mode.equals(PatchMode.UPDATE)) {
                 logs.add(" Reboot to finish update")
                 needReboot = true
+                APApplication.markNeedReboot()
             } else if(mode.equals(PatchMode.PATCH)) {
                 val newBootFile = patchDir.getChildFile("new-boot.img")
                 val outDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)

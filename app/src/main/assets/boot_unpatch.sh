@@ -25,8 +25,8 @@ command -v ./kptools >/dev/null 2>&1 || { echo "- Command kptools not found!"; e
 if [ ! -f kernel ]; then
 echo "- Unpacking boot image"
 ./magiskboot unpack "$BOOTIMAGE" >/dev/null 2>&1
-  if [ $? -ne 0 ]; then
-    echo "- Unpack error: $?"
+if [ $? -ne 0 ]; then
+    >&2 echo "- Unpack error: $?"
     exit $?
   fi
 fi
@@ -37,7 +37,7 @@ echo "- Unpatching kernel"
 ./kptools -u --image kernel.ori --out kernel
 
 if [ $? -ne 0 ]; then
-  echo "- Unpatch error: $?"
+  >&2 echo "- Unpatch error: $?"
   exit $?
 fi
 
@@ -45,7 +45,7 @@ echo "- Repacking boot image"
 ./magiskboot repack "$BOOTIMAGE" >/dev/null 2>&1
 
 if [ $? -ne 0 ]; then
-  echo "- Repack error: $?"
+  >&2 echo "- Repack error: $?"
   exit $?
 fi
 
@@ -54,7 +54,7 @@ if [ -f "new-boot.img" ]; then
   flash_image new-boot.img "$BOOTIMAGE"
 
   if [ $? -ne 0 ]; then
-    echo "- Flash error: $?"
+    >&2 echo "- Flash error: $?"
     exit $?
   fi
 fi
