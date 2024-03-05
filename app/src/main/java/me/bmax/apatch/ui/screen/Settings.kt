@@ -4,8 +4,11 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -15,8 +18,10 @@ import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.ContactPage
 import androidx.compose.material.icons.filled.Engineering
 import androidx.compose.material.icons.filled.Key
+import androidx.compose.material.icons.filled.Masks
 import androidx.compose.material.icons.filled.Translate
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -24,6 +29,7 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -34,29 +40,87 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
 import androidx.core.os.LocaleListCompat
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import dev.utils.app.AppUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.bmax.apatch.APApplication
-import me.bmax.apatch.BuildConfig
+import me.bmax.apatch.BuildConfig.APPLICATION_ID
 import me.bmax.apatch.R
 import me.bmax.apatch.apApp
 import me.bmax.apatch.ui.component.AboutDialog
 import me.bmax.apatch.ui.component.LoadingDialog
 import me.bmax.apatch.ui.component.SwitchItem
+import me.bmax.apatch.util.HideAPK
 import me.bmax.apatch.util.LocalDialogHost
 import me.bmax.apatch.util.getBugreportFile
 import me.bmax.apatch.util.isGlobalNamespaceEnabled
 import me.bmax.apatch.util.setGlobalNamespaceEnabled
 import java.util.Locale
+
+@Composable
+fun RandomizePkgNameDialog(showDialog: MutableState<Boolean>) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
+    var newPackageName by remember { mutableStateOf("") }
+    var enable by remember { mutableStateOf(false) }
+    AlertDialog(
+        onDismissRequest = { showDialog.value = false },
+        title = { Text(stringResource(id = R.string.hide_apatch_manager)) },
+        text = {
+            Column {
+                Text(stringResource(id = R.string.hide_apatch_dialog_summary))
+                Spacer(modifier = Modifier.height(8.dp))
+                Box(
+                    contentAlignment = Alignment.CenterEnd,
+                ) {
+                    TextField(
+                        value = newPackageName,
+                        onValueChange = {
+                            newPackageName = it
+                            enable = newPackageName.isNotEmpty()
+                        },
+                        label = { Text(stringResource(id = R.string.hide_apatch_dialog_new_manager_name)) },
+                        visualTransformation = VisualTransformation.None,
+                    )
+                }
+            }
+        },
+        dismissButton = {
+            Button(
+                onClick = {
+                    showDialog.value = false
+                }
+            ) {
+                Text(stringResource(id = android.R.string.cancel))
+            }
+        },
+        confirmButton = {
+            Button(
+                enabled = enable,
+                onClick = {
+                    showDialog.value = false
+                    scope.launch { HideAPK.hide(context, newPackageName) }
+
+                }
+            ) {
+                Text(stringResource(id = android.R.string.ok))
+            }
+        },
+    )
+}
 
 @Destination
 @Composable
@@ -66,6 +130,7 @@ fun SettingScreen(navigator: DestinationsNavigator) {
     val aPatchReady = (state == APApplication.State.ANDROIDPATCH_INSTALLING ||
                        state == APApplication.State.ANDROIDPATCH_INSTALLED ||
                        state == APApplication.State.ANDROIDPATCH_NEED_UPDATE)
+    val bIsManagerHide = AppUtils.getPackageName() != APPLICATION_ID
     var isGlobalNamespaceEnabled by rememberSaveable {
         mutableStateOf(false)
     }
@@ -89,6 +154,11 @@ fun SettingScreen(navigator: DestinationsNavigator) {
 
         val showLanguageDialog = rememberSaveable { mutableStateOf(false) }
         LanguageDialog(showLanguageDialog)
+
+        val showRandomizePkgNameDialog = rememberSaveable { mutableStateOf(false) }
+        if (showRandomizePkgNameDialog.value) {
+            RandomizePkgNameDialog(showDialog = showRandomizePkgNameDialog)
+        }
 
         Column(
             modifier = Modifier
@@ -134,6 +204,26 @@ fun SettingScreen(navigator: DestinationsNavigator) {
                 )
             }
 
+            if (kPatchReady && aPatchReady && !bIsManagerHide) {
+                ListItem(
+                    leadingContent = {
+                        Icon(
+                            Icons.Filled.Masks,
+                            stringResource(id = R.string.hide_apatch_manager)
+                        )
+                    },
+                    supportingContent = {
+                        Text(
+                            text = stringResource(id = R.string.hide_apatch_manager_summary)
+                        )
+                    },
+                    headlineContent = { Text(stringResource(id = R.string.hide_apatch_manager)) },
+                    modifier = Modifier.clickable {
+                        showRandomizePkgNameDialog.value = true
+                    }
+                )
+            }
+
             ListItem(
                 headlineContent = {
                     Text(text = stringResource(id = R.string.settings_app_language))
@@ -168,10 +258,11 @@ fun SettingScreen(navigator: DestinationsNavigator) {
                                 getBugreportFile(context)
                             }
                         }
+                        val myPkgName = AppUtils.getPackageName()
                         val uri: Uri =
                             FileProvider.getUriForFile(
                                 context,
-                                "${BuildConfig.APPLICATION_ID}.fileprovider",
+                                "${myPkgName}.fileprovider",
                                 bugreport
                             )
                         val shareIntent = Intent(Intent.ACTION_SEND)

@@ -147,4 +147,11 @@
     <string name="apm_downloading">Downloading \"%s\" module…</string>
     <string name="apm_start_downloading">Start downloading %s</string>
     <string name="apm_new_version_available">Click to install the new version, %s.</string>
+
+    <string name="hide_apatch_manager">Hide APatch Manager</string>
+    <string name="hide_apatch_manager_summary">Install a new manager app with a random package ID and custom app label</string>
+    <string name="hide_apatch_dialog_new_manager_name">New Manager Name</string>
+    <string name="hide_apatch_dialog_summary">It will be used as the new app label shown in launcher</string>
+    <string name="hide_apatch_manager_failure">Failed to hide, please report the bug!</string>
+
 </resources>

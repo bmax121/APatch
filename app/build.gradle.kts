@@ -66,6 +66,7 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
             excludes += "okhttp3/**"
             excludes += "kotlin/**"
+            excludes += "/org/bouncycastle/**"
             excludes += "org/**"
             excludes += "**.properties"
             excludes += "**.bin"
@@ -177,6 +178,7 @@ dependencies {
     implementation(libs.timber)
     implementation(libs.devappx)
     implementation(libs.ini4j)
+    implementation(libs.bcpkix)
 
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
