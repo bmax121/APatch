@@ -1,7 +1,9 @@
 package me.bmax.apatch.util
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
+import com.topjohnwu.superuser.CallbackList
 import com.topjohnwu.superuser.Shell
 import dev.utils.app.AppUtils.getPackageManager
 import dev.utils.app.AppUtils.getPackageName
@@ -17,6 +19,10 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
 import java.security.SecureRandom
+
+
+
+private const val TAG = "HideAPK"
 
 object HideAPK {
     private const val ALPHA = "abcdefghijklmnopqrstuvwxyz"
@@ -89,19 +95,24 @@ object HideAPK {
         val source = File(apkPath)
 
         // Generate a new random package name and signature
-        val repack = File(context.cacheDir, "patched.apk")
-        val pkg = genPackageName()
+        val patchedApk = File(context.cacheDir, "patched.apk")
+        val newPkgName = genPackageName()
 
-        if (!patch(source, FileOutputStream(repack), pkg, label))
+        if (!patch(source, FileOutputStream(patchedApk), newPkgName, label))
             return false
 
-        // https://github.com/topjohnwu/Magisk/blob/master/app/src/main/res/raw/manager.sh#L135
-        val result = shellForResult(shell,
-            "adb_pm_install() { local tmp=/data/local/tmp/temp.apk; cp -f \"\$1\" \$tmp; chmod 644 \$tmp; su 2000 -c \"pm install -g \$tmp\" || pm install -g \$tmp || su 1000 -c \"pm install -g \$tmp\"; local res=\$?; rm -f \$tmp; if [ \$res = 0 ]; then appops set \"\$2\" REQUEST_INSTALL_PACKAGES allow; fi; return \$res; }\n",
-            "adb_pm_install $repack $pkg",
-            "am start -n $pkg/$APPLICATION_ID.ui.MainActivity",
-            "pm uninstall $APPLICATION_ID",
+        val cmds = arrayOf(
+            "pm install -r -t ${patchedApk}",
+            "[ $? = 0 ] && appops set ${newPkgName} REQUEST_INSTALL_PACKAGES allow;",
+            "am start -n $newPkgName/$APPLICATION_ID.ui.MainActivity",
+            "pm uninstall $APPLICATION_ID" ,
         )
+        val logs = object : CallbackList<String>() {
+            override fun onAddElement(e: String?) {
+                Log.d(TAG, "${e}")
+            }
+        }
+        val result = getRootShell().newJob().add(*cmds).to(logs, logs).exec()
 
         return result.isSuccess
     }
