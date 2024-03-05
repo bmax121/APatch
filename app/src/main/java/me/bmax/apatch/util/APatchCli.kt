@@ -7,11 +7,8 @@ import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.ShellUtils
 import me.bmax.apatch.APApplication
 import me.bmax.apatch.BuildConfig
-import me.bmax.apatch.Natives
 import me.bmax.apatch.apApp
-import org.json.JSONArray
 import java.io.File
-import kotlin.concurrent.thread
 
 private const val TAG = "APatchCli"
 

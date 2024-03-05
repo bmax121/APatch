@@ -1,10 +1,7 @@
 package me.bmax.apatch.util
 
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
-import com.topjohnwu.superuser.CallbackList
-import com.topjohnwu.superuser.Shell
 import dev.utils.app.AppUtils.getPackageManager
 import dev.utils.app.AppUtils.getPackageName
 import kotlinx.coroutines.Dispatchers
