@@ -32,7 +32,7 @@ cmaker {
     }
 }
 
-project.ext.set("kernelPatchVersion", "0.10.0")
+project.ext.set("kernelPatchVersion", "0.10.1-dev")
 
 
 val androidMinSdkVersion = 26
@@ -78,6 +78,13 @@ fun getVersionCode(): Int {
 
 fun getVersionName(): String {
     return getGitDescribe()
+}
+
+tasks.register("printVersion") {
+    doLast {
+        println("Version code: $managerVersionCode")
+        println("Version name: $managerVersionName")
+    }
 }
 
 subprojects {
