@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.ContactPage
 import androidx.compose.material.icons.filled.Engineering
@@ -346,7 +346,7 @@ private fun TopBar(onBack: () -> Unit = {}) {
         navigationIcon = {
             IconButton(
                 onClick = onBack
-            ) { Icon(Icons.Filled.ArrowBack, contentDescription = null) }
+            ) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null) }
         },
     )
 }
@@ -362,7 +362,7 @@ private fun ClearSuperKeyDialog(showClearSuperKeyDialog: MutableState<Boolean>) 
                 TextButton(
                     onClick = { showClearSuperKeyDialog.value = false }
                 ) {
-                    Text(stringResource(id = android.R.string.no))
+                    Text(stringResource(id = android.R.string.cancel))
                 }
             },
             confirmButton = {
@@ -372,7 +372,7 @@ private fun ClearSuperKeyDialog(showClearSuperKeyDialog: MutableState<Boolean>) 
                         apApp.clearKey()
                     }
                 ) {
-                    Text(stringResource(id = android.R.string.yes))
+                    Text(stringResource(id = android.R.string.ok))
                 }
             }
         )

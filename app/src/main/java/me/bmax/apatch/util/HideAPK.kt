@@ -90,7 +90,7 @@ object HideAPK {
     }
 
     @JvmStatic
-    private fun patchAndHide(context: Context, label: String, shell: Shell): Boolean {
+    private fun patchAndHide(context: Context, label: String): Boolean {
         val apkPath: String = getPackageManager().getApplicationInfo(getPackageName(), 0).sourceDir
         val source = File(apkPath)
 
@@ -107,12 +107,7 @@ object HideAPK {
             "am start -n $newPkgName/$APPLICATION_ID.ui.MainActivity",
             "pm uninstall $APPLICATION_ID" ,
         )
-        val logs = object : CallbackList<String>() {
-            override fun onAddElement(e: String?) {
-                Log.d(TAG, "${e}")
-            }
-        }
-        val result = getRootShell().newJob().add(*cmds).to(logs, logs).exec()
+        val result = rootShellForResult(*cmds)
 
         return result.isSuccess
     }
@@ -129,11 +124,7 @@ object HideAPK {
             dialog.dismiss()
             Toast.makeText(context, context.getString(R.string.hide_apatch_manager_failure), Toast.LENGTH_LONG).show()
         }
-        val shell = tryGetRootShell()
-        if (!shell.isRoot) {
-            onFailure.run()
-        }
-        val success = withContext(Dispatchers.IO) { patchAndHide(context, label, shell)}
+        val success = withContext(Dispatchers.IO) { patchAndHide(context, label)}
         if (!success) onFailure.run()
     }
 }

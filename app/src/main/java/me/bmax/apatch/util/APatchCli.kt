@@ -19,21 +19,6 @@ private fun getKPatchPath(): String {
     return apApp.applicationInfo.nativeLibraryDir + File.separator + "libkpatch.so"
 }
 
-object APatchCli {
-    val SHELL: Shell = createRootShell()
-}
-
-fun getRootShell(): Shell {
-    return APatchCli.SHELL
-}
-
-fun shellForResult(shell: Shell, vararg cmds: String): Shell.Result {
-    val out = ArrayList<String>()
-    val err = ArrayList<String>()
-    val result = shell.newJob().add(*cmds).to(out, err).exec()
-    return result
-}
-
 fun createRootShell(): Shell {
     Shell.enableVerboseLogging = BuildConfig.DEBUG
     val builder = Shell.Builder.create()
@@ -49,6 +34,14 @@ fun createRootShell(): Shell {
         Log.e(TAG, "su failed: ", e)
         builder.build("sh")
     }
+}
+
+object APatchCli {
+    val SHELL: Shell = createRootShell()
+}
+
+fun getRootShell(): Shell {
+    return APatchCli.SHELL
 }
 
 fun tryGetRootShell(): Shell {
@@ -72,6 +65,20 @@ fun tryGetRootShell(): Shell {
             builder.build("sh")
         }
     }
+}
+
+fun shellForResult(shell: Shell, vararg cmds: String): Shell.Result {
+    val out = ArrayList<String>()
+    val err = ArrayList<String>()
+    val result = shell.newJob().add(*cmds).to(out, err).exec()
+    return result
+}
+
+fun rootShellForResult(vararg cmds: String): Shell.Result {
+    val out = ArrayList<String>()
+    val err = ArrayList<String>()
+    val result = getRootShell().newJob().add(*cmds).to(out, err).exec()
+    return result
 }
 
 fun execApd(args: String): Boolean {
