@@ -29,6 +29,8 @@ import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
@@ -42,8 +44,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -54,6 +58,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.PopupProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -70,8 +75,10 @@ import me.bmax.apatch.ui.component.ConfirmDialog
 import me.bmax.apatch.ui.component.ConfirmResult
 import me.bmax.apatch.ui.component.DialogHostState
 import me.bmax.apatch.ui.component.LoadingDialog
+import me.bmax.apatch.ui.screen.destinations.PatchesDestination
 import me.bmax.apatch.ui.viewmodel.KPModel
 import me.bmax.apatch.ui.viewmodel.KPModuleViewModel
+import me.bmax.apatch.ui.viewmodel.PatchesViewModel
 import me.bmax.apatch.util.LocalDialogHost
 import me.bmax.apatch.util.isScrollingUp
 import me.bmax.apatch.util.*
@@ -121,7 +128,10 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
             val scope = rememberCoroutineScope()
             val context = LocalContext.current
 
-            val moduleInstall = stringResource(id = R.string.kpm_load)
+            val moduleAdd = stringResource(id = R.string.kpm_add_kpm)
+            val moduleIoad = stringResource(id = R.string.kpm_load)
+            val moduleInstall = stringResource(id = R.string.kpm_install)
+            val moduleEmbed = stringResource(id = R.string.kpm_embed)
             val succToastText = stringResource(id = R.string.kpm_load_toast_succ)
             val failToastText = stringResource(id = R.string.kpm_load_toast_failed)
 
@@ -149,16 +159,48 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
                 }
             }
 
-            ExtendedFloatingActionButton(
-                onClick = {
-                    val intent = Intent(Intent.ACTION_GET_CONTENT)
-                    intent.type = "*/*"
-                    selectKpmLauncher.launch(intent)
-                },
-                expanded = kpModuleListState.isScrollingUp(),
-                icon = { Icon(Icons.Filled.Add, moduleInstall) },
-                text = { Text(text = moduleInstall) },
-            )
+            val current = LocalContext.current
+            var expanded by remember { mutableStateOf(false) }
+            val options = listOf(moduleEmbed, moduleInstall, moduleIoad)
+
+            Column {
+                ExtendedFloatingActionButton(
+                    onClick = {
+                        expanded = true;
+                    },
+                    expanded = kpModuleListState.isScrollingUp(),
+                    icon = { Icon(Icons.Filled.Add, moduleAdd) },
+                    text = { Text(text = moduleAdd) },
+                )
+
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false },
+                    properties = PopupProperties(focusable = false)
+                ) {
+                    options.forEach { label ->
+                        DropdownMenuItem(
+                            text = { Text(label) },
+                            onClick = {
+                                expanded = false
+                                when {
+                                    label.equals(moduleEmbed)-> {
+                                        navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.UPDATE))
+                                    }
+                                    label.equals(moduleInstall)-> {
+                                        Toast.makeText(current, "Not support now!", Toast.LENGTH_SHORT).show()
+                                    }
+                                    label.equals(moduleIoad)-> {
+                                        val intent = Intent(Intent.ACTION_GET_CONTENT)
+                                        intent.type = "*/*"
+                                        selectKpmLauncher.launch(intent)
+                                    }
+                                }
+                            }
+                        )
+                    }
+                }
+            }
         }
     }) { innerPadding ->
         ConfirmDialog()
@@ -199,6 +241,11 @@ suspend fun loadModule(dialogHost: DialogHostState, uri: Uri, args: String): Int
     }
     return rc
 }
+
+
+
+
+
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable

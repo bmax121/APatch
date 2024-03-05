@@ -103,8 +103,8 @@
     <string name="home_kpatch_info_title">信息</string>
     <string name="home_ap_cando_reboot">重启</string>
     <string name="patch_config_title">补丁</string>
-    <string name="patch_mode_bootimg_patch">修补当前槽位</string>
-    <string name="patch_mode_update_patch">修补另一槽位</string>
+    <string name="patch_mode_bootimg_patch">修补模式</string>
+    <string name="patch_mode_update_patch">更新模式</string>
     <string name="patch_select_bootimg_btn">选择 Boot 镜像</string>
     <string name="patch_start_patch_btn">开始修补</string>
     <string name="patch_item_error">‼错误‼</string>
