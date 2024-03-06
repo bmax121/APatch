@@ -304,7 +304,7 @@ class PatchesViewModel : ViewModel() {
                 APApplication.markNeedReboot()
             } else {
                 logs.add(" Unpatched failed")
-                error = result.err.toString()
+                error = result.err.joinToString("\n")
             }
             logs.add("****************************")
 
@@ -368,7 +368,8 @@ class PatchesViewModel : ViewModel() {
             if(!succ) {
                 val msg = " Patch failed."
                 error = msg
-                logs.add(msg)
+                error += result.err.joinToString("\n")
+                logs.add(error)
                 logs.add("****************************")
                 patching = false
                 return@launch
