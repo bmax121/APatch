@@ -14,6 +14,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.toLowerCase
 import androidx.lifecycle.ViewModel
 import com.topjohnwu.superuser.Shell
 import kotlinx.coroutines.Dispatchers
@@ -52,6 +53,7 @@ class SuperUserViewModel : ViewModel() {
             get() = packageInfo.applicationInfo.uid
     }
 
+    private val currLocale = Locale.getDefault();
     var search by mutableStateOf("")
     var showSystemApps by mutableStateOf(false)
     var isRefreshing by mutableStateOf(false)
@@ -72,7 +74,9 @@ class SuperUserViewModel : ViewModel() {
 
     val appList by derivedStateOf {
         sortedList.filter {
-            it.label.contains(search) || it.packageName.contains(search) || HanziToPinyin.getInstance()
+            it.label.contains(search) || it.packageName.contains(search) || it.label.lowercase(
+                currLocale
+            ).contains(search.lowercase(currLocale)) || HanziToPinyin.getInstance()
                 .toPinyinString(it.label).contains(search)
         }.filter {
             it.uid == 2000 // Always show shell
@@ -87,6 +91,7 @@ class SuperUserViewModel : ViewModel() {
             override fun onServiceDisconnected(name: ComponentName?) {
                 onDisconnect()
             }
+
             override fun onServiceConnected(name: ComponentName?, binder: IBinder?) {
                 it.resume(binder as IBinder to this)
             }
