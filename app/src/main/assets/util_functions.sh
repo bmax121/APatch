@@ -71,10 +71,10 @@ mount_partitions() {
 
 find_boot_image() {
   if [ ! -z $SLOT ]; then
-    BOOTIMAGE=$(find_block "ramdisk$SLOT" "recovery_ramdisk$SLOT" "init_boot$SLOT" "boot$SLOT")
+    BOOTIMAGE=$(find_block "boot$SLOT")
   fi
   if [ -z $BOOTIMAGE ]; then
-    BOOTIMAGE=$(find_block ramdisk recovery_ramdisk kern-a android_boot kernel bootimg init_boot boot lnx boot_a)
+    BOOTIMAGE=$(find_block kern-a android_boot kernel bootimg boot lnx boot_a)
   fi
   if [ -z $BOOTIMAGE ]; then
     # Lets see what fstabs tells me
