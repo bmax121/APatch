@@ -201,7 +201,7 @@ private fun AppItem(
 fun EditUser(app: SuperUserViewModel.AppInfo) {
 //    var _viahook = app.config.profile?.scontext.isNullOrEmpty()
 //    var viahook by remember { mutableStateOf(_viahook) }
-    var exclude by remember { mutableStateOf(app.config.exclude) }
+//    var exclude by remember { mutableStateOf(app.config.exclude) }
 
     Column(modifier = Modifier.padding(start = 24.dp, end = 24.dp)) {
 //        SwitchItem(
@@ -220,21 +220,21 @@ fun EditUser(app: SuperUserViewModel.AppInfo) {
 //                }
 //            },
 //        )
-        SwitchItem(
-            icon = Icons.Filled.Security,
-            title = stringResource(id = R.string.su_pkg_excluded_setting_title),
-            summary = stringResource(id = R.string.su_pkg_excluded_setting_summary),
-            checked = exclude != 0,
-            onCheckedChange = {
-                exclude = if (it) 1 else 0
-                runBlocking {
-                    launch(Dispatchers.IO) {
-                        app.config.exclude = exclude
-                        PkgConfig.changeConfig(app.config)
-                    }
-                }
-            },
-        )
+//        SwitchItem(
+//            icon = Icons.Filled.Security,
+//            title = stringResource(id = R.string.su_pkg_excluded_setting_title),
+//            summary = stringResource(id = R.string.su_pkg_excluded_setting_summary),
+//            checked = exclude != 0,
+//            onCheckedChange = {
+//                exclude = if (it) 1 else 0
+//                runBlocking {
+//                    launch(Dispatchers.IO) {
+//                        app.config.exclude = exclude
+//                        PkgConfig.changeConfig(app.config)
+//                    }
+//                }
+//            },
+//        )
     }
 }
 
