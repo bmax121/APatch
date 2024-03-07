@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.BugReport
+import androidx.compose.material.icons.filled.Commit
 import androidx.compose.material.icons.filled.ContactPage
 import androidx.compose.material.icons.filled.Engineering
 import androidx.compose.material.icons.filled.Key
@@ -57,6 +58,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.bmax.apatch.APApplication
 import me.bmax.apatch.BuildConfig.APPLICATION_ID
+import me.bmax.apatch.Natives
 import me.bmax.apatch.R
 import me.bmax.apatch.apApp
 import me.bmax.apatch.ui.component.AboutDialog
@@ -106,6 +108,11 @@ fun SettingScreen(navigator: DestinationsNavigator) {
         val showRandomizePkgNameDialog = rememberSaveable { mutableStateOf(false) }
         if (showRandomizePkgNameDialog.value) {
             RandomizePkgNameDialog(showDialog = showRandomizePkgNameDialog)
+        }
+
+        val showResetSuPathDialog = remember { mutableStateOf(false) }
+        if(showResetSuPathDialog.value) {
+            ResetSUPathDialog(showResetSuPathDialog)
         }
 
         Column(
@@ -161,13 +168,30 @@ fun SettingScreen(navigator: DestinationsNavigator) {
                         )
                     },
                     supportingContent = {
-                        Text(
-                            text = stringResource(id = R.string.hide_apatch_manager_summary)
-                        )
+                        Text(text = stringResource(id = R.string.hide_apatch_manager_summary))
                     },
                     headlineContent = { Text(stringResource(id = R.string.hide_apatch_manager)) },
                     modifier = Modifier.clickable {
-                        showRandomizePkgNameDialog.value = true
+                        showResetSuPathDialog.value = true
+                    }
+                )
+            }
+
+            if (kPatchReady) {
+                ListItem(
+                    leadingContent = {
+                        Icon(Icons.Filled.Commit,
+                            stringResource(id = R.string.setting_reset_su_path)
+                        )
+                    },
+                    supportingContent = {
+                        Text(
+                            text = stringResource(id = R.string.setting_reset_su_path_summary)
+                        )
+                    },
+                    headlineContent = { Text(stringResource(id = R.string.setting_reset_su_path)) },
+                    modifier = Modifier.clickable {
+                        showResetSuPathDialog.value = true
                     }
                 )
             }
@@ -243,6 +267,55 @@ fun SettingScreen(navigator: DestinationsNavigator) {
             )
         }
     }
+}
+
+val suPathChecked: (path: String)-> Boolean = {
+    it.startsWith("/") && it.trim().length > 1
+}
+@Composable
+fun ResetSUPathDialog(showDialog: MutableState<Boolean>) {
+    var suPath by remember { mutableStateOf(Natives.suPath()) }
+    AlertDialog(
+        onDismissRequest = { showDialog.value = false },
+        title = { Text(stringResource(id = R.string.setting_reset_su_path)) },
+        text = {
+            Column {
+                Spacer(modifier = Modifier.height(8.dp))
+                Box(
+                    contentAlignment = Alignment.CenterEnd,
+                ) {
+                    TextField(
+                        value = suPath,
+                        onValueChange = {
+                            suPath = it
+                        },
+                        label = { Text(stringResource(id = R.string.setting_reset_su_new_path)) },
+                        visualTransformation = VisualTransformation.None,
+                    )
+                }
+            }
+        },
+        dismissButton = {
+            Button(
+                onClick = {
+                    showDialog.value = false
+                }
+            ) {
+                Text(stringResource(id = android.R.string.cancel))
+            }
+        },
+        confirmButton = {
+            Button(
+                enabled = suPathChecked(suPath),
+                onClick = {
+                    showDialog.value = false
+                    Natives.resetSuPath(suPath)
+                }
+            ) {
+                Text(stringResource(id = android.R.string.ok))
+            }
+        },
+    )
 }
 
 
