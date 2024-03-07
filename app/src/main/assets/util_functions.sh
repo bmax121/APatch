@@ -96,6 +96,7 @@ flash_image() {
     blockdev --setrw "$2"
     local blk_ro=$(blockdev --getro "$2")
     [ "$blk_ro" -eq 1 ] && return 2
+    ## todo: https://github.com/bmax121/APatch/pull/247
     eval "$CMD1" > "$2" 2>/dev/null
     eval "$CMD1" | cat - /dev/zero > "$2" 2>/dev/null
   elif [ -c "$2" ]; then
