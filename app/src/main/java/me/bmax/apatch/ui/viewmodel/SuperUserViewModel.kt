@@ -1,14 +1,12 @@
 package me.bmax.apatch.ui.viewmodel
 
 import android.content.ComponentName
-import android.content.Context.BIND_AUTO_CREATE
 import android.content.Intent
 import android.content.ServiceConnection
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
 import android.os.IBinder
 import android.os.Parcelable
-import android.os.SystemClock
 import android.util.Log
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -72,8 +70,9 @@ class SuperUserViewModel : ViewModel() {
 
     val appList by derivedStateOf {
         sortedList.filter {
-            it.label.contains(search) || it.packageName.contains(search) || HanziToPinyin.getInstance()
-                .toPinyinString(it.label).contains(search)
+            it.label.lowercase().contains(search.lowercase()) ||
+                    it.packageName.lowercase().contains(search.lowercase()) ||
+                    HanziToPinyin.getInstance().toPinyinString(it.label).contains(search.lowercase())
         }.filter {
             it.uid == 2000 // Always show shell
                     || showSystemApps || it.packageInfo.applicationInfo.flags.and(ApplicationInfo.FLAG_SYSTEM) == 0
