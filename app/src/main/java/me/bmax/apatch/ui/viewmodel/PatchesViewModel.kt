@@ -55,8 +55,8 @@ class PatchesViewModel : ViewModel() {
     var patchLog by mutableStateOf("")
 
     private val patchDir: ExtendedFile = FileSystemManager.getLocal().getFile(apApp.filesDir.parent, "patch")
-    private val srcBoot: ExtendedFile = patchDir.getChildFile("boot.img")
-    private var shell: Shell = tryGetRootShell()
+    private var srcBoot: ExtendedFile = patchDir.getChildFile("boot.img")
+    private var shell: Shell = createRootShell()
     private var prepared: Boolean = false
 
     private fun prepare() {
@@ -116,9 +116,7 @@ class PatchesViewModel : ViewModel() {
     private fun parseBootimg(bootimg: String) {
         val result = shellForResult(shell,
             "cd $patchDir",
-            "cp $bootimg boot.img",
-            "./magiskboot unpack boot.img",
-            "[ $? -ne 0 ] && >&2 echo - magiskboot unpack error",
+            "./magiskboot unpack $bootimg",
             "./kptools -l -i kernel",
         )
         if(result.isSuccess) {
@@ -203,6 +201,7 @@ class PatchesViewModel : ViewModel() {
             bootDev = result.out.filter { it.startsWith("BOOTIMAGE=") }[0].removePrefix("BOOTIMAGE=")
             Log.d(TAG, "current slot: ${bootSlot}")
             Log.d(TAG, "current bootimg: ${bootDev}")
+            srcBoot = FileSystemManager.getLocal().getFile(bootDev)
             parseBootimg(bootDev)
         } else {
             error = result.err.joinToString("\n")
@@ -305,7 +304,7 @@ class PatchesViewModel : ViewModel() {
                 APApplication.markNeedReboot()
             } else {
                 logs.add(" Unpatched failed")
-                error = result.err.toString()
+                error = result.err.joinToString("\n")
             }
             logs.add("****************************")
 
@@ -369,7 +368,8 @@ class PatchesViewModel : ViewModel() {
             if(!succ) {
                 val msg = " Patch failed."
                 error = msg
-                logs.add(msg)
+                error += result.err.joinToString("\n")
+                logs.add(error)
                 logs.add("****************************")
                 patching = false
                 return@launch

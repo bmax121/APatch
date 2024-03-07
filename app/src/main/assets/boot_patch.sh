@@ -54,10 +54,11 @@ echo "- Patching kernel"
 
 set -x
 ./kptools -p -i kernel.ori -s "$SUPERKEY" -k kpimg -o kernel "$@"
+patch_rc=$?
 set +x
 
-if [ $? -ne 0 ]; then
-  >&2 echo "- Patch kernel error: $?"
+if [ $patch_rc -ne 0 ]; then
+  >&2 echo "- Patch kernel error: $patch_rc"
   exit $?
 fi
 
@@ -72,7 +73,7 @@ fi
 # flash
 if [ -b "$BOOTIMAGE" ] || [ -c "$BOOTIMAGE" ] && [ -f "new-boot.img" ]; then
   echo "- Flashing new boot image"
-  flash_image new-boot.img "$BOOTIMAGE"
+#  flash_image new-boot.img "$BOOTIMAGE"
   if [ $? -ne 0 ]; then
     >&2 echo "- Flash error: $?"
     exit $?
