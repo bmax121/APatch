@@ -159,9 +159,9 @@ private fun AppItem(
             Column {
                 Text(app.packageName)
                 FlowRow {
-                    if (config.exclude != 0) {
-                        LabelText(label = stringResource(id = R.string.su_pkg_excluded_label))
-                    }
+//                    if (config.exclude != 0) {
+//                        LabelText(label = stringResource(id = R.string.su_pkg_excluded_label))
+//                    }
                     if (config.allow != 0) {
                         LabelText(label = config.profile.uid.toString())
                         LabelText(label = config.profile.toUid.toString())

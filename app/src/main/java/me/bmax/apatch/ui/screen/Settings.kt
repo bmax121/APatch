@@ -2,6 +2,7 @@ package me.bmax.apatch.ui.screen
 
 import android.content.Intent
 import android.net.Uri
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -275,6 +276,7 @@ val suPathChecked: (path: String)-> Boolean = {
 }
 @Composable
 fun ResetSUPathDialog(showDialog: MutableState<Boolean>) {
+    val context = LocalContext.current
     var suPath by remember { mutableStateOf(Natives.suPath()) }
     AlertDialog(
         onDismissRequest = { showDialog.value = false },
@@ -310,7 +312,8 @@ fun ResetSUPathDialog(showDialog: MutableState<Boolean>) {
                 enabled = suPathChecked(suPath),
                 onClick = {
                     showDialog.value = false
-                    Natives.resetSuPath(suPath)
+                    val succ = Natives.resetSuPath(suPath)
+                    Toast.makeText(context, if(succ) R.string.success else R.string.failure, Toast.LENGTH_SHORT).show()
                     rootShellForResult("echo $suPath > ${APApplication.SU_PATH_FILE}")
                 }
             ) {

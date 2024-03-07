@@ -3,6 +3,9 @@
 
     <string name="home">Home</string>
 
+    <string name="success">Success</string>
+    <string name="failure">Failure</string>
+
     <string name="patch_warnning">Installation comes with risks. Please ensure your data is backed up.</string>
     <string name="patch">Patch</string>
 
