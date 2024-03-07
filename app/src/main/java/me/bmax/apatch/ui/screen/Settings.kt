@@ -68,6 +68,7 @@ import me.bmax.apatch.util.HideAPK
 import me.bmax.apatch.util.LocalDialogHost
 import me.bmax.apatch.util.getBugreportFile
 import me.bmax.apatch.util.isGlobalNamespaceEnabled
+import me.bmax.apatch.util.rootShellForResult
 import me.bmax.apatch.util.setGlobalNamespaceEnabled
 import java.util.Locale
 
@@ -310,6 +311,7 @@ fun ResetSUPathDialog(showDialog: MutableState<Boolean>) {
                 onClick = {
                     showDialog.value = false
                     Natives.resetSuPath(suPath)
+                    rootShellForResult("echo $suPath > ${APApplication.SU_PATH_FILE}")
                 }
             ) {
                 Text(stringResource(id = android.R.string.ok))

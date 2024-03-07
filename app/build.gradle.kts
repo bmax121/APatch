@@ -122,10 +122,10 @@ tasks.register<Download>("downloadApjni") {
 }
 
 tasks.getByName("preBuild").dependsOn(
-    "downloadKpimg",
-    "downloadKpatch",
-    "downloadKptools",
-    "downloadApjni",
+//    "downloadKpimg",
+//    "downloadKpatch",
+//    "downloadKptools",
+//    "downloadApjni",
 )
 
 // https://github.com/bbqsrc/cargo-ndk
@@ -144,9 +144,9 @@ tasks.register<Copy>("buildApd") {
 }
 
 tasks.configureEach {
-    if (name == "mergeDebugJniLibFolders" || name == "mergeReleaseJniLibFolders") {
-        dependsOn("buildApd")
-    }
+//    if (name == "mergeDebugJniLibFolders" || name == "mergeReleaseJniLibFolders") {
+//        dependsOn("buildApd")
+//    }
 }
 
 tasks.register<Exec>("cargoClean") {
