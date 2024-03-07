@@ -172,7 +172,7 @@ fun SettingScreen(navigator: DestinationsNavigator) {
                     },
                     headlineContent = { Text(stringResource(id = R.string.hide_apatch_manager)) },
                     modifier = Modifier.clickable {
-                        showResetSuPathDialog.value = true
+                        showRandomizePkgNameDialog.value = true
                     }
                 )
             }
