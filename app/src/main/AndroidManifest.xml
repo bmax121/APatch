@@ -16,7 +16,9 @@
         android:icon="@mipmap/ic_launcher"
         android:label="APatch"
         android:supportsRtl="true"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:theme="@style/Theme.APatch"
+        android:usesCleartextTraffic="true"
         tools:targetApi="33">
         <activity
             android:name=".ui.MainActivity"
