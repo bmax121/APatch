@@ -175,6 +175,7 @@ dependencies {
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.runtime.livedata)
+    implementation(libs.androidx.webkit)
     implementation(libs.timber)
     implementation(libs.devappx)
     implementation(libs.ini4j)
@@ -197,6 +198,7 @@ dependencies {
     implementation(libs.com.github.topjohnwu.libsu.core)
     implementation(libs.com.github.topjohnwu.libsu.service)
     implementation(libs.com.github.topjohnwu.libsu.nio)
+    implementation(libs.com.github.topjohnwu.libsu.io)
 
     implementation(libs.dev.rikka.rikkax.parcelablelist)
 
@@ -211,4 +213,5 @@ dependencies {
     implementation(libs.sheet.compose.dialogs.input)
 
     implementation(libs.markdown)
+    implementation(libs.com.google.accompanist.webview)
 }

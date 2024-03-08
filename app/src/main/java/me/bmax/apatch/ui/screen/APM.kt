@@ -8,6 +8,7 @@ import android.util.Patterns
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -76,6 +77,7 @@ import me.bmax.apatch.ui.component.ConfirmDialog
 import me.bmax.apatch.ui.component.ConfirmResult
 import me.bmax.apatch.ui.component.LoadingDialog
 import me.bmax.apatch.ui.screen.destinations.InstallScreenDestination
+import me.bmax.apatch.ui.screen.destinations.WebScreenDestination
 import me.bmax.apatch.ui.viewmodel.APModuleViewModel
 import me.bmax.apatch.util.LocalDialogHost
 import me.bmax.apatch.util.LocalSnackbarHost
@@ -186,10 +188,15 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
                     modifier = Modifier
                         .padding(innerPadding)
                         .fillMaxSize(),
-                    state = moduleListState
-                ) {
-                    navigator.navigate(InstallScreenDestination(it))
-                }
+                    state = moduleListState,
+                    onInstallModule =
+                    {
+                        navigator.navigate(InstallScreenDestination(it))
+                    }, onClickModule = { id, name, hasWebUi ->
+                        if (hasWebUi) {
+                            navigator.navigate(WebScreenDestination(id, name))
+                        }
+                    })
             }
         }
     }
@@ -201,7 +208,8 @@ private fun ModuleList(
     viewModel: APModuleViewModel,
     modifier: Modifier = Modifier,
     state: LazyListState,
-    onInstallModule: (Uri) -> Unit
+    onInstallModule: (Uri) -> Unit,
+    onClickModule: (id: String, name: String, hasWebUi: Boolean) -> Unit
 ) {
     val failedEnable = stringResource(R.string.apm_failed_to_enable)
     val failedDisable = stringResource(R.string.apm_failed_to_disable)
@@ -406,6 +414,8 @@ private fun ModuleList(
                                     "${module.name}-${updatedModule.second}.zip"
                                 )
                             }
+                        }, onClick = {
+                            onClickModule(it.id, it.name, it.hasWebUi)
                         })
                         // fix last item shadow incomplete in LazyColumn
                         Spacer(Modifier.height(1.dp))
@@ -438,9 +448,12 @@ private fun ModuleItem(
     onUninstall: (APModuleViewModel.ModuleInfo) -> Unit,
     onCheckChanged: (Boolean) -> Unit,
     onUpdate: (APModuleViewModel.ModuleInfo) -> Unit,
+    onClick: (APModuleViewModel.ModuleInfo) -> Unit,
 ) {
     ElevatedCard(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick(module) },
         colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
 
@@ -544,6 +557,18 @@ private fun ModuleItem(
                         fontSize = MaterialTheme.typography.labelMedium.fontSize,
                         text = stringResource(R.string.apm_uninstall),
                     )
+                }
+
+                if (module.hasWebUi) {
+                    TextButton(
+                        onClick = { onClick(module) },
+                    ) {
+                        Text(
+                            fontFamily = MaterialTheme.typography.labelMedium.fontFamily,
+                            fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                            text = stringResource(R.string.webui_open),
+                        )
+                    }
                 }
             }
         }
