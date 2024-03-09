@@ -32,6 +32,12 @@ Kernel configs
 - `CONFIG_KALLSYMS=y` and `CONFIG_KALLSYMS_ALL=y`
 - `CONFIG_KALLSYMS=y` and `CONFIG_KALLSYMS_ALL=n`: Early support
 
+## Security Alert
+
+The **SUPERKEY** has higher privileges than root access.  
+Weak or compromised keys can result in unauthorized control of your device.  
+It is critical to use robust keys and safeguard them from exposure to maintain the security of your device.
+
 ## Translation
 To help translate APatch or improve existing translations, please use [Weblate](https://hosted.weblate.org/engage/apatch/). PR of APatch translation is no longer accepted, because it will conflict with Weblate.
 
@@ -49,12 +55,6 @@ To help translate APatch or improve existing translations, please use [Weblate](
 
 Installation guide (coming soon)
 <hr>
-
-## Security Alert
-
-The **SUPERKEY** has higher privileges than root access.  
-Weak or compromised keys can result in unauthorized control of your device.  
-It is critical to use robust keys and safeguard them from exposure to maintain the security of your device.  
 
 ### Updates
 - Telegram Channel: [@APatchChannel](https://t.me/APatchChannel)
