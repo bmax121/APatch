@@ -50,6 +50,12 @@ To help translate APatch or improve existing translations, please use [Weblate](
 Installation guide (coming soon)
 <hr>
 
+## Security Alert
+
+The **SUPERKEY** has higher privileges than root access.  
+Weak or compromised keys can result in unauthorized control of your device.  
+It is critical to use robust keys and safeguard them from exposure to maintain the security of your device.  
+
 ### Updates
 - Telegram Channel: [@APatchChannel](https://t.me/APatchChannel)
 
