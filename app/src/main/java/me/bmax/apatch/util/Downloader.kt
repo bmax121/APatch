@@ -66,8 +66,10 @@ fun checkNewVersion(): Triple<Int, String, String> {
                     return defaultValue
                 }
                 val body = response.body?.string() ?: return defaultValue
+
                 val json = org.json.JSONObject(body)
                 val changelog = json.optString("body")
+                val versionCode = json.getInt("name")
 
                 val assets = json.getJSONArray("assets")
                 for (i in 0 until assets.length()) {
@@ -76,16 +78,10 @@ fun checkNewVersion(): Triple<Int, String, String> {
                     if (!name.endsWith(".apk")) {
                         continue
                     }
-
-                    val regex = Regex("v(.+?)_(\\d+)-")
-                    val matchResult = regex.find(name) ?: continue
-                    val versionName = matchResult.groupValues[1]
-                    val versionCode = matchResult.groupValues[2].toInt()
                     val downloadUrl = asset.getString("browser_download_url")
 
                     return Triple(versionCode, downloadUrl, changelog)
                 }
-
             }
     }
     return defaultValue
