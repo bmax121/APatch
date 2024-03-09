@@ -69,10 +69,11 @@ import me.bmax.apatch.util.HideAPK
 import me.bmax.apatch.util.LocalDialogHost
 import me.bmax.apatch.util.getBugreportFile
 import me.bmax.apatch.util.isGlobalNamespaceEnabled
+import me.bmax.apatch.util.isSkipStoreSuperKeyEnabled
+import me.bmax.apatch.util.setSkipStoreSuperKeyEnabled
 import me.bmax.apatch.util.rootShellForResult
 import me.bmax.apatch.util.setGlobalNamespaceEnabled
 import java.util.Locale
-
 
 @Destination
 @Composable
@@ -86,8 +87,12 @@ fun SettingScreen(navigator: DestinationsNavigator) {
     var isGlobalNamespaceEnabled by rememberSaveable {
         mutableStateOf(false)
     }
+    var bSkipStoreSuperKey by rememberSaveable {
+        mutableStateOf(false)
+    }
     if (kPatchReady && aPatchReady) {
         isGlobalNamespaceEnabled = isGlobalNamespaceEnabled()
+        bSkipStoreSuperKey = isSkipStoreSuperKeyEnabled()
     }
     Scaffold(
         topBar = {
@@ -138,6 +143,22 @@ fun SettingScreen(navigator: DestinationsNavigator) {
                     headlineContent = { Text(stringResource(id = R.string.clear_super_key)) },
                     modifier = Modifier.clickable {
                         showClearSuperKeyDialog.value = true
+                    }
+                )
+                SwitchItem(
+                    icon = Icons.Filled.Key,
+                    title = stringResource(id = R.string.settings_donot_store_superkey),
+                    summary = stringResource(id = R.string.settings_donot_store_superkey_summary),
+                    checked = bSkipStoreSuperKey,
+                    onCheckedChange = {
+                        setSkipStoreSuperKeyEnabled(
+                            if (bSkipStoreSuperKey) {
+                                1
+                            } else {
+                                0
+                            }
+                        )
+                        bSkipStoreSuperKey = it
                     }
                 )
             }

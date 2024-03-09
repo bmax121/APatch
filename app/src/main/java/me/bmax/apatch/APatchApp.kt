@@ -62,7 +62,8 @@ class APApplication : Application() {
         val LEGACY_SU_PATH = "/system/bin/su"
 
         // TODO: encrypt super_key before saving it on SharedPreferences
-        private const val SUPER_KEY = "super_key"
+        const val SUPER_KEY = "super_key"
+        const val SKIP_STORE_SUPER_KEY = "skip_store_super_key"
         private const val SHOW_BACKUP_WARN = "show_backup_warning"
         private lateinit var sharedPreferences: SharedPreferences
 
@@ -166,7 +167,8 @@ class APApplication : Application() {
                 Log.d(TAG, "state: " + _kpStateLiveData.value)
                 if(!ready) return
 
-                sharedPreferences.edit().putString(SUPER_KEY, value).apply()
+                if (!isSkipStoreSuperKeyEnabled())
+                    sharedPreferences.edit().putString(SUPER_KEY, value).apply()
 
                 thread {
                     val rc = Natives.su(0, null)
