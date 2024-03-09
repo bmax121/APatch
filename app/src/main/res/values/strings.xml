@@ -164,4 +164,7 @@
     <string name="setting_reset_su_path_summary">Use a new \"su\" path.</string>
     <string name="setting_reset_su_new_path">new full path</string>
     <string name="webui_open">Open WebUI</string>
+
+    <string name="settings_donot_store_superkey">Don\'t store super key in local</string>
+    <string name="settings_donot_store_superkey_summary">Authenticate the super key every time the manager starts</string>
 </resources>

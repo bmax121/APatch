@@ -1,17 +1,19 @@
 package me.bmax.apatch.util
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.net.Uri
 import android.util.Log
 import com.topjohnwu.superuser.CallbackList
 import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.ShellUtils
+import dev.utils.app.AppUtils.getSharedPreferences
 import me.bmax.apatch.APApplication
 import me.bmax.apatch.BuildConfig
 import me.bmax.apatch.apApp
 import java.io.File
 
 private const val TAG = "APatchCli"
-
 private fun getKPatchPath(): String {
     return apApp.applicationInfo.nativeLibraryDir + File.separator + "libkpatch.so"
 }
@@ -182,6 +184,15 @@ fun setGlobalNamespaceEnabled(value: String) {
         .submit { result ->
             Log.i(TAG, "setGlobalNamespaceEnabled result: ${result.isSuccess} [${result.out}]")
         }
+}
+
+fun isSkipStoreSuperKeyEnabled(): Boolean {
+    return getSharedPreferences("config", Context.MODE_PRIVATE).getInt(APApplication.SKIP_STORE_SUPER_KEY, 0) == 1
+}
+
+fun setSkipStoreSuperKeyEnabled(value: Int) {
+    getSharedPreferences("config", Context.MODE_PRIVATE).edit().putString(APApplication.SUPER_KEY, "").apply()
+    getSharedPreferences("config", Context.MODE_PRIVATE).edit().putInt(APApplication.SKIP_STORE_SUPER_KEY, value).apply()
 }
 
 fun forceStopApp(packageName: String) {
