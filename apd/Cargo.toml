@@ -2,7 +2,7 @@
 name = "apd"
 version = "0.1.0"
 edition = "2021"
-rust-version = "1.65"
+rust-version = "1.76"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -38,18 +38,18 @@ tempdir = "0.3"
 chrono = "0.4"
 
 [target.'cfg(any(target_os = "android", target_os = "linux"))'.dependencies]
-# sys-mount = { git = "https://github.com/tiann/sys-mount", branch = "loopfix" }
 rustix = { git = "https://github.com/Kernel-SU/rustix.git", branch = "main", features = ["all-apis"] }
 # some android specific dependencies which compiles under unix are also listed here for convenience of coding
 android-properties = { version = "0.2.2", features = ["bionic-deprecated"] }
 procfs = "0.16"
 loopdev = { git = "https://github.com/Kernel-SU/loopdev" }
 
-
 [target.'cfg(target_os = "android")'.dependencies]
 android_logger = "0.13"
 
 [profile.release]
 strip = true
-opt-level = "z"
+opt-level = 3
+codegen-units = 1
+panic = "abort"
 lto = true
