@@ -61,7 +61,6 @@ class APApplication : Application() {
         private const val DEFAULT_SU_PATH = "/system/bin/kp"
         private const val LEGACY_SU_PATH = "/system/bin/su"
 
-        // TODO: encrypt super_key before saving it on SharedPreferences
         const val SUPER_KEY = "super_key"
         const val SKIP_STORE_SUPER_KEY = "skip_store_super_key"
         private const val SHOW_BACKUP_WARN = "show_backup_warning"
@@ -167,7 +166,7 @@ class APApplication : Application() {
                 if(!ready) return
 
                 if (!isSkipStoreSuperKeyEnabled())
-                    sharedPreferences.edit().putString(SUPER_KEY, value).apply()
+                    sharedPreferences.edit().putString(SUPER_KEY, APatchSecurityHelper.encrypt(value)).apply()
 
                 thread {
                     val rc = Natives.su(0, null)
@@ -231,8 +230,14 @@ class APApplication : Application() {
         super.onCreate()
         apApp = this
 
+        APatchSecurityHelper.checkAndGenerateSecretKey()
         sharedPreferences = getSharedPreferences("config", Context.MODE_PRIVATE)
-        superKey = sharedPreferences.getString(SUPER_KEY, "") ?: ""
+        val superKeyFromSP = sharedPreferences.getString(SUPER_KEY, "")
+        superKey = if (!superKeyFromSP.isNullOrBlank()) {
+            APatchSecurityHelper.decrypt(superKeyFromSP)
+        } else {
+            ""
+        }
 
         val context = this
         val iconSize = resources.getDimensionPixelSize(android.R.dimen.app_icon_size)
