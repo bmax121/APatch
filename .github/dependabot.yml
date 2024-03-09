@@ -13,6 +13,13 @@ updates:
       maven-dependencies:
         patterns:
           - "*"
+    ignore:
+      - dependency-name: "*"
+        versions:
+          - "*-alpha.*"
+          - "*-beta.*"
+          - "*-rc.*"
+          - "*-*"
 
 registries:
   maven-google:

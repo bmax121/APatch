@@ -42,7 +42,7 @@
     <string name="su_refresh">重新整理</string>
     <string name="su_show_system_apps">顯示系統應用程式</string>
     <string name="home_ap_cando_install">安裝</string>
-    <string name="home_learn_apatch">深入了解 AndroidPatch</string>
+    <string name="home_learn_apatch">深入瞭解 AndroidPatch</string>
     <string name="apm_failed_to_disable">無法停用「%s」模組</string>
     <string name="home_click_to_install">點擊以開始安裝</string>
     <string name="home_selinux_status_unknown">未知</string>
@@ -124,10 +124,23 @@
     <string name="patch_item_skey">超級密鑰</string>
     <string name="patch_item_set_skey_label">超級密鑰至少需要８個字符，並且同時包含數字和字母</string>
     <string name="patch_item_extra_args">引數：</string>
-    <string name="patch_mode_uninstall_patch">模式：取消補丁</string>
+    <string name="patch_mode_uninstall_patch">模式：撤銷補丁</string>
     <string name="patch_mode_bootimg_patch">模式：修補</string>
     <string name="patch_start_unpatch_btn">取消修補</string>
     <string name="patch_item_kpimg_version">版本：</string>
     <string name="patch_item_kpimg_comile_time">時間：</string>
     <string name="patch_item_kpimg_config">配置：</string>
+    <string name="hide_apatch_manager">隱藏 APatch 管理器</string>
+    <string name="hide_apatch_dialog_new_manager_name">新管理器名稱</string>
+    <string name="hide_apatch_dialog_summary">它將用作啟動器中顯示的新應用程式標籤</string>
+    <string name="hide_apatch_manager_summary">使用隨機套件 ID 和自訂應用程式標籤安裝新的管理器應用程式</string>
+    <string name="hide_apatch_manager_failure">隱藏失敗，請回報bug！</string>
+    <string name="kpm_embed">嵌入</string>
+    <string name="kpm_add_kpm">新增 KPM</string>
+    <string name="kpm_install">安裝</string>
+    <string name="setting_reset_su_path">重置 su 路徑</string>
+    <string name="setting_reset_su_path_summary">使用新的“su”路徑。</string>
+    <string name="setting_reset_su_new_path">新的完整路徑</string>
+    <string name="success">成功</string>
+    <string name="failure">失敗</string>
 </resources>
