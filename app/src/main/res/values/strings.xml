@@ -170,4 +170,6 @@
 
     <string name="settings_donot_store_superkey">Don\'t store super key in local</string>
     <string name="settings_donot_store_superkey_summary">Authenticate the super key every time the manager starts</string>
+
+    <string name="home_new_apatch_found">New version available: %s, Click me to upgrade</string>
 </resources>
