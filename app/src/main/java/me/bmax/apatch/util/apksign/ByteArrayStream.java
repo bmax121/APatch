@@ -13,7 +13,7 @@ public class ByteArrayStream extends ByteArrayOutputStream {
 
     public synchronized void readFrom(InputStream is, int len) {
         int read;
-        byte buffer[] = new byte[4096];
+        byte[] buffer = new byte[4096];
         try {
             while ((read = is.read(buffer, 0, Math.min(len, buffer.length))) > 0) {
                 write(buffer, 0, read);

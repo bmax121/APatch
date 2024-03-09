@@ -17,7 +17,7 @@ import kotlin.concurrent.thread
 
 lateinit var apApp: APApplication
 
-val TAG = "APatch"
+const val TAG = "APatch"
 
 class APApplication : Application() {
     enum class State {
@@ -37,29 +37,29 @@ class APApplication : Application() {
 
 
     companion object {
-        val APD_PATH = "/data/adb/apd"
-        val KPATCH_PATH = "/data/adb/kpatch"
-        val SUPERCMD = "/system/bin/truncate"
-        val APATCH_FOLDER = "/data/adb/ap/"
-        val APATCH_BIN_FOLDER = APATCH_FOLDER + "bin/"
-        val APATCH_LOG_FOLDER = APATCH_FOLDER + "log/"
-        val APD_LINK_PATH = APATCH_BIN_FOLDER + "apd"
-        val KPATCH_LINK_PATH = APATCH_BIN_FOLDER + "kpatch"
-        val PACKAGE_CONFIG_FILE = APATCH_FOLDER + "package_config"
-        val SU_PATH_FILE = APATCH_FOLDER + "su_path"
-        val SAFEMODE_FILE = "/dev/.safemode"
-        val NEED_REBOOT_FILE = "/dev/.need_reboot"
-        val GLOBAL_NAMESPACE_FILE = "/data/adb/.global_namespace_enable"
+        const val APD_PATH = "/data/adb/apd"
+        const val KPATCH_PATH = "/data/adb/kpatch"
+        const val SUPERCMD = "/system/bin/truncate"
+        const val APATCH_FOLDER = "/data/adb/ap/"
+        private const val APATCH_BIN_FOLDER = APATCH_FOLDER + "bin/"
+        private const val APATCH_LOG_FOLDER = APATCH_FOLDER + "log/"
+        private const val APD_LINK_PATH = APATCH_BIN_FOLDER + "apd"
+        private const val KPATCH_LINK_PATH = APATCH_BIN_FOLDER + "kpatch"
+        const val PACKAGE_CONFIG_FILE = APATCH_FOLDER + "package_config"
+        const val SU_PATH_FILE = APATCH_FOLDER + "su_path"
+        const val SAFEMODE_FILE = "/dev/.safemode"
+        private const val NEED_REBOOT_FILE = "/dev/.need_reboot"
+        const val GLOBAL_NAMESPACE_FILE = "/data/adb/.global_namespace_enable"
 
         @Deprecated("Use 'apd -V'")
-        val APATCH_VERSION_PATH = APATCH_FOLDER + "version"
-        val MAGISKPOLICY_BIN_PATH = APATCH_BIN_FOLDER + "magiskpolicy"
-        val BUSYBOX_BIN_PATH = APATCH_BIN_FOLDER + "busybox"
-        val RESETPROP_BIN_PATH = APATCH_BIN_FOLDER + "resetprop"
-        val MAGISK_SCONTEXT = "u:r:magisk:s0"
+        const val APATCH_VERSION_PATH = APATCH_FOLDER + "version"
+        private const val MAGISKPOLICY_BIN_PATH = APATCH_BIN_FOLDER + "magiskpolicy"
+        private const val BUSYBOX_BIN_PATH = APATCH_BIN_FOLDER + "busybox"
+        private const val RESETPROP_BIN_PATH = APATCH_BIN_FOLDER + "resetprop"
+        const val MAGISK_SCONTEXT = "u:r:magisk:s0"
 
-        val DEFAULT_SU_PATH = "/system/bin/kp"
-        val LEGACY_SU_PATH = "/system/bin/su"
+        private const val DEFAULT_SU_PATH = "/system/bin/kp"
+        private const val LEGACY_SU_PATH = "/system/bin/su"
 
         // TODO: encrypt super_key before saving it on SharedPreferences
         const val SUPER_KEY = "super_key"
@@ -73,10 +73,10 @@ class APApplication : Application() {
             }
         }
 
-        private val _kpStateLiveData = MutableLiveData<State>(State.UNKNOWN_STATE)
+        private val _kpStateLiveData = MutableLiveData(State.UNKNOWN_STATE)
         val kpStateLiveData: LiveData<State> = _kpStateLiveData
 
-        private val _apStateLiveData = MutableLiveData<State>(State.UNKNOWN_STATE)
+        private val _apStateLiveData = MutableLiveData(State.UNKNOWN_STATE)
         val apStateLiveData: LiveData<State> = _apStateLiveData
 
         fun uninstallApatch() {
@@ -86,9 +86,9 @@ class APApplication : Application() {
             Natives.resetSuPath(DEFAULT_SU_PATH)
 
             val cmds = arrayOf(
-                "rm -f ${APD_PATH}",
-                "rm -f ${KPATCH_PATH}",
-                "rm -rf ${APATCH_FOLDER}",
+                "rm -f $APD_PATH",
+                "rm -f $KPATCH_PATH",
+                "rm -rf $APATCH_FOLDER",
             )
 
             val shell = getRootShell()
@@ -114,34 +114,34 @@ class APApplication : Application() {
             Natives.resetSuPath(LEGACY_SU_PATH)
 
             val cmds = arrayOf(
-                "mkdir -p ${APATCH_BIN_FOLDER}",
-                "mkdir -p ${APATCH_LOG_FOLDER}",
+                "mkdir -p $APATCH_BIN_FOLDER",
+                "mkdir -p $APATCH_LOG_FOLDER",
 
                 // kpatch extracted from kernel
-                "cp -f ${nativeDir}/libkpatch.so ${KPATCH_PATH}",
-                "chmod +x ${KPATCH_PATH}",
-                "ln -s ${KPATCH_PATH} ${KPATCH_LINK_PATH}",
-                "restorecon ${KPATCH_PATH}",
+                "cp -f ${nativeDir}/libkpatch.so $KPATCH_PATH",
+                "chmod +x $KPATCH_PATH",
+                "ln -s $KPATCH_PATH $KPATCH_LINK_PATH",
+                "restorecon $KPATCH_PATH",
 
-                "cp -f ${nativeDir}/libapd.so ${APD_PATH}",
-                "chmod +x ${APD_PATH}",
-                "ln -s ${APD_PATH} ${APD_LINK_PATH}",
-                "restorecon ${APD_PATH}",
+                "cp -f ${nativeDir}/libapd.so $APD_PATH",
+                "chmod +x $APD_PATH",
+                "ln -s $APD_PATH $APD_LINK_PATH",
+                "restorecon $APD_PATH",
 
-                "cp -f ${nativeDir}/libmagiskpolicy.so ${MAGISKPOLICY_BIN_PATH}",
-                "chmod +x ${MAGISKPOLICY_BIN_PATH}",
-                "cp -f ${nativeDir}/libresetprop.so ${RESETPROP_BIN_PATH}",
-                "chmod +x ${RESETPROP_BIN_PATH}",
-                "cp -f ${nativeDir}/libbusybox.so ${BUSYBOX_BIN_PATH}",
-                "chmod +x ${BUSYBOX_BIN_PATH}",
+                "cp -f ${nativeDir}/libmagiskpolicy.so $MAGISKPOLICY_BIN_PATH",
+                "chmod +x $MAGISKPOLICY_BIN_PATH",
+                "cp -f ${nativeDir}/libresetprop.so $RESETPROP_BIN_PATH",
+                "chmod +x $RESETPROP_BIN_PATH",
+                "cp -f ${nativeDir}/libbusybox.so $BUSYBOX_BIN_PATH",
+                "chmod +x $BUSYBOX_BIN_PATH",
 
-                "touch ${PACKAGE_CONFIG_FILE}",
-                "touch ${SU_PATH_FILE}",
-                "[ -s ${SU_PATH_FILE} ] || echo ${LEGACY_SU_PATH} > ${SU_PATH_FILE}",
-                "echo ${Version.getManagerVersion().second} > ${APATCH_VERSION_PATH}",
-                "restorecon -R ${APATCH_FOLDER}",
+                "touch $PACKAGE_CONFIG_FILE",
+                "touch $SU_PATH_FILE",
+                "[ -s $SU_PATH_FILE ] || echo $LEGACY_SU_PATH > $SU_PATH_FILE",
+                "echo ${Version.getManagerVersion().second} > $APATCH_VERSION_PATH",
+                "restorecon -R $APATCH_FOLDER",
 
-                "${KPATCH_PATH} ${superKey} android_user init",
+                "$KPATCH_PATH $superKey android_user init",
             )
 
             val shell = getRootShell()
@@ -152,13 +152,12 @@ class APApplication : Application() {
         }
 
         fun markNeedReboot() {
-            val result = rootShellForResult("touch ${NEED_REBOOT_FILE}")
+            val result = rootShellForResult("touch $NEED_REBOOT_FILE")
             _kpStateLiveData.postValue(State.KERNELPATCH_NEED_REBOOT)
             Log.d(TAG, "mark reboot ${result.code}")
         }
 
         var superKey: String = ""
-            get
             set(value) {
                 field = value
                 val ready = Natives.nativeReady(value)
@@ -181,7 +180,7 @@ class APApplication : Application() {
                     val buildV = Version.buildKPVUInt()
                     val installedV = Version.installedKPVUInt()
 
-                    Log.d(TAG, "kp installed version: ${installedV}, build version: ${buildV}")
+                    Log.d(TAG, "kp installed version: ${installedV}, build version: $buildV")
 
                     // use != instead of > to enable downgrade,
                     if (buildV != installedV) {
@@ -209,8 +208,8 @@ class APApplication : Application() {
                         val suPathFile = File(SU_PATH_FILE)
                         if (suPathFile.exists()) {
                             val suPath = suPathFile.readLines()[0].trim()
-                            if (!Natives.suPath().equals(suPath)) {
-                                Log.d(TAG, "su path: " + suPath)
+                            if (Natives.suPath() != suPath) {
+                                Log.d(TAG, "su path: $suPath")
                                 Natives.resetSuPath(suPath)
                             }
                         }

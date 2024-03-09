@@ -33,10 +33,10 @@ import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -120,8 +120,8 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
     }
 
     // todo
-    var isSafeMode = false
-    var hasMagisk = hasMagisk()
+    val isSafeMode = false
+    val hasMagisk = hasMagisk()
     val hideInstallButton = isSafeMode || hasMagisk || !viewModel.isOverlayAvailable
 
     val moduleListState = rememberLazyListState()
@@ -142,7 +142,7 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
                 val data = it.data ?: return@rememberLauncherForActivityResult
                 val uri = data.data ?: return@rememberLauncherForActivityResult
 
-                Log.i("ModuleScreen", "select zip result: ${uri}")
+                Log.i("ModuleScreen", "select zip result: $uri")
 
                 navigator.navigate(InstallScreenDestination(uri))
 
@@ -327,8 +327,6 @@ private fun ModuleList(
     val refreshState = rememberPullRefreshState(refreshing = viewModel.isRefreshing,
         onRefresh = { viewModel.fetchModuleList() })
     Box(modifier.pullRefresh(refreshState)) {
-        val context = LocalContext.current
-
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             state = state,
@@ -523,7 +521,7 @@ private fun ModuleItem(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Divider(thickness = Dp.Hairline)
+            HorizontalDivider(thickness = Dp.Hairline)
 
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,

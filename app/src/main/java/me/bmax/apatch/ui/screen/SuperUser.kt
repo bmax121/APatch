@@ -9,7 +9,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -35,7 +34,6 @@ import me.bmax.apatch.Natives
 import me.bmax.apatch.R
 import me.bmax.apatch.ui.component.ConfirmDialog
 import me.bmax.apatch.ui.component.SearchAppBar
-import me.bmax.apatch.ui.component.SwitchItem
 import me.bmax.apatch.ui.viewmodel.SuperUserViewModel
 import me.bmax.apatch.util.PkgConfig
 
@@ -128,7 +126,7 @@ fun SuperUserScreen(navigator: DestinationsNavigator) {
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun AppItem(
     app: SuperUserViewModel.AppInfo,
@@ -180,7 +178,7 @@ private fun AppItem(
                     checked = !checked
                     config.allow = if (checked) 1 else 0
                     if (checked) {
-                        Natives.grantSu(app.uid, 0, config.profile?.scontext)
+                        Natives.grantSu(app.uid, 0, config.profile.scontext)
                     } else {
                         Natives.revokeSu(app.uid)
                     }

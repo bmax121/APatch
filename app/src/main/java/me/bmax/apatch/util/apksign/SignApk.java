@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.security.DigestOutputStream;
 import java.security.GeneralSecurityException;
 import java.security.InvalidKeyException;
@@ -171,12 +172,12 @@ public class SignApk {
                 // Add SHA-1 digest if requested
                 if (md_sha1 != null) {
                     attr.putValue("SHA1-Digest",
-                            new String(Base64.encode(md_sha1.digest()), "ASCII"));
+                            new String(Base64.encode(md_sha1.digest()), StandardCharsets.US_ASCII));
                 }
                 // Add SHA-256 digest if requested
                 if (md_sha256 != null) {
                     attr.putValue("SHA-256-Digest",
-                            new String(Base64.encode(md_sha256.digest()), "ASCII"));
+                            new String(Base64.encode(md_sha256.digest()), StandardCharsets.US_ASCII));
                 }
                 output.getEntries().put(name, attr);
             }
@@ -206,13 +207,13 @@ public class SignApk {
 
         MessageDigest md = MessageDigest.getInstance(hash == USE_SHA256 ? "SHA256" : "SHA1");
         PrintStream print = new PrintStream(new DigestOutputStream(new ByteArrayOutputStream(), md),
-                true, "UTF-8");
+                true, StandardCharsets.UTF_8);
 
         // Digest of the entire manifest
         manifest.write(print);
         print.flush();
         main.putValue(hash == USE_SHA256 ? "SHA-256-Digest-Manifest" : "SHA1-Digest-Manifest",
-                new String(Base64.encode(md.digest()), "ASCII"));
+                new String(Base64.encode(md.digest()), StandardCharsets.US_ASCII));
 
         Map<String, Attributes> entries = manifest.getEntries();
         for (Map.Entry<String, Attributes> entry : entries.entrySet()) {
@@ -226,7 +227,7 @@ public class SignApk {
 
             Attributes sfAttr = new Attributes();
             sfAttr.putValue(hash == USE_SHA256 ? "SHA-256-Digest" : "SHA1-Digest",
-                    new String(Base64.encode(md.digest()), "ASCII"));
+                    new String(Base64.encode(md.digest()), StandardCharsets.US_ASCII));
             sf.getEntries().put(entry.getKey(), sfAttr);
         }
 

@@ -22,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.navigation.popBackStack
@@ -35,13 +36,12 @@ import me.bmax.apatch.util.LocalDialogHost
 import me.bmax.apatch.util.LocalSnackbarHost
 
 class MainActivity : AppCompatActivity() {
-    @OptIn(ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
             APatchTheme {
-                val navController = rememberAnimatedNavController()
+                val navController = rememberNavController()
                 val snackbarHostState = remember { SnackbarHostState() }
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val route = navBackStackEntry?.destination?.route
@@ -69,12 +69,12 @@ class MainActivity : AppCompatActivity() {
 @Composable
 private fun BottomBar(navController: NavHostController) {
     NavigationBar(tonalElevation = 8.dp) {
-        BottomBarDestination.values().forEach { destination ->
+        BottomBarDestination.entries.forEach { destination ->
             val state by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
-            val kPatchReady = !state.equals(APApplication.State.UNKNOWN_STATE)
-            val aPatchReady = (state.equals(APApplication.State.ANDROIDPATCH_INSTALLING) ||
-                               state.equals(APApplication.State.ANDROIDPATCH_INSTALLED) ||
-                               state.equals(APApplication.State.ANDROIDPATCH_NEED_UPDATE))
+            val kPatchReady = state != APApplication.State.UNKNOWN_STATE
+            val aPatchReady = (state == APApplication.State.ANDROIDPATCH_INSTALLING ||
+                    state == APApplication.State.ANDROIDPATCH_INSTALLED ||
+                    state == APApplication.State.ANDROIDPATCH_NEED_UPDATE)
             val hideDestination = (destination.kPatchRequired && !kPatchReady) ||
                                   (destination.aPatchRequired && !aPatchReady)
             if (hideDestination) return@forEach

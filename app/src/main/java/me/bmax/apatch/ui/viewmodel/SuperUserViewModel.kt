@@ -90,7 +90,7 @@ class SuperUserViewModel : ViewModel() {
                 it.resume(binder as IBinder to this)
             }
         }
-        val intent = Intent(apApp, RootServices::class.java);
+        val intent = Intent(apApp, RootServices::class.java)
         val task = RootServices.bindOrTask(
             intent,
             Shell.EXECUTOR,
@@ -101,7 +101,7 @@ class SuperUserViewModel : ViewModel() {
     }
 
     private fun stopRootService() {
-        val intent = Intent(apApp, RootServices::class.java);
+        val intent = Intent(apApp, RootServices::class.java)
         RootServices.stop(intent)
     }
 
@@ -120,7 +120,7 @@ class SuperUserViewModel : ViewModel() {
                 stopRootService()
             }
             val uids = Natives.suUids().toList()
-            Log.d(TAG, "all allows: ${uids}")
+            Log.d(TAG, "all allows: $uids")
 
             var configs: HashMap<String, PkgConfig.Config> = HashMap()
             thread {
@@ -128,9 +128,9 @@ class SuperUserViewModel : ViewModel() {
                 configs = PkgConfig.readConfigs()
             }.join()
 
-            Log.d(TAG, "all configs: ${configs}")
+            Log.d(TAG, "all configs: $configs")
 
-            apps = allPackages.list.map { it ->
+            apps = allPackages.list.map {
                 val appInfo = it.applicationInfo
                 val uid = appInfo.uid
                 val actProfile = if (uids.contains(uid)) Natives.suProfile(uid) else null

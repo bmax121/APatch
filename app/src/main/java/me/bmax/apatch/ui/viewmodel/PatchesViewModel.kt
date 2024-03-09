@@ -66,7 +66,7 @@ class PatchesViewModel : ViewModel() {
         error = ""
 
         val info = apApp.applicationInfo
-        var libs = File(info.nativeLibraryDir).listFiles { _, name ->
+        val libs = File(info.nativeLibraryDir).listFiles { _, name ->
             execs.contains(name)
         } ?: emptyArray()
 
@@ -97,7 +97,7 @@ class PatchesViewModel : ViewModel() {
 
         if(result.isSuccess) {
             val ini = Ini(StringReader(result.out.joinToString("\n")))
-            var kpimg = ini.get("kpimg")
+            val kpimg = ini["kpimg"]
             if (kpimg != null) {
                 kpimgInfo = KPModel.KPImgInfo(
                     kpimg["version"].toString(),
@@ -106,7 +106,7 @@ class PatchesViewModel : ViewModel() {
                     kpimg["superkey"].toString(),   // empty
                 )
             } else {
-                error += "parse kpimg error\n";
+                error += "parse kpimg error\n"
             }
         } else {
             error = result.err.joinToString("\n")
@@ -121,9 +121,9 @@ class PatchesViewModel : ViewModel() {
         )
         if(result.isSuccess) {
             val ini = Ini(StringReader(result.out.joinToString("\n")))
-            Log.d(TAG, "kernel image info: " + ini.toString())
+            Log.d(TAG, "kernel image info: $ini")
             
-            val kernel = ini.get("kernel")
+            val kernel = ini["kernel"]
             if (kernel == null) {
                 error += "empty kernel section"
                 Log.d(TAG, error)
@@ -131,15 +131,15 @@ class PatchesViewModel : ViewModel() {
             }
             kimgInfo = KPModel.KImgInfo(kernel["banner"].toString(), kernel["patched"].toBoolean())
             if(kimgInfo.patched) {
-                val superkey = ini.get("kpimg")?.getOrDefault("superkey", "") ?: ""
+                val superkey = ini["kpimg"]?.getOrDefault("superkey", "") ?: ""
                 kpimgInfo.superKey = superkey
                 if(keyChecked(superkey)) {
                     this.superkey = superkey
                 }
                 val kpmNum = kernel["extra_num"]?.toInt()
                 if(kpmNum != null && kpmNum > 0) {
-                    for (i in 0..kpmNum - 1) {
-                        val extra = ini.get("extra ${i}")
+                    for (i in 0..<kpmNum) {
+                        val extra = ini["extra $i"]
                         if(extra == null){
                             error += "empty extra section"
                             Log.d(TAG, error)
@@ -149,10 +149,10 @@ class PatchesViewModel : ViewModel() {
                         val name = extra["name"].toString()
                         val args = extra["args"].toString()
                         var event = extra["event"].toString()
-                        if(event.isNullOrEmpty()) {
+                        if(event.isEmpty()) {
                             event = KPModel.TriggerEvent.PRE_KERNEL_INIT.event
                         }
-                        if(type.equals(KPModel.ExtraType.KPM)) {
+                        if(type == KPModel.ExtraType.KPM) {
                             val kpmInfo = KPModel.KPMInfo(
                                 type, name, event, args,
                                 extra["version"].toString(),
@@ -184,14 +184,14 @@ class PatchesViewModel : ViewModel() {
                     src.copyAndCloseOut(it.newOutputStream())
                 }
             } } catch (e: IOException) {
-                Log.d(TAG, "copy boot image error: " + e)
+                Log.d(TAG, "copy boot image error: $e")
             }
             parseBootimg(srcBoot.path)
             running = false
         }
     }
 
-    fun extractAndParseBootimg() {
+    private fun extractAndParseBootimg() {
         val result = shellForResult(shell,
             "cd $patchDir",
             "sh boot_extract.sh",
@@ -199,8 +199,8 @@ class PatchesViewModel : ViewModel() {
         if(result.isSuccess) {
             bootSlot = result.out.filter { it.startsWith("SLOT=") }[0].removePrefix("SLOT=")
             bootDev = result.out.filter { it.startsWith("BOOTIMAGE=") }[0].removePrefix("BOOTIMAGE=")
-            Log.d(TAG, "current slot: ${bootSlot}")
-            Log.d(TAG, "current bootimg: ${bootDev}")
+            Log.d(TAG, "current slot: $bootSlot")
+            Log.d(TAG, "current bootimg: $bootDev")
             srcBoot = FileSystemManager.getLocal().getFile(bootDev)
             parseBootimg(bootDev)
         } else {
@@ -216,10 +216,10 @@ class PatchesViewModel : ViewModel() {
 
             running = true
             prepare()
-            if (!mode.equals(PatchMode.UNPATCH)) {
+            if (mode != PatchMode.UNPATCH) {
                 parseKpimg()
             }
-            if (mode.equals(PatchMode.UPDATE) || mode.equals(PatchMode.UNPATCH)) {
+            if (mode == PatchMode.UPDATE || mode == PatchMode.UNPATCH) {
                 extractAndParseBootimg()
             }
             running = false
@@ -234,7 +234,7 @@ class PatchesViewModel : ViewModel() {
 
             val rand = (1..4).map { ('a'..'z').random() }.joinToString("")
             val kpmFileName = "${rand}.kpm"
-            var kpmFile: ExtendedFile = patchDir.getChildFile(kpmFileName)
+            val kpmFile: ExtendedFile = patchDir.getChildFile(kpmFileName)
 
             Log.d(TAG, "copy kpm to: " + kpmFile.path)
             try {
@@ -244,7 +244,7 @@ class PatchesViewModel : ViewModel() {
                     }
                 }
             } catch (e: IOException) {
-                Log.d(TAG, "Copy kpm error: " + e)
+                Log.d(TAG, "Copy kpm error: $e")
             }
 
             val result = shellForResult(shell,
@@ -254,8 +254,8 @@ class PatchesViewModel : ViewModel() {
 
             if (result.isSuccess) {
                 val ini = Ini(StringReader(result.out.joinToString("\n")))
-                Log.d(TAG, "add new kpm info: " + ini.toString())
-                var kpm = ini.get("kpm")
+                Log.d(TAG, "add new kpm info: $ini")
+                val kpm = ini["kpm"]
                 if (kpm != null) {
                     val kpmInfo = KPModel.KPMInfo(
                         KPModel.ExtraType.KPM,
@@ -295,7 +295,7 @@ class PatchesViewModel : ViewModel() {
                 "rm -f ${APApplication.APD_PATH}",
                 "rm -rf ${APApplication.APATCH_FOLDER}",
                 "cd $patchDir",
-                "sh boot_unpatch.sh ${bootDev}",
+                "sh boot_unpatch.sh $bootDev",
             ).to(logs, logs).exec()
 
             if (result.isSuccess) {
@@ -333,7 +333,7 @@ class PatchesViewModel : ViewModel() {
 
             var patchCommand = "sh boot_patch.sh $superkey ${srcBoot.path}"
 
-            for(i in 0..newExtrasFileName.size - 1) {
+            for(i in 0..<newExtrasFileName.size) {
                 patchCommand += " -M ${newExtrasFileName[i]}"
                 val extra = newExtras[i]
                 if(extra.args.isNotEmpty()){
@@ -344,7 +344,7 @@ class PatchesViewModel : ViewModel() {
                 }
                 patchCommand += " -T ${extra.type.desc}"
             }
-            for(i in 0..existedExtras.size - 1) {
+            for(i in 0..<existedExtras.size) {
                 val extra = existedExtras[i]
                 patchCommand += " -E ${extra.name}"
                 if(extra.args.isNotEmpty()){
@@ -357,7 +357,7 @@ class PatchesViewModel : ViewModel() {
             }
             patchCommand += " -K kpatch"
 
-            Log.d(TAG, "patchCommand: ${patchCommand}")
+            Log.d(TAG, "patchCommand: $patchCommand")
 
             val result = shell.newJob().add(
                 "cd $patchDir",
@@ -375,11 +375,11 @@ class PatchesViewModel : ViewModel() {
                 return@launch
             }
 
-            if(mode.equals(PatchMode.UPDATE)) {
+            if(mode == PatchMode.UPDATE) {
                 logs.add(" Reboot to finish update")
                 needReboot = true
                 APApplication.markNeedReboot()
-            } else if(mode.equals(PatchMode.PATCH)) {
+            } else if(mode == PatchMode.PATCH) {
                 val newBootFile = patchDir.getChildFile("new-boot.img")
                 val outDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
                 if (!outDir.exists()) outDir.mkdirs()
@@ -395,7 +395,7 @@ class PatchesViewModel : ViewModel() {
                 if (succ) {
                     logs.add(" Write patched boot.img was successful")
                     logs.add(" Output file is written to ")
-                    logs.add(" ${outPath?.path}")
+                    logs.add(" ${outPath.path}")
                 } else {
                     logs.add(" Write patched boot.img failed")
                 }

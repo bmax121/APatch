@@ -46,8 +46,8 @@ class KPModuleViewModel : ViewModel() {
             kotlin.runCatching {
                 val names = Natives.kernelPatchModuleList()
                 val nameList = names.split('\n').toList()
-                Log.d(TAG, "kpm list: " + nameList)
-                modules = nameList.filter{!it.isNullOrEmpty()}.map{
+                Log.d(TAG, "kpm list: $nameList")
+                modules = nameList.filter{ it.isNotEmpty() }.map{
                     val infoline = Natives.kernelPatchModuleInfo(it)
                     val spi = infoline.split('\n')
                     val name = spi.find { it.startsWith("name=") }?.removePrefix("name=")
