@@ -97,7 +97,7 @@ fun HomeScreen(navigator: DestinationsNavigator) {
 @Composable
 fun AuthSuperKey(showDialog: MutableState<Boolean>) {
     var key by remember { mutableStateOf("") }
-    var keyVisible by remember { mutableStateOf(false) }
+    val keyVisible = rememberSaveable { mutableStateOf(false) }
     var enable by remember { mutableStateOf(false) }
     AlertDialog(
         onDismissRequest = { showDialog.value = false },
@@ -116,16 +116,17 @@ fun AuthSuperKey(showDialog: MutableState<Boolean>) {
                             enable = key.isNotEmpty()
                         },
                         label = { Text(stringResource(id = R.string.super_key)) },
-                        visualTransformation = if (keyVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                        visualTransformation = if (keyVisible.value) VisualTransformation.None else PasswordVisualTransformation(),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
                     )
                     IconButton(
                         modifier = Modifier
                             .size(40.dp)
                             .padding(end = 12.dp),
-                        onClick = { keyVisible = !keyVisible }
+                        onClick = { keyVisible.value = !keyVisible.value }
                     ) {
                         Icon(
-                            imageVector = if (keyVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                            imageVector = if (keyVisible.value) Icons.Default.Visibility else Icons.Default.VisibilityOff,
                             contentDescription = null,
                             tint = Color.Gray
                         )

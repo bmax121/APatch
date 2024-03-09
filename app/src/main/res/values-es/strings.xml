@@ -129,4 +129,17 @@
     <string name="patch_item_extra_name">nombre:</string>
     <string name="patch_item_error">¡¡ERROR!!</string>
     <string name="patch_item_bootimg_slot">slot:</string>
+    <string name="hide_apatch_manager">Ocultar el gestor de APatch</string>
+    <string name="kpm_embed">Insertar</string>
+    <string name="success">Exitoso</string>
+    <string name="kpm_install">Instalar</string>
+    <string name="hide_apatch_dialog_new_manager_name">Nombre del nuevo gestor</string>
+    <string name="hide_apatch_manager_summary">Instalar una nueva aplicación de gestión con un ID de paquete aleatorio y una etiqueta de aplicación personalizada</string>
+    <string name="hide_apatch_dialog_summary">Se utilizará como la nueva etiqueta de aplicación que se muestra en el lanzador</string>
+    <string name="hide_apatch_manager_failure">No se ha podido ocultar, ¡informe del error!</string>
+    <string name="setting_reset_su_path">Restablecer la ruta su</string>
+    <string name="setting_reset_su_path_summary">Utiliza una nueva ruta \"su\".</string>
+    <string name="setting_reset_su_new_path">nueva ruta completa</string>
+    <string name="failure">Fallido</string>
+    <string name="kpm_add_kpm">Añadir KPM</string>
 </resources>
