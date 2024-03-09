@@ -1,5 +1,6 @@
 package me.bmax.apatch.ui.screen
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
@@ -18,6 +19,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.Commit
 import androidx.compose.material.icons.filled.ContactPage
+import androidx.compose.material.icons.filled.DeveloperMode
 import androidx.compose.material.icons.filled.Engineering
 import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.Masks
@@ -180,6 +182,25 @@ fun SettingScreen(navigator: DestinationsNavigator) {
                         isGlobalNamespaceEnabled = it
                     }
                 )
+            }
+
+            if (aPatchReady) {
+                var enableWebDebugging by rememberSaveable {
+                    mutableStateOf(
+                        AppUtils.getSharedPreferences("config", Context.MODE_PRIVATE)
+                            .getBoolean("enable_web_debugging", false)
+                    )
+                }
+                SwitchItem(
+                    icon = Icons.Filled.DeveloperMode,
+                    title = stringResource(id = R.string.enable_web_debugging),
+                    summary = stringResource(id = R.string.enable_web_debugging_summary),
+                    checked = enableWebDebugging
+                ) {
+                    AppUtils.getSharedPreferences("config", Context.MODE_PRIVATE)
+                        .edit().putBoolean("enable_web_debugging", it).apply()
+                    enableWebDebugging = it
+                }
             }
 
             if (kPatchReady && !bIsManagerHide) {
