@@ -1,7 +1,6 @@
 package me.bmax.apatch.util
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.net.Uri
 import android.util.Log
 import com.topjohnwu.superuser.CallbackList
@@ -69,15 +68,13 @@ fun tryGetRootShell(): Shell {
 fun shellForResult(shell: Shell, vararg cmds: String): Shell.Result {
     val out = ArrayList<String>()
     val err = ArrayList<String>()
-    val result = shell.newJob().add(*cmds).to(out, err).exec()
-    return result
+    return shell.newJob().add(*cmds).to(out, err).exec()
 }
 
 fun rootShellForResult(vararg cmds: String): Shell.Result {
     val out = ArrayList<String>()
     val err = ArrayList<String>()
-    val result = getRootShell().newJob().add(*cmds).to(out, err).exec()
-    return result
+    return getRootShell().newJob().add(*cmds).to(out, err).exec()
 }
 
 fun execApd(args: String): Boolean {

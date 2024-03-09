@@ -64,17 +64,17 @@ import me.bmax.apatch.ui.viewmodel.PatchesViewModel
 import me.bmax.apatch.util.Version
 import me.bmax.apatch.util.reboot
 
-private val TAG = "Patches"
+private const val TAG = "Patches"
 
 @Destination
 @Composable
 fun Patches(navigator: DestinationsNavigator, mode: PatchesViewModel.PatchMode) {
-    var permissionRequest = remember { mutableStateOf(false)  }
+    val permissionRequest = remember { mutableStateOf(false)  }
     val scrollState = rememberScrollState()
     val scope = rememberCoroutineScope()
 
     val viewModel = viewModel<PatchesViewModel>()
-    SideEffect() {
+    SideEffect {
         viewModel.prepare(mode)
     }
 
@@ -127,11 +127,11 @@ fun Patches(navigator: DestinationsNavigator, mode: PatchesViewModel.PatchMode) 
             KernelPatchImageView(viewModel.kpimgInfo)
 
             // select boot.img
-            if(mode.equals(PatchesViewModel.PatchMode.PATCH) && viewModel.kimgInfo.banner.isEmpty()) {
+            if(mode == PatchesViewModel.PatchMode.PATCH && viewModel.kimgInfo.banner.isEmpty()) {
                 SelectFileButton(
                     text = stringResource(id = R.string.patch_select_bootimg_btn),
                     onSelected = { data, uri ->
-                        Log.d(TAG, "select boot.img, data: ${data}, uri: ${uri}")
+                        Log.d(TAG, "select boot.img, data: $data, uri: $uri")
                         viewModel.copyAndParseBootimg(uri)
                     }
                 )
@@ -145,12 +145,12 @@ fun Patches(navigator: DestinationsNavigator, mode: PatchesViewModel.PatchMode) 
                 KernelImageView(viewModel.kimgInfo)
             }
 
-            if(!mode.equals(PatchesViewModel.PatchMode.UNPATCH) && !viewModel.kimgInfo.banner.isEmpty() ) {
+            if(mode != PatchesViewModel.PatchMode.UNPATCH && viewModel.kimgInfo.banner.isNotEmpty()) {
                 SetSuperKeyView(viewModel)
             }
 
             // existed extras
-            if(mode.equals(PatchesViewModel.PatchMode.UPDATE)) {
+            if(mode == PatchesViewModel.PatchMode.UPDATE) {
                 viewModel.existedExtras.forEach( action = {
                     ExtraItem(extra = it, true, onDelete = {
                         viewModel.existedExtras.remove(it)
@@ -159,7 +159,7 @@ fun Patches(navigator: DestinationsNavigator, mode: PatchesViewModel.PatchMode) 
             }
 
             // add new extras
-            if(!mode.equals(PatchesViewModel.PatchMode.UNPATCH)) {
+            if(mode != PatchesViewModel.PatchMode.UNPATCH) {
                 viewModel.newExtras.forEach( action = {
                     ExtraItem(extra = it, false, onDelete = {
                         val idx = viewModel.newExtras.indexOf(it)
@@ -170,11 +170,11 @@ fun Patches(navigator: DestinationsNavigator, mode: PatchesViewModel.PatchMode) 
             }
 
             // add new KPM
-            if(viewModel.superkey.isNotEmpty() && !viewModel.patching && !viewModel.patchdone && !mode.equals(PatchesViewModel.PatchMode.UNPATCH)) {
+            if(viewModel.superkey.isNotEmpty() && !viewModel.patching && !viewModel.patchdone && mode != PatchesViewModel.PatchMode.UNPATCH) {
                 SelectFileButton(
                     text = stringResource(id = R.string.patch_embed_kpm_btn),
                     onSelected = {data, uri ->
-                        Log.d(TAG, "select kpm, data: ${data}, uri: ${uri}")
+                        Log.d(TAG, "select kpm, data: $data, uri: $uri")
                         viewModel.embedKPM(uri)
                     }
                 )
@@ -183,12 +183,16 @@ fun Patches(navigator: DestinationsNavigator, mode: PatchesViewModel.PatchMode) 
             // do patch, update, unpatch
             if(!viewModel.patching && !viewModel.patchdone) {
                 // patch start
-                if(!mode.equals(PatchesViewModel.PatchMode.UNPATCH) && viewModel.superkey.isNotEmpty()) {
-                    StartButton(stringResource(id = R.string.patch_start_patch_btn), {viewModel.doPatch(mode)} )
+                if(mode != PatchesViewModel.PatchMode.UNPATCH && viewModel.superkey.isNotEmpty()) {
+                    StartButton(stringResource(id = R.string.patch_start_patch_btn)) {
+                        viewModel.doPatch(
+                            mode
+                        )
+                    }
                 }
                 // unpatch
-                if(mode.equals(PatchesViewModel.PatchMode.UNPATCH) && viewModel.kimgInfo.banner.isNotEmpty()) {
-                    StartButton(stringResource(id = R.string.patch_start_unpatch_btn), {viewModel.doUnpatch()} )
+                if(mode == PatchesViewModel.PatchMode.UNPATCH && viewModel.kimgInfo.banner.isNotEmpty()) {
+                    StartButton(stringResource(id = R.string.patch_start_unpatch_btn)) { viewModel.doUnpatch() }
                 }
             }
 
@@ -271,7 +275,7 @@ private fun ExtraItem(extra: KPModel.IExtraInfo, existed: Boolean, onDelete: ()-
                         .padding(end = 8.dp)
                         .clickable { onDelete() })
             }
-            if(extra.type.equals(KPModel.ExtraType.KPM)) {
+            if(extra.type == KPModel.ExtraType.KPM) {
                 val kpmInfo: KPModel.KPMInfo = extra as KPModel.KPMInfo
                 Text(text = stringResource(id = R.string.patch_item_extra_name) + kpmInfo.name, style = MaterialTheme.typography.bodyMedium)
                 Text(text = stringResource(id = R.string.patch_item_extra_version) + kpmInfo.version, style = MaterialTheme.typography.bodyMedium)
@@ -443,7 +447,7 @@ private fun KernelImageView(kImgInfo: KPModel.KImgInfo) {
 
 
 @Composable
-private fun SelectFileButton(text: String, onSelected: (data: Intent, uri: Uri)-> Unit,) {
+private fun SelectFileButton(text: String, onSelected: (data: Intent, uri: Uri)-> Unit) {
     val selectFileLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) {

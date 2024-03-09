@@ -70,7 +70,7 @@ public abstract class JarMap implements Closeable {
 
     private static class FileMap extends JarMap {
 
-        private JarFile jarFile;
+        private final JarFile jarFile;
 
         FileMap(File file, boolean verify, int mode) throws IOException {
             jarFile = new JarFile(file, verify, mode);
@@ -121,7 +121,7 @@ public abstract class JarMap implements Closeable {
 
     private static class StreamMap extends JarMap {
 
-        private JarInputStream jis;
+        private final JarInputStream jis;
 
         StreamMap(InputStream is, boolean verify) throws IOException {
             jis = new JarInputStream(is, verify);

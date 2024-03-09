@@ -12,7 +12,7 @@ import me.bmax.apatch.apApp
  */
 object Version {
 
-    fun string2UInt(ver: String): UInt {
+    private fun string2UInt(ver: String): UInt {
         val v = ver.trim().split("-")[0]
         val vn = v.split('.')
         val vi = vn[0].toInt().shl(16) + vn[1].toInt().shl(8) + vn[2].toInt()
@@ -48,19 +48,17 @@ object Version {
     }
 
 
-    fun installedKPatchVString(): String {
+    private fun installedKPatchVString(): String {
         val result = ShellUtils.fastCmd("${APApplication.SUPERCMD} ${APApplication.superKey} " +
                 "${APApplication.KPATCH_PATH} ${APApplication.superKey} -v")
-        return if(result.trim().isEmpty()) "0" else result.trim()
+        return result.trim().ifEmpty { "0" }
     }
 
     fun installedKPatchVUInt(): UInt {
-        val vstr = installedKPatchVString()
-        val verUInt = vstr.trim().toUInt(0x10)
-        return verUInt
+        return installedKPatchVString().trim().toUInt(0x10)
     }
 
-    fun installedApdVString(): String {
+    private fun installedApdVString(): String {
         val result = ShellUtils.fastCmd("${APApplication.SUPERCMD} ${APApplication.superKey} " +
                 "${APApplication.APD_PATH} -V")
         installedApdVString = if(result.trim().isEmpty()) "0" else {

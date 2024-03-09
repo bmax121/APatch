@@ -1,10 +1,9 @@
 package me.bmax.apatch
 
 import android.os.Parcelable
-import android.util.Log
 import androidx.annotation.Keep
 import androidx.compose.runtime.Immutable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 object Natives {
     init {
@@ -21,10 +20,10 @@ object Natives {
     ) : Parcelable {
     }
 
-    private external fun nativeSu(superKey: String, to_uid: Int, scontext: String? ): Int
+    private external fun nativeSu(superKey: String, toUid: Int, scontext: String? ): Int
 
-    fun su(to_uid: Int, scontext: String?): Boolean {
-        return nativeSu(APApplication.superKey, to_uid, scontext) == 0
+    fun su(toUid: Int, scontext: String?): Boolean {
+        return nativeSu(APApplication.superKey, toUid, scontext) == 0
     }
 
     fun su(): Boolean {
@@ -73,23 +72,23 @@ object Natives {
 
     external fun nativeThreadSu(superKey: String, uid: Int, scontext: String?): Long
 
-    external private fun nativeGrantSu(superKey: String, uid: Int, to_uid: Int, scontext: String?): Long
-    fun grantSu(uid: Int, to_uid: Int, scontext: String?): Long {
-        return nativeGrantSu(APApplication.superKey, uid, to_uid, scontext)
+    private external fun nativeGrantSu(superKey: String, uid: Int, toUid: Int, scontext: String?): Long
+    fun grantSu(uid: Int, toUid: Int, scontext: String?): Long {
+        return nativeGrantSu(APApplication.superKey, uid, toUid, scontext)
     }
 
-    external private fun nativeRevokeSu(superKey: String, uid: Int): Long
+    private external fun nativeRevokeSu(superKey: String, uid: Int): Long
     fun revokeSu(uid: Int): Long {
         return nativeRevokeSu(APApplication.superKey, uid)
     }
 
-    external private fun nativeSuProfile(superKey: String, uid: Int): Profile;
+    private external fun nativeSuProfile(superKey: String, uid: Int): Profile
 
     fun suProfile(uid: Int): Profile {
         return nativeSuProfile(APApplication.superKey, uid)
     }
 
-    external private fun nativeResetSuPath(superKey: String, path: String): Boolean
+    private external fun nativeResetSuPath(superKey: String, path: String): Boolean
     fun resetSuPath(path: String): Boolean {
         return nativeResetSuPath(APApplication.superKey, path)
     }

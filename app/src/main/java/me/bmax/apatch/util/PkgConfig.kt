@@ -4,21 +4,20 @@ import android.os.Parcelable
 import android.util.Log
 import androidx.annotation.Keep
 import androidx.compose.runtime.Immutable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import me.bmax.apatch.APApplication
 import me.bmax.apatch.Natives
-import java.io.BufferedWriter
 import java.io.File
 import java.io.FileWriter
 import kotlin.concurrent.thread
 
 object PkgConfig {
     private val mutex = Mutex()
-    private val TAG = "PkgConfig"
+    private const val TAG = "PkgConfig"
 
-    private val CSV_HEADER = "pkg,exclude,allow,uid,to_uid,sctx"
+    private const val CSV_HEADER = "pkg,exclude,allow,uid,to_uid,sctx"
 
     @Immutable
     @Parcelize
@@ -32,8 +31,7 @@ object PkgConfig {
             fun fromLine(line: String): Config {
                 val sp = line.split(",")
                 val profile = Natives.Profile(sp[3].toInt(), sp[4].toInt(), sp[5])
-                val config = Config(sp[0], sp[1].toInt(), sp[2].toInt(), profile)
-                return config
+                return Config(sp[0], sp[1].toInt(), sp[2].toInt(), profile)
             }
         }
         fun isDefault(): Boolean {
@@ -48,7 +46,7 @@ object PkgConfig {
         val configs = HashMap<String,Config>()
         val file = File(APApplication.PACKAGE_CONFIG_FILE)
         if (file.exists()) {
-            file.readLines().drop(1).filter { !it.isEmpty() }.forEach {
+            file.readLines().drop(1).filter { it.isNotEmpty() }.forEach {
                 Log.d(TAG, it)
                 val p = Config.fromLine(it)
                 if (! p.isDefault()) {
@@ -61,7 +59,7 @@ object PkgConfig {
 
     private fun writeConfigs(configs: HashMap<String,Config> ) {
         val file = File(APApplication.PACKAGE_CONFIG_FILE)
-        if (!file.parentFile.exists()) file.parentFile.mkdirs()
+        if (!file.parentFile?.exists()!!) file.parentFile?.mkdirs()
         val writer = FileWriter(file, false)
         writer.write(CSV_HEADER + '\n')
         configs.values.forEach {
@@ -84,11 +82,11 @@ object PkgConfig {
                     // revoke all uid
                     val toRemove = configs.filter { it.key == pkg || it.value.profile.uid == uid }
                     toRemove.forEach {
-                        Log.d(TAG, "remove config: " + it)
+                        Log.d(TAG, "remove config: $it")
                         configs.remove(it.key)
                     }
                 } else {
-                    Log.d(TAG, "change config: " + config)
+                    Log.d(TAG, "change config: $config")
                     configs[config.pkg] = config
                 }
                 writeConfigs(configs)

@@ -28,12 +28,12 @@ import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -86,7 +86,7 @@ import java.io.IOException
 
 
 
-private val TAG = "KernelPatchModule"
+private const val TAG = "KernelPatchModule"
 
 @Destination
 @Composable
@@ -166,7 +166,7 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
             Column {
                 ExtendedFloatingActionButton(
                     onClick = {
-                        expanded = true;
+                        expanded = true
                     },
                     expanded = kpModuleListState.isScrollingUp(),
                     icon = { Icon(Icons.Filled.Add, moduleAdd) },
@@ -183,14 +183,14 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
                             text = { Text(label) },
                             onClick = {
                                 expanded = false
-                                when {
-                                    label.equals(moduleEmbed)-> {
+                                when (label) {
+                                    moduleEmbed -> {
                                         navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.UPDATE))
                                     }
-                                    label.equals(moduleInstall)-> {
+                                    moduleInstall -> {
                                         Toast.makeText(current, "Not support now!", Toast.LENGTH_SHORT).show()
                                     }
-                                    label.equals(moduleIoad)-> {
+                                    moduleIoad -> {
                                         val intent = Intent(Intent.ACTION_GET_CONTENT)
                                         intent.type = "*/*"
                                         selectKpmLauncher.launch(intent)
@@ -220,7 +220,7 @@ suspend fun loadModule(dialogHost: DialogHostState, uri: Uri, args: String): Int
     val rc = dialogHost.withLoading {
         withContext(Dispatchers.IO) {
             run {
-                var kpmDir: ExtendedFile =
+                val kpmDir: ExtendedFile =
                     FileSystemManager.getLocal().getFile(apApp.filesDir.parent, "kpm")
                 kpmDir.deleteRecursively()
                 kpmDir.mkdirs()
@@ -232,9 +232,9 @@ suspend fun loadModule(dialogHost: DialogHostState, uri: Uri, args: String): Int
                     uri.inputStream().buffered().writeTo(kpm)
                     rc = Natives.loadKernelPatchModule(kpm.path, args).toInt()
                 } catch (e: IOException) {
-                    Log.e(TAG, "Copy kpm error: " + e)
+                    Log.e(TAG, "Copy kpm error: $e")
                 }
-                Log.d(TAG, "load ${kpm.path} rc: ${rc}")
+                Log.d(TAG, "load ${kpm.path} rc: $rc")
                 rc
             }
         }
@@ -260,7 +260,6 @@ private fun KPModuleList(
     val cancel = stringResource(id = android.R.string.cancel)
 
     val dialogHost = LocalDialogHost.current
-    val context = LocalContext.current
 
     suspend fun onModuleUninstall(module: KPModel.KPMInfo) {
         val confirmResult = dialogHost.showConfirm(
@@ -287,8 +286,6 @@ private fun KPModuleList(
     val refreshState = rememberPullRefreshState(refreshing = viewModel.isRefreshing,
         onRefresh = { viewModel.fetchModuleList() })
     Box(modifier.pullRefresh(refreshState)) {
-        val context = LocalContext.current
-
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             state = state,
@@ -431,7 +428,7 @@ private fun KPModuleItem(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Divider(thickness = Dp.Hairline)
+            HorizontalDivider(thickness = Dp.Hairline)
 
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,

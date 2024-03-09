@@ -3,7 +3,7 @@ package me.bmax.apatch.ui.viewmodel
 import android.os.Parcelable
 import androidx.annotation.Keep
 import androidx.compose.runtime.Immutable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 object KPModel {
 
