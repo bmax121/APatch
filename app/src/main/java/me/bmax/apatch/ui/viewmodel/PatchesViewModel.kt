@@ -197,7 +197,12 @@ class PatchesViewModel : ViewModel() {
             "sh boot_extract.sh",
         )
         if(result.isSuccess) {
-            bootSlot = result.out.filter { it.startsWith("SLOT=") }[0].removePrefix("SLOT=")
+            var output = result.out
+            if (!output.contains("SLOT=")) {
+                bootSlot = ""
+            } else {
+                bootSlot = result.out.filter { it.startsWith("SLOT=") }[0].removePrefix("SLOT=")
+            }
             bootDev = result.out.filter { it.startsWith("BOOTIMAGE=") }[0].removePrefix("BOOTIMAGE=")
             Log.d(TAG, "current slot: ${bootSlot}")
             Log.d(TAG, "current bootimg: ${bootDev}")
