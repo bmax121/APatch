@@ -8,12 +8,12 @@
     <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
     <string name="app_name" translatable="false">APatch</string>
     <string name="kpm">KPModule</string>
-    <string name="reboot_recovery">But ke Recovery</string>
+    <string name="reboot_recovery">Ke Recovery</string>
     <string name="reboot">Reboot</string>
     <string name="settings">Pengaturan</string>
-    <string name="reboot_bootloader">But ke Bootloader</string>
+    <string name="reboot_bootloader">Ke Bootloader</string>
     <string name="home_click_to_learn_apatch">Pelajari fitur dan penggunaan AndroidPatch</string>
-    <string name="reboot_edl">But ke EDL</string>
+    <string name="reboot_edl">Ke EDL</string>
     <string name="home_learn_apatch">Pelajari AndroidPatch</string>
     <string name="about">Tentang</string>
     <string name="about_source_code">Lihat kode sumber di %1$s<br/>
@@ -34,7 +34,7 @@
     <string name="home_need_update">Tersedia versi terbaru</string>
     <string name="apatch_version_update">Versi: %s -&gt; %s</string>
     <string name="home_auth_key_title">Masukkan SuperKey</string>
-    <string name="reboot_download">But ke Download</string>
+    <string name="reboot_download">Ke Download</string>
     <string name="home_auth_key_desc">Mulai setelah penyertifikatan</string>
     <string name="home_ap_cando_update">Membarui</string>
     <string name="home_ap_cando_uninstall">Hapus</string>
@@ -106,7 +106,7 @@
     <string name="patch_mode_bootimg_patch">Mode: Patch</string>
     <string name="patch_select_bootimg_btn">Pilih boot</string>
     <string name="patch_start_patch_btn">Mulai</string>
-    <string name="patch_item_error">!!GALAT!!</string>
+    <string name="patch_item_error">!!ERROR!!</string>
     <string name="patch_mode_update_patch">Mode: Pembaruan</string>
     <string name="patch_item_bootimg_dev">Gawai:</string>
     <string name="patch_item_kpimg_version">Versi:</string>
@@ -130,17 +130,4 @@
     <string name="patch_start_unpatch_btn">UnPatch</string>
     <string name="patch_item_extra_event">Event:</string>
     <string name="patch_item_bootimg_slot">Slot:</string>
-    <string name="kpm_add_kpm">Tambah KPM</string>
-    <string name="kpm_install">Instal</string>
-    <string name="kpm_embed">Pasang</string>
-    <string name="hide_apatch_manager_failure">Gagal menyembunyikan, laporkan bug ini!</string>
-    <string name="hide_apatch_manager_summary">Instal manajer dengan label dipilih dan ID paket teracak</string>
-    <string name="hide_apatch_dialog_new_manager_name">Nama baru manajer</string>
-    <string name="hide_apatch_manager">Sembunyikan manajer</string>
-    <string name="hide_apatch_dialog_summary">Digunakan sebagai nama aplikasi di peluncur</string>
-    <string name="success">Berhasil</string>
-    <string name="failure">Gagal</string>
-    <string name="setting_reset_su_new_path">rute lengkap terbaru</string>
-    <string name="setting_reset_su_path_summary">Pilih rute SU</string>
-    <string name="setting_reset_su_path">Reset rute SU</string>
 </resources>

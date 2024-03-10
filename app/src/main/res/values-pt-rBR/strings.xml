@@ -22,7 +22,7 @@
     <string name="reboot_download">Reiniciar em modo Download</string>
     <string name="reboot_edl">Reiniciar em modo EDL</string>
     <string name="about">Sobre</string>
-    <string name="home_learn_apatch">Saiba mais sobre o AndroidPatch</string>
+    <string name="home_learn_apatch">Leia mais sobre o AndroidPatch</string>
     <string name="home_click_to_learn_apatch">Conheça os recursos do AndroidPatch e como usá-lo</string>
     <string name="about_source_code">Veja o código-fonte no %1$s<br/>Junte-se ao nosso canal do %2$s</string>
     <string name="send_log">Reportar registro</string>
@@ -43,7 +43,7 @@
     <string name="apatch_version_update">Versão: %s -&gt; %s</string>
     <string name="home_apatch_version">APatch: %s</string>
     <string name="home_auth_key_title">Inserir SuperKey</string>
-    <string name="home_auth_key_desc">Iniciar após a certificação</string>
+    <string name="home_auth_key_desc">Comece após a certificação</string>
     <string name="home_ap_cando_install">Instalar</string>
     <string name="home_ap_cando_update">Atualizar</string>
     <string name="home_ap_cando_uninstall">Desinstalar</string>
@@ -87,8 +87,8 @@
     <string name="apm_changelog">Registro de alterações</string>
     <string name="apm_update">Atualizar</string>
     <string name="apm_downloading">Baixando módulo %s</string>
-    <string name="apm_start_downloading">Iniciando download: %s</string>
-    <string name="apm_new_version_available">Nova versão %s está disponível, clique para atualizar.</string>
+    <string name="apm_start_downloading">Iniciar download: %s</string>
+    <string name="apm_new_version_available">Clique para instalar a nova versão: %s</string>
     <string name="clear_super_key">Limpar SuperKey</string>
     <string name="apm_not_installed">AndroidPatch não instalado</string>
     <string name="settings_app_language">Idioma</string>
@@ -127,19 +127,6 @@
     <string name="patch_item_extra_args">argumentos:</string>
     <string name="patch_item_extra_event">evento:</string>
     <string name="patch_item_skey">superkey</string>
-    <string name="settings_clear_super_key_dialog">Você realmente deseja continuar?</string>
+    <string name="settings_clear_super_key_dialog">Você realmente deseja prosseguir?</string>
     <string name="patch_item_set_skey_label">O comprimento da SuperKey deve ter pelo menos 8 caracteres e incluir números e letras</string>
-    <string name="hide_apatch_dialog_new_manager_name">Nome do novo gerenciador</string>
-    <string name="hide_apatch_dialog_summary">Ele será usado como o novo nome do app mostrado na launcher</string>
-    <string name="hide_apatch_manager">Ocultar o gerenciador do APatch</string>
-    <string name="hide_apatch_manager_summary">Instale um novo app gerenciador com um ID de pacote aleatório e nome personalizado</string>
-    <string name="hide_apatch_manager_failure">Falha ao ocultar. Por favor, reporte o bug!</string>
-    <string name="kpm_embed">Incorporar</string>
-    <string name="kpm_add_kpm">Adicionar KPM</string>
-    <string name="kpm_install">Instalar</string>
-    <string name="failure">Falha</string>
-    <string name="setting_reset_su_new_path">novo caminho completo</string>
-    <string name="success">Sucesso</string>
-    <string name="setting_reset_su_path">Redefinir caminho su</string>
-    <string name="setting_reset_su_path_summary">Use um novo caminho \"su\"</string>
 </resources>

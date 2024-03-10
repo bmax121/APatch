@@ -129,17 +129,4 @@
     <string name="patch_item_extra_kpm_license">лицензия:</string>
     <string name="settings_clear_super_key_dialog">Вы действительно хотите продолжить?</string>
     <string name="patch_item_set_skey_label">Длина суперключа должна быть не менее 8 символов и включать как числа, так и буквы</string>
-    <string name="failure">Ошибка</string>
-    <string name="kpm_install">Установить</string>
-    <string name="kpm_embed">Встроить</string>
-    <string name="kpm_add_kpm">Добавить KPM</string>
-    <string name="success">Успех</string>
-    <string name="hide_apatch_manager">Скрыть APatch Manager</string>
-    <string name="hide_apatch_manager_failure">Не удалось скрыть, пожалуйста, сообщите об ошибке!</string>
-    <string name="hide_apatch_dialog_summary">Оно будет использоваться как новое название приложения</string>
-    <string name="hide_apatch_dialog_new_manager_name">Название нового приложения</string>
-    <string name="setting_reset_su_path">Сбросить путь к SU</string>
-    <string name="setting_reset_su_path_summary">Используйте новый путь к SU</string>
-    <string name="hide_apatch_manager_summary">Переустановить приложение с новым случайным именем пакета и пользовательским названием приложения</string>
-    <string name="setting_reset_su_new_path">новый полный путь</string>
 </resources>

@@ -9,7 +9,8 @@
     <string name="settings">Einstellungen</string>
     <string name="home_install_unknown">Unbekannt</string>
     <string name="home_need_update">Eine neue Version ist verfügbar</string>
-    <string name="apatch_version">Version: %s</string>
+    <string name="apatch_version">Version:
+\n%s</string>
     <string name="home_ap_cando_install">Installieren</string>
     <string name="home_ap_cando_update">Aktualisieren</string>
     <string name="home_ap_cando_uninstall">Deinstallieren</string>
@@ -23,8 +24,9 @@
     <string name="home_learn_apatch">Lerne AndroidPatch kennen</string>
     <string name="home_patch_set_key_desc">Nur Anmeldedaten für KernelPatch</string>
     <string name="home_patch_next_step">Nächster Schritt</string>
-    <string name="kpatch_version">Version: %s</string>
-    <string name="apatch_version_update">Version: %s -&gt; %s</string>
+    <string name="kpatch_version">Version: %d.%d.%d</string>
+    <string name="apatch_version_update">Version:
+\n%s -&gt; %s</string>
     <string name="home_auth_key_desc">Start nach Zertifizierung</string>
     <string name="home_manager_version">Manager Version</string>
     <string name="su_pkg_excluded_setting_summary">für Module</string>
@@ -96,37 +98,4 @@
     <string name="patch">Patch</string>
     <string name="settings_global_namespace_mode">Globaler Namespace-Modus</string>
     <string name="settings_global_namespace_mode_summary">Alle Root-Sitzungen verwenden den globalen Mount-Namespace</string>
-    <string name="kpatch_shadow_path_title">kpatch</string>
-    <string name="home_kpatch_info_title">Info</string>
-    <string name="settings_clear_super_key_dialog">Wollen Sie wirklich fortfahren?</string>
-    <string name="kpatch_version_update">Version: %s -&gt; %s</string>
-    <string name="patch_config_title">Korrekturen</string>
-    <string name="patch_mode_bootimg_patch">Modus: Korrektur</string>
-    <string name="patch_mode_update_patch">Modus: Aktualisierung</string>
-    <string name="patch_mode_uninstall_patch">Modus: EntKorrektur</string>
-    <string name="home_ap_cando_reboot">Neustart</string>
-    <string name="patch_select_bootimg_btn">Wählen Sie Start</string>
-    <string name="patch_embed_kpm_btn">Eingebettetes KPM</string>
-    <string name="patch_start_unpatch_btn">EntKorrektur</string>
-    <string name="patch_item_bootimg">Startbild</string>
-    <string name="patch_item_error">!!ERROR!!</string>
-    <string name="patch_item_bootimg_slot">Schacht:</string>
-    <string name="patch_item_bootimg_dev">Gerät:</string>
-    <string name="patch_item_kpimg">kpimg</string>
-    <string name="patch_item_kpimg_version">Version:</string>
-    <string name="patch_item_kpimg_comile_time">Zeit:</string>
-    <string name="patch_item_kpimg_config">Konfiguration:</string>
-    <string name="patch_item_new_extra_kpm">Neues einbetten</string>
-    <string name="patch_item_extra_name">Name:</string>
-    <string name="patch_item_extra_version">Version:</string>
-    <string name="patch_item_extra_author">Autor:</string>
-    <string name="patch_item_extra_kpm_license">Lizenz:</string>
-    <string name="patch_item_extra_kpm_desciption">Beschreibung:</string>
-    <string name="patch_item_extra_args">Argumente:</string>
-    <string name="patch_item_extra_event">Veranstaltungen:</string>
-    <string name="patch_item_skey">Superschlüssel</string>
-    <string name="patch_start_patch_btn">Start</string>
-    <string name="patch_item_kernel">Kernel</string>
-    <string name="patch_item_existed_extra_kpm">existiert</string>
-    <string name="patch_item_set_skey_label">Die Länge des Superschlüssels sollte mindestens 8 Zeichen umfassen und Zahlen und Buchstaben enthalten</string>
 </resources>
