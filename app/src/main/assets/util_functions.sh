@@ -54,8 +54,8 @@ find_block() {
 }
 
 # After calling this method, the following variables will be set:
-# SLOT,
-mount_partitions() {
+# SLOT
+get_current_slot() {
   # Check A/B slot
   SLOT=$(grep_cmdline androidboot.slot_suffix)
   if [ -z $SLOT ]; then
@@ -69,14 +69,27 @@ mount_partitions() {
   [ -z $SLOT ] || echo "SLOT=$SLOT"
 }
 
-exchange_boot_slot(){  
+# After calling this method, the following variables will be set:
+# SLOT
+# This is used after OTA
+get_next_slot() {
+  # Check A/B slot
+  SLOT=$(grep_cmdline androidboot.slot_suffix)
+  if [ -z $SLOT ]; then
+    SLOT=$(grep_cmdline androidboot.slot)
+    [ -z $SLOT ] || SLOT=_${SLOT}
+  fi
+  if [ -z $SLOT ]; then
+    SLOT=$(getprop ro.boot.slot_suffix)
+  fi
   if [[ $SLOT == *_a ]]; then
     SLOT='_b'
   fi
-
   if [[ $SLOT == *_b ]]; then
     SLOT='_a'
   fi
+  [ "$SLOT" = "normal" ] && unset SLOT
+  [ -z $SLOT ] || echo "SLOT=$SLOT"
 }
 
 find_boot_image() {

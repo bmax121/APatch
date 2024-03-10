@@ -106,8 +106,8 @@
     <string name="patch_mode_bootimg_patch">Mode: Patch</string>
     <string name="patch_select_bootimg_btn">Pilih boot</string>
     <string name="patch_start_patch_btn">Mulai</string>
-    <string name="patch_item_error">!!GALAT!!</string>
-    <string name="patch_mode_update_patch">Mode: Pembaruan</string>
+    <string name="patch_item_error">!!ERROR!!</string>
+    <string name="patch_mode_patch_and_install">Mode: Pembaruan</string>
     <string name="patch_item_bootimg_dev">Gawai:</string>
     <string name="patch_item_kpimg_version">Versi:</string>
     <string name="patch_item_kpimg_comile_time">Waktu:</string>

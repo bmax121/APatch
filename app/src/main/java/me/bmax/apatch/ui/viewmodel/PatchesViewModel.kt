@@ -32,8 +32,9 @@ import java.io.StringReader
 private const val TAG = "PatchViewModel"
 class PatchesViewModel : ViewModel() {
     enum class PatchMode(val sId: Int) {
-        PATCH(R.string.patch_mode_bootimg_patch),
-        UPDATE(R.string.patch_mode_update_patch),
+        PATCH_ONLY(R.string.patch_mode_bootimg_patch),
+        PATCH_AND_INSTALL(R.string.patch_mode_patch_and_install),
+        INSTALL_TO_NEXT_SLOT(R.string.patch_mode_install_to_next_slot),
         UNPATCH(R.string.patch_mode_uninstall_patch),
     }
 
@@ -191,10 +192,16 @@ class PatchesViewModel : ViewModel() {
         }
     }
 
-    private fun extractAndParseBootimg() {
+    private fun extractAndParseBootimg(mode: PatchMode) {
+        var cmdBuilder = "sh boot_extract.sh"
+
+        if (mode == PatchMode.INSTALL_TO_NEXT_SLOT) {
+            cmdBuilder += " true"
+        }
+
         val result = shellForResult(shell,
             "cd $patchDir",
-            "sh boot_extract.sh",
+            cmdBuilder,
         )
 
         if (result.isSuccess) {
@@ -224,8 +231,8 @@ class PatchesViewModel : ViewModel() {
             if (mode != PatchMode.UNPATCH) {
                 parseKpimg()
             }
-            if (mode == PatchMode.UPDATE || mode == PatchMode.UNPATCH) {
-                extractAndParseBootimg()
+            if (mode == PatchMode.PATCH_AND_INSTALL || mode == PatchMode.UNPATCH || mode == PatchMode.INSTALL_TO_NEXT_SLOT) {
+                extractAndParseBootimg(mode)
             }
             running = false
         }
@@ -325,7 +332,7 @@ class PatchesViewModel : ViewModel() {
 
             val apVer = Version.getManagerVersion().second
             val rand = (1..4).map { ('a'..'z').random() }.joinToString("")
-            val outFilename = "apatch_${apVer}_${BuildConfig.buildKPV}_${rand}.img"
+            val outFilename = "APatch_patched_${apVer}_${BuildConfig.buildKPV}_${rand}.img"
 
             val logs = object: CallbackList<String>(){
                 override fun onAddElement(e: String?) {
@@ -337,6 +344,9 @@ class PatchesViewModel : ViewModel() {
             logs.add("****************************")
 
             var patchCommand = "sh boot_patch.sh $superkey ${srcBoot.path}"
+            if (mode == PatchMode.PATCH_AND_INSTALL || mode == PatchMode.INSTALL_TO_NEXT_SLOT) {
+                patchCommand += " true"
+            }
 
             for(i in 0..<newExtrasFileName.size) {
                 patchCommand += " -M ${newExtrasFileName[i]}"
@@ -380,11 +390,15 @@ class PatchesViewModel : ViewModel() {
                 return@launch
             }
 
-            if(mode == PatchMode.UPDATE) {
-                logs.add(" Reboot to finish update")
+            if(mode == PatchMode.PATCH_AND_INSTALL) {
+                logs.add(" Reboot to finish the installation~")
                 needReboot = true
                 APApplication.markNeedReboot()
-            } else if(mode == PatchMode.PATCH) {
+            } else if (mode == PatchMode.INSTALL_TO_NEXT_SLOT) {
+                logs.add(" KPatch was successfully installed to next slot, reboot to finish the installation~")
+                needReboot = true
+                APApplication.markNeedReboot()
+            } else if (mode == PatchMode.PATCH_ONLY) {
                 val newBootFile = patchDir.getChildFile("new-boot.img")
                 val outDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
                 if (!outDir.exists()) outDir.mkdirs()

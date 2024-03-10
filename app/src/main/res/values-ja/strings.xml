@@ -90,7 +90,7 @@
     <string name="home_ap_cando_reboot">再起動</string>
     <string name="patch_config_title">パッチ</string>
     <string name="patch_mode_bootimg_patch">モード: パッチ</string>
-    <string name="patch_mode_update_patch">モード: アップデート</string>
+    <string name="patch_mode_patch_and_install">モード: アップデート</string>
     <string name="patch_mode_uninstall_patch">モード: パッチ解除</string>
     <string name="patch_select_bootimg_btn">ブートを選択</string>
     <string name="patch_start_unpatch_btn">パッチ解除</string>

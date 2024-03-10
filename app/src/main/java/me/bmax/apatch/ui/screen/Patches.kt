@@ -127,7 +127,7 @@ fun Patches(navigator: DestinationsNavigator, mode: PatchesViewModel.PatchMode) 
             KernelPatchImageView(viewModel.kpimgInfo)
 
             // select boot.img
-            if(mode == PatchesViewModel.PatchMode.PATCH && viewModel.kimgInfo.banner.isEmpty()) {
+            if(mode == PatchesViewModel.PatchMode.PATCH_ONLY && viewModel.kimgInfo.banner.isEmpty()) {
                 SelectFileButton(
                     text = stringResource(id = R.string.patch_select_bootimg_btn),
                     onSelected = { data, uri ->
@@ -150,7 +150,7 @@ fun Patches(navigator: DestinationsNavigator, mode: PatchesViewModel.PatchMode) 
             }
 
             // existed extras
-            if(mode == PatchesViewModel.PatchMode.UPDATE) {
+            if (mode == PatchesViewModel.PatchMode.PATCH_AND_INSTALL || mode == PatchesViewModel.PatchMode.INSTALL_TO_NEXT_SLOT) {
                 viewModel.existedExtras.forEach( action = {
                     ExtraItem(extra = it, true, onDelete = {
                         viewModel.existedExtras.remove(it)

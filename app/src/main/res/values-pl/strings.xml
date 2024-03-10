@@ -127,6 +127,6 @@
     <string name="home_ap_cando_reboot">Zrestartuj</string>
     <string name="patch_config_title">Łatki</string>
     <string name="patch_mode_bootimg_patch">Tryb: Łatka</string>
-    <string name="patch_mode_update_patch">Tryb: Aktualizacja</string>
+    <string name="patch_mode_patch_and_install">Tryb: Aktualizacja</string>
     <string name="patch_mode_uninstall_patch">Tryb: Odłatkowanie</string>
 </resources>

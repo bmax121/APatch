@@ -103,7 +103,7 @@
     <string name="home_ap_cando_reboot">Reiniciar</string>
     <string name="patch_config_title">Parches</string>
     <string name="patch_mode_bootimg_patch">Modo: Parche</string>
-    <string name="patch_mode_update_patch">Modo: Actualizar</string>
+    <string name="patch_mode_patch_and_install">Modo: Actualizar</string>
     <string name="patch_mode_uninstall_patch">Modo: No actualizado</string>
     <string name="patch_select_bootimg_btn">Seleccione el arranque</string>
     <string name="patch_embed_kpm_btn">Integrar KPM</string>

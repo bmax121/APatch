@@ -121,7 +121,7 @@
     <string name="patch_start_patch_btn">Iniciar</string>
     <string name="patch_config_title">Patches</string>
     <string name="patch_mode_bootimg_patch">Modo: Patch</string>
-    <string name="patch_mode_update_patch">Modo: Atualização</string>
+    <string name="patch_mode_patch_and_install">Modo: Atualização</string>
     <string name="patch_mode_uninstall_patch">Modo: UnPatch</string>
     <string name="patch_start_unpatch_btn">UnPatch</string>
     <string name="patch_item_extra_args">argumentos:</string>
