@@ -129,7 +129,7 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
             val context = LocalContext.current
 
             val moduleAdd = stringResource(id = R.string.kpm_add_kpm)
-            val moduleIoad = stringResource(id = R.string.kpm_load)
+            val moduleLoad = stringResource(id = R.string.kpm_load)
             val moduleInstall = stringResource(id = R.string.kpm_install)
             val moduleEmbed = stringResource(id = R.string.kpm_embed)
             val succToastText = stringResource(id = R.string.kpm_load_toast_succ)
@@ -161,7 +161,7 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
 
             val current = LocalContext.current
             var expanded by remember { mutableStateOf(false) }
-            val options = listOf(moduleEmbed, moduleInstall, moduleIoad)
+            val options = listOf(moduleEmbed, moduleInstall, moduleLoad)
 
             Column {
                 ExtendedFloatingActionButton(
@@ -190,7 +190,7 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
                                     moduleInstall -> {
                                         Toast.makeText(current, "Not support now!", Toast.LENGTH_SHORT).show()
                                     }
-                                    moduleIoad -> {
+                                    moduleLoad -> {
                                         val intent = Intent(Intent.ACTION_GET_CONTENT)
                                         intent.type = "*/*"
                                         selectKpmLauncher.launch(intent)
