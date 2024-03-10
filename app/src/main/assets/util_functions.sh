@@ -69,6 +69,16 @@ mount_partitions() {
   [ -z $SLOT ] || echo "SLOT=$SLOT"
 }
 
+exchange_boot_slot(){  
+  if [[ $SLOT == *_a ]]; then
+    SLOT='_b'
+  fi
+
+  if [[ $SLOT == *_b ]]; then
+    SLOT='_a'
+  fi
+}
+
 find_boot_image() {
   if [ ! -z $SLOT ]; then
     BOOTIMAGE=$(find_block "boot$SLOT")
