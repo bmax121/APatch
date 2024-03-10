@@ -82,10 +82,11 @@ get_next_slot() {
   if [ -z $SLOT ]; then
     SLOT=$(getprop ro.boot.slot_suffix)
   fi
+   [ -z $SLOT ] && { >&2 echo "can't determined current boot slot!"; exit 1; }
+
   if [[ $SLOT == *_a ]]; then
     SLOT='_b'
-  fi
-  if [[ $SLOT == *_b ]]; then
+  else
     SLOT='_a'
   fi
   [ "$SLOT" = "normal" ] && unset SLOT
