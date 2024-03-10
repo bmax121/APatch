@@ -118,6 +118,7 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
         }
     }
 
+
     val kpModuleListState = rememberLazyListState()
 
     Scaffold(topBar = {
@@ -156,6 +157,7 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
                         ).show()
                     }
                     viewModel.markNeedRefresh()
+                    viewModel.fetchModuleList()
                 }
             }
 
