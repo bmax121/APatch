@@ -71,6 +71,7 @@ fun WebScreen(navigator: DestinationsNavigator, moduleId: String, moduleName: St
                     settings.domStorageEnabled = true
                     settings.allowFileAccess = false
                     addJavascriptInterface(WebViewInterface(context, this), "apatch")
+                    addJavascriptInterface(WebViewInterface(context, this), "ksu")
                 }
             })
     }
