@@ -63,16 +63,14 @@ import me.bmax.apatch.APApplication
 import me.bmax.apatch.BuildConfig.APPLICATION_ID
 import me.bmax.apatch.Natives
 import me.bmax.apatch.R
-import me.bmax.apatch.apApp
 import me.bmax.apatch.ui.component.AboutDialog
 import me.bmax.apatch.ui.component.LoadingDialog
 import me.bmax.apatch.ui.component.SwitchItem
+import me.bmax.apatch.util.APatchKeyHelper
 import me.bmax.apatch.util.HideAPK
 import me.bmax.apatch.util.LocalDialogHost
 import me.bmax.apatch.util.getBugreportFile
 import me.bmax.apatch.util.isGlobalNamespaceEnabled
-import me.bmax.apatch.util.isSkipStoreSuperKeyEnabled
-import me.bmax.apatch.util.setSkipStoreSuperKeyEnabled
 import me.bmax.apatch.util.rootShellForResult
 import me.bmax.apatch.util.setGlobalNamespaceEnabled
 import java.util.Locale
@@ -90,11 +88,10 @@ fun SettingScreen(navigator: DestinationsNavigator) {
         mutableStateOf(false)
     }
     var bSkipStoreSuperKey by rememberSaveable {
-        mutableStateOf(false)
+        mutableStateOf(APatchKeyHelper.shouldSkipStoreSuperKey())
     }
     if (kPatchReady && aPatchReady) {
         isGlobalNamespaceEnabled = isGlobalNamespaceEnabled()
-        bSkipStoreSuperKey = isSkipStoreSuperKeyEnabled()
     }
     Scaffold(
         topBar = {
@@ -133,7 +130,8 @@ fun SettingScreen(navigator: DestinationsNavigator) {
             val context = LocalContext.current
             val scope = rememberCoroutineScope()
             val dialogHost = LocalDialogHost.current
-            
+
+            // store superkey?
             if (kPatchReady) {
                 ListItem(
                     leadingContent = {
@@ -153,14 +151,8 @@ fun SettingScreen(navigator: DestinationsNavigator) {
                     summary = stringResource(id = R.string.settings_donot_store_superkey_summary),
                     checked = bSkipStoreSuperKey,
                     onCheckedChange = {
-                        setSkipStoreSuperKeyEnabled(
-                            if (bSkipStoreSuperKey) {
-                                1
-                            } else {
-                                0
-                            }
-                        )
                         bSkipStoreSuperKey = it
+                        APatchKeyHelper.setShouldSkipStoreSuperKey(bSkipStoreSuperKey)
                     }
                 )
             }
@@ -489,7 +481,7 @@ private fun ClearSuperKeyDialog(showClearSuperKeyDialog: MutableState<Boolean>) 
                 TextButton(
                     onClick = {
                         showClearSuperKeyDialog.value = false
-                        apApp.clearKey()
+                        APatchKeyHelper.clearConfigKey()
                     }
                 ) {
                     Text(stringResource(id = android.R.string.ok))

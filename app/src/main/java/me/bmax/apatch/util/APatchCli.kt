@@ -183,15 +183,6 @@ fun setGlobalNamespaceEnabled(value: String) {
         }
 }
 
-fun isSkipStoreSuperKeyEnabled(): Boolean {
-    return getSharedPreferences("config", Context.MODE_PRIVATE).getInt(APApplication.SKIP_STORE_SUPER_KEY, 0) == 1
-}
-
-fun setSkipStoreSuperKeyEnabled(value: Int) {
-    getSharedPreferences("config", Context.MODE_PRIVATE).edit().putString(APApplication.SUPER_KEY, "").apply()
-    getSharedPreferences("config", Context.MODE_PRIVATE).edit().putInt(APApplication.SKIP_STORE_SUPER_KEY, value).apply()
-}
-
 fun forceStopApp(packageName: String) {
     val shell = getRootShell()
     val result = shell.newJob().add("am force-stop $packageName").exec()

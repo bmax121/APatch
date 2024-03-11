@@ -61,10 +61,9 @@ class APApplication : Application() {
         private const val DEFAULT_SU_PATH = "/system/bin/kp"
         private const val LEGACY_SU_PATH = "/system/bin/su"
 
-        const val SUPER_KEY = "super_key"
-        const val SKIP_STORE_SUPER_KEY = "skip_store_super_key"
+        const val SP_NAME  = "config"
         private const val SHOW_BACKUP_WARN = "show_backup_warning"
-        private lateinit var sharedPreferences: SharedPreferences
+        lateinit var sharedPreferences: SharedPreferences
 
         private val logCallback: CallbackList<String?> = object : CallbackList<String?>() {
             override fun onAddElement(s: String?) {
@@ -116,7 +115,7 @@ class APApplication : Application() {
                 "mkdir -p $APATCH_BIN_FOLDER",
                 "mkdir -p $APATCH_LOG_FOLDER",
 
-                // kpatch extracted from kernel
+                // TODO: kpatch extracted from kernel
                 "cp -f ${nativeDir}/libkpatch.so $KPATCH_PATH",
                 "chmod +x $KPATCH_PATH",
                 "ln -s $KPATCH_PATH $KPATCH_LINK_PATH",
@@ -165,8 +164,7 @@ class APApplication : Application() {
                 Log.d(TAG, "state: " + _kpStateLiveData.value)
                 if(!ready) return
 
-                if (!isSkipStoreSuperKeyEnabled())
-                    sharedPreferences.edit().putString(SUPER_KEY, APatchSecurityHelper.encrypt(value)).apply()
+                APatchKeyHelper.writeSPSuperKey(value)
 
                 thread {
                     val rc = Natives.su(0, null)
@@ -220,24 +218,15 @@ class APApplication : Application() {
             }
     }
 
-    fun clearKey() {
-        _kpStateLiveData.value = State.UNKNOWN_STATE
-        _apStateLiveData.value = State.UNKNOWN_STATE
-        sharedPreferences.edit().putString(SUPER_KEY, "").apply()
-    }
-
     override fun onCreate() {
         super.onCreate()
         apApp = this
 
-        APatchSecurityHelper.checkAndGenerateSecretKey()
-        sharedPreferences = getSharedPreferences("config", Context.MODE_PRIVATE)
-        val superKeyFromSP = sharedPreferences.getString(SUPER_KEY, "")
-        superKey = if (!superKeyFromSP.isNullOrBlank()) {
-            APatchSecurityHelper.decrypt(superKeyFromSP)
-        } else {
-            ""
-        }
+        // TODO: We can't totally protect superkey from be stolen by root or LSPosed-like injection tools in user space, the only way is don't use superkey,
+        // TODO: 1. make me root by kernel
+        // TODO: 2. remove all usage of superkey
+        sharedPreferences = getSharedPreferences(SP_NAME, Context.MODE_PRIVATE)
+        superKey = APatchKeyHelper.readSPSuperKey()
 
         val context = this
         val iconSize = resources.getDimensionPixelSize(android.R.dimen.app_icon_size)

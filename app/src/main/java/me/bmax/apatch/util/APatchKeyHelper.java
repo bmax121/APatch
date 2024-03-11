@@ -1,6 +1,5 @@
 package me.bmax.apatch.util;
 
-import android.content.Context;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import android.util.Base64;
@@ -16,13 +15,31 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
 
-import dev.utils.app.AppUtils;
+import me.bmax.apatch.APApplication;
 
-public class APatchSecurityHelper {
+
+public class APatchKeyHelper {
+    private static final String TAG = "APatchSecurityHelper";
+
     private static final String ANDROID_KEYSTORE = "AndroidKeyStore";
-    private static final String RAND_IV = "rand_iv";
+    private static final String SUPER_KEY = "super_key";
+    private static final String SUPER_KEY_ENC = "super_key_enc";
+    private static final String SKIP_STORE_SUPER_KEY = "skip_store_super_key";
+    private static final String SUPER_KEY_IV = "super_key_iv";
     private static final String KEY_ALIAS = "APatchSecurityKey";
     private static final String ENCRYPT_MODE = "AES/GCM/NoPadding";
+
+    static {
+        try {
+            KeyStore keyStore = KeyStore.getInstance(ANDROID_KEYSTORE);
+            keyStore.load(null);
+            if (!keyStore.containsAlias(KEY_ALIAS)) {
+                generateSecretKey();
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to checkAndGenerateSecretKey", e);
+        }
+    }
 
     private static void generateSecretKey() {
         try {
@@ -45,37 +62,22 @@ public class APatchSecurityHelper {
                 keyGenerator.generateKey();
             }
         } catch (Exception e) {
-            Log.e("APatch", "[APatchSecurityHelper] Failed to generateSecretKey: " + e);
-            e.printStackTrace();
+            Log.e(TAG, "Failed to generateSecretKey", e);
         }
     }
-
-    public static void checkAndGenerateSecretKey() {
-        try {
-            KeyStore keyStore = KeyStore.getInstance(ANDROID_KEYSTORE);
-            keyStore.load(null);
-            if (!keyStore.containsAlias(KEY_ALIAS)) {
-                generateSecretKey();
-            }
-        } catch (Exception e) {
-            Log.e("APatch", "[APatchSecurityHelper] Failed to checkAndGenerateSecretKey: " + e);
-            e.printStackTrace();
-        }
-    }
-
 
     private static String getRandomIV() {
-        String randIV = AppUtils.getSharedPreferences("config", Context.MODE_PRIVATE).getString(RAND_IV, null);
+        String randIV = APApplication.sharedPreferences.getString(SUPER_KEY_IV, null);
         if (randIV == null) {
             SecureRandom secureRandom = new SecureRandom();
             byte[] generated = secureRandom.generateSeed(12);
             randIV = Base64.encodeToString(generated, Base64.DEFAULT);
-            AppUtils.getSharedPreferences("config", Context.MODE_PRIVATE).edit().putString(RAND_IV, randIV).apply();
+            APApplication.sharedPreferences.edit().putString(SUPER_KEY_IV, randIV).apply();
         }
         return randIV;
     }
 
-    public static String encrypt(String orig) {
+    private static String encrypt(String orig) {
         try {
             KeyStore keyStore = KeyStore.getInstance(ANDROID_KEYSTORE);
             keyStore.load(null);
@@ -86,14 +88,12 @@ public class APatchSecurityHelper {
 
             return Base64.encodeToString(cipher.doFinal(orig.getBytes(StandardCharsets.UTF_8)), Base64.DEFAULT);
         } catch (Exception e) {
-            Log.e("APatch", "[APatchSecurityHelper] Failed to encrypt: " + e);
-            e.printStackTrace();
-
+            Log.e(TAG, "Failed to encrypt: ", e);
             return null;
         }
     }
 
-    public static String decrypt(String encryptedData) {
+    private static String decrypt(String encryptedData) {
         try {
             KeyStore keyStore = KeyStore.getInstance(ANDROID_KEYSTORE);
             keyStore.load(null);
@@ -104,9 +104,43 @@ public class APatchSecurityHelper {
 
             return new String(cipher.doFinal(Base64.decode(encryptedData, Base64.DEFAULT)), StandardCharsets.UTF_8);
         } catch (Exception e) {
-            Log.e("APatch", "[APatchSecurityHelper] Failed to decrypt: " + e);
-            e.printStackTrace();
+            Log.e(TAG, "Failed to decrypt", e);
             return null;
         }
     }
+
+    public static boolean shouldSkipStoreSuperKey() {
+        return APApplication.sharedPreferences.getInt(SKIP_STORE_SUPER_KEY, 0) != 0;
+    }
+
+    public static void clearConfigKey() {
+        APApplication.sharedPreferences.edit().remove(SUPER_KEY).apply();
+        APApplication.sharedPreferences.edit().remove(SUPER_KEY_ENC).apply();
+        APApplication.sharedPreferences.edit().remove(SUPER_KEY_IV).apply();
+    }
+
+    public static void setShouldSkipStoreSuperKey(boolean should) {
+        clearConfigKey();
+        APApplication.sharedPreferences.edit().putInt(SKIP_STORE_SUPER_KEY, should? 1: 0).apply();
+    }
+
+    public static String readSPSuperKey() {
+        String encKey = APApplication.sharedPreferences.getString(SUPER_KEY_ENC, "");
+        if(encKey.length() > 0) {
+            return decrypt(encKey);
+        }
+
+        @Deprecated()
+        String key = APApplication.sharedPreferences.getString(SUPER_KEY, "");
+        writeSPSuperKey(key);
+        APApplication.sharedPreferences.edit().remove(SUPER_KEY).apply();
+        return key;
+    }
+
+    public static void writeSPSuperKey(String key) {
+        if(shouldSkipStoreSuperKey()) return;
+        key = APatchKeyHelper.encrypt(key);
+        APApplication.sharedPreferences.edit().putString(SUPER_KEY_ENC, key).apply();
+    }
+
 }
