@@ -196,11 +196,12 @@ class PatchesViewModel : ViewModel() {
             "cd $patchDir",
             "sh boot_extract.sh",
         )
-        if(result.isSuccess) {
-            if (!result.out.contains("SLOT=")) {
-                bootSlot = ""
+
+        if (result.isSuccess) {
+            bootSlot = if (!result.out.toString().contains("SLOT=")) {
+                ""
             } else {
-                bootSlot = result.out.filter { it.startsWith("SLOT=") }[0].removePrefix("SLOT=")
+                result.out.filter { it.startsWith("SLOT=") }[0].removePrefix("SLOT=")
             }
             bootDev = result.out.filter { it.startsWith("BOOTIMAGE=") }[0].removePrefix("BOOTIMAGE=")
             Log.d(TAG, "current slot: $bootSlot")
