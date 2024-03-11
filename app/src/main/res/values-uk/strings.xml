@@ -100,7 +100,7 @@
     <string name="home_ap_cando_reboot">Перезавантаження</string>
     <string name="patch_config_title">Патчі</string>
     <string name="patch_mode_bootimg_patch">Режим: Патч</string>
-    <string name="patch_mode_update_patch">Режим: Оновлення</string>
+    <string name="patch_mode_patch_and_install">Режим: Оновлення</string>
     <string name="patch_mode_uninstall_patch">Режим: Скасування патчу</string>
     <string name="patch_select_bootimg_btn">Виберіть boot</string>
     <string name="patch_embed_kpm_btn">Вбудований KPM</string>

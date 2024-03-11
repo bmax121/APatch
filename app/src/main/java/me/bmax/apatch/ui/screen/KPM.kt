@@ -187,7 +187,7 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
                                 expanded = false
                                 when (label) {
                                     moduleEmbed -> {
-                                        navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.UPDATE))
+                                        navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.PATCH_AND_INSTALL))
                                     }
                                     moduleInstall -> {
                                         Toast.makeText(current, "Not support now!", Toast.LENGTH_SHORT).show()

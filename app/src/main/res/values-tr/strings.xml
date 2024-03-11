@@ -102,7 +102,7 @@
     <string name="home_ap_cando_reboot">Yeniden başlat</string>
     <string name="patch_config_title">Yamalar</string>
     <string name="patch_mode_bootimg_patch">Mod: Yama</string>
-    <string name="patch_mode_update_patch">Mod: Güncelle</string>
+    <string name="patch_mode_patch_and_install">Mod: Güncelle</string>
     <string name="patch_select_bootimg_btn">Önyüklemeyi seç</string>
     <string name="home_kpatch_info_title">Bilgi</string>
     <string name="patch_item_bootimg">önyükleme kalıbı</string>

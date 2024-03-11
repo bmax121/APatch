@@ -30,6 +30,7 @@ echo "****************************"
 
 SUPERKEY=$1
 BOOTIMAGE=$2
+FLASH_TO_DEVICE=$3
 shift 2
 
 [ -z "$SUPERKEY" ] && { >&2 echo "- SuperKey empty!"; exit 1; }
@@ -70,14 +71,20 @@ if [ $? -ne 0 ]; then
   exit $?
 fi
 
-# flash
-if [ -b "$BOOTIMAGE" ] || [ -c "$BOOTIMAGE" ] && [ -f "new-boot.img" ]; then
-  echo "- Flashing new boot image"
-  flash_image new-boot.img "$BOOTIMAGE"
-  if [ $? -ne 0 ]; then
-    >&2 echo "- Flash error: $?"
-    exit $?
+# shellcheck disable=SC2039
+if [[ $FLASH_TO_DEVICE == *"true"* ]]; then
+  # flash
+  if [ -b "$BOOTIMAGE" ] || [ -c "$BOOTIMAGE" ] && [ -f "new-boot.img" ]; then
+    echo "- Flashing new boot image"
+    flash_image new-boot.img "$BOOTIMAGE"
+    if [ $? -ne 0 ]; then
+      >&2 echo "- Flash error: $?"
+      exit $?
+    fi
   fi
+
+  echo "- Successfully Flashed!"
+else
+  echo "- Successfully Patched!"
 fi
 
-echo "- Flash successful"

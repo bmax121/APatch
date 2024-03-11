@@ -7,6 +7,7 @@ import android.system.Os
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -52,11 +53,14 @@ import me.bmax.apatch.ui.screen.destinations.SettingScreenDestination
 import me.bmax.apatch.ui.viewmodel.PatchesViewModel
 import me.bmax.apatch.util.Version.getManagerVersion
 
+private val isABDevice = DeviceUtils.isABDevice()
+
 @RootNavGraph(start = true)
 @Destination
 @Composable
 fun HomeScreen(navigator: DestinationsNavigator) {
     var showPatchFloatAction by remember { mutableStateOf(true) }
+
     val kpState by APApplication.kpStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
     val apState by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
 
@@ -72,7 +76,7 @@ fun HomeScreen(navigator: DestinationsNavigator) {
         if (showPatchFloatAction) {
             ExtendedFloatingActionButton(
                 onClick = {
-                    navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.PATCH))
+                    navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.PATCH_ONLY))
                 },
                 icon = { Icon(Icons.Filled.InstallMobile, "install") },
                 text = { Text(text = stringResource(id = R.string.patch)) },
@@ -209,11 +213,58 @@ private fun TopBar(onSettingsClick: () -> Unit) {
 }
 
 @Composable
+fun PatchDialog(showPatchDialog: MutableState<Boolean>, navigator: DestinationsNavigator) {
+    if (showPatchDialog.value) {
+        AlertDialog(
+            onDismissRequest = { showPatchDialog.value = false },
+            text = {
+                LazyColumn {
+                    item {
+                        ListItem(
+                            headlineContent = { Text (text = stringResource(R.string.home_patch_dialog_patch_only)) },
+                            modifier = Modifier.clickable {
+                                showPatchDialog.value = false
+                                navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.PATCH_ONLY))
+                            }
+                        )
+                    }
+                    item {
+                        ListItem(
+                            headlineContent = { Text (text = stringResource(R.string.home_patch_dialog_patch_and_install)) },
+                            modifier = Modifier.clickable {
+                                showPatchDialog.value = false
+                                navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.PATCH_AND_INSTALL))
+                            }
+                        )
+                    }
+                    if (isABDevice) {
+                        item {
+                            ListItem(
+                                headlineContent = { Text (text = stringResource(R.string.home_patch_dialog_install_next_slot)) },
+                                modifier = Modifier.clickable {
+                                    showPatchDialog.value = false
+                                    navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.INSTALL_TO_NEXT_SLOT))
+                                }
+                            )
+                        }
+                    }
+                }
+            },
+            confirmButton = {},
+            dismissButton = {}
+        )
+    }
+}
+
+@Composable
 private fun KStatusCard(kpState: APApplication.State, navigator: DestinationsNavigator) {
     val showAuthKeyDialog = remember { mutableStateOf(false) }
     if (showAuthKeyDialog.value) {
         AuthSuperKey(showDialog = showAuthKeyDialog)
     }
+
+    val showPatchDialog = rememberSaveable { mutableStateOf(false) }
+    PatchDialog(showPatchDialog, navigator)
 
     ElevatedCard(
         onClick = { },
@@ -316,9 +367,9 @@ private fun KStatusCard(kpState: APApplication.State, navigator: DestinationsNav
                                 APApplication.State.KERNELPATCH_NEED_UPDATE -> {
                                     // todo: remove legacy compact for kp < 0.9.0
                                     if (Version.installedKPVUInt() < 0x900u) {
-                                        navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.PATCH))
+                                        navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.PATCH_ONLY))
                                     } else {
-                                        navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.UPDATE))
+                                        showPatchDialog.value = true
                                     }
                                 }
 
@@ -331,8 +382,7 @@ private fun KStatusCard(kpState: APApplication.State, navigator: DestinationsNav
                                 }
 
                                 else -> {
-                                    APApplication.uninstallApatch()
-                                    navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.UNPATCH))
+                                    showPatchDialog.value = true
                                 }
                             }
                         },
@@ -355,11 +405,22 @@ private fun KStatusCard(kpState: APApplication.State, navigator: DestinationsNav
                                 }
 
                                 else -> {
-                                    Text(text = stringResource(id = R.string.home_ap_cando_uninstall))
+                                    Text(text = stringResource(id = R.string.home_ap_cando_install))
                                 }
                             }
                         }
                     )
+                    if (kpState == APApplication.State.KERNELPATCH_INSTALLED) {
+                        Button(
+                            onClick = {
+                                APApplication.uninstallApatch()
+                                navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.UNPATCH))
+                            },
+                            content = {
+                                Text(text = stringResource(id = R.string.home_ap_cando_uninstall))
+                            }
+                        )
+                    }
                 }
             }
         }

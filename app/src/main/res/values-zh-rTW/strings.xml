@@ -103,7 +103,7 @@
     <string name="home_kpatch_info_title">資訊</string>
     <string name="home_ap_cando_reboot">重新啟動</string>
     <string name="patch_config_title">補丁</string>
-    <string name="patch_mode_update_patch">模式：更新</string>
+    <string name="patch_mode_patch_and_install">模式：更新</string>
     <string name="patch_select_bootimg_btn">選擇 Boot 镜像</string>
     <string name="patch_embed_kpm_btn">嵌入核心模組</string>
     <string name="patch_start_patch_btn">開始修補</string>

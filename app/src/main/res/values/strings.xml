@@ -8,6 +8,7 @@
 
     <string name="patch_warnning">Installation comes with risks. Please ensure your data is backed up.</string>
     <string name="patch">Patch</string>
+    <string name="patch_ab_after_ota">A/B Patch</string>
 
     <string name="kernel_patch">KernelPatch</string>
     <string name="android_patch">AndroidPatch</string>
@@ -56,6 +57,10 @@
     <string name="home_auth_key_desc">Start after certification</string>
     <string name="home_kpatch_info_title">Info</string>
 
+    <string name="home_patch_dialog_patch_only">Patch Only</string>
+    <string name="home_patch_dialog_patch_and_install">Patch And Install</string>
+    <string name="home_patch_dialog_install_next_slot">Install To Next Slot (After OTA)</string>
+
     <string name="home_ap_cando_install">Install</string>
     <string name="home_ap_cando_update">Update</string>
     <string name="home_ap_cando_uninstall">Uninstall</string>
@@ -63,11 +68,11 @@
 
     <string name="patch_title">Patch</string>
 
-
     <string name="patch_config_title">Patches</string>
     <string name="patch_mode_bootimg_patch">Mode: Patch</string>
-    <string name="patch_mode_update_patch">Mode: Update</string>
-    <string name="patch_mode_uninstall_patch">Mode: UnPatch</string>
+    <string name="patch_mode_patch_and_install">Mode: Patch and install</string>
+    <string name="patch_mode_install_to_next_slot">Mode: Install to next slot (After OTA)</string>
+    <string name="patch_mode_uninstall_patch">Mode: Uninstall KPatch</string>
     <string name="patch_select_bootimg_btn">Select boot</string>
     <string name="patch_embed_kpm_btn">Embed KPM</string>
     <string name="patch_start_patch_btn">Start</string>
