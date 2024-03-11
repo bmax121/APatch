@@ -489,6 +489,7 @@ private fun ClearSuperKeyDialog(showClearSuperKeyDialog: MutableState<Boolean>) 
                     onClick = {
                         showClearSuperKeyDialog.value = false
                         APatchKeyHelper.clearConfigKey()
+                        APApplication.superKey = ""
                     }
                 ) {
                     Text(stringResource(id = android.R.string.ok))
