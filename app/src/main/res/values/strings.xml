@@ -161,7 +161,6 @@
     <string name="hide_apatch_manager_failure">Failed to hide, please report the bug!</string>
 
     <string name="setting_reset_su_path">Reset su path</string>
-    <string name="setting_reset_su_path_summary">Use a new \"su\" path.</string>
     <string name="setting_reset_su_new_path">new full path</string>
 
     <string name="webui_open">Open WebUI</string>

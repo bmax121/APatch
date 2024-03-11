@@ -131,7 +131,7 @@ fun SettingScreen(navigator: DestinationsNavigator) {
             val scope = rememberCoroutineScope()
             val dialogHost = LocalDialogHost.current
 
-            // store superkey?
+            // clear key
             if (kPatchReady) {
                 ListItem(
                     leadingContent = {
@@ -145,6 +145,10 @@ fun SettingScreen(navigator: DestinationsNavigator) {
                         showClearSuperKeyDialog.value = true
                     }
                 )
+            }
+
+            // store key local?
+            if(true) {
                 SwitchItem(
                     icon = Icons.Filled.Key,
                     title = stringResource(id = R.string.settings_donot_store_superkey),
@@ -157,6 +161,7 @@ fun SettingScreen(navigator: DestinationsNavigator) {
                 )
             }
 
+            // Global mount
             if (kPatchReady && aPatchReady) {
                 SwitchItem(
                     icon = Icons.Filled.Engineering,
@@ -176,6 +181,7 @@ fun SettingScreen(navigator: DestinationsNavigator) {
                 )
             }
 
+            // webview
             if (aPatchReady) {
                 var enableWebDebugging by rememberSaveable {
                     mutableStateOf(
@@ -195,6 +201,7 @@ fun SettingScreen(navigator: DestinationsNavigator) {
                 }
             }
 
+            // hide manager
             if (kPatchReady && !bIsManagerHide) {
                 ListItem(
                     leadingContent = {
@@ -213,6 +220,7 @@ fun SettingScreen(navigator: DestinationsNavigator) {
                 )
             }
 
+            // su path
             if (kPatchReady) {
                 ListItem(
                     leadingContent = {
@@ -221,9 +229,6 @@ fun SettingScreen(navigator: DestinationsNavigator) {
                         )
                     },
                     supportingContent = {
-                        Text(
-                            text = stringResource(id = R.string.setting_reset_su_path_summary)
-                        )
                     },
                     headlineContent = { Text(stringResource(id = R.string.setting_reset_su_path)) },
                     modifier = Modifier.clickable {
@@ -232,6 +237,7 @@ fun SettingScreen(navigator: DestinationsNavigator) {
                 )
             }
 
+            // language
             ListItem(
                 headlineContent = {
                     Text(text = stringResource(id = R.string.settings_app_language))
@@ -251,6 +257,7 @@ fun SettingScreen(navigator: DestinationsNavigator) {
                 leadingContent = { Icon(Icons.Filled.Translate, null) }
             )
 
+            // log
             ListItem(
                 leadingContent = {
                     Icon(
