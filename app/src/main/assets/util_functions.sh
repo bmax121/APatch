@@ -82,15 +82,13 @@ get_next_slot() {
   if [ -z $SLOT ]; then
     SLOT=$(getprop ro.boot.slot_suffix)
   fi
-   [ -z $SLOT ] && { >&2 echo "can't determined current boot slot!"; exit 1; }
-
+   [ -z $SLOT ] && { >&2 echo "can't determined next boot slot! check your devices is A/B"; exit 1; }
+   [ "$SLOT" = "normal" ] &&  { >&2 echo "can't determined next boot slot! check your devices is A/B"; exit 1; }
   if [[ $SLOT == *_a ]]; then
     SLOT='_b'
   else
     SLOT='_a'
   fi
-  [ "$SLOT" = "normal" ] && unset SLOT
-  [ -z $SLOT ] || echo "SLOT=$SLOT"
 }
 
 find_boot_image() {
