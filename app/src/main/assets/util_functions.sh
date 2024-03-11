@@ -89,6 +89,7 @@ get_next_slot() {
   else
     SLOT='_a'
   fi
+  echo "SLOT=$SLOT"
 }
 
 find_boot_image() {
