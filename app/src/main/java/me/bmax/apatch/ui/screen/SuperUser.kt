@@ -27,6 +27,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import dev.utils.app.AppUtils.getPackageManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -37,6 +38,7 @@ import me.bmax.apatch.ui.component.SearchAppBar
 import me.bmax.apatch.ui.viewmodel.SuperUserViewModel
 import me.bmax.apatch.util.PkgConfig
 
+private val pm = getPackageManager()
 
 @OptIn(ExperimentalMaterialApi::class)
 @Destination
@@ -143,7 +145,7 @@ private fun AppItem(
         leadingContent = {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(app.packageInfo)
+                    .data(app.applicationInfo.loadIcon(pm))
                     .crossfade(true)
                     .build(),
                 contentDescription = app.label,
