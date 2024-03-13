@@ -1,38 +1,35 @@
-name: Bug report
-description: Report errors or unexpected behavior.
+name: Bug report/反馈 Bug
+description: Report errors or unexpected behavior./报告错误或未预料的行为
 labels: [Bug]
 
 body:
   - type: checkboxes
     attributes:
-       label: Please check before submitting an issue
+       label: Please check before submitting an issue/在提交 issue 前请检查
        options:
-          - label: I have searched the issues and haven't found anything relevant
+          - label: I have searched the issues and haven't found anything relevant/我已经搜索了 issues 列表，没有发现于本问题相关内容
             required: true
 
-          - label: If patch failed, root failed, or device unable to boot after flashing the new boot.img. Please goto KernelPatch
+          - label: If patch failed, root failed, or device unable to boot after flashing the new boot.img. Please goto KernelPatch/修复失败或刷入修补后镜像不能启动，请前往 KernelPatch 提问
             required: true
 
-          - label: I will upload bugreport file in APatch Manager - Settings - Report log
+          - label: I will upload bugreport file in APatch Manager - Settings - Report log/我会上传 bureport 文件从 APatch 管理器 - 设置 - 发送日志
             required: true
 
-          - label: My problem is fully stated in English. 
-            required: true
-
-          - label: I know how to reproduce the issue which may not be specific to my device
+          - label: I know how to reproduce the issue which may not be specific to my device/我知道如何重新复现这个问题
             required: false
 
   - type: textarea
     attributes:
-        label: Describe the bug
-        description: A clear and concise description of what the bug is
+        label: Describe the bug/描述 bug
+        description: A clear and concise description of what the bug is/对 bug 的清晰简洁的描述
     validations:
         required: true
 
   - type: textarea
     attributes:
-        label: Reproduce method
-        description: Steps to reproduce the behaviour
+        label: Reproduce method/复现方法
+        description: Steps to reproduce the behaviour/复现的步骤
         placeholder: |
           - 1. Go to '...'
           - 2. Click on '....'
@@ -43,62 +40,62 @@ body:
 
   - type: textarea
     attributes:
-        label: Expected behavior
-        description: A clear and concise description of what you expected to happen.
+        label: Expected behavior/预期行为
+        description: A clear and concise description of what you expected to happen./对你期望发生的行为进行清晰简洁的描述
     validations:
       required: true
 
   - type: textarea
     attributes:
-        label: Actual behaviour
-        placeholder: Tell us what happens instead
+        label: Actual behaviour /实际行为
+        placeholder: Tell us what happens instead/告诉我们实际发生了什么
     validations:
       required: true
 
   - type: textarea
     attributes:
-        label: Screenshots
-        description: If applicable, add screenshots to help explain your problem.
+        label: Screenshots/截图
+        description: If applicable, add screenshots to help explain your problem./如果可以的话，添加截图可以帮你解释问题
 
   - type: textarea
     attributes:
         label: Logs
-        description: If applicable, add crash or any other logs to help us figure out the problem.
+        description: If applicable, add crash or any other logs to help us figure out the problem./如果可以的话，添加崩溃日志可以帮助我们找到问题
 
   - type: input
     attributes:
-      label: Device Name
+      label: Device Name/设备名称
     validations:
       required: true
 
   - type: input
     attributes:
-      label: OS Version
+      label: OS Version/系统版本
     validations:
       required: true
 
   - type: input
     attributes:
-      label: APatch Version
+      label: APatch Version/APatch 版本
     validations:
       required: true
 
   - type: input
     attributes:
-      label: Kernel Version
+      label: Kernel Version/内核版本
     validations:
       required: true
 
   - type: input
     attributes:
-      label: KernelPatch Version
+      label: KernelPatch Version/KernelPatch 版本
     validations:
       required: true
 
   - type: textarea
     attributes:
-        label: Additional context
-        description: Add any other context about the problem here.
-        placeholder: Upload logs zip by clicking the bar on the bottom. Upload logs to other websites or using external links is prohibited.
+        label: Additional context/其他信息
+        description: Add any other context about the problem here./添加关于问题的任何信息。
+        placeholder: Upload logs zip by clicking the bar on the bottom. Upload logs to other websites or using external links is prohibited./点击文本框底栏上传日志压缩包，禁止上传到其它网站或使用外链提供日志。
     validations:
       required: true
