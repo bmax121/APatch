@@ -27,6 +27,9 @@
     <string name="settings_global_namespace_mode_summary">All root sessions use the global mount namespace</string>
     <string name="settings_clear_super_key_dialog">Do you really want to proceed?</string>
 
+    <string name="settings_check_update">Check update</string>
+    <string name="settings_check_update_summary">Automatically check for updates when opening the app</string>
+
     <string name="home_learn_apatch">Learn AndroidPatch</string>
     <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
     <string name="home_click_to_learn_apatch">Learn about the features of AndroidPatch and how to use</string>

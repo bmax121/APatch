@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.Engineering
 import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.Masks
 import androidx.compose.material.icons.filled.Translate
+import androidx.compose.material.icons.filled.Update
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -199,6 +200,24 @@ fun SettingScreen(navigator: DestinationsNavigator) {
                         .edit().putBoolean("enable_web_debugging", it).apply()
                     enableWebDebugging = it
                 }
+            }
+
+            // Check Update
+            val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
+            var checkUpdate by rememberSaveable {
+                mutableStateOf(
+                    prefs.getBoolean("check_update", true)
+                )
+            }
+
+            SwitchItem(
+                icon = Icons.Filled.Update,
+                title = stringResource(id = R.string.settings_check_update),
+                summary = stringResource(id = R.string.settings_check_update_summary),
+                checked = checkUpdate
+            ) {
+                prefs.edit().putBoolean("check_update", it).apply()
+                checkUpdate = it
             }
 
             // hide manager
