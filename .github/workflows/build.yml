@@ -9,6 +9,7 @@ on:
       - 'app/**'
       - 'apd/**'
       - 'build.gradle.kts'
+      - 'gradle/libs.versions.toml'
   pull_request:
     branches: [ "main" ]
     paths:
@@ -16,6 +17,7 @@ on:
       - 'app/**'
       - 'apd/**'
       - 'build.gradle.kts'
+      - 'gradle/libs.versions.toml'
   workflow_call:
   workflow_dispatch:
 
