@@ -90,7 +90,12 @@ fun HomeScreen(navigator: DestinationsNavigator) {
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            UpdateCard()
+            val checkUpdate =
+                LocalContext.current.getSharedPreferences("settings", Context.MODE_PRIVATE)
+                    .getBoolean("check_update", true)
+            if (checkUpdate) {
+                UpdateCard()
+            }
             WarningCard()
             KStatusCard(kpState, navigator)
             AStatusCard(apState)
