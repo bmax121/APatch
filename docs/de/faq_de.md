@@ -31,7 +31,7 @@ Für mehr Informationen, siehe [Wie schreibt man ein KPM](https://github.com/bma
 
 APatch benötigt KernelPatch, übernimmt all seine Fähigkeiten und wurde erweitert.
 
-Sie können nur KernelPatch installieren, aber dies wird Ihnen nicht erlauben, Magisk-Module zu nutzen. Und um Superuserverwaltung zu nutzen, müssen Sie AndroidPatch installieren und es dann deinstallieren.
+Sie können nur KernelPatch installieren, aber dies wird Ihnen nicht erlauben, Magisk-Module zu nutzen.
 
 [Lerne mehr über KernelPatch](https://github.com/bmax121/KernelPatch)
 
