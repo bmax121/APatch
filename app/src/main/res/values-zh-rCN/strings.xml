@@ -106,7 +106,7 @@
     <string name="patch_mode_bootimg_patch">修补模式</string>
     <string name="patch_mode_patch_and_install">修补并安装</string>
     <string name="patch_select_bootimg_btn">选择 Boot 镜像</string>
-    <string name="patch_start_patch_btn">开始嵌入</string>
+    <string name="patch_start_patch_btn">开始</string>
     <string name="patch_item_error">‼错误‼</string>
     <string name="patch_item_bootimg">启动镜像</string>
     <string name="patch_item_bootimg_slot">槽位：</string>
