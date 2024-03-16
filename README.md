@@ -67,6 +67,7 @@ Installation guide (coming soon)
 ### More Information
 
 - [Documents](docs/)
+- [中文文档(开发中)](https://nightsong-uwu.github.io/APatchDocs)
 
 ## Credits
 
