@@ -878,7 +878,7 @@ dependencies = [
 [[package]]
 name = "loopdev"
 version = "0.5.0"
-source = "git+https://github.com/Kernel-SU/loopdev#7a921f8d966477a645b1188732fac486c71a68ef"
+source = "git+https://github.com/AndroidPatch/loopdev#7a921f8d966477a645b1188732fac486c71a68ef"
 dependencies = [
  "errno 0.2.8",
  "libc",
@@ -1296,7 +1296,7 @@ dependencies = [
 [[package]]
 name = "rustix"
 version = "0.38.30"
-source = "git+https://github.com/Kernel-SU/rustix.git?branch=main#0e270bce2d97466be6b987bb5f7ea5b1e8d84969"
+source = "git+https://github.com/AndroidPatch/rustix?branch=main#0e270bce2d97466be6b987bb5f7ea5b1e8d84969"
 dependencies = [
  "bitflags 2.4.1",
  "errno 0.3.8",
