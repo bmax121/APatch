@@ -67,6 +67,7 @@ Installation guide (coming soon)
 ### More Information
 
 - [Documents](docs/)
+- [(开发中)中文文档](https://apatch.top/)
 
 ## Credits
 
