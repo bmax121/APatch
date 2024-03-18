@@ -60,8 +60,8 @@ Installation guide (coming soon)
 - Telegram Channel: [@APatchChannel](https://t.me/APatchChannel)
 
 ### Discussions
-- Telegram Group: [@APatchGroup](https://t.me/APatchGroup)
-- 中文: [@APatch_CN_Group](https://t.me/APatch_CN_Group)
+- Telegram Group: [@APatchGroup(EN/CN)](https://t.me/Apatch_discuss)
+
 
 
 ### More Information
