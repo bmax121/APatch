@@ -9,6 +9,8 @@ import androidx.lifecycle.MutableLiveData
 import coil.Coil
 import coil.ImageLoader
 import com.topjohnwu.superuser.CallbackList
+import com.topjohnwu.superuser.Shell
+import com.topjohnwu.superuser.internal.MainShell
 import me.bmax.apatch.util.*
 import me.zhanghai.android.appiconloader.coil.AppIconFetcher
 import me.zhanghai.android.appiconloader.coil.AppIconKeyer
@@ -86,7 +88,9 @@ class APApplication : Application() {
             val cmds = arrayOf(
                 "rm -f $APD_PATH",
                 "rm -f $KPATCH_PATH",
-                "rm -rf $APATCH_FOLDER",
+                "rm -rf $APATCH_BIN_FOLDER",
+                "rm -rf $APATCH_LOG_FOLDER",
+                "rm -rf $APATCH_VERSION_PATH",
             )
 
             val shell = getRootShell()
@@ -139,11 +143,14 @@ class APApplication : Application() {
                 "echo ${Version.getManagerVersion().second} > $APATCH_VERSION_PATH",
                 "restorecon -R $APATCH_FOLDER",
 
-                "$KPATCH_PATH $superKey android_user init",
+                "${nativeDir}/libmagiskpolicy.so --magisk --live",
             )
 
             val shell = getRootShell()
             shell.newJob().add(*cmds).to(logCallback, logCallback).exec()
+
+            // clear shell cache
+            APatchCli.refresh()
 
             Log.d(TAG, "APatch installed...")
             _apStateLiveData.postValue(State.ANDROIDPATCH_INSTALLED)
@@ -154,6 +161,7 @@ class APApplication : Application() {
             _kpStateLiveData.postValue(State.KERNELPATCH_NEED_REBOOT)
             Log.d(TAG, "mark reboot ${result.code}")
         }
+
 
         var superKey: String = ""
             set(value) {

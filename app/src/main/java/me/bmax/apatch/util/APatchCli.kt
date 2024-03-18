@@ -35,7 +35,11 @@ fun createRootShell(): Shell {
 }
 
 object APatchCli {
-    val SHELL: Shell = createRootShell()
+    var SHELL: Shell = createRootShell()
+    fun refresh() {
+        SHELL.close()
+        SHELL = createRootShell()
+    }
 }
 
 fun getRootShell(): Shell {
