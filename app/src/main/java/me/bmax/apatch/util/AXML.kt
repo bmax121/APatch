@@ -111,7 +111,7 @@ class AXML(b: ByteArray) {
     }
 
     private class RawByteStream : ByteArrayOutputStream() {
-        val buf: ByteArray get() = buf
+        val buf: ByteArray get() = super.buf
 
         fun align(alignment: Int = 4) {
             val newCount = (count + alignment - 1) / alignment * alignment
