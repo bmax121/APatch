@@ -61,6 +61,7 @@ Installation guide (coming soon)
 
 ### Discussions
 - Telegram Group: [@APatchGroup(EN/CN)](https://t.me/Apatch_discuss)
+- Telegram Group: [中文](https://t.me/APatch_CN_Group)
 
 
 
