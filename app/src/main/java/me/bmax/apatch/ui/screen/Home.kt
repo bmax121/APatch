@@ -9,6 +9,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -124,12 +125,14 @@ fun AuthSuperKey(showDialog: MutableState<Boolean>) {
                 Box(
                     contentAlignment = Alignment.CenterEnd,
                 ) {
-                    TextField(
+                    OutlinedTextField(
                         value = key,
+                        modifier = Modifier.fillMaxWidth().padding(top = 6.dp),
                         onValueChange = {
                             key = it
                             enable = key.isNotEmpty()
                         },
+                        shape = RoundedCornerShape(50.0f),
                         label = { Text(stringResource(id = R.string.super_key)) },
                         visualTransformation = if (keyVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
@@ -137,7 +140,7 @@ fun AuthSuperKey(showDialog: MutableState<Boolean>) {
                     IconButton(
                         modifier = Modifier
                             .size(40.dp)
-                            .padding(end = 12.dp),
+                            .padding(top = 15.dp, end = 5.dp),
                         onClick = { keyVisible = !keyVisible }
                     ) {
                         Icon(
