@@ -193,15 +193,16 @@ class PatchesViewModel : ViewModel() {
     }
 
     private fun extractAndParseBootimg(mode: PatchMode) {
-        var cmdBuilder = "sh boot_extract.sh"
+        var cmdBuilder = "./boot_extract.sh"
 
         if (mode == PatchMode.INSTALL_TO_NEXT_SLOT) {
             cmdBuilder += " true"
         }
 
         val result = shellForResult(shell,
+            "export ASH_STANDALONE=1",
             "cd $patchDir",
-            cmdBuilder,
+            "./busybox sh $cmdBuilder",
         )
 
         if (result.isSuccess) {
@@ -304,10 +305,11 @@ class PatchesViewModel : ViewModel() {
             }
 
             val result = shell.newJob().add(
+                "export ASH_STANDALONE=1",
                 "rm -f ${APApplication.APD_PATH}",
                 "rm -rf ${APApplication.APATCH_FOLDER}",
                 "cd $patchDir",
-                "sh boot_unpatch.sh $bootDev",
+                "./busybox sh ./boot_unpatch.sh $bootDev",
             ).to(logs, logs).exec()
 
             if (result.isSuccess) {
@@ -343,7 +345,7 @@ class PatchesViewModel : ViewModel() {
             }
             logs.add("****************************")
 
-            var patchCommand = "sh boot_patch.sh $superkey ${srcBoot.path}"
+            var patchCommand = "boot_patch.sh $superkey ${srcBoot.path}"
             if (mode == PatchMode.PATCH_AND_INSTALL || mode == PatchMode.INSTALL_TO_NEXT_SLOT) {
                 patchCommand += " true"
             }
@@ -375,8 +377,9 @@ class PatchesViewModel : ViewModel() {
             Log.d(TAG, "patchCommand: $patchCommand")
 
             val result = shell.newJob().add(
+                "export ASH_STANDALONE=1",
                 "cd $patchDir",
-                patchCommand,
+                "./busybox sh $patchCommand"
             ).to(logs, logs).exec()
             var succ = result.isSuccess
 
