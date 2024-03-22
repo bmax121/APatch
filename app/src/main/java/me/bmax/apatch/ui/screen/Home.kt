@@ -5,6 +5,11 @@ import android.os.Build
 import android.os.PowerManager
 import android.system.Os
 import androidx.annotation.StringRes
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -43,13 +48,11 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.bmax.apatch.util.*
 import me.bmax.apatch.*
 import me.bmax.apatch.R
-import me.bmax.apatch.ui.component.ConfirmDialog
-import me.bmax.apatch.ui.component.ConfirmResult
+import me.bmax.apatch.ui.component.rememberConfirmDialog
 import me.bmax.apatch.ui.screen.destinations.PatchesDestination
 import me.bmax.apatch.util.reboot
 import me.bmax.apatch.ui.screen.destinations.SettingScreenDestination
@@ -105,7 +108,6 @@ fun HomeScreen(navigator: DestinationsNavigator) {
             InfoCard()
             LearnMoreCard()
             Spacer(Modifier)
-            ConfirmDialog()
         }
     }
 }
@@ -487,7 +489,7 @@ private fun AStatusCard(apState: APApplication.State) {
                         .weight(2f)
                         .padding(start = 16.dp)
                 ) {
-                    val managerVersion = Version.getManagerVersion()
+                    val managerVersion = getManagerVersion()
                     when (apState) {
                         APApplication.State.ANDROIDPATCH_NOT_INSTALLED -> {
                             Text(
@@ -703,33 +705,32 @@ fun UpdateCard() {
     val newVersion by produceState(initialValue = Triple(0, "", "")) {
         value = withContext(Dispatchers.IO) { checkNewVersion() }
     }
-
     val currentVersionCode = getManagerVersion().second
     val newVersionCode = newVersion.first
     val newVersionUrl = newVersion.second
     val changelog = newVersion.third
-    if (newVersionCode <= currentVersionCode) {
-        return
-    }
 
     val uriHandler = LocalUriHandler.current
-    val dialogHost = LocalDialogHost.current
     val title = stringResource(id = R.string.apm_changelog)
     val updateText = stringResource(id = R.string.apm_update)
-    val scope = rememberCoroutineScope()
-    WarningCard(
-        message = stringResource(id = R.string.home_new_apatch_found).format(newVersionCode),
-        MaterialTheme.colorScheme.outlineVariant
+
+    AnimatedVisibility(
+        visible = newVersionCode >= currentVersionCode,
+        enter = fadeIn() + expandVertically(),
+        exit = shrinkVertically() + fadeOut()
     ) {
-        scope.launch {
-            if (changelog.isEmpty() || dialogHost.showConfirm(
+        val updateDialog = rememberConfirmDialog(onConfirm = { uriHandler.openUri(newVersionUrl) })
+        WarningCard(
+            message = stringResource(id = R.string.home_new_apatch_found).format(newVersionCode),
+            MaterialTheme.colorScheme.outlineVariant
+        ) {
+            if (changelog.isNotEmpty()) {
+                updateDialog.showConfirm(
                     title = title,
                     content = changelog,
                     markdown = true,
-                    confirm = updateText,
-                ) == ConfirmResult.Confirmed
-            ) {
-                uriHandler.openUri(newVersionUrl)
+                    confirm = updateText
+                )
             }
         }
     }

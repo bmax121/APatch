@@ -32,7 +32,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import me.bmax.apatch.Natives
 import me.bmax.apatch.R
-import me.bmax.apatch.ui.component.ConfirmDialog
 import me.bmax.apatch.ui.component.SearchAppBar
 import me.bmax.apatch.ui.viewmodel.SuperUserViewModel
 import me.bmax.apatch.util.PkgConfig
@@ -101,7 +100,7 @@ fun SuperUserScreen(navigator: DestinationsNavigator) {
         floatingActionButton = {
         }
     ) { innerPadding ->
-        ConfirmDialog()
+
         val refreshState = rememberPullRefreshState(
             refreshing = viewModel.isRefreshing,
             onRefresh = { scope.launch { viewModel.fetchAppList() } },

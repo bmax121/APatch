@@ -67,11 +67,11 @@ import me.bmax.apatch.BuildConfig.APPLICATION_ID
 import me.bmax.apatch.Natives
 import me.bmax.apatch.R
 import me.bmax.apatch.ui.component.AboutDialog
-import me.bmax.apatch.ui.component.LoadingDialog
 import me.bmax.apatch.ui.component.SwitchItem
+import me.bmax.apatch.ui.component.rememberCustomDialog
+import me.bmax.apatch.ui.component.rememberLoadingDialog
 import me.bmax.apatch.util.APatchKeyHelper
 import me.bmax.apatch.util.HideAPK
-import me.bmax.apatch.util.LocalDialogHost
 import me.bmax.apatch.util.getBugreportFile
 import me.bmax.apatch.util.isGlobalNamespaceEnabled
 import me.bmax.apatch.util.rootShellForResult
@@ -103,13 +103,15 @@ fun SettingScreen(navigator: DestinationsNavigator) {
             })
         }
     ) { paddingValues ->
-        LoadingDialog()
+
+        val loadingDialog = rememberLoadingDialog()
 
         val showClearSuperKeyDialog = remember { mutableStateOf(false) }
         ClearSuperKeyDialog(showClearSuperKeyDialog)
 
-        val showAboutDialog = remember { mutableStateOf(false) }
-        AboutDialog(showAboutDialog)
+        val aboutDialog = rememberCustomDialog {
+            AboutDialog(it)
+        }
 
         val showLanguageDialog = rememberSaveable { mutableStateOf(false) }
         LanguageDialog(showLanguageDialog)
@@ -133,7 +135,6 @@ fun SettingScreen(navigator: DestinationsNavigator) {
 
             val context = LocalContext.current
             val scope = rememberCoroutineScope()
-            val dialogHost = LocalDialogHost.current
 
             // clear key
             if (kPatchReady) {
@@ -152,18 +153,16 @@ fun SettingScreen(navigator: DestinationsNavigator) {
             }
 
             // store key local?
-            if(true) {
-                SwitchItem(
-                    icon = Icons.Filled.Key,
-                    title = stringResource(id = R.string.settings_donot_store_superkey),
-                    summary = stringResource(id = R.string.settings_donot_store_superkey_summary),
-                    checked = bSkipStoreSuperKey,
-                    onCheckedChange = {
-                        bSkipStoreSuperKey = it
-                        APatchKeyHelper.setShouldSkipStoreSuperKey(bSkipStoreSuperKey)
-                    }
-                )
-            }
+            SwitchItem(
+                icon = Icons.Filled.Key,
+                title = stringResource(id = R.string.settings_donot_store_superkey),
+                summary = stringResource(id = R.string.settings_donot_store_superkey_summary),
+                checked = bSkipStoreSuperKey,
+                onCheckedChange = {
+                    bSkipStoreSuperKey = it
+                    APatchKeyHelper.setShouldSkipStoreSuperKey(bSkipStoreSuperKey)
+                }
+            )
 
             // Global mount
             if (kPatchReady && aPatchReady) {
@@ -290,7 +289,7 @@ fun SettingScreen(navigator: DestinationsNavigator) {
                 headlineContent = { Text(stringResource(id = R.string.send_log)) },
                 modifier = Modifier.clickable {
                     scope.launch {
-                        val bugreport = dialogHost.withLoading {
+                        val bugreport = loadingDialog.withLoading {
                             withContext(Dispatchers.IO) {
                                 getBugreportFile(context)
                             }
@@ -327,7 +326,7 @@ fun SettingScreen(navigator: DestinationsNavigator) {
                 },
                 headlineContent = { Text(about) },
                 modifier = Modifier.clickable {
-                    showAboutDialog.value = true
+                    aboutDialog.show()
                 }
             )
         }

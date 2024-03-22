@@ -71,20 +71,17 @@ import me.bmax.apatch.APApplication
 import me.bmax.apatch.Natives
 import me.bmax.apatch.R
 import me.bmax.apatch.apApp
-import me.bmax.apatch.ui.component.ConfirmDialog
 import me.bmax.apatch.ui.component.ConfirmResult
-import me.bmax.apatch.ui.component.DialogHostState
-import me.bmax.apatch.ui.component.LoadingDialog
+import me.bmax.apatch.ui.component.LoadingDialogHandle
+import me.bmax.apatch.ui.component.rememberConfirmDialog
+import me.bmax.apatch.ui.component.rememberLoadingDialog
 import me.bmax.apatch.ui.screen.destinations.PatchesDestination
 import me.bmax.apatch.ui.viewmodel.KPModel
 import me.bmax.apatch.ui.viewmodel.KPModuleViewModel
 import me.bmax.apatch.ui.viewmodel.PatchesViewModel
-import me.bmax.apatch.util.LocalDialogHost
 import me.bmax.apatch.util.isScrollingUp
 import me.bmax.apatch.util.*
 import java.io.IOException
-
-
 
 private const val TAG = "KernelPatchModule"
 
@@ -118,14 +115,12 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
         }
     }
 
-
     val kpModuleListState = rememberLazyListState()
 
     Scaffold(topBar = {
         TopBar()
     }, floatingActionButton = run {
         {
-            val dialogHost = LocalDialogHost.current
             val scope = rememberCoroutineScope()
             val context = LocalContext.current
 
@@ -133,8 +128,9 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
             val moduleLoad = stringResource(id = R.string.kpm_load)
             val moduleInstall = stringResource(id = R.string.kpm_install)
             val moduleEmbed = stringResource(id = R.string.kpm_embed)
-            val succToastText = stringResource(id = R.string.kpm_load_toast_succ)
+            val successToastText = stringResource(id = R.string.kpm_load_toast_succ)
             val failToastText = stringResource(id = R.string.kpm_load_toast_failed)
+            val loadingDialog = rememberLoadingDialog()
 
             val selectKpmLauncher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.StartActivityForResult()
@@ -147,8 +143,8 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
 
                 // todo: args
                 scope.launch {
-                    val succ = loadModule(dialogHost, uri, "") == 0
-                    val toastText = if (succ) succToastText else failToastText
+                    val rc = loadModule(loadingDialog, uri, "") == 0
+                    val toastText = if (rc) successToastText else failToastText
                     withContext(Dispatchers.Main) {
                         Toast.makeText(
                             context,
@@ -205,8 +201,6 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
             }
         }
     }) { innerPadding ->
-        ConfirmDialog()
-        LoadingDialog()
 
         KPModuleList(
             viewModel = viewModel,
@@ -218,8 +212,8 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
     }
 }
 
-suspend fun loadModule(dialogHost: DialogHostState, uri: Uri, args: String): Int {
-    val rc = dialogHost.withLoading {
+suspend fun loadModule(loadingDialog: LoadingDialogHandle, uri: Uri, args: String): Int {
+    val rc = loadingDialog.withLoading {
         withContext(Dispatchers.IO) {
             run {
                 val kpmDir: ExtendedFile =
@@ -244,11 +238,6 @@ suspend fun loadModule(dialogHost: DialogHostState, uri: Uri, args: String): Int
     return rc
 }
 
-
-
-
-
-
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun KPModuleList(
@@ -261,10 +250,13 @@ private fun KPModuleList(
     val uninstall = stringResource(id = R.string.kpm_unload)
     val cancel = stringResource(id = android.R.string.cancel)
 
-    val dialogHost = LocalDialogHost.current
+    val confirmDialog = rememberConfirmDialog()
+    val loadingDialog = rememberLoadingDialog()
+
 
     suspend fun onModuleUninstall(module: KPModel.KPMInfo) {
-        val confirmResult = dialogHost.showConfirm(
+
+        val confirmResult = confirmDialog.awaitConfirm(
             moduleStr,
             content = moduleUninstallConfirm.format(module.name),
             confirm = uninstall,
@@ -274,7 +266,7 @@ private fun KPModuleList(
             return
         }
 
-        val success = dialogHost.withLoading {
+        val success = loadingDialog.withLoading {
             withContext(Dispatchers.IO) {
                 Natives.unloadKernelPatchModule(module.name) == 0L
             }

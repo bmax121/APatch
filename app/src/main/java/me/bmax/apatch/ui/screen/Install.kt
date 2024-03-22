@@ -36,7 +36,6 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 @Destination
 fun InstallScreen(navigator: DestinationsNavigator, uri: Uri) {
