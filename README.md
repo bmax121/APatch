@@ -32,6 +32,9 @@ Kernel configs
 - `CONFIG_KALLSYMS=y` and `CONFIG_KALLSYMS_ALL=y`
 - `CONFIG_KALLSYMS=y` and `CONFIG_KALLSYMS_ALL=n`: Early support
 
+- IF you cant use su and module try this commit (it work for me)
+- [Tonkla004@9e467fd](https://github.com/Tonkla004/android_kernel_oneplus_sm6375/commit/9e467fd04e4e00bee3711534427f00853080110f)
+
 ## Security Alert
 
 The **SUPERKEY** has higher privileges than root access.  
