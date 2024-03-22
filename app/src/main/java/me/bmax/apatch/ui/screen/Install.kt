@@ -41,7 +41,7 @@ import java.util.*
 @Destination
 fun InstallScreen(navigator: DestinationsNavigator, uri: Uri) {
     var text by rememberSaveable { mutableStateOf("") }
-    val logContent = StringBuilder()
+    val logContent = rememberSaveable { StringBuilder() }
     var showFloatAction by rememberSaveable { mutableStateOf(false) }
 
     val snackBarHost = LocalSnackbarHost.current
@@ -59,9 +59,6 @@ fun InstallScreen(navigator: DestinationsNavigator, uri: Uri) {
                 }
             }, onStdout = {
                 text += "$it\n"
-                scope.launch {
-                    scrollState.animateScrollTo(scrollState.maxValue)
-                }
                 logContent.append(it).append("\n")
             }, onStderr = {
                 logContent.append(it).append("\n")
@@ -116,6 +113,9 @@ fun InstallScreen(navigator: DestinationsNavigator, uri: Uri) {
                 .padding(innerPadding)
                 .verticalScroll(scrollState),
         ) {
+            LaunchedEffect(text) {
+                scrollState.animateScrollTo(scrollState.maxValue)
+            }
             Text(
                 modifier = Modifier.padding(8.dp),
                 text = text,
