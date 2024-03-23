@@ -149,6 +149,10 @@ fun HomeScreen(navigator: DestinationsNavigator) {
     }
 }
 
+val keyChecked: (skey: String)-> Boolean = {
+    it.length in 8..63 && it.any { it.isDigit() } && it.any{ it.isLetter()}
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AuthSuperKey(showDialog: MutableState<Boolean>) {
@@ -207,7 +211,7 @@ fun AuthSuperKey(showDialog: MutableState<Boolean>) {
                             .padding(top = 6.dp),
                         onValueChange = {
                             key = it
-                            enable = key.isNotEmpty()
+                            enable = keyChecked(key)
                         },
                         shape = RoundedCornerShape(50.0f),
                         label = { Text(stringResource(id = R.string.super_key)) },
@@ -241,7 +245,7 @@ fun AuthSuperKey(showDialog: MutableState<Boolean>) {
                     Button(onClick = {
                         showDialog.value = false
                         APApplication.superKey = key
-                    }) {
+                    }, enabled = enable) {
                         Text(stringResource(id = android.R.string.ok))
                     }
                 }
