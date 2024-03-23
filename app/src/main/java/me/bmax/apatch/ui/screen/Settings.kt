@@ -573,10 +573,5 @@ fun LanguageDialog(showLanguageDialog: MutableState<Boolean>) {
 private fun TopBar(onBack: () -> Unit = {}) {
     TopAppBar(
         title = { Text(stringResource(R.string.settings)) },
-        navigationIcon = {
-            IconButton(
-                onClick = onBack
-            ) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null) }
-        },
     )
 }
