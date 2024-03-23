@@ -123,10 +123,6 @@ fun SettingScreen(navigator: DestinationsNavigator) {
             APApplication.superKey = ""
         })
 
-        val aboutDialog = rememberCustomDialog {
-            AboutDialog(it)
-        }
-
         val showLanguageDialog = rememberSaveable { mutableStateOf(false) }
         LanguageDialog(showLanguageDialog)
 
@@ -336,20 +332,6 @@ fun SettingScreen(navigator: DestinationsNavigator) {
                             )
                         )
                     }
-                }
-            )
-
-            val about = stringResource(id = R.string.about)
-            ListItem(
-                leadingContent = {
-                    Icon(
-                        Icons.Filled.ContactPage,
-                        stringResource(id = R.string.about)
-                    )
-                },
-                headlineContent = { Text(about) },
-                modifier = Modifier.clickable {
-                    aboutDialog.show()
                 }
             )
         }

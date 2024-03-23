@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Build
 import android.os.PowerManager
 import android.system.Os
+import androidx.activity.compose.BackHandler
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
@@ -30,6 +31,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.InstallMobile
+import androidx.compose.material.icons.filled.MoreHoriz
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Visibility
@@ -83,6 +86,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.window.DialogWindowProvider
+import androidx.compose.ui.window.PopupProperties
 import androidx.compose.ui.window.SecureFlagPolicy
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
@@ -93,7 +97,9 @@ import me.bmax.apatch.APApplication
 import me.bmax.apatch.Natives
 import me.bmax.apatch.R
 import me.bmax.apatch.apApp
+import me.bmax.apatch.ui.component.AboutDialog
 import me.bmax.apatch.ui.component.rememberConfirmDialog
+import me.bmax.apatch.ui.component.rememberCustomDialog
 import me.bmax.apatch.ui.screen.destinations.InstallModeSelectScreenDestination
 import me.bmax.apatch.ui.screen.destinations.PatchesDestination
 import me.bmax.apatch.ui.screen.destinations.SettingScreenDestination
@@ -327,6 +333,13 @@ fun RebootDropdownItem(@StringRes id: Int, reason: String = "") {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TopBar(onSettingsClick: () -> Unit, onInstallClick: () -> Unit) {
+    val uriHandler = LocalUriHandler.current
+    val aboutDialog = rememberCustomDialog {
+        AboutDialog(it)
+    }
+    var showDropdownMoreOptions by remember { mutableStateOf(false) }
+    var showDropdownReboot by remember { mutableStateOf(false) }
+
     TopAppBar(title = { Text(stringResource(R.string.app_name)) }, actions = {
         IconButton(onClick = onInstallClick) {
             Icon(
@@ -335,17 +348,16 @@ private fun TopBar(onSettingsClick: () -> Unit, onInstallClick: () -> Unit) {
             )
         }
 
-        var showDropdown by remember { mutableStateOf(false) }
         IconButton(onClick = {
-            showDropdown = true
+            showDropdownReboot = true
         }) {
             Icon(
                 imageVector = Icons.Filled.Refresh,
                 contentDescription = stringResource(id = R.string.reboot)
             )
 
-            DropdownMenu(expanded = showDropdown, onDismissRequest = {
-                showDropdown = false
+            DropdownMenu(expanded = showDropdownReboot, onDismissRequest = {
+                showDropdownReboot = false
             }) {
                 RebootDropdownItem(id = R.string.reboot)
 
@@ -361,11 +373,29 @@ private fun TopBar(onSettingsClick: () -> Unit, onInstallClick: () -> Unit) {
             }
         }
 
-        IconButton(onClick = onSettingsClick) {
-            Icon(
-                imageVector = Icons.Filled.Settings,
-                contentDescription = stringResource(id = R.string.settings)
-            )
+        Box {
+            IconButton(onClick = {showDropdownMoreOptions = true}) {
+                Icon(
+                    imageVector = Icons.Filled.MoreVert,
+                    contentDescription = stringResource(id = R.string.settings)
+                )
+                DropdownMenu(expanded = showDropdownMoreOptions, onDismissRequest = {
+                    showDropdownMoreOptions = false
+                }) {
+                    DropdownMenuItem(text = {
+                        Text(stringResource(R.string.home_more_menu_feedback_or_suggestion))
+                    }, onClick = {
+                        showDropdownMoreOptions = false
+                        uriHandler.openUri("https://github.com/bmax121/APatch/issues/new/choose")
+                    })
+                    DropdownMenuItem(text = {
+                        Text(stringResource(R.string.home_more_menu_about))
+                    }, onClick = {
+                        showDropdownMoreOptions = false
+                        aboutDialog.show()
+                    })
+                }
+            }
         }
     })
 }

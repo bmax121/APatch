@@ -187,4 +187,7 @@
     <string name="home_dialog_auth_fail_title">Authentication failed</string>
     <string name="home_dialog_auth_fail_content">Unable to authenticate the super key, therefore APatch cannot work properly.\nHere are some possible reasons for authentication failure:\n1. You have not patched the boot image with KernelPatch.\n2. The patched boot image was not flashed.\n3. Super key wrong.\n4. Your device does not support APatch and KernelPatch.\n\nPlease check and try again. If there are still issues, you can always ask questions on the official repository\'s issues page.</string>
 
+    <string name="home_more_menu_feedback_or_suggestion">Feedback or suggestion</string>
+    <string name="home_more_menu_about">About</string>
+
 </resources>
