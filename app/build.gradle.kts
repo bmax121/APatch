@@ -1,12 +1,12 @@
 import com.android.build.gradle.internal.api.BaseVariantOutputImpl
 import org.jetbrains.kotlin.de.undercouch.gradle.tasks.download.Download
-import java.nio.file.Paths
 
 plugins {
     alias(libs.plugins.agp.app)
     alias(libs.plugins.kotlin)
     alias(libs.plugins.ksp)
     alias(libs.plugins.lsplugin.apksign)
+    alias(libs.plugins.lsplugin.resopt)
     id("kotlin-parcelize")
 }
 
@@ -166,30 +166,6 @@ tasks.register<Delete>("apdClean") {
 
 tasks.clean {
     dependsOn("apdClean")
-}
-
-val collapseReleaseResourceNames = task("collapseReleaseResourceNames") {
-    doLast {
-        val aapt2 = Paths.get(project.android.sdkDirectory.path, "build-tools", project.android.buildToolsVersion, "aapt2")
-        val zip = Paths.get(project.buildDir.path, "intermediates",
-            "optimized_processed_res", "release", "optimizeReleaseResources", "resources-release-optimize.ap_")
-        val optimized = File("${zip}.opt")
-
-        val cmd = exec {
-            commandLine(aapt2.toString(), "optimize", "--collapse-resource-names",
-                "--enable-sparse-encoding",
-                "-o", optimized.toString(), zip.toString())
-        }
-
-        if (cmd.exitValue == 0) {
-            delete(zip)
-            optimized.renameTo(File(zip.toString()))
-        }
-    }
-}
-
-afterEvaluate {
-    tasks.getByName("optimizeReleaseResources").finalizedBy(collapseReleaseResourceNames)
 }
 
 dependencies {
