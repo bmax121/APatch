@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlin)
     alias(libs.plugins.ksp)
     alias(libs.plugins.lsplugin.apksign)
+    alias(libs.plugins.lsplugin.resopt)
     id("kotlin-parcelize")
 }
 
@@ -161,6 +162,7 @@ tasks.register<Delete>("apdClean") {
     dependsOn("cargoClean")
     delete(file("${project.projectDir}/libs/arm64-v8a/libapd.so"))
 }
+
 
 tasks.clean {
     dependsOn("apdClean")

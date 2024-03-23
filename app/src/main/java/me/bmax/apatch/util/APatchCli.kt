@@ -47,6 +47,11 @@ fun getRootShell(): Shell {
     return APatchCli.SHELL
 }
 
+fun rootAvailable(): Boolean {
+    val shell = getRootShell()
+    return shell.isRoot
+}
+
 fun tryGetRootShell(): Shell {
     Shell.enableVerboseLogging = BuildConfig.DEBUG
     val builder = Shell.Builder.create()

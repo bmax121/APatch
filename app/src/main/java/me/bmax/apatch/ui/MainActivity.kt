@@ -33,11 +33,9 @@ import com.ramcosta.composedestinations.navigation.popBackStack
 import com.ramcosta.composedestinations.rememberNavHostEngine
 import com.ramcosta.composedestinations.utils.isRouteOnBackStack
 import me.bmax.apatch.APApplication
-import me.bmax.apatch.ui.component.rememberDialogHostState
 import me.bmax.apatch.ui.screen.BottomBarDestination
 import me.bmax.apatch.ui.screen.NavGraphs
 import me.bmax.apatch.ui.theme.APatchTheme
-import me.bmax.apatch.util.LocalDialogHost
 import me.bmax.apatch.util.LocalSnackbarHost
 
 class MainActivity : AppCompatActivity() {
@@ -71,7 +69,6 @@ class MainActivity : AppCompatActivity() {
                 ) { innerPadding ->
                     CompositionLocalProvider(
                         LocalSnackbarHost provides snackbarHostState,
-                        LocalDialogHost provides rememberDialogHostState(),
                     ) {
                         DestinationsNavHost(
                             modifier = Modifier.padding(innerPadding),

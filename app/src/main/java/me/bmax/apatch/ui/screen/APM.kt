@@ -73,13 +73,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.bmax.apatch.APApplication
 import me.bmax.apatch.R
-import me.bmax.apatch.ui.component.ConfirmDialog
 import me.bmax.apatch.ui.component.ConfirmResult
-import me.bmax.apatch.ui.component.LoadingDialog
+import me.bmax.apatch.ui.component.rememberConfirmDialog
+import me.bmax.apatch.ui.component.rememberLoadingDialog
 import me.bmax.apatch.ui.screen.destinations.InstallScreenDestination
 import me.bmax.apatch.ui.screen.destinations.WebScreenDestination
 import me.bmax.apatch.ui.viewmodel.APModuleViewModel
-import me.bmax.apatch.util.LocalDialogHost
 import me.bmax.apatch.util.LocalSnackbarHost
 import me.bmax.apatch.util.download
 import me.bmax.apatch.util.hasMagisk
@@ -162,11 +161,6 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
             )
         }
     }) { innerPadding ->
-
-        ConfirmDialog()
-
-        LoadingDialog()
-
         when {
             hasMagisk -> {
                 Box(
@@ -226,9 +220,11 @@ private fun ModuleList(
     val downloadingText = stringResource(R.string.apm_downloading)
     val startDownloadingText = stringResource(R.string.apm_start_downloading)
 
-    val dialogHost = LocalDialogHost.current
     val snackBarHost = LocalSnackbarHost.current
     val context = LocalContext.current
+
+    val loadingDialog = rememberLoadingDialog()
+    val confirmDialog = rememberConfirmDialog()
 
     suspend fun onModuleUpdate(
         module: APModuleViewModel.ModuleInfo,
@@ -236,7 +232,7 @@ private fun ModuleList(
         downloadUrl: String,
         fileName: String
     ) {
-        val changelog = dialogHost.withLoading {
+        val changelog = loadingDialog.withLoading {
             withContext(Dispatchers.IO) {
                 if (Patterns.WEB_URL.matcher(changelogUrl).matches()) {
                     OkHttpClient().newCall(
@@ -251,7 +247,7 @@ private fun ModuleList(
 
         if (changelog.isNotEmpty()) {
             // changelog is not empty, show it and wait for confirm
-            val confirmResult = dialogHost.showConfirm(
+            val confirmResult = confirmDialog.awaitConfirm(
                 changelogText,
                 content = changelog,
                 markdown = true,
@@ -289,7 +285,7 @@ private fun ModuleList(
     }
 
     suspend fun onModuleUninstall(module: APModuleViewModel.ModuleInfo) {
-        val confirmResult = dialogHost.showConfirm(
+        val confirmResult = confirmDialog.awaitConfirm(
             moduleStr,
             content = moduleUninstallConfirm.format(module.name),
             confirm = uninstall,
@@ -299,7 +295,7 @@ private fun ModuleList(
             return
         }
 
-        val success = dialogHost.withLoading {
+        val success = loadingDialog.withLoading {
             withContext(Dispatchers.IO) {
                 uninstallModule(module.id)
             }
@@ -383,7 +379,7 @@ private fun ModuleList(
                             scope.launch { onModuleUninstall(module) }
                         }, onCheckChanged = {
                             scope.launch {
-                                val success = dialogHost.withLoading {
+                                val success = loadingDialog.withLoading {
                                     withContext(Dispatchers.IO) {
                                         toggleModule(module.id, !isChecked)
                                     }

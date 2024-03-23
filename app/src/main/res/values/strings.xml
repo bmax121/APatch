@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">APatch</string>
 
@@ -33,7 +34,8 @@
     <string name="home_learn_apatch">Learn AndroidPatch</string>
     <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
     <string name="home_click_to_learn_apatch">Learn about the features of AndroidPatch and how to use</string>
-    <string name="about_source_code"><![CDATA[View source code at %1$s<br/>Join our %2$s channel]]></string>
+
+    <string name="about_source_code"><![CDATA[<p>View source code at %1$s<p/>Join our %2$s channel<p/>Join our %2$s group]]></string>
     <string name="send_log">Send Log</string>
     <string name="safe_mode">Safe mode</string>
 
@@ -59,10 +61,6 @@
     <string name="home_auth_key_title">Enter SuperKey</string>
     <string name="home_auth_key_desc">Start after certification</string>
     <string name="home_kpatch_info_title">Info</string>
-
-    <string name="home_patch_dialog_patch_only">Patch Only</string>
-    <string name="home_patch_dialog_patch_and_install">Patch And Install</string>
-    <string name="home_patch_dialog_install_next_slot">Install To Next Slot (After OTA)</string>
 
     <string name="home_ap_cando_install">Install</string>
     <string name="home_ap_cando_update">Update</string>
@@ -179,4 +177,17 @@
     <string name="settings_donot_store_superkey_summary">Authenticate the super key every time the manager starts</string>
 
     <string name="home_new_apatch_found">New version available: %s, Click me to upgrade</string>
+
+    <string name="mode_select_page_title">Install</string>
+    <string name="mode_select_page_patch_and_install">Patch and Install</string>
+    <string name="mode_select_page_select_file">Select a boot image to Patch</string>
+    <string name="mode_select_page_install_inactive_slot">Install to Inactive Slot (After OTA)</string>
+    <string name="mode_select_page_install_inactive_slot_warning">Your device will be **FORCED** to boot to the current inactive slot after a reboot!\nOnly use this option after OTA is done.\nContinue?</string>
+
+    <string name="home_dialog_auth_fail_title">Authentication failed</string>
+    <string name="home_dialog_auth_fail_content">Unable to authenticate the super key, therefore APatch cannot work properly.\nHere are some possible reasons for authentication failure:\n1. You have not patched the boot image with KernelPatch.\n2. The patched boot image was not flashed.\n3. Super key wrong.\n4. Your device does not support APatch and KernelPatch.\n\nPlease check and try again. If there are still issues, you can always ask questions on the official repository\'s issues page.</string>
+
+    <string name="home_more_menu_feedback_or_suggestion">Feedback or suggestion</string>
+    <string name="home_more_menu_about">About</string>
+
 </resources>

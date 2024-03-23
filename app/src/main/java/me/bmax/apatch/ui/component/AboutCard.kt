@@ -17,29 +17,31 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
+import androidx.compose.ui.window.DialogWindowProvider
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.HtmlCompat
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import me.bmax.apatch.BuildConfig
 import me.bmax.apatch.R
+import me.bmax.apatch.util.APDialogBlurBehindUtils
 
 @Preview
 @Composable
 fun AboutCard() {
     ElevatedCard(
-        modifier = Modifier
-            .fillMaxWidth(),
-        shape = RoundedCornerShape(8.dp),
+        modifier = Modifier.width(320.dp),
+        shape = RoundedCornerShape(20.dp),
     ) {
         Row(
             modifier = Modifier
@@ -52,13 +54,14 @@ fun AboutCard() {
 }
 
 @Composable
-fun AboutDialog(showAboutDialog: MutableState<Boolean>) {
-    if (showAboutDialog.value) {
-        Dialog(onDismissRequest = { showAboutDialog.value = false }) {
-            AboutCard()
-        }
+fun AboutDialog(dismiss: () -> Unit) {
+    Dialog(onDismissRequest = { dismiss() }, properties = DialogProperties(usePlatformDefaultWidth = false)) {
+        AboutCard()
+        val dialogWindowProvider = LocalView.current.parent as DialogWindowProvider
+        APDialogBlurBehindUtils.setupWindowBlurListener(dialogWindowProvider.window)
     }
 }
+
 
 @Composable
 private fun AboutCardContent() {
@@ -76,7 +79,7 @@ private fun AboutCardContent() {
             Image(
                 painter = rememberDrawablePainter(drawable),
                 contentDescription = "icon",
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier.size(48.dp)
             )
 
             Spacer(modifier = Modifier.width(12.dp))
@@ -84,12 +87,12 @@ private fun AboutCardContent() {
             Column {
 
                 Text(
-                    stringResource(id = R.string.app_name),
+                    stringResource(id = R.string.app_name) + if (BuildConfig.DEBUG) " (Debug)" else " (Release)",
                     style = MaterialTheme.typography.titleSmall,
                     fontSize = 18.sp
                 )
                 Text(
-                    BuildConfig.VERSION_NAME,
+                     "${BuildConfig.VERSION_CODE} (${BuildConfig.VERSION_NAME})",
                     style = MaterialTheme.typography.bodySmall,
                     fontSize = 14.sp
                 )
@@ -100,7 +103,8 @@ private fun AboutCardContent() {
                     html = stringResource(
                         id = R.string.about_source_code,
                         "<b><a href=\"https://github.com/bmax121/APatch\">GitHub</a></b>",
-                        "<b><a href=\"https://t.me/APatchChannel\">Telegram</a></b>"
+                        "<b><a href=\"https://t.me/APatchChannel\">Telegram</a></b>",
+                        "<b><a href=\"https://t.me/apatch_discuss\">Telegram</a></b>"
                     )
                 )
             }

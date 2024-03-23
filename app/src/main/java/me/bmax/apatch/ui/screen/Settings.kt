@@ -6,15 +6,19 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -27,16 +31,19 @@ import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.Masks
 import androidx.compose.material.icons.filled.Translate
 import androidx.compose.material.icons.filled.Update
-import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.AlertDialogDefaults
+import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -50,10 +57,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
+import androidx.compose.ui.window.DialogWindowProvider
+import androidx.compose.ui.window.SecureFlagPolicy
 import androidx.core.content.FileProvider
 import androidx.core.os.LocaleListCompat
 import com.ramcosta.composedestinations.annotation.Destination
@@ -67,11 +78,13 @@ import me.bmax.apatch.BuildConfig.APPLICATION_ID
 import me.bmax.apatch.Natives
 import me.bmax.apatch.R
 import me.bmax.apatch.ui.component.AboutDialog
-import me.bmax.apatch.ui.component.LoadingDialog
 import me.bmax.apatch.ui.component.SwitchItem
+import me.bmax.apatch.ui.component.rememberConfirmDialog
+import me.bmax.apatch.ui.component.rememberCustomDialog
+import me.bmax.apatch.ui.component.rememberLoadingDialog
+import me.bmax.apatch.util.APDialogBlurBehindUtils
 import me.bmax.apatch.util.APatchKeyHelper
 import me.bmax.apatch.util.HideAPK
-import me.bmax.apatch.util.LocalDialogHost
 import me.bmax.apatch.util.getBugreportFile
 import me.bmax.apatch.util.isGlobalNamespaceEnabled
 import me.bmax.apatch.util.rootShellForResult
@@ -84,8 +97,8 @@ fun SettingScreen(navigator: DestinationsNavigator) {
     val state by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
     val kPatchReady = state != APApplication.State.UNKNOWN_STATE
     val aPatchReady = (state == APApplication.State.ANDROIDPATCH_INSTALLING ||
-                       state == APApplication.State.ANDROIDPATCH_INSTALLED ||
-                       state == APApplication.State.ANDROIDPATCH_NEED_UPDATE)
+            state == APApplication.State.ANDROIDPATCH_INSTALLED ||
+            state == APApplication.State.ANDROIDPATCH_NEED_UPDATE)
     val bIsManagerHide = AppUtils.getPackageName() != APPLICATION_ID
     var isGlobalNamespaceEnabled by rememberSaveable {
         mutableStateOf(false)
@@ -103,13 +116,12 @@ fun SettingScreen(navigator: DestinationsNavigator) {
             })
         }
     ) { paddingValues ->
-        LoadingDialog()
 
-        val showClearSuperKeyDialog = remember { mutableStateOf(false) }
-        ClearSuperKeyDialog(showClearSuperKeyDialog)
-
-        val showAboutDialog = remember { mutableStateOf(false) }
-        AboutDialog(showAboutDialog)
+        val loadingDialog = rememberLoadingDialog()
+        val clearKeyDialog = rememberConfirmDialog(onConfirm = {
+            APatchKeyHelper.clearConfigKey()
+            APApplication.superKey = ""
+        })
 
         val showLanguageDialog = rememberSaveable { mutableStateOf(false) }
         LanguageDialog(showLanguageDialog)
@@ -120,7 +132,7 @@ fun SettingScreen(navigator: DestinationsNavigator) {
         }
 
         val showResetSuPathDialog = remember { mutableStateOf(false) }
-        if(showResetSuPathDialog.value) {
+        if (showResetSuPathDialog.value) {
             ResetSUPathDialog(showResetSuPathDialog)
         }
 
@@ -133,10 +145,12 @@ fun SettingScreen(navigator: DestinationsNavigator) {
 
             val context = LocalContext.current
             val scope = rememberCoroutineScope()
-            val dialogHost = LocalDialogHost.current
 
             // clear key
             if (kPatchReady) {
+                val clearKeyDialogTitle = stringResource(id = R.string.clear_super_key)
+                val clearKeyDialogContent =
+                    stringResource(id = R.string.settings_clear_super_key_dialog)
                 ListItem(
                     leadingContent = {
                         Icon(
@@ -146,24 +160,27 @@ fun SettingScreen(navigator: DestinationsNavigator) {
                     },
                     headlineContent = { Text(stringResource(id = R.string.clear_super_key)) },
                     modifier = Modifier.clickable {
-                        showClearSuperKeyDialog.value = true
+                        clearKeyDialog.showConfirm(
+                            title = clearKeyDialogTitle,
+                            content = clearKeyDialogContent,
+                            markdown = false,
+                        )
+
                     }
                 )
             }
 
             // store key local?
-            if(true) {
-                SwitchItem(
-                    icon = Icons.Filled.Key,
-                    title = stringResource(id = R.string.settings_donot_store_superkey),
-                    summary = stringResource(id = R.string.settings_donot_store_superkey_summary),
-                    checked = bSkipStoreSuperKey,
-                    onCheckedChange = {
-                        bSkipStoreSuperKey = it
-                        APatchKeyHelper.setShouldSkipStoreSuperKey(bSkipStoreSuperKey)
-                    }
-                )
-            }
+            SwitchItem(
+                icon = Icons.Filled.Key,
+                title = stringResource(id = R.string.settings_donot_store_superkey),
+                summary = stringResource(id = R.string.settings_donot_store_superkey_summary),
+                checked = bSkipStoreSuperKey,
+                onCheckedChange = {
+                    bSkipStoreSuperKey = it
+                    APatchKeyHelper.setShouldSkipStoreSuperKey(bSkipStoreSuperKey)
+                }
+            )
 
             // Global mount
             if (kPatchReady && aPatchReady) {
@@ -246,7 +263,8 @@ fun SettingScreen(navigator: DestinationsNavigator) {
             if (kPatchReady) {
                 ListItem(
                     leadingContent = {
-                        Icon(Icons.Filled.Commit,
+                        Icon(
+                            Icons.Filled.Commit,
                             stringResource(id = R.string.setting_reset_su_path)
                         )
                     },
@@ -290,7 +308,7 @@ fun SettingScreen(navigator: DestinationsNavigator) {
                 headlineContent = { Text(stringResource(id = R.string.send_log)) },
                 modifier = Modifier.clickable {
                     scope.launch {
-                        val bugreport = dialogHost.withLoading {
+                        val bugreport = loadingDialog.withLoading {
                             withContext(Dispatchers.IO) {
                                 getBugreportFile(context)
                             }
@@ -316,41 +334,57 @@ fun SettingScreen(navigator: DestinationsNavigator) {
                     }
                 }
             )
-
-            val about = stringResource(id = R.string.about)
-            ListItem(
-                leadingContent = {
-                    Icon(
-                        Icons.Filled.ContactPage,
-                        stringResource(id = R.string.about)
-                    )
-                },
-                headlineContent = { Text(about) },
-                modifier = Modifier.clickable {
-                    showAboutDialog.value = true
-                }
-            )
         }
     }
 }
 
-val suPathChecked: (path: String)-> Boolean = {
+val suPathChecked: (path: String) -> Boolean = {
     it.startsWith("/") && it.trim().length > 1
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ResetSUPathDialog(showDialog: MutableState<Boolean>) {
     val context = LocalContext.current
     var suPath by remember { mutableStateOf(Natives.suPath()) }
-    AlertDialog(
+    BasicAlertDialog(
         onDismissRequest = { showDialog.value = false },
-        title = { Text(stringResource(id = R.string.setting_reset_su_path)) },
-        text = {
-            Column {
-                Spacer(modifier = Modifier.height(8.dp))
+        properties = DialogProperties(
+            decorFitsSystemWindows = true,
+            usePlatformDefaultWidth = false,
+            securePolicy = SecureFlagPolicy.SecureOff
+        )
+    ) {
+        Surface(
+            modifier = Modifier
+                .width(310.dp)
+                .wrapContentHeight(),
+            shape = RoundedCornerShape(30.dp),
+            tonalElevation = AlertDialogDefaults.TonalElevation,
+            color = AlertDialogDefaults.containerColor,
+        ) {
+            Column(modifier = Modifier.padding(PaddingValues(all = 24.dp))) {
+                // Title
                 Box(
-                    contentAlignment = Alignment.CenterEnd,
+                    Modifier
+                        .padding(PaddingValues(bottom = 16.dp))
+                        .align(Alignment.Start)
                 ) {
-                    TextField(
+                    Text(
+                        text = stringResource(id = R.string.setting_reset_su_path),
+                        style = MaterialTheme.typography.headlineSmall
+                    )
+                }
+
+                // Content
+                Box(
+                    Modifier
+                        .weight(weight = 1f, fill = false)
+                        .padding(PaddingValues(bottom = 12.dp))
+                        .align(Alignment.Start)
+                )
+                {
+                    OutlinedTextField(
                         value = suPath,
                         onValueChange = {
                             suPath = it
@@ -359,34 +393,41 @@ fun ResetSUPathDialog(showDialog: MutableState<Boolean>) {
                         visualTransformation = VisualTransformation.None,
                     )
                 }
-            }
-        },
-        dismissButton = {
-            Button(
-                onClick = {
-                    showDialog.value = false
+
+                // Buttons
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    TextButton(onClick = { showDialog.value = false }) {
+
+                        Text(stringResource(id = android.R.string.cancel))
+                    }
+
+                    Button(
+                        enabled = suPathChecked(suPath),
+                        onClick = {
+                            showDialog.value = false
+                            val success = Natives.resetSuPath(suPath)
+                            Toast.makeText(
+                                context,
+                                if (success) R.string.success else R.string.failure,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            rootShellForResult("echo $suPath > ${APApplication.SU_PATH_FILE}")
+                        }) {
+                        Text(stringResource(id = android.R.string.ok))
+                    }
                 }
-            ) {
-                Text(stringResource(id = android.R.string.cancel))
             }
-        },
-        confirmButton = {
-            Button(
-                enabled = suPathChecked(suPath),
-                onClick = {
-                    showDialog.value = false
-                    val succ = Natives.resetSuPath(suPath)
-                    Toast.makeText(context, if(succ) R.string.success else R.string.failure, Toast.LENGTH_SHORT).show()
-                    rootShellForResult("echo $suPath > ${APApplication.SU_PATH_FILE}")
-                }
-            ) {
-                Text(stringResource(id = android.R.string.ok))
-            }
-        },
-    )
+            val dialogWindowProvider = LocalView.current.parent as DialogWindowProvider
+            APDialogBlurBehindUtils.setupWindowBlurListener(dialogWindowProvider.window)
+        }
+    }
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RandomizePkgNameDialog(showDialog: MutableState<Boolean>) {
     val context = LocalContext.current
@@ -394,17 +435,57 @@ fun RandomizePkgNameDialog(showDialog: MutableState<Boolean>) {
 
     var newPackageName by remember { mutableStateOf("") }
     var enable by remember { mutableStateOf(false) }
-    AlertDialog(
+    BasicAlertDialog(
         onDismissRequest = { showDialog.value = false },
-        title = { Text(stringResource(id = R.string.hide_apatch_manager)) },
-        text = {
-            Column {
-                Text(stringResource(id = R.string.hide_apatch_dialog_summary))
-                Spacer(modifier = Modifier.height(8.dp))
+        properties = DialogProperties(
+            decorFitsSystemWindows = true,
+            usePlatformDefaultWidth = false,
+            securePolicy = SecureFlagPolicy.SecureOff
+        )
+    ) {
+        Surface(
+            modifier = Modifier
+                .width(310.dp)
+                .wrapContentHeight(),
+            shape = RoundedCornerShape(30.dp),
+            tonalElevation = AlertDialogDefaults.TonalElevation,
+            color = AlertDialogDefaults.containerColor,
+        ) {
+            Column(modifier = Modifier.padding(PaddingValues(all = 24.dp))) {
+                // Title
                 Box(
-                    contentAlignment = Alignment.CenterEnd,
+                    Modifier
+                        .padding(PaddingValues(bottom = 16.dp))
+                        .align(Alignment.Start)
                 ) {
-                    TextField(
+                    Text(
+                        text = stringResource(id = R.string.hide_apatch_manager),
+                        style = MaterialTheme.typography.headlineSmall
+                    )
+                }
+
+                // Content
+                Box(
+                    Modifier
+                        .weight(weight = 1f, fill = false)
+                        .padding(PaddingValues(bottom = 12.dp))
+                        .align(Alignment.Start)
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.hide_apatch_dialog_summary),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+
+                // Content2
+                Box(
+                    Modifier
+                        .weight(weight = 1f, fill = false)
+                        .padding(PaddingValues(bottom = 12.dp))
+                        .align(Alignment.Start)
+                )
+                {
+                    OutlinedTextField(
                         value = newPackageName,
                         onValueChange = {
                             newPackageName = it
@@ -414,33 +495,32 @@ fun RandomizePkgNameDialog(showDialog: MutableState<Boolean>) {
                         visualTransformation = VisualTransformation.None,
                     )
                 }
-            }
-        },
-        dismissButton = {
-            Button(
-                onClick = {
-                    showDialog.value = false
-                }
-            ) {
-                Text(stringResource(id = android.R.string.cancel))
-            }
-        },
-        confirmButton = {
-            Button(
-                enabled = enable,
-                onClick = {
-                    showDialog.value = false
-                    scope.launch { HideAPK.hide(context, newPackageName) }
 
+                // Buttons
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    TextButton(onClick = { showDialog.value = false }) {
+                        Text(stringResource(id = android.R.string.cancel))
+                    }
+
+                    Button(onClick = {
+                        showDialog.value = false
+                        scope.launch { HideAPK.hide(context, newPackageName) }
+                    }) {
+                        Text(stringResource(id = android.R.string.ok))
+                    }
                 }
-            ) {
-                Text(stringResource(id = android.R.string.ok))
             }
-        },
-    )
+            val dialogWindowProvider = LocalView.current.parent as DialogWindowProvider
+            APDialogBlurBehindUtils.setupWindowBlurListener(dialogWindowProvider.window)
+        }
+    }
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LanguageDialog(showLanguageDialog: MutableState<Boolean>) {
 
@@ -448,9 +528,18 @@ fun LanguageDialog(showLanguageDialog: MutableState<Boolean>) {
     val languagesValues = stringArrayResource(id = R.array.languages_values)
 
     if (showLanguageDialog.value) {
-        AlertDialog(
+        BasicAlertDialog(
             onDismissRequest = { showLanguageDialog.value = false },
-            text = {
+            properties = DialogProperties(usePlatformDefaultWidth = false),
+        ) {
+            Surface(
+                modifier = Modifier
+                    .width(150.dp)
+                    .wrapContentHeight(),
+                shape = RoundedCornerShape(20.dp),
+                tonalElevation = AlertDialogDefaults.TonalElevation,
+                color = AlertDialogDefaults.containerColor,
+            ) {
                 LazyColumn {
                     itemsIndexed(languages) { index, item ->
                         ListItem(
@@ -472,10 +561,10 @@ fun LanguageDialog(showLanguageDialog: MutableState<Boolean>) {
                         )
                     }
                 }
-            },
-            confirmButton = {},
-            dismissButton = {}
-        )
+            }
+            val dialogWindowProvider = LocalView.current.parent as DialogWindowProvider
+            APDialogBlurBehindUtils.setupWindowBlurListener(dialogWindowProvider.window)
+        }
     }
 }
 
@@ -484,39 +573,5 @@ fun LanguageDialog(showLanguageDialog: MutableState<Boolean>) {
 private fun TopBar(onBack: () -> Unit = {}) {
     TopAppBar(
         title = { Text(stringResource(R.string.settings)) },
-        navigationIcon = {
-            IconButton(
-                onClick = onBack
-            ) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null) }
-        },
     )
-}
-
-@Composable
-private fun ClearSuperKeyDialog(showClearSuperKeyDialog: MutableState<Boolean>) {
-    if (showClearSuperKeyDialog.value) {
-        AlertDialog(
-            onDismissRequest = { showClearSuperKeyDialog.value = false },
-            title = { Text(stringResource(id = R.string.clear_super_key)) },
-            text = { Text(stringResource(id = R.string.settings_clear_super_key_dialog)) },
-            dismissButton = {
-                TextButton(
-                    onClick = { showClearSuperKeyDialog.value = false }
-                ) {
-                    Text(stringResource(id = android.R.string.cancel))
-                }
-            },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        showClearSuperKeyDialog.value = false
-                        APatchKeyHelper.clearConfigKey()
-                        APApplication.superKey = ""
-                    }
-                ) {
-                    Text(stringResource(id = android.R.string.ok))
-                }
-            }
-        )
-    }
 }
