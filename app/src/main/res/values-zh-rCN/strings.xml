@@ -147,4 +147,7 @@
     <string name="mode_select_page_install_inactive_slot">安装到未使用的槽位（OTA 后）</string>
     <string name="mode_select_page_install_inactive_slot_warning">制切换到另一个槽位！\n注意只能在 OTA 更新完成后的重启之前使用。\n确认？</string>
 
+    <string name="home_dialog_auth_fail_title">鉴权失败</string>
+    <string name="home_dialog_auth_fail_content">无法鉴权超级密钥，因此 APatch 无法正常工作。下面是一些可能导致鉴权失败的原因:\n1. 您未使用 KernelPatch 修补启动镜像\n2. KernelPatch 修补后的启动镜像没有被刷入\n3. 超级密钥输入错误\n4. 您的设备不支持 APatch\n\n请检查后重试，如果仍然存在问题，可以随时向官方仓库的 issues 页面发出提问。</string>
+
 </resources>

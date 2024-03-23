@@ -149,16 +149,68 @@ fun HomeScreen(navigator: DestinationsNavigator) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AuthFailedTipDialog(showDialog: MutableState<Boolean>) {
+    BasicAlertDialog(
+        onDismissRequest = { showDialog.value = false },
+        properties = DialogProperties(decorFitsSystemWindows = true, usePlatformDefaultWidth = false, securePolicy = SecureFlagPolicy.SecureOff)
+    ) {
+        Surface(
+            modifier = Modifier
+                .width(320.dp)
+                .wrapContentHeight(),
+            shape = RoundedCornerShape(20.dp),
+            tonalElevation = AlertDialogDefaults.TonalElevation,
+            color = AlertDialogDefaults.containerColor,
+        ) {
+            Column(modifier = Modifier.padding(PaddingValues(all = 24.dp))) {
+                // Title
+                Box(
+                    Modifier
+                        .padding(PaddingValues(bottom = 16.dp))
+                        .align(Alignment.Start)
+                ) {
+                    Text(text = stringResource(id = R.string.home_dialog_auth_fail_title), style = MaterialTheme.typography.headlineSmall)
+                }
+
+                // Content
+                Box(
+                    Modifier
+                        .weight(weight = 1f, fill = false)
+                        .padding(PaddingValues(bottom = 24.dp))
+                        .align(Alignment.Start)) {
+                    Text(text = stringResource(id = R.string.home_dialog_auth_fail_content), style = MaterialTheme.typography.bodyMedium)
+                }
+
+                // Buttons
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    TextButton(onClick = {showDialog.value = false}) {
+                        Text(text = stringResource(id = android.R.string.ok))
+                    }
+                }
+            }
+            val dialogWindowProvider = LocalView.current.parent as DialogWindowProvider
+            APDialogBlurBehindUtils.setupWindowBlurListener(dialogWindowProvider.window)
+        }
+    }
+
+}
+
 val keyChecked: (skey: String)-> Boolean = {
     it.length in 8..63 && it.any { it.isDigit() } && it.any{ it.isLetter()}
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AuthSuperKey(showDialog: MutableState<Boolean>) {
+fun AuthSuperKey(showDialog: MutableState<Boolean>, showFailedDialog: MutableState<Boolean>) {
     var key by remember { mutableStateOf("") }
     var keyVisible by remember { mutableStateOf(false) }
     var enable by remember { mutableStateOf(false) }
+
     BasicAlertDialog(
         onDismissRequest = { showDialog.value = false },
         properties = DialogProperties(
@@ -244,7 +296,14 @@ fun AuthSuperKey(showDialog: MutableState<Boolean>) {
 
                     Button(onClick = {
                         showDialog.value = false
-                        APApplication.superKey = key
+
+                        val preVerifyKey = Natives.nativeReady(key)
+                        if (preVerifyKey) {
+                            APApplication.superKey = key
+                        } else {
+                            showFailedDialog.value = true
+                        }
+
                     }, enabled = enable) {
                         Text(stringResource(id = android.R.string.ok))
                     }
@@ -313,9 +372,16 @@ private fun TopBar(onSettingsClick: () -> Unit, onInstallClick: () -> Unit) {
 
 @Composable
 private fun KStatusCard(kpState: APApplication.State, navigator: DestinationsNavigator) {
+    val showAuthFailedTipDialog = remember { mutableStateOf(false) }
+
+    if (showAuthFailedTipDialog.value) {
+        AuthFailedTipDialog(showDialog = showAuthFailedTipDialog)
+    }
+
     val showAuthKeyDialog = remember { mutableStateOf(false) }
+
     if (showAuthKeyDialog.value) {
-        AuthSuperKey(showDialog = showAuthKeyDialog)
+        AuthSuperKey(showDialog = showAuthKeyDialog, showFailedDialog = showAuthFailedTipDialog)
     }
 
     ElevatedCard(

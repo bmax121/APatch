@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">APatch</string>
 
@@ -182,4 +183,8 @@
     <string name="mode_select_page_select_file">Select a boot image to Patch</string>
     <string name="mode_select_page_install_inactive_slot">Install to Inactive Slot (After OTA)</string>
     <string name="mode_select_page_install_inactive_slot_warning">Your device will be **FORCED** to boot to the current inactive slot after a reboot!\nOnly use this option after OTA is done.\nContinue?</string>
+
+    <string name="home_dialog_auth_fail_title">Authentication failed</string>
+    <string name="home_dialog_auth_fail_content">Unable to authenticate the super key, therefore APatch cannot work properly.\nHere are some possible reasons for authentication failure:\n1. You have not patched the boot image with KernelPatch.\n2. The patched boot image was not flashed.\n3. Super key wrong.\n4. Your device does not support APatch and KernelPatch.\n\nPlease check and try again. If there are still issues, you can always ask questions on the official repository\'s issues page.</string>
+
 </resources>
