@@ -1,11 +1,17 @@
 package me.bmax.apatch.ui.component
 
+import androidx.compose.foundation.clickable
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 
 @Composable
@@ -18,6 +24,9 @@ fun SwitchItem(
     onCheckedChange: (Boolean) -> Unit
 ) {
     ListItem(
+        modifier = Modifier.clickable {
+            onCheckedChange.invoke(!checked)
+        },
         headlineContent = {
             Text(title)
         },
