@@ -11,7 +11,18 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,43 +32,78 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.InstallMobile
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.Block
 import androidx.compose.material.icons.outlined.Cached
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material.icons.outlined.InstallMobile
 import androidx.compose.material.icons.outlined.SystemUpdate
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.AlertDialogDefaults
+import androidx.compose.material3.BasicAlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
+import androidx.compose.ui.window.DialogWindowProvider
+import androidx.compose.ui.window.SecureFlagPolicy
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import me.bmax.apatch.util.*
-import me.bmax.apatch.*
+import me.bmax.apatch.APApplication
+import me.bmax.apatch.Natives
 import me.bmax.apatch.R
+import me.bmax.apatch.apApp
 import me.bmax.apatch.ui.component.rememberConfirmDialog
 import me.bmax.apatch.ui.screen.destinations.PatchesDestination
-import me.bmax.apatch.util.reboot
 import me.bmax.apatch.ui.screen.destinations.SettingScreenDestination
 import me.bmax.apatch.ui.viewmodel.PatchesViewModel
+import me.bmax.apatch.util.APDialogBlurBehindUtils
+import me.bmax.apatch.util.DeviceUtils
+import me.bmax.apatch.util.Version
 import me.bmax.apatch.util.Version.getManagerVersion
+import me.bmax.apatch.util.checkNewVersion
+import me.bmax.apatch.util.getSELinuxStatus
+import me.bmax.apatch.util.reboot
 
 private val isABDevice = DeviceUtils.isABDevice()
 
@@ -112,24 +158,62 @@ fun HomeScreen(navigator: DestinationsNavigator) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AuthSuperKey(showDialog: MutableState<Boolean>) {
     var key by remember { mutableStateOf("") }
     var keyVisible by remember { mutableStateOf(false) }
     var enable by remember { mutableStateOf(false) }
-    AlertDialog(
+    BasicAlertDialog(
         onDismissRequest = { showDialog.value = false },
-        title = { Text(stringResource(id = R.string.home_auth_key_title)) },
-        text = {
-            Column {
-                Text(stringResource(id = R.string.home_auth_key_desc))
-                Spacer(modifier = Modifier.height(8.dp))
+        properties = DialogProperties(
+            decorFitsSystemWindows = true,
+            usePlatformDefaultWidth = false,
+            securePolicy = SecureFlagPolicy.SecureOff
+        )
+    ) {
+        Surface(
+            modifier = Modifier
+                .width(310.dp)
+                .wrapContentHeight(),
+            shape = RoundedCornerShape(30.dp),
+            tonalElevation = AlertDialogDefaults.TonalElevation,
+            color = AlertDialogDefaults.containerColor,
+        ) {
+            Column(modifier = Modifier.padding(PaddingValues(all = 24.dp))) {
+                // Title
+                Box(
+                    Modifier
+                        .padding(PaddingValues(bottom = 16.dp))
+                        .align(Alignment.Start)
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.home_auth_key_title),
+                        style = MaterialTheme.typography.headlineSmall
+                    )
+                }
+
+                // Content
+                Box(
+                    Modifier
+                        .weight(weight = 1f, fill = false)
+                        .align(Alignment.Start)
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.home_auth_key_desc),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+
+                // Content2
                 Box(
                     contentAlignment = Alignment.CenterEnd,
                 ) {
                     OutlinedTextField(
                         value = key,
-                        modifier = Modifier.fillMaxWidth().padding(top = 6.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 6.dp),
                         onValueChange = {
                             key = it
                             enable = key.isNotEmpty()
@@ -152,29 +236,29 @@ fun AuthSuperKey(showDialog: MutableState<Boolean>) {
                         )
                     }
                 }
-            }
-        },
-        dismissButton = {
-            Button(
-                onClick = {
-                    showDialog.value = false
+
+                Spacer(modifier = Modifier.height(12.dp))
+                // Buttons
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    TextButton(onClick = { showDialog.value = false }) {
+                        Text(stringResource(id = android.R.string.cancel))
+                    }
+
+                    Button(onClick = {
+                        showDialog.value = false
+                        APApplication.superKey = key
+                    }) {
+                        Text(stringResource(id = android.R.string.ok))
+                    }
                 }
-            ) {
-                Text(stringResource(id = android.R.string.cancel))
             }
-        },
-        confirmButton = {
-            Button(
-                enabled = enable,
-                onClick = {
-                    showDialog.value = false
-                    APApplication.superKey = key
-                }
-            ) {
-                Text(stringResource(id = android.R.string.ok))
-            }
-        },
-    )
+        }
+        val dialogWindowProvider = LocalView.current.parent as DialogWindowProvider
+        APDialogBlurBehindUtils.setupWindowBlurListener(dialogWindowProvider.window)
+    }
 }
 
 @Composable
@@ -234,7 +318,7 @@ fun PatchDialog(showPatchDialog: MutableState<Boolean>, navigator: DestinationsN
                 LazyColumn {
                     item {
                         ListItem(
-                            headlineContent = { Text (text = stringResource(R.string.home_patch_dialog_patch_only)) },
+                            headlineContent = { Text(text = stringResource(R.string.home_patch_dialog_patch_only)) },
                             modifier = Modifier.clickable {
                                 showPatchDialog.value = false
                                 navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.PATCH_ONLY))
@@ -243,7 +327,7 @@ fun PatchDialog(showPatchDialog: MutableState<Boolean>, navigator: DestinationsN
                     }
                     item {
                         ListItem(
-                            headlineContent = { Text (text = stringResource(R.string.home_patch_dialog_patch_and_install)) },
+                            headlineContent = { Text(text = stringResource(R.string.home_patch_dialog_patch_and_install)) },
                             modifier = Modifier.clickable {
                                 showPatchDialog.value = false
                                 navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.PATCH_AND_INSTALL))
@@ -253,7 +337,7 @@ fun PatchDialog(showPatchDialog: MutableState<Boolean>, navigator: DestinationsN
                     if (isABDevice) {
                         item {
                             ListItem(
-                                headlineContent = { Text (text = stringResource(R.string.home_patch_dialog_install_next_slot)) },
+                                headlineContent = { Text(text = stringResource(R.string.home_patch_dialog_install_next_slot)) },
                                 modifier = Modifier.clickable {
                                     showPatchDialog.value = false
                                     navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.INSTALL_TO_NEXT_SLOT))
@@ -700,6 +784,7 @@ fun WarningCard(
         }
     }
 }
+
 @Composable
 fun UpdateCard() {
     val newVersion by produceState(initialValue = Triple(0, "", "")) {

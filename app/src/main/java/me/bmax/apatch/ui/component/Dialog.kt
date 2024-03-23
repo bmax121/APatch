@@ -1,16 +1,37 @@
 package me.bmax.apatch.ui.component
+import android.animation.ValueAnimator
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Context
 import android.graphics.text.LineBreaker
 import android.os.Build
 import android.os.Parcelable
 import android.text.Layout
 import android.text.method.LinkMovementMethod
 import android.util.Log
+import android.view.SurfaceControl
+import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.view.WindowManager
+import android.view.animation.DecelerateInterpolator
+import android.webkit.WebView
 import android.widget.TextView
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -19,11 +40,17 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.compose.ui.window.DialogWindowProvider
+import androidx.compose.ui.window.SecureFlagPolicy
 import io.noties.markwon.Markwon
 import io.noties.markwon.utils.NoCopySpannableFactory
 import kotlinx.coroutines.*
@@ -33,6 +60,11 @@ import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
+import me.bmax.apatch.ui.webui.WebViewInterface
+import me.bmax.apatch.ui.webui.showSystemUI
+import me.bmax.apatch.util.APDialogBlurBehindUtils.Companion.setupWindowBlurListener
+import java.lang.reflect.Method
+import java.util.function.Consumer
 import kotlin.coroutines.resume
 
 private const val TAG = "DialogComponent"
@@ -380,7 +412,7 @@ fun rememberCustomDialog(composable: @Composable (dismiss: () -> Unit) -> Unit):
 private fun LoadingDialog() {
     Dialog(
         onDismissRequest = {},
-        properties = DialogProperties(dismissOnClickOutside = false, dismissOnBackPress = false)
+        properties = DialogProperties(dismissOnClickOutside = false, dismissOnBackPress = false, usePlatformDefaultWidth = false)
     ) {
         Surface(
             modifier = Modifier.size(100.dp), shape = RoundedCornerShape(8.dp)
@@ -391,36 +423,69 @@ private fun LoadingDialog() {
                 CircularProgressIndicator()
             }
         }
+        val dialogWindowProvider = LocalView.current.parent as DialogWindowProvider
+        setupWindowBlurListener(dialogWindowProvider.window)
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ConfirmDialog(visuals: ConfirmDialogVisuals, confirm: () -> Unit, dismiss: () -> Unit) {
-    AlertDialog(
+    BasicAlertDialog(
         onDismissRequest = {
             dismiss()
         },
-        title = {
-            Text(text = visuals.title)
-        },
-        text = {
-            if (visuals.isMarkdown) {
-                MarkdownContent(content = visuals.content)
-            } else {
-                Text(text = visuals.content)
+        properties = DialogProperties(decorFitsSystemWindows = true, usePlatformDefaultWidth = false, securePolicy = SecureFlagPolicy.SecureOff)
+    ) {
+        Surface(
+            modifier = Modifier
+                .width(320.dp)
+                .wrapContentHeight(),
+            shape = RoundedCornerShape(20.dp),
+            tonalElevation = AlertDialogDefaults.TonalElevation,
+            color = AlertDialogDefaults.containerColor,
+        ) {
+            Column(modifier = Modifier.padding(PaddingValues(all = 24.dp))) {
+                // Title
+                Box(Modifier
+                    .padding(PaddingValues(bottom = 16.dp))
+                    .align(Alignment.Start)
+                ) {
+                    Text(text = visuals.title, style = MaterialTheme.typography.headlineSmall)
+                }
+
+                // Content
+                Box(Modifier
+                    .weight(weight = 1f, fill = false)
+                    .padding(PaddingValues(bottom = 24.dp))
+                    .align(Alignment.Start)) {
+
+                    if (visuals.isMarkdown) {
+                        MarkdownContent(content = visuals.content)
+                    } else {
+                        Text(text = visuals.content, style = MaterialTheme.typography.bodyMedium)
+                    }
+                }
+
+                // Buttons
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    TextButton(onClick = dismiss) {
+                        Text(text = visuals.dismiss ?: stringResource(id = android.R.string.cancel))
+                    }
+
+                    TextButton(onClick = confirm) {
+                        Text(text = visuals.confirm ?: stringResource(id = android.R.string.ok))
+                    }
+                }
             }
-        },
-        confirmButton = {
-            TextButton(onClick = confirm) {
-                Text(text = visuals.confirm ?: stringResource(id = android.R.string.ok))
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = dismiss) {
-                Text(text = visuals.dismiss ?: stringResource(id = android.R.string.cancel))
-            }
-        },
-    )
+            val dialogWindowProvider = LocalView.current.parent as DialogWindowProvider
+            setupWindowBlurListener(dialogWindowProvider.window)
+        }
+    }
+
 }
 
 @Composable
