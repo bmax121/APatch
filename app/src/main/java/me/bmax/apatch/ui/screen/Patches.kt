@@ -135,8 +135,16 @@ fun Patches(navigator: DestinationsNavigator, mode: PatchesViewModel.PatchMode) 
             ErrorView(viewModel.error)
             KernelPatchImageView(viewModel.kpimgInfo)
 
+            if (mode == PatchesViewModel.PatchMode.PATCH_ONLY && selectedBootImage != null && viewModel.kimgInfo.banner.isEmpty()) {
+                viewModel.copyAndParseBootimg(selectedBootImage!!)
+                // Fix endless loop
+                if (viewModel.error.isNotEmpty()) {
+                    selectedBootImage = null
+                }
+            }
+
             // select boot.img
-            if(mode == PatchesViewModel.PatchMode.PATCH_ONLY && viewModel.kimgInfo.banner.isEmpty()) {
+            if (mode == PatchesViewModel.PatchMode.PATCH_ONLY && viewModel.kimgInfo.banner.isEmpty()) {
                 SelectFileButton(
                     text = stringResource(id = R.string.patch_select_bootimg_btn),
                     onSelected = { data, uri ->

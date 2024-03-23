@@ -94,6 +94,7 @@ import me.bmax.apatch.Natives
 import me.bmax.apatch.R
 import me.bmax.apatch.apApp
 import me.bmax.apatch.ui.component.rememberConfirmDialog
+import me.bmax.apatch.ui.screen.destinations.InstallModeSelectScreenDestination
 import me.bmax.apatch.ui.screen.destinations.PatchesDestination
 import me.bmax.apatch.ui.screen.destinations.SettingScreenDestination
 import me.bmax.apatch.ui.viewmodel.PatchesViewModel
@@ -104,8 +105,6 @@ import me.bmax.apatch.util.Version.getManagerVersion
 import me.bmax.apatch.util.checkNewVersion
 import me.bmax.apatch.util.getSELinuxStatus
 import me.bmax.apatch.util.reboot
-
-private val isABDevice = DeviceUtils.isABDevice()
 
 @RootNavGraph(start = true)
 @Destination
@@ -123,17 +122,9 @@ fun HomeScreen(navigator: DestinationsNavigator) {
     Scaffold(topBar = {
         TopBar(onSettingsClick = {
             navigator.navigate(SettingScreenDestination, true)
+        }, onInstallClick = {
+            navigator.navigate(InstallModeSelectScreenDestination, true)
         })
-    }, floatingActionButton = {
-        if (showPatchFloatAction) {
-            ExtendedFloatingActionButton(
-                onClick = {
-                    navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.PATCH_ONLY))
-                },
-                icon = { Icon(Icons.Filled.InstallMobile, "install") },
-                text = { Text(text = stringResource(id = R.string.patch)) },
-            )
-        }
     }) { innerPadding ->
         Column(
             modifier = Modifier
@@ -272,8 +263,15 @@ fun RebootDropdownItem(@StringRes id: Int, reason: String = "") {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun TopBar(onSettingsClick: () -> Unit) {
+private fun TopBar(onSettingsClick: () -> Unit, onInstallClick: () -> Unit) {
     TopAppBar(title = { Text(stringResource(R.string.app_name)) }, actions = {
+        IconButton(onClick = onInstallClick) {
+            Icon(
+                imageVector = Icons.Filled.InstallMobile,
+                contentDescription = stringResource(id = R.string.mode_select_page_title)
+            )
+        }
+
         var showDropdown by remember { mutableStateOf(false) }
         IconButton(onClick = {
             showDropdown = true
@@ -310,61 +308,16 @@ private fun TopBar(onSettingsClick: () -> Unit) {
 }
 
 @Composable
-fun PatchDialog(showPatchDialog: MutableState<Boolean>, navigator: DestinationsNavigator) {
-    if (showPatchDialog.value) {
-        AlertDialog(
-            onDismissRequest = { showPatchDialog.value = false },
-            text = {
-                LazyColumn {
-                    item {
-                        ListItem(
-                            headlineContent = { Text(text = stringResource(R.string.home_patch_dialog_patch_only)) },
-                            modifier = Modifier.clickable {
-                                showPatchDialog.value = false
-                                navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.PATCH_ONLY))
-                            }
-                        )
-                    }
-                    item {
-                        ListItem(
-                            headlineContent = { Text(text = stringResource(R.string.home_patch_dialog_patch_and_install)) },
-                            modifier = Modifier.clickable {
-                                showPatchDialog.value = false
-                                navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.PATCH_AND_INSTALL))
-                            }
-                        )
-                    }
-                    if (isABDevice) {
-                        item {
-                            ListItem(
-                                headlineContent = { Text(text = stringResource(R.string.home_patch_dialog_install_next_slot)) },
-                                modifier = Modifier.clickable {
-                                    showPatchDialog.value = false
-                                    navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.INSTALL_TO_NEXT_SLOT))
-                                }
-                            )
-                        }
-                    }
-                }
-            },
-            confirmButton = {},
-            dismissButton = {}
-        )
-    }
-}
-
-@Composable
 private fun KStatusCard(kpState: APApplication.State, navigator: DestinationsNavigator) {
     val showAuthKeyDialog = remember { mutableStateOf(false) }
     if (showAuthKeyDialog.value) {
         AuthSuperKey(showDialog = showAuthKeyDialog)
     }
 
-    val showPatchDialog = rememberSaveable { mutableStateOf(false) }
-    PatchDialog(showPatchDialog, navigator)
-
     ElevatedCard(
-        onClick = { },
+        onClick = {
+            navigator.navigate(InstallModeSelectScreenDestination)
+        },
         colors = CardDefaults.elevatedCardColors(containerColor = run {
             MaterialTheme.colorScheme.secondaryContainer
         })
@@ -395,7 +348,7 @@ private fun KStatusCard(kpState: APApplication.State, navigator: DestinationsNav
                     }
 
                     else -> {
-                        Icon(Icons.Outlined.Block, stringResource(R.string.home_install_unknown))
+                        Icon(Icons.Outlined.Block, stringResource(R.string.home_ap_cando_uninstall))
                     }
                 }
                 Column(
@@ -466,7 +419,7 @@ private fun KStatusCard(kpState: APApplication.State, navigator: DestinationsNav
                                     if (Version.installedKPVUInt() < 0x900u) {
                                         navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.PATCH_ONLY))
                                     } else {
-                                        showPatchDialog.value = true
+                                        navigator.navigate(InstallModeSelectScreenDestination)
                                     }
                                 }
 
@@ -479,7 +432,9 @@ private fun KStatusCard(kpState: APApplication.State, navigator: DestinationsNav
                                 }
 
                                 else -> {
-                                    showPatchDialog.value = true
+                                    //showPatchDialog.value = true
+                                    APApplication.uninstallApatch()
+                                    navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.UNPATCH))
                                 }
                             }
                         },
@@ -502,22 +457,11 @@ private fun KStatusCard(kpState: APApplication.State, navigator: DestinationsNav
                                 }
 
                                 else -> {
-                                    Text(text = stringResource(id = R.string.home_ap_cando_install))
+                                    Text(text = stringResource(id = R.string.home_ap_cando_uninstall))
                                 }
                             }
                         }
                     )
-                    if (kpState == APApplication.State.KERNELPATCH_INSTALLED) {
-                        Button(
-                            onClick = {
-                                APApplication.uninstallApatch()
-                                navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.UNPATCH))
-                            },
-                            content = {
-                                Text(text = stringResource(id = R.string.home_ap_cando_uninstall))
-                            }
-                        )
-                    }
                 }
             }
         }

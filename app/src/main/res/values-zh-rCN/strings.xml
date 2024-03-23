@@ -138,8 +138,13 @@
     <string name="kpm_add_kpm">添加</string>
     <string name="kpm_install">安裝</string>
     <string name="setting_reset_su_path">自定义 su 路径</string>
-    <string name="setting_reset_su_path_summary">指定超级用户二进制文件路径。</string>
     <string name="setting_reset_su_new_path">新的完整路径</string>
     <string name="success">成功</string>
     <string name="failure">失败</string>
+    <string name="mode_select_page_title">安装</string>
+    <string name="mode_select_page_patch_and_install">修补并安装</string>
+    <string name="mode_select_page_select_file">选择一个启动镜像并修补</string>
+    <string name="mode_select_page_install_inactive_slot">安装到未使用的槽位（OTA 后）</string>
+    <string name="mode_select_page_install_inactive_slot_warning">制切换到另一个槽位！\n注意只能在 OTA 更新完成后的重启之前使用。\n确认？</string>
+
 </resources>

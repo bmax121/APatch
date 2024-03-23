@@ -61,10 +61,6 @@
     <string name="home_auth_key_desc">Start after certification</string>
     <string name="home_kpatch_info_title">Info</string>
 
-    <string name="home_patch_dialog_patch_only">Patch Only</string>
-    <string name="home_patch_dialog_patch_and_install">Patch And Install</string>
-    <string name="home_patch_dialog_install_next_slot">Install To Next Slot (After OTA)</string>
-
     <string name="home_ap_cando_install">Install</string>
     <string name="home_ap_cando_update">Update</string>
     <string name="home_ap_cando_uninstall">Uninstall</string>
@@ -180,4 +176,10 @@
     <string name="settings_donot_store_superkey_summary">Authenticate the super key every time the manager starts</string>
 
     <string name="home_new_apatch_found">New version available: %s, Click me to upgrade</string>
+
+    <string name="mode_select_page_title">Install</string>
+    <string name="mode_select_page_patch_and_install">Patch and Install</string>
+    <string name="mode_select_page_select_file">Select a boot image to Patch</string>
+    <string name="mode_select_page_install_inactive_slot">Install to Inactive Slot (After OTA)</string>
+    <string name="mode_select_page_install_inactive_slot_warning">Your device will be **FORCED** to boot to the current inactive slot after a reboot!\nOnly use this option after OTA is done.\nContinue?</string>
 </resources>
