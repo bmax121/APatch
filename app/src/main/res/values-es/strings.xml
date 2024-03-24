@@ -16,8 +16,8 @@
     <string name="reboot">Reiniciar</string>
     <string name="settings">Ajustes</string>
     <string name="reboot_bootloader">Reiniciar en modo de arranque</string>
-    <string name="about_source_code">Ver el código fuente en %1$s<br/>Únete a nuestro canal de %2$s</string>
-    <string name="send_log">Enviar registro de informes</string>
+    <string name="about_source_code">&lt;p&gt;Ver código fuente en %1$s &lt;p/&gt;Únete a nuestro %2$s canal&lt;p/&gt;Únete a nuestro %2$s grupo</string>
+    <string name="send_log">Enviar registro</string>
     <string name="kpatch_version">Versión: %s</string>
     <string name="home_patch_set_key_desc">Clave única para KernelPatch</string>
     <string name="home_install_unknown">Desconocido</string>
@@ -138,8 +138,10 @@
     <string name="hide_apatch_dialog_summary">Se utilizará como la nueva etiqueta de aplicación que se muestra en el lanzador</string>
     <string name="hide_apatch_manager_failure">No se ha podido ocultar, ¡informe del error!</string>
     <string name="setting_reset_su_path">Restablecer la ruta su</string>
-    <string name="setting_reset_su_path_summary">Utiliza una nueva ruta \"su\".</string>
     <string name="setting_reset_su_new_path">nueva ruta completa</string>
     <string name="failure">Fallido</string>
     <string name="kpm_add_kpm">Añadir KPM</string>
+    <string name="settings_check_update_summary">Buscar actualizaciones automáticamente al abrir la aplicación</string>
+    <string name="settings_check_update">Buscar actualizaciones</string>
+    <string name="patch_ab_after_ota">Parche A/B</string>
 </resources>

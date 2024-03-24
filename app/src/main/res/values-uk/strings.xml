@@ -59,7 +59,7 @@
     <string name="patch_warnning">Інсталяція має ризики. Будь ласка, створіть резервну копію ваших даних.</string>
     <string name="reboot_edl">Перезавантаження в EDL</string>
     <string name="home_click_to_learn_apatch">Дізнайтеся більше про можливості AndroidPatch і про його використання</string>
-    <string name="about_source_code">Перегляньте вихідний код на %1$s<br/> Приєднуйтеся до нашого %2$s каналу</string>
+    <string name="about_source_code">&lt;p&gt;Перегляньте вихідний код на %1$s&lt;p/&gt; Приєднуйтеся до нашого %2$s каналу&lt;p/&gt;Приєднуйтеся до нашої %2$s групи</string>
     <string name="send_log">Надіслати звіт</string>
     <string name="apatch_version_update">Версія: %s → %s</string>
     <string name="home_apatch_version">APatch %s</string>
@@ -129,4 +129,9 @@
     <string name="settings_clear_super_key_dialog">Ви дійсно хочете продовжити?</string>
     <string name="kpatch_version_update">Версія: %s -&gt; %s</string>
     <string name="home_kpatch_info_title">Інфо</string>
+    <string name="settings_check_update_summary">Автоматично перевіряти оновлення при відкритті застосунку</string>
+    <string name="success">Успішно</string>
+    <string name="failure">Помилка</string>
+    <string name="settings_check_update">Перевірити оновлення</string>
+    <string name="patch_ab_after_ota">A/B Патч</string>
 </resources>

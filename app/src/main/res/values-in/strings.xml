@@ -141,6 +141,5 @@
     <string name="success">Berhasil</string>
     <string name="failure">Gagal</string>
     <string name="setting_reset_su_new_path">rute lengkap terbaru</string>
-    <string name="setting_reset_su_path_summary">Pilih rute SU</string>
     <string name="setting_reset_su_path">Reset rute SU</string>
 </resources>
