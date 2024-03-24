@@ -126,9 +126,7 @@ fun HomeScreen(navigator: DestinationsNavigator) {
     }
 
     Scaffold(topBar = {
-        TopBar(onSettingsClick = {
-            navigator.navigate(SettingScreenDestination, true)
-        }, onInstallClick = {
+        TopBar(onInstallClick = {
             navigator.navigate(InstallModeSelectScreenDestination, true)
         })
     }) { innerPadding ->
@@ -206,8 +204,8 @@ fun AuthFailedTipDialog(showDialog: MutableState<Boolean>) {
 
 }
 
-val keyChecked: (skey: String)-> Boolean = {
-    it.length in 8..63 && it.any { it.isDigit() } && it.any{ it.isLetter()}
+val checkSuperKeyValidation: (superKey: String) -> Boolean = { superKey ->
+    superKey.length in 8..63 && superKey.any { it.isDigit() } && superKey.any { it.isLetter() }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -269,7 +267,7 @@ fun AuthSuperKey(showDialog: MutableState<Boolean>, showFailedDialog: MutableSta
                             .padding(top = 6.dp),
                         onValueChange = {
                             key = it
-                            enable = keyChecked(key)
+                            enable = checkSuperKeyValidation(key)
                         },
                         shape = RoundedCornerShape(50.0f),
                         label = { Text(stringResource(id = R.string.super_key)) },
@@ -332,7 +330,7 @@ fun RebootDropdownItem(@StringRes id: Int, reason: String = "") {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun TopBar(onSettingsClick: () -> Unit, onInstallClick: () -> Unit) {
+private fun TopBar(onInstallClick: () -> Unit) {
     val uriHandler = LocalUriHandler.current
     val aboutDialog = rememberCustomDialog {
         AboutDialog(it)

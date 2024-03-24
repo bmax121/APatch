@@ -343,7 +343,7 @@ private fun ExtraItem(extra: KPModel.IExtraInfo, existed: Boolean, onDelete: ()-
 @Composable
 private fun SetSuperKeyView(viewModel: PatchesViewModel) {
     var skey by remember { mutableStateOf(viewModel.kpimgInfo.superKey) }
-    var showWarn by remember { mutableStateOf(!viewModel.keyChecked(skey))}
+    var showWarn by remember { mutableStateOf(!viewModel.checkSuperKeyValidation(skey))}
     var keyVisible by remember { mutableStateOf(false) }
     ElevatedCard(
         colors = CardDefaults.elevatedCardColors(containerColor = run {
@@ -385,7 +385,7 @@ private fun SetSuperKeyView(viewModel: PatchesViewModel) {
                         shape = RoundedCornerShape(50.0f),
                         onValueChange = {
                             skey = it
-                            if (viewModel.keyChecked(it)) {
+                            if (viewModel.checkSuperKeyValidation(it)) {
                                 viewModel.superkey = it
                                 showWarn = false
                             } else {

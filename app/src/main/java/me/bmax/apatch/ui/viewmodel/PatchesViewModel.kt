@@ -134,7 +134,7 @@ class PatchesViewModel : ViewModel() {
             if(kimgInfo.patched) {
                 val superkey = ini["kpimg"]?.getOrDefault("superkey", "") ?: ""
                 kpimgInfo.superKey = superkey
-                if(keyChecked(superkey)) {
+                if(checkSuperKeyValidation(superkey)) {
                     this.superkey = superkey
                 }
                 val kpmNum = kernel["extra_num"]?.toInt()
@@ -172,8 +172,8 @@ class PatchesViewModel : ViewModel() {
         }
     }
 
-    val keyChecked: (skey: String)-> Boolean = {
-        it.length in 8..63 && it.any { it.isDigit() } && it.any{ it.isLetter()}
+    val checkSuperKeyValidation: (superKey: String) -> Boolean = { superKey ->
+        superKey.length in 8..63 && superKey.any { it.isDigit() } && superKey.any { it.isLetter() }
     }
 
     fun copyAndParseBootimg(uri: Uri) {

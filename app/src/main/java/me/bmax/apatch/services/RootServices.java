@@ -23,16 +23,6 @@ import rikka.parcelablelist.ParcelableListSlice;
 public class RootServices extends RootService {
     private static final String TAG = "RootServices";
 
-    class Stub extends IAPRootService.Stub {
-        @Override
-        public ParcelableListSlice<PackageInfo> getPackages(int flags) {
-            List<PackageInfo> list = getInstalledPackagesAll(flags);
-            Log.i(TAG, "getPackages: " + list.size());
-            return new ParcelableListSlice<>(list);
-        }
-
-    }
-
     @Override
     public IBinder onBind(@NonNull Intent intent) {
         return new Stub();
@@ -68,5 +58,15 @@ public class RootServices extends RootService {
         }
 
         return new ArrayList<>();
+    }
+
+    class Stub extends IAPRootService.Stub {
+        @Override
+        public ParcelableListSlice<PackageInfo> getPackages(int flags) {
+            List<PackageInfo> list = getInstalledPackagesAll(flags);
+            Log.i(TAG, "getPackages: " + list.size());
+            return new ParcelableListSlice<>(list);
+        }
+
     }
 }
