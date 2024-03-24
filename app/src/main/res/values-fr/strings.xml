@@ -112,7 +112,6 @@
     <string name="success">Succès</string>
     <string name="failure">Échec</string>
     <string name="patch_mode_bootimg_patch">Mode : Patch</string>
-    <string name="patch_mode_update_patch">Mode : Mise à jour</string>
     <string name="patch_select_bootimg_btn">Sélectionner l\'image de boot</string>
     <string name="patch_start_unpatch_btn">Dépatcher</string>
     <string name="patch_item_error">!! ERREUR !!</string>
@@ -134,7 +133,6 @@
     <string name="kpm_install">Installer</string>
     <string name="kpm_embed">Intégrer</string>
     <string name="setting_reset_su_path">Réinitialiser le chemin su</string>
-    <string name="setting_reset_su_path_summary">Utiliser un nouveau chemin \"su\".</string>
     <string name="kpatch_shadow_path_title">kpatch</string>
     <string name="patch_mode_uninstall_patch">Mode : Dépatch</string>
     <string name="patch_item_extra_version">version :</string>

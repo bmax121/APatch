@@ -84,7 +84,7 @@
     <string name="kpm_license">Lisans</string>
     <string name="reboot_bootloader">Önyükleyici modunda yeniden başlat</string>
     <string name="kpm_apm_empty">Yüklü modül yok</string>
-    <string name="about_source_code">%1$s üzerinden kaynak koduna göz atın. <br/>%2$s kanalımıza katılın</string>
+    <string name="about_source_code">&lt;p&gt;%1$s üzerinden kaynak koduna göz atın&lt;p/&gt;%2$s kanalımıza katılın&lt;p/&gt;%2$s grubumuza katılın</string>
     <string name="home_manager_version">Yönetici sürümü</string>
     <string name="kpm_load_toast_succ">Başarıyla yüklendi</string>
     <string name="apm_author">Geliştirici</string>
@@ -138,8 +138,35 @@
     <string name="kpm_install">Kur</string>
     <string name="hide_apatch_manager_summary">Rastgele bir paket kimliği ve özel uygulama etiketi ile yeni bir yönetici uygulaması kurun</string>
     <string name="setting_reset_su_path">\"su\" programı yolunu sıfırla</string>
-    <string name="setting_reset_su_path_summary">Yeni \"su\" programı yolunu kullan.</string>
     <string name="setting_reset_su_new_path">yeni tam yol</string>
     <string name="success">Başarılı</string>
     <string name="failure">Başarısız</string>
+    <string name="home_new_apatch_found">Yeni sürüm var: %s, Yükseltmek için tıklayın</string>
+    <string name="settings_check_update">Güncellemeleri denetle</string>
+    <string name="patch_mode_install_to_next_slot">Mod: Sonraki yuvaya kur (OTA\'dan sonra)</string>
+    <string name="mode_select_page_patch_and_install">Yama ve Kur</string>
+    <string name="mode_select_page_select_file">Yama için bir önyükleme kalıbı seçin</string>
+    <string name="home_dialog_auth_fail_title">Kimlik doğrulama başarısız</string>
+    <string name="home_more_menu_feedback_or_suggestion">Geri bildirim veya öneri</string>
+    <string name="home_more_menu_about">Hakkında</string>
+    <string name="mode_select_page_title">Kur</string>
+    <string name="mode_select_page_install_inactive_slot">Etkin olmayan yuvaya kur (OTA\'dan sonra)</string>
+    <string name="mode_select_page_install_inactive_slot_warning">Aygıtınız yeniden başlatıldıktan sonra geçerli etkin olmayan yuvaya önyükleme yapmaya **ZORLANACAK**!
+\nBu seçeneği yalnızca OTA tamamlandıktan sonra kullanın.
+\nDevam edilsin mi?</string>
+    <string name="home_dialog_auth_fail_content">Süper anahtarın kimliği doğrulanamıyor, bu nedenle APatch düzgün çalışamıyor.
+\nKimlik doğrulama başarısızlığının bazı olası nedenleri şunlardır:
+\n1. Önyükleme kalıbını KernelPatch ile yamalamadınız.
+\n2. Yamalı önyükleme kalıbı yazılmadı.
+\n3. Süper anahtar yanlış.
+\n4. Aygıtınız APatch ve KernelPatch desteklemiyor.
+\n
+\nLütfen gözden geçirin ve tekrar deneyin. Hala sorun varsa, resmi deponun sorunlar sayfasında her zaman soru sorabilirsiniz.</string>
+    <string name="settings_check_update_summary">Uygulama açıldığında güncellemeleri otomatik olarak denetle</string>
+    <string name="webui_open">Web Arayüzünü Aç</string>
+    <string name="enable_web_debugging">Web Görünümü Hata Ayıklamayı Etkinleştir</string>
+    <string name="settings_donot_store_superkey_summary">Yönetici her başladığında süper anahtarın kimliğini doğrulayın</string>
+    <string name="patch_ab_after_ota">A/B Yaması</string>
+    <string name="enable_web_debugging_summary">Web arayüzünde hata ayıklamak için kullanılabilir, lütfen yalnızca gerektiğinde etkinleştirin.</string>
+    <string name="settings_donot_store_superkey">Süper anahtarı yerel olarak saklama</string>
 </resources>

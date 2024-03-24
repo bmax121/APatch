@@ -139,7 +139,6 @@
     <string name="hide_apatch_dialog_summary">Оно будет использоваться как новое название приложения</string>
     <string name="hide_apatch_dialog_new_manager_name">Название нового приложения</string>
     <string name="setting_reset_su_path">Сбросить путь к SU</string>
-    <string name="setting_reset_su_path_summary">Используйте новый путь к SU</string>
     <string name="hide_apatch_manager_summary">Переустановить приложение с новым случайным именем пакета и пользовательским названием приложения</string>
     <string name="setting_reset_su_new_path">новый полный путь</string>
 </resources>

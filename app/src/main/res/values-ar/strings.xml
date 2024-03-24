@@ -108,7 +108,6 @@
     <string name="home_ap_cando_reboot">إعادة تشغيل</string>
     <string name="patch_config_title">باتشات</string>
     <string name="patch_mode_bootimg_patch">الوضع: باتش</string>
-    <string name="patch_mode_update_patch">الوضع: تحديث</string>
     <string name="patch_mode_uninstall_patch">الوضع: إلغاء للباتش</string>
     <string name="patch_select_bootimg_btn">حدد التمهيد</string>
     <string name="patch_embed_kpm_btn">تضمين KPM</string>
@@ -139,7 +138,6 @@
     <string name="hide_apatch_manager_summary">قم بتثبيت تطبيق مدير جديد بمعرف حزمة عشوائي وتصنيف تطبيق مخصص</string>
     <string name="hide_apatch_dialog_summary">سيتم استخدامه كتسمية التطبيق الجديدة الموضحة في المشغل</string>
     <string name="hide_apatch_manager_failure">فشل الإخفاء، يرجى الإبلاغ عن الخطأ!</string>
-    <string name="setting_reset_su_path_summary">استخدم مسار su جديد</string>
     <string name="setting_reset_su_new_path">مسار كامل جديد</string>
     <string name="setting_reset_su_path">إعادة تعيين مسار su</string>
     <string name="success">نجاح</string>

@@ -102,7 +102,6 @@
     <string name="kpatch_version_update">Version: %s -&gt; %s</string>
     <string name="patch_config_title">Korrekturen</string>
     <string name="patch_mode_bootimg_patch">Modus: Korrektur</string>
-    <string name="patch_mode_update_patch">Modus: Aktualisierung</string>
     <string name="patch_mode_uninstall_patch">Modus: EntKorrektur</string>
     <string name="home_ap_cando_reboot">Neustart</string>
     <string name="patch_select_bootimg_btn">Wählen Sie Start</string>

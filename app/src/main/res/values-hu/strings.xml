@@ -62,7 +62,6 @@
     <string name="reboot_bootloader">Újraindítás a Bootloaderbe</string>
     <string name="settings_global_namespace_mode_summary">Minden root munkamenet az általános csatolási névteret használja</string>
     <string name="home_learn_apatch">AndroidPatch tanulása</string>
-    <string name="patch_mode_update_patch">Mód: Frissítés</string>
     <string name="apm_overlay_fs_not_available">A modulok elérhetetlenek, mert az OverlayFS ki van kapcsolva a kernel által.</string>
     <string name="settings_clear_super_key_dialog">Tényleg folytatni akarod?</string>
     <string name="home_click_to_learn_apatch">Ismerd meg az AndroidPatch funkcióit és használatát</string>

@@ -139,7 +139,6 @@
     <string name="kpm_add_kpm">新增 KPM</string>
     <string name="kpm_install">安裝</string>
     <string name="setting_reset_su_path">重置 su 路徑</string>
-    <string name="setting_reset_su_path_summary">使用新的“su”路徑。</string>
     <string name="setting_reset_su_new_path">新的完整路徑</string>
     <string name="success">成功</string>
     <string name="failure">失敗</string>
