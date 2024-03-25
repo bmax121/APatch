@@ -163,7 +163,6 @@ tasks.register<Delete>("apdClean") {
     delete(file("${project.projectDir}/libs/arm64-v8a/libapd.so"))
 }
 
-
 tasks.clean {
     dependsOn("apdClean")
 }
