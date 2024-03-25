@@ -45,18 +45,20 @@
     <string name="home_patch_next_step">Next Step</string>
 
     <string name="home_not_installed">Not installed</string>
-    <string name="home_install_unknown">Unknown</string>
+    <string name="home_install_unknown">Not installed or authenticated</string>
+    <string name="home_install_unknown_summary">Click to install</string>
     <string name="home_click_to_install">Click to install</string>
-    <string name="home_working">Working</string>
+    <string name="home_working">Working 😋</string>
+
+    <string name="full_apatch">Full APatch</string>
+
     <string name="home_installing">Installing</string>
     <string name="home_need_update">New version available</string>
     <string name="kpatch_version">Version: %s</string>
     <string name="apatch_version">Version: %s</string>
     <string name="apatch_version_update">Version: %s -&gt; %s</string>
     <string name="kpatch_version_update">Version: %s -&gt; %s</string>
-    <string name="home_su_path">su: %s</string>
     <string name="kpatch_shadow_path_title">kpatch</string>
-    <string name="home_apatch_version">APatch: %s</string>
     <string name="home_auth_key_title">Enter SuperKey</string>
     <string name="home_auth_key_desc">Start after certification</string>
     <string name="home_kpatch_info_title">Info</string>
@@ -109,6 +111,11 @@
     <string name="home_selinux_status_permissive">Permissive</string>
     <string name="home_selinux_status_unknown">Unknown</string>
 
+    <string name="home_device_info">Device</string>
+    <string name="home_system_version">System version</string>
+    <string name="home_kpatch_version">KernelPatch version</string>
+    <string name="home_su_path">Executable su</string>
+    <string name="home_apatch_version">APatch version</string>
 
     <string name="kpm">KPModule</string>
     <string name="kpm_kp_not_installed">KernelPatch not installed</string>
@@ -189,4 +196,8 @@
     <string name="home_more_menu_feedback_or_suggestion">Feedback or suggestion</string>
     <string name="home_more_menu_about">About</string>
 
+    <string name="home_dialog_uninstall_title">Uninstall</string>
+
+    <string name="home_dialog_uninstall_ap_only">Remove AndroidPatch</string>
+    <string name="home_dialog_uninstall_all">Uninstall completely</string>
 </resources>
