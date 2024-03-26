@@ -29,6 +29,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.HelpOutline
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.InstallMobile
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Refresh
@@ -39,6 +40,7 @@ import androidx.compose.material.icons.outlined.Block
 import androidx.compose.material.icons.outlined.Cached
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Clear
+import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.InstallMobile
 import androidx.compose.material.icons.outlined.SystemUpdate
 import androidx.compose.material3.AlertDialogDefaults
@@ -534,7 +536,7 @@ private fun KStatusCard(
             ) {
                 when (kpState) {
                     APApplication.State.KERNELPATCH_INSTALLED -> {
-                        Icon(Icons.Outlined.CheckCircle, stringResource(R.string.home_working))
+                        Icon(Icons.Filled.CheckCircle, stringResource(R.string.home_working))
                     }
 
                     APApplication.State.KERNELPATCH_NEED_UPDATE, APApplication.State.KERNELPATCH_NEED_REBOOT -> {
@@ -686,7 +688,7 @@ private fun AStatusCard(apState: APApplication.State) {
             ) {
                 when (apState) {
                     APApplication.State.ANDROIDPATCH_NOT_INSTALLED -> {
-                        Icon(Icons.Outlined.Block, stringResource(R.string.home_not_installed))
+                        Icon(Icons.AutoMirrored.Outlined.HelpOutline, stringResource(R.string.home_not_installed))
                     }
 
                     APApplication.State.ANDROIDPATCH_INSTALLING -> {
@@ -702,7 +704,7 @@ private fun AStatusCard(apState: APApplication.State) {
                     }
 
                     else -> {
-                        Icon(Icons.Outlined.Block, stringResource(R.string.home_install_unknown))
+                        Icon(Icons.AutoMirrored.Outlined.HelpOutline, stringResource(R.string.home_install_unknown))
                     }
                 }
                 Column(
