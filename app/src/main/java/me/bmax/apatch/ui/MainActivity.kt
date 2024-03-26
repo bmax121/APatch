@@ -32,6 +32,7 @@ import com.ramcosta.composedestinations.animations.defaults.RootNavGraphDefaultA
 import com.ramcosta.composedestinations.navigation.popBackStack
 import com.ramcosta.composedestinations.rememberNavHostEngine
 import com.ramcosta.composedestinations.utils.isRouteOnBackStack
+import com.ramcosta.composedestinations.utils.isRouteOnBackStackAsState
 import me.bmax.apatch.APApplication
 import me.bmax.apatch.ui.screen.BottomBarDestination
 import me.bmax.apatch.ui.screen.NavGraphs
@@ -45,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         setContent {
             APatchTheme {
                 val navController = rememberNavController()
-                val snackbarHostState = remember { SnackbarHostState() }
+                val snackBarHostState = remember { SnackbarHostState() }
 
                 val navHostEngine = rememberNavHostEngine(
                     navHostContentAlignment = Alignment.TopCenter,
@@ -62,10 +63,10 @@ class MainActivity : AppCompatActivity() {
                 )
                 Scaffold(
                     bottomBar = { BottomBar(navController) },
-                    snackbarHost = { SnackbarHost(snackbarHostState) }
+                    snackbarHost = { SnackbarHost(snackBarHostState) }
                 ) { innerPadding ->
                     CompositionLocalProvider(
-                        LocalSnackbarHost provides snackbarHostState,
+                        LocalSnackbarHost provides snackBarHostState,
                     ) {
                         DestinationsNavHost(
                             modifier = Modifier.padding(innerPadding),
@@ -92,7 +93,7 @@ private fun BottomBar(navController: NavHostController) {
             val hideDestination = (destination.kPatchRequired && !kPatchReady) ||
                                   (destination.aPatchRequired && !aPatchReady)
             if (hideDestination) return@forEach
-            val isCurrentDestOnBackStack = navController.isRouteOnBackStack(destination.direction)
+            val isCurrentDestOnBackStack by navController.isRouteOnBackStackAsState(destination.direction)
             NavigationBarItem(
                 selected = isCurrentDestOnBackStack,
                 onClick = {

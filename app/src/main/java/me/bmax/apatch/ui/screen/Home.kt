@@ -39,9 +39,7 @@ import androidx.compose.material.icons.outlined.Block
 import androidx.compose.material.icons.outlined.Cached
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Clear
-import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.InstallMobile
-import androidx.compose.material.icons.outlined.Key
 import androidx.compose.material.icons.outlined.SystemUpdate
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.BasicAlertDialog
@@ -54,7 +52,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -155,7 +152,11 @@ fun HomeScreen(navigator: DestinationsNavigator) {
 fun UninstallDialog(showDialog: MutableState<Boolean>, navigator: DestinationsNavigator) {
     BasicAlertDialog(
         onDismissRequest = { showDialog.value = false },
-        properties = DialogProperties(decorFitsSystemWindows = true, usePlatformDefaultWidth = false, securePolicy = SecureFlagPolicy.SecureOff)
+        properties = DialogProperties(
+            decorFitsSystemWindows = true,
+            usePlatformDefaultWidth = false,
+            securePolicy = SecureFlagPolicy.SecureOff
+        )
     ) {
         Surface(
             modifier = Modifier
@@ -172,7 +173,10 @@ fun UninstallDialog(showDialog: MutableState<Boolean>, navigator: DestinationsNa
                         .padding(PaddingValues(bottom = 16.dp))
                         .align(Alignment.CenterHorizontally)
                 ) {
-                    Text(text = stringResource(id = R.string.home_dialog_uninstall_title), style = MaterialTheme.typography.headlineSmall)
+                    Text(
+                        text = stringResource(id = R.string.home_dialog_uninstall_title),
+                        style = MaterialTheme.typography.headlineSmall
+                    )
                 }
 
                 // Buttons
@@ -208,7 +212,11 @@ fun UninstallDialog(showDialog: MutableState<Boolean>, navigator: DestinationsNa
 fun AuthFailedTipDialog(showDialog: MutableState<Boolean>) {
     BasicAlertDialog(
         onDismissRequest = { showDialog.value = false },
-        properties = DialogProperties(decorFitsSystemWindows = true, usePlatformDefaultWidth = false, securePolicy = SecureFlagPolicy.SecureOff)
+        properties = DialogProperties(
+            decorFitsSystemWindows = true,
+            usePlatformDefaultWidth = false,
+            securePolicy = SecureFlagPolicy.SecureOff
+        )
     ) {
         Surface(
             modifier = Modifier
@@ -225,7 +233,10 @@ fun AuthFailedTipDialog(showDialog: MutableState<Boolean>) {
                         .padding(PaddingValues(bottom = 16.dp))
                         .align(Alignment.Start)
                 ) {
-                    Text(text = stringResource(id = R.string.home_dialog_auth_fail_title), style = MaterialTheme.typography.headlineSmall)
+                    Text(
+                        text = stringResource(id = R.string.home_dialog_auth_fail_title),
+                        style = MaterialTheme.typography.headlineSmall
+                    )
                 }
 
                 // Content
@@ -233,8 +244,12 @@ fun AuthFailedTipDialog(showDialog: MutableState<Boolean>) {
                     Modifier
                         .weight(weight = 1f, fill = false)
                         .padding(PaddingValues(bottom = 24.dp))
-                        .align(Alignment.Start)) {
-                    Text(text = stringResource(id = R.string.home_dialog_auth_fail_content), style = MaterialTheme.typography.bodyMedium)
+                        .align(Alignment.Start)
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.home_dialog_auth_fail_content),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
                 }
 
                 // Buttons
@@ -242,7 +257,7 @@ fun AuthFailedTipDialog(showDialog: MutableState<Boolean>) {
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End
                 ) {
-                    TextButton(onClick = {showDialog.value = false}) {
+                    TextButton(onClick = { showDialog.value = false }) {
                         Text(text = stringResource(id = android.R.string.ok))
                     }
                 }
@@ -388,7 +403,11 @@ private fun TopBar(onInstallClick: () -> Unit) {
     var showDropdownMoreOptions by remember { mutableStateOf(false) }
     var showDropdownReboot by remember { mutableStateOf(false) }
 
-    TopAppBar(title = { Text(stringResource(R.string.app_name), modifier = Modifier.clickable { aboutDialog.show() }) }, actions = {
+    TopAppBar(title = {
+        Text(
+            stringResource(R.string.app_name),
+            modifier = Modifier.clickable { aboutDialog.show() })
+    }, actions = {
         IconButton(onClick = onInstallClick) {
             Icon(
                 imageVector = Icons.Filled.InstallMobile,
@@ -422,7 +441,7 @@ private fun TopBar(onInstallClick: () -> Unit) {
         }
 
         Box {
-            IconButton(onClick = {showDropdownMoreOptions = true}) {
+            IconButton(onClick = { showDropdownMoreOptions = true }) {
                 Icon(
                     imageVector = Icons.Filled.MoreVert,
                     contentDescription = stringResource(id = R.string.settings)
@@ -449,7 +468,11 @@ private fun TopBar(onInstallClick: () -> Unit) {
 }
 
 @Composable
-private fun KStatusCard(kpState: APApplication.State, apState: APApplication.State, navigator: DestinationsNavigator) {
+private fun KStatusCard(
+    kpState: APApplication.State,
+    apState: APApplication.State,
+    navigator: DestinationsNavigator
+) {
 
     val showAuthFailedTipDialog = remember { mutableStateOf(false) }
     if (showAuthFailedTipDialog.value) {
@@ -486,7 +509,8 @@ private fun KStatusCard(kpState: APApplication.State, apState: APApplication.Sta
                 navigator.navigate(InstallModeSelectScreenDestination)
             }
         },
-        colors = CardDefaults.elevatedCardColors(containerColor = cardBackgroundColor), elevation = CardDefaults.cardElevation(
+        colors = CardDefaults.elevatedCardColors(containerColor = cardBackgroundColor),
+        elevation = CardDefaults.cardElevation(
             defaultElevation = 6.dp
         )
     ) {
@@ -564,7 +588,7 @@ private fun KStatusCard(kpState: APApplication.State, apState: APApplication.Sta
                     if (kpState != APApplication.State.UNKNOWN_STATE && kpState != APApplication.State.KERNELPATCH_NEED_UPDATE && kpState != APApplication.State.KERNELPATCH_NEED_REBOOT) {
                         Spacer(Modifier.height(4.dp))
                         Text(
-                            text = "${Version.installedKPVString()} (${getManagerVersion().second}) - " +  if (apState != APApplication.State.ANDROIDPATCH_NOT_INSTALLED) "Full"  else "KernelPatch",
+                            text = "${Version.installedKPVString()} (${getManagerVersion().second}) - " + if (apState != APApplication.State.ANDROIDPATCH_NOT_INSTALLED) "Full" else "KernelPatch",
                             style = MaterialTheme.typography.bodyMedium
                         )
                     }
@@ -649,7 +673,7 @@ private fun AStatusCard(apState: APApplication.State) {
                 .fillMaxWidth()
                 .padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally
         ) {
-           Row {
+            Row {
                 Text(
                     text = stringResource(R.string.android_patch),
                     style = MaterialTheme.typography.titleMedium
@@ -786,9 +810,10 @@ private fun AStatusCard(apState: APApplication.State) {
 fun WarningCard() {
     var show by rememberSaveable { mutableStateOf(apApp.getBackupWarningState()) }
     if (show) {
-        ElevatedCard(elevation = CardDefaults.cardElevation(
-            defaultElevation = 6.dp
-        ),colors = CardDefaults.elevatedCardColors(containerColor = run {
+        ElevatedCard(
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = 6.dp
+            ), colors = CardDefaults.elevatedCardColors(containerColor = run {
                 MaterialTheme.colorScheme.error
             })
         ) {
@@ -872,7 +897,10 @@ private fun InfoCard(kpState: APApplication.State, apState: APApplication.State)
             }
 
             if (kpState != APApplication.State.UNKNOWN_STATE) {
-                InfoCardItem(stringResource(R.string.home_kpatch_version), Version.installedKPVString())
+                InfoCardItem(
+                    stringResource(R.string.home_kpatch_version),
+                    Version.installedKPVString()
+                )
 
                 Spacer(Modifier.height(16.dp))
                 InfoCardItem(stringResource(R.string.home_su_path), Natives.suPath())
@@ -881,7 +909,10 @@ private fun InfoCard(kpState: APApplication.State, apState: APApplication.State)
             }
 
             if (apState != APApplication.State.UNKNOWN_STATE && apState != APApplication.State.ANDROIDPATCH_NOT_INSTALLED) {
-                InfoCardItem(stringResource(R.string.home_apatch_version), getManagerVersion().second.toString())
+                InfoCardItem(
+                    stringResource(R.string.home_apatch_version),
+                    getManagerVersion().second.toString()
+                )
                 Spacer(Modifier.height(16.dp))
             }
 

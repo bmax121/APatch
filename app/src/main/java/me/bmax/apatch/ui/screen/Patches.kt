@@ -29,9 +29,12 @@ import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.outlined.Cached
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
@@ -276,29 +279,26 @@ private fun ExtraItem(extra: KPModel.IExtraInfo, existed: Boolean, onDelete: ()-
                 .fillMaxWidth()
                 .padding(12.dp),
         ) {
-            Row {
+            Row ( modifier = Modifier.align(Alignment.CenterHorizontally)) {
                 Text(text = stringResource(id =
                 if(existed) R.string.patch_item_existed_extra_kpm else R.string.patch_item_new_extra_kpm) +
-                        " " + extra.type.toString().lowercase(),
+                        " " + extra.type.toString().uppercase(),
                     style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier
-                        .padding(end = 8.dp)
-                        .weight(1f)
-                        .wrapContentWidth(Alignment.CenterHorizontally))
-                Icon(imageVector = Icons.Default.Close,
+                        .weight(1f).wrapContentWidth(Alignment.CenterHorizontally))
+                Icon(imageVector = Icons.Default.Delete,
                     contentDescription = "Delete",
-                    tint = Color.Red,
                     modifier = Modifier
                         .padding(end = 8.dp)
                         .clickable { onDelete() })
             }
             if(extra.type == KPModel.ExtraType.KPM) {
                 val kpmInfo: KPModel.KPMInfo = extra as KPModel.KPMInfo
-                Text(text = stringResource(id = R.string.patch_item_extra_name) + kpmInfo.name, style = MaterialTheme.typography.bodyMedium)
-                Text(text = stringResource(id = R.string.patch_item_extra_version) + kpmInfo.version, style = MaterialTheme.typography.bodyMedium)
-                Text(text = stringResource(id = R.string.patch_item_extra_kpm_license) + kpmInfo.license, style = MaterialTheme.typography.bodyMedium)
-                Text(text = stringResource(id = R.string.patch_item_extra_author) + kpmInfo.author, style = MaterialTheme.typography.bodyMedium)
-                Text(text = stringResource(id = R.string.patch_item_extra_kpm_desciption) + kpmInfo.description, style = MaterialTheme.typography.bodyMedium)
+                Text(text = "${stringResource(id = R.string.patch_item_extra_name)} ${kpmInfo.name}" , style = MaterialTheme.typography.bodyMedium)
+                Text(text = "${stringResource(id = R.string.patch_item_extra_version)} ${kpmInfo.version}", style = MaterialTheme.typography.bodyMedium)
+                Text(text = "${stringResource(id = R.string.patch_item_extra_kpm_license)} ${kpmInfo.license}", style = MaterialTheme.typography.bodyMedium)
+                Text(text = "${stringResource(id = R.string.patch_item_extra_author)} ${kpmInfo.author}", style = MaterialTheme.typography.bodyMedium)
+                Text(text = "${stringResource(id = R.string.patch_item_extra_kpm_desciption)} ${kpmInfo.description}", style = MaterialTheme.typography.bodyMedium)
                 var event by remember { mutableStateOf(kpmInfo.event) }
                 Row(modifier = Modifier
                     .fillMaxWidth()
@@ -353,7 +353,7 @@ private fun SetSuperKeyView(viewModel: PatchesViewModel) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 12.dp, end = 12.dp, bottom = 12.dp),
+                .padding(12.dp),
         ) {
             Column(
                 modifier = Modifier
@@ -364,7 +364,8 @@ private fun SetSuperKeyView(viewModel: PatchesViewModel) {
                     style = MaterialTheme.typography.bodyLarge
                 )
             }
-            if(showWarn) {
+            if (showWarn) {
+                Spacer(modifier = Modifier.height(3.dp))
                 Text(color = Color.Red,
                     text = stringResource(id = R.string.patch_item_set_skey_label),
                     style = MaterialTheme.typography.bodyMedium)
