@@ -20,13 +20,13 @@
     <string name="home_patch_set_key_desc">Пароль для KernelPatch</string>
     <string name="home_patch_next_step">Наступний крок</string>
     <string name="home_not_installed">Не встановлено</string>
-    <string name="home_install_unknown">Невідомо</string>
+    <string name="home_install_unknown">Не встановлено або автентифіковано</string>
     <string name="home_click_to_install">Натисніть щоб встановити</string>
-    <string name="home_working">Працює</string>
+    <string name="home_working">Працює😋</string>
     <string name="home_installing">Встановлення</string>
     <string name="kpatch_version">Версія: %s</string>
     <string name="apatch_version">Версія: %s</string>
-    <string name="home_su_path">su %s</string>
+    <string name="home_su_path">Виконуваний файл su</string>
     <string name="home_auth_key_title">Введіть SuperKey</string>
     <string name="home_ap_cando_update">Оновити</string>
     <string name="patch_title">Патч</string>
@@ -38,7 +38,7 @@
     <string name="home_selinux_status_permissive">Дозвільний</string>
     <string name="kpm">KPModule</string>
     <string name="kpm_kp_not_installed">KernelPatch не встановлено</string>
-    <string name="kpm_load">Додати</string>
+    <string name="kpm_load">Завантажити</string>
     <string name="kpm_load_toast_failed">Не вдалося встановити</string>
     <string name="kpm_author">Автор</string>
     <string name="kpm_args">Аргументи</string>
@@ -62,7 +62,7 @@
     <string name="about_source_code">&lt;p&gt;Перегляньте вихідний код на %1$s&lt;p/&gt; Приєднуйтеся до нашого %2$s каналу&lt;p/&gt;Приєднуйтеся до нашої %2$s групи</string>
     <string name="send_log">Надіслати звіт</string>
     <string name="apatch_version_update">Версія: %s → %s</string>
-    <string name="home_apatch_version">APatch %s</string>
+    <string name="home_apatch_version">Версія APatch %s</string>
     <string name="home_need_update">Доступне оновлення</string>
     <string name="home_auth_key_desc">Почати після сертифікації</string>
     <string name="home_ap_cando_uninstall">Видалити</string>
@@ -88,7 +88,7 @@
     <string name="apm_overlay_fs_not_available">Модулі недоступні, оскільки OverlayFS вимкнено ядром.</string>
     <string name="apm_magisk_conflict">Модулі недоступні через конфлікт з Magisk.</string>
     <string name="apm_downloading">Завантаження модуля \"%s\"…</string>
-    <string name="kpm_unload_confirm">Видалити \"%s\" module?</string>
+    <string name="kpm_unload_confirm">Видалити модуль \"%s\"?</string>
     <string name="apm_new_version_available">Натисніть, щоб встановити нову версію, %s.</string>
     <string name="apm_failed_to_disable">Не вдалося вимкнути модуль \"%s\"</string>
     <string name="settings_app_language">Мова</string>
@@ -100,13 +100,13 @@
     <string name="home_ap_cando_reboot">Перезавантаження</string>
     <string name="patch_config_title">Патчі</string>
     <string name="patch_mode_bootimg_patch">Режим: Патч</string>
-    <string name="patch_mode_patch_and_install">Режим: Оновлення</string>
+    <string name="patch_mode_patch_and_install">Режим: Пропатчити та встановити</string>
     <string name="patch_mode_uninstall_patch">Режим: Скасування патчу</string>
     <string name="patch_select_bootimg_btn">Виберіть boot</string>
     <string name="patch_embed_kpm_btn">Вбудований KPM</string>
     <string name="patch_start_patch_btn">Старт</string>
     <string name="patch_start_unpatch_btn">Скасування патчу</string>
-    <string name="patch_item_error">!!ОШИБКА!!</string>
+    <string name="patch_item_error">!!ПОМИЛКА!!</string>
     <string name="patch_item_bootimg">bootimg</string>
     <string name="patch_item_bootimg_slot">слот:</string>
     <string name="patch_item_bootimg_dev">пристрій:</string>
@@ -133,5 +133,46 @@
     <string name="success">Успішно</string>
     <string name="failure">Помилка</string>
     <string name="settings_check_update">Перевірити оновлення</string>
-    <string name="patch_ab_after_ota">A/B Патч</string>
+    <string name="settings_donot_store_superkey">Не зберігати SuperKey локально</string>
+    <string name="patch_mode_install_to_next_slot">Режим: Встановити в інший слот (Після OTA)</string>
+    <string name="hide_apatch_manager_summary">Встановити новий менеджер застосунок з випадковим ідентифікатором пакета та користувацькою назвою</string>
+    <string name="enable_web_debugging_summary">Можна використовувати для налагодження WebUI, вмикайте лише за потреби.</string>
+    <string name="home_new_apatch_found">Доступна нова версія: %s, Натисніть сюди для оновлення</string>
+    <string name="home_install_unknown_summary">Натисніть щоб встановити</string>
+    <string name="mode_select_page_patch_and_install">Пропатчити та встановити</string>
+    <string name="home_device_info">Пристрій</string>
+    <string name="home_system_version">Версія системи</string>
+    <string name="home_kpatch_version">Версія KernelPatch</string>
+    <string name="hide_apatch_dialog_new_manager_name">Нове ім\'я менеджера</string>
+    <string name="hide_apatch_dialog_summary">Воно буде використовуватися як нове ім\'я застосунку, яке відображатиметься на робочому столі</string>
+    <string name="hide_apatch_manager_failure">Не вдалося приховати, будь ласка повідомте про проблему!</string>
+    <string name="enable_web_debugging">Увімкнути налагодження WebView</string>
+    <string name="settings_donot_store_superkey_summary">Перевіряти валідність SyperKey щоразу при відкритті менеджера</string>
+    <string name="setting_reset_su_path">Скинути шлях до файлу su</string>
+    <string name="setting_reset_su_new_path">новий повний шлях</string>
+    <string name="webui_open">Відкрити WebUI</string>
+    <string name="hide_apatch_manager">Приховати APatch Manager</string>
+    <string name="kpm_embed">Вставити</string>
+    <string name="kpm_add_kpm">Додати KPM</string>
+    <string name="kpm_install">Встановити</string>
+    <string name="mode_select_page_title">Встановити</string>
+    <string name="home_more_menu_about">Про</string>
+    <string name="mode_select_page_install_inactive_slot">Встановити в неактивний слот (Після OTA)</string>
+    <string name="home_dialog_uninstall_title">Видалити</string>
+    <string name="home_dialog_uninstall_ap_only">Видалити AndroidPatch</string>
+    <string name="home_dialog_uninstall_all">Видалити повністю</string>
+    <string name="mode_select_page_select_file">Вибирати boot образ для патчу</string>
+    <string name="mode_select_page_install_inactive_slot_warning">Ваш пристрій буде **ПРИМУШЕНО** завантажитися в поточний неактивний слот після перезавантаження!
+\nВикористовуйте цей параметр лише після завершення OTA.
+\nПродовжити?</string>
+    <string name="home_dialog_auth_fail_content">Не вдалося автентифікувати супер ключ, тому APatch не може працювати належним чином.
+\nОсь деякі можливі причини відмови від автентифікації:
+\n1. Ви не пропатчни образ boot за допомогою KernelPatch.
+\n2. Пропатчений образ boot не завантажився.
+\n3. Супер ключ неправильний.
+\n4. У Ваш пристрій не підтримує APatch і KernelPatch.
+\n
+\nБудь ласка, перевірте та спробуйте знову. Якщо є ще питання, ви завжди можете запитати на офіційній сторінці репозиторію.</string>
+    <string name="home_more_menu_feedback_or_suggestion">Зворотній зв\'язок</string>
+    <string name="home_dialog_auth_fail_title">Помилка авторизації</string>
 </resources>

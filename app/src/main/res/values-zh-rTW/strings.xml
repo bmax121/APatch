@@ -21,7 +21,7 @@
     <string name="kpatch_version">版本：%s</string>
     <string name="apm_uninstall">解除安裝</string>
     <string name="kpm_kp_not_installed">KernelPatch 尚未安裝</string>
-    <string name="home_install_unknown">未知</string>
+    <string name="home_install_unknown">未安裝或未鑒權</string>
     <string name="apm_uninstall_confirm">確定要解除安裝「%s」模組？</string>
     <string name="su_pkg_excluded_setting_title">忽略</string>
     <string name="home_click_to_learn_apatch">學習有關 AndroidPatch 的功能及使用方式</string>
@@ -63,7 +63,7 @@
     <string name="home_selinux_status_disabled">停用</string>
     <string name="apm_new_version_available">點擊以安裝新版本的 %s。</string>
     <string name="apatch_version_update">版本：%s → %s</string>
-    <string name="home_working">執行中</string>
+    <string name="home_working">運作中 😋</string>
     <string name="apm_empty">尚未安裝模組</string>
     <string name="kpm_load">匯入</string>
     <string name="apm_update">更新</string>
@@ -81,9 +81,9 @@
     <string name="apm">AP模組</string>
     <string name="safe_mode">安全模式</string>
     <string name="super_key">超級密鑰</string>
-    <string name="home_apatch_version">APatch: %s</string>
+    <string name="home_apatch_version">APatch 版本</string>
     <string name="home_patch_set_key_title">設定超級密鑰</string>
-    <string name="home_su_path">su: %s</string>
+    <string name="home_su_path">可執行 SU 路徑</string>
     <string name="home_patch_next_step">下一步</string>
     <string name="home_auth_key_title">輸入超級密鑰</string>
     <string name="home_not_installed">尚未安裝</string>
@@ -142,4 +142,38 @@
     <string name="setting_reset_su_new_path">新的完整路徑</string>
     <string name="success">成功</string>
     <string name="failure">失敗</string>
+    <string name="settings_check_update">檢查更新</string>
+    <string name="mode_select_page_patch_and_install">修補並安裝</string>
+    <string name="mode_select_page_install_inactive_slot">安裝到非活動插槽（OTA 之後）</string>
+    <string name="mode_select_page_select_file">選擇要修補的「boot image」</string>
+    <string name="home_dialog_auth_fail_title">鑒權失敗</string>
+    <string name="enable_web_debugging">啟用 WebView 偵錯</string>
+    <string name="home_more_menu_feedback_or_suggestion">回饋或建議</string>
+    <string name="home_more_menu_about">關於</string>
+    <string name="mode_select_page_install_inactive_slot_warning">重新啟動後，您的裝置將**強制**啟動到目前非活動插槽！
+\n僅在 OTA 完成之後使用此選項。
+\n繼續？</string>
+    <string name="settings_check_update_summary">開啟應用程式時自動檢查更新</string>
+    <string name="webui_open">打開網頁介面</string>
+    <string name="enable_web_debugging_summary">可用於偵錯WebUI，請僅在需要時啟用。</string>
+    <string name="settings_donot_store_superkey">停用本機儲存密鑰</string>
+    <string name="home_dialog_auth_fail_content">無法驗證超級密鑰，因此 APatch 無法正常運作。
+\n以下是驗證失敗的一些可能原因：
+\n1. 您尚未使用 KernelPatch 程式修補啟動映像檔。
+\n2. 修補後的啟動映像檔未刷入裝置。
+\n3. 超級密鑰錯誤。
+\n4. 您的裝置不支援 APatch 和 KernelPatch。
+\n
+\n請檢查並再次嘗試。如果仍存在問題，您隨時可以在官方存放庫的議題頁面上提問。</string>
+    <string name="home_install_unknown_summary">點選安裝</string>
+    <string name="home_device_info">裝置</string>
+    <string name="home_new_apatch_found">新版本可用：%s，點選升級</string>
+    <string name="mode_select_page_title">安裝</string>
+    <string name="home_dialog_uninstall_title">解除安裝</string>
+    <string name="home_dialog_uninstall_ap_only">僅刪除 AndroidPatch</string>
+    <string name="home_dialog_uninstall_all">完全卸載</string>
+    <string name="home_system_version">系統版本</string>
+    <string name="home_kpatch_version">KernelPatch 版本</string>
+    <string name="settings_donot_store_superkey_summary">每次管理器啟動時驗證超級密鑰</string>
+    <string name="patch_mode_install_to_next_slot">模式：安裝到另一個插槽（OTA之後）</string>
 </resources>
