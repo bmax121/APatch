@@ -14,7 +14,7 @@
     <string name="patch_warnning">Kurulum işlemi risklidir. Lütfen verilerinizi yedeklediğinizden emin olun.</string>
     <string name="kpm_kp_not_installed">KernelPatch kurulu değil</string>
     <string name="home_patch_set_key_desc">KernelPatch için tek gerekli veri</string>
-    <string name="home_install_unknown">Bilinmiyor</string>
+    <string name="home_install_unknown">Kurulmadı veya kimliği doğrulanmadı</string>
     <string name="apm_uninstall_confirm">\"%s\" modülünü kaldır?</string>
     <string name="su_pkg_excluded_setting_title">Dahil etme</string>
     <string name="reboot_download">İndirme modunda yeniden başlat</string>
@@ -47,7 +47,7 @@
     <string name="kernel_patch">KernelPatch</string>
     <string name="home_click_to_install">Kurmak için tıklayın</string>
     <string name="home_selinux_status_unknown">Bilinmiyor</string>
-    <string name="home_apatch_version">APatch: %s</string>
+    <string name="home_apatch_version">APatch sürümü</string>
     <string name="about">Hakkında</string>
     <string name="home_selinux_status_permissive">Permissive</string>
     <string name="reboot">Yeniden başlat</string>
@@ -61,7 +61,7 @@
     <string name="home_patch_set_key_title">Süper Anahtar\'ı ayarla</string>
     <string name="apm_downloading">\"%s\"modülü indiriliyor…</string>
     <string name="su_hide_system_apps">Sistem uygulamalarını gizle</string>
-    <string name="home_su_path">su: %s</string>
+    <string name="home_su_path">su programı</string>
     <string name="apm_magisk_conflict">Magisk ile çakıştığı için modüllere erişilemiyor.</string>
     <string name="apm_desc">Açıklama</string>
     <string name="home_ap_cando_update">Güncelle</string>
@@ -71,7 +71,7 @@
     <string name="settings">Ayarlar</string>
     <string name="apm_new_version_available">Yeni sürüm %s, güncellemek için tıklayın.</string>
     <string name="apatch_version_update">Sürüm: %s -&gt; %s</string>
-    <string name="home_working">Çalışıyor</string>
+    <string name="home_working">Çalışıyor 😋</string>
     <string name="apm_empty">Hiç modül kurulmadı</string>
     <string name="kpm_load">Yükle</string>
     <string name="home_patch_next_step">Sonraki adım</string>
@@ -166,7 +166,13 @@
     <string name="webui_open">Web Arayüzünü Aç</string>
     <string name="enable_web_debugging">Web Görünümü Hata Ayıklamayı Etkinleştir</string>
     <string name="settings_donot_store_superkey_summary">Yönetici her başladığında süper anahtarın kimliğini doğrulayın</string>
-    <string name="patch_ab_after_ota">A/B Yaması</string>
     <string name="enable_web_debugging_summary">Web arayüzünde hata ayıklamak için kullanılabilir, lütfen yalnızca gerektiğinde etkinleştirin.</string>
     <string name="settings_donot_store_superkey">Süper anahtarı yerel olarak saklama</string>
+    <string name="home_system_version">Sistem sürümü</string>
+    <string name="home_dialog_uninstall_all">Tamamen kaldır</string>
+    <string name="home_install_unknown_summary">Kurmak için tıklayın</string>
+    <string name="home_device_info">Aygıt</string>
+    <string name="home_kpatch_version">KernelPatch sürümü</string>
+    <string name="home_dialog_uninstall_title">Kaldır</string>
+    <string name="home_dialog_uninstall_ap_only">AndroidPatch\'i kaldır</string>
 </resources>

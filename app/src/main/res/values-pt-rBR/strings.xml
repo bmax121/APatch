@@ -33,15 +33,15 @@
     <string name="home_patch_next_step">Próximo passo</string>
     <string name="home_not_installed">Não instalado</string>
     <string name="home_click_to_install">Clique para instalar</string>
-    <string name="home_working">Em execução</string>
-    <string name="home_install_unknown">Desconhecido</string>
+    <string name="home_working">Em execução 😋</string>
+    <string name="home_install_unknown">Não instalado ou autenticado</string>
     <string name="home_installing">Instalando</string>
     <string name="home_need_update">Nova versão disponível</string>
     <string name="kpatch_version">Versão: %s</string>
     <string name="apatch_version">Versão: %s</string>
-    <string name="home_su_path">su: %s</string>
+    <string name="home_su_path">Su executável</string>
     <string name="apatch_version_update">Versão: %s -&gt; %s</string>
-    <string name="home_apatch_version">APatch: %s</string>
+    <string name="home_apatch_version">Versão do APatch</string>
     <string name="home_auth_key_title">Inserir SuperKey</string>
     <string name="home_auth_key_desc">Iniciar após a certificação</string>
     <string name="home_ap_cando_install">Instalar</string>
@@ -143,7 +143,6 @@
     <string name="setting_reset_su_path">Redefinir caminho su</string>
     <string name="settings_check_update_summary">Verifique automaticamente se há atualizações ao abrir o app</string>
     <string name="settings_check_update">Verificar por atualização</string>
-    <string name="patch_ab_after_ota">Patch A/B</string>
     <string name="mode_select_page_install_inactive_slot">Instalar no slot inativo (após o OTA)</string>
     <string name="mode_select_page_install_inactive_slot_warning">Seu dispositivo será **FORÇADO** a inicializar no slot inativo atual após uma reinicialização!
 \nSó use esta opção após a conclusão do OTA.
@@ -169,4 +168,11 @@
     <string name="settings_donot_store_superkey">Não armazenar a SuperKey no local</string>
     <string name="home_new_apatch_found">Nova versão %s está disponível, clique para atualizar.</string>
     <string name="patch_mode_install_to_next_slot">Modo: Instalar no slot inativo (após o OTA)</string>
+    <string name="home_device_info">Dispositivo</string>
+    <string name="home_dialog_uninstall_ap_only">Remover AndroidPatch</string>
+    <string name="home_dialog_uninstall_all">Desinstalar completamente</string>
+    <string name="home_install_unknown_summary">Clique para instalar</string>
+    <string name="home_system_version">Versão do sistema</string>
+    <string name="home_kpatch_version">Versão do KernelPatch</string>
+    <string name="home_dialog_uninstall_title">Desinstalar</string>
 </resources>

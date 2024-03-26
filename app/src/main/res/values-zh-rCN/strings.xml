@@ -146,26 +146,24 @@
     <string name="mode_select_page_patch_and_install">修补并安装</string>
     <string name="mode_select_page_select_file">选择一个启动镜像并修补</string>
     <string name="mode_select_page_install_inactive_slot">安装到未使用的槽位（OTA 后）</string>
-    <string name="mode_select_page_install_inactive_slot_warning">制切换到另一个槽位！\n注意只能在 OTA 更新完成后的重启之前使用。\n确认？</string>
+    <string name="mode_select_page_install_inactive_slot_warning">将在重启后强制切换到另一个槽位！\\n注意只能在 OTA 更新完成后的重启之前使用。\\n确认？</string>
     <string name="home_dialog_auth_fail_title">鉴权失败</string>
     <string name="home_dialog_auth_fail_content">无法鉴权超级密钥，因此 APatch 无法正常工作。下面是一些可能导致鉴权失败的原因:\n1. 您未使用 KernelPatch 修补启动镜像\n2. KernelPatch 修补后的启动镜像没有被刷入\n3. 超级密钥输入错误\n4. 您的设备不支持 APatch\n\n请检查后重试，如果仍然存在问题，可以随时向官方仓库的 issues 页面发出提问。</string>
     <string name="home_more_menu_feedback_or_suggestion">反馈或建议</string>
     <string name="home_more_menu_about">关于</string>
     <string name="settings_check_update">检查更新</string>
-    <string name="patch_mode_install_to_next_slot">模式: 安装到另一槽位(OTA 后)</string>
+    <string name="patch_mode_install_to_next_slot">模式：安装到另一槽位(OTA 后)</string>
     <string name="webui_open">打开 WebUI</string>
     <string name="enable_web_debugging">开启 WebView 调试</string>
     <string name="home_new_apatch_found">有新版本可用: %s, 点我升级</string>
-    <string name="settings_check_update_summary">打开 app 时自动检查更新</string>
-    <string name="enable_web_debugging_summary">可以用来调试WebUI
-\n仅在需要时开启</string>
-    <string name="settings_donot_store_superkey">禁用本地保存密钥</string>
-    <string name="settings_donot_store_superkey_summary">每次打开管理器时验证超级密钥</string>
+    <string name="settings_check_update_summary">在应用启动后自动检查是否有最新版</string>
+    <string name="enable_web_debugging_summary">可用于调试 WebUI ，请仅在需要时启用。</string>
+    <string name="settings_donot_store_superkey">不在本地保存超级密钥</string>
+    <string name="settings_donot_store_superkey_summary">在每次打开管理器时都验证超级密钥</string>
     <string name="home_device_info">设备</string>
     <string name="home_system_version">系统版本</string>
     <string name="home_kpatch_version">KernelPatch 版本</string>
     <string name="home_dialog_uninstall_title">卸载</string>
-
     <string name="home_dialog_uninstall_ap_only">仅卸载 AndroidPatch</string>
     <string name="home_dialog_uninstall_all">完全卸载</string>
 </resources>

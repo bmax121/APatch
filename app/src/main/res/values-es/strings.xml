@@ -20,16 +20,16 @@
     <string name="send_log">Enviar registro</string>
     <string name="kpatch_version">Versión: %s</string>
     <string name="home_patch_set_key_desc">Clave única para KernelPatch</string>
-    <string name="home_install_unknown">Desconocido</string>
+    <string name="home_install_unknown">No instalado o autentificado</string>
     <string name="home_installing">Instalando</string>
     <string name="apatch_version">Versión: %s</string>
     <string name="safe_mode">Modo seguro</string>
     <string name="home_click_to_install">Toca para instalar</string>
     <string name="home_need_update">Nueva versión disponible</string>
     <string name="home_patch_set_key_title">Definir SuperKey</string>
-    <string name="home_su_path">su: %s</string>
+    <string name="home_su_path">Ejecutable su</string>
     <string name="apatch_version_update">Versión: %s → %s</string>
-    <string name="home_working">Funcionando</string>
+    <string name="home_working">Trabajando 😋</string>
     <string name="home_patch_next_step">Siguiente paso</string>
     <string name="home_not_installed">No instalado</string>
     <string name="home_auth_key_desc">Comenzar tras la certificación</string>
@@ -76,7 +76,7 @@
     <string name="su_refresh">Recargar</string>
     <string name="apm_failed_to_disable">No se ha podido desactivar el módulo \"%s</string>
     <string name="kernel_patch">KernelPatch</string>
-    <string name="home_apatch_version">APatch: %s</string>
+    <string name="home_apatch_version">Versión de APatch</string>
     <string name="apm_changelog">Registro de cambios</string>
     <string name="apm_uninstall_failed">No se ha podido desinstalar %s</string>
     <string name="apm_failed_to_enable">No se ha podido activar el módulo \"%s</string>
@@ -143,5 +143,36 @@
     <string name="kpm_add_kpm">Añadir KPM</string>
     <string name="settings_check_update_summary">Buscar actualizaciones automáticamente al abrir la aplicación</string>
     <string name="settings_check_update">Buscar actualizaciones</string>
-    <string name="patch_ab_after_ota">Parche A/B</string>
+    <string name="home_more_menu_feedback_or_suggestion">Comentarios o sugerencias</string>
+    <string name="home_more_menu_about">Acerca de</string>
+    <string name="mode_select_page_install_inactive_slot">Instalar en un slot inactivo (después de OTA)</string>
+    <string name="mode_select_page_select_file">Seleccione una imagen de arranque para parchear</string>
+    <string name="home_dialog_auth_fail_title">Autenticación fallida</string>
+    <string name="mode_select_page_title">Instalar</string>
+    <string name="mode_select_page_patch_and_install">Parchear e instalar</string>
+    <string name="mode_select_page_install_inactive_slot_warning">¡Su dispositivo será **FORZADO** a arrancar en la ranura inactiva actual después de un reinicio!
+\nUtilice esta opción sólo después de que la OTA haya finalizado.
+\n¿Continuar?</string>
+    <string name="enable_web_debugging">Habilitar la depuración de WebView</string>
+    <string name="home_install_unknown_summary">Haga clic para instalar</string>
+    <string name="home_device_info">Dispositivo</string>
+    <string name="home_system_version">Versión del sistema</string>
+    <string name="home_kpatch_version">Versión del KernelPatch</string>
+    <string name="home_dialog_uninstall_title">Desinstalar</string>
+    <string name="home_dialog_uninstall_ap_only">Quitar AndroidPatch</string>
+    <string name="home_dialog_uninstall_all">Desinstalación completa</string>
+    <string name="home_dialog_auth_fail_content">No se puede autenticar la superclave, por lo que APatch no puede funcionar correctamente.
+\nA continuación se muestran algunas posibles razones del error de autenticación:
+\n1. No has parcheado la imagen de arranque con KernelPatch.
+\n2. La imagen de inicio parcheada no se actualizó.
+\n3. Súper clave incorrecta.
+\n4. Su dispositivo no es compatible con APatch y KernelPatch.
+\n
+\nPor favor revisa e intenta de nuevo. Si todavía hay problemas, siempre puedes hacer preguntas en la página de problemas del repositorio oficial.</string>
+    <string name="webui_open">Open WebUI</string>
+    <string name="enable_web_debugging_summary">Se puede utilizar para depurar WebUI; habilítelo solo cuando sea necesario.</string>
+    <string name="settings_donot_store_superkey">Deshabilitar el guardado de la supervlave localmente</string>
+    <string name="patch_mode_install_to_next_slot">Modo: Instalar en el siguiente slot (después de OTA)</string>
+    <string name="settings_donot_store_superkey_summary">Verifique la superclave cada vez que se inicie el administrador</string>
+    <string name="home_new_apatch_found">Nueva versión disponible: %s, Haga clic aquí para actualizar</string>
 </resources>

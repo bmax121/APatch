@@ -16,18 +16,17 @@
     <string name="reboot_edl">But ke EDL</string>
     <string name="home_learn_apatch">Pelajari AndroidPatch</string>
     <string name="about">Tentang</string>
-    <string name="about_source_code">Lihat kode sumber di %1$s<br/>
-\nGabung ke saluran %2$s kami</string>
+    <string name="about_source_code">&lt;p&gt;Lihat kode sumber di %1$s&lt;p/&gt;Gabung kanal %2$s kami&lt;p/&gt;Gabung grup %2$s kami</string>
     <string name="send_log">Kirim Log</string>
     <string name="safe_mode">Mode aman</string>
     <string name="home_patch_set_key_desc">Kredensial untuk KernelPatch</string>
     <string name="home_patch_set_key_title">Pasang SuperKey</string>
-    <string name="home_install_unknown">Tidak teridentifikasi</string>
+    <string name="home_install_unknown">Belum diinstal/autentikasi</string>
     <string name="home_click_to_install">Klik untuk menginstal</string>
     <string name="home_patch_next_step">Selanjutnya</string>
     <string name="home_not_installed">Tidak terinstal</string>
     <string name="home">Beranda</string>
-    <string name="home_working">Berfungsi</string>
+    <string name="home_working">Berfungsi 😋</string>
     <string name="kpatch_version">Versi: %s</string>
     <string name="home_installing">Menginstal</string>
     <string name="apatch_version">Versi: %s</string>
@@ -39,8 +38,8 @@
     <string name="home_ap_cando_update">Membarui</string>
     <string name="home_ap_cando_uninstall">Hapus</string>
     <string name="home_ap_cando_install">Instal</string>
-    <string name="home_apatch_version">APatch: %s</string>
-    <string name="home_su_path">su: %s</string>
+    <string name="home_apatch_version">Versi APatch</string>
+    <string name="home_su_path">Program SU</string>
     <string name="home_kernel">Kernel</string>
     <string name="home_manager_version">Versi Manajer</string>
     <string name="patch_title">Patch</string>
@@ -72,7 +71,7 @@
     <string name="su_pkg_excluded_setting_title">Kecualikan</string>
     <string name="su_pkg_excluded_setting_summary">untuk modul</string>
     <string name="su_pkg_excluded_label">dikecualikan</string>
-    <string name="su_title">Superuser</string>
+    <string name="su_title">SuperUser</string>
     <string name="su_selinux_via_hook">bypass via hook</string>
     <string name="kpm_version">Versi</string>
     <string name="reboot_userspace">SoftReboot</string>
@@ -106,9 +105,9 @@
     <string name="patch_mode_bootimg_patch">Mode: Patch</string>
     <string name="patch_select_bootimg_btn">Pilih boot</string>
     <string name="patch_start_patch_btn">Mulai</string>
-    <string name="patch_item_error">!!ERROR!!</string>
-    <string name="patch_mode_patch_and_install">Mode: Pembaruan</string>
-    <string name="patch_item_bootimg_dev">Gawai:</string>
+    <string name="patch_item_error">!!GALAT!!</string>
+    <string name="patch_mode_patch_and_install">Mode: Patch dan Instal</string>
+    <string name="patch_item_bootimg_dev">Rute:</string>
     <string name="patch_item_kpimg_version">Versi:</string>
     <string name="patch_item_kpimg_comile_time">Waktu:</string>
     <string name="patch_item_kpimg_config">Konfigurasi:</string>
@@ -119,14 +118,14 @@
     <string name="patch_item_existed_extra_kpm">terpasang</string>
     <string name="patch_item_extra_name">Nama:</string>
     <string name="patch_item_extra_kpm_license">Lisensi:</string>
-    <string name="patch_item_extra_kpm_desciption">Keterangan:</string>
+    <string name="patch_item_extra_kpm_desciption">Deskripsi:</string>
     <string name="patch_item_skey">SuperKey</string>
     <string name="patch_item_set_skey_label">SuperKey memiliki panjang minimal 8 karakter serta memuat huruf dan angka</string>
     <string name="patch_item_extra_version">Versi:</string>
     <string name="patch_item_extra_author">Oleh:</string>
     <string name="patch_item_extra_args">Args:</string>
     <string name="patch_item_bootimg">Bootimg</string>
-    <string name="patch_mode_uninstall_patch">Mode: UnPatch</string>
+    <string name="patch_mode_uninstall_patch">Mode: Hapus KPatch</string>
     <string name="patch_start_unpatch_btn">UnPatch</string>
     <string name="patch_item_extra_event">Event:</string>
     <string name="patch_item_bootimg_slot">Slot:</string>
@@ -134,7 +133,7 @@
     <string name="kpm_install">Instal</string>
     <string name="kpm_embed">Pasang</string>
     <string name="hide_apatch_manager_failure">Gagal menyembunyikan, laporkan bug ini!</string>
-    <string name="hide_apatch_manager_summary">Instal manajer dengan label dipilih dan ID paket teracak</string>
+    <string name="hide_apatch_manager_summary">Instal manajer dengan label nama dipilih dan ID paket teracak</string>
     <string name="hide_apatch_dialog_new_manager_name">Nama baru manajer</string>
     <string name="hide_apatch_manager">Sembunyikan manajer</string>
     <string name="hide_apatch_dialog_summary">Digunakan sebagai nama aplikasi di peluncur</string>
@@ -142,4 +141,38 @@
     <string name="failure">Gagal</string>
     <string name="setting_reset_su_new_path">rute lengkap terbaru</string>
     <string name="setting_reset_su_path">Reset rute SU</string>
+    <string name="patch_mode_install_to_next_slot">Mode: Instal ke Slot lainnya (Setelah OTA)</string>
+    <string name="settings_check_update_summary">Cek versi terbaru setiap membuka manajer</string>
+    <string name="webui_open">Buka WebUI</string>
+    <string name="home_dialog_auth_fail_title">Gagal autentikasi</string>
+    <string name="home_more_menu_about">Tentang</string>
+    <string name="mode_select_page_patch_and_install">Patch dan Instal</string>
+    <string name="mode_select_page_select_file">Pilih Boot Image</string>
+    <string name="home_more_menu_feedback_or_suggestion">Saran dan Masukan</string>
+    <string name="mode_select_page_title">Instal</string>
+    <string name="mode_select_page_install_inactive_slot">Instal ke slot nonaktif (setelah OTA)</string>
+    <string name="home_kpatch_version">Versi KernelPatch</string>
+    <string name="enable_web_debugging">Pengawakutuan WebVeiw</string>
+    <string name="mode_select_page_install_inactive_slot_warning">Gawai akan **DIPAKSA** but ke slot nonaktif!
+\nHANYA gunakan setelah proses OTA selesai.
+\nLanjutkan?</string>
+    <string name="home_dialog_uninstall_title">Hapus</string>
+    <string name="home_dialog_uninstall_ap_only">Hapus AndroidPatch</string>
+    <string name="home_dialog_uninstall_all">Hapus sepenuhnya</string>
+    <string name="settings_check_update">Cek terbaru</string>
+    <string name="home_install_unknown_summary">Klik untuk menginstal</string>
+    <string name="home_device_info">Gawai</string>
+    <string name="home_system_version">Versi Sistem</string>
+    <string name="home_dialog_auth_fail_content">Gagal autentikasi SuperKey, APatch tidak dapat berfungsi normal.
+\nHal ini dapat disebabkan oleh:
+\n1. Boot Image tidak di-patch dengan KernelPatch.
+\n2. Tidak menginstal/flash Boot Image yg sudah di-patch.
+\n3. Salah memasukkan SuperKey.
+\n4. Gawai tidak mendukung APatch dan KernelPatch.
+\n
+\nCek dan coba kembali. Jika tetap gagal, dapat menanyakan pada laman di repositori resmi kami.</string>
+    <string name="enable_web_debugging_summary">Dapat mengawakutu WebUI, hanya aktifkan jika butuh.</string>
+    <string name="settings_donot_store_superkey_summary">Autentikasi SuperKey setiap membuka manajer</string>
+    <string name="settings_donot_store_superkey">Jangan simpan SuperKey</string>
+    <string name="home_new_apatch_found">Tersedia versi terbaru: %s, Klik untuk membarui</string>
 </resources>
