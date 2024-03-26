@@ -46,9 +46,6 @@ class MainActivity : AppCompatActivity() {
             APatchTheme {
                 val navController = rememberNavController()
                 val snackbarHostState = remember { SnackbarHostState() }
-                val navBackStackEntry by navController.currentBackStackEntryAsState()
-                val route = navBackStackEntry?.destination?.route
-                val showBottomBar = route == null || !route.startsWith("web_screen")
 
                 val navHostEngine = rememberNavHostEngine(
                     navHostContentAlignment = Alignment.TopCenter,
@@ -64,7 +61,7 @@ class MainActivity : AppCompatActivity() {
                     )
                 )
                 Scaffold(
-                    bottomBar = { if (showBottomBar) BottomBar(navController) },
+                    bottomBar = { BottomBar(navController) },
                     snackbarHost = { SnackbarHost(snackbarHostState) }
                 ) { innerPadding ->
                     CompositionLocalProvider(

@@ -20,11 +20,6 @@ import org.json.JSONObject
 import java.util.concurrent.CompletableFuture
 
 class WebViewInterface(val context: Context, private val webView: WebView) {
-
-    companion object {
-        var isHideSystemUI: Boolean = false
-    }
-
     @JavascriptInterface
     fun exec(cmd: String): String {
         val shell = createRootShell()
@@ -167,7 +162,6 @@ class WebViewInterface(val context: Context, private val webView: WebView) {
                 } else {
                     showSystemUI(context.window)
                 }
-                isHideSystemUI = enable
             }
         }
     }

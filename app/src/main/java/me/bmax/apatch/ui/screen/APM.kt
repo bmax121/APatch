@@ -77,8 +77,8 @@ import me.bmax.apatch.ui.component.ConfirmResult
 import me.bmax.apatch.ui.component.rememberConfirmDialog
 import me.bmax.apatch.ui.component.rememberLoadingDialog
 import me.bmax.apatch.ui.screen.destinations.InstallScreenDestination
-import me.bmax.apatch.ui.screen.destinations.WebScreenDestination
 import me.bmax.apatch.ui.viewmodel.APModuleViewModel
+import me.bmax.apatch.ui.webui.WebUIActivity
 import me.bmax.apatch.util.LocalSnackbarHost
 import me.bmax.apatch.util.download
 import me.bmax.apatch.util.hasMagisk
@@ -91,6 +91,8 @@ import okhttp3.OkHttpClient
 @Destination
 @Composable
 fun APModuleScreen(navigator: DestinationsNavigator) {
+    val context = LocalContext.current
+
     val state by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
     if (state != APApplication.State.ANDROIDPATCH_INSTALLED && state != APApplication.State.ANDROIDPATCH_NEED_UPDATE) {
         Column(
@@ -188,7 +190,11 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
                         navigator.navigate(InstallScreenDestination(it))
                     }, onClickModule = { id, name, hasWebUi ->
                         if (hasWebUi) {
-                            navigator.navigate(WebScreenDestination(id, name))
+                            context.startActivity(Intent(context, WebUIActivity::class.java)
+                                .setData(Uri.parse("apatch://webui/$id"))
+                                .putExtra("id", id)
+                                .putExtra("name", name)
+                            )
                         }
                     })
             }
