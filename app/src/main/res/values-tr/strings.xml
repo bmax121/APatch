@@ -77,7 +77,7 @@
     <string name="home_patch_next_step">Sonraki adım</string>
     <string name="home_auth_key_title">Süper Anahtarı girin</string>
     <string name="apm_update">Güncelle</string>
-    <string name="home_kernel">Kernel</string>
+    <string name="home_kernel">Çekirdek</string>
     <string name="home_not_installed">Kurulu değil</string>
     <string name="kpm">KP Modül</string>
     <string name="home_selinux_status_enforcing">Enforcing</string>
@@ -106,13 +106,13 @@
     <string name="patch_select_bootimg_btn">Önyüklemeyi seç</string>
     <string name="home_kpatch_info_title">Bilgi</string>
     <string name="patch_item_bootimg">önyükleme kalıbı</string>
-    <string name="patch_item_existed_extra_kpm">var olan</string>
+    <string name="patch_item_existed_extra_kpm">Var olan</string>
     <string name="patch_mode_uninstall_patch">Mod: Yama kaldır</string>
     <string name="patch_item_bootimg_slot">yuva:</string>
     <string name="patch_item_extra_name">ad:</string>
     <string name="patch_item_bootimg_dev">aygıt:</string>
     <string name="patch_start_patch_btn">Başlat</string>
-    <string name="patch_item_kernel">çekirdek</string>
+    <string name="patch_item_kernel">Çekirdek</string>
     <string name="patch_item_extra_version">sürüm:</string>
     <string name="patch_embed_kpm_btn">KPM göm</string>
     <string name="patch_item_kpimg">kpimg</string>
@@ -125,9 +125,9 @@
     <string name="patch_item_kpimg_comile_time">zaman:</string>
     <string name="patch_item_extra_kpm_desciption">açıklama:</string>
     <string name="patch_item_kpimg_config">yapılandırma:</string>
-    <string name="patch_item_new_extra_kpm">yeni göm</string>
+    <string name="patch_item_new_extra_kpm">Yeni göm</string>
     <string name="patch_item_extra_event">olay:</string>
-    <string name="patch_item_skey">süper anahtar</string>
+    <string name="patch_item_skey">Süper Anahtar</string>
     <string name="patch_item_set_skey_label">Süper anahtarın uzunluğu en az 8 karakter olmalı ve rakam ve harf içermelidir</string>
     <string name="hide_apatch_manager">APatch Yöneticisini Gizle</string>
     <string name="hide_apatch_dialog_summary">Başlatıcıda gösterilen yeni uygulama etiketi olarak kullanılacaktır</string>

@@ -104,13 +104,13 @@
     <string name="patch_item_bootimg">bootimg</string>
     <string name="patch_item_bootimg_slot">slot:</string>
     <string name="patch_item_bootimg_dev">dispositivo:</string>
-    <string name="patch_item_kernel">kernel</string>
+    <string name="patch_item_kernel">Kernel</string>
     <string name="patch_item_kpimg">kpimg</string>
     <string name="patch_item_kpimg_version">versão:</string>
     <string name="patch_item_kpimg_comile_time">hora:</string>
     <string name="patch_item_kpimg_config">configuração:</string>
-    <string name="patch_item_new_extra_kpm">incorporar novo</string>
-    <string name="patch_item_existed_extra_kpm">existia</string>
+    <string name="patch_item_new_extra_kpm">Incorporar novo</string>
+    <string name="patch_item_existed_extra_kpm">Existia</string>
     <string name="patch_item_extra_name">nome:</string>
     <string name="patch_item_extra_version">versão:</string>
     <string name="patch_item_extra_author">autor:</string>
@@ -126,7 +126,7 @@
     <string name="patch_start_unpatch_btn">UnPatch</string>
     <string name="patch_item_extra_args">argumentos:</string>
     <string name="patch_item_extra_event">evento:</string>
-    <string name="patch_item_skey">superkey</string>
+    <string name="patch_item_skey">SuperKey</string>
     <string name="settings_clear_super_key_dialog">Você realmente deseja continuar?</string>
     <string name="patch_item_set_skey_label">O comprimento da SuperKey deve ter pelo menos 8 caracteres e incluir números e letras</string>
     <string name="hide_apatch_dialog_new_manager_name">Nome do novo gerenciador</string>
