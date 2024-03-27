@@ -9,7 +9,7 @@
     <string name="send_log">发送日志</string>
     <string name="patch_warnning">安装过程存在风险，请确保您的数据已备份。</string>
     <string name="home_patch_set_key_desc">内核补丁的唯一授权凭证</string>
-    <string name="home_install_unknown">未安装或未鉴权</string>
+    <string name="home_install_unknown">未安装或未授权</string>
     <string name="home_install_unknown_summary">点击安装</string>
     <string name="reboot_download">重启至 Download</string>
     <string name="home_click_to_learn_apatch">了解 APatch 的功能和使用方法</string>
@@ -23,22 +23,22 @@
     <string name="home_click_to_install">点击安装</string>
     <string name="about">关于</string>
     <string name="reboot">重启</string>
-    <string name="home_need_update">有新版本可用</string>
+    <string name="home_need_update">可更新</string>
     <string name="home">主页</string>
     <string name="home_patch_set_key_title">设定超级密钥</string>
     <string name="settings">设置</string>
-    <string name="home_working">工作中 😋</string>
+    <string name="home_working">生效中😋</string>
     <string name="home_patch_next_step">下一步</string>
     <string name="home_not_installed">未安装</string>
     <string name="reboot_bootloader">重启至 Bootloader</string>
-    <string name="about_source_code"><![CDATA[<p>在 %1$s 查看我们的源码<p/>加入我们的 %2$s 频道<p/>加入我们的 %2$s 讨论组]]></string>
+    <string name="about_source_code">&lt;p&gt;在 %1$s 查看源码&lt;p/&gt;加入我们的 %2$s 频道&lt;p/&gt;加入我们的 %2$s 讨论组</string>
     <string name="home_auth_key_desc">通过验证后开始使用</string>
     <string name="kpatch_version">版本：%s</string>
     <string name="home_ap_cando_uninstall">卸载</string>
     <string name="apatch_version">版本：%s</string>
     <string name="home_ap_cando_install">安装</string>
-    <string name="home_apatch_version">APatch 版本</string>
-    <string name="home_su_path">可执行 SU 路径</string>
+    <string name="home_apatch_version">APatch 版本</string>
+    <string name="home_su_path">可执行 SU 路径</string>
     <string name="home_ap_cando_update">更新</string>
     <string name="apatch_version_update">版本：%s → %s</string>
     <string name="home_auth_key_title">输入超级密钥</string>
@@ -58,7 +58,7 @@
     <string name="home_selinux_status_disabled">禁用</string>
     <string name="kpm_load">加载</string>
     <string name="home_selinux_status_enforcing">强制模式</string>
-    <string name="kpm_license">许可证</string>
+    <string name="kpm_license">许可</string>
     <string name="kpm_apm_empty">尚未加载模块</string>
     <string name="kpm_load_toast_succ">加载成功</string>
     <string name="su_pkg_excluded_setting_title">排除模块</string>
@@ -66,7 +66,7 @@
     <string name="su_pkg_excluded_label">排除模块</string>
     <string name="su_title">超级用户</string>
     <string name="kpm_desc">描述</string>
-    <string name="su_selinux_via_hook">通过 Hook 绕过</string>
+    <string name="su_selinux_via_hook">通过劫持实现绕过</string>
     <string name="kpm_args">参数</string>
     <string name="su_refresh">刷新</string>
     <string name="su_show_system_apps">显示系统应用</string>
@@ -106,13 +106,13 @@
     <string name="patch_mode_bootimg_patch">修补模式</string>
     <string name="patch_mode_patch_and_install">修补并安装</string>
     <string name="patch_select_bootimg_btn">选择 Boot 镜像</string>
-    <string name="patch_start_patch_btn">开始</string>
+    <string name="patch_start_patch_btn">开始修补</string>
     <string name="patch_item_error">‼错误‼</string>
     <string name="patch_item_bootimg">启动镜像</string>
     <string name="patch_item_bootimg_slot">槽位：</string>
     <string name="patch_item_bootimg_dev">设备：</string>
-    <string name="patch_item_kernel">内核</string>
-    <string name="patch_item_kpimg">kpimg</string>
+    <string name="patch_item_kernel">内核版本</string>
+    <string name="patch_item_kpimg">内核补丁</string>
     <string name="patch_item_kpimg_version">版本：</string>
     <string name="patch_item_kpimg_comile_time">时间：</string>
     <string name="patch_item_kpimg_config">配置：</string>
@@ -121,12 +121,12 @@
     <string name="patch_item_extra_name">名称：</string>
     <string name="patch_item_extra_version">版本：</string>
     <string name="patch_item_extra_author">作者：</string>
-    <string name="patch_item_extra_kpm_license">许可证：</string>
+    <string name="patch_item_extra_kpm_license">许可：</string>
     <string name="patch_item_extra_kpm_desciption">描述：</string>
     <string name="patch_item_extra_args">参数：</string>
     <string name="patch_item_extra_event">事件：</string>
     <string name="patch_item_skey">超级密钥</string>
-    <string name="patch_item_existed_extra_kpm">已嵌入</string>
+    <string name="patch_item_existed_extra_kpm">已嵌入的</string>
     <string name="patch_item_set_skey_label">超级密钥至少需要８个字符，并且同时包含数字和字母</string>
     <string name="patch_mode_uninstall_patch">还原内核镜像</string>
     <string name="patch_start_unpatch_btn">取消修补</string>
@@ -134,35 +134,43 @@
     <string name="hide_apatch_dialog_summary">将使用新的名称安装管理器</string>
     <string name="hide_apatch_manager_failure">隐藏失败，请提交反馈！</string>
     <string name="hide_apatch_manager_summary">安装具有随机包名和自定义应用名称的新管理器应用</string>
-    <string name="hide_apatch_manager">隐藏 APatch 管理器</string>
+    <string name="hide_apatch_manager">隐藏 APatch 管理器</string>
     <string name="kpm_embed">嵌入</string>
     <string name="kpm_add_kpm">添加</string>
-    <string name="kpm_install">安裝</string>
-    <string name="setting_reset_su_path">自定义 su 路径</string>
-    <string name="setting_reset_su_new_path">新的完整路径</string>
+    <string name="kpm_install">安装</string>
+    <string name="setting_reset_su_path">自定义 su 路径</string>
+    <string name="setting_reset_su_new_path">新完整路径</string>
     <string name="success">成功</string>
     <string name="failure">失败</string>
     <string name="mode_select_page_title">安装</string>
     <string name="mode_select_page_patch_and_install">修补并安装</string>
     <string name="mode_select_page_select_file">选择一个启动镜像并修补</string>
     <string name="mode_select_page_install_inactive_slot">安装到未使用的槽位（OTA 后）</string>
-    <string name="mode_select_page_install_inactive_slot_warning">将在重启后强制切换到另一个槽位！\\n注意只能在 OTA 更新完成后的重启之前使用。\\n确认？</string>
-    <string name="home_dialog_auth_fail_title">鉴权失败</string>
-    <string name="home_dialog_auth_fail_content">无法鉴权超级密钥，因此 APatch 无法正常工作。下面是一些可能导致鉴权失败的原因:\n1. 您未使用 KernelPatch 修补启动镜像\n2. KernelPatch 修补后的启动镜像没有被刷入\n3. 超级密钥输入错误\n4. 您的设备不支持 APatch\n\n请检查后重试，如果仍然存在问题，可以随时向官方仓库的 issues 页面发出提问。</string>
+    <string name="mode_select_page_install_inactive_slot_warning">将在重启后强制切换到另一个槽位！
+\n注意只能在 OTA 更新完成后的重启之前使用。
+\n确定要继续吗？</string>
+    <string name="home_dialog_auth_fail_title">授权失败</string>
+    <string name="home_dialog_auth_fail_content">超级密钥无法授权，因此 APatch 不能正常工作。下面是一些导致授权失败的可能原因：
+\n⒈未使用 KernelPatch 修补内核镜像
+\n⒉KernelPatch 修补后的内核镜像未刷入
+\n⒊超级密钥输入错误
+\n⒋设备不支持 APatch 以及 KernelPatch
+\n
+\n请检查后重试，如果问题仍然存在，可随时前往 GitHub 仓库的 issues 页面提问。</string>
     <string name="home_more_menu_feedback_or_suggestion">反馈或建议</string>
     <string name="home_more_menu_about">关于</string>
     <string name="settings_check_update">检查更新</string>
     <string name="patch_mode_install_to_next_slot">模式：安装到另一槽位(OTA 后)</string>
     <string name="webui_open">打开 WebUI</string>
-    <string name="enable_web_debugging">开启 WebView 调试</string>
-    <string name="home_new_apatch_found">有新版本可用: %s, 点我升级</string>
-    <string name="settings_check_update_summary">在应用启动后自动检查是否有最新版</string>
-    <string name="enable_web_debugging_summary">可用于调试 WebUI ，请仅在需要时启用。</string>
+    <string name="enable_web_debugging">启用 WebView 调试</string>
+    <string name="home_new_apatch_found">发现新版本：%s，点击升级</string>
+    <string name="settings_check_update_summary">打开时自动检查是否有新版本</string>
+    <string name="enable_web_debugging_summary">可用于调试 WebUI，请仅在需要时启用。</string>
     <string name="settings_donot_store_superkey">不在本地保存超级密钥</string>
-    <string name="settings_donot_store_superkey_summary">在每次打开管理器时都验证超级密钥</string>
+    <string name="settings_donot_store_superkey_summary">每次打开管理器时验证超级密钥</string>
     <string name="home_device_info">设备</string>
     <string name="home_system_version">系统版本</string>
-    <string name="home_kpatch_version">KernelPatch 版本</string>
+    <string name="home_kpatch_version">KernelPatch 版本</string>
     <string name="home_dialog_uninstall_title">卸载</string>
     <string name="home_dialog_uninstall_ap_only">仅卸载 AndroidPatch</string>
     <string name="home_dialog_uninstall_all">完全卸载</string>

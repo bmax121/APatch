@@ -110,13 +110,13 @@
     <string name="patch_item_bootimg">bootimg</string>
     <string name="patch_item_bootimg_slot">слот:</string>
     <string name="patch_item_bootimg_dev">пристрій:</string>
-    <string name="patch_item_kernel">kernel</string>
+    <string name="patch_item_kernel">Ядро</string>
     <string name="patch_item_kpimg">kpimg</string>
     <string name="patch_item_kpimg_version">версія:</string>
     <string name="patch_item_kpimg_comile_time">час:</string>
     <string name="patch_item_kpimg_config">налаштування:</string>
-    <string name="patch_item_new_extra_kpm">вбудувати новий</string>
-    <string name="patch_item_existed_extra_kpm">існуючий</string>
+    <string name="patch_item_new_extra_kpm">Вбудувати новий</string>
+    <string name="patch_item_existed_extra_kpm">Існуючий</string>
     <string name="patch_item_extra_name">ім\'я:</string>
     <string name="patch_item_extra_version">версія:</string>
     <string name="patch_item_extra_author">автор:</string>
@@ -125,7 +125,7 @@
     <string name="patch_item_extra_args">аргументи:</string>
     <string name="patch_item_extra_event">подія:</string>
     <string name="patch_item_set_skey_label">Довжина суперключа повинна бути не менше 8 символів і включати числа і букви</string>
-    <string name="patch_item_skey">суперключ</string>
+    <string name="patch_item_skey">Суперключ</string>
     <string name="settings_clear_super_key_dialog">Ви дійсно хочете продовжити?</string>
     <string name="kpatch_version_update">Версія: %s -&gt; %s</string>
     <string name="home_kpatch_info_title">Інфо</string>
