@@ -24,14 +24,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.animations.defaults.NestedNavGraphDefaultAnimations
 import com.ramcosta.composedestinations.animations.defaults.RootNavGraphDefaultAnimations
 import com.ramcosta.composedestinations.navigation.popBackStack
 import com.ramcosta.composedestinations.rememberNavHostEngine
-import com.ramcosta.composedestinations.utils.isRouteOnBackStack
 import com.ramcosta.composedestinations.utils.isRouteOnBackStackAsState
 import me.bmax.apatch.APApplication
 import me.bmax.apatch.ui.screen.BottomBarDestination
@@ -85,6 +83,7 @@ class MainActivity : AppCompatActivity() {
 private fun BottomBar(navController: NavHostController) {
     NavigationBar(tonalElevation = 8.dp) {
         BottomBarDestination.entries.forEach { destination ->
+            val isCurrentDestOnBackStack by navController.isRouteOnBackStackAsState(destination.direction)
             val state by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
             val kPatchReady = state != APApplication.State.UNKNOWN_STATE
             val aPatchReady = (state == APApplication.State.ANDROIDPATCH_INSTALLING ||
@@ -93,7 +92,6 @@ private fun BottomBar(navController: NavHostController) {
             val hideDestination = (destination.kPatchRequired && !kPatchReady) ||
                                   (destination.aPatchRequired && !aPatchReady)
             if (hideDestination) return@forEach
-            val isCurrentDestOnBackStack by navController.isRouteOnBackStackAsState(destination.direction)
             NavigationBarItem(
                 selected = isCurrentDestOnBackStack,
                 onClick = {

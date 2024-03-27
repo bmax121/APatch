@@ -40,6 +40,7 @@ android {
         }
     }
 
+    dependenciesInfo.includeInApk = false
 
     buildFeatures {
         aidl = true

@@ -688,7 +688,7 @@ private fun AStatusCard(apState: APApplication.State) {
             ) {
                 when (apState) {
                     APApplication.State.ANDROIDPATCH_NOT_INSTALLED -> {
-                        Icon(Icons.AutoMirrored.Outlined.HelpOutline, stringResource(R.string.home_not_installed))
+                        Icon(Icons.Outlined.Block, stringResource(R.string.home_not_installed))
                     }
 
                     APApplication.State.ANDROIDPATCH_INSTALLING -> {

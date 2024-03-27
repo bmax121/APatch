@@ -2,9 +2,9 @@ package me.bmax.apatch.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val YELLOW = Color(0xFFeed502)
-val YELLOW_LIGHT = Color(0xFFffff52)
-val SECONDARY_LIGHT = Color(0xffa9817f)
+val YELLOW = Color(0xFF0061A4)
+val YELLOW_LIGHT = Color(0xFF535F70)
+val SECONDARY_LIGHT = Color(0xFF6B5778)
 
-val YELLOW_DARK = Color(0xFFb7a400)
-val SECONDARY_DARK = Color(0xFF4c2b2b)
+val YELLOW_DARK = Color(0xFF253140)
+val SECONDARY_DARK = Color(0xFFBBC7DB)
