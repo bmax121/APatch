@@ -17,25 +17,23 @@
     <string name="home_patch_set_key_desc">커널 패치에만 사용하는 비밀번호입니다</string>
     <string name="home_patch_next_step">다음 단계</string>
     <string name="home_not_installed">설치되지 않음</string>
-    <string name="home_install_unknown">알 수 없음</string>
-    <string name="home_click_to_install">클릭해서 설치하기</string>
-    <string name="home_working">작동 중</string>
+    <string name="home_install_unknown">알수 없음</string>
+    <string name="home_click_to_install">클릭하여 설치</string>
+    <string name="home_working">작동 중 😋</string>
     <string name="home_installing">설치중</string>
     <string name="home_need_update">새로운 버전이 사용 가능합니다</string>
-    <string name="kpatch_version">버전: %d.%d.%d</string>
-    <string name="apatch_version">버전
-\n%s</string>
-    <string name="apatch_version_update">버전
-\n%s -&gt; %s</string>
-    <string name="home_su_path">su 명령어 경로: %s</string>
-    <string name="home_apatch_version">안드로이드 패치: %s</string>
-    <string name="home_auth_key_title">루팅 비밀번호를 입력해주세요</string>
+    <string name="kpatch_version">버전: %s</string>
+    <string name="apatch_version">버전: %s</string>
+    <string name="apatch_version_update">버전: %s -&gt; %s</string>
+    <string name="home_su_path">Executable su</string>
+    <string name="home_apatch_version">APatch 버전</string>
+    <string name="home_auth_key_title">SuperKey를 입력해주세요</string>
     <string name="home_auth_key_desc">인증 후 시작하기</string>
     <string name="home_ap_cando_install">설치</string>
     <string name="home_ap_cando_update">업데이트</string>
     <string name="home_ap_cando_uninstall">제거</string>
-    <string name="home_kernel">커널 정보</string>
-    <string name="home_manager_version">매니저 버전</string>
+    <string name="home_kernel">커널 버전</string>
+    <string name="home_manager_version">매니저 앱 버전</string>
     <string name="home_fingerprint">기기 서명</string>
     <string name="home_selinux_status">SELinux 상태</string>
     <string name="home_selinux_status_disabled">꺼짐</string>
@@ -65,18 +63,18 @@
     <string name="apm_uninstall_failed">%s 을 제거하지 못했습니다</string>
     <string name="apm_version">버전</string>
     <string name="apm_author">저작자</string>
-    <string name="apm_overlay_fs_not_available">OverlayFS 가 사용 불가능합니다. 이 모듈은 사용 불가능합니다.</string>
+    <string name="apm_overlay_fs_not_available">커널에 의해 OverlayFS가 비활성화 되었음으로 모듈 사용이 불가능 합니다.</string>
     <string name="system_default">시스템 기본값</string>
     <string name="home_click_to_learn_apatch">안드로이드 패치의 기능과 사용법을 알아보기</string>
-    <string name="about_source_code">소스코드를 보려면 %1$s<br/> %2$s 로 들어와주세요</string>
+    <string name="about_source_code">&lt;p&gt;소스 코드를 보려면 %1$s&lt;p/&gt;채널 참여%2$s &lt;p/&gt;그룹 참여%2$s</string>
     <string name="safe_mode">안전 모드</string>
     <string name="kpm_load_toast_succ">불러오기 성공</string>
     <string name="home_learn_apatch">안드로이드 패치 알아보기</string>
     <string name="send_log">로그 보내기</string>
     <string name="super_key">루팅 비밀번호</string>
-    <string name="clear_super_key">비밀번호 지우기</string>
+    <string name="clear_super_key">Superkey 지우기</string>
     <string name="home_patch_set_key_title">루팅 비밀번호 정하기</string>
-    <string name="patch_title">패치하기</string>
+    <string name="patch_title">패치</string>
     <string name="su_title">슈퍼유저</string>
     <string name="reboot_userspace">단순 재부팅</string>
     <string name="reboot_recovery">리커버리로 재부팅</string>
@@ -86,7 +84,7 @@
     <string name="su_pkg_excluded_setting_title">제외하기</string>
     <string name="apm_not_installed">안드로이드 패치가 설치되지 않았습니다</string>
     <string name="apm_failed_to_enable">\"%s\" 모듈을 키지 못했습니다</string>
-    <string name="apm_magisk_conflict">Magisk 모듈과 충돌이 발생해 모듈들이 비활성화 되었습니다.</string>
+    <string name="apm_magisk_conflict">Magisk와 충돌이 발생해 모듈들이 비활성화 되었습니다.</string>
     <string name="apm_reboot_to_apply">적용하려면 재부팅해주세요</string>
     <string name="apm_changelog">변경사항</string>
     <string name="apm_update">업데이트</string>
@@ -98,4 +96,82 @@
     <string name="apm_desc">설명</string>
     <string name="settings_global_namespace_mode">글로벌 네임스페이스 모드</string>
     <string name="settings_global_namespace_mode_summary">모든 루트 세션은 글로벌 마운트 세션을 사용합니다</string>
+    <string name="settings_check_update">업데이트 확인</string>
+    <string name="settings_check_update_summary">앱을 실행할 때 자동으로 업데이트 확인하기</string>
+    <string name="home_kpatch_info_title">정보</string>
+    <string name="kpatch_shadow_path_title">kpatch</string>
+    <string name="patch_item_kpimg_comile_time">시간:</string>
+    <string name="patch_mode_uninstall_patch">모드: KPatch 제거</string>
+    <string name="patch_select_bootimg_btn">boot 선택</string>
+    <string name="patch_item_existed_extra_kpm">Existed</string>
+    <string name="patch_item_extra_name">이름:</string>
+    <string name="patch_item_extra_kpm_license">라이선스:</string>
+    <string name="patch_item_extra_author">제작자:</string>
+    <string name="patch_item_set_skey_label">Super Key의 길이는 숫자와 문자를 포함하여 8자리 이상이여야 합니다</string>
+    <string name="kpm_install">설치</string>
+    <string name="kpm_embed">포함시키기</string>
+    <string name="hide_apatch_dialog_new_manager_name">새로운 매니저 앱 이름</string>
+    <string name="hide_apatch_manager_summary">랜덤 패키지 ID와 지정 이름으로 매니저 앱 설치하기</string>
+    <string name="patch_item_extra_kpm_desciption">설명:</string>
+    <string name="home_new_apatch_found">새로운 버전 사용가능: %s, 클릭하여 업데이트 하기</string>
+    <string name="kpatch_version_update">버전: %s -&gt; %s</string>
+    <string name="home_more_menu_about">정보</string>
+    <string name="home_more_menu_feedback_or_suggestion">피드백 또는 제안</string>
+    <string name="kpm_add_kpm">커널 패치 모듈 추가</string>
+    <string name="home_install_unknown_summary">클릭하여 설치</string>
+    <string name="mode_select_page_install_inactive_slot">비활성화된 슬롯에 설치 (OTA 이후)</string>
+    <string name="mode_select_page_select_file">패치할 boot image 선택하기</string>
+    <string name="home_dialog_uninstall_title">제거</string>
+    <string name="home_dialog_uninstall_all">Uninstall completely</string>
+    <string name="patch_config_title">Patches</string>
+    <string name="patch_mode_patch_and_install">모드: Patch and install</string>
+    <string name="patch_item_extra_args">args:</string>
+    <string name="home_device_info">디바이스</string>
+    <string name="home_kpatch_version">KernelPatch 버전</string>
+    <string name="hide_apatch_manager">APatch 매니저 숨기기</string>
+    <string name="hide_apatch_dialog_summary">이것은 앱 서랍에서 보여질 이름 입니다</string>
+    <string name="hide_apatch_manager_failure">숨기기 실패, 버그를 제보해주세요!</string>
+    <string name="settings_donot_store_superkey_summary">매니저 앱을 시작할 때 마다 Super Key로 인증받기</string>
+    <string name="mode_select_page_patch_and_install">패치 후 설치</string>
+    <string name="mode_select_page_install_inactive_slot_warning">재부팅 이후 기기가 비활성화 된 슬롯으로 **강제** 부팅 될 것 입니다!
+\nOTA 이후에만 이 옵션을 사용하세요.
+\n계속하시겠습니까?</string>
+    <string name="home_dialog_uninstall_ap_only">AndroidPatch 제거</string>
+    <string name="home_ap_cando_reboot">재부팅</string>
+    <string name="patch_mode_bootimg_patch">모드: Patch</string>
+    <string name="patch_mode_install_to_next_slot">모드: 다음 를롯에 설치 (OTA 이후)</string>
+    <string name="patch_item_kpimg_config">설정:</string>
+    <string name="patch_item_new_extra_kpm">Embed new</string>
+    <string name="patch_item_extra_version">버전:</string>
+    <string name="patch_item_extra_event">이벤트:</string>
+    <string name="patch_item_skey">Super Key</string>
+    <string name="home_system_version">시스템 버전</string>
+    <string name="mode_select_page_title">설치</string>
+    <string name="home_dialog_auth_fail_title">인증 실패</string>
+    <string name="home_dialog_auth_fail_content">Super Key를 인증 할 수 없으므로 APatch가 적절히 작동 할 수 없습니다.
+\n여기 인증이 실패 할 수 있는 몇가지 원인이 있습니다:
+\n1. 커널 패치로 boot img를 패치하지 않은 경우.
+\n2. 패치한 boot image를 설치하지 않은 경우.
+\n3. 잘못된 Super Key.
+\n4. 디바이스가 Apatch와 KernelPatch를 지원하지 않는 경우.
+\n
+\n확인 후 재시도 해주세요. 계속 오류가 발생한다면, 공식 깃허브 repo의 issues 탭에 제보 해주세요 .</string>
+    <string name="patch_item_kernel">커널</string>
+    <string name="patch_item_kpimg">kpimg</string>
+    <string name="patch_item_kpimg_version">버전:</string>
+    <string name="patch_embed_kpm_btn">Embed KPM</string>
+    <string name="patch_start_patch_btn">시작</string>
+    <string name="patch_start_unpatch_btn">UnPatch</string>
+    <string name="patch_item_error">!!에러!!</string>
+    <string name="patch_item_bootimg">bootimg</string>
+    <string name="patch_item_bootimg_slot">슬롯:</string>
+    <string name="patch_item_bootimg_dev">기기:</string>
+    <string name="setting_reset_su_path">su path 재설정</string>
+    <string name="webui_open">WebUI 열기</string>
+    <string name="enable_web_debugging">WebView 디버깅 활성화</string>
+    <string name="enable_web_debugging_summary">Can be used to debug WebUI, 오직 필요할 때만 활성화 해주세요.</string>
+    <string name="settings_donot_store_superkey">기기에 Super Key 저장하지 않기</string>
+    <string name="success">성공</string>
+    <string name="failure">실패</string>
+    <string name="settings_clear_super_key_dialog">정말로 계속하시겠습니까?</string>
 </resources>
