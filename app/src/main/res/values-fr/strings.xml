@@ -23,19 +23,19 @@
     <string name="home_need_update">Nouvelle version disponible</string>
     <string name="apatch_version">Version : %s</string>
     <string name="home_patch_next_step">Suivant</string>
-    <string name="home_install_unknown">Inconnu</string>
+    <string name="home_install_unknown">Non installé ou authentifié</string>
     <string name="kpatch_version">Version : %s</string>
     <string name="clear_super_key">Effacer la clé</string>
-    <string name="home_su_path">su : %s</string>
-    <string name="home_apatch_version">APatch : %s</string>
+    <string name="home_su_path">Exécutable su</string>
+    <string name="home_apatch_version">Version d\'APatch</string>
     <string name="apatch_version_update">Version : %s -&gt; %s</string>
-    <string name="about_source_code">Voir le code source sur %1$s<br/>Rejoindre le canal %2$s</string>
+    <string name="about_source_code">&lt;p&gt;Voir le code source sur %1$s&lt;p/&gt;Rejoindre notre canal %2$s&lt;p/&gt;Rejoindre notre groupe %2$s</string>
     <string name="home_patch_set_key_title">Initialiser la clé</string>
     <string name="send_log">Envoyer le log</string>
     <string name="home_kernel">Noyau</string>
     <string name="kpm">KPModule</string>
     <string name="apm_version">Version</string>
-    <string name="home_working">Fonctionnel</string>
+    <string name="home_working">Fonctionnel 😋</string>
     <string name="home_patch_set_key_desc">Authentification unique pour KernelPatch</string>
     <string name="home_auth_key_title">Renseigner la clé</string>
     <string name="home_ap_cando_install">Installer</string>
@@ -101,8 +101,8 @@
     <string name="home_kpatch_info_title">Info</string>
     <string name="home_ap_cando_reboot">Redémarrer</string>
     <string name="patch_config_title">Patches</string>
-    <string name="patch_item_kernel">noyau</string>
-    <string name="patch_item_set_skey_label">La longueur de la super-clé devrait être d\'au moins 8 caractères et inclure les numéros et les lettres</string>
+    <string name="patch_item_kernel">Noyau</string>
+    <string name="patch_item_set_skey_label">La longueur de la clé doit être d\'au moins 8 caractères et inclure à la fois des numéros et des lettres</string>
     <string name="hide_apatch_dialog_new_manager_name">Nouveau nom du gestionnaire</string>
     <string name="hide_apatch_dialog_summary">Il sera utilisé comme label de la nouvelle application affichée dans le lanceur d\'applications</string>
     <string name="hide_apatch_manager_summary">Installer un nouveau gestionnaire avec un identifiant de paquet aléatoire et un label d\'application personnalisé</string>
@@ -122,13 +122,13 @@
     <string name="patch_item_kpimg_version">version :</string>
     <string name="patch_item_kpimg_comile_time">heure :</string>
     <string name="patch_item_kpimg_config">config :</string>
-    <string name="patch_item_new_extra_kpm">intégrer un nouveau</string>
+    <string name="patch_item_new_extra_kpm">Intégrer un nouveau</string>
     <string name="patch_item_extra_name">nom :</string>
     <string name="patch_item_extra_author">auteur :</string>
     <string name="patch_item_extra_kpm_license">licence :</string>
     <string name="patch_item_extra_kpm_desciption">description :</string>
     <string name="patch_item_extra_event">événement :</string>
-    <string name="patch_item_skey">clé</string>
+    <string name="patch_item_skey">Clé</string>
     <string name="kpm_add_kpm">Ajouter un KPM</string>
     <string name="kpm_install">Installer</string>
     <string name="kpm_embed">Intégrer</string>
@@ -139,5 +139,40 @@
     <string name="patch_item_extra_args">arguments :</string>
     <string name="hide_apatch_manager">Masquer le gestionnaire APatch</string>
     <string name="setting_reset_su_new_path">nouveau chemin complet</string>
-    <string name="patch_item_existed_extra_kpm">existait</string>
+    <string name="patch_item_existed_extra_kpm">Existait</string>
+    <string name="settings_donot_store_superkey_summary">Authentifier la clé à chaque démarrage du gestionnaire</string>
+    <string name="mode_select_page_select_file">Sélectionner une image boot à patcher</string>
+    <string name="mode_select_page_patch_and_install">Patcher et installer</string>
+    <string name="settings_check_update">Vérifier les mises à jour</string>
+    <string name="settings_check_update_summary">Vérifier automatiquement les mises à jour à l\'ouverture de l\'application</string>
+    <string name="home_more_menu_about">À propos</string>
+    <string name="home_install_unknown_summary">Cliquer pour installer</string>
+    <string name="home_device_info">Appareil</string>
+    <string name="home_system_version">Version du système</string>
+    <string name="home_kpatch_version">Version de KernelPatch</string>
+    <string name="enable_web_debugging_summary">Peut être utilisé pour déboguer l\'interface web, n\'activer cette option qu\'en cas de besoin.</string>
+    <string name="home_new_apatch_found">Nouvelle version disponible : %s, Cliquer pour mettre à jour</string>
+    <string name="home_dialog_auth_fail_title">Echec de l\'authentification</string>
+    <string name="home_dialog_uninstall_title">Désinstaller</string>
+    <string name="home_dialog_uninstall_ap_only">Supprimer AndroidPatch</string>
+    <string name="home_dialog_uninstall_all">Désinstaller complètement</string>
+    <string name="patch_mode_install_to_next_slot">Mode : Installer dans le slot suivant (après OTA)</string>
+    <string name="mode_select_page_title">Installer</string>
+    <string name="mode_select_page_install_inactive_slot">Installer dans le slot inactif (après OTA)</string>
+    <string name="home_more_menu_feedback_or_suggestion">Commentaires ou suggestions</string>
+    <string name="patch_mode_patch_and_install">Mode : Patcher et installer</string>
+    <string name="mode_select_page_install_inactive_slot_warning">Votre appareil sera **FORCÉ** de démarrer sur le slot inactif actuel après un redémarrage !
+\nN\'utilisez cette option qu\'une fois l\'OTA terminée.
+\nContinuer ?</string>
+    <string name="home_dialog_auth_fail_content">Impossible d\'authentifier la clé, par conséquent APatch ne peut pas fonctionner correctement.
+\nVoici quelques raisons possibles de l\'échec de l\'authentification :
+\n1. Vous n\'avez pas patché l\'image de démarrage avec KernelPatch.
+\n2. L\'image de démarrage patchée n\'a pas été flashée.
+\n3. La clé est erronée.
+\n4. Votre appareil ne prend pas en charge APatch et KernelPatch.
+\n
+\nVeuillez vérifier et réessayer. Si des problèmes persistent, vous pouvez toujours poser vos questions sur le dépôt officiel.</string>
+    <string name="settings_donot_store_superkey">Ne pas stocker la clé localement</string>
+    <string name="webui_open">Ouvrir l\'interface web</string>
+    <string name="enable_web_debugging">Activer le débogage WebView</string>
 </resources>

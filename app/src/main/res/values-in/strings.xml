@@ -38,8 +38,8 @@
     <string name="home_ap_cando_update">Membarui</string>
     <string name="home_ap_cando_uninstall">Hapus</string>
     <string name="home_ap_cando_install">Instal</string>
-    <string name="home_apatch_version">Versi APatch</string>
-    <string name="home_su_path">Jalur SU</string>
+    <string name="home_apatch_version">APatch</string>
+    <string name="home_su_path">SU</string>
     <string name="home_kernel">Kernel</string>
     <string name="home_manager_version">Versi Manajer</string>
     <string name="patch_title">Patch</string>
@@ -61,7 +61,7 @@
     <string name="apm_changelog">Catatan perubahan</string>
     <string name="kpm_author">Oleh</string>
     <string name="apm_downloading">Modul %s sedang diunduh…</string>
-    <string name="apm_new_version_available">Klik untuk membarui ke versi %s</string>
+    <string name="apm_new_version_available">Klik untuk membarui ke versi %s.</string>
     <string name="apm_update">Membarui</string>
     <string name="su_refresh">Muat ulang</string>
     <string name="apm_failed_to_disable">Gagal menonaktifkan modul %s</string>
@@ -77,7 +77,7 @@
     <string name="reboot_userspace">SoftReboot</string>
     <string name="home_selinux_status_unknown">Unknown</string>
     <string name="home_selinux_status_permissive">Permissive</string>
-    <string name="home_selinux_status">Status SELinux</string>
+    <string name="home_selinux_status">SELinux</string>
     <string name="kpm_load_toast_failed">Gagal memuat</string>
     <string name="home_selinux_status_disabled">Nonaktif</string>
     <string name="kpm_load">Muat</string>
@@ -151,7 +151,7 @@
     <string name="home_more_menu_feedback_or_suggestion">Saran dan Masukan</string>
     <string name="mode_select_page_title">Instal</string>
     <string name="mode_select_page_install_inactive_slot">Instal ke slot nonaktif (setelah OTA)</string>
-    <string name="home_kpatch_version">Versi KernelPatch</string>
+    <string name="home_kpatch_version">KernelPatch</string>
     <string name="enable_web_debugging">Pengawakutuan WebVeiw</string>
     <string name="mode_select_page_install_inactive_slot_warning">Gawai akan **DIPAKSA** but ke slot nonaktif!
 \nHANYA gunakan setelah proses OTA selesai.
@@ -162,7 +162,7 @@
     <string name="settings_check_update">Cek terbaru</string>
     <string name="home_install_unknown_summary">Klik untuk menginstal</string>
     <string name="home_device_info">Gawai</string>
-    <string name="home_system_version">Versi Sistem</string>
+    <string name="home_system_version">Sistem</string>
     <string name="home_dialog_auth_fail_content">Gagal autentikasi SuperKey, APatch tidak dapat berfungsi normal.
 \nHal ini dapat disebabkan oleh:
 \n1. Boot Image tidak di-patch dengan KernelPatch.
