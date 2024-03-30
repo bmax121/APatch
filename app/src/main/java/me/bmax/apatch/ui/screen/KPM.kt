@@ -17,16 +17,26 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material3.AlertDialogDefaults
+import androidx.compose.material3.BasicAlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -35,13 +45,17 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -50,15 +64,23 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
+import androidx.compose.ui.window.DialogWindowProvider
 import androidx.compose.ui.window.PopupProperties
+import androidx.compose.ui.window.SecureFlagPolicy
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -84,6 +106,7 @@ import me.bmax.apatch.util.*
 import java.io.IOException
 
 private const val TAG = "KernelPatchModule"
+private lateinit var targetKPMToControl : KPModel.KPMInfo
 
 @Destination
 @Composable
@@ -238,6 +261,121 @@ suspend fun loadModule(loadingDialog: LoadingDialogHandle, uri: Uri, args: Strin
     return rc
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun KPMControlDialog(showDialog: MutableState<Boolean>) {
+    var controlParam by remember { mutableStateOf("") }
+    var enable by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+    val loadingDialog = rememberLoadingDialog()
+    val context = LocalContext.current
+    val resultStringRes = stringResource(id = R.string.kpm_control_result_code);
+    val outMsgStringRes = stringResource(id = R.string.kpm_control_outMsg);
+    val okStringRes = stringResource(id = R.string.kpm_control_ok);
+    val failedStringRes = stringResource(id = R.string.kpm_control_failed);
+
+    lateinit var controlResult: Natives.KPMCtlRes
+
+    suspend fun onModuleControl(module: KPModel.KPMInfo) {
+        loadingDialog.withLoading {
+            withContext(Dispatchers.IO) {
+                controlResult = Natives.kernelPatchModuleControl(module.name, controlParam)
+            }
+        }
+
+        if (controlResult.rc >= 0) {
+            Toast.makeText(context, "$okStringRes ${resultStringRes}: ${controlResult.rc}, ${outMsgStringRes}: ${controlResult.outMsg}", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(context, "$failedStringRes ${resultStringRes}: ${controlResult.rc}, ${outMsgStringRes}: ${controlResult.outMsg}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    BasicAlertDialog(
+        onDismissRequest = { showDialog.value = false },
+        properties = DialogProperties(
+            decorFitsSystemWindows = true,
+            usePlatformDefaultWidth = false,
+            securePolicy = SecureFlagPolicy.SecureOff
+        )
+    ) {
+        Surface(
+            modifier = Modifier
+                .width(310.dp)
+                .wrapContentHeight(),
+            shape = RoundedCornerShape(30.dp),
+            tonalElevation = AlertDialogDefaults.TonalElevation,
+            color = AlertDialogDefaults.containerColor,
+        ) {
+            Column(modifier = Modifier.padding(PaddingValues(all = 24.dp))) {
+                // Title
+                Box(
+                    Modifier
+                        .padding(PaddingValues(bottom = 16.dp))
+                        .align(Alignment.Start)
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.kpm_control_dialog_title),
+                        style = MaterialTheme.typography.headlineSmall
+                    )
+                }
+
+                // Content
+                Box(
+                    Modifier
+                        .weight(weight = 1f, fill = false)
+                        .align(Alignment.Start)
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.kpm_control_dialog_content),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+
+                // Content2
+                Box(
+                    contentAlignment = Alignment.CenterEnd,
+                ) {
+                    OutlinedTextField(
+                        value = controlParam,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 6.dp),
+                        onValueChange = {
+                            controlParam = it
+                            enable = controlParam.isNotBlank()
+                        },
+                        shape = RoundedCornerShape(50.0f),
+                        label = { Text(stringResource(id = R.string.kpm_control_paramters)) },
+                        visualTransformation = VisualTransformation.None,
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+                // Buttons
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    TextButton(onClick = { showDialog.value = false }) {
+                        Text(stringResource(id = android.R.string.cancel))
+                    }
+
+                    Button(onClick = {
+                        showDialog.value = false
+
+                        scope.launch { onModuleControl(targetKPMToControl) }
+
+                    }, enabled = enable) {
+                        Text(stringResource(id = android.R.string.ok))
+                    }
+                }
+            }
+        }
+        val dialogWindowProvider = LocalView.current.parent as DialogWindowProvider
+        APDialogBlurBehindUtils.setupWindowBlurListener(dialogWindowProvider.window)
+    }
+}
+
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun KPModuleList(
@@ -253,9 +391,12 @@ private fun KPModuleList(
     val confirmDialog = rememberConfirmDialog()
     val loadingDialog = rememberLoadingDialog()
 
+    val showKPMControlDialog = remember { mutableStateOf(false) }
+    if (showKPMControlDialog.value) {
+        KPMControlDialog(showDialog = showKPMControlDialog)
+    }
 
     suspend fun onModuleUninstall(module: KPModel.KPMInfo) {
-
         val confirmResult = confirmDialog.awaitConfirm(
             moduleStr,
             content = moduleUninstallConfirm.format(module.name),
@@ -316,6 +457,10 @@ private fun KPModuleList(
                             onUninstall = {
                                 scope.launch { onModuleUninstall(module) }
                             },
+                            onControl = {
+                                targetKPMToControl = module
+                                showKPMControlDialog.value = true
+                            },
                         )
 
                         // fix last item shadow incomplete in LazyColumn
@@ -343,6 +488,7 @@ private fun TopBar() {
 private fun KPModuleItem(
     module: KPModel.KPMInfo,
     onUninstall: (KPModel.KPMInfo) -> Unit,
+    onControl: (KPModel.KPMInfo) -> Unit,
 ) {
     ElevatedCard(
         modifier = Modifier.fillMaxWidth(),
@@ -358,7 +504,6 @@ private fun KPModuleItem(
                 val moduleVersion = stringResource(id = R.string.kpm_version)
                 val moduleLicense = stringResource(id = R.string.kpm_license)
                 val moduleAuthor = stringResource(id = R.string.kpm_author)
-                val moduleDesc = stringResource(id = R.string.kpm_desc)
                 val moduleArgs = stringResource(id = R.string.kpm_args)
 
                 Column(modifier = Modifier.fillMaxWidth(0.8f)) {
@@ -432,6 +577,17 @@ private fun KPModuleItem(
 
                 TextButton(
                     enabled = true,
+                    onClick = { onControl(module) },
+                ) {
+                    Text(
+                        fontFamily = MaterialTheme.typography.labelMedium.fontFamily,
+                        fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                        text = stringResource(R.string.kpm_control),
+                    )
+                }
+
+                TextButton(
+                    enabled = true,
                     onClick = { onUninstall(module) },
                 ) {
                     Text(
@@ -440,6 +596,7 @@ private fun KPModuleItem(
                         text = stringResource(R.string.kpm_unload),
                     )
                 }
+
             }
         }
     }

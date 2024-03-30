@@ -20,6 +20,12 @@
     public static void throw*(...);
 }
 
+# KPM Control
+-keep class me.bmax.apatch.Natives$KPMCtlRes {
+    <fields>;
+    <methods>;
+}
+
 -repackageclasses
 -allowaccessmodification
 -overloadaggressively

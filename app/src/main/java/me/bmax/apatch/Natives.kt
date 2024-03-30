@@ -20,6 +20,19 @@ object Natives {
     ) : Parcelable {
     }
 
+    class KPMCtlRes {
+        var rc: Long = 0
+        var outMsg: String? = null
+
+        constructor()
+
+        constructor(rc: Long, outMsg: String?) {
+            this.rc = rc
+            this.outMsg = outMsg
+        }
+    }
+
+
     private external fun nativeSu(superKey: String, toUid: Int, scontext: String? ): Int
 
     fun su(toUid: Int, scontext: String?): Boolean {
@@ -68,6 +81,11 @@ object Natives {
     private external fun nativeKernelPatchModuleInfo(superKey: String, moduleName: String): String
     fun kernelPatchModuleInfo( moduleName: String): String {
         return nativeKernelPatchModuleInfo(APApplication.superKey, moduleName)
+    }
+
+    private external fun nativeControlKernelPatchModule(superKey: String, modName: String, jctlargs: String): KPMCtlRes
+    fun kernelPatchModuleControl(moduleName: String, controlArg: String): KPMCtlRes {
+        return nativeControlKernelPatchModule(APApplication.superKey, moduleName, controlArg)
     }
 
     external fun nativeThreadSu(superKey: String, uid: Int, scontext: String?): Long

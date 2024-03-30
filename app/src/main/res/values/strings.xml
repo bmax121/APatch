@@ -125,6 +125,7 @@
     <string name="kpm_load_toast_failed">Load failed</string>
     <string name="kpm_unload_confirm">Unload \"%s\" module?</string>
     <string name="kpm_unload">Unload</string>
+    <string name="kpm_control">Control</string>
     <string name="kpm_apm_empty">No module loaded</string>
     <string name="kpm_version">Version</string>
     <string name="kpm_license">License</string>
@@ -198,4 +199,13 @@
 
     <string name="home_dialog_uninstall_ap_only">Remove AndroidPatch</string>
     <string name="home_dialog_uninstall_all">Uninstall completely</string>
+
+    <string name="kpm_control_dialog_title">Control KPModule</string>
+    <string name="kpm_control_dialog_content">Input control parameters:</string>
+    <string name="kpm_control_paramters">Parameters</string>
+
+    <string name="kpm_control_result_code">Result</string>
+    <string name="kpm_control_outMsg">Message</string>
+    <string name="kpm_control_ok">Operation succeeded!</string>
+    <string name="kpm_control_failed">Operation failed!</string>
 </resources>
