@@ -4,15 +4,15 @@
     <string name="app_name" translatable="false">APatch</string>
     <string name="home">الرئيسية</string>
     <string name="patch_warnning">التثبيت يأتي بمخاطر. يرجى التأكد من عمل نسخ احتياطي لبياناتك.</string>
-    <string name="kernel_patch">باتش النواة</string>
-    <string name="android_patch">باتش الأندرويد</string>
+    <string name="kernel_patch">KernelPatch</string>
+    <string name="android_patch">AndroidPatch</string>
     <string name="reboot">إعادة تشغيل</string>
     <string name="settings">الإعدادات</string>
     <string name="reboot_userspace">إعادة تشغيل ناعمة</string>
     <string name="reboot_recovery">إعادة تشغيل إلي وضع الاسترداد</string>
     <string name="reboot_bootloader">إعادة تشغيل إلي محمل الإقلاع</string>
     <string name="reboot_download">إعادة تشغيل إلي وضع التنزيل</string>
-    <string name="reboot_edl">اعادة تشغيل إلي EDL</string>
+    <string name="reboot_edl">إعادة تشغيل إلي EDL</string>
     <string name="about">حول</string>
     <string name="home_learn_apatch">تعلم AndroidPatch</string>
     <string name="home_click_to_learn_apatch">تعرف على ميزات AndroidPatch وكيفية استخدامه</string>
@@ -29,22 +29,22 @@
     <string name="home_patch_next_step">الخطوة التالية</string>
     <string name="kpatch_version">الإصدار: %d.%d.%d</string>
     <string name="home_not_installed">لم يتم التثبيت</string>
-    <string name="home_install_unknown">غير معروف</string>
+    <string name="home_install_unknown">غير مثبت أو مصادق عليه</string>
     <string name="home_need_update">اصدار جديد متوفر</string>
     <string name="apatch_version">الإصدار:
 \n%s</string>
     <string name="apatch_version_update">الإصدار:
 \n%s -&gt; %s</string>
     <string name="home_auth_key_desc">البدء بعد التوثيق</string>
-    <string name="home_su_path">su: %s</string>
-    <string name="home_apatch_version">APatch: %s</string>
+    <string name="home_su_path">مستخدم خارق قابل للتنفيذ</string>
+    <string name="home_apatch_version">إصدار APatch: %s</string>
     <string name="home_auth_key_title">ادخل المفتاح الخارق</string>
     <string name="home_ap_cando_install">تثبيت</string>
     <string name="home_ap_cando_update">تحديث</string>
     <string name="home_ap_cando_uninstall">إلغاء التثبيت</string>
     <string name="home_kernel">النواة</string>
     <string name="patch_title">باتش</string>
-    <string name="home_manager_version">اصدار المدير</string>
+    <string name="home_manager_version">إصدار المدير</string>
     <string name="kpm_unload">إلغاء التحميل</string>
     <string name="kpm_apm_empty">لم يتم تحميل أي إضافة</string>
     <string name="home_selinux_status_unknown">غير معروف</string>
@@ -82,7 +82,7 @@
     <string name="apm_reboot_to_apply">أعد التشغيل لاتخاذ التأثير</string>
     <string name="system_default">النظام الافتراضي</string>
     <string name="settings_app_language">اللغة</string>
-    <string name="apm">إضافات AP</string>
+    <string name="apm">إضافة AP</string>
     <string name="apm_failed_to_enable">غير قادر علي تشغيل الإضافة \"%s\"</string>
     <string name="apm_author">المؤلف</string>
     <string name="apm_changelog">سجل التغييرات</string>
@@ -108,8 +108,8 @@
     <string name="home_ap_cando_reboot">إعادة تشغيل</string>
     <string name="patch_config_title">باتشات</string>
     <string name="patch_mode_bootimg_patch">الوضع: باتش</string>
-    <string name="patch_mode_uninstall_patch">الوضع: إلغاء للباتش</string>
-    <string name="patch_select_bootimg_btn">حدد التمهيد</string>
+    <string name="patch_mode_uninstall_patch">الوضع: إلغاء تثبيت KPatch</string>
+    <string name="patch_select_bootimg_btn">حدد صورة التمهيد</string>
     <string name="patch_embed_kpm_btn">تضمين KPM</string>
     <string name="patch_start_patch_btn">البدء</string>
     <string name="patch_start_unpatch_btn">ألغاء الباتش</string>
@@ -142,4 +142,39 @@
     <string name="setting_reset_su_path">إعادة تعيين مسار su</string>
     <string name="success">نجاح</string>
     <string name="failure">فشل</string>
+    <string name="mode_select_page_title">تثبيت</string>
+    <string name="settings_check_update">البحث عن تحديث</string>
+    <string name="settings_check_update_summary">التحقق تلقائيًا من وجود تحديثات عند فتح التطبيق</string>
+    <string name="home_install_unknown_summary">اضغط للتثبيت</string>
+    <string name="home_device_info">الجهاز</string>
+    <string name="home_system_version">إصدار النظام</string>
+    <string name="home_kpatch_version">إصدار KernelPatch</string>
+    <string name="settings_donot_store_superkey">لا تقم بتخزين المفتاح الخارق محلياً</string>
+    <string name="settings_donot_store_superkey_summary">قم بتوثيق المفتاح الخارق في كل مرة يبدأ فيها المدير</string>
+    <string name="home_new_apatch_found">إصدار الجديد متوفر: %s، اضغط فوقي للترقية</string>
+    <string name="mode_select_page_patch_and_install">باتش وتثبيت</string>
+    <string name="mode_select_page_select_file">اختر صورة تهميد لـAPatch</string>
+    <string name="home_dialog_auth_fail_title">فشلت المصادقة</string>
+    <string name="home_more_menu_feedback_or_suggestion">التعليقات أو الاقتراحات</string>
+    <string name="home_more_menu_about">حول</string>
+    <string name="home_dialog_uninstall_title">إلغاء تثبيت</string>
+    <string name="home_dialog_uninstall_ap_only">إزالة AndroidPatch</string>
+    <string name="home_dialog_uninstall_all">إلغاء التثبيت بالكامل</string>
+    <string name="mode_select_page_install_inactive_slot">التثبيت على الفتحة غير النشطة (بعد OTA)</string>
+    <string name="mode_select_page_install_inactive_slot_warning">**سيتم إجبار جهازك** على التمهيد إلى الفتحة غير النشطة الحالية بعد إعادة التشغيل!
+\nاستخدم هذا الخيار فقط بعد انتهاء OTA.
+\nهل تريد المتابعة؟</string>
+    <string name="home_dialog_auth_fail_content">غير قادر على مصادقة المفتاح الخارق، وبالتالي لا يمكن لـ APatch العمل بشكل صحيح.
+\nفيما يلي بعض الأسباب المحتملة لفشل المصادقة:
+\n1. لم تقم بتصحيح صورة التمهيد باستخدام KernelPatch.
+\n2. لم يتم تثبيت صورة التمهيد المصححة.
+\n3. مفتاح خارق خطأ.
+\n4. جهازك لا يدعم APatch وKernelPatch.
+\n
+\nيرجى المراجعة وحاول مرة أخرى. إذا كانت لا تزال هناك مشكلات، فيمكنك دائمًا طرح الأسئلة على صفحة المشكلات الخاصة بالمستودع الرسمي.</string>
+    <string name="patch_mode_patch_and_install">الوضع: باتش وتثبيت</string>
+    <string name="patch_mode_install_to_next_slot">الوضع: التثبيت في الفتحة التالية (بعد OTA)</string>
+    <string name="webui_open">فتح WebUI</string>
+    <string name="enable_web_debugging">تمكين تصحيح أخطاء WebView</string>
+    <string name="enable_web_debugging_summary">يمكن استخدامه لتصحيح أخطاء WebUI، يرجى تمكينه فقط عند الحاجة.</string>
 </resources>
