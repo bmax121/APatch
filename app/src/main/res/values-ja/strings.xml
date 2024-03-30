@@ -129,4 +129,23 @@
     <string name="patch_item_kpimg_comile_time">時刻:</string>
     <string name="patch_item_kpimg_config">設定:</string>
     <string name="patch_item_extra_kpm_license">ライセンス:</string>
+    <string name="settings_check_update">アップデートを確認</string>
+    <string name="hide_apatch_manager_summary">ランダムなパッケージIDとカスタムラベルで新しくマネージャーアプリをインストールする</string>
+    <string name="hide_apatch_manager">APatchマネージャーを隠す</string>
+    <string name="settings_check_update_summary">アプリを開いたときに自動でアップデートを確認する</string>
+    <string name="kpm_install">インストール</string>
+    <string name="kpm_embed">埋め込む</string>
+    <string name="hide_apatch_manager_failure">非表示に失敗しました！
+\nバグを報告してください</string>
+    <string name="home_install_unknown_summary">クリックしてインストール</string>
+    <string name="setting_reset_su_path">suパッチをリセット</string>
+    <string name="webui_open">ウェブUIを開く</string>
+    <string name="patch_mode_install_to_next_slot">モード:別のスロットにインストール(OTA後）</string>
+    <string name="home_device_info">デバイス</string>
+    <string name="home_system_version">システムバージョン</string>
+    <string name="home_kpatch_version">カーネルパッチバージョン</string>
+    <string name="success">成功</string>
+    <string name="failure">失敗</string>
+    <string name="hide_apatch_dialog_summary">これはランチャーに表示される新しいアプリのラベルとして使用されます。</string>
+    <string name="home_dialog_uninstall_all">アンインストールが完了しました</string>
 </resources>
