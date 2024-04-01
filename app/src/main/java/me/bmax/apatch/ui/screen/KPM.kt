@@ -269,7 +269,6 @@ fun KPMControlDialog(showDialog: MutableState<Boolean>) {
     val scope = rememberCoroutineScope()
     val loadingDialog = rememberLoadingDialog()
     val context = LocalContext.current
-    val resultStringRes = stringResource(id = R.string.kpm_control_result_code);
     val outMsgStringRes = stringResource(id = R.string.kpm_control_outMsg);
     val okStringRes = stringResource(id = R.string.kpm_control_ok);
     val failedStringRes = stringResource(id = R.string.kpm_control_failed);
@@ -284,9 +283,9 @@ fun KPMControlDialog(showDialog: MutableState<Boolean>) {
         }
 
         if (controlResult.rc >= 0) {
-            Toast.makeText(context, "$okStringRes ${resultStringRes}: ${controlResult.rc}, ${outMsgStringRes}: ${controlResult.outMsg}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "$okStringRes\n${outMsgStringRes}: ${controlResult.outMsg}", Toast.LENGTH_SHORT).show()
         } else {
-            Toast.makeText(context, "$failedStringRes ${resultStringRes}: ${controlResult.rc}, ${outMsgStringRes}: ${controlResult.outMsg}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "$failedStringRes\n${outMsgStringRes}: ${controlResult.outMsg}", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -307,7 +306,6 @@ fun KPMControlDialog(showDialog: MutableState<Boolean>) {
             color = AlertDialogDefaults.containerColor,
         ) {
             Column(modifier = Modifier.padding(PaddingValues(all = 24.dp))) {
-                // Title
                 Box(
                     Modifier
                         .padding(PaddingValues(bottom = 16.dp))
@@ -319,7 +317,6 @@ fun KPMControlDialog(showDialog: MutableState<Boolean>) {
                     )
                 }
 
-                // Content
                 Box(
                     Modifier
                         .weight(weight = 1f, fill = false)
@@ -331,7 +328,6 @@ fun KPMControlDialog(showDialog: MutableState<Boolean>) {
                     )
                 }
 
-                // Content2
                 Box(
                     contentAlignment = Alignment.CenterEnd,
                 ) {
@@ -351,7 +347,6 @@ fun KPMControlDialog(showDialog: MutableState<Boolean>) {
                 }
 
                 Spacer(modifier = Modifier.height(12.dp))
-                // Buttons
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End

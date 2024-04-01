@@ -198,13 +198,11 @@
     <string name="home_dialog_uninstall_title">Uninstall</string>
 
     <string name="home_dialog_uninstall_ap_only">Remove AndroidPatch</string>
-    <string name="home_dialog_uninstall_all">Uninstall completely</string>
+    <string name="home_dialog_uninstall_all">Uninstall All</string>
 
     <string name="kpm_control_dialog_title">Control KPModule</string>
     <string name="kpm_control_dialog_content">Input control parameters:</string>
     <string name="kpm_control_paramters">Parameters</string>
-
-    <string name="kpm_control_result_code">Result</string>
     <string name="kpm_control_outMsg">Message</string>
     <string name="kpm_control_ok">Operation succeeded!</string>
     <string name="kpm_control_failed">Operation failed!</string>

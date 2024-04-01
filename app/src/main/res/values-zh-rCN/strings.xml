@@ -174,4 +174,10 @@
     <string name="home_dialog_uninstall_title">卸载</string>
     <string name="home_dialog_uninstall_ap_only">仅卸载系统补丁</string>
     <string name="home_dialog_uninstall_all">完全卸载</string>
+    <string name="kpm_control_dialog_title">控制内核模块</string>
+    <string name="kpm_control_dialog_content">请输入控制参数:</string>
+    <string name="kpm_control_paramters">参数</string>
+    <string name="kpm_control_outMsg">信息</string>
+    <string name="kpm_control_ok">操作成功！</string>
+    <string name="kpm_control_failed">操作失败!</string>
 </resources>
