@@ -72,6 +72,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.bmax.apatch.APApplication
+import me.bmax.apatch.APApplication.Companion.SAFEMODE_FILE
 import me.bmax.apatch.R
 import me.bmax.apatch.ui.component.ConfirmResult
 import me.bmax.apatch.ui.component.rememberConfirmDialog
@@ -81,12 +82,20 @@ import me.bmax.apatch.ui.viewmodel.APModuleViewModel
 import me.bmax.apatch.ui.webui.WebUIActivity
 import me.bmax.apatch.util.LocalSnackbarHost
 import me.bmax.apatch.util.download
+import me.bmax.apatch.util.getRootShell
 import me.bmax.apatch.util.hasMagisk
 import me.bmax.apatch.util.isScrollingUp
 import me.bmax.apatch.util.reboot
+import me.bmax.apatch.util.shellForResult
 import me.bmax.apatch.util.toggleModule
+import me.bmax.apatch.util.tryGetRootShell
 import me.bmax.apatch.util.uninstallModule
 import okhttp3.OkHttpClient
+
+private fun getSafeMode(): Boolean {
+    val shell = getRootShell()
+    return shellForResult(shell, "[ -e $SAFEMODE_FILE ] && echo 'IS_SAFE_MODE'").out.contains("IS_SAFE_MODE")
+}
 
 @Destination
 @Composable
@@ -120,8 +129,7 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
         }
     }
 
-    // todo
-    val isSafeMode = false
+    val isSafeMode = getSafeMode()
     val hasMagisk = hasMagisk()
     val hideInstallButton = isSafeMode || hasMagisk || !viewModel.isOverlayAvailable
 
