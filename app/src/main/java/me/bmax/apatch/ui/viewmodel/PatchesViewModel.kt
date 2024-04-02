@@ -137,7 +137,11 @@ class PatchesViewModel : ViewModel() {
                 if(checkSuperKeyValidation(superkey)) {
                     this.superkey = superkey
                 }
-                val kpmNum = kernel["extra_num"]?.toInt()
+                var kpmNum = kernel["extra_num"]?.toInt()
+                if(kpmNum == null) {
+                    val extras = ini["extras"]
+                    kpmNum = extras?.get("num")?.toInt()
+                }
                 if(kpmNum != null && kpmNum > 0) {
                     for (i in 0..<kpmNum) {
                         val extra = ini["extra $i"]
