@@ -50,7 +50,7 @@ fn exec_install_script(module_file: &str) -> Result<()> {
             ),
         )
         .env("APATCH", "true")
-        .env("APATCH_VER_NAME", defs::VERSION_NAME)
+        .env("APATCH_VER", defs::VERSION_NAME)
         .env("APATCH_VER_CODE", defs::VERSION_CODE)
         .env("OUTFD", "1")
         .env("ZIPFILE", realpath)
@@ -221,7 +221,7 @@ fn exec_script<T: AsRef<Path>>(path: T, wait: bool) -> Result<()> {
         .arg(path.as_ref())
         .env("ASH_STANDALONE", "1")
         .env("APATCH", "true")
-        .env("APATCH_VER_NAME", defs::VERSION_NAME)
+        .env("APATCH_VER", defs::VERSION_NAME)
         .env("APATCH_VER_CODE", defs::VERSION_CODE)
         .env(
             "PATH",

@@ -1,13 +1,12 @@
 use anyhow::{bail, Context, Result};
 use log::{info, warn};
 use std::env;
-use std::path::PathBuf;
 use std::{collections::HashMap, path::Path};
 
 use crate::module::prune_modules;
 use crate::{
     assets, defs, mount, restorecon,
-    utils::{self, ensure_clean_dir, ensure_dir_exists},
+    utils::{self, ensure_clean_dir},
 };
 
 fn mount_partition(partition_name: &str, lowerdir: &Vec<String>) -> Result<()> {
@@ -110,19 +109,13 @@ pub fn on_post_data_fs() -> Result<()> {
         return Ok(());
     }
 
-    let key = "SUPERKEY";
-    match env::var(key) {
-        Ok(value) => println!("{}: {}", key, value),
-        Err(_) => println!("{} not found", key)
-    }
-
-    let key = "KERNEL_PATCH_VER";
+    let key = "KERNELPATCH_VERSION";
     match env::var(key) {
         Ok(value) => println!("{}: {}", key, value),
         Err(_) => println!("{} not found", key),
     }
 
-    let key = "KERNEL_VER";
+    let key = "KERNEL_VERSION";
     match env::var(key) {
         Ok(value) => println!("{}: {}", key, value),
         Err(_) => println!("{} not found", key),
