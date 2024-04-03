@@ -15,10 +15,7 @@ class PackageConfigListener : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         intent?.let {
-            if (it.action == Intent.ACTION_PACKAGE_ADDED ||
-                it.action == Intent.ACTION_PACKAGE_REPLACED ||
-                it.action == Intent.ACTION_PACKAGE_REMOVED
-            ) {
+            if (it.action == Intent.ACTION_PACKAGE_REMOVED) {
                 val prefs =
                     context?.getSharedPreferences(APApplication.SP_NAME, Context.MODE_PRIVATE)
                 if (prefs?.getString(APatchKeyHelper.SUPER_KEY_ENC, null).isNullOrBlank()) {
@@ -26,28 +23,21 @@ class PackageConfigListener : BroadcastReceiver() {
                         return
                     }
                 }
-
                 APatchKeyHelper.setSharedPreferences(prefs)
                 APApplication.superKey = APatchKeyHelper.readSPSuperKey()
-                var configs: HashMap<String, PkgConfig.Config> = HashMap()
-                thread {
-                    Natives.su()
-                    configs = PkgConfig.readConfigs()
-                }.join()
 
                 it.data?.encodedSchemeSpecificPart?.let { packageName ->
-                    val currPackageConfig = configs[packageName] ?: return
-                    val currentUid = currPackageConfig.profile.uid
                     val packageInfo = context?.packageManager?.getPackageInfo(packageName, 0)
-                    val newUid = packageInfo?.applicationInfo?.uid
+                    val uid = packageInfo?.applicationInfo?.uid
 
-                    if (newUid != null && newUid != currentUid) {
-                        Log.d(TAG, "UID has changed for package $packageName! New UID: $newUid")
+                    if(uid == null) {
+                        Log.e(TAG, "package $packageName uninstall, but can't find uid")
+                    } else {
+                        Log.e(TAG, "package $packageName uninstall, uid: $uid")
 
-                        currPackageConfig.profile.uid = newUid
-                        PkgConfig.changeConfigByPkgChange(currPackageConfig)
+                        val config = PkgConfig.Config(packageName, 1, 0, Natives.Profile(uid, 0, ""));
+                        PkgConfig.changeConfig(config)
                     }
-
                 }
             }
         }

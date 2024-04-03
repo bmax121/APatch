@@ -181,11 +181,7 @@ private fun AppItem(
                     } else {
                         Natives.revokeSu(app.uid)
                     }
-                    runBlocking {
-                        launch(Dispatchers.IO) {
-                            PkgConfig.changeConfig(config)
-                        }
-                    }
+                    PkgConfig.changeConfig(config)
                 })
         },
     )
@@ -210,11 +206,7 @@ fun EditUser(app: SuperUserViewModel.AppInfo) {
 //                viahook = !viahook
 //                if (viahook) app.config.profile.scontext = ""
 //                else app.config.profile.scontext = APApplication.MAGISK_SCONTEXT
-//                runBlocking {
-//                    launch(Dispatchers.IO) {
 //                        PkgConfig.changeConfig(app.config)
-//                    }
-//                }
 //            },
 //        )
 //        SwitchItem(
@@ -224,12 +216,8 @@ fun EditUser(app: SuperUserViewModel.AppInfo) {
 //            checked = exclude != 0,
 //            onCheckedChange = {
 //                exclude = if (it) 1 else 0
-//                runBlocking {
-//                    launch(Dispatchers.IO) {
 //                        app.config.exclude = exclude
 //                        PkgConfig.changeConfig(app.config)
-//                    }
-//                }
 //            },
 //        )
     }

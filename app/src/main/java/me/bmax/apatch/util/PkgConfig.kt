@@ -74,30 +74,9 @@ object PkgConfig {
         writer.close()
     }
 
-    fun changeConfigByPkgChange(config: Config) {
+    fun changeConfig(config: Config) {
         thread {
-            Natives.su()
-            val configs = readConfigs()
-            val pkg = config.pkg
-            val uid = config.profile.uid
-            if (config.allow == 0) {
-                // revoke all uid
-                val toRemove = configs.filter { it.key == pkg || it.value.profile.uid == uid }
-                toRemove.forEach {
-                    Log.d(TAG, "remove config: $it")
-                    configs.remove(it.key)
-                }
-            } else {
-                Log.d(TAG, "change config: $config")
-                configs[config.pkg] = config
-            }
-            writeConfigs(configs)
-        }.join()
-    }
-
-    suspend fun changeConfig(config: Config) {
-        mutex.withLock {
-            thread {
+            synchronized(PkgConfig.javaClass) {
                 Natives.su()
                 val configs = readConfigs()
                 val pkg = config.pkg
@@ -114,7 +93,7 @@ object PkgConfig {
                     configs[config.pkg] = config
                 }
                 writeConfigs(configs)
-            }.join()
+            }
         }
     }
 }
