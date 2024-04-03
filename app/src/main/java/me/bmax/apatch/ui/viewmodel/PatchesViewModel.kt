@@ -41,7 +41,7 @@ class PatchesViewModel : ViewModel() {
     var bootSlot by mutableStateOf("")
     var bootDev by mutableStateOf("")
     var kimgInfo by mutableStateOf(KPModel.KImgInfo("", false))
-    var kpimgInfo by mutableStateOf(KPModel.KPImgInfo("","","", ""))
+    var kpimgInfo by mutableStateOf(KPModel.KPImgInfo("","","", "", ""))
     var superkey by mutableStateOf("")
     var existedExtras = mutableStateListOf<KPModel.IExtraInfo>()
     var newExtras = mutableStateListOf<KPModel.IExtraInfo>()
@@ -104,7 +104,9 @@ class PatchesViewModel : ViewModel() {
                     kpimg["version"].toString(),
                     kpimg["compile_time"].toString(),
                     kpimg["config"].toString(),
-                    kpimg["superkey"].toString(),   // empty
+//                    kpimg["superkey"].toString(),   // empty
+                    APApplication.superKey,     // current key
+                    kpimg["root_superkey"].toString(),   // empty
                 )
             } else {
                 error += "parse kpimg error\n"
