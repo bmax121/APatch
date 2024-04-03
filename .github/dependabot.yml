@@ -4,13 +4,32 @@ updates:
     directory: "/"
     schedule:
       interval: daily
-      time: "21:00"
     target-branch: main
     registries:
       - maven-google
       - gradle-plugin
     groups:
       maven-dependencies:
+        patterns:
+          - "*"
+
+  - package-ecosystem: github-actions
+    target-branch: main
+    directory: /
+    schedule:
+      interval: daily
+    groups:
+      action-dependencies:
+        patterns:
+          - "*"
+
+  - package-ecosystem: cargo
+    target-branch: main
+    directory: apd/
+    schedule:
+      interval: daily
+    groups:
+      rust-dependencies:
         patterns:
           - "*"
 
