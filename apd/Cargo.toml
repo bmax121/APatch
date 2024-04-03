@@ -14,7 +14,7 @@ zip = "0.6"
 zip-extensions = "0.6"
 java-properties = "2.0.0"
 log = "0.4"
-env_logger = "0.10"
+env_logger = "0.11"
 serde = { version = "1" }
 serde_json = "1"
 regex = "1"
@@ -27,11 +27,11 @@ jwalk = "0.8"
 is_executable = "1"
 nom = "7"
 derive-new = "0.6.0"
-rust-embed = { version = "8.0.0", features = [
+rust-embed = { version = "8.3.0", features = [
     "debug-embed",
     "compression", # must clean build after updating binaries
 ] }
-which = "5"
+which = "6"
 getopts = "0.2"
 sha256 = "1"
 tempdir = "0.3"
