@@ -80,12 +80,6 @@ jobs:
           sed -i 's/org.gradle.configuration-cache=true//g' gradle.properties
           ./gradlew clean assembleRelease
 
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: APatch
-          path: app/build/outputs/apk/release/*.apk
-
       - name: Sign Release
         env: 
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
@@ -99,6 +93,12 @@ jobs:
           alias: ${{ secrets.ALIAS }}
           keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
           keyPassword: ${{ secrets.KEY_PASSWORD }}
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: APatch
+          path: ${{steps.sign_app.outputs.signedReleaseFile}}
 
       - name: Release apk
         env: 
