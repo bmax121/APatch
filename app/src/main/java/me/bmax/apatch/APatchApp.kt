@@ -9,8 +9,6 @@ import androidx.lifecycle.MutableLiveData
 import coil.Coil
 import coil.ImageLoader
 import com.topjohnwu.superuser.CallbackList
-import com.topjohnwu.superuser.Shell
-import com.topjohnwu.superuser.internal.MainShell
 import me.bmax.apatch.util.*
 import me.zhanghai.android.appiconloader.coil.AppIconFetcher
 import me.zhanghai.android.appiconloader.coil.AppIconKeyer
@@ -63,7 +61,7 @@ class APApplication : Application() {
         private const val DEFAULT_SU_PATH = "/system/bin/kp"
         private const val LEGACY_SU_PATH = "/system/bin/su"
 
-        const val SP_NAME  = "config"
+        const val SP_NAME = "config"
         private const val SHOW_BACKUP_WARN = "show_backup_warning"
         lateinit var sharedPreferences: SharedPreferences
 
@@ -234,6 +232,7 @@ class APApplication : Application() {
         // TODO: 1. make me root by kernel
         // TODO: 2. remove all usage of superkey
         sharedPreferences = getSharedPreferences(SP_NAME, Context.MODE_PRIVATE)
+        APatchKeyHelper.setSharedPreferences(sharedPreferences)
         superKey = APatchKeyHelper.readSPSuperKey()
 
         val context = this

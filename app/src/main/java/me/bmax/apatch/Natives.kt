@@ -20,6 +20,7 @@ object Natives {
     ) : Parcelable {
     }
 
+    @Keep
     class KPMCtlRes {
         var rc: Long = 0
         var outMsg: String? = null

@@ -4,9 +4,9 @@ import android.os.Parcelable
 import android.util.Log
 import androidx.annotation.Keep
 import androidx.compose.runtime.Immutable
-import kotlinx.parcelize.Parcelize
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.parcelize.Parcelize
 import me.bmax.apatch.APApplication
 import me.bmax.apatch.Natives
 import java.io.File
@@ -22,11 +22,12 @@ object PkgConfig {
     @Immutable
     @Parcelize
     @Keep
-    data class Config(var pkg: String = "",
-                      var exclude: Int = 1,
-                      var allow: Int = 0,
-                      var profile: Natives.Profile
-    ): Parcelable {
+    data class Config(
+        var pkg: String = "",
+        var exclude: Int = 1,
+        var allow: Int = 0,
+        var profile: Natives.Profile
+    ) : Parcelable {
         companion object {
             fun fromLine(line: String): Config {
                 val sp = line.split(",")
@@ -34,22 +35,24 @@ object PkgConfig {
                 return Config(sp[0], sp[1].toInt(), sp[2].toInt(), profile)
             }
         }
+
         fun isDefault(): Boolean {
             return allow == 0 && exclude != 0
         }
+
         fun toLine(): String {
             return "${pkg},${exclude},${allow},${profile.uid},${profile.toUid},${profile.scontext}"
         }
     }
 
-    fun readConfigs(): HashMap<String,Config> {
-        val configs = HashMap<String,Config>()
+    fun readConfigs(): HashMap<String, Config> {
+        val configs = HashMap<String, Config>()
         val file = File(APApplication.PACKAGE_CONFIG_FILE)
         if (file.exists()) {
             file.readLines().drop(1).filter { it.isNotEmpty() }.forEach {
                 Log.d(TAG, it)
                 val p = Config.fromLine(it)
-                if (! p.isDefault()) {
+                if (!p.isDefault()) {
                     configs[p.pkg] = p
                 }
             }
@@ -57,7 +60,7 @@ object PkgConfig {
         return configs
     }
 
-    private fun writeConfigs(configs: HashMap<String,Config> ) {
+    private fun writeConfigs(configs: HashMap<String, Config>) {
         val file = File(APApplication.PACKAGE_CONFIG_FILE)
         if (!file.parentFile?.exists()!!) file.parentFile?.mkdirs()
         val writer = FileWriter(file, false)
@@ -71,6 +74,27 @@ object PkgConfig {
         writer.close()
     }
 
+    fun changeConfigByPkgChange(config: Config) {
+        thread {
+            Natives.su()
+            val configs = readConfigs()
+            val pkg = config.pkg
+            val uid = config.profile.uid
+            if (config.allow == 0) {
+                // revoke all uid
+                val toRemove = configs.filter { it.key == pkg || it.value.profile.uid == uid }
+                toRemove.forEach {
+                    Log.d(TAG, "remove config: $it")
+                    configs.remove(it.key)
+                }
+            } else {
+                Log.d(TAG, "change config: $config")
+                configs[config.pkg] = config
+            }
+            writeConfigs(configs)
+        }.join()
+    }
+
     suspend fun changeConfig(config: Config) {
         mutex.withLock {
             thread {
@@ -78,7 +102,7 @@ object PkgConfig {
                 val configs = readConfigs()
                 val pkg = config.pkg
                 val uid = config.profile.uid
-                if(config.allow == 0) {
+                if (config.allow == 0) {
                     // revoke all uid
                     val toRemove = configs.filter { it.key == pkg || it.value.profile.uid == uid }
                     toRemove.forEach {

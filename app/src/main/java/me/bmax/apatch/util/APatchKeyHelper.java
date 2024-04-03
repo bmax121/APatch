@@ -1,5 +1,6 @@
 package me.bmax.apatch.util;
 
+import android.content.SharedPreferences;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import android.util.Base64;
@@ -15,19 +16,18 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
 
-import me.bmax.apatch.APApplication;
-
 
 public class APatchKeyHelper {
     private static final String TAG = "APatchSecurityHelper";
 
     private static final String ANDROID_KEYSTORE = "AndroidKeyStore";
-    private static final String SUPER_KEY = "super_key";
-    private static final String SUPER_KEY_ENC = "super_key_enc";
+    protected static final String SUPER_KEY = "super_key";
+    protected static final String SUPER_KEY_ENC = "super_key_enc";
     private static final String SKIP_STORE_SUPER_KEY = "skip_store_super_key";
     private static final String SUPER_KEY_IV = "super_key_iv";
     private static final String KEY_ALIAS = "APatchSecurityKey";
     private static final String ENCRYPT_MODE = "AES/GCM/NoPadding";
+    private static SharedPreferences prefs = null;
 
     static {
         try {
@@ -39,6 +39,10 @@ public class APatchKeyHelper {
         } catch (Exception e) {
             Log.e(TAG, "Failed to checkAndGenerateSecretKey", e);
         }
+    }
+
+    public static void setSharedPreferences(SharedPreferences sp) {
+        prefs = sp;
     }
 
     private static void generateSecretKey() {
@@ -67,12 +71,12 @@ public class APatchKeyHelper {
     }
 
     private static String getRandomIV() {
-        String randIV = APApplication.sharedPreferences.getString(SUPER_KEY_IV, null);
+        String randIV = prefs.getString(SUPER_KEY_IV, null);
         if (randIV == null) {
             SecureRandom secureRandom = new SecureRandom();
             byte[] generated = secureRandom.generateSeed(12);
             randIV = Base64.encodeToString(generated, Base64.DEFAULT);
-            APApplication.sharedPreferences.edit().putString(SUPER_KEY_IV, randIV).apply();
+            prefs.edit().putString(SUPER_KEY_IV, randIV).apply();
         }
         return randIV;
     }
@@ -110,37 +114,37 @@ public class APatchKeyHelper {
     }
 
     public static boolean shouldSkipStoreSuperKey() {
-        return APApplication.sharedPreferences.getInt(SKIP_STORE_SUPER_KEY, 0) != 0;
+        return prefs.getInt(SKIP_STORE_SUPER_KEY, 0) != 0;
     }
 
     public static void clearConfigKey() {
-        APApplication.sharedPreferences.edit().remove(SUPER_KEY).apply();
-        APApplication.sharedPreferences.edit().remove(SUPER_KEY_ENC).apply();
-        APApplication.sharedPreferences.edit().remove(SUPER_KEY_IV).apply();
+        prefs.edit().remove(SUPER_KEY).apply();
+        prefs.edit().remove(SUPER_KEY_ENC).apply();
+        prefs.edit().remove(SUPER_KEY_IV).apply();
     }
 
     public static void setShouldSkipStoreSuperKey(boolean should) {
         clearConfigKey();
-        APApplication.sharedPreferences.edit().putInt(SKIP_STORE_SUPER_KEY, should? 1: 0).apply();
+        prefs.edit().putInt(SKIP_STORE_SUPER_KEY, should? 1: 0).apply();
     }
 
     public static String readSPSuperKey() {
-        String encKey = APApplication.sharedPreferences.getString(SUPER_KEY_ENC, "");
-        if(encKey.length() > 0) {
+        String encKey = prefs.getString(SUPER_KEY_ENC, "");
+        if (!encKey.isEmpty()) {
             return decrypt(encKey);
         }
 
         @Deprecated()
-        String key = APApplication.sharedPreferences.getString(SUPER_KEY, "");
+        String key = prefs.getString(SUPER_KEY, "");
         writeSPSuperKey(key);
-        APApplication.sharedPreferences.edit().remove(SUPER_KEY).apply();
+        prefs.edit().remove(SUPER_KEY).apply();
         return key;
     }
 
     public static void writeSPSuperKey(String key) {
         if(shouldSkipStoreSuperKey()) return;
         key = APatchKeyHelper.encrypt(key);
-        APApplication.sharedPreferences.edit().putString(SUPER_KEY_ENC, key).apply();
+        prefs.edit().putString(SUPER_KEY_ENC, key).apply();
     }
 
 }
