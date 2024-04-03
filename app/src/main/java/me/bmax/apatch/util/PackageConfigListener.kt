@@ -14,6 +14,7 @@ class PackageConfigListener : BroadcastReceiver() {
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {
+
         intent?.let {
             if (it.action == Intent.ACTION_PACKAGE_REMOVED) {
                 val prefs =
