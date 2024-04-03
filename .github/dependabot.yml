@@ -18,12 +18,20 @@ updates:
     directory: /
     schedule:
       interval: daily
+    groups:
+      action-dependencies:
+        patterns:
+          - "*"
 
   - package-ecosystem: cargo
     target-branch: main
     directory: apd/
     schedule:
       interval: daily
+    groups:
+      rust-dependencies:
+        patterns:
+          - "*"
 
 registries:
   maven-google:
