@@ -180,4 +180,33 @@
     <string name="kpm_control_outMsg">信息</string>
     <string name="kpm_control_ok">操作成功！</string>
     <string name="kpm_control_failed">操作失败!</string>
+
+    <string name="settings_night_mode_follow_sys">深色模式跟随系统</string>
+    <string name="settings_night_mode_follow_sys_summary">根据系统的深色模式自动切换</string>
+
+    <string name="settings_night_theme_enabled">启用深色模式主题</string>
+
+    <string name="settings_use_system_color_theme">系统颜色主题</string>
+    <string name="settings_use_system_color_theme_summary">使用由系统根据壁纸生成的配色主题</string>
+
+    <string name="settings_custom_color_theme">颜色主题</string>
+    <string name="amber_theme">琥珀色主题</string>
+    <string name="blue_theme">蓝色主题</string>
+    <string name="blue_grey_theme">蓝灰色主题</string>
+    <string name="brown_theme">棕色主题</string>
+    <string name="cyan_theme">青色主题</string>
+    <string name="deep_orange_theme">深橙色主题</string>
+    <string name="deep_purple_theme">深紫色主题</string>
+    <string name="green_theme">绿色主题</string>
+    <string name="indigo_theme">靛蓝色主题</string>
+    <string name="light_blue_theme">浅蓝色主题</string>
+    <string name="light_green_theme">浅绿色主题</string>
+    <string name="lime_theme">柠檬色主题</string>
+    <string name="orange_theme">橙色主题</string>
+    <string name="pink_theme">粉红色主题</string>
+    <string name="purple_theme">紫色主题</string>
+    <string name="red_theme">红色主题</string>
+    <string name="sakura_theme">樱花色主题</string>
+    <string name="teal_theme">鸭翅绿色主题</string>
+    <string name="yellow_theme">黄色主题</string>
 </resources>

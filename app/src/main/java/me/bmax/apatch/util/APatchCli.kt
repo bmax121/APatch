@@ -1,15 +1,20 @@
 package me.bmax.apatch.util
 
+import android.app.Activity
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import com.topjohnwu.superuser.CallbackList
 import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.ShellUtils
+import dev.utils.app.ActivityUtils
 import dev.utils.app.AppUtils.getSharedPreferences
 import me.bmax.apatch.APApplication
 import me.bmax.apatch.BuildConfig
 import me.bmax.apatch.apApp
+import me.bmax.apatch.ui.MainActivity
 import java.io.File
 
 private const val TAG = "APatchCli"
@@ -210,4 +215,3 @@ fun restartApp(packageName: String) {
     forceStopApp(packageName)
     launchApp(packageName)
 }
-
