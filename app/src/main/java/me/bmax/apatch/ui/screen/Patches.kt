@@ -140,9 +140,9 @@ fun Patches(navigator: DestinationsNavigator, mode: PatchesViewModel.PatchMode) 
 
             if (mode == PatchesViewModel.PatchMode.PATCH_ONLY && selectedBootImage != null && viewModel.kimgInfo.banner.isEmpty()) {
                 viewModel.copyAndParseBootimg(selectedBootImage!!)
-                // Fix endless loop. It's not normal if parse done but banner still null
+                // Fix endless loop. It's not normal if (parse done && working thread is not working) but banner still null
                 // Leave user re-choose
-                if (viewModel.kimgInfo.banner.isEmpty()) {
+                if (!viewModel.running && viewModel.kimgInfo.banner.isEmpty()) {
                     selectedBootImage = null
                 }
             }
