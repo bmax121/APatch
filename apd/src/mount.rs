@@ -3,6 +3,7 @@ use anyhow::{anyhow, bail, Ok, Result};
 #[cfg(any(target_os = "linux", target_os = "android"))]
 use anyhow::Context;
 #[cfg(any(target_os = "linux", target_os = "android"))]
+#[allow(unused_imports)]
 use retry::delay::NoDelay;
 #[cfg(any(target_os = "linux", target_os = "android"))]
 //use sys_mount::{unmount, FilesystemType, Mount, MountFlags, Unmount, UnmountFlags};
@@ -58,7 +59,7 @@ impl Drop for AutoMountExt4 {
 
 #[allow(dead_code)]
 #[cfg(any(target_os = "linux", target_os = "android"))]
-pub fn mount_image(src: &str, target: &str, autodrop: bool) -> Result<()> {
+pub fn mount_image(src: &str, target: &str, _autodrop: bool) -> Result<()> {
     mount_ext4(src, target)?;
         Ok(())
 }
