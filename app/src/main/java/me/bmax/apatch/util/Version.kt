@@ -74,6 +74,7 @@ object Version {
     }
 
 
+    @Suppress("DEPRECATION")
     fun getManagerVersion(): Pair<String, Int> {
         val packageInfo = apApp.packageManager.getPackageInfo(apApp.packageName, 0)
         return Pair(packageInfo.versionName, packageInfo.versionCode)

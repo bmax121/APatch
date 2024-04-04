@@ -9,7 +9,11 @@ import androidx.lifecycle.MutableLiveData
 import coil.Coil
 import coil.ImageLoader
 import com.topjohnwu.superuser.CallbackList
-import me.bmax.apatch.util.*
+import me.bmax.apatch.util.APatchCli
+import me.bmax.apatch.util.APatchKeyHelper
+import me.bmax.apatch.util.Version
+import me.bmax.apatch.util.getRootShell
+import me.bmax.apatch.util.rootShellForResult
 import me.zhanghai.android.appiconloader.coil.AppIconFetcher
 import me.zhanghai.android.appiconloader.coil.AppIconKeyer
 import java.io.File
@@ -77,6 +81,7 @@ class APApplication : Application() {
         private val _apStateLiveData = MutableLiveData(State.UNKNOWN_STATE)
         val apStateLiveData: LiveData<State> = _apStateLiveData
 
+        @Suppress("DEPRECATION")
         fun uninstallApatch() {
             if (_apStateLiveData.value != State.ANDROIDPATCH_INSTALLED) return
             _apStateLiveData.value = State.ANDROIDPATCH_UNINSTALLING
@@ -102,10 +107,12 @@ class APApplication : Application() {
             }
         }
 
+        @Suppress("DEPRECATION")
         fun installApatch() {
             val state = _apStateLiveData.value
             if (state != State.ANDROIDPATCH_NOT_INSTALLED &&
-                state != State.ANDROIDPATCH_NEED_UPDATE) {
+                state != State.ANDROIDPATCH_NEED_UPDATE
+            ) {
                 return
             }
             _apStateLiveData.value = State.ANDROIDPATCH_INSTALLING
@@ -165,10 +172,12 @@ class APApplication : Application() {
             set(value) {
                 field = value
                 val ready = Natives.nativeReady(value)
-                _kpStateLiveData.value = if (ready) State.KERNELPATCH_INSTALLED else State.UNKNOWN_STATE
-                _apStateLiveData.value = if (ready) State.ANDROIDPATCH_NOT_INSTALLED else State.UNKNOWN_STATE
+                _kpStateLiveData.value =
+                    if (ready) State.KERNELPATCH_INSTALLED else State.UNKNOWN_STATE
+                _apStateLiveData.value =
+                    if (ready) State.ANDROIDPATCH_NOT_INSTALLED else State.UNKNOWN_STATE
                 Log.d(TAG, "state: " + _kpStateLiveData.value)
-                if(!ready) return
+                if (!ready) return
 
                 APatchKeyHelper.writeSPSuperKey(value)
 
@@ -191,7 +200,7 @@ class APApplication : Application() {
                     }
                     Log.d(TAG, "kp state: " + _kpStateLiveData.value)
 
-                    if(File(NEED_REBOOT_FILE).exists()) {
+                    if (File(NEED_REBOOT_FILE).exists()) {
                         _kpStateLiveData.postValue(State.KERNELPATCH_NEED_REBOOT)
                     }
                     Log.d(TAG, "kp state: " + _kpStateLiveData.value)
@@ -201,7 +210,7 @@ class APApplication : Application() {
                     val installedApdVInt = Version.installedApdVUInt()
                     Log.d(TAG, "manager version: $mgv, installed apd version: $installedApdVInt")
 
-                    if(Version.installedApdVInt > 0) {
+                    if (Version.installedApdVInt > 0) {
                         _apStateLiveData.postValue(State.ANDROIDPATCH_INSTALLED)
                     }
 

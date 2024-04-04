@@ -80,7 +80,7 @@ private const val TAG = "Patches"
 
 @Destination
 @Composable
-fun Patches(navigator: DestinationsNavigator, mode: PatchesViewModel.PatchMode) {
+fun Patches(mode: PatchesViewModel.PatchMode) {
     val permissionRequest = remember { mutableStateOf(false)  }
     val scrollState = rememberScrollState()
     val scope = rememberCoroutineScope()

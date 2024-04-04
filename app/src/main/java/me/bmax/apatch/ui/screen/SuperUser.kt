@@ -48,7 +48,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.launch
 import me.bmax.apatch.APApplication
 import me.bmax.apatch.Natives
@@ -62,7 +61,7 @@ import me.bmax.apatch.util.PkgConfig
 @OptIn(ExperimentalMaterialApi::class)
 @Destination
 @Composable
-fun SuperUserScreen(navigator: DestinationsNavigator) {
+fun SuperUserScreen() {
     val viewModel = viewModel<SuperUserViewModel>()
     val scope = rememberCoroutineScope()
 
@@ -215,7 +214,7 @@ private fun AppItem(
 
 @Composable
 fun EditUser(app: SuperUserViewModel.AppInfo) {
-    val _viahook = app.config.profile.scontext.isNullOrEmpty()
+    val _viahook = app.config.profile.scontext.isEmpty()
     var viahook by remember { mutableStateOf(_viahook) }
     var exclude by remember { mutableIntStateOf(app.config.exclude) }
 

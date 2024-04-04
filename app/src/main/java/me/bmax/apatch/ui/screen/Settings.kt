@@ -67,11 +67,9 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.window.DialogWindowProvider
-import androidx.compose.ui.window.SecureFlagPolicy
 import androidx.core.content.FileProvider
 import androidx.core.os.LocaleListCompat
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dev.utils.app.AppUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -83,25 +81,6 @@ import me.bmax.apatch.R
 import me.bmax.apatch.ui.component.SwitchItem
 import me.bmax.apatch.ui.component.rememberConfirmDialog
 import me.bmax.apatch.ui.component.rememberLoadingDialog
-import me.bmax.apatch.ui.theme.LightAmberTheme
-import me.bmax.apatch.ui.theme.LightBlueGreyTheme
-import me.bmax.apatch.ui.theme.LightBlueTheme
-import me.bmax.apatch.ui.theme.LightBrownTheme
-import me.bmax.apatch.ui.theme.LightCyanTheme
-import me.bmax.apatch.ui.theme.LightDeepOrangeTheme
-import me.bmax.apatch.ui.theme.LightDeepPurpleTheme
-import me.bmax.apatch.ui.theme.LightGreenTheme
-import me.bmax.apatch.ui.theme.LightIndigoTheme
-import me.bmax.apatch.ui.theme.LightLightBlueTheme
-import me.bmax.apatch.ui.theme.LightLightGreenTheme
-import me.bmax.apatch.ui.theme.LightLimeTheme
-import me.bmax.apatch.ui.theme.LightOrangeTheme
-import me.bmax.apatch.ui.theme.LightPinkTheme
-import me.bmax.apatch.ui.theme.LightPurpleTheme
-import me.bmax.apatch.ui.theme.LightRedTheme
-import me.bmax.apatch.ui.theme.LightSakuraTheme
-import me.bmax.apatch.ui.theme.LightTealTheme
-import me.bmax.apatch.ui.theme.LightYellowTheme
 import me.bmax.apatch.util.APDialogBlurBehindUtils
 import me.bmax.apatch.util.APatchKeyHelper
 import me.bmax.apatch.util.HideAPK
@@ -113,7 +92,7 @@ import java.util.Locale
 
 @Destination
 @Composable
-fun SettingScreen(navigator: DestinationsNavigator) {
+fun SettingScreen() {
     val state by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
     val kPatchReady = state != APApplication.State.UNKNOWN_STATE
     val aPatchReady = (state == APApplication.State.ANDROIDPATCH_INSTALLING ||
@@ -131,9 +110,7 @@ fun SettingScreen(navigator: DestinationsNavigator) {
     }
     Scaffold(
         topBar = {
-            TopBar(onBack = {
-                navigator.popBackStack()
-            })
+            TopBar()
         }
     ) { paddingValues ->
 
@@ -478,7 +455,7 @@ fun ThemeChooseDialog(showDialog: MutableState<Boolean>) {
             LazyColumn {
                 item {
                     ListItem(
-                        headlineContent = { Text (text = stringResource(R.string.amber_theme)) },
+                        headlineContent = { Text(text = stringResource(R.string.amber_theme)) },
                         modifier = Modifier.clickable {
                             showDialog.value = false
                             prefs.edit().putString("custom_color", "amber").apply()
@@ -488,7 +465,7 @@ fun ThemeChooseDialog(showDialog: MutableState<Boolean>) {
                 }
                 item {
                     ListItem(
-                        headlineContent = { Text (text = stringResource(R.string.blue_grey_theme)) },
+                        headlineContent = { Text(text = stringResource(R.string.blue_grey_theme)) },
                         modifier = Modifier.clickable {
                             showDialog.value = false
                             prefs.edit().putString("custom_color", "blue_grey").apply()
@@ -498,7 +475,7 @@ fun ThemeChooseDialog(showDialog: MutableState<Boolean>) {
                 }
                 item {
                     ListItem(
-                        headlineContent = { Text (text = stringResource(R.string.blue_theme)) },
+                        headlineContent = { Text(text = stringResource(R.string.blue_theme)) },
                         modifier = Modifier.clickable {
                             showDialog.value = false
                             prefs.edit().putString("custom_color", "blue").apply()
@@ -508,7 +485,7 @@ fun ThemeChooseDialog(showDialog: MutableState<Boolean>) {
                 }
                 item {
                     ListItem(
-                        headlineContent = { Text (text = stringResource(R.string.brown_theme)) },
+                        headlineContent = { Text(text = stringResource(R.string.brown_theme)) },
                         modifier = Modifier.clickable {
                             showDialog.value = false
                             prefs.edit().putString("custom_color", "brown").apply()
@@ -518,7 +495,7 @@ fun ThemeChooseDialog(showDialog: MutableState<Boolean>) {
                 }
                 item {
                     ListItem(
-                        headlineContent = { Text (text = stringResource(R.string.cyan_theme)) },
+                        headlineContent = { Text(text = stringResource(R.string.cyan_theme)) },
                         modifier = Modifier.clickable {
                             showDialog.value = false
                             prefs.edit().putString("custom_color", "cyan").apply()
@@ -528,7 +505,7 @@ fun ThemeChooseDialog(showDialog: MutableState<Boolean>) {
                 }
                 item {
                     ListItem(
-                        headlineContent = { Text (text = stringResource(R.string.deep_orange_theme)) },
+                        headlineContent = { Text(text = stringResource(R.string.deep_orange_theme)) },
                         modifier = Modifier.clickable {
                             showDialog.value = false
                             prefs.edit().putString("custom_color", "deep_orange").apply()
@@ -538,7 +515,7 @@ fun ThemeChooseDialog(showDialog: MutableState<Boolean>) {
                 }
                 item {
                     ListItem(
-                        headlineContent = { Text (text = stringResource(R.string.deep_purple_theme)) },
+                        headlineContent = { Text(text = stringResource(R.string.deep_purple_theme)) },
                         modifier = Modifier.clickable {
                             showDialog.value = false
                             prefs.edit().putString("custom_color", "deep_purple").apply()
@@ -548,7 +525,7 @@ fun ThemeChooseDialog(showDialog: MutableState<Boolean>) {
                 }
                 item {
                     ListItem(
-                        headlineContent = { Text (text = stringResource(R.string.green_theme)) },
+                        headlineContent = { Text(text = stringResource(R.string.green_theme)) },
                         modifier = Modifier.clickable {
                             showDialog.value = false
                             prefs.edit().putString("custom_color", "green").apply()
@@ -558,7 +535,7 @@ fun ThemeChooseDialog(showDialog: MutableState<Boolean>) {
                 }
                 item {
                     ListItem(
-                        headlineContent = { Text (text = stringResource(R.string.indigo_theme)) },
+                        headlineContent = { Text(text = stringResource(R.string.indigo_theme)) },
                         modifier = Modifier.clickable {
                             showDialog.value = false
                             prefs.edit().putString("custom_color", "indigo").apply()
@@ -568,7 +545,7 @@ fun ThemeChooseDialog(showDialog: MutableState<Boolean>) {
                 }
                 item {
                     ListItem(
-                        headlineContent = { Text (text = stringResource(R.string.light_blue_theme)) },
+                        headlineContent = { Text(text = stringResource(R.string.light_blue_theme)) },
                         modifier = Modifier.clickable {
                             showDialog.value = false
                             prefs.edit().putString("custom_color", "light_blue").apply()
@@ -578,7 +555,7 @@ fun ThemeChooseDialog(showDialog: MutableState<Boolean>) {
                 }
                 item {
                     ListItem(
-                        headlineContent = { Text (text = stringResource(R.string.light_green_theme)) },
+                        headlineContent = { Text(text = stringResource(R.string.light_green_theme)) },
                         modifier = Modifier.clickable {
                             showDialog.value = false
                             prefs.edit().putString("custom_color", "light_green").apply()
@@ -588,7 +565,7 @@ fun ThemeChooseDialog(showDialog: MutableState<Boolean>) {
                 }
                 item {
                     ListItem(
-                        headlineContent = { Text (text = stringResource(R.string.lime_theme)) },
+                        headlineContent = { Text(text = stringResource(R.string.lime_theme)) },
                         modifier = Modifier.clickable {
                             showDialog.value = false
                             prefs.edit().putString("custom_color", "lime").apply()
@@ -598,7 +575,7 @@ fun ThemeChooseDialog(showDialog: MutableState<Boolean>) {
                 }
                 item {
                     ListItem(
-                        headlineContent = { Text (text = stringResource(R.string.orange_theme)) },
+                        headlineContent = { Text(text = stringResource(R.string.orange_theme)) },
                         modifier = Modifier.clickable {
                             showDialog.value = false
                             prefs.edit().putString("custom_color", "orange").apply()
@@ -608,7 +585,7 @@ fun ThemeChooseDialog(showDialog: MutableState<Boolean>) {
                 }
                 item {
                     ListItem(
-                        headlineContent = { Text (text = stringResource(R.string.pink_theme)) },
+                        headlineContent = { Text(text = stringResource(R.string.pink_theme)) },
                         modifier = Modifier.clickable {
                             showDialog.value = false
                             prefs.edit().putString("custom_color", "pink").apply()
@@ -618,7 +595,7 @@ fun ThemeChooseDialog(showDialog: MutableState<Boolean>) {
                 }
                 item {
                     ListItem(
-                        headlineContent = { Text (text = stringResource(R.string.purple_theme)) },
+                        headlineContent = { Text(text = stringResource(R.string.purple_theme)) },
                         modifier = Modifier.clickable {
                             showDialog.value = false
                             prefs.edit().putString("custom_color", "purple").apply()
@@ -628,7 +605,7 @@ fun ThemeChooseDialog(showDialog: MutableState<Boolean>) {
                 }
                 item {
                     ListItem(
-                        headlineContent = { Text (text = stringResource(R.string.red_theme)) },
+                        headlineContent = { Text(text = stringResource(R.string.red_theme)) },
                         modifier = Modifier.clickable {
                             showDialog.value = false
                             prefs.edit().putString("custom_color", "red").apply()
@@ -638,7 +615,7 @@ fun ThemeChooseDialog(showDialog: MutableState<Boolean>) {
                 }
                 item {
                     ListItem(
-                        headlineContent = { Text (text = stringResource(R.string.sakura_theme)) },
+                        headlineContent = { Text(text = stringResource(R.string.sakura_theme)) },
                         modifier = Modifier.clickable {
                             showDialog.value = false
                             prefs.edit().putString("custom_color", "sakura").apply()
@@ -648,7 +625,7 @@ fun ThemeChooseDialog(showDialog: MutableState<Boolean>) {
                 }
                 item {
                     ListItem(
-                        headlineContent = { Text (text = stringResource(R.string.teal_theme)) },
+                        headlineContent = { Text(text = stringResource(R.string.teal_theme)) },
                         modifier = Modifier.clickable {
                             showDialog.value = false
                             prefs.edit().putString("custom_color", "teal").apply()
@@ -658,7 +635,7 @@ fun ThemeChooseDialog(showDialog: MutableState<Boolean>) {
                 }
                 item {
                     ListItem(
-                        headlineContent = { Text (text = stringResource(R.string.yellow_theme)) },
+                        headlineContent = { Text(text = stringResource(R.string.yellow_theme)) },
                         modifier = Modifier.clickable {
                             showDialog.value = false
                             prefs.edit().putString("custom_color", "yellow").apply()
@@ -677,7 +654,7 @@ fun ThemeChooseDialog(showDialog: MutableState<Boolean>) {
 }
 
 @Composable
-fun colorNameToString(colorName: String) : String {
+fun colorNameToString(colorName: String): String {
     return when (colorName) {
         "amber" -> stringResource(R.string.amber_theme)
         "blue_grey" -> stringResource(R.string.blue_grey_theme)
@@ -803,8 +780,8 @@ fun RandomizePkgNameDialog(showDialog: MutableState<Boolean>) {
         properties = DialogProperties(
             decorFitsSystemWindows = true,
             usePlatformDefaultWidth = false,
-            
-        )
+
+            )
     ) {
         Surface(
             modifier = Modifier
@@ -815,7 +792,7 @@ fun RandomizePkgNameDialog(showDialog: MutableState<Boolean>) {
             color = AlertDialogDefaults.containerColor,
         ) {
             Column(modifier = Modifier.padding(PaddingValues(all = 24.dp))) {
-                // Title
+
                 Box(
                     Modifier
                         .padding(PaddingValues(bottom = 16.dp))
@@ -827,7 +804,6 @@ fun RandomizePkgNameDialog(showDialog: MutableState<Boolean>) {
                     )
                 }
 
-                // Content
                 Box(
                     Modifier
                         .weight(weight = 1f, fill = false)
@@ -840,7 +816,6 @@ fun RandomizePkgNameDialog(showDialog: MutableState<Boolean>) {
                     )
                 }
 
-                // Content2
                 Box(
                     Modifier
                         .weight(weight = 1f, fill = false)
@@ -933,7 +908,7 @@ fun LanguageDialog(showLanguageDialog: MutableState<Boolean>) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun TopBar(onBack: () -> Unit = {}) {
+private fun TopBar() {
     TopAppBar(
         title = { Text(stringResource(R.string.settings)) },
     )
