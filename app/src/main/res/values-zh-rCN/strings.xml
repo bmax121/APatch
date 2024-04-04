@@ -184,7 +184,7 @@
     <string name="settings_night_mode_follow_sys">深色模式跟随系统</string>
     <string name="settings_night_mode_follow_sys_summary">根据系统的深色模式自动切换</string>
 
-    <string name="settings_night_theme_enabled">启用深色模式主题</string>
+    <string name="settings_night_theme_enabled">深色主题</string>
 
     <string name="settings_use_system_color_theme">系统颜色主题</string>
     <string name="settings_use_system_color_theme_summary">使用由系统根据壁纸生成的配色主题</string>
