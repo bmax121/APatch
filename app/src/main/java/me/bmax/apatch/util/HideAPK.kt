@@ -64,7 +64,7 @@ object HideAPK {
                 if (!xml.patchStrings {
                     for (i in it.indices) {
                         val s = it[i]
-                        if (s.contains(APPLICATION_ID) && !s.contains("ui.MainActivity") && !s.contains(".APApplication")) {
+                        if (s.contains(APPLICATION_ID) && !s.contains("ui.MainActivity") && !s.contains("WebUIActivity") && !s.contains(".APApplication")) {
                             it[i] = s.replace(APPLICATION_ID, pkg)
                         } else if (s == origLabel) {
                             it[i] = label.toString()
