@@ -459,15 +459,13 @@ private fun ModuleItem(
     onClick: (APModuleViewModel.ModuleInfo) -> Unit,
 ) {
     ElevatedCard(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick(module) },
+        modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
 
         val textDecoration = if (!module.remove) null else TextDecoration.LineThrough
 
-        Column(modifier = Modifier.padding(24.dp, 16.dp, 24.dp, 0.dp)) {
+        Column(modifier = Modifier.clickable { onClick(module) }.padding(24.dp, 16.dp, 24.dp, 0.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
