@@ -81,7 +81,7 @@ object PkgConfig {
                 val configs = readConfigs()
                 val pkg = config.pkg
                 val uid = config.profile.uid
-                if (config.allow == 0) {
+                if (config.allow == 0 && configs[pkg] != null) {
                     // revoke all uid
                     val toRemove = configs.filter { it.key == pkg || it.value.profile.uid == uid }
                     toRemove.forEach {

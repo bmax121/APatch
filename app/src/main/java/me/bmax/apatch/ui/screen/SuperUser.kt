@@ -49,7 +49,6 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.ramcosta.composedestinations.annotation.Destination
 import kotlinx.coroutines.launch
-import me.bmax.apatch.APApplication
 import me.bmax.apatch.Natives
 import me.bmax.apatch.R
 import me.bmax.apatch.ui.component.SearchAppBar
@@ -214,12 +213,11 @@ private fun AppItem(
 
 @Composable
 fun EditUser(app: SuperUserViewModel.AppInfo) {
-    val _viahook = app.config.profile.scontext.isEmpty()
-    var viahook by remember { mutableStateOf(_viahook) }
+    //var viahook by remember { mutableStateOf(app.config.profile.scontext.isEmpty()) }
     var exclude by remember { mutableIntStateOf(app.config.exclude) }
 
     Column(modifier = Modifier.padding(start = 24.dp, end = 24.dp)) {
-        SwitchItem(
+        /*SwitchItem(
             icon = Icons.Filled.Security,
             title = "SU Thread",
             summary = "bypass selinux via hooks",
@@ -230,7 +228,7 @@ fun EditUser(app: SuperUserViewModel.AppInfo) {
                 else app.config.profile.scontext = APApplication.MAGISK_SCONTEXT
                 PkgConfig.changeConfig(app.config)
             },
-        )
+        )*/
         SwitchItem(
             icon = Icons.Filled.Security,
             title = stringResource(id = R.string.su_pkg_excluded_setting_title),
