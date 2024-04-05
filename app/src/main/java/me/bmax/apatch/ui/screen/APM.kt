@@ -554,17 +554,6 @@ private fun ModuleItem(
                     }
                 }
 
-                TextButton(
-                    enabled = !module.remove,
-                    onClick = { onUninstall(module) },
-                ) {
-                    Text(
-                        fontFamily = MaterialTheme.typography.labelMedium.fontFamily,
-                        fontSize = MaterialTheme.typography.labelMedium.fontSize,
-                        text = stringResource(R.string.apm_uninstall),
-                    )
-                }
-
                 if (module.hasWebUi) {
                     TextButton(
                         onClick = { onClick(module) },
@@ -575,6 +564,17 @@ private fun ModuleItem(
                             text = stringResource(R.string.webui_open),
                         )
                     }
+                }
+
+                TextButton(
+                    enabled = !module.remove,
+                    onClick = { onUninstall(module) },
+                ) {
+                    Text(
+                        fontFamily = MaterialTheme.typography.labelMedium.fontFamily,
+                        fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                        text = stringResource(R.string.apm_uninstall),
+                    )
                 }
             }
         }
