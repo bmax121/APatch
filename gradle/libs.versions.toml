@@ -1,7 +1,7 @@
 [versions]
 agp = "8.3.1"
 kotlin = "1.9.23"
-ksp = "1.9.23-1.0.19"
+ksp = "1.9.23-1.0.20"
 compose-bom = "2024.04.00"
 lifecycle = "2.7.0"
 accompanist = "0.34.0"
@@ -69,7 +69,7 @@ markdown = { group = "io.noties.markwon", name = "core", version.ref = "markdown
 timber = { group = "com.jakewharton.timber", name = "timber", version = "5.0.1" }
 devappx = { group = "io.github.afkt", name = "DevAppX", version = "2.4.4" }
 ini4j = { group = "org.ini4j", name = "ini4j", version = "0.5.4" }
-bcpkix = { group = "org.bouncycastle", name = "bcpkix-jdk18on", version = "1.77" }
+bcpkix = { group = "org.bouncycastle", name = "bcpkix-jdk18on", version = "1.78" }
 
 com-google-accompanist-webview = { group = "com.google.accompanist", name = "accompanist-webview", version.ref = "accompanist" }
 androidx-webkit = { group = "androidx.webkit", name = "webkit", version.ref = "webkit" }
