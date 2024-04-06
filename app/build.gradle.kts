@@ -125,11 +125,22 @@ tasks.register<Download>("downloadApjni") {
     overwrite(true)
 }
 
+tasks.register<Copy>("mergeFlashableScript") {
+    into("${project.projectDir}/src/main/resources/META-INF/com/google/android")
+    from(rootProject.file("${project.rootDir}/scripts/update_binary.sh")) {
+         rename { "update-binary" }
+    }
+    from(rootProject.file("${project.rootDir}/scripts/update_binary.sh")) {
+         rename { "updater-script" }
+    }
+}
+
 tasks.getByName("preBuild").dependsOn(
     "downloadKpimg",
     "downloadKpatch",
     "downloadKptools",
     "downloadApjni",
+    "mergeFlashableScript",
 )
 
 // https://github.com/bbqsrc/cargo-ndk
