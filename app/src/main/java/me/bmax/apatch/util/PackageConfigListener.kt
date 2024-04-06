@@ -16,7 +16,7 @@ class PackageConfigListener : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
 
         intent?.let {
-            if (it.action == Intent.ACTION_PACKAGE_REMOVED) {
+            if (it.action == Intent.ACTION_PACKAGE_REMOVED || it.action == Intent.ACTION_PACKAGE_FULLY_REMOVED) {
                 val prefs =
                     context?.getSharedPreferences(APApplication.SP_NAME, Context.MODE_PRIVATE)
                 if (prefs?.getString(APatchKeyHelper.SUPER_KEY_ENC, null).isNullOrBlank()) {
