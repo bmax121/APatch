@@ -31,7 +31,7 @@
     <string name="home_patch_next_step">下一步</string>
     <string name="home_not_installed">未安装</string>
     <string name="reboot_bootloader">重启至 Bootloader</string>
-    <string name="about_source_code">&lt;p&gt;在 %1$s 查看源码&lt;p/&gt;加入我们的 %2$s 频道&lt;p/&gt;加入我们的 %2$s 讨论组</string>
+    <string name="about_source_code">&lt;p&gt;在 %1$s 查看源码&lt;p/&gt;加入我们的 %2$s 频道&lt;p/&gt;加入我们的 %3$s 讨论组</string>
     <string name="home_auth_key_desc">通过验证后开始使用</string>
     <string name="kpatch_version">版本：%s</string>
     <string name="home_ap_cando_uninstall">卸载</string>
