@@ -372,7 +372,7 @@ private fun SetSuperKeyView(viewModel: PatchesViewModel) {
                     style = MaterialTheme.typography.bodyMedium)
             }
             Column {
-                Spacer(modifier = Modifier.height(8.dp))
+                //Spacer(modifier = Modifier.height(8.dp))
                 Box(
                     contentAlignment = Alignment.CenterEnd,
                 ) {

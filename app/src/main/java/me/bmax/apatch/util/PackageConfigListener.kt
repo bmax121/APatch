@@ -4,18 +4,27 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import androidx.annotation.CallSuper
 import me.bmax.apatch.APApplication
 import me.bmax.apatch.Natives
 import kotlin.concurrent.thread
 
-class PackageConfigListener : BroadcastReceiver() {
-    companion object {
-        private const val TAG = "APatchPkgListener"
+private const val TAG = "APatchPkgListener"
+open class PackageConfigListener : BroadcastReceiver() {
+    private fun getUid(intent: Intent): Int? {
+        val uid = intent.getIntExtra(Intent.EXTRA_UID, -1)
+        return if (uid == -1) null else uid
     }
 
-    override fun onReceive(context: Context?, intent: Intent?) {
+    private fun getPkg(intent: Intent): String? {
+        val pkg = intent.getStringExtra(Intent.EXTRA_PACKAGE_NAME)
+        return pkg ?: intent.data?.schemeSpecificPart
+    }
 
-        intent?.let {
+
+    override fun onReceive(context: Context?, intent: Intent?) {
+        Log.i(TAG, "Recieved: ${intent?.action}")
+        intent?.let { it ->
             if (it.action == Intent.ACTION_PACKAGE_REMOVED || it.action == Intent.ACTION_PACKAGE_FULLY_REMOVED) {
                 val prefs =
                     context?.getSharedPreferences(APApplication.SP_NAME, Context.MODE_PRIVATE)
@@ -25,20 +34,19 @@ class PackageConfigListener : BroadcastReceiver() {
                     }
                 }
                 APatchKeyHelper.setSharedPreferences(prefs)
-                APApplication.superKey = APatchKeyHelper.readSPSuperKey()
+                val superKey = APatchKeyHelper.readSPSuperKey()
+                if (superKey.isNullOrBlank())
+                    return
+                APApplication.superKey = superKey
 
-                it.data?.encodedSchemeSpecificPart?.let { packageName ->
-                    val packageInfo = context?.packageManager?.getPackageInfo(packageName, 0)
-                    val uid = packageInfo?.applicationInfo?.uid
+                val packageUid = getUid(intent)
+                val packageName = getPkg(intent)
 
-                    if(uid == null) {
-                        Log.e(TAG, "package $packageName uninstall, but can't find uid")
-                    } else {
-                        Log.e(TAG, "package $packageName uninstall, uid: $uid")
-
-                        val config = PkgConfig.Config(packageName, 1, 0, Natives.Profile(uid, 0, ""));
-                        PkgConfig.changeConfig(config)
-                    }
+                if (packageUid != null && packageName != null) {
+                    val config =
+                        PkgConfig.Config(packageName, 1, 0, Natives.Profile(packageUid, 0, ""));
+                    PkgConfig.changeConfig(config)
+                    Log.i(TAG, "Package $packageName uninstall, uid: $packageUid")
                 }
             }
         }
