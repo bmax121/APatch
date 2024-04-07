@@ -30,8 +30,8 @@
     <string name="settings_check_update">Check update</string>
     <string name="settings_check_update_summary">Automatically check for updates when opening the app</string>
 
-    <string name="home_learn_apatch">Learn AndroidPatch</string>
-    <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
+    <string name="home_learn_apatch">Learn APatch</string>
+    <string name="home_learn_android_patch_url">https://apatch.top</string>
     <string name="home_click_to_learn_apatch">Learn about the features of AndroidPatch and how to use</string>
 
     <string name="about_source_code"><![CDATA[<p>View source code at %1$s<p/>Join our %2$s channel<p/>Join our %3$s group]]></string>
