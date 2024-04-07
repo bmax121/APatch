@@ -9,3 +9,5 @@ captures
 key.jks
 key.jks.base64.txt
 .vscode
+app/src/main/resources/
+
