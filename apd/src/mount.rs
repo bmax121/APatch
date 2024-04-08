@@ -115,14 +115,19 @@ pub fn mount_overlayfs(
         upperdir,
         workdir
     );
+
+    let upperdir = upperdir
+        .filter(|up| up.exists())
+        .map(|e| e.display().to_string());
+    let workdir = workdir
+        .filter(|wd| wd.exists())
+        .map(|e| e.display().to_string());
     if let Result::Ok(fs) = fsopen("overlay", FsOpenFlags::FSOPEN_CLOEXEC) {
         let fs = fs.as_fd();
         fsconfig_set_string(fs, "lowerdir", lowerdir_config)?;
         if let (Some(upperdir), Some(workdir)) = (upperdir, workdir) {
-            if upperdir.exists() && workdir.exists() {
-                fsconfig_set_string(fs, "upperdir", upperdir.display().to_string())?;
-                fsconfig_set_string(fs, "workdir", workdir.display().to_string())?;
-            }
+            fsconfig_set_string(fs, "upperdir", upperdir)?;
+            fsconfig_set_string(fs, "workdir", workdir)?;
         }
         fsconfig_set_string(fs, "source", AP_OVERLAY_SOURCE)?;
         fsconfig_create(fs)?;
@@ -137,13 +142,12 @@ pub fn mount_overlayfs(
     } else {
         let mut data = format!("lowerdir={lowerdir_config}");
         if let (Some(upperdir), Some(workdir)) = (upperdir, workdir) {
-            if upperdir.exists() && workdir.exists() {
-                data = format!(
+            data = format!(
                     "{data},upperdir={},workdir={}",
-                    upperdir.display(),
-                    workdir.display()
-                );
-            }
+                    upperdir,
+                    workdir
+            );
+            
         }
         mount(
             AP_OVERLAY_SOURCE,
@@ -155,7 +159,6 @@ pub fn mount_overlayfs(
     }
     Ok(())
 }
-
 
 #[cfg(any(target_os = "linux", target_os = "android"))]
 pub fn mount_tmpfs(dest: impl AsRef<Path>) -> Result<()> {
