@@ -145,7 +145,7 @@ pub fn on_post_data_fs() -> Result<()> {
     // we should clean the module mount point if it exists
     ensure_clean_dir(module_dir)?;
 
-    assets::ensure_binaries().with_context(|| "Failed to extract bin assets")?;
+    assets::ensure_binaries().with_context(|| "binary missing")?;
 
     if Path::new(module_update_img).exists() {
         if module_update_flag.exists() {

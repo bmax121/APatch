@@ -1,6 +1,6 @@
 use anyhow::{bail, Context, Error, Ok, Result};
 use std::{
-    fs::{create_dir_all, write, File, OpenOptions},
+    fs::{create_dir_all, File, OpenOptions},
     io::{ErrorKind::AlreadyExists, Write},
     path::Path,
 };
@@ -48,20 +48,8 @@ pub fn ensure_dir_exists<T: AsRef<Path>>(dir: T) -> Result<()> {
     }
 }
 
-pub fn ensure_binary<T: AsRef<Path>>(path: T, contents: &[u8]) -> Result<()> {
-    if path.as_ref().exists() {
-        return Ok(());
-    }
-
-    ensure_dir_exists(path.as_ref().parent().ok_or_else(|| {
-        anyhow::anyhow!(
-            "{} does not have parent directory",
-            path.as_ref().to_string_lossy()
-        )
-    })?)?;
-
-    write(&path, contents)?;
-    #[cfg(unix)]
+// todo: ensure
+pub fn ensure_binary<T: AsRef<Path>>(path: T) -> Result<()> {
     set_permissions(&path, Permissions::from_mode(0o755))?;
     Ok(())
 }
