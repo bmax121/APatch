@@ -3,6 +3,8 @@ package me.bmax.apatch.ui.component
 import androidx.compose.foundation.clickable
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -28,7 +30,7 @@ fun SwitchItem(
             onCheckedChange.invoke(!checked)
         },
         headlineContent = {
-            Text(title)
+            Text(title, style = MaterialTheme.typography.bodyLarge, color = LocalContentColor.current)
         },
         leadingContent = icon?.let {
             { Icon(icon, title) }
@@ -38,7 +40,9 @@ fun SwitchItem(
         },
         supportingContent = {
             if (summary != null) {
-                Text(summary)
+                Text(summary,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.outline)
             }
         }
     )

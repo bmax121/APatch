@@ -206,7 +206,7 @@ fun SettingScreen() {
                 )
             }
 
-            // webview
+            // Webview Debug
             if (aPatchReady) {
                 var enableWebDebugging by rememberSaveable {
                     mutableStateOf(
@@ -310,7 +310,11 @@ fun SettingScreen() {
                         },
                         supportingContent = {
                             val colorMode = prefs.getString("custom_color", "blue")
-                            Text(text = colorNameToString(colorMode.toString()))
+                            Text(
+                                text = colorNameToString(colorMode.toString()),
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.outline
+                            )
                         },
                         leadingContent = { Icon(Icons.Filled.FormatColorFill, null) }
                     )
@@ -326,7 +330,11 @@ fun SettingScreen() {
                     },
                     supportingContent = {
                         val colorMode = prefs.getString("custom_color", "blue")
-                        Text(text = colorNameToString(colorMode.toString()))
+                        Text(
+                            text = colorNameToString(colorMode.toString()),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.outline
+                        )
                     },
                     leadingContent = { Icon(Icons.Filled.FormatColorFill, null) }
                 )
@@ -344,7 +352,13 @@ fun SettingScreen() {
                     supportingContent = {
                         Text(text = stringResource(id = R.string.hide_apatch_manager_summary))
                     },
-                    headlineContent = { Text(stringResource(id = R.string.hide_apatch_manager)) },
+                    headlineContent = {
+                        Text(
+                            stringResource(id = R.string.hide_apatch_manager),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.outline
+                        )
+                    },
                     modifier = Modifier.clickable {
                         showRandomizePkgNameDialog.value = true
                     }
@@ -383,7 +397,9 @@ fun SettingScreen() {
                             if (it.isLowerCase()) it.titlecase(
                                 Locale.getDefault()
                             ) else it.toString()
-                        } ?: stringResource(id = R.string.system_default)
+                        } ?: stringResource(id = R.string.system_default),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.outline
                     )
                 },
                 leadingContent = { Icon(Icons.Filled.Translate, null) }
