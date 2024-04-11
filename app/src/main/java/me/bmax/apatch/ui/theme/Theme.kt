@@ -3,14 +3,45 @@ package me.bmax.apatch.ui.theme
 import android.content.Context
 import android.os.Build
 import android.util.Log
+import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
+
+@Composable
+private fun SystemBarStyle(
+    darkMode: Boolean,
+    statusBarScrim: Color = Color.Transparent,
+    navigationBarScrim: Color = Color.Transparent
+) {
+    val context = LocalContext.current
+    val activity = context as ComponentActivity
+
+    SideEffect {
+        activity.enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.auto(
+                statusBarScrim.toArgb(),
+                statusBarScrim.toArgb(),
+            ) { darkMode },
+            navigationBarStyle = when {
+                darkMode -> SystemBarStyle.dark(
+                    navigationBarScrim.toArgb()
+                )
+                else -> SystemBarStyle.light(
+                    navigationBarScrim.toArgb(),
+                    navigationBarScrim.toArgb(),
+                )
+            }
+        )
+    }
+}
 
 @Composable
 fun APatchTheme(
@@ -86,20 +117,9 @@ fun APatchTheme(
         }
     }
 
-    val systemUiController = rememberSystemUiController()
-    SideEffect {
-        systemUiController.setStatusBarColor(
-            color = colorScheme.surface,
-            darkIcons = !darkTheme
-        )
-
-        // To match the App Navbar color
-        systemUiController.setNavigationBarColor(
-            color = colorScheme.surfaceColorAtElevation(8.dp),
-            darkIcons = !darkTheme,
-        )
-    }
-
+    SystemBarStyle(
+        darkMode = darkTheme
+    )
 
     MaterialTheme(
         colorScheme = colorScheme,

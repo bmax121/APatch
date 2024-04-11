@@ -22,19 +22,20 @@
         android:allowBackup="true"
         android:requestLegacyExternalStorage="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
-        android:enableOnBackInvokedCallback="true"
+        android:enableOnBackInvokedCallback="false"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="APatch"
         android:supportsRtl="true"
         android:networkSecurityConfig="@xml/network_security_config"
-        android:theme="@style/Theme.APatch"
+        android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
+
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"
-            android:theme="@style/AppTheme">
+            android:theme="@style/Theme.APatch">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

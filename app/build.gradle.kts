@@ -207,7 +207,6 @@ dependencies {
 
     implementation(libs.com.google.accompanist.drawablepainter)
     implementation(libs.com.google.accompanist.navigation.animation)
-    implementation(libs.com.google.accompanist.systemuicontroller)
 
     implementation(libs.compose.destinations.animations.core)
     ksp(libs.compose.destinations.ksp)
