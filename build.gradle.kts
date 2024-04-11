@@ -27,7 +27,7 @@ cmaker {
     }
     buildTypes {
         if (it.name == "release") {
-            arguments += "-DDEBUG_SYMBOLS_PATH=${buildDir.absolutePath}/symbols"
+            arguments += "-DDEBUG_SYMBOLS_PATH=${project.layout.buildDirectory}/symbols"
         }
     }
 }
@@ -48,7 +48,7 @@ val managerVersionName by extra(getVersionName())
 
 
 tasks.register<Delete>("clean") {
-    delete(rootProject.buildDir)
+    delete(rootProject.layout.buildDirectory)
 }
 
 fun getGitCommitCount(): Int {
