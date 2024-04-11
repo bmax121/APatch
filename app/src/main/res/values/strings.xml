@@ -30,9 +30,9 @@
     <string name="settings_check_update">Check update</string>
     <string name="settings_check_update_summary">Automatically check for updates when opening the app</string>
 
-    <string name="home_learn_apatch">Learn AndroidPatch</string>
+    <string name="home_learn_apatch">Learn APatch</string>
     <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
-    <string name="home_click_to_learn_apatch">Learn about the features of AndroidPatch and how to use</string>
+    <string name="home_click_to_learn_apatch">Learn about the features of APatch and how to use</string>
 
     <string name="about_source_code"><![CDATA[<p>View source code at %1$s<p/>Join our %2$s channel<p/>Join our %3$s group]]></string>
     <string name="send_log">Send Log</string>
@@ -236,4 +236,11 @@
     <string name="teal_theme">Teal Theme</string>
     <string name="yellow_theme">Yellow Theme</string>
 
+    <string name="about_app_version">Version %1$s</string>
+    <string name="about_app_desc">Kernel Root solution with only a stripped kernel image, providing the ability of mounting system module and hooking Kernel function.</string>
+    <string name="about_github" translatable="false">GitHub</string>
+    <string name="about_weblate" translatable="false">Weblate</string>
+    <string name="about_telegram_channel">Telegram Channel</string>
+    <string name="about_telegram_group">Telegram Group</string>
+    <string name="about_powered_by">Powered by %1$s</string>
 </resources>

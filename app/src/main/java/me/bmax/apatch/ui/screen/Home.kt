@@ -40,7 +40,6 @@ import androidx.compose.material.icons.outlined.Block
 import androidx.compose.material.icons.outlined.Cached
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Clear
-import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.InstallMobile
 import androidx.compose.material.icons.outlined.SystemUpdate
 import androidx.compose.material3.AlertDialogDefaults
@@ -92,9 +91,8 @@ import me.bmax.apatch.APApplication
 import me.bmax.apatch.Natives
 import me.bmax.apatch.R
 import me.bmax.apatch.apApp
-import me.bmax.apatch.ui.component.AboutDialog
 import me.bmax.apatch.ui.component.rememberConfirmDialog
-import me.bmax.apatch.ui.component.rememberCustomDialog
+import me.bmax.apatch.ui.screen.destinations.AboutScreenDestination
 import me.bmax.apatch.ui.screen.destinations.InstallModeSelectScreenDestination
 import me.bmax.apatch.ui.screen.destinations.PatchesDestination
 import me.bmax.apatch.ui.viewmodel.PatchesViewModel
@@ -121,7 +119,7 @@ fun HomeScreen(navigator: DestinationsNavigator) {
     Scaffold(topBar = {
         TopBar(onInstallClick = {
             navigator.navigate(InstallModeSelectScreenDestination, true)
-        })
+        }, navigator)
     }) { innerPadding ->
         Column(
             modifier = Modifier
@@ -397,18 +395,13 @@ fun RebootDropdownItem(@StringRes id: Int, reason: String = "") {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun TopBar(onInstallClick: () -> Unit) {
+private fun TopBar(onInstallClick: () -> Unit, navigator: DestinationsNavigator) {
     val uriHandler = LocalUriHandler.current
-    val aboutDialog = rememberCustomDialog {
-        AboutDialog(it)
-    }
     var showDropdownMoreOptions by remember { mutableStateOf(false) }
     var showDropdownReboot by remember { mutableStateOf(false) }
 
     TopAppBar(title = {
-        Text(
-            stringResource(R.string.app_name),
-            modifier = Modifier.clickable { aboutDialog.show() })
+        Text(stringResource(R.string.app_name))
     }, actions = {
         IconButton(onClick = onInstallClick) {
             Icon(
@@ -460,8 +453,8 @@ private fun TopBar(onInstallClick: () -> Unit) {
                     DropdownMenuItem(text = {
                         Text(stringResource(R.string.home_more_menu_about))
                     }, onClick = {
+                        navigator.navigate(AboutScreenDestination)
                         showDropdownMoreOptions = false
-                        aboutDialog.show()
                     })
                 }
             }
@@ -704,7 +697,10 @@ private fun AStatusCard(apState: APApplication.State) {
                     }
 
                     else -> {
-                        Icon(Icons.AutoMirrored.Outlined.HelpOutline, stringResource(R.string.home_install_unknown))
+                        Icon(
+                            Icons.AutoMirrored.Outlined.HelpOutline,
+                            stringResource(R.string.home_install_unknown)
+                        )
                     }
                 }
                 Column(
