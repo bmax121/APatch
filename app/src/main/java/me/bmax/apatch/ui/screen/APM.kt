@@ -26,8 +26,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -35,7 +33,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -58,6 +56,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -84,17 +83,18 @@ import me.bmax.apatch.util.LocalSnackbarHost
 import me.bmax.apatch.util.download
 import me.bmax.apatch.util.getRootShell
 import me.bmax.apatch.util.hasMagisk
-import me.bmax.apatch.util.isScrollingUp
 import me.bmax.apatch.util.reboot
 import me.bmax.apatch.util.shellForResult
 import me.bmax.apatch.util.toggleModule
-import me.bmax.apatch.util.tryGetRootShell
 import me.bmax.apatch.util.uninstallModule
 import okhttp3.OkHttpClient
 
 private fun getSafeMode(): Boolean {
     val shell = getRootShell()
-    return shellForResult(shell, "[ -e $SAFEMODE_FILE ] && echo 'IS_SAFE_MODE'").out.contains("IS_SAFE_MODE")
+    return shellForResult(
+        shell,
+        "[ -e $SAFEMODE_FILE ] && echo 'IS_SAFE_MODE'"
+    ).out.contains("IS_SAFE_MODE")
 }
 
 @Destination
@@ -141,7 +141,6 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
         { /* Empty */ }
     } else {
         {
-            val moduleInstall = stringResource(id = R.string.apm_install)
             val selectZipLauncher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.StartActivityForResult()
             ) {
@@ -158,17 +157,20 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
                 viewModel.markNeedRefresh()
             }
 
-            ExtendedFloatingActionButton(
+            FloatingActionButton(
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+                containerColor = MaterialTheme.colorScheme.primary,
                 onClick = {
                     // select the zip file to install
                     val intent = Intent(Intent.ACTION_GET_CONTENT)
                     intent.type = "application/zip"
                     selectZipLauncher.launch(intent)
-                },
-                expanded = moduleListState.isScrollingUp(),
-                icon = { Icon(Icons.Filled.Add, moduleInstall) },
-                text = { Text(text = moduleInstall) },
-            )
+                }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.package_import),
+                    contentDescription = null
+                )
+            }
         }
     }) { innerPadding ->
         when {
@@ -198,10 +200,11 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
                         navigator.navigate(InstallScreenDestination(it))
                     }, onClickModule = { id, name, hasWebUi ->
                         if (hasWebUi) {
-                            context.startActivity(Intent(context, WebUIActivity::class.java)
-                                .setData(Uri.parse("apatch://webui/$id"))
-                                .putExtra("id", id)
-                                .putExtra("name", name)
+                            context.startActivity(
+                                Intent(context, WebUIActivity::class.java)
+                                    .setData(Uri.parse("apatch://webui/$id"))
+                                    .putExtra("id", id)
+                                    .putExtra("name", name)
                             )
                         }
                     })
@@ -465,7 +468,9 @@ private fun ModuleItem(
 
         val textDecoration = if (!module.remove) null else TextDecoration.LineThrough
 
-        Column(modifier = Modifier.clickable { onClick(module) }.padding(24.dp, 16.dp, 24.dp, 0.dp)) {
+        Column(modifier = Modifier
+            .clickable { onClick(module) }
+            .padding(24.dp, 16.dp, 24.dp, 0.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
