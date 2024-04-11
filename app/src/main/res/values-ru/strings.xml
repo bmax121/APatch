@@ -65,7 +65,7 @@
     <string name="apm_start_downloading">Начало загрузки: %s</string>
     <string name="apm_new_version_available">Нажмите что бы установить новую версию, %s.</string>
     <string name="apm_changelog">Список изменений</string>
-    <string name="home_patch_set_key_title">Задать SuperKey</string>
+    <string name="patch_set_superkey">Задать SuperKey</string>
     <string name="kpm_load_toast_failed">Ошибка загрузки</string>
     <string name="home_auth_key_desc">Начало после сертификации</string>
     <string name="home_patch_set_key_desc">Ключ только для KernelPatch</string>

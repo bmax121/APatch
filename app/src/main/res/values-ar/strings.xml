@@ -21,7 +21,7 @@
     <string name="safe_mode">الوضع الآمن</string>
     <string name="super_key">المفتاح الخارق</string>
     <string name="clear_super_key">محو المفتاح الخارق</string>
-    <string name="home_patch_set_key_title">ضع المفتاح الخارق</string>
+    <string name="patch_set_superkey">ضع المفتاح الخارق</string>
     <string name="home_patch_set_key_desc">اعتماد فقط لـKernelPatch</string>
     <string name="home_click_to_install">اضغط للتثبيت</string>
     <string name="home_working">يعمل</string>

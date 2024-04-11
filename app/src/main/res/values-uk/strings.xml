@@ -16,7 +16,7 @@
     <string name="safe_mode">Безпечний режим</string>
     <string name="super_key">SuperKey</string>
     <string name="clear_super_key">Очистити SuperKey</string>
-    <string name="home_patch_set_key_title">Встановити SuperKey</string>
+    <string name="patch_set_superkey">Встановити SuperKey</string>
     <string name="home_patch_set_key_desc">Пароль для KernelPatch</string>
     <string name="home_patch_next_step">Наступний крок</string>
     <string name="home_not_installed">Не встановлено</string>

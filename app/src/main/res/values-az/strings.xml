@@ -19,7 +19,7 @@
     <string name="safe_mode">Təhlükəsiz rejim</string>
     <string name="clear_super_key">Açarı silin</string>
     <string name="super_key">SuperAçar</string>
-    <string name="home_patch_set_key_title">SuperAçar təyin edin</string>
+    <string name="patch_set_superkey">SuperAçar təyin edin</string>
     <string name="home_patch_set_key_desc">Yalnız NüvəYamağı üçün etimadnamə</string>
     <string name="home_patch_next_step">Sonrakı addım</string>
     <string name="home_not_installed">Quraşdırılmayıb</string>

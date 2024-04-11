@@ -13,7 +13,7 @@
     <string name="home_click_to_install">คลิกเพื่อติดตั้ง</string>
     <string name="home_need_update">มีอัปเดตพร้อมใช้งาน</string>
     <string name="home_selinux_status">สถานะ SELinux</string>
-    <string name="home_patch_set_key_title">ตั้ง SuperKey</string>
+    <string name="patch_set_superkey">ตั้ง SuperKey</string>
     <string name="home_ap_cando_update">อัพเดท</string>
     <string name="home_selinux_status_disabled">ปิด</string>
     <string name="home_working">กำลังทำงาน</string>

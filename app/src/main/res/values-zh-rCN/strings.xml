@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="apm">系统模块</string>
-    <string name="super_key">验证超级密钥</string>
+    <string name="super_key">超级密钥</string>
     <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
     <string name="app_name" translatable="false">APatch</string>
     <string name="kpm">内核模块</string>
@@ -25,7 +25,7 @@
     <string name="reboot">重启</string>
     <string name="home_need_update">有新版本可用</string>
     <string name="home">主页</string>
-    <string name="home_patch_set_key_title">设定超级密钥</string>
+    <string name="patch_set_superkey">设置超级密钥</string>
     <string name="settings">设置</string>
     <string name="home_working">生效中 😋</string>
     <string name="home_patch_next_step">下一步</string>

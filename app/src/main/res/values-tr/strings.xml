@@ -58,7 +58,7 @@
     <string name="kpm_author">Geliştirici</string>
     <string name="apm_failed_to_enable">\"%s\" modülü aktifleştirilemedi</string>
     <string name="home">Anasayfa</string>
-    <string name="home_patch_set_key_title">Süper Anahtar\'ı ayarla</string>
+    <string name="patch_set_superkey">Süper Anahtar\'ı ayarla</string>
     <string name="apm_downloading">\"%s\"modülü indiriliyor…</string>
     <string name="su_hide_system_apps">Sistem uygulamalarını gizle</string>
     <string name="home_su_path">su programı</string>

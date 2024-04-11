@@ -57,7 +57,7 @@
     <string name="apm_start_downloading">Έναρξη λήψης %s</string>
     <string name="super_key">Υπερ κλειδί</string>
     <string name="clear_super_key">Καθαρό κλειδί</string>
-    <string name="home_patch_set_key_title">Ρυθμίστε το σούπερ κλειδί</string>
+    <string name="patch_set_superkey">Ρυθμίστε το σούπερ κλειδί</string>
     <string name="home_patch_set_key_desc">Μόνο διαπιστευτήρια για το KernelPatch</string>
     <string name="home_patch_next_step">Επόμενο βήμα</string>
     <string name="home_not_installed">Δεν έχει εγκατασταθεί</string>

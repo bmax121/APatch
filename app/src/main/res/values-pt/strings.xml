@@ -13,7 +13,7 @@
     <string name="home_learn_apatch">Aprenda sobre AndroidPatch</string>
     <string name="home_click_to_learn_apatch">Conheça os recursos do AndroidPatch e como usá-lo</string>
     <string name="super_key">Chave de Segurança</string>
-    <string name="home_patch_set_key_title">Definir Chave de Segurança</string>
+    <string name="patch_set_superkey">Definir Chave de Segurança</string>
     <string name="home_patch_next_step">Próximo Passo</string>
     <string name="home_install_unknown">Desconhecido</string>
     <string name="home_click_to_install">Clique para instalar</string>

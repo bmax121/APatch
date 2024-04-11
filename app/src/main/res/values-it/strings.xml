@@ -47,7 +47,7 @@
     <string name="kpm_author">Autore</string>
     <string name="apm_failed_to_enable">Impossibile abilitare il modulo \"%s\"</string>
     <string name="home">Home</string>
-    <string name="home_patch_set_key_title">Imposta SuperKey</string>
+    <string name="patch_set_superkey">Imposta SuperKey</string>
     <string name="apm_downloading">Download del modulo \"%s\" in corso…</string>
     <string name="su_hide_system_apps">Nascondi app di sistema</string>
     <string name="apm_magisk_conflict">I moduli non sono disponibili a causa di un conflitto con Magisk.</string>

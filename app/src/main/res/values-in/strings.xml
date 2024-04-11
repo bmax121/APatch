@@ -20,7 +20,7 @@
     <string name="send_log">Kirim Log</string>
     <string name="safe_mode">Mode aman</string>
     <string name="home_patch_set_key_desc">Kredensial untuk KernelPatch</string>
-    <string name="home_patch_set_key_title">Pasang SuperKey</string>
+    <string name="patch_set_superkey">Pasang SuperKey</string>
     <string name="home_install_unknown">Belum diinstal/autentikasi</string>
     <string name="home_click_to_install">Klik untuk menginstal</string>
     <string name="home_patch_next_step">Selanjutnya</string>

@@ -27,7 +27,7 @@
     <string name="home_not_installed">未インストール</string>
     <string name="send_log">ログを送信</string>
     <string name="super_key">SuperKey</string>
-    <string name="home_patch_set_key_title">SuperKey を設定</string>
+    <string name="patch_set_superkey">SuperKey を設定</string>
     <string name="home_installing">インストール中</string>
     <string name="home_auth_key_title">SuperKey を入力</string>
     <string name="kpm_kp_not_installed">KernelPatch はインストールされていません</string>

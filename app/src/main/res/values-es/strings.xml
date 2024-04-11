@@ -26,7 +26,7 @@
     <string name="safe_mode">Modo seguro</string>
     <string name="home_click_to_install">Toca para instalar</string>
     <string name="home_need_update">Nueva versión disponible</string>
-    <string name="home_patch_set_key_title">Definir SuperKey</string>
+    <string name="patch_set_superkey">Definir SuperKey</string>
     <string name="home_su_path">Ejecutable su</string>
     <string name="apatch_version_update">Versión: %s → %s</string>
     <string name="home_working">Trabajando 😋</string>

@@ -53,7 +53,7 @@
     <string name="reboot_userspace">Sanfter Neustart</string>
     <string name="super_key">Superschlüssel</string>
     <string name="clear_super_key">Superschlüssel löschen</string>
-    <string name="home_patch_set_key_title">Setze den Superschlüssel</string>
+    <string name="patch_set_superkey">Setze den Superschlüssel</string>
     <string name="home_installing">Installiere...</string>
     <string name="home_auth_key_title">Superschlüssel eingeben</string>
     <string name="kpm">KPModule</string>

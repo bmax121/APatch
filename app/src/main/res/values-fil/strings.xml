@@ -15,7 +15,7 @@
     <string name="reboot_userspace">Soft Reboot</string>
     <string name="home_learn_apatch">Alamin ang AndroidPatch</string>
     <string name="home_click_to_install">I-click para mag install</string>
-    <string name="home_patch_set_key_title">I-set ang SuperKey</string>
+    <string name="patch_set_superkey">I-set ang SuperKey</string>
     <string name="home_working">Gumagana</string>
     <string name="home_not_installed">Hindi naka-installed</string>
     <string name="home_need_update">May update</string>

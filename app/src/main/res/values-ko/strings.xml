@@ -73,7 +73,7 @@
     <string name="send_log">로그 보내기</string>
     <string name="super_key">루팅 비밀번호</string>
     <string name="clear_super_key">Superkey 지우기</string>
-    <string name="home_patch_set_key_title">루팅 비밀번호 정하기</string>
+    <string name="patch_set_superkey">루팅 비밀번호 정하기</string>
     <string name="patch_title">패치</string>
     <string name="su_title">슈퍼유저</string>
     <string name="reboot_userspace">단순 재부팅</string>

@@ -82,7 +82,7 @@
     <string name="safe_mode">安全模式</string>
     <string name="super_key">超級密鑰</string>
     <string name="home_apatch_version">APatch 版本</string>
-    <string name="home_patch_set_key_title">設定超級密鑰</string>
+    <string name="patch_set_superkey">設定超級密鑰</string>
     <string name="home_su_path">可執行 SU 路徑</string>
     <string name="home_patch_next_step">下一步</string>
     <string name="home_auth_key_title">輸入超級密鑰</string>

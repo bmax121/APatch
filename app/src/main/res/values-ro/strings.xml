@@ -18,7 +18,7 @@
     <string name="about_source_code">Vezi codul sursă la %1$s<br/> Intră pe canalul nostru %2$s</string>
     <string name="send_log">Trimite un log</string>
     <string name="clear_super_key">Șterge cheia</string>
-    <string name="home_patch_set_key_title">Setează Superkey</string>
+    <string name="patch_set_superkey">Setează Superkey</string>
     <string name="home_patch_set_key_desc">Doar acreditări pentru KernelPatch</string>
     <string name="home_patch_next_step">Următorul pas</string>
     <string name="home_not_installed">Neinstalat</string>

@@ -343,7 +343,7 @@ private fun ExtraItem(extra: KPModel.IExtraInfo, existed: Boolean, onDelete: ()-
 
 @Composable
 private fun SetSuperKeyView(viewModel: PatchesViewModel) {
-    var skey by remember { mutableStateOf(viewModel.kpimgInfo.superKey) }
+    var skey = viewModel.superkey
     var showWarn by remember { mutableStateOf(!viewModel.checkSuperKeyValidation(skey))}
     var keyVisible by remember { mutableStateOf(false) }
     ElevatedCard(
@@ -381,7 +381,7 @@ private fun SetSuperKeyView(viewModel: PatchesViewModel) {
                             .fillMaxWidth()
                             .padding(top = 6.dp),
                         value = skey,
-                        label = { Text(stringResource(id = R.string.super_key)) },
+                        label = { Text(stringResource(id = R.string.patch_set_superkey)) },
                         visualTransformation = if (keyVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                         shape = RoundedCornerShape(50.0f),

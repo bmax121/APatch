@@ -71,7 +71,7 @@
     <string name="apm_new_version_available">Nhấn để nâng cấp phiên bản mới, %s.</string>
     <string name="patch_warnning">Việc cài đặt đi kèm với rủi ro. Hãy đảm bảo dữ liệu của bạn đã được sao lưu.</string>
     <string name="super_key">Siêu khóa</string>
-    <string name="home_patch_set_key_title">Đặt siêu khóa</string>
+    <string name="patch_set_superkey">Đặt siêu khóa</string>
     <string name="apatch_version">Phiên bản:
 \n%s</string>
     <string name="home_learn_apatch">Tìm hiểu AndroidPatch</string>

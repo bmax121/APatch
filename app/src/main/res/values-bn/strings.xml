@@ -30,7 +30,7 @@
     <string name="send_log">লগ পাঠান</string>
     <string name="reboot_edl">EDL এ রিবুট করুন</string>
     <string name="home_click_to_learn_apatch">অ্যান্ড্রয়েডপ্যাচের বৈশিষ্ট্য এবং কীভাবে ব্যবহার করবেন সে সম্পর্কে জানুন</string>
-    <string name="home_patch_set_key_title">সুপারকি সেট করুন</string>
+    <string name="patch_set_superkey">সুপারকি সেট করুন</string>
     <string name="home_patch_next_step">পরবর্তী ধাপ</string>
     <string name="home_click_to_install">ইনস্টল করতে ক্লিক করুন</string>
     <string name="home_auth_key_desc">প্রত্যয়িতকরণের পরে কাজ শুরু করুন</string>

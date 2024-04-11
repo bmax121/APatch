@@ -42,7 +42,7 @@ class PatchesViewModel : ViewModel() {
     var bootDev by mutableStateOf("")
     var kimgInfo by mutableStateOf(KPModel.KImgInfo("", false))
     var kpimgInfo by mutableStateOf(KPModel.KPImgInfo("","","", "", ""))
-    var superkey by mutableStateOf("")
+    var superkey by mutableStateOf(APApplication.superKey)
     var existedExtras = mutableStateListOf<KPModel.IExtraInfo>()
     var newExtras = mutableStateListOf<KPModel.IExtraInfo>()
     var newExtrasFileName = mutableListOf<String>()
@@ -104,7 +104,6 @@ class PatchesViewModel : ViewModel() {
                     kpimg["version"].toString(),
                     kpimg["compile_time"].toString(),
                     kpimg["config"].toString(),
-//                    kpimg["superkey"].toString(),   // empty
                     APApplication.superKey,     // current key
                     kpimg["root_superkey"].toString(),   // empty
                 )
@@ -149,7 +148,6 @@ class PatchesViewModel : ViewModel() {
                         val extra = ini["extra $i"]
                         if(extra == null){
                             error += "empty extra section"
-                            Log.d(TAG, error)
                             break
                         }
                         val type = KPModel.ExtraType.valueOf(extra["type"]!!.uppercase())
@@ -191,7 +189,7 @@ class PatchesViewModel : ViewModel() {
                     src.copyAndCloseOut(it.newOutputStream())
                 }
             } } catch (e: IOException) {
-                Log.d(TAG, "copy boot image error: $e")
+                Log.e(TAG, "copy boot image error: $e")
             }
             parseBootimg(srcBoot.path)
             running = false
@@ -218,8 +216,8 @@ class PatchesViewModel : ViewModel() {
                 result.out.filter { it.startsWith("SLOT=") }[0].removePrefix("SLOT=")
             }
             bootDev = result.out.filter { it.startsWith("BOOTIMAGE=") }[0].removePrefix("BOOTIMAGE=")
-            Log.d(TAG, "current slot: $bootSlot")
-            Log.d(TAG, "current bootimg: $bootDev")
+            Log.i(TAG, "current slot: $bootSlot")
+            Log.i(TAG, "current bootimg: $bootDev")
             srcBoot = FileSystemManager.getLocal().getFile(bootDev)
             parseBootimg(bootDev)
         } else {
@@ -255,7 +253,7 @@ class PatchesViewModel : ViewModel() {
             val kpmFileName = "${rand}.kpm"
             val kpmFile: ExtendedFile = patchDir.getChildFile(kpmFileName)
 
-            Log.d(TAG, "copy kpm to: " + kpmFile.path)
+            Log.i(TAG, "copy kpm to: " + kpmFile.path)
             try {
                 uri.inputStream().buffered().use { src ->
                     kpmFile.also {
@@ -263,7 +261,7 @@ class PatchesViewModel : ViewModel() {
                     }
                 }
             } catch (e: IOException) {
-                Log.d(TAG, "Copy kpm error: $e")
+                Log.e(TAG, "Copy kpm error: $e")
             }
 
             val result = shellForResult(shell,
@@ -273,7 +271,6 @@ class PatchesViewModel : ViewModel() {
 
             if (result.isSuccess) {
                 val ini = Ini(StringReader(result.out.joinToString("\n")))
-                Log.d(TAG, "add new kpm info: $ini")
                 val kpm = ini["kpm"]
                 if (kpm != null) {
                     val kpmInfo = KPModel.KPMInfo(
@@ -300,12 +297,12 @@ class PatchesViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             patching = true
             patchLog = ""
-            Log.d(TAG, "starting unpatching...")
+            Log.i(TAG, "starting unpatching...")
 
             val logs = object : CallbackList<String>() {
                 override fun onAddElement(e: String?) {
                     patchLog += e
-                    Log.d(TAG, "" + e)
+                    Log.i(TAG, "" + e)
                     patchLog += "\n"
                 }
             }
@@ -380,7 +377,7 @@ class PatchesViewModel : ViewModel() {
             }
             patchCommand += " -K kpatch"
 
-            Log.d(TAG, "patchCommand: $patchCommand")
+            Log.i(TAG, "patchCommand: $patchCommand")
 
             val result = shell.newJob().add(
                 "export ASH_STANDALONE=1",

@@ -19,7 +19,7 @@
     <string name="safe_mode">Sigurni način</string>
     <string name="super_key">SuperKey</string>
     <string name="clear_super_key">Izbriši SuperKey</string>
-    <string name="home_patch_set_key_title">Postavi SuperKey</string>
+    <string name="patch_set_superkey">Postavi SuperKey</string>
     <string name="home_patch_next_step">Sljedeči korak</string>
     <string name="home_not_installed">Nije instalirano</string>
     <string name="home_install_unknown">Nepoznato</string>

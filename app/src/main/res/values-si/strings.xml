@@ -6,7 +6,7 @@
     <string name="reboot">Restart කරන්න</string>
     <string name="about">APatch පිළිබඳ</string>
     <string name="super_key">මුරපදය</string>
-    <string name="home_patch_set_key_title">නව මුර පදයක් සෑදීම</string>
+    <string name="patch_set_superkey">නව මුර පදයක් සෑදීම</string>
     <string name="home_patch_set_key_desc">ඔබගේ මුරපදය ඇතුළත් කරන්න</string>
     <string name="home_patch_next_step">ඉදිරියට</string>
     <string name="home_not_installed">ස්ථාපනය වී නොමැත</string>

@@ -28,7 +28,7 @@
     <string name="send_log">Reportar registro</string>
     <string name="safe_mode">Modo de segurança</string>
     <string name="super_key">SuperKey</string>
-    <string name="home_patch_set_key_title">Definir SuperKey</string>
+    <string name="patch_set_superkey">Definir SuperKey</string>
     <string name="home_patch_set_key_desc">Apenas credencial para KernelPatch</string>
     <string name="home_patch_next_step">Próximo passo</string>
     <string name="home_not_installed">Não instalado</string>

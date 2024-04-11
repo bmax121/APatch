@@ -30,7 +30,7 @@
     <string name="home_apatch_version">Version d\'APatch</string>
     <string name="apatch_version_update">Version : %s -&gt; %s</string>
     <string name="about_source_code">&lt;p&gt;Voir le code source sur %1$s&lt;p/&gt;Rejoindre notre canal %2$s&lt;p/&gt;Rejoindre notre groupe %2$s</string>
-    <string name="home_patch_set_key_title">Initialiser la clé</string>
+    <string name="patch_set_superkey">Initialiser la clé</string>
     <string name="send_log">Envoyer le log</string>
     <string name="home_kernel">Noyau</string>
     <string name="kpm">KPModule</string>
