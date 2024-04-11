@@ -1,5 +1,7 @@
 package me.bmax.apatch.util.apksign;
 
+import androidx.annotation.NonNull;
+
 import org.bouncycastle.asn1.ASN1Encoding;
 import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.ASN1OutputStream;
@@ -432,14 +434,7 @@ public class SignApk {
         for (int i = 0; i < privateKeys.length; i++) {
             PrivateKey privateKey = privateKeys[i];
             X509Certificate certificate = certificates[i];
-            PublicKey publicKey = certificate.getPublicKey();
-            String keyAlgorithm = privateKey.getAlgorithm();
-            if (!keyAlgorithm.equalsIgnoreCase(publicKey.getAlgorithm())) {
-                throw new InvalidKeyException(
-                        "Key algorithm of private key #" + (i + 1) + " does not match key"
-                                + " algorithm of public key #" + (i + 1) + ": " + keyAlgorithm
-                                + " vs " + publicKey.getAlgorithm());
-            }
+            String keyAlgorithm = getKeyAlgorithm(certificate, privateKey, i);
             ApkSignerV2.SignerConfig signerConfig = new ApkSignerV2.SignerConfig();
             signerConfig.privateKey = privateKey;
             signerConfig.certificates = Collections.singletonList(certificate);
@@ -457,6 +452,19 @@ public class SignApk {
             result.add(signerConfig);
         }
         return result;
+    }
+
+    @NonNull
+    private static String getKeyAlgorithm(X509Certificate certificate, PrivateKey privateKey, int i) throws InvalidKeyException {
+        PublicKey publicKey = certificate.getPublicKey();
+        String keyAlgorithm = privateKey.getAlgorithm();
+        if (!keyAlgorithm.equalsIgnoreCase(publicKey.getAlgorithm())) {
+            throw new InvalidKeyException(
+                    "Key algorithm of private key #" + (i + 1) + " does not match key"
+                            + " algorithm of public key #" + (i + 1) + ": " + keyAlgorithm
+                            + " vs " + publicKey.getAlgorithm());
+        }
+        return keyAlgorithm;
     }
 
     private static int getV2SignatureAlgorithm(String keyAlgorithm, String digestAlgorithm) {
