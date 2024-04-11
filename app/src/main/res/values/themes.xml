@@ -2,6 +2,23 @@
 <resources>
     <style name="Theme.APatch" parent="Theme.Material3.Light.NoActionBar" />
 
+    <style name="Theme.Splash.Light" parent="Theme.SplashScreen">
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <style name="Theme.Splash.Dark" parent="Theme.SplashScreen">
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <style name="Theme.Splash" parent="Theme.Splash.Light"/>
+
+    <style name="AppTheme" parent="Theme.Splash">
+        <item name="windowSplashScreenAnimatedIcon">@drawable/launcher_splash</item>
+        <item name="postSplashScreenTheme">@style/Theme.APatch</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
     <style name="Theme.APatch.WebUI" parent="Theme.APatch">
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">true</item>

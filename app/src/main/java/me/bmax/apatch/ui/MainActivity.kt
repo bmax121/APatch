@@ -18,11 +18,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.ramcosta.composedestinations.DestinationsNavHost
@@ -38,8 +41,13 @@ import me.bmax.apatch.ui.theme.APatchTheme
 import me.bmax.apatch.util.LocalSnackbarHost
 
 class MainActivity : AppCompatActivity() {
+    private var isLoading by mutableStateOf(true)
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
+
+        splashScreen.setKeepOnScreenCondition { isLoading }
 
         setContent {
             APatchTheme {
@@ -75,6 +83,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+            isLoading = false
         }
     }
 }
@@ -90,7 +99,7 @@ private fun BottomBar(navController: NavHostController) {
                     state == APApplication.State.ANDROIDPATCH_INSTALLED ||
                     state == APApplication.State.ANDROIDPATCH_NEED_UPDATE)
             val hideDestination = (destination.kPatchRequired && !kPatchReady) ||
-                                  (destination.aPatchRequired && !aPatchReady)
+                    (destination.aPatchRequired && !aPatchReady)
             if (hideDestination) return@forEach
             NavigationBarItem(
                 selected = isCurrentDestOnBackStack,

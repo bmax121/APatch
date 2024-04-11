@@ -2,6 +2,8 @@
 <resources>
     <style name="Theme.APatch" parent="Theme.Material3.Dark.NoActionBar" />
 
+    <style name="Theme.Splash" parent="Theme.Splash.Dark"/>
+
     <style name="Theme.APatch.WebUI" parent="Theme.APatch">
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">false</item>

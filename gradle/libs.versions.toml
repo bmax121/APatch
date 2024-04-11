@@ -12,6 +12,7 @@ sheets-compose-dialogs = "1.3.0"
 markdown = "4.6.2"
 ui = "1.6.5"
 webkit = "1.10.0"
+androidxCoreSplashscreen = "1.0.1"
 
 [plugins]
 agp-app = { id = "com.android.application", version.ref = "agp" }
@@ -34,6 +35,7 @@ androidx-compose-ui = { group = "androidx.compose.ui", name = "ui", version.ref 
 androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "ui" }
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "ui" }
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "ui" }
+androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "androidxCoreSplashscreen" }
 androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata" }
 
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
