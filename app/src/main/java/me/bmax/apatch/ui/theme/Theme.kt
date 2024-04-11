@@ -2,15 +2,46 @@ package me.bmax.apatch.ui.theme
 
 import android.content.Context
 import android.os.Build
-import android.util.Log
+import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
+
+@Composable
+private fun SystemBarStyle(
+    darkMode: Boolean,
+    statusBarScrim: Color = Color.Transparent,
+    navigationBarScrim: Color = Color.Transparent
+) {
+    val context = LocalContext.current
+    val activity = context as ComponentActivity
+
+    SideEffect {
+        activity.enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.auto(
+                statusBarScrim.toArgb(),
+                statusBarScrim.toArgb(),
+            ) { darkMode }, navigationBarStyle = when {
+                darkMode -> SystemBarStyle.dark(
+                    navigationBarScrim.toArgb()
+                )
+
+                else -> SystemBarStyle.light(
+                    navigationBarScrim.toArgb(),
+                    navigationBarScrim.toArgb(),
+                )
+            }
+        )
+    }
+}
 
 @Composable
 fun APatchTheme(
@@ -24,7 +55,9 @@ fun APatchTheme(
         prefs.getBoolean("night_mode_enabled", false)
     }
     // Dynamic color is available on Android 12+, and custom 1t!
-    val dynamicColor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) prefs.getBoolean("use_system_color_theme", true) else false
+    val dynamicColor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) prefs.getBoolean(
+        "use_system_color_theme", true
+    ) else false
 
     val customColorScheme = prefs.getString("custom_color", "blue")
 
@@ -81,29 +114,17 @@ fun APatchTheme(
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
                 if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
             }
+
             darkTheme -> DarkBlueTheme
             else -> LightBlueTheme
         }
     }
 
-    val systemUiController = rememberSystemUiController()
-    SideEffect {
-        systemUiController.setStatusBarColor(
-            color = colorScheme.surface,
-            darkIcons = !darkTheme
-        )
-
-        // To match the App Navbar color
-        systemUiController.setNavigationBarColor(
-            color = colorScheme.surfaceColorAtElevation(8.dp),
-            darkIcons = !darkTheme,
-        )
-    }
-
+    SystemBarStyle(
+        darkMode = darkTheme
+    )
 
     MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
-        content = content
+        colorScheme = colorScheme, typography = Typography, content = content
     )
 }

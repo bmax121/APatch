@@ -2,6 +2,7 @@ package me.bmax.apatch.ui
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -45,8 +46,11 @@ class MainActivity : AppCompatActivity() {
     private var isLoading by mutableStateOf(true)
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         val splashScreen = installSplashScreen()
+
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
 
         splashScreen.setKeepOnScreenCondition { isLoading }
 
@@ -59,21 +63,20 @@ class MainActivity : AppCompatActivity() {
                     rememberNavHostEngine(navHostContentAlignment = Alignment.TopCenter,
                         rootDefaultAnimations = RootNavGraphDefaultAnimations(enterTransition = {
                             fadeIn(animationSpec = tween(300))
-                        },
-                            exitTransition = { fadeOut(animationSpec = tween(300)) }),
+                        }, exitTransition = { fadeOut(animationSpec = tween(300)) }),
                         defaultAnimationsForNestedNavGraph = mapOf(
                             NavGraphs.root to NestedNavGraphDefaultAnimations(enterTransition = {
                                 fadeIn(animationSpec = tween(300))
-                            },
-                                exitTransition = { fadeOut(animationSpec = tween(300)) }),
-                        ))
+                            }, exitTransition = { fadeOut(animationSpec = tween(300)) }),
+                        )
+                    )
                 Scaffold(bottomBar = { BottomBar(navController) },
                     snackbarHost = { SnackbarHost(snackBarHostState) }) { innerPadding ->
                     CompositionLocalProvider(
                         LocalSnackbarHost provides snackBarHostState,
                     ) {
                         DestinationsNavHost(
-                            modifier = Modifier.padding(innerPadding),
+                            modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
                             navGraph = NavGraphs.root,
                             navController = navController,
                             engine = navHostEngine

@@ -6,11 +6,7 @@
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
-    <style name="Theme.Splash.Dark" parent="Theme.SplashScreen">
-        <item name="android:windowLightStatusBar">false</item>
-    </style>
-
-    <style name="Theme.Splash" parent="Theme.Splash.Light"/>
+    <style name="Theme.Splash" parent="Theme.Splash.Light" />
 
     <style name="AppTheme" parent="Theme.Splash">
         <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_round</item>
