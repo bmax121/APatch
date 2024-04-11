@@ -3,7 +3,9 @@ package me.bmax.apatch
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Build
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import coil.Coil
@@ -18,6 +20,7 @@ import me.zhanghai.android.appiconloader.coil.AppIconFetcher
 import me.zhanghai.android.appiconloader.coil.AppIconKeyer
 import java.io.File
 import kotlin.concurrent.thread
+import kotlin.system.exitProcess
 
 lateinit var apApp: APApplication
 
@@ -236,6 +239,13 @@ class APApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         apApp = this
+
+        val isArm64 = Build.SUPPORTED_ABIS.any { it == "arm64-v8a" }
+        if (!isArm64) {
+            Toast.makeText(applicationContext, "Unsupported architecture!", Toast.LENGTH_LONG).show()
+            Thread.sleep(5000)
+            exitProcess(0)
+        }
 
         // TODO: We can't totally protect superkey from be stolen by root or LSPosed-like injection tools in user space, the only way is don't use superkey,
         // TODO: 1. make me root by kernel
