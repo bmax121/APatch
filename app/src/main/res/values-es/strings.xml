@@ -67,7 +67,7 @@
     <string name="android_patch">AndroidPatch</string>
     <string name="apm_uninstall_success">%s ha sido desinstalado</string>
     <string name="apm_install">Instalar módulo</string>
-    <string name="apm_uninstall">Desinstalar</string>
+    <string name="apm_remove">Desinstalar</string>
     <string name="apm_uninstall_confirm">¿Desinstalar el módulo \"%s\"?</string>
     <string name="apm_version">Versión</string>
     <string name="apm_start_downloading">Iniciar descarga %s</string>
@@ -169,7 +169,7 @@
 \n4. Su dispositivo no es compatible con APatch y KernelPatch.
 \n
 \nPor favor revisa e intenta de nuevo. Si todavía hay problemas, siempre puedes hacer preguntas en la página de problemas del repositorio oficial.</string>
-    <string name="webui_open">Open WebUI</string>
+    <string name="apm_webui_open">Open WebUI</string>
     <string name="enable_web_debugging_summary">Se puede utilizar para depurar WebUI; habilítelo solo cuando sea necesario.</string>
     <string name="settings_donot_store_superkey">Deshabilitar el guardado de la supervlave localmente</string>
     <string name="patch_mode_install_to_next_slot">Modo: Instalar en el siguiente slot (después de OTA)</string>

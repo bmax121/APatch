@@ -48,7 +48,7 @@
     <string name="su_refresh">রিফ্রেশ</string>
     <string name="apm_failed_to_disable">মডিউল \"%s\" নিষ্ক্রিয় করতে ব্যর্থ হয়েছে</string>
     <string name="apm_empty">কোন মডিউল ইনস্টল করা নেই</string>
-    <string name="apm_uninstall">আনইনস্টল করুন</string>
+    <string name="apm_remove">আনইনস্টল করুন</string>
     <string name="apm_failed_to_enable">মডিউল \"%s\" সক্রিয় করতে ব্যর্থ</string>
     <string name="apm_uninstall_confirm">আপনি কি নিশ্চিত আপনি মডিউল %s আনইনস্টল করতে চান?</string>
     <string name="apm_uninstall_success">%s আনইনস্টল করা হয়েছে</string>

@@ -56,7 +56,7 @@
     <string name="apm">안드로이드 패치 모듈</string>
     <string name="apm_failed_to_disable">\"%s\" 모듈을 끄지 못하였습니다</string>
     <string name="apm_empty">설치된 모듈이 없습니다</string>
-    <string name="apm_uninstall">제거</string>
+    <string name="apm_remove">제거</string>
     <string name="apm_install">설치</string>
     <string name="apm_uninstall_confirm">\"%s\" 모듈을 제거하시겠습니까?</string>
     <string name="apm_uninstall_success">%s 이 제거되었습니다</string>
@@ -167,7 +167,7 @@
     <string name="patch_item_bootimg_slot">슬롯:</string>
     <string name="patch_item_bootimg_dev">기기:</string>
     <string name="setting_reset_su_path">su path 재설정</string>
-    <string name="webui_open">WebUI 열기</string>
+    <string name="apm_webui_open">WebUI 열기</string>
     <string name="enable_web_debugging">WebView 디버깅 활성화</string>
     <string name="enable_web_debugging_summary">Can be used to debug WebUI, 오직 필요할 때만 활성화 해주세요.</string>
     <string name="settings_donot_store_superkey">기기에 Super Key 저장하지 않기</string>

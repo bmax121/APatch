@@ -88,7 +88,7 @@
     <string name="apm_failed_to_enable">Impossible d\'activer le module \"%s\"</string>
     <string name="kpm_args">Arguments</string>
     <string name="su_pkg_excluded_setting_summary">pour les modules</string>
-    <string name="apm_uninstall">Désinstaller</string>
+    <string name="apm_remove">Désinstaller</string>
     <string name="su_pkg_excluded_setting_title">Exclure</string>
     <string name="apm_overlay_fs_not_available">Les modules sont indisponibles car OverlayFS est désactivé par le noyau.</string>
     <string name="patch">Patcher</string>
@@ -173,6 +173,6 @@
 \n
 \nVeuillez vérifier et réessayer. Si des problèmes persistent, vous pouvez toujours poser vos questions sur le dépôt officiel.</string>
     <string name="settings_donot_store_superkey">Ne pas stocker la clé localement</string>
-    <string name="webui_open">Ouvrir l\'interface web</string>
+    <string name="apm_webui_open">Ouvrir l\'interface web</string>
     <string name="enable_web_debugging">Activer le débogage WebView</string>
 </resources>

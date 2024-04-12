@@ -81,7 +81,7 @@
     <string name="apm_failed_to_disable">Kon de module \"%s\" niet uitschakelen</string>
     <string name="apm_failed_to_enable">Kon de module \"%s\" niet inschakelen</string>
     <string name="apm_update">Update</string>
-    <string name="apm_uninstall">Verwijderen</string>
+    <string name="apm_remove">Verwijderen</string>
     <string name="apm_install">Installeren</string>
     <string name="apm_uninstall_confirm">De module \"%s\" verwijderen?</string>
     <string name="apm_version">Versie</string>

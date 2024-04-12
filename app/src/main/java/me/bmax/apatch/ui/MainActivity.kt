@@ -24,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavHostController
@@ -123,7 +124,7 @@ private fun BottomBar(navController: NavHostController) {
                         Icon(destination.iconNotSelected, stringResource(destination.label))
                     }
                 },
-                label = { Text(stringResource(destination.label)) },
+                label = { Text(stringResource(destination.label), overflow = TextOverflow.Ellipsis) },
                 alwaysShowLabel = false
             )
         }

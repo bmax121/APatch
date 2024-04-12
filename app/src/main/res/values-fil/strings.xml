@@ -50,7 +50,7 @@
     <string name="home_selinux_status_disabled">Hindi pinagana</string>
     <string name="kpm_license">Lisensiya</string>
     <string name="apm_install">I-install</string>
-    <string name="apm_uninstall">I-uninstall</string>
+    <string name="apm_remove">I-uninstall</string>
     <string name="apm_uninstall_confirm">Sigurado ka bang gusto mong i-uninstall ang module %s?</string>
     <string name="su_pkg_excluded_setting_title">I-exclude</string>
     <string name="su_pkg_excluded_setting_summary">para sa mga modules</string>

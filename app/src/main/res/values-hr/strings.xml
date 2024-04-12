@@ -67,7 +67,7 @@
     <string name="apm_not_installed">AndroidPatch nije instaliran</string>
     <string name="apm_failed_to_enable">Nije bilo moguće uključit \"%s\" modul</string>
     <string name="apm_empty">Nema modula instalirana</string>
-    <string name="apm_uninstall">Deinstaliraj</string>
+    <string name="apm_remove">Deinstaliraj</string>
     <string name="apm_install">Instaliraj</string>
     <string name="apm_start_downloading">Počni preuzimati %s</string>
     <string name="apm_new_version_available">Klikni za instaliranje nove inačice, %s.</string>

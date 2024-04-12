@@ -45,7 +45,7 @@
     <string name="patch_title">Patch</string>
     <string name="apm_uninstall_success">%s berhasil dihapus</string>
     <string name="apm_install">Instal</string>
-    <string name="apm_uninstall">Hapus</string>
+    <string name="apm_remove">Hapus</string>
     <string name="apm_uninstall_confirm">Hapus modul %s?</string>
     <string name="apm_version">Versi</string>
     <string name="apm_overlay_fs_not_available">Kernel tidak mendukung OverlayFS, fungsi modul ditiadakan.</string>
@@ -143,7 +143,7 @@
     <string name="setting_reset_su_path">Reset jalur SU</string>
     <string name="patch_mode_install_to_next_slot">Mode: Instal ke Slot lainnya (Setelah OTA)</string>
     <string name="settings_check_update_summary">Cek versi terbaru setiap membuka manajer</string>
-    <string name="webui_open">Buka WebUI</string>
+    <string name="apm_webui_open">Buka WebUI</string>
     <string name="home_dialog_auth_fail_title">Gagal autentikasi</string>
     <string name="home_more_menu_about">Tentang</string>
     <string name="mode_select_page_patch_and_install">Patch dan Instal</string>

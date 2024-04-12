@@ -76,7 +76,7 @@
     <string name="su_title">Superuser</string>
     <string name="su_show_system_apps">Systemanwendungen zeigen</string>
     <string name="su_hide_system_apps">System-Apps ausblenden</string>
-    <string name="apm_uninstall">Deinstallieren</string>
+    <string name="apm_remove">Deinstallieren</string>
     <string name="apm_install">Installieren</string>
     <string name="apm_uninstall_failed">Konnte %s nicht deinstallieren</string>
     <string name="apm_version">Version</string>

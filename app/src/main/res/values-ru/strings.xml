@@ -31,7 +31,7 @@
     <string name="apm_empty">Нет установленных модулей</string>
     <string name="kpm">KP Модули</string>
     <string name="apm">AP Модули</string>
-    <string name="apm_uninstall">Удалить</string>
+    <string name="apm_remove">Удалить</string>
     <string name="kpm_load">Загрузить</string>
     <string name="apm_install">Установить</string>
     <string name="reboot">Перезагрузить</string>

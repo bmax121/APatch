@@ -38,7 +38,7 @@
     <string name="su_show_system_apps">System Apps ද පෙන්වන්න</string>
     <string name="home_auth_key_title">මුරපදය</string>
     <string name="apm_overlay_fs_not_available">ඔයාගේ Kernel එකේ OverlayFS කියන function එක enable වෙලා නැහැ. මේකට අපිටම කියලා OverlayFS enable කරපු Kernel එකක් compile කරගන්න ඕනි 😕!</string>
-    <string name="apm_uninstall">ඉවත් කරන්න</string>
+    <string name="apm_remove">ඉවත් කරන්න</string>
     <string name="apm_magisk_conflict">Magisk හි මොඩියුල්ස් සමග ගැටෙන නිසා, මෙම විශේෂාංගය තාවකාලිකව ක්‍රියා විරහිත කර ඇත!</string>
     <string name="apm_failed_to_enable">මෙම මොඩියුලය ක්‍රියාත්මක කිරීමට නොහැකි විය: %s</string>
     <string name="safe_mode">ආරක්ෂාකාරී mode එක</string>

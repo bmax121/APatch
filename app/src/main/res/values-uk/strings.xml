@@ -49,7 +49,7 @@
     <string name="apm">Модулі</string>
     <string name="apm_not_installed">AndroidPatch не встановлено</string>
     <string name="apm_failed_to_enable">Неможливо ввімкнути \"%s\" модуль</string>
-    <string name="apm_uninstall">Видалити</string>
+    <string name="apm_remove">Видалити</string>
     <string name="apm_author">Автор</string>
     <string name="apm_desc">Опис</string>
     <string name="apm_reboot_to_apply">Перезавантажте, щоб зміни вступити в силу</string>
@@ -150,7 +150,7 @@
     <string name="settings_donot_store_superkey_summary">Перевіряти валідність SyperKey щоразу при відкритті менеджера</string>
     <string name="setting_reset_su_path">Скинути шлях до файлу su</string>
     <string name="setting_reset_su_new_path">новий повний шлях</string>
-    <string name="webui_open">Відкрити WebUI</string>
+    <string name="apm_webui_open">Відкрити WebUI</string>
     <string name="hide_apatch_manager">Приховати APatch Manager</string>
     <string name="kpm_embed">Вставити</string>
     <string name="kpm_add_kpm">Додати KPM</string>

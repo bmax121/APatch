@@ -49,7 +49,7 @@
     <string name="su_show_system_apps">Rendszeralkalmazások megjelenítése</string>
     <string name="su_hide_system_apps">Rendszeralkalmazások elrejtése</string>
     <string name="su_refresh">Frissítés</string>
-    <string name="apm_uninstall">Eltávolítás</string>
+    <string name="apm_remove">Eltávolítás</string>
     <string name="apm_install">Telepítés</string>
     <string name="apm_reboot_to_apply">Újraindítsa a hatás eléréséhez</string>
     <string name="apm_changelog">Változásnapló</string>

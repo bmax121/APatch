@@ -74,7 +74,7 @@
     <string name="apm_failed_to_enable">Falha ao ativar o módulo %s</string>
     <string name="apm_failed_to_disable">Falha ao desativar o módulo %s</string>
     <string name="apm_empty">Nenhum módulo instalado</string>
-    <string name="apm_uninstall">Desinstalar</string>
+    <string name="apm_remove">Desinstalar</string>
     <string name="apm_install">Instalar</string>
     <string name="apm_uninstall_confirm">Desinstalar o módulo %s?</string>
     <string name="apm_uninstall_success">%s desinstalado</string>
@@ -161,7 +161,7 @@
 \nPor favor, verifique e tente novamente. Se ainda houver problemas, você pode fazer perguntas na página de problemas do repositório oficial.</string>
     <string name="home_more_menu_feedback_or_suggestion">Feedback ou sugestão</string>
     <string name="home_more_menu_about">Sobre</string>
-    <string name="webui_open">Abrir WebUI</string>
+    <string name="apm_webui_open">Abrir WebUI</string>
     <string name="enable_web_debugging">Ativar depuração do WebView</string>
     <string name="settings_donot_store_superkey_summary">Autentique a SuperKey sempre que o gerenciador iniciar</string>
     <string name="enable_web_debugging_summary">Pode ser usado para depurar o WebUI. Por favor, ative somente quando necessário.</string>

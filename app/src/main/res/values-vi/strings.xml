@@ -54,7 +54,7 @@
     <string name="kpm_args">Tham số</string>
     <string name="apm_failed_to_disable">Không thể tắt mô-đun %s</string>
     <string name="apm_empty">Không có module nào được cài đặt</string>
-    <string name="apm_uninstall">Gỡ cài đặt</string>
+    <string name="apm_remove">Gỡ cài đặt</string>
     <string name="apm_install">Cài đặt</string>
     <string name="apm_uninstall_confirm">Gỡ cài đặt mô-đun %s?</string>
     <string name="apm_uninstall_success">%s đã được gỡ cài đặt</string>

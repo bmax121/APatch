@@ -8,7 +8,7 @@
     <string name="apm_install">Installa</string>
     <string name="home_auth_key_desc">Avvia dopo la certificazione</string>
     <string name="kpatch_version">Versione: %d.%d.%d</string>
-    <string name="apm_uninstall">Disinstalla</string>
+    <string name="apm_remove">Disinstalla</string>
     <string name="patch_warnning">L\'installazione comporta dei rischi. Assicurati che i tuoi dati siano stati salvati.</string>
     <string name="kpm_kp_not_installed">KernelPatch non installato</string>
     <string name="home_patch_set_key_desc">Credenziale solo per KernelPatch</string>
@@ -157,7 +157,7 @@
     <string name="home_kpatch_info_title">Informazioni</string>
     <string name="settings_clear_super_key_dialog">Sei sicuro di voler procedere?</string>
     <string name="kpatch_version_update">Versione: %s -&gt; %s</string>
-    <string name="webui_open">Apri Interfaccia Web</string>
+    <string name="apm_webui_open">Apri Interfaccia Web</string>
     <string name="enable_web_debugging_summary">Può essere usato per il Debug di WebUI, per favore, attiva solo se necessario</string>
     <string name="patch_mode_bootimg_patch">Modalità: Patch</string>
     <string name="patch_item_error">!!ERRORE!!</string>

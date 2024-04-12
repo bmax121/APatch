@@ -148,7 +148,7 @@
     <string name="apm_failed_to_enable">Could not turn on the \"%s\" module</string>
     <string name="apm_failed_to_disable">Could not turn off the \"%s\" module</string>
     <string name="apm_empty">No module installed</string>
-    <string name="apm_uninstall">Uninstall</string>
+    <string name="apm_remove">Remove</string>
     <string name="apm_install">Install</string>
     <string name="apm_uninstall_confirm">Uninstall the \"%s\" module?</string>
     <string name="apm_uninstall_success">%s uninstalled</string>
@@ -174,7 +174,7 @@
     <string name="setting_reset_su_path">Reset su path</string>
     <string name="setting_reset_su_new_path">new full path</string>
 
-    <string name="webui_open">Open WebUI</string>
+    <string name="apm_webui_open">Open</string>
     <string name="enable_web_debugging">Enable WebView Debugging</string>
     <string name="enable_web_debugging_summary">Can be used to debug WebUI, please enable only when needed.</string>
 

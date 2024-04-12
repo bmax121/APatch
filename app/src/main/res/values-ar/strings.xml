@@ -87,7 +87,7 @@
     <string name="apm_author">المؤلف</string>
     <string name="apm_changelog">سجل التغييرات</string>
     <string name="apm_update">تحديث</string>
-    <string name="apm_uninstall">إلغاء التثبيت</string>
+    <string name="apm_remove">إلغاء التثبيت</string>
     <string name="apm_version">الاصدار</string>
     <string name="apm_start_downloading">بدء التنزيل %s</string>
     <string name="apm_new_version_available">اضغط لتثبيت الإصدار الجديد %s.</string>
@@ -174,7 +174,7 @@
 \nيرجى المراجعة وحاول مرة أخرى. إذا كانت لا تزال هناك مشكلات، فيمكنك دائمًا طرح الأسئلة على صفحة المشكلات الخاصة بالمستودع الرسمي.</string>
     <string name="patch_mode_patch_and_install">الوضع: باتش وتثبيت</string>
     <string name="patch_mode_install_to_next_slot">الوضع: التثبيت في الفتحة التالية (بعد OTA)</string>
-    <string name="webui_open">فتح WebUI</string>
+    <string name="apm_webui_open">فتح WebUI</string>
     <string name="enable_web_debugging">تمكين تصحيح أخطاء WebView</string>
     <string name="enable_web_debugging_summary">يمكن استخدامه لتصحيح أخطاء WebUI، يرجى تمكينه فقط عند الحاجة.</string>
 </resources>

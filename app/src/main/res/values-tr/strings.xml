@@ -10,7 +10,7 @@
     <string name="apm_install">Kur</string>
     <string name="home_auth_key_desc">Sertifikasyondan sonra başlar</string>
     <string name="kpatch_version">Sürüm: %s</string>
-    <string name="apm_uninstall">Kaldır</string>
+    <string name="apm_remove">Kaldır</string>
     <string name="patch_warnning">Kurulum işlemi risklidir. Lütfen verilerinizi yedeklediğinizden emin olun.</string>
     <string name="kpm_kp_not_installed">KernelPatch kurulu değil</string>
     <string name="home_patch_set_key_desc">KernelPatch için tek gerekli veri</string>
@@ -163,7 +163,7 @@
 \n
 \nLütfen gözden geçirin ve tekrar deneyin. Hala sorun varsa, resmi deponun sorunlar sayfasında her zaman soru sorabilirsiniz.</string>
     <string name="settings_check_update_summary">Uygulama açıldığında güncellemeleri otomatik olarak denetle</string>
-    <string name="webui_open">Web Arayüzünü Aç</string>
+    <string name="apm_webui_open">Web Arayüzünü Aç</string>
     <string name="enable_web_debugging">Web Görünümü Hata Ayıklamayı Etkinleştir</string>
     <string name="settings_donot_store_superkey_summary">Yönetici her başladığında süper anahtarın kimliğini doğrulayın</string>
     <string name="enable_web_debugging_summary">Web arayüzünde hata ayıklamak için kullanılabilir, lütfen yalnızca gerektiğinde etkinleştirin.</string>

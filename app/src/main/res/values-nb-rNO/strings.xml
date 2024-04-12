@@ -38,7 +38,7 @@
     <string name="kpm_author">Utvikler</string>
     <string name="kpm_desc">Beskrivelse</string>
     <string name="kpm_args">Argumenter</string>
-    <string name="apm_uninstall">Avinstaller</string>
+    <string name="apm_remove">Avinstaller</string>
     <string name="home_ap_cando_uninstall">Avinstaller</string>
     <string name="home_fingerprint">Fingeravtrykk</string>
     <string name="home_selinux_status_enforcing">Påtvingende</string>

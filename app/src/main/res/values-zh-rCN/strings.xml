@@ -77,7 +77,7 @@
     <string name="apm_reboot_to_apply">重启生效</string>
     <string name="apm_uninstall_success">%s 已卸载</string>
     <string name="apm_install">安装</string>
-    <string name="apm_uninstall">卸载</string>
+    <string name="apm_remove">卸载</string>
     <string name="apm_uninstall_confirm">确认要卸载“%s”模块吗？</string>
     <string name="apm_version">版本</string>
     <string name="apm_start_downloading">开始下载 %s</string>
@@ -161,7 +161,7 @@
     <string name="home_more_menu_about">关于</string>
     <string name="settings_check_update">检查更新</string>
     <string name="patch_mode_install_to_next_slot">模式：安装到另一槽位(OTA 后)</string>
-    <string name="webui_open">详情</string>
+    <string name="apm_webui_open">详情</string>
     <string name="enable_web_debugging">启用 WebView 调试</string>
     <string name="home_new_apatch_found">发现新版本：%s，点击升级</string>
     <string name="settings_check_update_summary">打开时自动检查是否有新版本</string>

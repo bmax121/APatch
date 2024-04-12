@@ -19,7 +19,7 @@
     <string name="apm_uninstall_success">已解除安裝 %s</string>
     <string name="apm_install">安裝</string>
     <string name="kpatch_version">版本：%s</string>
-    <string name="apm_uninstall">解除安裝</string>
+    <string name="apm_remove">解除安裝</string>
     <string name="kpm_kp_not_installed">KernelPatch 尚未安裝</string>
     <string name="home_install_unknown">未安裝或未鑒權</string>
     <string name="apm_uninstall_confirm">確定要解除安裝「%s」模組？</string>
@@ -154,7 +154,7 @@
 \n僅在 OTA 完成之後使用此選項。
 \n繼續？</string>
     <string name="settings_check_update_summary">開啟應用程式時自動檢查更新</string>
-    <string name="webui_open">打開網頁介面</string>
+    <string name="apm_webui_open">打開網頁介面</string>
     <string name="enable_web_debugging_summary">可用於偵錯WebUI，請僅在需要時啟用。</string>
     <string name="settings_donot_store_superkey">停用本機儲存密鑰</string>
     <string name="home_dialog_auth_fail_content">無法驗證超級密鑰，因此 APatch 無法正常運作。

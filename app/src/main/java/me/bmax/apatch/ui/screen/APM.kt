@@ -231,7 +231,7 @@ private fun ModuleList(
     val reboot = stringResource(id = R.string.reboot)
     val rebootToApply = stringResource(id = R.string.apm_reboot_to_apply)
     val moduleStr = stringResource(id = R.string.apm)
-    val uninstall = stringResource(id = R.string.apm_uninstall)
+    val uninstall = stringResource(id = R.string.apm_remove)
     val cancel = stringResource(id = android.R.string.cancel)
     val moduleUninstallConfirm = stringResource(id = R.string.apm_uninstall_confirm)
     val updateText = stringResource(R.string.apm_update)
@@ -481,7 +481,8 @@ private fun RemoveOrRestore(
 
     Spacer(modifier = Modifier.width(6.dp))
     Text(
-        text = stringResource(id = R.string.apm_uninstall)
+        text = stringResource(id = R.string.apm_remove),
+        overflow = TextOverflow.Ellipsis
     )
 }
 
@@ -592,7 +593,6 @@ private fun ModuleItem(
                     }
 
                     if (module.hasWebUi) {
-
                         FilledTonalButton(
                             onClick = { onClick(module) },
                             enabled = true,
@@ -606,7 +606,8 @@ private fun ModuleItem(
 
                             Spacer(modifier = Modifier.width(6.dp))
                             Text(
-                                text = stringResource(id = R.string.webui_open)
+                                text = stringResource(id = R.string.apm_webui_open),
+                                overflow = TextOverflow.Ellipsis
                             )
                         }
 
