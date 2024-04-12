@@ -1,5 +1,6 @@
 package me.bmax.apatch.util
 
+import android.util.Log
 import com.topjohnwu.superuser.ShellUtils
 import me.bmax.apatch.APApplication
 import me.bmax.apatch.BuildConfig
@@ -61,6 +62,7 @@ object Version {
     private fun installedApdVString(): String {
         val result = ShellUtils.fastCmd("${APApplication.SUPERCMD} ${APApplication.superKey} " +
                 "${APApplication.APD_PATH} -V")
+        Log.i("APatch", "[installedApdVString@Version] resultFromShell: ${result}")
         installedApdVString = if(result.trim().isEmpty()) "0" else {
             Regex("\\d+").find(result)!!.value
         }
@@ -68,8 +70,7 @@ object Version {
     }
 
     fun installedApdVUInt(): Int {
-        val vstr = installedApdVString()
-        installedApdVInt = vstr.toInt()
+        installedApdVInt = installedApdVString().toInt()
         return installedApdVInt
     }
 
