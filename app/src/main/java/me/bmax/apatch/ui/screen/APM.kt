@@ -8,6 +8,8 @@ import android.util.Patterns
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,11 +17,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
@@ -29,19 +33,17 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material3.Button
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarResult
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -55,6 +57,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -62,7 +67,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
@@ -92,8 +96,7 @@ import okhttp3.OkHttpClient
 private fun getSafeMode(): Boolean {
     val shell = getRootShell()
     return shellForResult(
-        shell,
-        "[ -e $SAFEMODE_FILE ] && echo 'IS_SAFE_MODE'"
+        shell, "[ -e $SAFEMODE_FILE ] && echo 'IS_SAFE_MODE'"
     ).out.contains("IS_SAFE_MODE")
 }
 
@@ -157,8 +160,7 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
                 viewModel.markNeedRefresh()
             }
 
-            FloatingActionButton(
-                contentColor = MaterialTheme.colorScheme.onPrimary,
+            FloatingActionButton(contentColor = MaterialTheme.colorScheme.onPrimary,
                 containerColor = MaterialTheme.colorScheme.primary,
                 onClick = {
                     // select the zip file to install
@@ -189,21 +191,21 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
             }
 
             else -> {
-                ModuleList(
-                    viewModel = viewModel,
+                ModuleList(viewModel = viewModel,
                     modifier = Modifier
                         .padding(innerPadding)
                         .fillMaxSize(),
                     state = moduleListState,
-                    onInstallModule =
-                    {
+                    onInstallModule = {
                         navigator.navigate(InstallScreenDestination(it))
-                    }, onClickModule = { id, name, hasWebUi ->
+                    },
+                    onClickModule = { id, name, hasWebUi ->
                         if (hasWebUi) {
                             context.startActivity(
-                                Intent(context, WebUIActivity::class.java)
-                                    .setData(Uri.parse("apatch://webui/$id"))
-                                    .putExtra("id", id)
+                                Intent(
+                                    context,
+                                    WebUIActivity::class.java
+                                ).setData(Uri.parse("apatch://webui/$id")).putExtra("id", id)
                                     .putExtra("name", name)
                             )
                         }
@@ -278,16 +280,13 @@ private fun ModuleList(
 
         withContext(Dispatchers.Main) {
             Toast.makeText(
-                context,
-                startDownloadingText.format(module.name),
-                Toast.LENGTH_SHORT
+                context, startDownloadingText.format(module.name), Toast.LENGTH_SHORT
             ).show()
         }
 
         val downloading = downloadingText.format(module.name)
         withContext(Dispatchers.IO) {
-            download(
-                context,
+            download(context,
                 downloadUrl,
                 fileName,
                 downloading,
@@ -296,8 +295,7 @@ private fun ModuleList(
                     launch(Dispatchers.Main) {
                         Toast.makeText(context, downloading, Toast.LENGTH_SHORT).show()
                     }
-                }
-            )
+                })
         }
     }
 
@@ -337,7 +335,8 @@ private fun ModuleList(
         }
     }
 
-    val refreshState = rememberPullRefreshState(refreshing = viewModel.isRefreshing,
+    val refreshState = rememberPullRefreshState(
+        refreshing = viewModel.isRefreshing,
         onRefresh = { viewModel.fetchModuleList() })
     Box(modifier.pullRefresh(refreshState)) {
         LazyColumn(
@@ -375,8 +374,7 @@ private fun ModuleList(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                stringResource(R.string.apm_empty),
-                                textAlign = TextAlign.Center
+                                stringResource(R.string.apm_empty), textAlign = TextAlign.Center
                             )
                         }
                     }
@@ -452,6 +450,55 @@ private fun TopBar() {
 }
 
 @Composable
+private fun UpdateButton(
+    onClick: () -> Unit
+) = FilledTonalButton(
+    onClick = onClick, enabled = true, contentPadding = PaddingValues(horizontal = 12.dp)
+) {
+    Icon(
+        modifier = Modifier.size(20.dp),
+        painter = painterResource(id = R.drawable.device_mobile_down),
+        contentDescription = null
+    )
+
+    Spacer(modifier = Modifier.width(6.dp))
+    Text(
+        text = stringResource(id = R.string.apm_update)
+    )
+}
+
+@Composable
+private fun RemoveOrRestore(
+    enabled: Boolean, onClick: () -> Unit
+) = FilledTonalButton(
+    onClick = onClick, enabled = enabled, contentPadding = PaddingValues(horizontal = 12.dp)
+) {
+    Icon(
+        modifier = Modifier.size(20.dp),
+        painter = painterResource(id = R.drawable.trash),
+        contentDescription = null
+    )
+
+    Spacer(modifier = Modifier.width(6.dp))
+    Text(
+        text = stringResource(id = R.string.apm_uninstall)
+    )
+}
+
+@Composable
+fun StateIndicator(
+    @DrawableRes icon: Int, color: Color = MaterialTheme.colorScheme.outline
+) {
+    Image(
+        modifier = Modifier.requiredSize(150.dp),
+        painter = painterResource(id = icon),
+        contentDescription = null,
+        alpha = 0.1f,
+        colorFilter = ColorFilter.tint(color)
+    )
+}
+
+@Composable
 private fun ModuleItem(
     module: APModuleViewModel.ModuleInfo,
     isChecked: Boolean,
@@ -460,127 +507,120 @@ private fun ModuleItem(
     onCheckChanged: (Boolean) -> Unit,
     onUpdate: (APModuleViewModel.ModuleInfo) -> Unit,
     onClick: (APModuleViewModel.ModuleInfo) -> Unit,
+    modifier: Modifier = Modifier,
+    alpha: Float = 1f,
 ) {
-    ElevatedCard(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.surface)
+    val decoration = if (!module.remove) TextDecoration.None else TextDecoration.LineThrough
+    val moduleAuthor = stringResource(id = R.string.apm_author)
+
+    Surface(
+        modifier = modifier,
+        color = MaterialTheme.colorScheme.surface,
+        tonalElevation = 1.dp,
+        shape = RoundedCornerShape(20.dp)
     ) {
 
-        val textDecoration = if (!module.remove) null else TextDecoration.LineThrough
-
-        Column(modifier = Modifier
-            .clickable { onClick(module) }
-            .padding(24.dp, 16.dp, 24.dp, 0.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { onClick(module) },
+            contentAlignment = Alignment.Center
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth()
             ) {
-                val moduleVersion = stringResource(id = R.string.apm_version)
-                val moduleAuthor = stringResource(id = R.string.apm_author)
-
-                Column(modifier = Modifier.fillMaxWidth(0.8f)) {
-                    Text(
-                        text = module.name,
-                        fontSize = MaterialTheme.typography.titleMedium.fontSize,
-                        fontWeight = FontWeight.SemiBold,
-                        lineHeight = MaterialTheme.typography.bodySmall.lineHeight,
-                        fontFamily = MaterialTheme.typography.titleMedium.fontFamily,
-                        textDecoration = textDecoration,
-                    )
-
-                    Text(
-                        text = "$moduleVersion: ${module.version}",
-                        fontSize = MaterialTheme.typography.bodySmall.fontSize,
-                        lineHeight = MaterialTheme.typography.bodySmall.lineHeight,
-                        fontFamily = MaterialTheme.typography.bodySmall.fontFamily,
-                        textDecoration = textDecoration
-                    )
-
-                    Text(
-                        text = "$moduleAuthor: ${module.author}",
-                        fontSize = MaterialTheme.typography.bodySmall.fontSize,
-                        lineHeight = MaterialTheme.typography.bodySmall.lineHeight,
-                        fontFamily = MaterialTheme.typography.bodySmall.fontFamily,
-                        textDecoration = textDecoration
-                    )
-                }
-
-                Spacer(modifier = Modifier.weight(1f))
-
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End,
+                    modifier = Modifier.padding(all = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
+                    Column(
+                        modifier = Modifier
+                            .alpha(alpha = alpha)
+                            .weight(1f),
+                        verticalArrangement = Arrangement.spacedBy(2.dp)
+                    ) {
+                        Text(
+                            text = module.name,
+                            style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
+                            maxLines = 2,
+                            textDecoration = decoration,
+                            overflow = TextOverflow.Ellipsis
+                        )
+
+                        Text(
+                            text = "${module.version}, $moduleAuthor ${module.author}",
+                            style = MaterialTheme.typography.bodySmall,
+                            textDecoration = decoration,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+
                     Switch(
                         enabled = !module.update,
                         checked = isChecked,
                         onCheckedChange = onCheckChanged
                     )
                 }
+
+                Text(
+                    modifier = Modifier
+                        .alpha(alpha = alpha)
+                        .padding(horizontal = 16.dp),
+                    text = module.description,
+                    style = MaterialTheme.typography.bodySmall,
+                    textDecoration = decoration,
+                    color = MaterialTheme.colorScheme.outline
+                )
+
+                HorizontalDivider(
+                    thickness = 1.5.dp,
+                    color = MaterialTheme.colorScheme.surface,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+                
+                Row(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Spacer(modifier = Modifier.weight(1f))
+                    if (updateUrl.isNotEmpty()) {
+                        UpdateButton(onClick = { onUpdate(module) })
+
+                        Spacer(modifier = Modifier.width(12.dp))
+                    }
+
+                    if (module.hasWebUi) {
+
+                        FilledTonalButton(
+                            onClick = { onClick(module) },
+                            enabled = true,
+                            contentPadding = PaddingValues(horizontal = 12.dp)
+                        ) {
+                            Icon(
+                                modifier = Modifier.size(20.dp),
+                                painter = painterResource(id = R.drawable.settings),
+                                contentDescription = null
+                            )
+
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text(
+                                text = stringResource(id = R.string.webui_open)
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.width(12.dp))
+                    }
+                    RemoveOrRestore(enabled = !module.remove, onClick = { onUninstall(module) })
+                }
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Text(
-                text = module.description,
-                fontSize = MaterialTheme.typography.bodySmall.fontSize,
-                fontFamily = MaterialTheme.typography.bodySmall.fontFamily,
-                lineHeight = MaterialTheme.typography.bodySmall.lineHeight,
-                fontWeight = MaterialTheme.typography.bodySmall.fontWeight,
-                overflow = TextOverflow.Ellipsis,
-                maxLines = 4,
-                textDecoration = textDecoration
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            HorizontalDivider(thickness = Dp.Hairline)
-
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Spacer(modifier = Modifier.weight(1f, true))
-
-                if (updateUrl.isNotEmpty()) {
-                    Button(
-                        modifier = Modifier
-                            .padding(0.dp)
-                            .defaultMinSize(52.dp, 32.dp),
-                        onClick = { onUpdate(module) },
-                        shape = RoundedCornerShape(6.dp),
-                        contentPadding = PaddingValues(0.dp)
-                    ) {
-                        Text(
-                            fontFamily = MaterialTheme.typography.labelMedium.fontFamily,
-                            fontSize = MaterialTheme.typography.labelMedium.fontSize,
-                            text = stringResource(R.string.apm_update),
-                        )
-                    }
-                }
-
-                if (module.hasWebUi) {
-                    TextButton(
-                        onClick = { onClick(module) },
-                    ) {
-                        Text(
-                            fontFamily = MaterialTheme.typography.labelMedium.fontFamily,
-                            fontSize = MaterialTheme.typography.labelMedium.fontSize,
-                            text = stringResource(R.string.webui_open),
-                        )
-                    }
-                }
-
-                TextButton(
-                    enabled = !module.remove,
-                    onClick = { onUninstall(module) },
-                ) {
-                    Text(
-                        fontFamily = MaterialTheme.typography.labelMedium.fontFamily,
-                        fontSize = MaterialTheme.typography.labelMedium.fontSize,
-                        text = stringResource(R.string.apm_uninstall),
-                    )
-                }
+            if (module.remove) {
+                StateIndicator(R.drawable.trash)
+            }
+            if (module.update) {
+                StateIndicator(R.drawable.device_mobile_down)
             }
         }
     }
