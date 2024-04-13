@@ -83,6 +83,7 @@ import me.bmax.apatch.ui.component.rememberLoadingDialog
 import me.bmax.apatch.ui.screen.destinations.InstallScreenDestination
 import me.bmax.apatch.ui.viewmodel.APModuleViewModel
 import me.bmax.apatch.ui.webui.WebUIActivity
+import me.bmax.apatch.util.DownloadListener
 import me.bmax.apatch.util.LocalSnackbarHost
 import me.bmax.apatch.util.download
 import me.bmax.apatch.util.getRootShell
@@ -431,7 +432,7 @@ private fun ModuleList(
             }
         }
 
-//        DownloadListener(context, onInstallModule)
+        DownloadListener(context, onInstallModule)
 
         PullRefreshIndicator(
             refreshing = viewModel.isRefreshing, state = refreshState, modifier = Modifier.align(

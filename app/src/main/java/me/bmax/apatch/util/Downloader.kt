@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -115,10 +116,18 @@ fun DownloadListener(context: Context, onDownloaded: (Uri) -> Unit) {
                 }
             }
         }
-        context.registerReceiver(
-            receiver,
-            IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
-        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            context.registerReceiver(
+                receiver,
+                IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE),
+                Context.RECEIVER_EXPORTED
+            )
+        } else {
+            context.registerReceiver(
+                receiver,
+                IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
+            )
+        }
         onDispose {
             context.unregisterReceiver(receiver)
         }
