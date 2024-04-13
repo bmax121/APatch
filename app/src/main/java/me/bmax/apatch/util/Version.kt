@@ -50,8 +50,8 @@ object Version {
 
 
     private fun installedKPatchVString(): String {
-        val result = ShellUtils.fastCmd("${APApplication.SUPERCMD} ${APApplication.superKey} " +
-                "${APApplication.KPATCH_PATH} ${APApplication.superKey} -v")
+        val resultShell = rootShellForResult("${APApplication.APD_PATH} -V")
+        val result = resultShell.out.toString()
         return result.trim().ifEmpty { "0" }
     }
 
@@ -60,10 +60,10 @@ object Version {
     }
 
     private fun installedApdVString(): String {
-        val result = ShellUtils.fastCmd("${APApplication.SUPERCMD} ${APApplication.superKey} " +
-                "${APApplication.APD_PATH} -V")
+        val resultShell = rootShellForResult("${APApplication.APD_PATH} -V")
+        val result = resultShell.out.toString()
         Log.i("APatch", "[installedApdVString@Version] resultFromShell: ${result}")
-        installedApdVString = if(result.trim().isEmpty()) "0" else {
+        installedApdVString = if (result.trim().isEmpty()) "0" else {
             Regex("\\d+").find(result)!!.value
         }
         return installedApdVString
