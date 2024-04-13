@@ -8,6 +8,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -124,7 +125,8 @@ private fun BottomBar(navController: NavHostController) {
                         Icon(destination.iconNotSelected, stringResource(destination.label))
                     }
                 },
-                label = { Text(stringResource(destination.label), overflow = TextOverflow.Ellipsis) },
+
+                label = { Text(stringResource(destination.label), overflow = TextOverflow.Visible, maxLines = 1, softWrap = false) },
                 alwaysShowLabel = false
             )
         }

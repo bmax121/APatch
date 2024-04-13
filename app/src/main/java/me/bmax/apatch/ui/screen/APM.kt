@@ -463,12 +463,15 @@ private fun UpdateButton(
 
     Spacer(modifier = Modifier.width(6.dp))
     Text(
-        text = stringResource(id = R.string.apm_update)
+        text = stringResource(id = R.string.apm_update),
+        maxLines = 1,
+        overflow = TextOverflow.Visible,
+        softWrap = false
     )
 }
 
 @Composable
-private fun RemoveOrRestore(
+private fun RemoveButton(
     enabled: Boolean, onClick: () -> Unit
 ) = FilledTonalButton(
     onClick = onClick, enabled = enabled, contentPadding = PaddingValues(horizontal = 12.dp)
@@ -479,10 +482,12 @@ private fun RemoveOrRestore(
         contentDescription = null
     )
 
-    Spacer(modifier = Modifier.width(6.dp))
+    Spacer(modifier = Modifier.width(6 .dp))
     Text(
         text = stringResource(id = R.string.apm_remove),
-        overflow = TextOverflow.Ellipsis
+        maxLines = 1,
+        overflow = TextOverflow.Visible,
+        softWrap = false
     )
 }
 
@@ -607,13 +612,15 @@ private fun ModuleItem(
                             Spacer(modifier = Modifier.width(6.dp))
                             Text(
                                 text = stringResource(id = R.string.apm_webui_open),
-                                overflow = TextOverflow.Ellipsis
+                                maxLines = 1,
+                                overflow = TextOverflow.Visible,
+                                softWrap = false
                             )
                         }
 
                         Spacer(modifier = Modifier.width(12.dp))
                     }
-                    RemoveOrRestore(enabled = !module.remove, onClick = { onUninstall(module) })
+                    RemoveButton(enabled = !module.remove, onClick = { onUninstall(module) })
                 }
             }
 
