@@ -8,7 +8,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -56,23 +55,20 @@ class MainActivity : AppCompatActivity() {
                 val navController = rememberNavController()
                 val snackBarHostState = remember { SnackbarHostState() }
 
-                val navHostEngine = rememberNavHostEngine(
-                    navHostContentAlignment = Alignment.TopCenter,
-                    rootDefaultAnimations = RootNavGraphDefaultAnimations(
-                        enterTransition = { fadeIn(animationSpec = tween(300)) },
-                        exitTransition = { fadeOut(animationSpec = tween(300)) }
-                    ),
-                    defaultAnimationsForNestedNavGraph = mapOf(
-                        NavGraphs.root to NestedNavGraphDefaultAnimations(
-                            enterTransition = { fadeIn(animationSpec = tween(300)) },
-                            exitTransition = { fadeOut(animationSpec = tween(300)) }
-                        ),
-                    )
-                )
-                Scaffold(
-                    bottomBar = { BottomBar(navController) },
-                    snackbarHost = { SnackbarHost(snackBarHostState) }
-                ) { innerPadding ->
+                val navHostEngine =
+                    rememberNavHostEngine(navHostContentAlignment = Alignment.TopCenter,
+                        rootDefaultAnimations = RootNavGraphDefaultAnimations(enterTransition = {
+                            fadeIn(animationSpec = tween(300))
+                        },
+                            exitTransition = { fadeOut(animationSpec = tween(300)) }),
+                        defaultAnimationsForNestedNavGraph = mapOf(
+                            NavGraphs.root to NestedNavGraphDefaultAnimations(enterTransition = {
+                                fadeIn(animationSpec = tween(300))
+                            },
+                                exitTransition = { fadeOut(animationSpec = tween(300)) }),
+                        ))
+                Scaffold(bottomBar = { BottomBar(navController) },
+                    snackbarHost = { SnackbarHost(snackBarHostState) }) { innerPadding ->
                     CompositionLocalProvider(
                         LocalSnackbarHost provides snackBarHostState,
                     ) {
@@ -92,42 +88,46 @@ class MainActivity : AppCompatActivity() {
 
 @Composable
 private fun BottomBar(navController: NavHostController) {
+    val state by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
+    val kPatchReady = state != APApplication.State.UNKNOWN_STATE
+    val aPatchReady =
+        (state == APApplication.State.ANDROIDPATCH_INSTALLING || state == APApplication.State.ANDROIDPATCH_INSTALLED || state == APApplication.State.ANDROIDPATCH_NEED_UPDATE)
+
     NavigationBar(tonalElevation = 8.dp) {
         BottomBarDestination.entries.forEach { destination ->
             val isCurrentDestOnBackStack by navController.isRouteOnBackStackAsState(destination.direction)
-            val state by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
-            val kPatchReady = state != APApplication.State.UNKNOWN_STATE
-            val aPatchReady = (state == APApplication.State.ANDROIDPATCH_INSTALLING ||
-                    state == APApplication.State.ANDROIDPATCH_INSTALLED ||
-                    state == APApplication.State.ANDROIDPATCH_NEED_UPDATE)
-            val hideDestination = (destination.kPatchRequired && !kPatchReady) ||
-                    (destination.aPatchRequired && !aPatchReady)
+
+            val hideDestination =
+                (destination.kPatchRequired && !kPatchReady) || (destination.aPatchRequired && !aPatchReady)
             if (hideDestination) return@forEach
-            NavigationBarItem(
-                selected = isCurrentDestOnBackStack,
-                onClick = {
-                    if (isCurrentDestOnBackStack) {
-                        navController.popBackStack(destination.direction, false)
-                    }
+            NavigationBarItem(selected = isCurrentDestOnBackStack, onClick = {
+                if (isCurrentDestOnBackStack) {
+                    navController.popBackStack(destination.direction, false)
+                }
 
-                    navController.navigate(destination.direction.route) {
-                        popUpTo(NavGraphs.root.route) {
-                            saveState = true
-                        }
-                        launchSingleTop = true
-                        restoreState = true
+                navController.navigate(destination.direction.route) {
+                    popUpTo(NavGraphs.root.route) {
+                        saveState = true
                     }
-                },
-                icon = {
-                    if (isCurrentDestOnBackStack) {
-                        Icon(destination.iconSelected, stringResource(destination.label))
-                    } else {
-                        Icon(destination.iconNotSelected, stringResource(destination.label))
-                    }
-                },
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            }, icon = {
+                if (isCurrentDestOnBackStack) {
+                    Icon(destination.iconSelected, stringResource(destination.label))
+                } else {
+                    Icon(destination.iconNotSelected, stringResource(destination.label))
+                }
+            },
 
-                label = { Text(stringResource(destination.label), overflow = TextOverflow.Visible, maxLines = 1, softWrap = false) },
-                alwaysShowLabel = false
+                label = {
+                    Text(
+                        stringResource(destination.label),
+                        overflow = TextOverflow.Visible,
+                        maxLines = 1,
+                        softWrap = false
+                    )
+                }, alwaysShowLabel = false
             )
         }
     }

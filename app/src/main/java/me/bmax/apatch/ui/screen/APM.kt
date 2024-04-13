@@ -203,8 +203,7 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
                         if (hasWebUi) {
                             context.startActivity(
                                 Intent(
-                                    context,
-                                    WebUIActivity::class.java
+                                    context, WebUIActivity::class.java
                                 ).setData(Uri.parse("apatch://webui/$id")).putExtra("id", id)
                                     .putExtra("name", name)
                             )
@@ -335,8 +334,7 @@ private fun ModuleList(
         }
     }
 
-    val refreshState = rememberPullRefreshState(
-        refreshing = viewModel.isRefreshing,
+    val refreshState = rememberPullRefreshState(refreshing = viewModel.isRefreshing,
         onRefresh = { viewModel.fetchModuleList() })
     Box(modifier.pullRefresh(refreshState)) {
         LazyColumn(
@@ -482,7 +480,7 @@ private fun RemoveButton(
         contentDescription = null
     )
 
-    Spacer(modifier = Modifier.width(6 .dp))
+    Spacer(modifier = Modifier.width(6.dp))
     Text(
         text = stringResource(id = R.string.apm_remove),
         maxLines = 1,
@@ -583,7 +581,7 @@ private fun ModuleItem(
                     color = MaterialTheme.colorScheme.surface,
                     modifier = Modifier.padding(top = 8.dp)
                 )
-                
+
                 Row(
                     modifier = Modifier
                         .padding(horizontal = 16.dp, vertical = 8.dp)
