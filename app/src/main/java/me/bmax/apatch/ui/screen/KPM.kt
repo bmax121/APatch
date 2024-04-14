@@ -25,27 +25,20 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -64,23 +57,20 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.window.DialogWindowProvider
 import androidx.compose.ui.window.PopupProperties
-import androidx.compose.ui.window.SecureFlagPolicy
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -94,6 +84,7 @@ import me.bmax.apatch.Natives
 import me.bmax.apatch.R
 import me.bmax.apatch.apApp
 import me.bmax.apatch.ui.component.ConfirmResult
+import me.bmax.apatch.ui.component.KPModuleRemoveButton
 import me.bmax.apatch.ui.component.LoadingDialogHandle
 import me.bmax.apatch.ui.component.rememberConfirmDialog
 import me.bmax.apatch.ui.component.rememberLoadingDialog
@@ -101,12 +92,13 @@ import me.bmax.apatch.ui.screen.destinations.PatchesDestination
 import me.bmax.apatch.ui.viewmodel.KPModel
 import me.bmax.apatch.ui.viewmodel.KPModuleViewModel
 import me.bmax.apatch.ui.viewmodel.PatchesViewModel
-import me.bmax.apatch.util.isScrollingUp
-import me.bmax.apatch.util.*
+import me.bmax.apatch.util.APDialogBlurBehindUtils
+import me.bmax.apatch.util.inputStream
+import me.bmax.apatch.util.writeTo
 import java.io.IOException
 
 private const val TAG = "KernelPatchModule"
-private lateinit var targetKPMToControl : KPModel.KPMInfo
+private lateinit var targetKPMToControl: KPModel.KPMInfo
 
 @Destination
 @Composable
@@ -170,9 +162,7 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
                     val toastText = if (rc) successToastText else failToastText
                     withContext(Dispatchers.Main) {
                         Toast.makeText(
-                            context,
-                            toastText,
-                            Toast.LENGTH_SHORT
+                            context, toastText, Toast.LENGTH_SHORT
                         ).show()
                     }
                     viewModel.markNeedRefresh()
@@ -185,40 +175,47 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
             val options = listOf(moduleEmbed, moduleInstall, moduleLoad)
 
             Column {
-                ExtendedFloatingActionButton(
+                FloatingActionButton(
                     onClick = {
-                        expanded = true
+                        expanded = !expanded
                     },
-                    expanded = kpModuleListState.isScrollingUp(),
-                    icon = { Icon(Icons.Filled.Add, moduleAdd) },
-                    text = { Text(text = moduleAdd) },
-                )
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                    containerColor = MaterialTheme.colorScheme.primary,
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.package_import),
+                        contentDescription = null
+                    )
+                }
 
                 DropdownMenu(
                     expanded = expanded,
                     onDismissRequest = { expanded = false },
-                    properties = PopupProperties(focusable = false)
+                    properties = PopupProperties(focusable = true)
                 ) {
                     options.forEach { label ->
-                        DropdownMenuItem(
-                            text = { Text(label) },
-                            onClick = {
-                                expanded = false
-                                when (label) {
-                                    moduleEmbed -> {
-                                        navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.PATCH_AND_INSTALL))
-                                    }
-                                    moduleInstall -> {
-                                        Toast.makeText(current, "Not support now!", Toast.LENGTH_SHORT).show()
-                                    }
-                                    moduleLoad -> {
-                                        val intent = Intent(Intent.ACTION_GET_CONTENT)
-                                        intent.type = "*/*"
-                                        selectKpmLauncher.launch(intent)
-                                    }
+                        DropdownMenuItem(text = { Text(label) }, onClick = {
+                            expanded = false
+                            when (label) {
+                                moduleEmbed -> {
+                                    navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.PATCH_AND_INSTALL))
+                                }
+
+                                moduleInstall -> {
+                                    Toast.makeText(
+                                        current,
+                                        "Not support now!",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+
+                                moduleLoad -> {
+                                    val intent = Intent(Intent.ACTION_GET_CONTENT)
+                                    intent.type = "*/*"
+                                    selectKpmLauncher.launch(intent)
                                 }
                             }
-                        )
+                        })
                     }
                 }
             }
@@ -269,9 +266,9 @@ fun KPMControlDialog(showDialog: MutableState<Boolean>) {
     val scope = rememberCoroutineScope()
     val loadingDialog = rememberLoadingDialog()
     val context = LocalContext.current
-    val outMsgStringRes = stringResource(id = R.string.kpm_control_outMsg);
-    val okStringRes = stringResource(id = R.string.kpm_control_ok);
-    val failedStringRes = stringResource(id = R.string.kpm_control_failed);
+    val outMsgStringRes = stringResource(id = R.string.kpm_control_outMsg)
+    val okStringRes = stringResource(id = R.string.kpm_control_ok)
+    val failedStringRes = stringResource(id = R.string.kpm_control_failed)
 
     lateinit var controlResult: Natives.KPMCtlRes
 
@@ -283,18 +280,24 @@ fun KPMControlDialog(showDialog: MutableState<Boolean>) {
         }
 
         if (controlResult.rc >= 0) {
-            Toast.makeText(context, "$okStringRes\n${outMsgStringRes}: ${controlResult.outMsg}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                context,
+                "$okStringRes\n${outMsgStringRes}: ${controlResult.outMsg}",
+                Toast.LENGTH_SHORT
+            ).show()
         } else {
-            Toast.makeText(context, "$failedStringRes\n${outMsgStringRes}: ${controlResult.outMsg}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                context,
+                "$failedStringRes\n${outMsgStringRes}: ${controlResult.outMsg}",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
     BasicAlertDialog(
-        onDismissRequest = { showDialog.value = false },
-        properties = DialogProperties(
+        onDismissRequest = { showDialog.value = false }, properties = DialogProperties(
             decorFitsSystemWindows = true,
             usePlatformDefaultWidth = false,
-            securePolicy = SecureFlagPolicy.SecureOff
         )
     ) {
         Surface(
@@ -348,8 +351,7 @@ fun KPMControlDialog(showDialog: MutableState<Boolean>) {
 
                 Spacer(modifier = Modifier.height(12.dp))
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
+                    modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End
                 ) {
                     TextButton(onClick = { showDialog.value = false }) {
                         Text(stringResource(id = android.R.string.cancel))
@@ -374,9 +376,7 @@ fun KPMControlDialog(showDialog: MutableState<Boolean>) {
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun KPModuleList(
-    viewModel: KPModuleViewModel,
-    modifier: Modifier = Modifier,
-    state: LazyListState
+    viewModel: KPModuleViewModel, modifier: Modifier = Modifier, state: LazyListState
 ) {
     val moduleStr = stringResource(id = R.string.kpm)
     val moduleUninstallConfirm = stringResource(id = R.string.kpm_unload_confirm)
@@ -413,7 +413,8 @@ private fun KPModuleList(
         }
     }
 
-    val refreshState = rememberPullRefreshState(refreshing = viewModel.isRefreshing,
+    val refreshState = rememberPullRefreshState(
+        refreshing = viewModel.isRefreshing,
         onRefresh = { viewModel.fetchModuleList() })
     Box(modifier.pullRefresh(refreshState)) {
         LazyColumn(
@@ -437,8 +438,7 @@ private fun KPModuleList(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                stringResource(R.string.kpm_apm_empty),
-                                textAlign = TextAlign.Center
+                                stringResource(R.string.kpm_apm_empty), textAlign = TextAlign.Center
                             )
                         }
                     }
@@ -484,115 +484,111 @@ private fun KPModuleItem(
     module: KPModel.KPMInfo,
     onUninstall: (KPModel.KPMInfo) -> Unit,
     onControl: (KPModel.KPMInfo) -> Unit,
+    modifier: Modifier = Modifier,
+    alpha: Float = 1f,
 ) {
-    ElevatedCard(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.surface)
+    val moduleAuthor = stringResource(id = R.string.kpm_author)
+    val moduleArgs = stringResource(id = R.string.kpm_args)
+    val decoration = TextDecoration.None
+
+    Surface(
+        modifier = modifier,
+        color = MaterialTheme.colorScheme.surface,
+        tonalElevation = 1.dp,
+        shape = RoundedCornerShape(20.dp)
     ) {
-        val textDecoration = TextDecoration.None
 
-        Column(modifier = Modifier.padding(24.dp, 16.dp, 24.dp, 0.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
+        Box(
+            modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth()
             ) {
-                val moduleVersion = stringResource(id = R.string.kpm_version)
-                val moduleLicense = stringResource(id = R.string.kpm_license)
-                val moduleAuthor = stringResource(id = R.string.kpm_author)
-                val moduleArgs = stringResource(id = R.string.kpm_args)
+                Row(
+                    modifier = Modifier.padding(all = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .alpha(alpha = alpha)
+                            .weight(1f),
+                        verticalArrangement = Arrangement.spacedBy(2.dp)
+                    ) {
+                        Text(
+                            text = module.name,
+                            style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
+                            maxLines = 2,
+                            textDecoration = decoration,
+                            overflow = TextOverflow.Ellipsis
+                        )
 
-                Column(modifier = Modifier.fillMaxWidth(0.8f)) {
-                    Text(
-                        text = module.name,
-                        fontSize = MaterialTheme.typography.titleMedium.fontSize,
-                        fontWeight = FontWeight.SemiBold,
-                        lineHeight = MaterialTheme.typography.bodySmall.lineHeight,
-                        fontFamily = MaterialTheme.typography.titleMedium.fontFamily,
-                        textDecoration = textDecoration,
-                    )
+                        Text(
+                            text = "${module.version}, $moduleAuthor ${module.author}",
+                            style = MaterialTheme.typography.bodySmall,
+                            textDecoration = decoration,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
 
-                    Text(
-                        text = "$moduleVersion: ${module.version}",
-                        fontSize = MaterialTheme.typography.bodySmall.fontSize,
-                        lineHeight = MaterialTheme.typography.bodySmall.lineHeight,
-                        fontFamily = MaterialTheme.typography.bodySmall.fontFamily,
-                        textDecoration = textDecoration
-                    )
+                        Text(
+                            text = "$moduleArgs: ${module.args}",
+                            style = MaterialTheme.typography.bodySmall,
+                            textDecoration = decoration,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
 
-                    Text(
-                        text = "$moduleLicense: ${module.license}",
-                        fontSize = MaterialTheme.typography.bodySmall.fontSize,
-                        lineHeight = MaterialTheme.typography.bodySmall.lineHeight,
-                        fontFamily = MaterialTheme.typography.bodySmall.fontFamily,
-                        textDecoration = textDecoration
-                    )
-
-                    Text(
-                        text = "$moduleAuthor: ${module.author}",
-                        fontSize = MaterialTheme.typography.bodySmall.fontSize,
-                        lineHeight = MaterialTheme.typography.bodySmall.lineHeight,
-                        fontFamily = MaterialTheme.typography.bodySmall.fontFamily,
-                        textDecoration = textDecoration
-                    )
-
-                    Text(
-                        text = "$moduleArgs: ${module.args}",
-                        fontSize = MaterialTheme.typography.bodySmall.fontSize,
-                        lineHeight = MaterialTheme.typography.bodySmall.lineHeight,
-                        fontFamily = MaterialTheme.typography.bodySmall.fontFamily,
-                        textDecoration = textDecoration
-                    )
                 }
 
-                Spacer(modifier = Modifier.weight(1f))
+                Text(
+                    modifier = Modifier
+                        .alpha(alpha = alpha)
+                        .padding(horizontal = 16.dp),
+                    text = module.description,
+                    style = MaterialTheme.typography.bodySmall,
+                    textDecoration = decoration,
+                    color = MaterialTheme.colorScheme.outline
+                )
+
+                HorizontalDivider(
+                    thickness = 1.5.dp,
+                    color = MaterialTheme.colorScheme.surface,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+
+                Row(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Spacer(modifier = Modifier.weight(1f))
+
+                    FilledTonalButton(
+                        onClick = { onControl(module) },
+                        enabled = true,
+                        contentPadding = PaddingValues(horizontal = 12.dp)
+                    ) {
+                        Icon(
+                            modifier = Modifier.size(20.dp),
+                            painter = painterResource(id = R.drawable.settings),
+                            contentDescription = null
+                        )
+
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(
+                            text = stringResource(id = R.string.kpm_control),
+                            maxLines = 1,
+                            overflow = TextOverflow.Visible,
+                            softWrap = false
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.width(12.dp))
+
+                    KPModuleRemoveButton(enabled = true, onClick = { onUninstall(module) })
+                }
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Text(
-                text = module.description,
-                fontSize = MaterialTheme.typography.bodySmall.fontSize,
-                fontFamily = MaterialTheme.typography.bodySmall.fontFamily,
-                lineHeight = MaterialTheme.typography.bodySmall.lineHeight,
-                fontWeight = MaterialTheme.typography.bodySmall.fontWeight,
-                overflow = TextOverflow.Ellipsis,
-                maxLines = 4,
-                textDecoration = textDecoration
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            HorizontalDivider(thickness = Dp.Hairline)
-
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Spacer(modifier = Modifier.weight(1f, true))
-
-                TextButton(
-                    enabled = true,
-                    onClick = { onControl(module) },
-                ) {
-                    Text(
-                        fontFamily = MaterialTheme.typography.labelMedium.fontFamily,
-                        fontSize = MaterialTheme.typography.labelMedium.fontSize,
-                        text = stringResource(R.string.kpm_control),
-                    )
-                }
-
-                TextButton(
-                    enabled = true,
-                    onClick = { onUninstall(module) },
-                ) {
-                    Text(
-                        fontFamily = MaterialTheme.typography.labelMedium.fontFamily,
-                        fontSize = MaterialTheme.typography.labelMedium.fontSize,
-                        text = stringResource(R.string.kpm_unload),
-                    )
-                }
-
-            }
         }
     }
 }

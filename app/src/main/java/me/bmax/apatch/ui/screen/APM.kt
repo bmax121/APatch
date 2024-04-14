@@ -8,8 +8,6 @@ import android.util.Patterns
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.DrawableRes
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,7 +19,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -58,8 +55,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -78,6 +73,9 @@ import me.bmax.apatch.APApplication
 import me.bmax.apatch.APApplication.Companion.SAFEMODE_FILE
 import me.bmax.apatch.R
 import me.bmax.apatch.ui.component.ConfirmResult
+import me.bmax.apatch.ui.component.ModuleRemoveButton
+import me.bmax.apatch.ui.component.ModuleStateIndicator
+import me.bmax.apatch.ui.component.ModuleUpdateButton
 import me.bmax.apatch.ui.component.rememberConfirmDialog
 import me.bmax.apatch.ui.component.rememberLoadingDialog
 import me.bmax.apatch.ui.screen.destinations.InstallScreenDestination
@@ -449,61 +447,6 @@ private fun TopBar() {
 }
 
 @Composable
-private fun UpdateButton(
-    onClick: () -> Unit
-) = FilledTonalButton(
-    onClick = onClick, enabled = true, contentPadding = PaddingValues(horizontal = 12.dp)
-) {
-    Icon(
-        modifier = Modifier.size(20.dp),
-        painter = painterResource(id = R.drawable.device_mobile_down),
-        contentDescription = null
-    )
-
-    Spacer(modifier = Modifier.width(6.dp))
-    Text(
-        text = stringResource(id = R.string.apm_update),
-        maxLines = 1,
-        overflow = TextOverflow.Visible,
-        softWrap = false
-    )
-}
-
-@Composable
-private fun RemoveButton(
-    enabled: Boolean, onClick: () -> Unit
-) = FilledTonalButton(
-    onClick = onClick, enabled = enabled, contentPadding = PaddingValues(horizontal = 12.dp)
-) {
-    Icon(
-        modifier = Modifier.size(20.dp),
-        painter = painterResource(id = R.drawable.trash),
-        contentDescription = null
-    )
-
-    Spacer(modifier = Modifier.width(6.dp))
-    Text(
-        text = stringResource(id = R.string.apm_remove),
-        maxLines = 1,
-        overflow = TextOverflow.Visible,
-        softWrap = false
-    )
-}
-
-@Composable
-fun StateIndicator(
-    @DrawableRes icon: Int, color: Color = MaterialTheme.colorScheme.outline
-) {
-    Image(
-        modifier = Modifier.requiredSize(150.dp),
-        painter = painterResource(id = icon),
-        contentDescription = null,
-        alpha = 0.1f,
-        colorFilter = ColorFilter.tint(color)
-    )
-}
-
-@Composable
 private fun ModuleItem(
     module: APModuleViewModel.ModuleInfo,
     isChecked: Boolean,
@@ -591,7 +534,7 @@ private fun ModuleItem(
                 ) {
                     Spacer(modifier = Modifier.weight(1f))
                     if (updateUrl.isNotEmpty()) {
-                        UpdateButton(onClick = { onUpdate(module) })
+                        ModuleUpdateButton(onClick = { onUpdate(module) })
 
                         Spacer(modifier = Modifier.width(12.dp))
                     }
@@ -619,15 +562,15 @@ private fun ModuleItem(
 
                         Spacer(modifier = Modifier.width(12.dp))
                     }
-                    RemoveButton(enabled = !module.remove, onClick = { onUninstall(module) })
+                    ModuleRemoveButton(enabled = !module.remove, onClick = { onUninstall(module) })
                 }
             }
 
             if (module.remove) {
-                StateIndicator(R.drawable.trash)
+                ModuleStateIndicator(R.drawable.trash)
             }
             if (module.update) {
-                StateIndicator(R.drawable.device_mobile_down)
+                ModuleStateIndicator(R.drawable.device_mobile_down)
             }
         }
     }
