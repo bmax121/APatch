@@ -86,6 +86,7 @@ import me.bmax.apatch.apApp
 import me.bmax.apatch.ui.component.ConfirmResult
 import me.bmax.apatch.ui.component.KPModuleRemoveButton
 import me.bmax.apatch.ui.component.LoadingDialogHandle
+import me.bmax.apatch.ui.component.ProvideMenuShape
 import me.bmax.apatch.ui.component.rememberConfirmDialog
 import me.bmax.apatch.ui.component.rememberLoadingDialog
 import me.bmax.apatch.ui.screen.destinations.PatchesDestination
@@ -188,34 +189,34 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
                     )
                 }
 
-                DropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false },
-                    properties = PopupProperties(focusable = true)
-                ) {
-                    options.forEach { label ->
-                        DropdownMenuItem(text = { Text(label) }, onClick = {
-                            expanded = false
-                            when (label) {
-                                moduleEmbed -> {
-                                    navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.PATCH_AND_INSTALL))
-                                }
+                ProvideMenuShape(RoundedCornerShape(10.dp)) {
+                    DropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false },
+                        properties = PopupProperties(focusable = true)
+                    ) {
+                        options.forEach { label ->
+                            DropdownMenuItem(text = { Text(label) }, onClick = {
+                                expanded = false
+                                when (label) {
+                                    moduleEmbed -> {
+                                        navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.PATCH_AND_INSTALL))
+                                    }
 
-                                moduleInstall -> {
-                                    Toast.makeText(
-                                        current,
-                                        "Not support now!",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
+                                    moduleInstall -> {
+                                        Toast.makeText(
+                                            current, "Not support now!", Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
 
-                                moduleLoad -> {
-                                    val intent = Intent(Intent.ACTION_GET_CONTENT)
-                                    intent.type = "*/*"
-                                    selectKpmLauncher.launch(intent)
+                                    moduleLoad -> {
+                                        val intent = Intent(Intent.ACTION_GET_CONTENT)
+                                        intent.type = "*/*"
+                                        selectKpmLauncher.launch(intent)
+                                    }
                                 }
-                            }
-                        })
+                            })
+                        }
                     }
                 }
             }
@@ -413,8 +414,7 @@ private fun KPModuleList(
         }
     }
 
-    val refreshState = rememberPullRefreshState(
-        refreshing = viewModel.isRefreshing,
+    val refreshState = rememberPullRefreshState(refreshing = viewModel.isRefreshing,
         onRefresh = { viewModel.fetchModuleList() })
     Box(modifier.pullRefresh(refreshState)) {
         LazyColumn(
