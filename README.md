@@ -30,7 +30,7 @@ Support for Samsung devices with security protection: planned
 Kernel configs
 
 - `CONFIG_KALLSYMS=y` and `CONFIG_KALLSYMS_ALL=y`
-- `CONFIG_KALLSYMS=y` and `CONFIG_KALLSYMS_ALL=n`: Early support
+- `CONFIG_KALLSYMS=y` and `CONFIG_KALLSYMS_ALL=n`: Initial support
 
 ## Security Alert
 
@@ -43,9 +43,7 @@ To help translate APatch or improve existing translations, please use [Weblate](
 
 <div align="center">
 
-[![Translation status](https://hosted.weblate.org/widget/APatch/apatch/horizontal-auto.svg)](https://hosted.weblate.org/engage/APatch/)
-
-[![Translation status](https://hosted.weblate.org/widget/APatch/apatch/287x66-black.png)](https://hosted.weblate.org/engage/APatch/)
+[![Translation status](https://hosted.weblate.org/widget/APatch/open-graph.png)](https://hosted.weblate.org/engage/APatch/)
 
 </div>
 
