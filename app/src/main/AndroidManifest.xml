@@ -29,8 +29,7 @@
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"
-            android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustResize">
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -46,8 +45,7 @@
             android:autoRemoveFromRecents="true"
             android:documentLaunchMode="intoExisting"
             android:exported="false"
-            android:theme="@style/Theme.APatch.WebUI"
-            android:windowSoftInputMode="adjustResize"/>
+            android:theme="@style/Theme.APatch.WebUI"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"
