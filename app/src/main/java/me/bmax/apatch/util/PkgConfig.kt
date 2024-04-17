@@ -4,8 +4,6 @@ import android.os.Parcelable
 import android.util.Log
 import androidx.annotation.Keep
 import androidx.compose.runtime.Immutable
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import kotlinx.parcelize.Parcelize
 import me.bmax.apatch.APApplication
 import me.bmax.apatch.Natives
@@ -14,7 +12,6 @@ import java.io.FileWriter
 import kotlin.concurrent.thread
 
 object PkgConfig {
-    private val mutex = Mutex()
     private const val TAG = "PkgConfig"
 
     private const val CSV_HEADER = "pkg,exclude,allow,uid,to_uid,sctx"
@@ -23,10 +20,7 @@ object PkgConfig {
     @Parcelize
     @Keep
     data class Config(
-        var pkg: String = "",
-        var exclude: Int = 1,
-        var allow: Int = 0,
-        var profile: Natives.Profile
+        var pkg: String = "", var exclude: Int = 0, var allow: Int = 0, var profile: Natives.Profile
     ) : Parcelable {
         companion object {
             fun fromLine(line: String): Config {
@@ -37,7 +31,7 @@ object PkgConfig {
         }
 
         fun isDefault(): Boolean {
-            return allow == 0 && exclude != 0
+            return allow == 0 && exclude == 0
         }
 
         fun toLine(): String {
@@ -81,7 +75,11 @@ object PkgConfig {
                 val configs = readConfigs()
                 val pkg = config.pkg
                 val uid = config.profile.uid
-                if (config.allow == 0 && configs[pkg] != null) {
+                // Root App should not be excluded
+                if (config.allow == 1) {
+                    config.exclude = 0
+                }
+                if (config.allow == 0 && configs[pkg] != null && config.exclude != 0) {
                     // revoke all uid
                     val toRemove = configs.filter { it.key == pkg || it.value.profile.uid == uid }
                     toRemove.forEach {

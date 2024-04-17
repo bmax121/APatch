@@ -51,6 +51,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import kotlinx.coroutines.launch
 import me.bmax.apatch.Natives
 import me.bmax.apatch.R
+import me.bmax.apatch.ui.component.ProvideMenuShape
 import me.bmax.apatch.ui.component.SearchAppBar
 import me.bmax.apatch.ui.component.SwitchItem
 import me.bmax.apatch.ui.viewmodel.SuperUserViewModel
@@ -88,37 +89,37 @@ fun SuperUserScreen() {
                             contentDescription = stringResource(id = R.string.settings)
                         )
 
-                        DropdownMenu(expanded = showDropdown, onDismissRequest = {
-                            showDropdown = false
-                        }) {
-                            DropdownMenuItem(text = {
-                                Text(stringResource(R.string.su_refresh))
-                            }, onClick = {
-                                scope.launch {
-                                    viewModel.fetchAppList()
-                                }
+                        ProvideMenuShape(RoundedCornerShape(10.dp)) {
+                            DropdownMenu(expanded = showDropdown, onDismissRequest = {
                                 showDropdown = false
-                            })
-
-                            DropdownMenuItem(text = {
-                                Text(
-                                    if (viewModel.showSystemApps) {
-                                        stringResource(R.string.su_hide_system_apps)
-                                    } else {
-                                        stringResource(R.string.su_show_system_apps)
+                            }) {
+                                DropdownMenuItem(text = {
+                                    Text(stringResource(R.string.su_refresh))
+                                }, onClick = {
+                                    scope.launch {
+                                        viewModel.fetchAppList()
                                     }
-                                )
-                            }, onClick = {
-                                viewModel.showSystemApps = !viewModel.showSystemApps
-                                showDropdown = false
-                            })
+                                    showDropdown = false
+                                })
+
+                                DropdownMenuItem(text = {
+                                    Text(
+                                        if (viewModel.showSystemApps) {
+                                            stringResource(R.string.su_hide_system_apps)
+                                        } else {
+                                            stringResource(R.string.su_show_system_apps)
+                                        }
+                                    )
+                                }, onClick = {
+                                    viewModel.showSystemApps = !viewModel.showSystemApps
+                                    showDropdown = false
+                                })
+                            }
                         }
                     }
                 },
             )
         },
-        floatingActionButton = {
-        }
     ) { innerPadding ->
 
         val refreshState = rememberPullRefreshState(
@@ -151,20 +152,23 @@ private fun AppItem(
     app: SuperUserViewModel.AppInfo,
 ) {
     val config = app.config
-    var edit by remember { mutableStateOf(false) }
-    var checked by remember { mutableStateOf(config.allow != 0) }
+    var showEditProfile by remember { mutableStateOf(false) }
+    var rootGranted by remember { mutableStateOf(config.allow != 0) }
+    var excludeApp by remember { mutableIntStateOf(config.exclude) }
 
     ListItem(
         modifier = Modifier.clickable(onClick = {
-            edit = !edit
+            if (!rootGranted) {
+                showEditProfile = !showEditProfile
+            } else {
+                rootGranted = false
+            }
         }),
         headlineContent = { Text(app.label) },
         leadingContent = {
             AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(app.packageInfo)
-                    .crossfade(true)
-                    .build(),
+                model = ImageRequest.Builder(LocalContext.current).data(app.packageInfo)
+                    .crossfade(true).build(),
                 contentDescription = app.label,
                 modifier = Modifier
                     .padding(4.dp)
@@ -173,13 +177,15 @@ private fun AppItem(
             )
         },
         supportingContent = {
+
             Column {
                 Text(app.packageName)
                 FlowRow {
-                    if (config.exclude != 0) {
+
+                    if (excludeApp == 1) {
                         LabelText(label = stringResource(id = R.string.su_pkg_excluded_label))
                     }
-                    if (config.allow != 0) {
+                    if (rootGranted) {
                         LabelText(label = config.profile.uid.toString())
                         LabelText(label = config.profile.toUid.toString())
                         LabelText(
@@ -194,10 +200,10 @@ private fun AppItem(
             }
         },
         trailingContent = {
-            Switch(checked = checked, onCheckedChange = {
-                checked = !checked
-                config.allow = if (checked) 1 else 0
-                if (checked) {
+            Switch(checked = rootGranted, onCheckedChange = {
+                rootGranted = !rootGranted
+                config.allow = if (rootGranted) 1 else 0
+                if (rootGranted) {
                     Natives.grantSu(app.uid, 0, config.profile.scontext)
                 } else {
                     Natives.revokeSu(app.uid)
@@ -206,43 +212,36 @@ private fun AppItem(
             })
         },
     )
-    if (edit) {
-        EditUser(app)
+    if (showEditProfile && !rootGranted) {
+        //var viahook by remember { mutableStateOf(app.config.profile.scontext.isEmpty()) }
+
+        Column(modifier = Modifier.padding(start = 24.dp, end = 24.dp)) {
+            /*SwitchItem(
+                icon = Icons.Filled.Security,
+                title = "SU Thread",
+                summary = "bypass selinux via hooks",
+                checked = viahook,
+                onCheckedChange = {
+                    viahook = !viahook
+                    if (viahook) app.config.profile.scontext = ""
+                    else app.config.profile.scontext = APApplication.MAGISK_SCONTEXT
+                    PkgConfig.changeConfig(app.config)
+                },
+            )*/
+            SwitchItem(
+                icon = Icons.Filled.Security,
+                title = stringResource(id = R.string.su_pkg_excluded_setting_title),
+                summary = stringResource(id = R.string.su_pkg_excluded_setting_summary),
+                checked = excludeApp == 1,
+                onCheckedChange = {
+                    excludeApp = if (it) 1 else 0
+                    config.exclude = excludeApp
+                    PkgConfig.changeConfig(config)
+                },
+            )
+        }
     }
 }
-
-@Composable
-fun EditUser(app: SuperUserViewModel.AppInfo) {
-    //var viahook by remember { mutableStateOf(app.config.profile.scontext.isEmpty()) }
-    var exclude by remember { mutableIntStateOf(app.config.exclude) }
-
-    Column(modifier = Modifier.padding(start = 24.dp, end = 24.dp)) {
-        /*SwitchItem(
-            icon = Icons.Filled.Security,
-            title = "SU Thread",
-            summary = "bypass selinux via hooks",
-            checked = viahook,
-            onCheckedChange = {
-                viahook = !viahook
-                if (viahook) app.config.profile.scontext = ""
-                else app.config.profile.scontext = APApplication.MAGISK_SCONTEXT
-                PkgConfig.changeConfig(app.config)
-            },
-        )*/
-        SwitchItem(
-            icon = Icons.Filled.Security,
-            title = stringResource(id = R.string.su_pkg_excluded_setting_title),
-            summary = stringResource(id = R.string.su_pkg_excluded_setting_summary),
-            checked = exclude != 0,
-            onCheckedChange = {
-                exclude = if (it) 1 else 0
-                app.config.exclude = exclude
-                PkgConfig.changeConfig(app.config)
-            },
-        )
-    }
-}
-
 
 @Composable
 fun LabelText(label: String) {
@@ -250,8 +249,7 @@ fun LabelText(label: String) {
         modifier = Modifier
             .padding(top = 4.dp, end = 4.dp)
             .background(
-                Color.Black,
-                shape = RoundedCornerShape(4.dp)
+                Color.Black, shape = RoundedCornerShape(4.dp)
             )
     ) {
         Text(

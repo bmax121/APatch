@@ -25,8 +25,7 @@ import me.bmax.apatch.util.APatchCli
 import me.bmax.apatch.util.HanziToPinyin
 import me.bmax.apatch.util.PkgConfig
 import java.text.Collator
-import java.util.*
-import kotlin.collections.HashMap
+import java.util.Locale
 import kotlin.concurrent.thread
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -40,9 +39,7 @@ class SuperUserViewModel : ViewModel() {
 
     @Parcelize
     data class AppInfo(
-        val label: String,
-        val packageInfo: PackageInfo,
-        val config: PkgConfig.Config
+        val label: String, val packageInfo: PackageInfo, val config: PkgConfig.Config
     ) : Parcelable {
         val packageName: String
             get() = packageInfo.packageName
@@ -59,7 +56,7 @@ class SuperUserViewModel : ViewModel() {
         val comparator = compareBy<AppInfo> {
             when {
                 it.config.allow != 0 -> 0
-                it.config.exclude == 0 -> 1
+                it.config.exclude == 1 -> 1
                 else -> 2
             }
         }.then(compareBy(Collator.getInstance(Locale.getDefault()), AppInfo::label))
@@ -70,9 +67,9 @@ class SuperUserViewModel : ViewModel() {
 
     val appList by derivedStateOf {
         sortedList.filter {
-            it.label.lowercase().contains(search.lowercase()) ||
-                    it.packageName.lowercase().contains(search.lowercase()) ||
-                    HanziToPinyin.getInstance().toPinyinString(it.label).contains(search.lowercase())
+            it.label.lowercase().contains(search.lowercase()) || it.packageName.lowercase()
+                .contains(search.lowercase()) || HanziToPinyin.getInstance()
+                .toPinyinString(it.label).contains(search.lowercase())
         }.filter {
             it.uid == 2000 // Always show shell
                     || showSystemApps || it.packageInfo.applicationInfo.flags.and(ApplicationInfo.FLAG_SYSTEM) == 0
@@ -86,6 +83,7 @@ class SuperUserViewModel : ViewModel() {
             override fun onServiceDisconnected(name: ComponentName?) {
                 onDisconnect()
             }
+
             override fun onServiceConnected(name: ComponentName?, binder: IBinder?) {
                 it.resume(binder as IBinder to this)
             }
@@ -136,7 +134,7 @@ class SuperUserViewModel : ViewModel() {
                 val actProfile = if (uids.contains(uid)) Natives.suProfile(uid) else null
                 val config = configs.getOrDefault(
                     appInfo.packageName,
-                    PkgConfig.Config(appInfo.packageName, 1, 0, Natives.Profile(uid))
+                    PkgConfig.Config(appInfo.packageName, 0, 0, Natives.Profile(uid))
                 )
                 config.allow = 0
 
