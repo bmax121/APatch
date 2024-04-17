@@ -61,10 +61,12 @@ object Version {
 
     private fun installedApdVString(): String {
         val resultShell = rootShellForResult("${APApplication.APD_PATH} -V")
-        val result = resultShell.out.toString()
-        Log.i("APatch", "[installedApdVString@Version] resultFromShell: ${result}")
-        installedApdVString = if (result.trim().isEmpty()) "0" else {
+        installedApdVString = if (resultShell.isSuccess) {
+            val result = resultShell.out.toString()
+            Log.i("APatch", "[installedApdVString@Version] resultFromShell: ${result}")
             Regex("\\d+").find(result)!!.value
+        } else {
+            "0"
         }
         return installedApdVString
     }
