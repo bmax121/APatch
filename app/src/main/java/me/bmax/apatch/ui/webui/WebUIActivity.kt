@@ -9,6 +9,7 @@ import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.ComponentActivity
+import androidx.activity.enableEdgeToEdge
 import androidx.webkit.WebViewAssetLoader
 import java.io.File
 
@@ -18,6 +19,8 @@ class WebUIActivity : ComponentActivity()  {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        
         val moduleId = intent.getStringExtra("id")!!
         val name = intent.getStringExtra("name")!!
         setTaskDescription(ActivityManager.TaskDescription("APatch - $name"))
