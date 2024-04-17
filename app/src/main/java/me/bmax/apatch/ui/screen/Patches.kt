@@ -343,7 +343,7 @@ private fun ExtraItem(extra: KPModel.IExtraInfo, existed: Boolean, onDelete: ()-
 
 @Composable
 private fun SetSuperKeyView(viewModel: PatchesViewModel) {
-    var skey = viewModel.superkey
+    var skey by remember { mutableStateOf(viewModel.superkey) }
     var showWarn by remember { mutableStateOf(!viewModel.checkSuperKeyValidation(skey))}
     var keyVisible by remember { mutableStateOf(false) }
     ElevatedCard(
