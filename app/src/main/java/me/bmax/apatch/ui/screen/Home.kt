@@ -74,6 +74,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -153,7 +154,6 @@ fun UninstallDialog(showDialog: MutableState<Boolean>, navigator: DestinationsNa
         onDismissRequest = { showDialog.value = false }, properties = DialogProperties(
             decorFitsSystemWindows = true,
             usePlatformDefaultWidth = false,
-            securePolicy = SecureFlagPolicy.SecureOff
         )
     ) {
         Surface(
@@ -496,7 +496,7 @@ private fun KStatusCard(
         },
         colors = CardDefaults.elevatedCardColors(containerColor = cardBackgroundColor),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 6.dp
+            defaultElevation = if (kpState == APApplication.State.UNKNOWN_STATE) 0.dp else 6.dp
         )
     ) {
         Column(
@@ -529,7 +529,12 @@ private fun KStatusCard(
                     }
 
                     else -> {
-                        Icon(Icons.AutoMirrored.Outlined.HelpOutline, "Unknown")
+                        Icon(
+                            modifier = Modifier.size(30.dp),
+                            painter = painterResource(id = R.drawable.info_circle_filled),
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary
+                        )
                     }
                 }
                 Column(
