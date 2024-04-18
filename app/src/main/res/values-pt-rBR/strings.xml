@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
+    <string name="home_learn_android_patch_url">https://apatch.top/pt_BR/what-is-apatch.html</string>
     <string name="app_name" translatable="false">APatch</string>
     <string name="home">Início</string>
     <string name="patch_warnning">A instalação apresenta riscos. Por favor, certifique-se de fazer backup de seus dados.</string>
@@ -22,9 +22,9 @@
     <string name="reboot_download">Reiniciar em modo Download</string>
     <string name="reboot_edl">Reiniciar em modo EDL</string>
     <string name="about">Sobre</string>
-    <string name="home_learn_apatch">Saiba mais sobre o AndroidPatch</string>
-    <string name="home_click_to_learn_apatch">Conheça os recursos do AndroidPatch e como usá-lo</string>
-    <string name="about_source_code">&lt;p&gt;Veja o código-fonte no %1$s&lt;p/&gt;Participe do nosso canal do %2$s&lt;p/&gt;Participe do nosso grupo do %2$s</string>
+    <string name="home_learn_apatch">Saiba mais sobre o APatch</string>
+    <string name="home_click_to_learn_apatch">Conheça os recursos do APatch e como usá-lo</string>
+    <string name="about_source_code">&lt;p&gt;Veja o código-fonte no %1$s&lt;p/&gt;Participe do nosso canal do %2$s&lt;p/&gt;Participe do nosso grupo do %3$s</string>
     <string name="send_log">Reportar registro</string>
     <string name="safe_mode">Modo de segurança</string>
     <string name="super_key">SuperKey</string>
@@ -128,7 +128,7 @@
     <string name="patch_item_extra_event">evento:</string>
     <string name="patch_item_skey">SuperKey</string>
     <string name="settings_clear_super_key_dialog">Você realmente deseja continuar?</string>
-    <string name="patch_item_set_skey_label">O comprimento da SuperKey deve ter pelo menos 8 caracteres e incluir números e letras</string>
+    <string name="patch_item_set_skey_label">A SuperKey deve ter pelo menos 8 caracteres e incluir números e letras</string>
     <string name="hide_apatch_dialog_new_manager_name">Nome do novo gerenciador</string>
     <string name="hide_apatch_dialog_summary">Ele será usado como o novo nome do app mostrado na launcher</string>
     <string name="hide_apatch_manager">Ocultar gerenciador do APatch</string>
@@ -153,15 +153,15 @@
     <string name="mode_select_page_patch_and_install">Patch e instalação</string>
     <string name="home_dialog_auth_fail_content">Não foi possível autenticar a SuperKey, portanto o APatch não pode funcionar corretamente.
 \nAqui estão alguns possíveis motivos para falha de autenticação:
-\n1. Você não fez patch da imagem boot com KernelPatch.
-\n2. A imagem boot corrigida não foi flashada.
+\n1. Você não fez patch do boot.img com KernelPatch.
+\n2. O boot.img corrigido não foi flashado.
 \n3. A SuperKey está errada.
 \n4. Seu dispositivo não oferece suporte ao APatch e KernelPatch.
 \n
 \nPor favor, verifique e tente novamente. Se ainda houver problemas, você pode fazer perguntas na página de problemas do repositório oficial.</string>
     <string name="home_more_menu_feedback_or_suggestion">Feedback ou sugestão</string>
     <string name="home_more_menu_about">Sobre</string>
-    <string name="apm_webui_open">Abrir WebUI</string>
+    <string name="apm_webui_open">Abrir</string>
     <string name="enable_web_debugging">Ativar depuração do WebView</string>
     <string name="settings_donot_store_superkey_summary">Autentique a SuperKey sempre que o gerenciador iniciar</string>
     <string name="enable_web_debugging_summary">Pode ser usado para depurar o WebUI. Por favor, ative somente quando necessário.</string>
@@ -170,9 +170,46 @@
     <string name="patch_mode_install_to_next_slot">Modo: Instalar no slot inativo (após o OTA)</string>
     <string name="home_device_info">Dispositivo</string>
     <string name="home_dialog_uninstall_ap_only">Remover AndroidPatch</string>
-    <string name="home_dialog_uninstall_all">Desinstalar completamente</string>
+    <string name="home_dialog_uninstall_all">Desinstalar tudo</string>
     <string name="home_install_unknown_summary">Clique para instalar</string>
     <string name="home_system_version">Versão do sistema</string>
     <string name="home_kpatch_version">Versão do KernelPatch</string>
     <string name="home_dialog_uninstall_title">Desinstalar</string>
+    <string name="settings_night_theme_enabled">Ativar tema escuro</string>
+    <string name="settings_use_system_color_theme">Tema de cores do sistema</string>
+    <string name="settings_use_system_color_theme_summary">Use um tema de cores gerado pelo sistema de acordo com o plano de fundo atual</string>
+    <string name="settings_custom_color_theme">Tema de cores</string>
+    <string name="green_theme">Verde</string>
+    <string name="deep_orange_theme">Laranja profundo</string>
+    <string name="lime_theme">Lima</string>
+    <string name="orange_theme">Laranja</string>
+    <string name="teal_theme">Verde-azulado</string>
+    <string name="kpm_control_failed">Operação falhou!</string>
+    <string name="settings_night_mode_follow_sys_summary">Mude automaticamente para o tema escuro de acordo com as configurações do sistema</string>
+    <string name="blue_theme">Azul</string>
+    <string name="cyan_theme">Ciano</string>
+    <string name="light_blue_theme">Azul claro</string>
+    <string name="light_green_theme">Verde claro</string>
+    <string name="pink_theme">Rosa</string>
+    <string name="purple_theme">Roxo</string>
+    <string name="red_theme">Vermelho</string>
+    <string name="sakura_theme">Sakura</string>
+    <string name="about_app_version">Versão %1$s</string>
+    <string name="about_telegram_group">Grupo do Telegram</string>
+    <string name="about_powered_by">Desenvolvido por %1$s</string>
+    <string name="yellow_theme">Amarelo</string>
+    <string name="about_telegram_channel">Canal do Telegram</string>
+    <string name="kpm_control">Controlar</string>
+    <string name="kpm_control_dialog_content">Parâmetros de controle de entrada:</string>
+    <string name="kpm_control_paramters">Parâmetros</string>
+    <string name="kpm_control_outMsg">Mensagem</string>
+    <string name="kpm_control_ok">Operação bem-sucedida!</string>
+    <string name="settings_night_mode_follow_sys">Seguir tema escuro do sistema</string>
+    <string name="amber_theme">Âmbar</string>
+    <string name="blue_grey_theme">Cinza-azulado</string>
+    <string name="indigo_theme">Índigo</string>
+    <string name="brown_theme">Marrom</string>
+    <string name="deep_purple_theme">Roxo profundo</string>
+    <string name="about_app_desc">Solução root do kernel com apenas uma imagem do kernel despojada, fornecendo a capacidade de montar módulos do sistema e realizar a interceptação de funções do kernel.</string>
+    <string name="kpm_control_dialog_title">Controlar KPMódulo</string>
 </resources>
