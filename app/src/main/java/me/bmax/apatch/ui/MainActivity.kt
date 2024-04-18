@@ -59,24 +59,24 @@ class MainActivity : AppCompatActivity() {
                 val navController = rememberNavController()
                 val snackBarHostState = remember { SnackbarHostState() }
 
-                val navHostEngine =
-                    rememberNavHostEngine(navHostContentAlignment = Alignment.TopCenter,
-                        rootDefaultAnimations = RootNavGraphDefaultAnimations(enterTransition = {
+                val navHostEngine = rememberNavHostEngine(
+                    navHostContentAlignment = Alignment.TopCenter,
+                    rootDefaultAnimations = RootNavGraphDefaultAnimations(enterTransition = {
+                        fadeIn(animationSpec = tween(300))
+                    }, exitTransition = { fadeOut(animationSpec = tween(300)) }),
+                    defaultAnimationsForNestedNavGraph = mapOf(
+                        NavGraphs.root to NestedNavGraphDefaultAnimations(enterTransition = {
                             fadeIn(animationSpec = tween(300))
                         }, exitTransition = { fadeOut(animationSpec = tween(300)) }),
-                        defaultAnimationsForNestedNavGraph = mapOf(
-                            NavGraphs.root to NestedNavGraphDefaultAnimations(enterTransition = {
-                                fadeIn(animationSpec = tween(300))
-                            }, exitTransition = { fadeOut(animationSpec = tween(300)) }),
-                        )
                     )
+                )
                 Scaffold(bottomBar = { BottomBar(navController) },
-                    snackbarHost = { SnackbarHost(snackBarHostState) }) { innerPadding ->
+                    snackbarHost = { SnackbarHost(snackBarHostState) }) {
                     CompositionLocalProvider(
                         LocalSnackbarHost provides snackBarHostState,
                     ) {
                         DestinationsNavHost(
-                            modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
+                            modifier = Modifier.padding(bottom = it.calculateBottomPadding() - 16.dp),
                             navGraph = NavGraphs.root,
                             navController = navController,
                             engine = navHostEngine
