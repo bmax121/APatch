@@ -2,7 +2,6 @@ package me.bmax.apatch.ui
 
 import android.annotation.SuppressLint
 import android.app.ActivityManager
-import android.content.Context
 import android.os.Bundle
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
@@ -10,6 +9,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.ComponentActivity
 import androidx.webkit.WebViewAssetLoader
+import me.bmax.apatch.APApplication
 import me.bmax.apatch.ui.webui.SuFilePathHandler
 import me.bmax.apatch.ui.webui.WebViewInterface
 import java.io.File
@@ -18,13 +18,14 @@ import java.io.File
 class WebUIActivity : ComponentActivity() {
     private lateinit var webViewInterface: WebViewInterface
 
+    @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val moduleId = intent.getStringExtra("id")!!
         val name = intent.getStringExtra("name")!!
-        setTaskDescription(ActivityManager.TaskDescription("APatch - $name"))
+        ActivityManager.TaskDescription("APatch - $name")
 
-        val prefs = getSharedPreferences("settings", Context.MODE_PRIVATE)
+        val prefs = APApplication.sharedPreferences
         WebView.setWebContentsDebuggingEnabled(prefs.getBoolean("enable_web_debugging", false))
 
         val webRoot = File("/data/adb/modules/${moduleId}/webroot")

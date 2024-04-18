@@ -31,6 +31,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import coil.Coil
+import coil.ImageLoader
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.animations.defaults.NestedNavGraphDefaultAnimations
 import com.ramcosta.composedestinations.animations.defaults.RootNavGraphDefaultAnimations
@@ -42,6 +44,8 @@ import me.bmax.apatch.ui.screen.BottomBarDestination
 import me.bmax.apatch.ui.screen.NavGraphs
 import me.bmax.apatch.ui.theme.APatchTheme
 import me.bmax.apatch.util.ui.LocalSnackbarHost
+import me.zhanghai.android.appiconloader.coil.AppIconFetcher
+import me.zhanghai.android.appiconloader.coil.AppIconKeyer
 
 class MainActivity : AppCompatActivity() {
     private var isLoading by mutableStateOf(true)
@@ -85,8 +89,21 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-            isLoading = false
         }
+
+        // Initialize Coil
+        val context = this
+        val iconSize = resources.getDimensionPixelSize(android.R.dimen.app_icon_size)
+        Coil.setImageLoader(
+            ImageLoader.Builder(context)
+                .components {
+                    add(AppIconKeyer())
+                    add(AppIconFetcher.Factory(iconSize, false, context))
+                }
+                .build()
+        )
+
+        isLoading = false
     }
 }
 

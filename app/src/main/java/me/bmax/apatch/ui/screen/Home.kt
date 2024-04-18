@@ -97,12 +97,12 @@ import me.bmax.apatch.ui.screen.destinations.AboutScreenDestination
 import me.bmax.apatch.ui.screen.destinations.InstallModeSelectScreenDestination
 import me.bmax.apatch.ui.screen.destinations.PatchesDestination
 import me.bmax.apatch.ui.viewmodel.PatchesViewModel
-import me.bmax.apatch.util.ui.APDialogBlurBehindUtils
 import me.bmax.apatch.util.Version
 import me.bmax.apatch.util.Version.getManagerVersion
 import me.bmax.apatch.util.checkNewVersion
 import me.bmax.apatch.util.getSELinuxStatus
 import me.bmax.apatch.util.reboot
+import me.bmax.apatch.util.ui.APDialogBlurBehindUtils
 
 @RootNavGraph(start = true)
 @Destination
@@ -135,9 +135,7 @@ fun HomeScreen(navigator: DestinationsNavigator) {
             if (kpState != APApplication.State.UNKNOWN_STATE && apState != APApplication.State.ANDROIDPATCH_INSTALLED) {
                 AStatusCard(apState)
             }
-            val checkUpdate =
-                LocalContext.current.getSharedPreferences("settings", Context.MODE_PRIVATE)
-                    .getBoolean("check_update", true)
+            val checkUpdate = APApplication.sharedPreferences.getBoolean("check_update", true)
             if (checkUpdate) {
                 UpdateCard()
             }

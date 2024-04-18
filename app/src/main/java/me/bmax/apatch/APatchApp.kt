@@ -8,16 +8,12 @@ import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import coil.Coil
-import coil.ImageLoader
 import com.topjohnwu.superuser.CallbackList
 import me.bmax.apatch.util.APatchCli
 import me.bmax.apatch.util.APatchKeyHelper
 import me.bmax.apatch.util.Version
 import me.bmax.apatch.util.getRootShell
 import me.bmax.apatch.util.rootShellForResult
-import me.zhanghai.android.appiconloader.coil.AppIconFetcher
-import me.zhanghai.android.appiconloader.coil.AppIconKeyer
 import java.io.File
 import kotlin.concurrent.thread
 import kotlin.system.exitProcess
@@ -45,7 +41,7 @@ class APApplication : Application() {
 
     companion object {
         const val APD_PATH = "/data/adb/apd"
-        const val KPATCH_PATH = "/data/adb/kpatch"
+        private const val KPATCH_PATH = "/data/adb/kpatch"
         const val SUPERCMD = "/system/bin/truncate"
         const val APATCH_FOLDER = "/data/adb/ap/"
         private const val APATCH_BIN_FOLDER = APATCH_FOLDER + "bin/"
@@ -254,17 +250,6 @@ class APApplication : Application() {
         sharedPreferences = getSharedPreferences(SP_NAME, Context.MODE_PRIVATE)
         APatchKeyHelper.setSharedPreferences(sharedPreferences)
         superKey = APatchKeyHelper.readSPSuperKey()
-
-        val context = this
-        val iconSize = resources.getDimensionPixelSize(android.R.dimen.app_icon_size)
-        Coil.setImageLoader(
-            ImageLoader.Builder(context)
-                .components {
-                    add(AppIconKeyer())
-                    add(AppIconFetcher.Factory(iconSize, false, context))
-                }
-                .build()
-        )
     }
 
     fun getBackupWarningState(): Boolean {

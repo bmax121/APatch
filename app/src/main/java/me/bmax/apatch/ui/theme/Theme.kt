@@ -14,6 +14,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import me.bmax.apatch.APApplication
 
 @Composable
 private fun SystemBarStyle(
@@ -48,7 +49,7 @@ fun APatchTheme(
     content: @Composable () -> Unit
 ) {
     val context = LocalContext.current
-    val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
+    val prefs = APApplication.sharedPreferences
     val darkTheme = if (prefs.getBoolean("night_mode_follow_sys", true)) {
         isSystemInDarkTheme()
     } else {

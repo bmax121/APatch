@@ -1,7 +1,6 @@
 package me.bmax.apatch.ui.screen
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -79,13 +78,13 @@ import me.bmax.apatch.R
 import me.bmax.apatch.ui.component.SwitchItem
 import me.bmax.apatch.ui.component.rememberConfirmDialog
 import me.bmax.apatch.ui.component.rememberLoadingDialog
-import me.bmax.apatch.util.ui.APDialogBlurBehindUtils
 import me.bmax.apatch.util.APatchKeyHelper
-import me.bmax.apatch.util.hideapk.HideAPK
 import me.bmax.apatch.util.getBugreportFile
+import me.bmax.apatch.util.hideapk.HideAPK
 import me.bmax.apatch.util.isGlobalNamespaceEnabled
 import me.bmax.apatch.util.rootShellForResult
 import me.bmax.apatch.util.setGlobalNamespaceEnabled
+import me.bmax.apatch.util.ui.APDialogBlurBehindUtils
 import java.util.Locale
 
 @Destination
@@ -145,7 +144,7 @@ fun SettingScreen() {
 
             val context = LocalContext.current
             val scope = rememberCoroutineScope()
-            val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
+            val prefs = APApplication.sharedPreferences
             val activity = LocalContext.current as Activity
 
             // clear key
@@ -208,8 +207,7 @@ fun SettingScreen() {
             if (aPatchReady) {
                 var enableWebDebugging by rememberSaveable {
                     mutableStateOf(
-                        AppUtils.getSharedPreferences("config", Context.MODE_PRIVATE)
-                            .getBoolean("enable_web_debugging", false)
+                        prefs.getBoolean("enable_web_debugging", false)
                     )
                 }
                 SwitchItem(
@@ -218,8 +216,8 @@ fun SettingScreen() {
                     summary = stringResource(id = R.string.enable_web_debugging_summary),
                     checked = enableWebDebugging
                 ) {
-                    AppUtils.getSharedPreferences("config", Context.MODE_PRIVATE)
-                        .edit().putBoolean("enable_web_debugging", it).apply()
+                    APApplication.sharedPreferences.edit().putBoolean("enable_web_debugging", it)
+                        .apply()
                     enableWebDebugging = it
                 }
             }
@@ -448,8 +446,7 @@ fun SettingScreen() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ThemeChooseDialog(showDialog: MutableState<Boolean>) {
-    val context = LocalContext.current
-    val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
+    val prefs = APApplication.sharedPreferences
     val activity = LocalContext.current as Activity
 
     BasicAlertDialog(
@@ -719,7 +716,6 @@ fun ResetSUPathDialog(showDialog: MutableState<Boolean>) {
             color = AlertDialogDefaults.containerColor,
         ) {
             Column(modifier = Modifier.padding(PaddingValues(all = 24.dp))) {
-                // Title
                 Box(
                     Modifier
                         .padding(PaddingValues(bottom = 16.dp))
@@ -730,8 +726,6 @@ fun ResetSUPathDialog(showDialog: MutableState<Boolean>) {
                         style = MaterialTheme.typography.headlineSmall
                     )
                 }
-
-                // Content
                 Box(
                     Modifier
                         .weight(weight = 1f, fill = false)
@@ -749,7 +743,6 @@ fun ResetSUPathDialog(showDialog: MutableState<Boolean>) {
                     )
                 }
 
-                // Buttons
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End
