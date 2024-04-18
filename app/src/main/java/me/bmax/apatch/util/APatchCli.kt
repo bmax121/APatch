@@ -1,5 +1,6 @@
 package me.bmax.apatch.util
 
+import android.content.Context
 import android.net.Uri
 import android.util.Log
 import com.topjohnwu.superuser.CallbackList
@@ -10,21 +11,26 @@ import me.bmax.apatch.BuildConfig
 import me.bmax.apatch.apApp
 import java.io.File
 
+
 private const val TAG = "APatchCli"
 private fun getKPatchPath(): String {
     return apApp.applicationInfo.nativeLibraryDir + File.separator + "libkpatch.so"
+}
+
+
+class RootShellInitializer : Shell.Initializer() {
+    override fun onInit(context: Context, shell: Shell): Boolean {
+        shell.newJob().add("export PATH=\$PATH:/system_ext/bin:/vendor/bin").exec()
+        return true
+    }
 }
 
 fun createRootShell(): Shell {
     Shell.enableVerboseLogging = BuildConfig.DEBUG
     val builder = Shell.Builder.create()
     return try {
-        builder.build(
-            getKPatchPath(),
-            APApplication.superKey,
-            "su",
-            "-Z",
-            APApplication.MAGISK_SCONTEXT
+        builder.setInitializers(RootShellInitializer::class.java).build(
+            getKPatchPath(), APApplication.superKey, "su", "-Z", APApplication.MAGISK_SCONTEXT
         )
     } catch (e: Throwable) {
         Log.e(TAG, "su failed: ", e)
@@ -55,11 +61,7 @@ fun tryGetRootShell(): Shell {
     val builder = Shell.Builder.create()
     return try {
         builder.build(
-            getKPatchPath(),
-            APApplication.superKey,
-            "su",
-            "-Z",
-            APApplication.MAGISK_SCONTEXT
+            getKPatchPath(), APApplication.superKey, "su", "-Z", APApplication.MAGISK_SCONTEXT
         )
     } catch (e: Throwable) {
         Log.e(TAG, "su failed: ", e)
@@ -116,10 +118,7 @@ fun uninstallModule(id: String): Boolean {
 }
 
 fun installModule(
-    uri: Uri,
-    onFinish: (Boolean) -> Unit,
-    onStdout: (String) -> Unit,
-    onStderr: (String) -> Unit
+    uri: Uri, onFinish: (Boolean) -> Unit, onStdout: (String) -> Unit, onStderr: (String) -> Unit
 ): Boolean {
     val resolver = apApp.contentResolver
     with(resolver.openInputStream(uri)) {
@@ -178,15 +177,13 @@ fun hasMagisk(): Boolean {
 
 fun isGlobalNamespaceEnabled(): Boolean {
     val shell = getRootShell()
-    val result =
-        ShellUtils.fastCmd(shell, "cat ${APApplication.GLOBAL_NAMESPACE_FILE}")
+    val result = ShellUtils.fastCmd(shell, "cat ${APApplication.GLOBAL_NAMESPACE_FILE}")
     Log.i(TAG, "is global namespace enabled: $result")
     return result == "1"
 }
 
 fun setGlobalNamespaceEnabled(value: String) {
-    getRootShell().newJob()
-        .add("echo $value > ${APApplication.GLOBAL_NAMESPACE_FILE}")
+    getRootShell().newJob().add("echo $value > ${APApplication.GLOBAL_NAMESPACE_FILE}")
         .submit { result ->
             Log.i(TAG, "setGlobalNamespaceEnabled result: ${result.isSuccess} [${result.out}]")
         }
