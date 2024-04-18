@@ -1,5 +1,6 @@
 package me.bmax.apatch.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -45,6 +46,7 @@ import me.bmax.apatch.util.LocalSnackbarHost
 class MainActivity : AppCompatActivity() {
     private var isLoading by mutableStateOf(true)
 
+    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
 
         val splashScreen = installSplashScreen()
@@ -71,12 +73,12 @@ class MainActivity : AppCompatActivity() {
                     )
                 )
                 Scaffold(bottomBar = { BottomBar(navController) },
-                    snackbarHost = { SnackbarHost(snackBarHostState) }) {
+                    snackbarHost = { SnackbarHost(snackBarHostState) }) { _ ->
                     CompositionLocalProvider(
                         LocalSnackbarHost provides snackBarHostState,
                     ) {
                         DestinationsNavHost(
-                            modifier = Modifier.padding(bottom = it.calculateBottomPadding() - 16.dp),
+                            modifier = Modifier.padding(bottom = 80.dp),
                             navGraph = NavGraphs.root,
                             navController = navController,
                             engine = navHostEngine
