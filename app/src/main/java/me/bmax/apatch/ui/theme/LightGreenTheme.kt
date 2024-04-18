@@ -98,7 +98,7 @@ val LightLightGreenTheme = lightColorScheme(
     scrim = md_theme_light_scrim,
 )
 
-val DarkLightGreenTheme= darkColorScheme(
+val DarkLightGreenTheme = darkColorScheme(
     primary = md_theme_dark_primary,
     onPrimary = md_theme_dark_onPrimary,
     primaryContainer = md_theme_dark_primaryContainer,

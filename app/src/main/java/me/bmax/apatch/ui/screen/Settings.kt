@@ -32,7 +32,6 @@ import androidx.compose.material.icons.filled.Engineering
 import androidx.compose.material.icons.filled.FormatColorFill
 import androidx.compose.material.icons.filled.InvertColors
 import androidx.compose.material.icons.filled.Key
-import androidx.compose.material.icons.filled.Masks
 import androidx.compose.material.icons.filled.Translate
 import androidx.compose.material.icons.filled.Update
 import androidx.compose.material3.AlertDialogDefaults
@@ -75,15 +74,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.bmax.apatch.APApplication
-import me.bmax.apatch.BuildConfig.APPLICATION_ID
 import me.bmax.apatch.Natives
 import me.bmax.apatch.R
 import me.bmax.apatch.ui.component.SwitchItem
 import me.bmax.apatch.ui.component.rememberConfirmDialog
 import me.bmax.apatch.ui.component.rememberLoadingDialog
-import me.bmax.apatch.util.APDialogBlurBehindUtils
+import me.bmax.apatch.util.ui.APDialogBlurBehindUtils
 import me.bmax.apatch.util.APatchKeyHelper
-import me.bmax.apatch.util.HideAPK
+import me.bmax.apatch.util.hideapk.HideAPK
 import me.bmax.apatch.util.getBugreportFile
 import me.bmax.apatch.util.isGlobalNamespaceEnabled
 import me.bmax.apatch.util.rootShellForResult

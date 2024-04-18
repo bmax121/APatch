@@ -9,10 +9,6 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 
@@ -30,7 +26,11 @@ fun SwitchItem(
             onCheckedChange.invoke(!checked)
         },
         headlineContent = {
-            Text(title, style = MaterialTheme.typography.bodyLarge, color = LocalContentColor.current)
+            Text(
+                title,
+                style = MaterialTheme.typography.bodyLarge,
+                color = LocalContentColor.current
+            )
         },
         leadingContent = icon?.let {
             { Icon(icon, title) }
@@ -40,9 +40,11 @@ fun SwitchItem(
         },
         supportingContent = {
             if (summary != null) {
-                Text(summary,
+                Text(
+                    summary,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.outline)
+                    color = MaterialTheme.colorScheme.outline
+                )
             }
         }
     )

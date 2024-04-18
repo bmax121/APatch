@@ -72,6 +72,7 @@ import kotlinx.coroutines.withContext
 import me.bmax.apatch.APApplication
 import me.bmax.apatch.APApplication.Companion.SAFEMODE_FILE
 import me.bmax.apatch.R
+import me.bmax.apatch.ui.WebUIActivity
 import me.bmax.apatch.ui.component.ConfirmResult
 import me.bmax.apatch.ui.component.ModuleRemoveButton
 import me.bmax.apatch.ui.component.ModuleStateIndicator
@@ -80,9 +81,8 @@ import me.bmax.apatch.ui.component.rememberConfirmDialog
 import me.bmax.apatch.ui.component.rememberLoadingDialog
 import me.bmax.apatch.ui.screen.destinations.InstallScreenDestination
 import me.bmax.apatch.ui.viewmodel.APModuleViewModel
-import me.bmax.apatch.ui.webui.WebUIActivity
 import me.bmax.apatch.util.DownloadListener
-import me.bmax.apatch.util.LocalSnackbarHost
+import me.bmax.apatch.util.ui.LocalSnackbarHost
 import me.bmax.apatch.util.download
 import me.bmax.apatch.util.getRootShell
 import me.bmax.apatch.util.hasMagisk

@@ -1,49 +1,46 @@
 package me.bmax.apatch.ui.component
-import android.animation.ValueAnimator
-import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Context
+
 import android.graphics.text.LineBreaker
 import android.os.Build
 import android.os.Parcelable
 import android.text.Layout
 import android.text.method.LinkMovementMethod
 import android.util.Log
-import android.view.SurfaceControl
-import android.view.View
 import android.view.ViewGroup
-import android.view.Window
-import android.view.WindowManager
-import android.view.animation.DecelerateInterpolator
-import android.webkit.WebView
 import android.widget.TextView
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.AlertDialogDefaults
+import androidx.compose.material3.BasicAlertDialog
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -53,18 +50,18 @@ import androidx.compose.ui.window.DialogWindowProvider
 import androidx.compose.ui.window.SecureFlagPolicy
 import io.noties.markwon.Markwon
 import io.noties.markwon.utils.NoCopySpannableFactory
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CancellableContinuation
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.parcelize.Parcelize
-import me.bmax.apatch.ui.webui.WebViewInterface
-import me.bmax.apatch.ui.webui.showSystemUI
-import me.bmax.apatch.util.APDialogBlurBehindUtils.Companion.setupWindowBlurListener
-import java.lang.reflect.Method
-import java.util.function.Consumer
+import me.bmax.apatch.util.ui.APDialogBlurBehindUtils.Companion.setupWindowBlurListener
 import kotlin.coroutines.resume
 
 private const val TAG = "DialogComponent"
@@ -184,7 +181,10 @@ interface ConfirmCallback {
     val isEmpty: Boolean get() = onConfirm == null && onDismiss == null
 
     companion object {
-        operator fun invoke(onConfirmProvider: () -> NullableCallback, onDismissProvider: () -> NullableCallback): ConfirmCallback {
+        operator fun invoke(
+            onConfirmProvider: () -> NullableCallback,
+            onDismissProvider: () -> NullableCallback
+        ): ConfirmCallback {
             return object : ConfirmCallback {
                 override val onConfirm: NullableCallback
                     get() = onConfirmProvider()
@@ -348,7 +348,10 @@ fun rememberLoadingDialog(): LoadingDialogHandle {
 }
 
 @Composable
-private fun rememberConfirmDialog(visuals: ConfirmDialogVisuals, callback: ConfirmCallback): ConfirmDialogHandle {
+private fun rememberConfirmDialog(
+    visuals: ConfirmDialogVisuals,
+    callback: ConfirmCallback
+): ConfirmDialogHandle {
     val visible = rememberSaveable {
         mutableStateOf(false)
     }
@@ -376,7 +379,10 @@ private fun rememberConfirmDialog(visuals: ConfirmDialogVisuals, callback: Confi
 }
 
 @Composable
-fun rememberConfirmCallback(onConfirm: NullableCallback, onDismiss: NullableCallback): ConfirmCallback {
+fun rememberConfirmCallback(
+    onConfirm: NullableCallback,
+    onDismiss: NullableCallback
+): ConfirmCallback {
     val currentOnConfirm by rememberUpdatedState(newValue = onConfirm)
     val currentOnDismiss by rememberUpdatedState(newValue = onDismiss)
     return remember {
@@ -385,7 +391,10 @@ fun rememberConfirmCallback(onConfirm: NullableCallback, onDismiss: NullableCall
 }
 
 @Composable
-fun rememberConfirmDialog(onConfirm: NullableCallback = null, onDismiss: NullableCallback = null): ConfirmDialogHandle {
+fun rememberConfirmDialog(
+    onConfirm: NullableCallback = null,
+    onDismiss: NullableCallback = null
+): ConfirmDialogHandle {
     return rememberConfirmDialog(rememberConfirmCallback(onConfirm, onDismiss))
 }
 
@@ -412,7 +421,11 @@ fun rememberCustomDialog(composable: @Composable (dismiss: () -> Unit) -> Unit):
 private fun LoadingDialog() {
     Dialog(
         onDismissRequest = {},
-        properties = DialogProperties(dismissOnClickOutside = false, dismissOnBackPress = false, usePlatformDefaultWidth = false)
+        properties = DialogProperties(
+            dismissOnClickOutside = false,
+            dismissOnBackPress = false,
+            usePlatformDefaultWidth = false
+        )
     ) {
         Surface(
             modifier = Modifier.size(100.dp), shape = RoundedCornerShape(8.dp)
@@ -435,7 +448,11 @@ private fun ConfirmDialog(visuals: ConfirmDialogVisuals, confirm: () -> Unit, di
         onDismissRequest = {
             dismiss()
         },
-        properties = DialogProperties(decorFitsSystemWindows = true, usePlatformDefaultWidth = false, securePolicy = SecureFlagPolicy.SecureOff)
+        properties = DialogProperties(
+            decorFitsSystemWindows = true,
+            usePlatformDefaultWidth = false,
+            securePolicy = SecureFlagPolicy.SecureOff
+        )
     ) {
         Surface(
             modifier = Modifier
@@ -446,19 +463,19 @@ private fun ConfirmDialog(visuals: ConfirmDialogVisuals, confirm: () -> Unit, di
             color = AlertDialogDefaults.containerColor,
         ) {
             Column(modifier = Modifier.padding(PaddingValues(all = 24.dp))) {
-                // Title
-                Box(Modifier
-                    .padding(PaddingValues(bottom = 16.dp))
-                    .align(Alignment.Start)
+                Box(
+                    Modifier
+                        .padding(PaddingValues(bottom = 16.dp))
+                        .align(Alignment.Start)
                 ) {
                     Text(text = visuals.title, style = MaterialTheme.typography.headlineSmall)
                 }
-
-                // Content
-                Box(Modifier
-                    .weight(weight = 1f, fill = false)
-                    .padding(PaddingValues(bottom = 24.dp))
-                    .align(Alignment.Start)) {
+                Box(
+                    Modifier
+                        .weight(weight = 1f, fill = false)
+                        .padding(PaddingValues(bottom = 24.dp))
+                        .align(Alignment.Start)
+                ) {
 
                     if (visuals.isMarkdown) {
                         MarkdownContent(content = visuals.content)
@@ -466,8 +483,6 @@ private fun ConfirmDialog(visuals: ConfirmDialogVisuals, confirm: () -> Unit, di
                         Text(text = visuals.content, style = MaterialTheme.typography.bodyMedium)
                     }
                 }
-
-                // Buttons
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End

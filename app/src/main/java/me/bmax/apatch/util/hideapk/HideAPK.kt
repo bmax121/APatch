@@ -1,4 +1,4 @@
-package me.bmax.apatch.util
+package me.bmax.apatch.util.hideapk
 
 import android.content.Context
 import android.widget.Toast
@@ -11,12 +11,12 @@ import me.bmax.apatch.BuildConfig.APPLICATION_ID
 import me.bmax.apatch.R
 import me.bmax.apatch.util.apksign.JarMap
 import me.bmax.apatch.util.apksign.SignApk
+import me.bmax.apatch.util.rootShellForResult
 import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
 import java.security.SecureRandom
-
 
 
 private const val TAG = "HideAPK"
@@ -62,15 +62,18 @@ object HideAPK {
                 val xml = AXML(jar.getRawData(je))
 
                 if (!xml.patchStrings {
-                    for (i in it.indices) {
-                        val s = it[i]
-                        if (s.contains(APPLICATION_ID) && !s.contains("ui.MainActivity") && !s.contains("WebUIActivity") && !s.contains(".APApplication")) {
-                            it[i] = s.replace(APPLICATION_ID, pkg)
-                        } else if (s == origLabel) {
-                            it[i] = label.toString()
+                        for (i in it.indices) {
+                            val s = it[i]
+                            if (s.contains(APPLICATION_ID) && !s.contains("ui.MainActivity") && !s.contains(
+                                    "WebUIActivity"
+                                ) && !s.contains(".APApplication")
+                            ) {
+                                it[i] = s.replace(APPLICATION_ID, pkg)
+                            } else if (s == origLabel) {
+                                it[i] = label.toString()
+                            }
                         }
-                    }
-                }) {
+                    }) {
                     return false
                 }
 
@@ -102,7 +105,7 @@ object HideAPK {
             "pm install -r -t ${patchedApk}",
             "[ $? = 0 ] && appops set ${newPkgName} REQUEST_INSTALL_PACKAGES allow;",
             "am start -n $newPkgName/$APPLICATION_ID.ui.MainActivity",
-            "pm uninstall $APPLICATION_ID" ,
+            "pm uninstall $APPLICATION_ID",
         )
         val result = rootShellForResult(*cmds)
 
@@ -119,9 +122,13 @@ object HideAPK {
         }
         val onFailure = Runnable {
             dialog.dismiss()
-            Toast.makeText(context, context.getString(R.string.hide_apatch_manager_failure), Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                context,
+                context.getString(R.string.hide_apatch_manager_failure),
+                Toast.LENGTH_LONG
+            ).show()
         }
-        val success = withContext(Dispatchers.IO) { patchAndHide(context, label)}
+        val success = withContext(Dispatchers.IO) { patchAndHide(context, label) }
         if (!success) onFailure.run()
     }
 }

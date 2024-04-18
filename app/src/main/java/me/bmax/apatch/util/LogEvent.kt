@@ -46,7 +46,7 @@ fun getBugreportFile(context: Context): File {
     shell.newJob().add("getprop > ${propFile.absolutePath}").exec()
     shell.newJob().add("cp /data/adb/ap/package_config ${packageConfigFile.absolutePath}").exec()
 
-    val selinux = ShellUtils.fastCmd(shell, "getenforce");
+    val selinux = ShellUtils.fastCmd(shell, "getenforce")
 
     // basic information
     val buildInfo = File(bugreportDir, "basic.txt")
@@ -85,7 +85,8 @@ fun getBugreportFile(context: Context): File {
 
     val targetFile = File(context.cacheDir, "APatch_bugreport_${current}.tar.gz")
 
-    shell.newJob().add("tar czf ${targetFile.absolutePath} -C ${bugreportDir.absolutePath} .").exec()
+    shell.newJob().add("tar czf ${targetFile.absolutePath} -C ${bugreportDir.absolutePath} .")
+        .exec()
     shell.newJob().add("rm -rf ${bugreportDir.absolutePath}").exec()
     shell.newJob().add("chmod 0644 ${targetFile.absolutePath}").exec()
 

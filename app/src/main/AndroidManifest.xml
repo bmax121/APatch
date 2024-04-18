@@ -41,7 +41,7 @@
                 android:value="" />
         </activity>
 
-        <activity android:name=".ui.webui.WebUIActivity"
+        <activity android:name=".ui.WebUIActivity"
             android:autoRemoveFromRecents="true"
             android:documentLaunchMode="intoExisting"
             android:exported="false"

@@ -35,7 +35,7 @@ import me.bmax.apatch.R
 import me.bmax.apatch.ui.component.rememberConfirmDialog
 import me.bmax.apatch.ui.screen.destinations.PatchesDestination
 import me.bmax.apatch.ui.viewmodel.PatchesViewModel
-import me.bmax.apatch.util.DeviceUtils
+import me.bmax.apatch.util.isABDevice
 import me.bmax.apatch.util.rootAvailable
 
 var selectedBootImage: Uri? = null
@@ -90,7 +90,7 @@ private fun SelectInstallMethod(
     navigator: DestinationsNavigator
 ) {
     val rootAvailable = rootAvailable()
-    val isAbDevice = DeviceUtils.isABDevice()
+    val isAbDevice = isABDevice()
 
     val radioOptions =
         mutableListOf<InstallMethod>(InstallMethod.SelectFile())
@@ -190,5 +190,5 @@ private fun TopBar(onBack: () -> Unit = {}) {
                 onClick = onBack
             ) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null) }
         },
-        )
+    )
 }

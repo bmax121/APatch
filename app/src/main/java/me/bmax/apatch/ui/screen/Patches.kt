@@ -28,13 +28,10 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material.icons.outlined.Cached
-import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
@@ -44,7 +41,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -65,7 +61,6 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dev.utils.app.permission.PermissionUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -81,7 +76,7 @@ private const val TAG = "Patches"
 @Destination
 @Composable
 fun Patches(mode: PatchesViewModel.PatchMode) {
-    val permissionRequest = remember { mutableStateOf(false)  }
+    val permissionRequest = remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
     val scope = rememberCoroutineScope()
 
@@ -125,6 +120,7 @@ fun Patches(mode: PatchesViewModel.PatchMode) {
                 override fun onGranted() {
                     permissionRequest.value = false
                 }
+
                 override fun onDenied(
                     grantedList: MutableList<String>?,
                     deniedList: MutableList<String>?,
@@ -158,21 +154,21 @@ fun Patches(mode: PatchesViewModel.PatchMode) {
                 )
             }
 
-            if(viewModel.bootSlot.isNotEmpty() || viewModel.bootDev.isNotEmpty()) {
+            if (viewModel.bootSlot.isNotEmpty() || viewModel.bootDev.isNotEmpty()) {
                 BootimgView(slot = viewModel.bootSlot, boot = viewModel.bootDev)
             }
 
-            if(viewModel.kimgInfo.banner.isNotEmpty()) {
+            if (viewModel.kimgInfo.banner.isNotEmpty()) {
                 KernelImageView(viewModel.kimgInfo)
             }
 
-            if(mode != PatchesViewModel.PatchMode.UNPATCH && viewModel.kimgInfo.banner.isNotEmpty()) {
+            if (mode != PatchesViewModel.PatchMode.UNPATCH && viewModel.kimgInfo.banner.isNotEmpty()) {
                 SetSuperKeyView(viewModel)
             }
 
             // existed extras
             if (mode == PatchesViewModel.PatchMode.PATCH_AND_INSTALL || mode == PatchesViewModel.PatchMode.INSTALL_TO_NEXT_SLOT) {
-                viewModel.existedExtras.forEach( action = {
+                viewModel.existedExtras.forEach(action = {
                     ExtraItem(extra = it, true, onDelete = {
                         viewModel.existedExtras.remove(it)
                     })
@@ -180,8 +176,8 @@ fun Patches(mode: PatchesViewModel.PatchMode) {
             }
 
             // add new extras
-            if(mode != PatchesViewModel.PatchMode.UNPATCH) {
-                viewModel.newExtras.forEach( action = {
+            if (mode != PatchesViewModel.PatchMode.UNPATCH) {
+                viewModel.newExtras.forEach(action = {
                     ExtraItem(extra = it, false, onDelete = {
                         val idx = viewModel.newExtras.indexOf(it)
                         viewModel.newExtras.remove(it)
@@ -191,10 +187,10 @@ fun Patches(mode: PatchesViewModel.PatchMode) {
             }
 
             // add new KPM
-            if(viewModel.superkey.isNotEmpty() && !viewModel.patching && !viewModel.patchdone && mode != PatchesViewModel.PatchMode.UNPATCH) {
+            if (viewModel.superkey.isNotEmpty() && !viewModel.patching && !viewModel.patchdone && mode != PatchesViewModel.PatchMode.UNPATCH) {
                 SelectFileButton(
                     text = stringResource(id = R.string.patch_embed_kpm_btn),
-                    onSelected = {data, uri ->
+                    onSelected = { data, uri ->
                         Log.d(TAG, "select kpm, data: $data, uri: $uri")
                         viewModel.embedKPM(uri)
                     }
@@ -202,9 +198,9 @@ fun Patches(mode: PatchesViewModel.PatchMode) {
             }
 
             // do patch, update, unpatch
-            if(!viewModel.patching && !viewModel.patchdone) {
+            if (!viewModel.patching && !viewModel.patchdone) {
                 // patch start
-                if(mode != PatchesViewModel.PatchMode.UNPATCH && viewModel.superkey.isNotEmpty()) {
+                if (mode != PatchesViewModel.PatchMode.UNPATCH && viewModel.superkey.isNotEmpty()) {
                     StartButton(stringResource(id = R.string.patch_start_patch_btn)) {
                         viewModel.doPatch(
                             mode
@@ -212,13 +208,13 @@ fun Patches(mode: PatchesViewModel.PatchMode) {
                     }
                 }
                 // unpatch
-                if(mode == PatchesViewModel.PatchMode.UNPATCH && viewModel.kimgInfo.banner.isNotEmpty()) {
+                if (mode == PatchesViewModel.PatchMode.UNPATCH && viewModel.kimgInfo.banner.isNotEmpty()) {
                     StartButton(stringResource(id = R.string.patch_start_unpatch_btn)) { viewModel.doUnpatch() }
                 }
             }
 
             // patch log
-            if(viewModel.patching || viewModel.patchdone) {
+            if (viewModel.patching || viewModel.patchdone) {
                 Text(
                     modifier = Modifier.padding(8.dp),
                     text = viewModel.patchLog,
@@ -234,10 +230,11 @@ fun Patches(mode: PatchesViewModel.PatchMode) {
             Spacer(modifier = Modifier.height(12.dp))
 
             // loading progress
-            if(viewModel.running) {
-                Box(modifier = Modifier
-                    .padding(innerPadding)
-                    .align(Alignment.CenterHorizontally)
+            if (viewModel.running) {
+                Box(
+                    modifier = Modifier
+                        .padding(innerPadding)
+                        .align(Alignment.CenterHorizontally)
                 ) {
                     CircularProgressIndicator(
                         modifier = Modifier
@@ -253,7 +250,7 @@ fun Patches(mode: PatchesViewModel.PatchMode) {
 
 
 @Composable
-private fun StartButton(text: String, onClick: ()-> Unit) {
+private fun StartButton(text: String, onClick: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth(),
@@ -269,7 +266,7 @@ private fun StartButton(text: String, onClick: ()-> Unit) {
 }
 
 @Composable
-private fun ExtraItem(extra: KPModel.IExtraInfo, existed: Boolean, onDelete: ()->Unit) {
+private fun ExtraItem(extra: KPModel.IExtraInfo, existed: Boolean, onDelete: () -> Unit) {
     ElevatedCard(
         colors = CardDefaults.elevatedCardColors(containerColor = run {
             MaterialTheme.colorScheme.secondaryContainer
@@ -280,30 +277,51 @@ private fun ExtraItem(extra: KPModel.IExtraInfo, existed: Boolean, onDelete: ()-
                 .fillMaxWidth()
                 .padding(12.dp),
         ) {
-            Row ( modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                Text(text = stringResource(id =
-                if(existed) R.string.patch_item_existed_extra_kpm else R.string.patch_item_new_extra_kpm) +
-                        " " + extra.type.toString().uppercase(),
+            Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                Text(
+                    text = stringResource(
+                        id =
+                        if (existed) R.string.patch_item_existed_extra_kpm else R.string.patch_item_new_extra_kpm
+                    ) +
+                            " " + extra.type.toString().uppercase(),
                     style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier
-                        .weight(1f).wrapContentWidth(Alignment.CenterHorizontally))
+                        .weight(1f)
+                        .wrapContentWidth(Alignment.CenterHorizontally)
+                )
                 Icon(imageVector = Icons.Default.Delete,
                     contentDescription = "Delete",
                     modifier = Modifier
                         .padding(end = 8.dp)
                         .clickable { onDelete() })
             }
-            if(extra.type == KPModel.ExtraType.KPM) {
+            if (extra.type == KPModel.ExtraType.KPM) {
                 val kpmInfo: KPModel.KPMInfo = extra as KPModel.KPMInfo
-                Text(text = "${stringResource(id = R.string.patch_item_extra_name)} ${kpmInfo.name}" , style = MaterialTheme.typography.bodyMedium)
-                Text(text = "${stringResource(id = R.string.patch_item_extra_version)} ${kpmInfo.version}", style = MaterialTheme.typography.bodyMedium)
-                Text(text = "${stringResource(id = R.string.patch_item_extra_kpm_license)} ${kpmInfo.license}", style = MaterialTheme.typography.bodyMedium)
-                Text(text = "${stringResource(id = R.string.patch_item_extra_author)} ${kpmInfo.author}", style = MaterialTheme.typography.bodyMedium)
-                Text(text = "${stringResource(id = R.string.patch_item_extra_kpm_desciption)} ${kpmInfo.description}", style = MaterialTheme.typography.bodyMedium)
+                Text(
+                    text = "${stringResource(id = R.string.patch_item_extra_name)} ${kpmInfo.name}",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Text(
+                    text = "${stringResource(id = R.string.patch_item_extra_version)} ${kpmInfo.version}",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Text(
+                    text = "${stringResource(id = R.string.patch_item_extra_kpm_license)} ${kpmInfo.license}",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Text(
+                    text = "${stringResource(id = R.string.patch_item_extra_author)} ${kpmInfo.author}",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Text(
+                    text = "${stringResource(id = R.string.patch_item_extra_kpm_desciption)} ${kpmInfo.description}",
+                    style = MaterialTheme.typography.bodyMedium
+                )
                 var event by remember { mutableStateOf(kpmInfo.event) }
-                Row(modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.LightGray)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.LightGray)
                 ) {
                     Text(
                         text = stringResource(id = R.string.patch_item_extra_event),
@@ -320,11 +338,15 @@ private fun ExtraItem(extra: KPModel.IExtraInfo, existed: Boolean, onDelete: ()-
                     )
                 }
                 var args by remember { mutableStateOf(kpmInfo.args) }
-                Row(modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.LightGray)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.LightGray)
                 ) {
-                    Text(text = stringResource(id = R.string.patch_item_extra_args), style = MaterialTheme.typography.bodyMedium)
+                    Text(
+                        text = stringResource(id = R.string.patch_item_extra_args),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
                     BasicTextField(
                         modifier = Modifier.fillMaxWidth(),
                         value = args,
@@ -344,7 +366,7 @@ private fun ExtraItem(extra: KPModel.IExtraInfo, existed: Boolean, onDelete: ()-
 @Composable
 private fun SetSuperKeyView(viewModel: PatchesViewModel) {
     var skey by remember { mutableStateOf(viewModel.superkey) }
-    var showWarn by remember { mutableStateOf(!viewModel.checkSuperKeyValidation(skey))}
+    var showWarn by remember { mutableStateOf(!viewModel.checkSuperKeyValidation(skey)) }
     var keyVisible by remember { mutableStateOf(false) }
     ElevatedCard(
         colors = CardDefaults.elevatedCardColors(containerColor = run {
@@ -361,15 +383,18 @@ private fun SetSuperKeyView(viewModel: PatchesViewModel) {
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = stringResource(id = R.string.patch_item_skey),
+                Text(
+                    text = stringResource(id = R.string.patch_item_skey),
                     style = MaterialTheme.typography.bodyLarge
                 )
             }
             if (showWarn) {
                 Spacer(modifier = Modifier.height(3.dp))
-                Text(color = Color.Red,
+                Text(
+                    color = Color.Red,
                     text = stringResource(id = R.string.patch_item_set_skey_label),
-                    style = MaterialTheme.typography.bodyMedium)
+                    style = MaterialTheme.typography.bodyMedium
+                )
             }
             Column {
                 //Spacer(modifier = Modifier.height(8.dp))
@@ -416,7 +441,7 @@ private fun SetSuperKeyView(viewModel: PatchesViewModel) {
 
 @Composable
 private fun KernelPatchImageView(kpImgInfo: KPModel.KPImgInfo) {
-    if(kpImgInfo.version.isEmpty()) return
+    if (kpImgInfo.version.isEmpty()) return
     ElevatedCard(
         colors = CardDefaults.elevatedCardColors(containerColor = run {
             MaterialTheme.colorScheme.secondaryContainer
@@ -432,11 +457,24 @@ private fun KernelPatchImageView(kpImgInfo: KPModel.KPImgInfo) {
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = stringResource(id = R.string.patch_item_kpimg), style = MaterialTheme.typography.bodyLarge)
+                Text(
+                    text = stringResource(id = R.string.patch_item_kpimg),
+                    style = MaterialTheme.typography.bodyLarge
+                )
             }
-            Text(text = stringResource(id = R.string.patch_item_kpimg_version) + Version.uInt2String(kpImgInfo.version.substring(2).toUInt(16)), style = MaterialTheme.typography.bodyMedium)
-            Text(text = stringResource(id = R.string.patch_item_kpimg_comile_time) + kpImgInfo.compileTime, style = MaterialTheme.typography.bodyMedium)
-            Text(text = stringResource(id = R.string.patch_item_kpimg_config) + kpImgInfo.config, style = MaterialTheme.typography.bodyMedium)
+            Text(
+                text = stringResource(id = R.string.patch_item_kpimg_version) + Version.uInt2String(
+                    kpImgInfo.version.substring(2).toUInt(16)
+                ), style = MaterialTheme.typography.bodyMedium
+            )
+            Text(
+                text = stringResource(id = R.string.patch_item_kpimg_comile_time) + kpImgInfo.compileTime,
+                style = MaterialTheme.typography.bodyMedium
+            )
+            Text(
+                text = stringResource(id = R.string.patch_item_kpimg_config) + kpImgInfo.config,
+                style = MaterialTheme.typography.bodyMedium
+            )
         }
     }
 }
@@ -448,19 +486,29 @@ private fun BootimgView(slot: String, boot: String) {
             MaterialTheme.colorScheme.secondaryContainer
         })
     ) {
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .padding(12.dp),
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = stringResource(id = R.string.patch_item_bootimg), style = MaterialTheme.typography.bodyLarge)
+                Text(
+                    text = stringResource(id = R.string.patch_item_bootimg),
+                    style = MaterialTheme.typography.bodyLarge
+                )
             }
-            Text(text = stringResource(id = R.string.patch_item_bootimg_slot) + " " + slot, style = MaterialTheme.typography.bodyMedium)
-            Text(text = stringResource(id = R.string.patch_item_bootimg_dev) + " " + boot, style = MaterialTheme.typography.bodyMedium)
+            Text(
+                text = stringResource(id = R.string.patch_item_bootimg_slot) + " " + slot,
+                style = MaterialTheme.typography.bodyMedium
+            )
+            Text(
+                text = stringResource(id = R.string.patch_item_bootimg_dev) + " " + boot,
+                style = MaterialTheme.typography.bodyMedium
+            )
         }
     }
 }
@@ -482,7 +530,10 @@ private fun KernelImageView(kImgInfo: KPModel.KImgInfo) {
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = stringResource(id = R.string.patch_item_kernel), style = MaterialTheme.typography.bodyLarge)
+                Text(
+                    text = stringResource(id = R.string.patch_item_kernel),
+                    style = MaterialTheme.typography.bodyLarge
+                )
             }
             Text(text = kImgInfo.banner, style = MaterialTheme.typography.bodyMedium)
         }
@@ -491,7 +542,7 @@ private fun KernelImageView(kImgInfo: KPModel.KImgInfo) {
 
 
 @Composable
-private fun SelectFileButton(text: String, onSelected: (data: Intent, uri: Uri)-> Unit) {
+private fun SelectFileButton(text: String, onSelected: (data: Intent, uri: Uri) -> Unit) {
     val selectFileLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) {
@@ -513,7 +564,7 @@ private fun SelectFileButton(text: String, onSelected: (data: Intent, uri: Uri)-
                 val intent = Intent(Intent.ACTION_GET_CONTENT)
                 intent.type = "*/*"
                 selectFileLauncher.launch(intent)
-            } ,
+            },
             content = { Text(text = text) }
         )
     }
@@ -521,7 +572,7 @@ private fun SelectFileButton(text: String, onSelected: (data: Intent, uri: Uri)-
 
 @Composable
 private fun ErrorView(error: String) {
-    if(error.isEmpty()) return
+    if (error.isEmpty()) return
     ElevatedCard(
         colors = CardDefaults.elevatedCardColors(containerColor = run {
             MaterialTheme.colorScheme.error
@@ -533,7 +584,10 @@ private fun ErrorView(error: String) {
                 .padding(start = 12.dp, top = 12.dp, end = 12.dp, bottom = 12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = stringResource(id = R.string.patch_item_error), style = MaterialTheme.typography.bodyLarge)
+            Text(
+                text = stringResource(id = R.string.patch_item_error),
+                style = MaterialTheme.typography.bodyLarge
+            )
             Text(text = error, style = MaterialTheme.typography.bodyMedium)
         }
     }

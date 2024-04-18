@@ -1,7 +1,8 @@
 package me.bmax.apatch.util
 
-import androidx.compose.ui.res.stringResource
+import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import com.topjohnwu.superuser.Shell
 import me.bmax.apatch.R
 
@@ -29,4 +30,24 @@ fun getSELinuxStatus(): String {
     } else {
         stringResource(R.string.home_selinux_status_unknown)
     }
+}
+
+private fun getSystemProperty(key: String): Boolean {
+    try {
+        val c = Class.forName("android.os.SystemProperties")
+        val get = c.getMethod(
+            "getBoolean",
+            String::class.java,
+            Boolean::class.javaPrimitiveType
+        )
+        return get.invoke(c, key, false) as Boolean
+    } catch (e: Exception) {
+        Log.e("APatch", "[DeviceUtils] Failed to get system property: ", e)
+    }
+    return false
+}
+
+// Check to see if device supports A/B (seamless) system updates
+fun isABDevice(): Boolean {
+    return getSystemProperty("ro.build.ab_update")
 }

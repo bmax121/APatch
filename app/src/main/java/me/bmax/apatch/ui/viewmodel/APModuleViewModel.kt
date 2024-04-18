@@ -15,7 +15,7 @@ import me.bmax.apatch.util.overlayFsAvailable
 import org.json.JSONArray
 import org.json.JSONObject
 import java.text.Collator
-import java.util.*
+import java.util.Locale
 
 class APModuleViewModel : ViewModel() {
     companion object {

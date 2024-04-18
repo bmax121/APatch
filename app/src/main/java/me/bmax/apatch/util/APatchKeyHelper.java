@@ -18,11 +18,10 @@ import javax.crypto.spec.GCMParameterSpec;
 
 
 public class APatchKeyHelper {
-    private static final String TAG = "APatchSecurityHelper";
-
-    private static final String ANDROID_KEYSTORE = "AndroidKeyStore";
     protected static final String SUPER_KEY = "super_key";
     protected static final String SUPER_KEY_ENC = "super_key_enc";
+    private static final String TAG = "APatchSecurityHelper";
+    private static final String ANDROID_KEYSTORE = "AndroidKeyStore";
     private static final String SKIP_STORE_SUPER_KEY = "skip_store_super_key";
     private static final String SUPER_KEY_IV = "super_key_iv";
     private static final String KEY_ALIAS = "APatchSecurityKey";
@@ -125,7 +124,7 @@ public class APatchKeyHelper {
 
     public static void setShouldSkipStoreSuperKey(boolean should) {
         clearConfigKey();
-        prefs.edit().putInt(SKIP_STORE_SUPER_KEY, should? 1: 0).apply();
+        prefs.edit().putInt(SKIP_STORE_SUPER_KEY, should ? 1 : 0).apply();
     }
 
     public static String readSPSuperKey() {
@@ -142,7 +141,7 @@ public class APatchKeyHelper {
     }
 
     public static void writeSPSuperKey(String key) {
-        if(shouldSkipStoreSuperKey()) return;
+        if (shouldSkipStoreSuperKey()) return;
         key = APatchKeyHelper.encrypt(key);
         prefs.edit().putString(SUPER_KEY_ENC, key).apply();
     }

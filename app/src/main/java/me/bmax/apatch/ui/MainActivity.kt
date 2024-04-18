@@ -41,14 +41,13 @@ import me.bmax.apatch.APApplication
 import me.bmax.apatch.ui.screen.BottomBarDestination
 import me.bmax.apatch.ui.screen.NavGraphs
 import me.bmax.apatch.ui.theme.APatchTheme
-import me.bmax.apatch.util.LocalSnackbarHost
+import me.bmax.apatch.util.ui.LocalSnackbarHost
 
 class MainActivity : AppCompatActivity() {
     private var isLoading by mutableStateOf(true)
 
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
-
         val splashScreen = installSplashScreen()
 
         super.onCreate(savedInstanceState)

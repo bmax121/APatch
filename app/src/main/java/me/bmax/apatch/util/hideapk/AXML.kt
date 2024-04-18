@@ -1,4 +1,4 @@
-package me.bmax.apatch.util
+package me.bmax.apatch.util.hideapk
 
 import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer

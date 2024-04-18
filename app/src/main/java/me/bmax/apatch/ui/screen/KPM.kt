@@ -93,7 +93,7 @@ import me.bmax.apatch.ui.screen.destinations.PatchesDestination
 import me.bmax.apatch.ui.viewmodel.KPModel
 import me.bmax.apatch.ui.viewmodel.KPModuleViewModel
 import me.bmax.apatch.ui.viewmodel.PatchesViewModel
-import me.bmax.apatch.util.APDialogBlurBehindUtils
+import me.bmax.apatch.util.ui.APDialogBlurBehindUtils
 import me.bmax.apatch.util.inputStream
 import me.bmax.apatch.util.writeTo
 import java.io.IOException
@@ -140,7 +140,6 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
             val scope = rememberCoroutineScope()
             val context = LocalContext.current
 
-            val moduleAdd = stringResource(id = R.string.kpm_add_kpm)
             val moduleLoad = stringResource(id = R.string.kpm_load)
             val moduleInstall = stringResource(id = R.string.kpm_install)
             val moduleEmbed = stringResource(id = R.string.kpm_embed)

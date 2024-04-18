@@ -1,4 +1,4 @@
-package me.bmax.apatch.util
+package me.bmax.apatch.util.hideapk
 
 import android.util.Base64
 import android.util.Base64OutputStream
@@ -28,7 +28,8 @@ class Keygen : CertKeyProvider {
     companion object {
         private const val ALIAS = "apatch"
         private val PASSWORD get() = "apatch".toCharArray()
-        private const val DNAME = "C=US,ST=California,L=Mountain View,O=Google Inc.,OU=Android,CN=Android"
+        private const val DNAME =
+            "C=US,ST=California,L=Mountain View,O=Google Inc.,OU=Android,CN=Android"
         private const val BASE64_FLAG = Base64.NO_PADDING or Base64.NO_WRAP
 
     }

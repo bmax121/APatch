@@ -12,7 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.bmax.apatch.Natives
 import java.text.Collator
-import java.util.*
+import java.util.Locale
 
 class KPModuleViewModel : ViewModel() {
     companion object {
@@ -47,24 +47,25 @@ class KPModuleViewModel : ViewModel() {
                 val names = Natives.kernelPatchModuleList()
                 val nameList = names.split('\n').toList()
                 Log.d(TAG, "kpm list: $nameList")
-                modules = nameList.filter{ it.isNotEmpty() }.map{
+                modules = nameList.filter { it.isNotEmpty() }.map {
                     val infoline = Natives.kernelPatchModuleInfo(it)
                     val spi = infoline.split('\n')
                     val name = spi.find { it.startsWith("name=") }?.removePrefix("name=")
                     val version = spi.find { it.startsWith("version=") }?.removePrefix("version=")
                     val license = spi.find { it.startsWith("license=") }?.removePrefix("license=")
                     val author = spi.find { it.startsWith("author=") }?.removePrefix("author=")
-                    val description = spi.find { it.startsWith("description=") }?.removePrefix("description=")
+                    val description =
+                        spi.find { it.startsWith("description=") }?.removePrefix("description=")
                     val args = spi.find { it.startsWith("args=") }?.removePrefix("args=")
                     val info = KPModel.KPMInfo(
                         KPModel.ExtraType.KPM,
-                        name?:"",
+                        name ?: "",
                         "",
-                        args?:"",
-                        version?:"",
-                        license?:"",
-                        author?:"",
-                        description?:""
+                        args ?: "",
+                        version ?: "",
+                        license ?: "",
+                        author ?: "",
+                        description ?: ""
                     )
                     info
                 }

@@ -97,7 +97,7 @@ import me.bmax.apatch.ui.screen.destinations.AboutScreenDestination
 import me.bmax.apatch.ui.screen.destinations.InstallModeSelectScreenDestination
 import me.bmax.apatch.ui.screen.destinations.PatchesDestination
 import me.bmax.apatch.ui.viewmodel.PatchesViewModel
-import me.bmax.apatch.util.APDialogBlurBehindUtils
+import me.bmax.apatch.util.ui.APDialogBlurBehindUtils
 import me.bmax.apatch.util.Version
 import me.bmax.apatch.util.Version.getManagerVersion
 import me.bmax.apatch.util.checkNewVersion
@@ -167,7 +167,6 @@ fun UninstallDialog(showDialog: MutableState<Boolean>, navigator: DestinationsNa
             color = AlertDialogDefaults.containerColor,
         ) {
             Column(modifier = Modifier.padding(PaddingValues(all = 24.dp))) {
-                // Title
                 Box(
                     Modifier
                         .padding(PaddingValues(bottom = 16.dp))
@@ -178,8 +177,6 @@ fun UninstallDialog(showDialog: MutableState<Boolean>, navigator: DestinationsNa
                         style = MaterialTheme.typography.headlineSmall
                     )
                 }
-
-                // Buttons
                 Row(
                     modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center
                 ) {
@@ -837,9 +834,9 @@ fun WarningCard() {
                             Icons.Outlined.Clear,
                             contentDescription = "",
                             modifier = Modifier.clickable {
-                                    show = false
-                                    apApp.updateBackupWarningState(false)
-                                },
+                                show = false
+                                apApp.updateBackupWarningState(false)
+                            },
                         )
                     }
                 }

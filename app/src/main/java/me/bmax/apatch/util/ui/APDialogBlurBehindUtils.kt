@@ -1,4 +1,4 @@
-package me.bmax.apatch.util
+package me.bmax.apatch.util.ui
 
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
@@ -62,11 +62,17 @@ open class APDialogBlurBehindUtils {
                                 }
                                 transaction.apply()
                             } catch (t: Throwable) {
-                                Log.e("APatchUI", "[APDialogBlurBehindUtils] Blur behind dialog builder: " + t.toString())
+                                Log.e(
+                                    "APatchUI",
+                                    "[APDialogBlurBehindUtils] Blur behind dialog builder: " + t.toString()
+                                )
                             }
                         }
                     } catch (t: Throwable) {
-                        Log.e("APatchUI", "[APDialogBlurBehindUtils] Blur behind dialog builder: " + t.toString())
+                        Log.e(
+                            "APatchUI",
+                            "[APDialogBlurBehindUtils] Blur behind dialog builder: " + t.toString()
+                        )
                     }
                     view.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
                         override fun onViewAttachedToWindow(v: View) {}

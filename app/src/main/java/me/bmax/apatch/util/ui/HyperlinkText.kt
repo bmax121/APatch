@@ -1,4 +1,4 @@
-package me.bmax.apatch.util
+package me.bmax.apatch.util.ui
 
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.material3.MaterialTheme

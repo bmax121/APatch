@@ -1,4 +1,4 @@
-package me.bmax.apatch.ui.webui
+package me.bmax.apatch.ui
 
 import android.annotation.SuppressLint
 import android.app.ActivityManager
@@ -10,10 +10,12 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.ComponentActivity
 import androidx.webkit.WebViewAssetLoader
+import me.bmax.apatch.ui.webui.SuFilePathHandler
+import me.bmax.apatch.ui.webui.WebViewInterface
 import java.io.File
 
 @SuppressLint("SetJavaScriptEnabled")
-class WebUIActivity : ComponentActivity()  {
+class WebUIActivity : ComponentActivity() {
     private lateinit var webViewInterface: WebViewInterface
 
     override fun onCreate(savedInstanceState: Bundle?) {

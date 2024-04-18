@@ -242,7 +242,8 @@ class APApplication : Application() {
 
         val isArm64 = Build.SUPPORTED_ABIS.any { it == "arm64-v8a" }
         if (!isArm64) {
-            Toast.makeText(applicationContext, "Unsupported architecture!", Toast.LENGTH_LONG).show()
+            Toast.makeText(applicationContext, "Unsupported architecture!", Toast.LENGTH_LONG)
+                .show()
             Thread.sleep(5000)
             exitProcess(0)
         }
