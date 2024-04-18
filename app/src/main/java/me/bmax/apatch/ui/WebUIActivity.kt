@@ -23,7 +23,7 @@ class WebUIActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val moduleId = intent.getStringExtra("id")!!
         val name = intent.getStringExtra("name")!!
-        ActivityManager.TaskDescription("APatch - $name")
+        setTaskDescription(ActivityManager.TaskDescription("APatch - $name"))
 
         val prefs = APApplication.sharedPreferences
         WebView.setWebContentsDebuggingEnabled(prefs.getBoolean("enable_web_debugging", false))
