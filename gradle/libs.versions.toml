@@ -13,6 +13,7 @@ markdown = "4.6.2"
 ui = "1.6.6"
 webkit = "1.10.0"
 androidxCoreSplashscreen = "1.0.1"
+androidx-compose-compiler = "1.5.12"
 
 [plugins]
 agp-app = { id = "com.android.application", version.ref = "agp" }
@@ -28,6 +29,7 @@ androidx-activity-compose = { group = "androidx.activity", name = "activity-comp
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
 
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
+androidx-compose-compiler = { group = "androidx.compose.compiler", name = "compiler", version.ref = "androidx-compose-compiler" }
 androidx-compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 androidx-compose-material = { group = "androidx.compose.material", name = "material" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
