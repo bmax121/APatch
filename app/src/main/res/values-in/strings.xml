@@ -16,7 +16,7 @@
     <string name="reboot_edl">But ke EDL</string>
     <string name="home_learn_apatch">Pelajari AndroidPatch</string>
     <string name="about">Tentang</string>
-    <string name="about_source_code">&lt;p&gt;Lihat kode sumber di %1$s&lt;p/&gt;Gabung kanal %2$s kami&lt;p/&gt;Gabung grup %2$s kami</string>
+    <string name="about_source_code">&lt;p&gt;Lihat kode sumber di %1$s&lt;p/&gt;Gabung kanal %2$s kami&lt;p/&gt;Gabung grup %3$s kami</string>
     <string name="send_log">Kirim Log</string>
     <string name="safe_mode">Mode aman</string>
     <string name="home_patch_set_key_desc">Kredensial untuk KernelPatch</string>
@@ -79,7 +79,7 @@
     <string name="home_selinux_status_permissive">Permissive</string>
     <string name="home_selinux_status">SELinux</string>
     <string name="kpm_load_toast_failed">Gagal memuat</string>
-    <string name="home_selinux_status_disabled">Nonaktif</string>
+    <string name="home_selinux_status_disabled">Mati</string>
     <string name="kpm_load">Muat</string>
     <string name="home_selinux_status_enforcing">Enforcing</string>
     <string name="kpm_license">Lisensi</string>
@@ -90,7 +90,7 @@
     <string name="kpm_args">Args</string>
     <string name="home_fingerprint">Identitas</string>
     <string name="clear_super_key">Hapus SuperKey</string>
-    <string name="apm_not_installed">AndroidPatch tidak terinstal</string>
+    <string name="apm_not_installed">APatch tidak terinstal</string>
     <string name="settings_app_language">Bahasa</string>
     <string name="system_default">Bawaan sistem</string>
     <string name="patch">Patch</string>
@@ -115,7 +115,7 @@
     <string name="patch_item_kpimg">KPimg</string>
     <string name="kpatch_shadow_path_title">KPatch</string>
     <string name="patch_item_new_extra_kpm">Tanam baru</string>
-    <string name="patch_item_existed_extra_kpm">Terpasang</string>
+    <string name="patch_item_existed_extra_kpm">Tertanam</string>
     <string name="patch_item_extra_name">Nama:</string>
     <string name="patch_item_extra_kpm_license">Lisensi:</string>
     <string name="patch_item_extra_kpm_desciption">Deskripsi:</string>
@@ -131,7 +131,7 @@
     <string name="patch_item_bootimg_slot">Slot:</string>
     <string name="kpm_add_kpm">Tambah KPM</string>
     <string name="kpm_install">Instal</string>
-    <string name="kpm_embed">Tertanam</string>
+    <string name="kpm_embed">Tanam</string>
     <string name="hide_apatch_manager_failure">Gagal menyembunyikan, laporkan bug ini!</string>
     <string name="hide_apatch_manager_summary">Instal manajer dengan label nama dipilih dan ID paket teracak</string>
     <string name="hide_apatch_dialog_new_manager_name">Nama baru manajer</string>
@@ -143,7 +143,7 @@
     <string name="setting_reset_su_path">Reset jalur SU</string>
     <string name="patch_mode_install_to_next_slot">Mode: Instal ke Slot lainnya (Setelah OTA)</string>
     <string name="settings_check_update_summary">Cek versi terbaru setiap membuka manajer</string>
-    <string name="apm_webui_open">Buka WebUI</string>
+    <string name="apm_webui_open">Buka</string>
     <string name="home_dialog_auth_fail_title">Gagal autentikasi</string>
     <string name="home_more_menu_about">Tentang</string>
     <string name="mode_select_page_patch_and_install">Patch dan Instal</string>
@@ -158,7 +158,7 @@
 \nLanjutkan?</string>
     <string name="home_dialog_uninstall_title">Hapus</string>
     <string name="home_dialog_uninstall_ap_only">Hapus AndroidPatch</string>
-    <string name="home_dialog_uninstall_all">Hapus sepenuhnya</string>
+    <string name="home_dialog_uninstall_all">Hapus Semua</string>
     <string name="settings_check_update">Cek terbaru</string>
     <string name="home_install_unknown_summary">Klik untuk menginstal</string>
     <string name="home_device_info">Gawai</string>
@@ -175,4 +175,41 @@
     <string name="settings_donot_store_superkey_summary">Autentikasi SuperKey setiap membuka manajer</string>
     <string name="settings_donot_store_superkey">Jangan simpan SuperKey</string>
     <string name="home_new_apatch_found">Tersedia versi terbaru: %s, Klik untuk membarui</string>
+    <string name="kpm_control_failed">Operasi gagal!</string>
+    <string name="settings_night_mode_follow_sys_summary">Gunakan tema gelap dari pengaturan bawaan sistem</string>
+    <string name="settings_night_theme_enabled">Aktifkan Tema Gelap</string>
+    <string name="settings_use_system_color_theme">Tema Corak Wallpaper</string>
+    <string name="settings_use_system_color_theme_summary">Gunakan corak warna yang diperoleh sistem dari wallpaper saat ini</string>
+    <string name="settings_custom_color_theme">Tema Warna</string>
+    <string name="red_theme">Tema Merah</string>
+    <string name="sakura_theme">Tema Sakura</string>
+    <string name="teal_theme">Tema Teal</string>
+    <string name="kpm_control_dialog_title">KPModule Kontrol</string>
+    <string name="amber_theme">Tema Amber</string>
+    <string name="blue_grey_theme">Tema Sebam</string>
+    <string name="cyan_theme">Tema Sian</string>
+    <string name="deep_orange_theme">Tema Jingga Gelap</string>
+    <string name="green_theme">Tema Hijau</string>
+    <string name="light_blue_theme">Tema Biru Terang</string>
+    <string name="light_green_theme">Tema Hijau Terang</string>
+    <string name="pink_theme">Tema Merah Muda</string>
+    <string name="kpm_control">Kontrol</string>
+    <string name="about_app_version">Versi %1$s</string>
+    <string name="about_powered_by">Didukung oleh %1$s</string>
+    <string name="blue_theme">Tema Biru</string>
+    <string name="brown_theme">Tema Cokelat</string>
+    <string name="lime_theme">Tema Limau</string>
+    <string name="orange_theme">Tema Jingga</string>
+    <string name="indigo_theme">Tema Nila</string>
+    <string name="purple_theme">Tema Ungu</string>
+    <string name="kpm_control_dialog_content">Input parameter kontrol:</string>
+    <string name="kpm_control_ok">Operasi berhasil!</string>
+    <string name="deep_purple_theme">Tema Ungu Gelap</string>
+    <string name="yellow_theme">Tema Kuning</string>
+    <string name="about_telegram_channel">Kanal Telegram</string>
+    <string name="about_app_desc">Metode root via kernel hanya menggunakan kernel image, memberikan fungsi hook via kernel dan memuat modul.</string>
+    <string name="about_telegram_group">Grup Telegram</string>
+    <string name="kpm_control_paramters">Parameter</string>
+    <string name="kpm_control_outMsg">Pesan</string>
+    <string name="settings_night_mode_follow_sys">Tema Gelap Bawaan Sistem</string>
 </resources>
