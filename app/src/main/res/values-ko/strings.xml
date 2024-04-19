@@ -9,7 +9,7 @@
     <string name="android_patch">안드로이드 패치</string>
     <string name="reboot">재부팅</string>
     <string name="settings">설정</string>
-    <string name="reboot_bootloader">부트로더로 재부팅</string>
+    <string name="reboot_bootloader">재부팅하기</string>
     <string name="reboot_download">다운로드 모드로 재부팅</string>
     <string name="reboot_edl">edl 모드로 재부팅</string>
     <string name="about">설명</string>
