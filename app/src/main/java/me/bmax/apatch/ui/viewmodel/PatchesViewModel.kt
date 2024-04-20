@@ -39,9 +39,9 @@ private const val TAG = "PatchViewModel"
 
 class PatchesViewModel : ViewModel() {
     enum class PatchMode(val sId: Int) {
-        PATCH_ONLY(R.string.patch_mode_bootimg_patch),
-        PATCH_AND_INSTALL(R.string.patch_mode_patch_and_install),
-        INSTALL_TO_NEXT_SLOT(R.string.patch_mode_install_to_next_slot),
+        PATCH_ONLY(R.string.patch_mode_bootimg_patch), PATCH_AND_INSTALL(R.string.patch_mode_patch_and_install), INSTALL_TO_NEXT_SLOT(
+            R.string.patch_mode_install_to_next_slot
+        ),
         UNPATCH(R.string.patch_mode_uninstall_patch),
     }
 
@@ -71,7 +71,13 @@ class PatchesViewModel : ViewModel() {
     private fun prepare() {
         patchDir.deleteRecursively()
         patchDir.mkdirs()
-        val execs = listOf("libkptools.so", "libmagiskboot.so", "libbusybox.so", "libkpatch.so")
+        val execs = listOf(
+            "libkptools.so",
+            "libmagiskboot.so",
+            "libbusybox.so",
+            "libkpatch.so",
+            "libbootctl.so"
+        )
         error = ""
 
         val info = apApp.applicationInfo
@@ -86,11 +92,7 @@ class PatchesViewModel : ViewModel() {
 
         // Extract scripts
         for (script in listOf(
-            "boot_patch.sh",
-            "boot_unpatch.sh",
-            "boot_extract.sh",
-            "util_functions.sh",
-            "kpimg"
+            "boot_patch.sh", "boot_unpatch.sh", "boot_extract.sh", "util_functions.sh", "kpimg"
         )) {
             val dest = File(patchDir, script)
             apApp.assets.open(script).writeTo(dest)
@@ -100,9 +102,7 @@ class PatchesViewModel : ViewModel() {
 
     private fun parseKpimg() {
         val result = shellForResult(
-            shell,
-            "cd $patchDir",
-            "./kptools -l -k kpimg"
+            shell, "cd $patchDir", "./kptools -l -k kpimg"
         )
 
         if (result.isSuccess) {
@@ -279,9 +279,7 @@ class PatchesViewModel : ViewModel() {
             }
 
             val result = shellForResult(
-                shell,
-                "cd $patchDir",
-                "./kptools -l -M ${kpmFile.path}"
+                shell, "cd $patchDir", "./kptools -l -M ${kpmFile.path}"
             )
 
             if (result.isSuccess) {
@@ -395,9 +393,7 @@ class PatchesViewModel : ViewModel() {
             Log.i(TAG, "patchCommand: $patchCommand")
 
             val result = shell.newJob().add(
-                "export ASH_STANDALONE=1",
-                "cd $patchDir",
-                "./busybox sh $patchCommand"
+                "export ASH_STANDALONE=1", "cd $patchDir", "./busybox sh $patchCommand"
             ).to(logs, logs).exec()
             var succ = result.isSuccess
 
@@ -416,7 +412,28 @@ class PatchesViewModel : ViewModel() {
                 needReboot = true
                 APApplication.markNeedReboot()
             } else if (mode == PatchMode.INSTALL_TO_NEXT_SLOT) {
-                logs.add(" KPatch was successfully installed to next slot, reboot to finish the installation~")
+                val bootctlStatus = shell.newJob().add(
+                    "cd $patchDir", "chmod 0777 $patchDir/bootctl", "./bootctl hal-info"
+                ).to(logs, logs).exec()
+                if (!bootctlStatus.isSuccess) {
+                    logs.add(" [X] Failed to connect to boot hal")
+                } else {
+                    val currSlot = shell.newJob().add(
+                        "cd $patchDir", "./bootctl get-current-slot"
+                    ).exec()
+                    val targetSlot = if (currSlot.out.toString().contains("0")) {
+                        1
+                    } else {
+                        0
+                    }
+                    val setNextActiveSlot = shell.newJob().add(
+                        "cd $patchDir", "./bootctl set-active-boot-slot $targetSlot"
+                    ).exec()
+                    if (setNextActiveSlot.isSuccess) {
+                        logs.add(" Switch to next slot: $targetSlot done")
+                    }
+                }
+                logs.add(" KernelPatch was successfully installed to next slot, reboot to finish the installation~")
                 needReboot = true
                 APApplication.markNeedReboot()
             } else if (mode == PatchMode.PATCH_ONLY) {
