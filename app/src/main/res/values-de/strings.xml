@@ -3,7 +3,7 @@
     <string name="app_name" translatable="false">APatch</string>
     <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
     <string name="home_click_to_learn_apatch">Erfahren Sie mehr über die Funktionen von AndroidPatch und wie Sie diese verwenden</string>
-    <string name="about_source_code">Quellcode anzeigen %1$s<br/>Trete unserer %2$s Gruppe bei</string>
+    <string name="about_source_code">&lt;p&gt;Quellcode anzeigen unter %1$s&lt;p/&gt;Trete unserem %2$s Kanel bei&lt;p/&gt;Trete unserer %3$s Gruppe bei</string>
     <string name="home">Startseite</string>
     <string name="reboot">Neustart</string>
     <string name="settings">Einstellungen</string>
@@ -61,7 +61,7 @@
     <string name="kpm_kp_not_installed">KernelPatch nicht installiert</string>
     <string name="kpm_unload">Entladen</string>
     <string name="kpm_apm_empty">Kein Modul geladen</string>
-    <string name="apm">APModule</string>
+    <string name="apm">APModul</string>
     <string name="apm_not_installed">AndroidPatch nicht installiert</string>
     <string name="apm_empty">Kein Modul installiert</string>
     <string name="apm_uninstall_confirm">Modul \"%s\" deinstallieren?</string>
@@ -76,7 +76,7 @@
     <string name="su_title">Superuser</string>
     <string name="su_show_system_apps">Systemanwendungen zeigen</string>
     <string name="su_hide_system_apps">System-Apps ausblenden</string>
-    <string name="apm_remove">Deinstallieren</string>
+    <string name="apm_remove">Entfernen</string>
     <string name="apm_install">Installieren</string>
     <string name="apm_uninstall_failed">Konnte %s nicht deinstallieren</string>
     <string name="apm_version">Version</string>
@@ -84,12 +84,12 @@
     <string name="apm_author">Autor</string>
     <string name="kpm_load_toast_succ">Laden erfolgreich</string>
     <string name="kpm_load_toast_failed">Laden fehlgeschlagen</string>
-    <string name="kpm_desc">Desc</string>
+    <string name="kpm_desc">Beschreibung</string>
     <string name="kpm_args">Args</string>
     <string name="su_selinux_via_hook">Umgehung über einhaken</string>
     <string name="su_pkg_excluded_setting_title">Absondern</string>
     <string name="su_refresh">Aktualisieren</string>
-    <string name="apm_desc">Desc</string>
+    <string name="apm_desc">Beschreibung</string>
     <string name="apm_changelog">Update-Verlauf</string>
     <string name="settings_app_language">Sprache</string>
     <string name="system_default">Systemstandard</string>
@@ -128,4 +128,20 @@
     <string name="patch_item_kernel">Kernel</string>
     <string name="patch_item_existed_extra_kpm">existiert</string>
     <string name="patch_item_set_skey_label">Die Länge des Superschlüssels sollte mindestens 8 Zeichen umfassen und Zahlen und Buchstaben enthalten</string>
+    <string name="settings_check_update">Prüfe auf Update</string>
+    <string name="home_install_unknown_summary">Klicke zum Installieren</string>
+    <string name="patch_mode_patch_and_install">Modus: Patchen und installieren</string>
+    <string name="enable_web_debugging">WebView Debugging aktivieren</string>
+    <string name="blue_grey_theme">BlauGrau Thema</string>
+    <string name="amber_theme">Bernstein Thema</string>
+    <string name="blue_theme">Blaues Thema</string>
+    <string name="brown_theme">Braunes Thema</string>
+    <string name="green_theme">Grünes Thema</string>
+    <string name="about_telegram_group">Telegram Gruppe</string>
+    <string name="about_telegram_channel">Telegram Kanal</string>
+    <string name="settings_check_update_summary">Automatisch auf Updates prüfen, wenn die App geöffnet wird</string>
+    <string name="enable_web_debugging_summary">Kann zum debuggen von WebUI benutzt werden, nur bei Bedarf aktivieren.</string>
+    <string name="apm_webui_open">Öffnen</string>
+    <string name="failure">Fehlgeschlagen</string>
+    <string name="success">Erfolg</string>
 </resources>
