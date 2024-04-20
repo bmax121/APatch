@@ -529,12 +529,7 @@ private fun KStatusCard(
                     }
 
                     else -> {
-                        Icon(
-                            modifier = Modifier.size(30.dp),
-                            painter = painterResource(id = R.drawable.info_circle_filled),
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary
-                        )
+                        Icon(Icons.AutoMirrored.Outlined.HelpOutline, "Unknown")
                     }
                 }
                 Column(
