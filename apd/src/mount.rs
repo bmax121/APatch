@@ -29,11 +29,11 @@ impl AutoMountExt4 {
     pub fn try_new(source: &str, target: &str, auto_umount: bool) -> Result<Self, anyhow::Error> {
         let path = Path::new(source);
         if !path.exists() {
-            Err(anyhow!("Source path does not exist"));;
+            Err::<T, anyhow::Error>(anyhow!("Source path does not exist"));
         }
         let metadata = fs::metadata(path)?;
         if !metadata.permissions().readonly() {
-            Err(anyhow!("Source path is not read-only"));
+            Err::<T, anyhow::Error>(anyhow!("Source path is not read-only"));
         }
         
         mount_ext4(source, target)?;
