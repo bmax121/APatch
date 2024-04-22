@@ -16,8 +16,6 @@ use log::{info, warn};
 use procfs::process::Process;
 use std::path::Path;
 use std::path::PathBuf;
-use std::fs;
-use std::io;
 
 pub struct AutoMountExt4 {
     target: String,
@@ -26,32 +24,17 @@ pub struct AutoMountExt4 {
 
 impl AutoMountExt4 {
     #[cfg(any(target_os = "linux", target_os = "android"))]
-    pub fn check_file(source: &str) -> Result<(), io::Error> {
-        let path = Path::new(source);
-    
-        if !path.exists() {
-            return Err(io::Error::new(
-                io::ErrorKind::NotFound,
-                "Source file does not exist.",
-            ));
-        }
-    
-        let metadata = fs::metadata(path)?;
-    
-        if !metadata.permissions().readonly() {
-            return Err(io::Error::new(
-                io::ErrorKind::PermissionDenied,
-                "Source file does not have required permissions.",
-            ));
-        }
-    
-        Ok(())
-    }
+
     pub fn try_new(source: &str, target: &str, auto_umount: bool) -> Result<Self> {
-        match check_file(source) {
-            Ok(_) => println!("File exists and has required permissions."),
-            Err(e) => eprintln!("Error: {}", e),
+        let path = Path::new(source);
+        if !path.exists() {
+            Err(anyhow!("Source path does not exist"));;
         }
+        let metadata = fs::metadata(path)?;
+        if !metadata.permissions().readonly() {
+            Err(anyhow!("Source path is not read-only"));
+        }
+        
         mount_ext4(source, target)?;
         Ok(Self {
             target: target.to_string(),
