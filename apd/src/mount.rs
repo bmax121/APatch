@@ -16,6 +16,7 @@ use log::{info, warn};
 use procfs::process::Process;
 use std::path::Path;
 use std::path::PathBuf;
+use std::fs;
 
 pub struct AutoMountExt4 {
     target: String,
