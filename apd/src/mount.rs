@@ -26,14 +26,20 @@ pub struct AutoMountExt4 {
 impl AutoMountExt4 {
     #[cfg(any(target_os = "linux", target_os = "android"))]
 
-    pub fn try_new(source: &str, target: &str, auto_umount: bool) -> Result<Self, anyhow::Error> {
+    pub fn try_new(source: &str, target: &str, auto_umount: bool) -> Result<Self> {
         let path = Path::new(source);
         if !path.exists() {
-            Err::<anyhow::Error>(anyhow!("Source path does not exist"));
+            Err(Self {
+                target: target.to_string(),
+                auto_umount,
+            },anyhow!("Source path does not exist"));
         }
         let metadata = fs::metadata(path)?;
         if !metadata.permissions().readonly() {
-            Err::<anyhow::Error>(anyhow!("Source path is not read-only"));
+            Err(Self {
+                target: target.to_string(),
+                auto_umount,
+            },anyhow!("Source path is not read-only"));
         }
         
         mount_ext4(source, target)?;
