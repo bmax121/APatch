@@ -164,4 +164,26 @@
     <string name="patch_item_extra_name">Nome:</string>
     <string name="hide_apatch_manager">Nascondi il Manager di APatch</string>
     <string name="success">Successo</string>
+    <string name="kpm_control_dialog_content">Parametri di controllo in ingresso:</string>
+    <string name="kpm_control_ok">Operazione riuscita!</string>
+    <string name="settings_night_mode_follow_sys">Segui il tema scuro di sistema</string>
+    <string name="home_dialog_auth_fail_content">Incapace di autenticare la SuperKey, quindi APatch non può funzionare correttamente.
+\nEcco alcuni possibili motivi per la mancata autenticazione:
+\n1. Non hai corretto l\'immagine di avvio con KernelPatch.
+\n2. L\'immagine di avvio corretta non è stata installata.
+\n3. SuperKey sbagliata.
+\n4. Il dispositivo non supporta APatch e KernelPatch.
+\n
+\nSi prega di controllare e riprovare. Se ci sono ancora problemi, puoi sempre fare domande sulla pagina dei problemi del repository ufficiale.</string>
+    <string name="kpm_control_paramters">Parametri</string>
+    <string name="settings_night_mode_follow_sys_summary">Passa automaticamente al tema scuro usando le impostazioni di sistema</string>
+    <string name="home_more_menu_about">Chi siamo</string>
+    <string name="home_dialog_uninstall_title">Disinstallare</string>
+    <string name="kpm_control">Controllo</string>
+    <string name="home_more_menu_feedback_or_suggestion">Commenti o suggerimenti</string>
+    <string name="home_dialog_uninstall_ap_only">Rimuovi AndroidPatch</string>
+    <string name="home_dialog_uninstall_all">Disinstalla tutto</string>
+    <string name="kpm_control_dialog_title">Controllo KPModule</string>
+    <string name="kpm_control_outMsg">Messaggio</string>
+    <string name="kpm_control_failed">Operazione fallita!</string>
 </resources>
