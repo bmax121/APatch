@@ -73,4 +73,6 @@
     <string name="apm_uninstall_failed">Kunne ikke avinstallere: %s</string>
     <string name="apm_overlay_fs_not_available">OverlayFS er ikke tilgjengelig. Modulen kan ikke fungere.</string>
     <string name="clear_super_key">Fjern tast</string>
+    <string name="home_kpatch_info_title">Info</string>
+    <string name="kpatch_version_update">Versjon: %s → %s</string>
 </resources>

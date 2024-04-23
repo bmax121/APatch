@@ -98,4 +98,6 @@
     <string name="patch">Patch</string>
     <string name="settings_global_namespace_mode">Modul de spațiu de nume global</string>
     <string name="settings_global_namespace_mode_summary">Toate sesiunile root folosesc spațiul de nume de montare global</string>
+    <string name="success">Succes</string>
+    <string name="failure">Eșec</string>
 </resources>

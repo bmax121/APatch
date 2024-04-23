@@ -31,10 +31,8 @@
     <string name="home_not_installed">لم يتم التثبيت</string>
     <string name="home_install_unknown">غير مثبت أو مصادق عليه</string>
     <string name="home_need_update">اصدار جديد متوفر</string>
-    <string name="apatch_version">الإصدار:
-\n%s</string>
-    <string name="apatch_version_update">الإصدار:
-\n%s -&gt; %s</string>
+    <string name="apatch_version">الإصدار: %s</string>
+    <string name="apatch_version_update">الإصدار: %s -&gt; %s</string>
     <string name="home_auth_key_desc">البدء بعد التوثيق</string>
     <string name="home_su_path">مستخدم خارق قابل للتنفيذ</string>
     <string name="home_apatch_version">إصدار APatch: %s</string>

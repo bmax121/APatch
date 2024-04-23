@@ -9,9 +9,9 @@
     <string name="patch_warnning">インストールにはリスクが伴います。データがバックアップされていることを確認してください。</string>
     <string name="home_patch_set_key_desc">KernelPatch の資格情報のみ</string>
     <string name="reboot_download">ダウンロードモードに再起動</string>
-    <string name="home_click_to_learn_apatch">AndroidPatch の機能と使い方はこちら</string>
+    <string name="home_click_to_learn_apatch">Android-Patch の機能と使い方はこちら</string>
     <string name="reboot_edl">EDL モードに再起動</string>
-    <string name="home_learn_apatch">AndroidPatch について</string>
+    <string name="home_learn_apatch">Android-Patch について</string>
     <string name="kernel_patch">KernelPatch</string>
     <string name="home_need_update">新しいバージョンが利用可能</string>
     <string name="settings">設定</string>
