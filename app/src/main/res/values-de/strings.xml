@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name" translatable="false">APatch</string>
     <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
-    <string name="home_click_to_learn_apatch">Erfahren Sie mehr über die Funktionen von AndroidPatch und wie Sie diese verwenden</string>
+    <string name="home_click_to_learn_apatch">Erfahren Sie mehr über die Funktionen von APatch und wie Sie diese verwenden</string>
     <string name="about_source_code">&lt;p&gt;Quellcode anzeigen unter %1$s&lt;p/&gt;Trete unserem %2$s Kanel bei&lt;p/&gt;Trete unserer %3$s Gruppe bei</string>
     <string name="home">Startseite</string>
     <string name="reboot">Neustart</string>
@@ -20,7 +20,7 @@
     <string name="kernel_patch">KernelPatch</string>
     <string name="android_patch">AndroidPatch</string>
     <string name="reboot_bootloader">Neustart zum Bootloader</string>
-    <string name="home_learn_apatch">Lerne AndroidPatch kennen</string>
+    <string name="home_learn_apatch">Lerne APatch kennen</string>
     <string name="home_patch_set_key_desc">Nur Anmeldedaten für KernelPatch</string>
     <string name="home_patch_next_step">Nächster Schritt</string>
     <string name="kpatch_version">Version: %s</string>
@@ -172,4 +172,13 @@
     <string name="settings_night_mode_follow_sys_summary">Automatisch mit der Systemeinstellung zum dunklen Thema wechseln</string>
     <string name="settings_night_theme_enabled">Dunkles Thema aktivieren</string>
     <string name="settings_use_system_color_theme">Systemfarbthema</string>
+    <string name="patch_mode_install_to_next_slot">Modus: In nächsten Slot installieren (Nach OTA)</string>
+    <string name="setting_reset_su_path">su-Pfad zurücksetzen</string>
+    <string name="hide_apatch_manager_failure">Verstecken fehlgeschlagen, bitte melde den Fehler!</string>
+    <string name="settings_donot_store_superkey">Super-Key nicht lokal speichern</string>
+    <string name="home_new_apatch_found">Neue Version verfügbar: %s, klicke, um upzugraden</string>
+    <string name="mode_select_page_install_inactive_slot">Auf inaktiven Slot installieren (Nach OTA)</string>
+    <string name="hide_apatch_manager_summary">Installiere eine neue Manager-App mit einer zufälligen Package-ID und einem anpassbaren App-Namen</string>
+    <string name="hide_apatch_dialog_summary">Wird als App-Bezeichnung auf dem Home-Screen genutzt</string>
+    <string name="settings_donot_store_superkey_summary">Super-Key jedes mal authentifizieren, wenn der Manager startet</string>
 </resources>

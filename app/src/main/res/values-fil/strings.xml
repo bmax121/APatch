@@ -77,4 +77,5 @@
     <string name="apm_start_downloading">Simulan ang pag-download ng: %s</string>
     <string name="apm_downloading">Ini-download ang module: %s</string>
     <string name="apm_new_version_available">Bagong bersyon: %s ay available, i-click para i-upgrade</string>
+    <string name="home">Tahanan</string>
 </resources>

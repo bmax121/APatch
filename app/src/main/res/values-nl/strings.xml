@@ -92,4 +92,7 @@
     <string name="apm_new_version_available">Klik om de nieuwe versie te installeren.</string>
     <string name="apm_overlay_fs_not_available">Modules zijn onbereikbaar als OverlayFS wordt uitgeschakeld door de kern.</string>
     <string name="apm_magisk_conflict">Modules zijn niet beschikbaar door een conflict met Magisk.</string>
+    <string name="settings_clear_super_key_dialog">Wil je zeker verder gaan?</string>
+    <string name="success">Succes</string>
+    <string name="failure">Mislukking</string>
 </resources>

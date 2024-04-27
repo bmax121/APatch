@@ -15,8 +15,8 @@
     <string name="kpatch_version">Версия: %s</string>
     <string name="apatch_version">Версия: %s</string>
     <string name="apatch_version_update">Версия: %s → %s</string>
-    <string name="home_su_path">su: %s</string>
-    <string name="home_apatch_version">APatch: %s</string>
+    <string name="home_su_path">Исполняемый файл su</string>
+    <string name="home_apatch_version">Версия APatch</string>
     <string name="home_kernel">Ядро</string>
     <string name="home_manager_version">Версия менеджера</string>
     <string name="home_fingerprint">Подпись</string>
@@ -81,7 +81,7 @@
     <string name="kpm_author">Автор</string>
     <string name="kpm_desc">Описание</string>
     <string name="kpm_args">Аргументы</string>
-    <string name="su_selinux_via_hook">обход через hook</string>
+    <string name="su_selinux_via_hook">Обход через hook</string>
     <string name="su_pkg_excluded_label">исключён</string>
     <string name="su_pkg_excluded_setting_title">Исключить</string>
     <string name="su_pkg_excluded_setting_summary">для модулей</string>
@@ -146,7 +146,7 @@
     <string name="lime_theme">Лаймовая тема</string>
     <string name="mode_select_page_select_file">Выберите образ boot чтобы пропатчить</string>
     <string name="settings_donot_store_superkey">Не храните super ключ локально</string>
-    <string name="mode_select_page_install_inactive_slot_warning">Ваш девайс будет загружен в выбранный неактивный слот после перезагрузки!
+    <string name="mode_select_page_install_inactive_slot_warning">Ваше устройство будет загружено в текущий неактивный слот после перезагрузки!
 \nИспользуйте эту опцию только после успешной установки OTA.
 \nПродолжить?</string>
     <string name="kpm_control">Управление</string>
@@ -166,7 +166,7 @@
     <string name="kpm_control_ok">Операция выполнена успешно!</string>
     <string name="orange_theme">Оранжевая тема</string>
     <string name="settings_night_mode_follow_sys_summary">Автоматически переключает на темную тему, следуя настройкам системы</string>
-    <string name="about_app_desc">Root-решение на уровне ядра, предоставляющее возможность монтировать модуль системы и подключать функции ядра</string>
+    <string name="about_app_desc">Решение для root на уровне ядра, предоставляющее возможность монтировать модуль системы и подключать функции ядра</string>
     <string name="about_telegram_channel">Канал в Telegram</string>
     <string name="about_telegram_group">Группа в Telegram</string>
     <string name="about_powered_by">Основано на %1$s</string>
