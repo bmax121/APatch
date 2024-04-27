@@ -1,12 +1,14 @@
 package me.bmax.apatch.ui.component
 
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -33,6 +35,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
@@ -56,6 +59,16 @@ fun SearchAppBar(
     if (onSearch) {
         LaunchedEffect(Unit) { focusRequester.requestFocus() }
     }
+
+    BackHandler(
+        enabled = onSearch,
+        onBack = {
+            keyboardController?.hide()
+            onClearClick()
+            onSearch = !onSearch
+        }
+    )
+
     DisposableEffect(Unit) {
         onDispose {
             keyboardController?.hide()
@@ -93,6 +106,7 @@ fun SearchAppBar(
                             },
                         value = searchText,
                         onValueChange = onSearchTextChange,
+                        shape = RoundedCornerShape(15.dp),
                         trailingIcon = {
                             IconButton(
                                 onClick = {
@@ -105,11 +119,15 @@ fun SearchAppBar(
                         },
                         maxLines = 1,
                         singleLine = true,
-                        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
-                        keyboardActions = KeyboardActions(onDone = {
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Search
+                        ),
+                        keyboardActions = KeyboardActions {
+                            defaultKeyboardAction(ImeAction.Search)
                             keyboardController?.hide()
                             onConfirm?.invoke()
-                        })
+                        },
                     )
                 }
             }
@@ -132,9 +150,7 @@ fun SearchAppBar(
                 )
             }
 
-            if (dropdownContent != null) {
-                dropdownContent()
-            }
+            dropdownContent?.invoke()
 
         }
     )
