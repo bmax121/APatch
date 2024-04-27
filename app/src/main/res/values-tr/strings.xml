@@ -18,7 +18,7 @@
     <string name="apm_uninstall_confirm">\"%s\" modülünü kaldır?</string>
     <string name="su_pkg_excluded_setting_title">Dahil etme</string>
     <string name="reboot_download">İndirme modunda yeniden başlat</string>
-    <string name="home_click_to_learn_apatch">AndroidPatch\'in özelliklerini ve nasıl kullanılacağını öğrenin</string>
+    <string name="home_click_to_learn_apatch">APatch\'in özelliklerini ve nasıl kullanılacağını öğrenin</string>
     <string name="apm_version">Sürüm</string>
     <string name="su_pkg_excluded_setting_summary">modüller için</string>
     <string name="reboot_edl">EDL modunda yeniden başlat</string>
@@ -42,14 +42,14 @@
     <string name="super_key">Süper Anahtar</string>
     <string name="reboot_recovery">Kurtarma modunda yeniden başlat</string>
     <string name="reboot_userspace">Hızlı yeniden başlat</string>
-    <string name="home_learn_apatch">AndroidPatch\'i öğrenin</string>
+    <string name="home_learn_apatch">APatch\'i öğrenin</string>
     <string name="apm_failed_to_disable">\"%s \"modülü devre dışı bırakılamadı</string>
     <string name="kernel_patch">KernelPatch</string>
     <string name="home_click_to_install">Kurmak için tıklayın</string>
     <string name="home_selinux_status_unknown">Bilinmiyor</string>
     <string name="home_apatch_version">APatch sürümü</string>
     <string name="about">Hakkında</string>
-    <string name="home_selinux_status_permissive">Permissive</string>
+    <string name="home_selinux_status_permissive">Serbest</string>
     <string name="reboot">Yeniden başlat</string>
     <string name="home_need_update">Yeni sürüm mevcut</string>
     <string name="home_selinux_status">SELinux durumu</string>
@@ -163,7 +163,7 @@
 \n
 \nLütfen gözden geçirin ve tekrar deneyin. Hala sorun varsa, resmi deponun sorunlar sayfasında her zaman soru sorabilirsiniz.</string>
     <string name="settings_check_update_summary">Uygulama açıldığında güncellemeleri otomatik olarak denetle</string>
-    <string name="apm_webui_open">Web Arayüzünü Aç</string>
+    <string name="apm_webui_open">Aç</string>
     <string name="enable_web_debugging">Web Görünümü Hata Ayıklamayı Etkinleştir</string>
     <string name="settings_donot_store_superkey_summary">Yönetici her başladığında süper anahtarın kimliğini doğrulayın</string>
     <string name="enable_web_debugging_summary">Web arayüzünde hata ayıklamak için kullanılabilir, lütfen yalnızca gerektiğinde etkinleştirin.</string>
@@ -175,4 +175,41 @@
     <string name="home_kpatch_version">KernelPatch sürümü</string>
     <string name="home_dialog_uninstall_title">Kaldır</string>
     <string name="home_dialog_uninstall_ap_only">AndroidPatch\'i kaldır</string>
+    <string name="kpm_control">Denetim</string>
+    <string name="kpm_control_outMsg">Mesaj</string>
+    <string name="kpm_control_failed">İşlem başarısız!</string>
+    <string name="settings_night_theme_enabled">Koyu Temayı Etkinleştir</string>
+    <string name="settings_custom_color_theme">Renk Teması</string>
+    <string name="light_blue_theme">Açık Mavi Tema</string>
+    <string name="kpm_control_paramters">Parametreler</string>
+    <string name="kpm_control_ok">İşlem başarılı!</string>
+    <string name="settings_use_system_color_theme">Sistem Renk Teması</string>
+    <string name="blue_theme">Mavi Tema</string>
+    <string name="brown_theme">Kahverengi Tema</string>
+    <string name="cyan_theme">Camgöbeği Tema</string>
+    <string name="deep_orange_theme">Koyu Turuncu Tema</string>
+    <string name="deep_purple_theme">Koyu Mor Tema</string>
+    <string name="indigo_theme">Çivit Mavisi Tema</string>
+    <string name="light_green_theme">Açık Yeşil Tema</string>
+    <string name="lime_theme">Kireç Teması</string>
+    <string name="orange_theme">Turuncu Tema</string>
+    <string name="pink_theme">Pembe Tema</string>
+    <string name="purple_theme">Mor Tema</string>
+    <string name="red_theme">Kırmızı Tema</string>
+    <string name="sakura_theme">Kiraz Çiçeği Teması</string>
+    <string name="teal_theme">Deniz Mavisi Teması</string>
+    <string name="yellow_theme">Sarı Tema</string>
+    <string name="about_app_version">Sürüm %1$s</string>
+    <string name="about_app_desc">Yalnızca sadeleştirilmiş bir çekirdek kalıbına sahip Çekirdek Root çözümü, sistem modülünü bağlama ve Çekirdek işlevini kancalama olanağı sağlar.</string>
+    <string name="about_telegram_channel">Telegram Kanalı</string>
+    <string name="about_telegram_group">Telegram Grubu</string>
+    <string name="about_powered_by">%1$s desteğiyle</string>
+    <string name="kpm_control_dialog_title">KPModule Denetimi</string>
+    <string name="kpm_control_dialog_content">Giriş denetim parametreleri:</string>
+    <string name="settings_night_mode_follow_sys">Sistemin Koyu Temasını Kullan</string>
+    <string name="settings_night_mode_follow_sys_summary">Sistem ayarlarıyla otomatik olarak koyu temaya geç</string>
+    <string name="settings_use_system_color_theme_summary">Geçerli duvar kağıdı ile sistem tarafından oluşturulan bir renk teması kullanın</string>
+    <string name="amber_theme">Amber Tema</string>
+    <string name="blue_grey_theme">BlueGrey Teması</string>
+    <string name="green_theme">Yeşil Tema</string>
 </resources>

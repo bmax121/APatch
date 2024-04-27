@@ -8,7 +8,7 @@
     <string name="apm_install">Installa</string>
     <string name="home_auth_key_desc">Avvia dopo la certificazione</string>
     <string name="kpatch_version">Versione: %d.%d.%d</string>
-    <string name="apm_remove">Disinstalla</string>
+    <string name="apm_remove">Rimuovi</string>
     <string name="patch_warnning">L\'installazione comporta dei rischi. Assicurati che i tuoi dati siano stati salvati.</string>
     <string name="kpm_kp_not_installed">KernelPatch non installato</string>
     <string name="home_patch_set_key_desc">Credenziale solo per KernelPatch</string>
@@ -16,7 +16,7 @@
     <string name="apm_uninstall_confirm">Sei sicuro di voler disinstallare il modulo \"%s\"?</string>
     <string name="su_pkg_excluded_setting_title">Escludere</string>
     <string name="reboot_download">Riavvia in modalità Download</string>
-    <string name="home_click_to_learn_apatch">Scopri le caratteristiche di AndroidPatch e come utilizzarlo</string>
+    <string name="home_click_to_learn_apatch">Scopri le caratteristiche di APatch e come utilizzarlo</string>
     <string name="apm_version">Versione</string>
     <string name="su_pkg_excluded_setting_summary">per i moduli</string>
     <string name="reboot_edl">Riavvia in modalità EDL</string>
@@ -24,8 +24,7 @@
     <string name="apm_start_downloading">Download di %s avviato</string>
     <string name="su_selinux_via_hook">bypassa tramite hook</string>
     <string name="home_ap_cando_uninstall">Disinstalla</string>
-    <string name="apatch_version">Versione:
-\n %s</string>
+    <string name="apatch_version">Versione: %s</string>
     <string name="apm_overlay_fs_not_available">I moduli non sono disponibili poiché OverlayFS è disabilitato dal kernel.</string>
     <string name="kpm_version">Versione</string>
     <string name="su_refresh">Aggiorna</string>
@@ -34,7 +33,7 @@
     <string name="home_ap_cando_install">Installa</string>
     <string name="reboot_recovery">Riavvia in Recovery</string>
     <string name="reboot_userspace">Riavvio veloce</string>
-    <string name="home_learn_apatch">Scopri AndroidPatch</string>
+    <string name="home_learn_apatch">Scopri APatch</string>
     <string name="apm_failed_to_disable">Impossibile disabilitare il modulo \"%s\"</string>
     <string name="kernel_patch">KernelPatch</string>
     <string name="home_click_to_install">Clicca per installare</string>
@@ -53,11 +52,10 @@
     <string name="apm_magisk_conflict">I moduli non sono disponibili a causa di un conflitto con Magisk.</string>
     <string name="home_ap_cando_update">Aggiorna</string>
     <string name="kpm_load_toast_failed">Caricamento fallito</string>
-    <string name="home_selinux_status_disabled">Disabilitato</string>
+    <string name="home_selinux_status_disabled">Spento</string>
     <string name="settings">Impostazioni</string>
     <string name="apm_new_version_available">Clicca per installare la nuova versione %s.</string>
-    <string name="apatch_version_update">Versione:
-\n %s -&gt; %s</string>
+    <string name="apatch_version_update">Versione: %s -&gt; %s</string>
     <string name="home_working">In esecuzione 😋</string>
     <string name="apm_empty">Nessun modulo installato</string>
     <string name="kpm_load">Aggiungi</string>
@@ -99,24 +97,24 @@
     <string name="settings_global_namespace_mode">Modalità Namespace Globale</string>
     <string name="settings_global_namespace_mode_summary">Tutte le sessioni di root erediteranno il namespace globale</string>
     <string name="settings_check_update">Controlla Aggiornamento</string>
-    <string name="home_ap_cando_reboot">Riavvio</string>
+    <string name="home_ap_cando_reboot">Riavvia</string>
     <string name="patch_config_title">Patch</string>
     <string name="patch_mode_uninstall_patch">Modalità: Disinstalla KPatch</string>
     <string name="patch_item_bootimg_slot">Slot:</string>
     <string name="patch_embed_kpm_btn">Incorpora KPM</string>
     <string name="patch_mode_patch_and_install">Modalità: Patch e installa</string>
     <string name="mode_select_page_select_file">Seleziona una immagine di Boot da patchare</string>
-    <string name="patch_item_kpimg_comile_time">Ora:</string>
-    <string name="patch_item_extra_kpm_desciption">Descrizione:</string>
+    <string name="patch_item_kpimg_comile_time">tempo:</string>
+    <string name="patch_item_extra_kpm_desciption">descrizione:</string>
     <string name="patch_item_kernel">Kernel</string>
     <string name="patch_item_kpimg">Kpimg</string>
-    <string name="patch_item_kpimg_version">Versione:</string>
+    <string name="patch_item_kpimg_version">versione:</string>
     <string name="patch_item_new_extra_kpm">Incorpora nuovo</string>
     <string name="patch_item_existed_extra_kpm">Esistito</string>
     <string name="mode_select_page_install_inactive_slot_warning">Il dispositivo sarà **FORZATO** ad avviarsi nello slot inattivo dopo il riavvio!
 \nUsa questa opzione solo dopo l\'OTA.
 \nContinuare?</string>
-    <string name="home_dialog_auth_fail_title">Accesso Fallito</string>
+    <string name="home_dialog_auth_fail_title">Autenticazione Fallita</string>
     <string name="home_system_version">Versione del sistema</string>
     <string name="home_install_unknown_summary">Clicca per installare</string>
     <string name="home_device_info">Dispositivo</string>
@@ -138,10 +136,10 @@
     <string name="patch_mode_install_to_next_slot">Modalità: Installa nell\'altro slot (Dopo OTA)</string>
     <string name="enable_web_debugging">Attiva Debug WebView</string>
     <string name="settings_donot_store_superkey_summary">Richiedi super chiave ogni volta che il manager viene avviato</string>
-    <string name="patch_item_extra_version">Versione:</string>
+    <string name="patch_item_extra_version">versione:</string>
     <string name="patch_item_extra_author">Autore:</string>
     <string name="patch_item_extra_event">Eventi:</string>
-    <string name="patch_item_extra_kpm_license">Licenza:</string>
+    <string name="patch_item_extra_kpm_license">licenza:</string>
     <string name="patch_item_bootimg_dev">Dispositivo:</string>
     <string name="patch_select_bootimg_btn">Seleziona Avvio</string>
     <string name="hide_apatch_manager_failure">Errore nel nascondere l\'app, per favore segnala il bug!</string>
@@ -157,20 +155,20 @@
     <string name="home_kpatch_info_title">Informazioni</string>
     <string name="settings_clear_super_key_dialog">Sei sicuro di voler procedere?</string>
     <string name="kpatch_version_update">Versione: %s -&gt; %s</string>
-    <string name="apm_webui_open">Apri Interfaccia Web</string>
+    <string name="apm_webui_open">Apri</string>
     <string name="enable_web_debugging_summary">Può essere usato per il Debug di WebUI, per favore, attiva solo se necessario</string>
     <string name="patch_mode_bootimg_patch">Modalità: Patch</string>
     <string name="patch_item_error">!!ERRORE!!</string>
-    <string name="patch_item_extra_name">Nome:</string>
+    <string name="patch_item_extra_name">nome:</string>
     <string name="hide_apatch_manager">Nascondi il Manager di APatch</string>
     <string name="success">Successo</string>
-    <string name="kpm_control_dialog_content">Parametri di controllo in ingresso:</string>
+    <string name="kpm_control_dialog_content">Parametri di controllo in input:</string>
     <string name="kpm_control_ok">Operazione riuscita!</string>
     <string name="settings_night_mode_follow_sys">Segui il tema scuro di sistema</string>
     <string name="home_dialog_auth_fail_content">Incapace di autenticare la SuperKey, quindi APatch non può funzionare correttamente.
-\nEcco alcuni possibili motivi per la mancata autenticazione:
-\n1. Non hai corretto l\'immagine di avvio con KernelPatch.
-\n2. L\'immagine di avvio corretta non è stata installata.
+\nEcco alcuni possibili motivi per il fallimento dell\'autenticazione:
+\n1. Non hai patchato l\'immagine di avvio con KernelPatch.
+\n2. L\'immagine di avvio patchata non è stata installata.
 \n3. SuperKey sbagliata.
 \n4. Il dispositivo non supporta APatch e KernelPatch.
 \n
@@ -178,12 +176,39 @@
     <string name="kpm_control_paramters">Parametri</string>
     <string name="settings_night_mode_follow_sys_summary">Passa automaticamente al tema scuro usando le impostazioni di sistema</string>
     <string name="home_more_menu_about">Chi siamo</string>
-    <string name="home_dialog_uninstall_title">Disinstallare</string>
+    <string name="home_dialog_uninstall_title">Disinstalla</string>
     <string name="kpm_control">Controllo</string>
-    <string name="home_more_menu_feedback_or_suggestion">Commenti o suggerimenti</string>
+    <string name="home_more_menu_feedback_or_suggestion">Feedback o suggerimento</string>
     <string name="home_dialog_uninstall_ap_only">Rimuovi AndroidPatch</string>
     <string name="home_dialog_uninstall_all">Disinstalla tutto</string>
     <string name="kpm_control_dialog_title">Controllo KPModule</string>
     <string name="kpm_control_outMsg">Messaggio</string>
     <string name="kpm_control_failed">Operazione fallita!</string>
+    <string name="settings_night_theme_enabled">Attiva il Tema Scuro</string>
+    <string name="settings_use_system_color_theme">Colore del Tema di Sistema</string>
+    <string name="settings_use_system_color_theme_summary">Usa un colore generato dallo sfondo corrente</string>
+    <string name="settings_custom_color_theme">Colore Tema</string>
+    <string name="amber_theme">Tema Ambra</string>
+    <string name="blue_grey_theme">Tema BluGrigio</string>
+    <string name="blue_theme">Tema Blu</string>
+    <string name="brown_theme">Tema Marrone</string>
+    <string name="cyan_theme">Tema Ciano</string>
+    <string name="deep_orange_theme">Tema Arancione Scuro</string>
+    <string name="deep_purple_theme">Tema Viola Scuro</string>
+    <string name="green_theme">Tema Verde</string>
+    <string name="indigo_theme">Tema Indaco</string>
+    <string name="light_blue_theme">Colore di Sistema</string>
+    <string name="light_green_theme">Tema Verde Chiaro</string>
+    <string name="lime_theme">Tema Lime</string>
+    <string name="orange_theme">Tema Arancione</string>
+    <string name="pink_theme">Tema Rosa</string>
+    <string name="purple_theme">Tema Viola</string>
+    <string name="red_theme">Tema Rosso</string>
+    <string name="sakura_theme">Tema Sakura</string>
+    <string name="teal_theme">Tema Verde Acqua</string>
+    <string name="yellow_theme">Tema Giallo</string>
+    <string name="about_app_version">Versione %1$s</string>
+    <string name="about_app_desc">Soluzione Kernel Root con solo un\'immagine del kernel ridotta, che offre la possibilità di montare il modulo di sistema e agganciare la funzione Kernel.</string>
+    <string name="about_telegram_channel">Canale Telegram</string>
+    <string name="about_telegram_group">Gruppo Telegram</string>
 </resources>

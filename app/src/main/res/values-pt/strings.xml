@@ -98,4 +98,5 @@
     <string name="patch">Aplicar o Patch</string>
     <string name="settings_global_namespace_mode">Modo de Namespace Global</string>
     <string name="settings_global_namespace_mode_summary">Todas as sessões root usam o Global Mount Namespace</string>
+    <string name="settings_check_update">Checar por atualização</string>
 </resources>
