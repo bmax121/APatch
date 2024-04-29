@@ -501,10 +501,12 @@ private fun BootimgView(slot: String, boot: String) {
                     style = MaterialTheme.typography.bodyLarge
                 )
             }
-            Text(
-                text = stringResource(id = R.string.patch_item_bootimg_slot) + " " + slot,
-                style = MaterialTheme.typography.bodyMedium
-            )
+            if (slot.isNotEmpty()) {
+                Text(
+                    text = stringResource(id = R.string.patch_item_bootimg_slot) + " " + slot,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
             Text(
                 text = stringResource(id = R.string.patch_item_bootimg_dev) + " " + boot,
                 style = MaterialTheme.typography.bodyMedium
