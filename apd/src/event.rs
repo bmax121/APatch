@@ -127,6 +127,9 @@ pub fn on_post_data_fs() -> Result<()> {
         // we should still mount modules.img to `/data/adb/modules` in safe mode
         // becuase we may need to operate the module dir in safe mode
         warn!("safe mode, skip common post-fs-data.d scripts");
+        if let Err(e) = crate::module::disable_all_modules() {
+            warn!("disable all modules failed: {}", e);
+        }
     } else {
         // Then exec common post-fs-data scripts
         if let Err(e) = crate::module::exec_common_scripts("post-fs-data.d", true) {
@@ -230,6 +233,9 @@ fn run_stage(stage: &str, block: bool) {
 
     if crate::utils::is_safe_mode() {
         warn!("safe mode, skip {stage} scripts");
+        if let Err(e) = crate::module::disable_all_modules() {
+            warn!("disable all modules failed: {}", e);
+        }
         return;
     }
 
