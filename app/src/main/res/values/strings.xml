@@ -137,8 +137,8 @@
     <string name="su_title">Superuser</string>
     <string name="su_selinux_via_hook">bypass via hook</string>
     <string name="su_pkg_excluded_label">exclude</string>
-    <string name="su_pkg_excluded_setting_title">Exclude</string>
-    <string name="su_pkg_excluded_setting_summary">for modules</string>
+    <string name="su_pkg_excluded_setting_title">Exclude Modifications</string>
+    <string name="su_pkg_excluded_setting_summary">Enabling this option will allow APatch to restore any modified files by the modules for this application.</string>
     <string name="su_show_system_apps">Show system apps</string>
     <string name="su_hide_system_apps">Hide system apps</string>
     <string name="su_refresh">Refresh</string>
