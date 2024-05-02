@@ -16,11 +16,11 @@
     <string name="home_patch_set_key_desc">KernelPatch için tek gerekli veri</string>
     <string name="home_install_unknown">Kurulmadı veya kimliği doğrulanmadı</string>
     <string name="apm_uninstall_confirm">\"%s\" modülünü kaldır?</string>
-    <string name="su_pkg_excluded_setting_title">Dahil etme</string>
+    <string name="su_pkg_excluded_setting_title">Değişiklikleri Hariç Tut</string>
     <string name="reboot_download">İndirme modunda yeniden başlat</string>
     <string name="home_click_to_learn_apatch">APatch\'in özelliklerini ve nasıl kullanılacağını öğrenin</string>
     <string name="apm_version">Sürüm</string>
-    <string name="su_pkg_excluded_setting_summary">modüller için</string>
+    <string name="su_pkg_excluded_setting_summary">Bu seçeneğin etkinleştirilmesi, APatch\'in bu uygulama için modüller tarafından değiştirilen tüm dosyaları geri yüklemesine izin verecektir.</string>
     <string name="reboot_edl">EDL modunda yeniden başlat</string>
     <string name="home_installing">Kuruluyor</string>
     <string name="apm_start_downloading">İndirme başladı: \"%s\"</string>
