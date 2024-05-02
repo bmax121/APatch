@@ -131,7 +131,9 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
         }
     }
 
-    val isSafeMode = getSafeMode()
+    // TODO: notify boot_completed event to kernel to skip writing /dev/.safemode
+    //val isSafeMode = getSafeMode()
+    val isSafeMode = false
     val hasMagisk = hasMagisk()
     val hideInstallButton = isSafeMode || hasMagisk || !viewModel.isOverlayAvailable
 
