@@ -8,8 +8,8 @@
     <string name="android_patch">AndroidPatch</string>
     <string name="home_not_installed">Не установлено</string>
     <string name="home_install_unknown">Не установлено или не авторизовано</string>
-    <string name="home_click_to_install">Нажмите, чтобы установить</string>
-    <string name="home_working">Работает</string>
+    <string name="home_click_to_install">Нажмите для установки</string>
+    <string name="home_working">Работает 😋</string>
     <string name="home_installing">Установка</string>
     <string name="home_need_update">Доступна новая версия</string>
     <string name="kpatch_version">Версия: %s</string>
@@ -19,7 +19,7 @@
     <string name="home_apatch_version">Версия APatch</string>
     <string name="home_kernel">Ядро</string>
     <string name="home_manager_version">Версия менеджера</string>
-    <string name="home_fingerprint">Подпись</string>
+    <string name="home_fingerprint">Отпечаток</string>
     <string name="home_selinux_status">Состояние SELinux</string>
     <string name="home_selinux_status_disabled">Отключен</string>
     <string name="home_selinux_status_enforcing">Принудительный</string>
@@ -59,7 +59,7 @@
     <string name="home_learn_apatch">Узнайте о APatch</string>
     <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
     <string name="home_click_to_learn_apatch">Узнайте, как установить и использовать APatch</string>
-    <string name="about_source_code">Посмотреть исходный код на %1$s<br/>Присоединяйтесь к нашему %2$s каналу</string>
+    <string name="about_source_code"><p>Посмотреть исходный код на %1$s<p/>Присоединяйтесь к нашему %2$s каналу</p>Присоединяйтесь к нашей %3$s группе</string>
     <string name="apm_update">Обновить</string>
     <string name="apm_downloading">Загрузка модуля \"%s\"…</string>
     <string name="apm_start_downloading">Начало загрузки: %s</string>
@@ -96,11 +96,11 @@
     <string name="patch">Пропатчить</string>
     <string name="settings_global_namespace_mode">Режим глобального пространства имён</string>
     <string name="settings_global_namespace_mode_summary">Все root сессии используют монтирование глобального пространства имён</string>
-    <string name="kpatch_version_update">Версия: %s -&gt; %s</string>
-    <string name="home_kpatch_info_title">Инфо</string>
+    <string name="kpatch_version_update">Версия: %s → %s</string>
+    <string name="home_kpatch_info_title">Информация</string>
     <string name="home_ap_cando_reboot">Перезагрузка</string>
     <string name="patch_config_title">Патчи</string>
-    <string name="patch_mode_uninstall_patch">Режим: Отмена патча</string>
+    <string name="patch_mode_uninstall_patch">Режим: Удаление KPatch</string>
     <string name="patch_select_bootimg_btn">Выберите boot</string>
     <string name="patch_embed_kpm_btn">Встроенный KPM</string>
     <string name="patch_start_patch_btn">Старт</string>
@@ -109,19 +109,19 @@
     <string name="patch_item_bootimg">bootimg</string>
     <string name="patch_item_bootimg_slot">слот:</string>
     <string name="patch_item_bootimg_dev">устройство:</string>
-    <string name="patch_item_kernel">kernel</string>
+    <string name="patch_item_kernel">Ядро</string>
     <string name="patch_item_kpimg">kpimg</string>
     <string name="patch_item_kpimg_comile_time">время:</string>
     <string name="patch_item_kpimg_config">настройка:</string>
-    <string name="patch_item_new_extra_kpm">встроить новый</string>
-    <string name="patch_item_existed_extra_kpm">существующий</string>
+    <string name="patch_item_new_extra_kpm">Встроить новый</string>
+    <string name="patch_item_existed_extra_kpm">Существующий</string>
     <string name="patch_item_extra_kpm_desciption">описание:</string>
     <string name="patch_item_extra_args">аргументы:</string>
     <string name="patch_item_extra_event">событие:</string>
     <string name="patch_item_skey">SuperKey</string>
     <string name="kpatch_shadow_path_title">kpatch</string>
     <string name="patch_mode_bootimg_patch">Режим: Патч</string>
-    <string name="patch_mode_patch_and_install">Режим: Обновление</string>
+    <string name="patch_mode_patch_and_install">Режим: Обновить и установить</string>
     <string name="patch_item_kpimg_version">версия:</string>
     <string name="patch_item_extra_name">имя:</string>
     <string name="patch_item_extra_version">версия:</string>
@@ -133,7 +133,7 @@
     <string name="kpm_install">Установить</string>
     <string name="kpm_embed">Встроить</string>
     <string name="kpm_add_kpm">Добавить KPM</string>
-    <string name="success">Успех</string>
+    <string name="success">Успешно</string>
     <string name="hide_apatch_manager">Скрыть менеджер APatch</string>
     <string name="hide_apatch_manager_failure">Не удалось скрыть, пожалуйста, сообщите об ошибке!</string>
     <string name="hide_apatch_dialog_summary">Оно будет использоваться как новое название приложения</string>
@@ -151,7 +151,7 @@
 \nПродолжить?</string>
     <string name="kpm_control">Управление</string>
     <string name="mode_select_page_patch_and_install">Пропатчить и установить</string>
-    <string name="settings_donot_store_superkey_summary">Запросить SuperKey каждый раз при запуске менеджера</string>
+    <string name="settings_donot_store_superkey_summary">Запрашивать SuperKey каждый раз при запуске приложения</string>
     <string name="home_dialog_auth_fail_content">Не удалось авторизовать SuperKey, в следствии чего корректная работа APatch не может быть гарантирована
 \nНиже приведены возможные причины провала аутентификации:
 \n1. Ваше ядро не имеет патчей для работы KernelPatch.
@@ -159,18 +159,18 @@
 \n3. Неправильный SuperKey.
 \n4. Ваше устройство не поддерживает APatch и KernelPatch.
 \n
-\nПожалуйста, проверьте все и попробуйте еще раз. Если проблема не решилась, вы можете задать свой вопрос в разделе issue официального репозитория</string>
+\nПожалуйста, проверьте все и попробуйте еще раз. Если проблема не решилась, вы можете задать свой вопрос в разделе Issues официального репозитория.</string>
     <string name="home_more_menu_about">О программе</string>
     <string name="home_dialog_uninstall_ap_only">Удалить AndroidPatch</string>
     <string name="kpm_control_dialog_title">Управление KPModule</string>
     <string name="kpm_control_ok">Операция выполнена успешно!</string>
     <string name="orange_theme">Оранжевая тема</string>
     <string name="settings_night_mode_follow_sys_summary">Автоматически переключает на темную тему, следуя настройкам системы</string>
-    <string name="about_app_desc">Решение для root на уровне ядра, предоставляющее возможность монтировать модули системы и изменять функции ядра</string>
+    <string name="about_app_desc">Решение для root на уровне ядра, предоставляющее возможность монтировать модули системы и изменять функции ядра.</string>
     <string name="about_telegram_channel">Канал в Telegram</string>
     <string name="about_telegram_group">Группа в Telegram</string>
     <string name="about_powered_by">Основано на %1$s</string>
-    <string name="home_install_unknown_summary">Нажмите чтобы установить</string>
+    <string name="home_install_unknown_summary">Нажмите для установки</string>
     <string name="home_kpatch_version">Версия KernelPatch</string>
     <string name="home_new_apatch_found">Доступна новая версия: %s. Нажмите, чтобы обновиться</string>
     <string name="mode_select_page_title">Установить</string>
@@ -211,5 +211,5 @@
     <string name="brown_theme">Коричневая тема</string>
     <string name="blue_grey_theme">Сине-серая тема</string>
     <string name="blue_theme">Синяя тема</string>
-    <string name="enable_web_debugging_summary">Может использоваться для отладки WebUI, пожалуйста, включайте только если это вам необходимо</string>
+    <string name="enable_web_debugging_summary">Может использоваться для отладки WebUI, пожалуйста, включайте только если это вам необходимо.</string>
 </resources>
