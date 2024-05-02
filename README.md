@@ -51,8 +51,9 @@ To help translate APatch or improve existing translations, please use [Weblate](
 
 ### Usage
 
-Installation guide (coming soon)
-<hr>
+For usage, please refer to [our official documentation](https://apatch.top).  
+It's worth noting that the documentation is currently not quite complete, and the content may change at any time.  
+Furthermore, we need more volunteers to [contribute to the documentation](https://github.com/AndroidPatch/APatchDocs) in other languages.
 
 ### Updates
 - Telegram Channel: [@APatchChannel](https://t.me/APatchChannel)
@@ -60,8 +61,6 @@ Installation guide (coming soon)
 ### Discussions
 - Telegram Group: [@APatchGroup(EN/CN)](https://t.me/Apatch_discuss)
 - Telegram Group: [中文](https://t.me/APatch_CN_Group)
-
-
 
 ### More Information
 
