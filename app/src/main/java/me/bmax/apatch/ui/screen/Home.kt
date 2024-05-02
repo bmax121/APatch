@@ -120,7 +120,7 @@ fun HomeScreen(navigator: DestinationsNavigator) {
     Scaffold(topBar = {
         TopBar(onInstallClick = {
             navigator.navigate(InstallModeSelectScreenDestination, true)
-        }, navigator)
+        }, navigator, kpState)
     }) { innerPadding ->
         Column(
             modifier = Modifier
@@ -382,7 +382,7 @@ fun RebootDropdownItem(@StringRes id: Int, reason: String = "") {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun TopBar(onInstallClick: () -> Unit, navigator: DestinationsNavigator) {
+private fun TopBar(onInstallClick: () -> Unit, navigator: DestinationsNavigator, kpState: APApplication.State) {
     val uriHandler = LocalUriHandler.current
     var showDropdownMoreOptions by remember { mutableStateOf(false) }
     var showDropdownReboot by remember { mutableStateOf(false) }
@@ -397,29 +397,31 @@ private fun TopBar(onInstallClick: () -> Unit, navigator: DestinationsNavigator)
             )
         }
 
-        IconButton(onClick = {
-            showDropdownReboot = true
-        }) {
-            Icon(
-                imageVector = Icons.Filled.Refresh,
-                contentDescription = stringResource(id = R.string.reboot)
-            )
+        if (kpState != APApplication.State.UNKNOWN_STATE) {
+            IconButton(onClick = {
+                showDropdownReboot = true
+            }) {
+                Icon(
+                    imageVector = Icons.Filled.Refresh,
+                    contentDescription = stringResource(id = R.string.reboot)
+                )
 
-            ProvideMenuShape(RoundedCornerShape(10.dp)) {
-                DropdownMenu(expanded = showDropdownReboot, onDismissRequest = {
-                    showDropdownReboot = false
-                }) {
-                    RebootDropdownItem(id = R.string.reboot)
+                ProvideMenuShape(RoundedCornerShape(10.dp)) {
+                    DropdownMenu(expanded = showDropdownReboot, onDismissRequest = {
+                        showDropdownReboot = false
+                    }) {
+                        RebootDropdownItem(id = R.string.reboot)
 
-                    val pm =
-                        LocalContext.current.getSystemService(Context.POWER_SERVICE) as PowerManager?
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && pm?.isRebootingUserspaceSupported == true) {
-                        RebootDropdownItem(id = R.string.reboot_userspace, reason = "userspace")
+                        val pm =
+                            LocalContext.current.getSystemService(Context.POWER_SERVICE) as PowerManager?
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && pm?.isRebootingUserspaceSupported == true) {
+                            RebootDropdownItem(id = R.string.reboot_userspace, reason = "userspace")
+                        }
+                        RebootDropdownItem(id = R.string.reboot_recovery, reason = "recovery")
+                        RebootDropdownItem(id = R.string.reboot_bootloader, reason = "bootloader")
+                        RebootDropdownItem(id = R.string.reboot_download, reason = "download")
+                        RebootDropdownItem(id = R.string.reboot_edl, reason = "edl")
                     }
-                    RebootDropdownItem(id = R.string.reboot_recovery, reason = "recovery")
-                    RebootDropdownItem(id = R.string.reboot_bootloader, reason = "bootloader")
-                    RebootDropdownItem(id = R.string.reboot_download, reason = "download")
-                    RebootDropdownItem(id = R.string.reboot_edl, reason = "edl")
                 }
             }
         }
