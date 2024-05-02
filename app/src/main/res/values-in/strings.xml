@@ -68,8 +68,8 @@
     <string name="apm_failed_to_enable">Gagal mengaktifkan modul %s</string>
     <string name="su_hide_system_apps">Sembunyikan aplikasi sistem</string>
     <string name="kpm_kp_not_installed">KernelPatch tidak terinstal</string>
-    <string name="su_pkg_excluded_setting_title">Kecualikan</string>
-    <string name="su_pkg_excluded_setting_summary">untuk modul</string>
+    <string name="su_pkg_excluded_setting_title">Modifikasi dikecualikan</string>
+    <string name="su_pkg_excluded_setting_summary">Opsi agar APatch dapat mengembalikan semua modifikasi ke kondisi asali pada aplikasi yg dipilih.</string>
     <string name="su_pkg_excluded_label">dikecualikan</string>
     <string name="su_title">SuperUser</string>
     <string name="su_selinux_via_hook">bypass via hook</string>
@@ -166,7 +166,7 @@
     <string name="home_dialog_auth_fail_content">Gagal autentikasi SuperKey, APatch tidak dapat berfungsi normal.
 \nHal ini dapat disebabkan oleh:
 \n1. Boot Image tidak di-patch dengan KernelPatch.
-\n2. Tidak menginstal/flash Boot Image yg sudah di-patch.
+\n2. Tidak menginstal/pasang Boot Image yg sudah di-patch.
 \n3. Salah memasukkan SuperKey.
 \n4. Gawai tidak mendukung APatch dan KernelPatch.
 \n
