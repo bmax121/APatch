@@ -180,4 +180,7 @@
     <string name="kpm_control_paramters">매개변수</string>
     <string name="kpm_control_outMsg">메시지</string>
     <string name="setting_reset_su_new_path">새로운 전체 경로</string>
+    <string name="kpm_control_ok">작업 성공!</string>
+    <string name="kpm_control_failed">작업 실패!</string>
+    <string name="settings_night_mode_follow_sys">시스템 다크 테마 따라가기</string>
 </resources>

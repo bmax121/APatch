@@ -9,7 +9,7 @@
     <string name="kpm_desc">Descrição</string>
     <string name="kpm_args">Argumentos</string>
     <string name="su_title">SuperUsuário</string>
-    <string name="su_pkg_excluded_setting_summary">para módulos</string>
+    <string name="su_pkg_excluded_setting_summary">Ativar esta opção permitirá que o APatch restaure quaisquer arquivos modificados pelos módulos deste app.</string>
     <string name="su_refresh">Atualizar</string>
     <string name="apm_reboot_to_apply">Reinicie para entrar em vigor</string>
     <string name="kernel_patch">KernelPatch</string>
@@ -67,7 +67,7 @@
     <string name="kpm_license">Licença</string>
     <string name="su_selinux_via_hook">ignorar via hook</string>
     <string name="su_pkg_excluded_label">excluir</string>
-    <string name="su_pkg_excluded_setting_title">Excluir</string>
+    <string name="su_pkg_excluded_setting_title">Excluir modificações</string>
     <string name="su_show_system_apps">Mostrar apps do sistema</string>
     <string name="su_hide_system_apps">Ocultar apps do sistema</string>
     <string name="apm">APMódulo</string>

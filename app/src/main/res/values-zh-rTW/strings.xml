@@ -23,10 +23,10 @@
     <string name="kpm_kp_not_installed">KernelPatch 尚未安裝</string>
     <string name="home_install_unknown">未安裝或未鑒權</string>
     <string name="apm_uninstall_confirm">確定要解除安裝「%s」模組？</string>
-    <string name="su_pkg_excluded_setting_title">忽略</string>
+    <string name="su_pkg_excluded_setting_title">排除修改</string>
     <string name="home_click_to_learn_apatch">學習有關 APatch 的功能及使用方式</string>
     <string name="apm_version">版本</string>
-    <string name="su_pkg_excluded_setting_summary">適用於模組的忽略方式</string>
+    <string name="su_pkg_excluded_setting_summary">啟用此選項將允許 APatch 還原此應用程式被模組修改的任何檔案。</string>
     <string name="home_installing">安裝中</string>
     <string name="apm_start_downloading">開始下載 %s</string>
     <string name="su_pkg_excluded_label">忽略</string>

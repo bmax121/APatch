@@ -35,9 +35,9 @@
     <string name="home_fingerprint">Vân tay</string>
     <string name="home_selinux_status">Trạng thái SELinux</string>
     <string name="home_selinux_status_disabled">Vô hiệu hóa</string>
-    <string name="home_selinux_status_enforcing">Đang thực thi</string>
-    <string name="home_selinux_status_permissive">Cho phép</string>
-    <string name="home_selinux_status_unknown">Không xác định</string>
+    <string name="home_selinux_status_enforcing">Đang thực thi (Enforcing)</string>
+    <string name="home_selinux_status_permissive">Cho phép (Permissive)</string>
+    <string name="home_selinux_status_unknown">Không xác định (Unknown)</string>
     <string name="kpm_kp_not_installed">KernelPatch chưa được cài đặt</string>
     <string name="kpm_load_toast_succ">Tải thành công</string>
     <string name="kpm_load_toast_failed">Tải không thành công</string>
@@ -82,10 +82,10 @@
     <string name="su_hide_system_apps">Ẩn ứng dụng hệ thống</string>
     <string name="su_refresh">Làm mới</string>
     <string name="apm_failed_to_enable">Không thể kích hoạt mô-đun %s</string>
-    <string name="clear_super_key">Xóa khóa</string>
+    <string name="clear_super_key">Xóa SuperKey</string>
     <string name="apm_magisk_conflict">Modules không khả dụng do xung đột với Magisk.</string>
     <string name="about_source_code">Xem mã nguồn tại %1$s<br/>Tham gia kênh %2$s của chúng tôi</string>
-    <string name="home_su_path">su: %s</string>
+    <string name="home_su_path">Thực thi Su</string>
     <string name="home_kernel">Kernel</string>
     <string name="kpm">KPModule</string>
     <string name="su_title">Superuser</string>
@@ -177,7 +177,7 @@
 \nChỉ sử dụng tùy chọn này sau khi OTA hoàn tất.
 \nTiếp tục?</string>
     <string name="deep_orange_theme">Chủ đề màu cam đậm</string>
-    <string name="home_more_menu_feedback_or_suggestion">Phản hồi</string>
+    <string name="home_more_menu_feedback_or_suggestion">Góp ý hoặc báo lỗi</string>
     <string name="patch_item_set_skey_label">Độ dài của SuperKey phải có ít nhất 8 ký tự và bao gồm cả số và chữ cái</string>
     <string name="home_device_info">Thiết bị</string>
     <string name="home_kpatch_version">Phiên bản KernelPatch</string>

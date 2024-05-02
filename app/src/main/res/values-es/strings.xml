@@ -49,8 +49,8 @@
     <string name="patch_title">Parchear</string>
     <string name="kpm_load_toast_succ">Carga exitosa</string>
     <string name="kpm_unload_confirm">¿Descargar módulo \"%s\"?</string>
-    <string name="su_pkg_excluded_setting_title">Excluir</string>
-    <string name="su_pkg_excluded_setting_summary">para módulos</string>
+    <string name="su_pkg_excluded_setting_title">Excluir modificaciones</string>
+    <string name="su_pkg_excluded_setting_summary">Si activa esta opción, APatch podrá restaurar los archivos modificados por los módulos de esta aplicación.</string>
     <string name="su_pkg_excluded_label">excluir</string>
     <string name="su_title">Superusuario</string>
     <string name="kpm_desc">Descripción</string>

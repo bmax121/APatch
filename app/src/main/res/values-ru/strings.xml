@@ -7,7 +7,7 @@
     <string name="kernel_patch">KernelPatch</string>
     <string name="android_patch">AndroidPatch</string>
     <string name="home_not_installed">Не установлено</string>
-    <string name="home_install_unknown">Неизвестно</string>
+    <string name="home_install_unknown">Не установлено или не авторизовано</string>
     <string name="home_click_to_install">Нажмите, чтобы установить</string>
     <string name="home_working">Работает</string>
     <string name="home_installing">Установка</string>
@@ -21,11 +21,11 @@
     <string name="home_manager_version">Версия менеджера</string>
     <string name="home_fingerprint">Подпись</string>
     <string name="home_selinux_status">Состояние SELinux</string>
-    <string name="home_selinux_status_disabled">Отключено</string>
+    <string name="home_selinux_status_disabled">Отключен</string>
     <string name="home_selinux_status_enforcing">Принудительный</string>
     <string name="home_selinux_status_permissive">Разрешающий</string>
     <string name="home_selinux_status_unknown">Неизвестно</string>
-    <string name="su_title">Суперпользователь</string>
+    <string name="su_title">Superuser</string>
     <string name="apm_failed_to_enable">Не удалось включить модуль \"%s\"</string>
     <string name="apm_failed_to_disable">Не удалось отключить модуль \"%s\"</string>
     <string name="apm_empty">Нет установленных модулей</string>
@@ -65,7 +65,7 @@
     <string name="apm_start_downloading">Начало загрузки: %s</string>
     <string name="apm_new_version_available">Нажмите что бы установить новую версию, %s.</string>
     <string name="apm_changelog">Список изменений</string>
-    <string name="patch_set_superkey">Установить SuperKey</string>
+    <string name="patch_set_superkey">Задать SuperKey</string>
     <string name="kpm_load_toast_failed">Ошибка загрузки</string>
     <string name="home_auth_key_desc">Начало после сертификации</string>
     <string name="home_patch_set_key_desc">Ключ только для KernelPatch</string>
@@ -83,8 +83,8 @@
     <string name="kpm_args">Аргументы</string>
     <string name="su_selinux_via_hook">Обход через hook</string>
     <string name="su_pkg_excluded_label">исключён</string>
-    <string name="su_pkg_excluded_setting_title">Исключить</string>
-    <string name="su_pkg_excluded_setting_summary">для модулей</string>
+    <string name="su_pkg_excluded_setting_title">Исключить изменения</string>
+    <string name="su_pkg_excluded_setting_summary">Включение этой опции позволит APatch восстановить любые файлы этого приложения, которые были модифицированы модулями.</string>
     <string name="home_ap_cando_install">Установить</string>
     <string name="home_ap_cando_update">Обновить</string>
     <string name="home_ap_cando_uninstall">Удалить</string>
@@ -118,7 +118,7 @@
     <string name="patch_item_extra_kpm_desciption">описание:</string>
     <string name="patch_item_extra_args">аргументы:</string>
     <string name="patch_item_extra_event">событие:</string>
-    <string name="patch_item_skey">суперключ</string>
+    <string name="patch_item_skey">SuperKey</string>
     <string name="kpatch_shadow_path_title">kpatch</string>
     <string name="patch_mode_bootimg_patch">Режим: Патч</string>
     <string name="patch_mode_patch_and_install">Режим: Обновление</string>
@@ -128,13 +128,13 @@
     <string name="patch_item_extra_author">автор:</string>
     <string name="patch_item_extra_kpm_license">лицензия:</string>
     <string name="settings_clear_super_key_dialog">Вы действительно хотите продолжить?</string>
-    <string name="patch_item_set_skey_label">Длина суперключа должна быть не менее 8 символов и включать как числа, так и буквы</string>
+    <string name="patch_item_set_skey_label">Длина SuperKey должна быть не менее 8 символов и включать как числа, так и буквы</string>
     <string name="failure">Ошибка</string>
     <string name="kpm_install">Установить</string>
     <string name="kpm_embed">Встроить</string>
     <string name="kpm_add_kpm">Добавить KPM</string>
     <string name="success">Успех</string>
-    <string name="hide_apatch_manager">Скрыть APatch Manager</string>
+    <string name="hide_apatch_manager">Скрыть менеджер APatch</string>
     <string name="hide_apatch_manager_failure">Не удалось скрыть, пожалуйста, сообщите об ошибке!</string>
     <string name="hide_apatch_dialog_summary">Оно будет использоваться как новое название приложения</string>
     <string name="hide_apatch_dialog_new_manager_name">Название нового приложения</string>
@@ -144,19 +144,19 @@
     <string name="cyan_theme">Голубая тема</string>
     <string name="pink_theme">Розовая тема</string>
     <string name="lime_theme">Лаймовая тема</string>
-    <string name="mode_select_page_select_file">Выберите образ boot чтобы пропатчить</string>
-    <string name="settings_donot_store_superkey">Не храните super ключ локально</string>
-    <string name="mode_select_page_install_inactive_slot_warning">Ваше устройство будет загружено в текущий неактивный слот после перезагрузки!
+    <string name="mode_select_page_select_file">Выберите образ boot, чтобы пропатчить</string>
+    <string name="settings_donot_store_superkey">Не сохранять SuperKey локально</string>
+    <string name="mode_select_page_install_inactive_slot_warning">Ваше устройство будет **ПРИНУДЕТЕЛЬНО** загружено в текущий неактивный слот после перезагрузки!
 \nИспользуйте эту опцию только после успешной установки OTA.
 \nПродолжить?</string>
     <string name="kpm_control">Управление</string>
     <string name="mode_select_page_patch_and_install">Пропатчить и установить</string>
-    <string name="settings_donot_store_superkey_summary">Авторизовать super ключ каждый раз при запуске менеджера</string>
-    <string name="home_dialog_auth_fail_content">Не удалось аутентифицировать super ключ, в следствии чего корректная работа APatch не может быть гарантирована
+    <string name="settings_donot_store_superkey_summary">Запросить SuperKey каждый раз при запуске менеджера</string>
+    <string name="home_dialog_auth_fail_content">Не удалось авторизовать SuperKey, в следствии чего корректная работа APatch не может быть гарантирована
 \nНиже приведены возможные причины провала аутентификации:
 \n1. Ваше ядро не имеет патчей для работы KernelPatch.
 \n2. Патченное ядро не установлено.
-\n3. Неправильный Super-ключ.
+\n3. Неправильный SuperKey.
 \n4. Ваше устройство не поддерживает APatch и KernelPatch.
 \n
 \nПожалуйста, проверьте все и попробуйте еще раз. Если проблема не решилась, вы можете задать свой вопрос в разделе issue официального репозитория</string>
@@ -166,7 +166,7 @@
     <string name="kpm_control_ok">Операция выполнена успешно!</string>
     <string name="orange_theme">Оранжевая тема</string>
     <string name="settings_night_mode_follow_sys_summary">Автоматически переключает на темную тему, следуя настройкам системы</string>
-    <string name="about_app_desc">Решение для root на уровне ядра, предоставляющее возможность монтировать модуль системы и подключать функции ядра</string>
+    <string name="about_app_desc">Решение для root на уровне ядра, предоставляющее возможность монтировать модули системы и изменять функции ядра</string>
     <string name="about_telegram_channel">Канал в Telegram</string>
     <string name="about_telegram_group">Группа в Telegram</string>
     <string name="about_powered_by">Основано на %1$s</string>
@@ -174,8 +174,8 @@
     <string name="home_kpatch_version">Версия KernelPatch</string>
     <string name="home_new_apatch_found">Доступна новая версия: %s. Нажмите, чтобы обновиться</string>
     <string name="mode_select_page_title">Установить</string>
-    <string name="mode_select_page_install_inactive_slot">Установить в неактивный слот(после OTA)</string>
-    <string name="home_dialog_auth_fail_title">Аутентификация не удалась</string>
+    <string name="mode_select_page_install_inactive_slot">Установить в неактивный слот (после OTA)</string>
+    <string name="home_dialog_auth_fail_title">Ошибка авторизации</string>
     <string name="home_dialog_uninstall_all">Полное удаление</string>
     <string name="home_more_menu_feedback_or_suggestion">Предложения или исправления</string>
     <string name="home_dialog_uninstall_title">Удаление</string>
@@ -198,7 +198,7 @@
     <string name="yellow_theme">Желтая тема</string>
     <string name="green_theme">Зеленая тема</string>
     <string name="indigo_theme">Сине-фиолетовая тема</string>
-    <string name="patch_mode_install_to_next_slot">Режим: Установить в следующий слот(После OTA)</string>
+    <string name="patch_mode_install_to_next_slot">Режим: Установить в следующий слот (После OTA)</string>
     <string name="about_app_version">Версия %1$s</string>
     <string name="apm_webui_open">Открыть</string>
     <string name="settings_check_update">Проверить обновления</string>
@@ -206,7 +206,7 @@
     <string name="home_device_info">Устройство</string>
     <string name="home_system_version">Версия системы</string>
     <string name="settings_night_theme_enabled">Включить темную тему</string>
-    <string name="enable_web_debugging">Включить WebView отладку</string>
+    <string name="enable_web_debugging">Включить отладку WebView</string>
     <string name="amber_theme">Янтарная тема</string>
     <string name="brown_theme">Коричневая тема</string>
     <string name="blue_grey_theme">Сине-серая тема</string>
