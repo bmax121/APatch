@@ -12,7 +12,8 @@ use crate::{
     defs,
     utils::{self, umask},
 };
-
+#[cfg(any(target_os = "linux", target_os = "android"))]
+use crate::pty::prepare_pty;
 
 fn print_usage(opts: Options) {
     let brief = format!("APatch\n\nUsage: <command> [options] [-] [user [argument...]]");
@@ -77,6 +78,7 @@ pub fn root_shell() -> Result<()> {
         "mount-master",
         "force run in the global mount namespace",
     );
+    opts.optflag("", "no-pty", "Do not allocate a new pseudo terminal.");
 
     // Replace -cn with -z, -mm with -M for supporting getopt_long
     let args = args
@@ -185,7 +187,12 @@ pub fn root_shell() -> Result<()> {
     if PathBuf::from(defs::AP_RC_PATH).exists() && env::var("ENV").is_err() {
         command = command.env("ENV", defs::AP_RC_PATH);
     }
-
+    #[cfg(target_os = "android")]
+    if !matches.opt_present("no-pty") {
+        if let Err(e) = prepare_pty() {
+            log::error!("failed to prepare pty: {:?}", e);
+        }
+    }
     // escape from the current cgroup and become session leader
     // WARNING!!! This cause some root shell hang forever!
     // command = command.process_group(0);

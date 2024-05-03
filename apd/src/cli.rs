@@ -77,7 +77,7 @@ pub fn run() -> Result<()> {
 
     // the kernel executes su with argv[0] = "/system/bin/kp" or "/system/bin/su" or "su" or "kp" and replace it with us
     let arg0 = std::env::args().next().unwrap_or_default();
-    if arg0 == "/system/bin/kp" || arg0 == "/system/bin/su" || arg0 == "su" || arg0 == "kp" {
+    if arg0.ends_with("kp") || arg0.ends_with("su") {
         return crate::apd::root_shell();
     }
 

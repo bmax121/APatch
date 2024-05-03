@@ -1,5 +1,5 @@
 use anyhow::{anyhow, bail, Ok, Result};
-
+use std::fs::create_dir;
 #[cfg(any(target_os = "linux", target_os = "android"))]
 use anyhow::Context;
 #[cfg(any(target_os = "linux", target_os = "android"))]
@@ -10,6 +10,7 @@ use retry::delay::NoDelay;
 #[cfg(any(target_os = "linux", target_os = "android"))]
 use rustix::{fd::AsFd, fs::CWD, mount::*};
 
+use crate::defs::PTS_NAME;
 use crate::defs::AP_OVERLAY_SOURCE;
 use log::{info, warn};
 #[cfg(any(target_os = "linux", target_os = "android"))]
@@ -170,7 +171,22 @@ pub fn mount_overlayfs(
     }
     Ok(())
 }
-
+#[cfg(any(target_os = "linux", target_os = "android"))]
+pub fn mount_devpts(dest: impl AsRef<Path>) -> Result<()> {
+    create_dir(dest.as_ref())?;
+    mount(
+        AP_OVERLAY_SOURCE,
+        dest.as_ref(),
+        "devpts",
+        MountFlags::empty(),
+        "newinstance",
+    )?;
+    Ok(())
+}
+#[cfg(not(any(target_os = "linux", target_os = "android")))]
+pub fn mount_devpts(_dest: impl AsRef<Path>) -> Result<()> {
+    unimplemented!()
+}
 #[cfg(any(target_os = "linux", target_os = "android"))]
 pub fn mount_tmpfs(dest: impl AsRef<Path>) -> Result<()> {
     info!("mount tmpfs on {}", dest.as_ref().display());
@@ -194,6 +210,10 @@ pub fn mount_tmpfs(dest: impl AsRef<Path>) -> Result<()> {
             rustix::fs::MountFlags::empty(),
             "",
         )?;
+    }
+    let pts_dir = format!("{}/{PTS_NAME}", dest.as_ref().display());
+    if let Err(e) = mount_devpts(pts_dir) {
+        warn!("do devpts mount failed: {}", e);
     }
     Ok(())
 }
