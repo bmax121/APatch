@@ -62,8 +62,8 @@
     <string name="kpm_license">许可</string>
     <string name="kpm_apm_empty">尚未添加模块</string>
     <string name="kpm_load_toast_succ">加载成功</string>
-    <string name="su_pkg_excluded_setting_title">排除模块</string>
-    <string name="su_pkg_excluded_setting_summary">免除模块对此应用造成的影响</string>
+    <string name="su_pkg_excluded_setting_title">不包括修改</string>
+    <string name="su_pkg_excluded_setting_summary">使模块不影响此应用。</string>
     <string name="su_pkg_excluded_label">排除模块</string>
     <string name="su_title">超级用户</string>
     <string name="kpm_desc">描述</string>
