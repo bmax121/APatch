@@ -52,7 +52,7 @@
     <string name="kpm_load_toast_succ">ロード成功</string>
     <string name="kpm_load_toast_failed">ロード失敗</string>
     <string name="kpm_version">バージョン</string>
-    <string name="su_pkg_excluded_setting_summary">除外されたモジュール</string>
+    <string name="su_pkg_excluded_setting_summary">このオプションを有効にすると、APatch は、このアプリケーションのモジュールによって変更されたファイルを復元できます。</string>
     <string name="su_show_system_apps">システムアプリを表示</string>
     <string name="su_refresh">更新</string>
     <string name="apm_not_installed">AndroidPatch はインストールされていません</string>
@@ -71,7 +71,7 @@
     <string name="clear_super_key">SuperKey を消去</string>
     <string name="patch_title">パッチ</string>
     <string name="home_selinux_status_enforcing">Enforcing</string>
-    <string name="su_pkg_excluded_setting_title">除外</string>
+    <string name="su_pkg_excluded_setting_title">変更の除外</string>
     <string name="su_hide_system_apps">システムアプリを非表示</string>
     <string name="home_apatch_version">APatch: %s</string>
     <string name="home_selinux_status_permissive">Permissive</string>
@@ -148,4 +148,9 @@
     <string name="failure">失敗</string>
     <string name="hide_apatch_dialog_summary">これはランチャーに表示される新しいアプリのラベルとして使用されます。</string>
     <string name="home_dialog_uninstall_all">アンインストールが完了しました</string>
+    <string name="kpm_add_kpm">KPM を追加</string>
+    <string name="kpm_control">コントロール</string>
+    <string name="hide_apatch_dialog_new_manager_name">新しいマネージャー名</string>
+    <string name="setting_reset_su_new_path">新しいフルパス</string>
+    <string name="enable_web_debugging">WebView デバッグの有効化</string>
 </resources>

@@ -12,9 +12,9 @@
     <string name="reboot">Reboot</string>
     <string name="settings">Pengaturan</string>
     <string name="reboot_bootloader">But ke Bootloader</string>
-    <string name="home_click_to_learn_apatch">Pelajari fitur dan penggunaan AndroidPatch</string>
+    <string name="home_click_to_learn_apatch">Pelajari fitur dan penggunaan APatch</string>
     <string name="reboot_edl">But ke EDL</string>
-    <string name="home_learn_apatch">Pelajari AndroidPatch</string>
+    <string name="home_learn_apatch">Pelajari APatch</string>
     <string name="about">Tentang</string>
     <string name="about_source_code">&lt;p&gt;Lihat kode sumber di %1$s&lt;p/&gt;Gabung kanal %2$s kami&lt;p/&gt;Gabung grup %3$s kami</string>
     <string name="send_log">Kirim Log</string>
@@ -46,13 +46,13 @@
     <string name="apm_uninstall_success">%s berhasil dihapus</string>
     <string name="apm_install">Instal</string>
     <string name="apm_remove">Hapus</string>
-    <string name="apm_uninstall_confirm">Hapus modul %s?</string>
+    <string name="apm_uninstall_confirm">Hapus modul \"%s\"?</string>
     <string name="apm_version">Versi</string>
     <string name="apm_overlay_fs_not_available">Kernel tidak mendukung OverlayFS, fungsi modul ditiadakan.</string>
     <string name="apm_uninstall_failed">Gagal menghapus %s</string>
     <string name="apm_magisk_conflict">Konflik dengan Magisk, fungsi modul ditiadakan.</string>
     <string name="apm_desc">Ket.</string>
-    <string name="apm_empty">Tidak ada modul</string>
+    <string name="apm_empty">Tidak ada modul terinstal</string>
     <string name="apm_author">Oleh</string>
     <string name="apm_reboot_to_apply">Reboot agar berfungsi</string>
     <string name="apm_start_downloading">Mulai mengunduh %s</string>
@@ -64,12 +64,12 @@
     <string name="apm_new_version_available">Klik untuk membarui ke versi %s.</string>
     <string name="apm_update">Membarui</string>
     <string name="su_refresh">Muat ulang</string>
-    <string name="apm_failed_to_disable">Gagal menonaktifkan modul %s</string>
-    <string name="apm_failed_to_enable">Gagal mengaktifkan modul %s</string>
+    <string name="apm_failed_to_disable">Gagal menonaktifkan modul \"%s\"</string>
+    <string name="apm_failed_to_enable">Gagal mengaktifkan modul \"%s\"</string>
     <string name="su_hide_system_apps">Sembunyikan aplikasi sistem</string>
     <string name="kpm_kp_not_installed">KernelPatch tidak terinstal</string>
     <string name="su_pkg_excluded_setting_title">Modifikasi dikecualikan</string>
-    <string name="su_pkg_excluded_setting_summary">Opsi agar APatch dapat mengembalikan semua modifikasi ke kondisi asali pada aplikasi yg dipilih.</string>
+    <string name="su_pkg_excluded_setting_summary">Aktifkan opsi ini agar APatch dapat memulihkan kembali berkas termodifikasi oleh modul pada aplikasi ini.</string>
     <string name="su_pkg_excluded_label">dikecualikan</string>
     <string name="su_title">SuperUser</string>
     <string name="su_selinux_via_hook">bypass via hook</string>
@@ -77,7 +77,7 @@
     <string name="reboot_userspace">SoftReboot</string>
     <string name="home_selinux_status_unknown">Unknown</string>
     <string name="home_selinux_status_permissive">Permissive</string>
-    <string name="home_selinux_status">SELinux</string>
+    <string name="home_selinux_status">Status SELinux</string>
     <string name="kpm_load_toast_failed">Gagal memuat</string>
     <string name="home_selinux_status_disabled">Mati</string>
     <string name="kpm_load">Muat</string>
@@ -90,7 +90,7 @@
     <string name="kpm_args">Args</string>
     <string name="home_fingerprint">Identitas</string>
     <string name="clear_super_key">Hapus SuperKey</string>
-    <string name="apm_not_installed">APatch tidak terinstal</string>
+    <string name="apm_not_installed">AndroidPatch tidak terinstal</string>
     <string name="settings_app_language">Bahasa</string>
     <string name="system_default">Bawaan sistem</string>
     <string name="patch">Patch</string>
@@ -153,7 +153,7 @@
     <string name="mode_select_page_install_inactive_slot">Instal ke slot nonaktif (setelah OTA)</string>
     <string name="home_kpatch_version">KernelPatch</string>
     <string name="enable_web_debugging">Pengawakutuan WebVeiw</string>
-    <string name="mode_select_page_install_inactive_slot_warning">Gawai akan **DIPAKSA** but ke slot nonaktif!
+    <string name="mode_select_page_install_inactive_slot_warning">Gawai akan **DIPAKSA** untuk but ke slot nonaktif!
 \nHANYA gunakan setelah proses OTA selesai.
 \nLanjutkan?</string>
     <string name="home_dialog_uninstall_title">Hapus</string>
@@ -207,7 +207,7 @@
     <string name="deep_purple_theme">Tema Ungu Gelap</string>
     <string name="yellow_theme">Tema Kuning</string>
     <string name="about_telegram_channel">Kanal Telegram</string>
-    <string name="about_app_desc">Metode root via kernel hanya menggunakan kernel image, memberikan fungsi hook via kernel dan memuat modul.</string>
+    <string name="about_app_desc">Metode root dengan menggunakan kernel image, memberikan fungsi untuk memuat modul dan fungsi hook via kernel.</string>
     <string name="about_telegram_group">Grup Telegram</string>
     <string name="kpm_control_paramters">Parameter</string>
     <string name="kpm_control_outMsg">Pesan</string>

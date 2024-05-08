@@ -34,4 +34,7 @@
     <string name="kpatch_version">Versi: %d.%d.%d</string>
     <string name="apatch_version">Versi:
 \n%s</string>
+    <string name="home_install_unknown_summary">Tekan untuk pasang</string>
+    <string name="success">Berjaya</string>
+    <string name="failure">Gagal</string>
 </resources>
