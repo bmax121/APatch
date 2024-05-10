@@ -1,7 +1,7 @@
 [versions]
 agp = "8.4.0"
-kotlin = "1.9.23"
-ksp = "1.9.23-1.0.20"
+kotlin = "1.9.24"
+ksp = "1.9.24-1.0.20"
 compose-bom = "2024.05.00"
 lifecycle = "2.7.0"
 accompanist = "0.34.0"
@@ -56,7 +56,7 @@ dev-rikka-rikkax-parcelablelist = { module = "dev.rikka.rikkax.parcelablelist:pa
 
 io-coil-kt-coil-compose = { group = "io.coil-kt", name = "coil-compose", version = "2.6.0" }
 
-kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version = "1.8.0" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version = "1.8.1" }
 
 me-zhanghai-android-appiconloader-coil = { group = "me.zhanghai.android.appiconloader", name = "appiconloader-coil", version = "1.5.0" }
 
