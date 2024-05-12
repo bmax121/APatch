@@ -296,14 +296,14 @@ set_perm_recursive <directory> <owner> <group> <dirpermission> <filepermission> 
 
 ```txt
 0. BootLoader (nothing on sceen)
-  load patched boot.img
-  ...
+load patched boot.img
+...
 
 1. kernel init (oem logo on screen)
 mount /dev, /dev/pts, /proc, /sys, etc.
 property-init -> read default props
 read init.rc
-
+...
 early-init -> init -> late_init
 early-fs
    start vold
