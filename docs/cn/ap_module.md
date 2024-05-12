@@ -337,7 +337,7 @@ load_all_props_action
   **(Zygisk) mount zygisksu/module.prop
 start system apps (autostart)
 ...
-boot complete (broadcast ACTION_BOOT_COMPLETED event)
+boot complete (broadcast ACTION_LOCKED_BOOT_COMPLETED event)
 *execute general scripts in boot-completed.d/
 *execute module scripts boot-completed.sh
 
