@@ -327,7 +327,7 @@ load_all_props_action
   class_start core
     start-service logd, console, vold, etc.
   class_start main
-    start-service adb, netd (iptables), zygote, etc.
+    start-service adb, netd, zygote, etc.
 
 2. kernel2user init (rom animation on screen, start by service bootanim)
 *execute general scripts in service.d/
