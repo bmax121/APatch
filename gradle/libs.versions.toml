@@ -1,9 +1,9 @@
 [versions]
 agp = "8.4.0"
-kotlin = "1.9.23"
-ksp = "1.9.23-1.0.20"
+kotlin = "1.9.24"
+ksp = "1.9.24-1.0.20"
 compose-bom = "2024.05.00"
-lifecycle = "2.7.0"
+lifecycle = "2.8.0"
 accompanist = "0.34.0"
 navigation = "2.7.7"
 compose-destination = "1.10.2"
@@ -13,7 +13,7 @@ markdown = "4.6.2"
 ui = "1.6.7"
 webkit = "1.11.0"
 androidxCoreSplashscreen = "1.0.1"
-androidx-compose-compiler = "1.5.13"
+androidx-compose-compiler = "1.5.14"
 
 [plugins]
 agp-app = { id = "com.android.application", version.ref = "agp" }
@@ -56,7 +56,7 @@ dev-rikka-rikkax-parcelablelist = { module = "dev.rikka.rikkax.parcelablelist:pa
 
 io-coil-kt-coil-compose = { group = "io.coil-kt", name = "coil-compose", version = "2.6.0" }
 
-kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version = "1.8.0" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version = "1.8.1" }
 
 me-zhanghai-android-appiconloader-coil = { group = "me.zhanghai.android.appiconloader", name = "appiconloader-coil", version = "1.5.0" }
 
