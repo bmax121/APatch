@@ -26,10 +26,9 @@
     <string name="home_need_update">Νέα έκδοση διαθέσιμη</string>
     <string name="home_working">Εργασία</string>
     <string name="patch_title">Patch</string>
-    <string name="kpatch_version">Έκδοση: %d.%d.%d</string>
+    <string name="kpatch_version">Έκδοση: %s</string>
     <string name="kpm_unload_confirm">Ξεφορτώστε την ενότητα \"%s\"?</string>
-    <string name="apatch_version">Έκδοση:
-\n%s</string>
+    <string name="apatch_version">Έκδοση: %s</string>
     <string name="home_fingerprint">Δακτυλικό αποτύπωμα</string>
     <string name="su_title">Σούπερ χρήστης</string>
     <string name="apm_downloading">Λήψη της μονάδας \"%s\"…</string>
@@ -63,8 +62,7 @@
     <string name="home_not_installed">Δεν έχει εγκατασταθεί</string>
     <string name="home_install_unknown">Άγνωστος</string>
     <string name="home_installing">Εγκατάσταση του</string>
-    <string name="apatch_version_update">Έκδοση:
-\n%s -&gt; %s</string>
+    <string name="apatch_version_update">Έκδοση: %s -&gt; %s</string>
     <string name="home_su_path">su: %s</string>
     <string name="home_auth_key_desc">Έναρξη μετά την πιστοποίηση</string>
     <string name="home_ap_cando_update">Ενημέρωση</string>
@@ -87,7 +85,7 @@
     <string name="apm_version">Έκδοση</string>
     <string name="apm_author">Συγγραφέας</string>
     <string name="home_ap_cando_uninstall">κατάργηση εγκατάστασης</string>
-    <string name="home_apatch_version">APatch: %s</string>
+    <string name="home_apatch_version">έκδοση APatch</string>
     <string name="kpm_kp_not_installed">Το KernelPatch δεν έχει εγκατασταθεί</string>
     <string name="kpm_load_toast_succ">Φορτώστε επιτυχώς</string>
     <string name="kpm_apm_empty">Δεν έχει φορτωθεί καμία ενότητα</string>
@@ -96,4 +94,6 @@
     <string name="su_pkg_excluded_setting_summary">για τις ενότητες</string>
     <string name="su_show_system_apps">Εμφάνιση εφαρμογών συστήματος</string>
     <string name="apm_uninstall_success">%s απεγκατεστημένο</string>
+    <string name="success">Επιτυχία</string>
+    <string name="failure">Αποτυχία</string>
 </resources>

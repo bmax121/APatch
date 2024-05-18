@@ -14,7 +14,7 @@
     <string name="reboot_download">Repornește la Download</string>
     <string name="reboot_edl">Repornește la EDL</string>
     <string name="about">Despre</string>
-    <string name="home_learn_apatch">Află despre AndroidPatch</string>
+    <string name="home_learn_apatch">Invata APatch</string>
     <string name="about_source_code">Vezi codul sursă la %1$s<br/> Intră pe canalul nostru %2$s</string>
     <string name="send_log">Trimite un log</string>
     <string name="clear_super_key">Șterge cheia</string>
@@ -84,7 +84,7 @@
     <string name="apm_update">Actualizează</string>
     <string name="apm_downloading">Descărcarea modulului \"%s\"…</string>
     <string name="apm_start_downloading">Începe descărcarea %s</string>
-    <string name="home_click_to_learn_apatch">Află despre funcțiile AndroidPatch și cum să le folosești</string>
+    <string name="home_click_to_learn_apatch">Afla despre funcționalitațile din APatch și cum să le folosești</string>
     <string name="safe_mode">Mod sigur</string>
     <string name="super_key">SuperKey</string>
     <string name="home_manager_version">Versiune manager</string>
@@ -100,4 +100,12 @@
     <string name="settings_global_namespace_mode_summary">Toate sesiunile root folosesc spațiul de nume de montare global</string>
     <string name="success">Succes</string>
     <string name="failure">Eșec</string>
+    <string name="settings_clear_super_key_dialog">Ești sigur ca vrei să continui?</string>
+    <string name="settings_check_update">Verifică actualizare</string>
+    <string name="settings_check_update_summary">Verificare automată a actualizarilor la deschiderea aplicației</string>
+    <string name="home_install_unknown_summary">Click pentru instalare</string>
+    <string name="kpatch_version_update">Versiune: %s -&gt; %s</string>
+    <string name="home_kpatch_info_title">Informații</string>
+    <string name="kpatch_shadow_path_title">kpatch</string>
+    <string name="home_ap_cando_reboot">Restart</string>
 </resources>

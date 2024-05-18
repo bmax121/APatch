@@ -27,7 +27,7 @@
     <string name="apatch_version_update">Version: %s -&gt; %s</string>
     <string name="home_auth_key_desc">Start nach Zertifizierung</string>
     <string name="home_manager_version">Manager Version</string>
-    <string name="su_pkg_excluded_setting_summary">für Module</string>
+    <string name="su_pkg_excluded_setting_summary">Wenn Sie diese Option aktivieren, kann APatch alle von den Modulen für diese Anwendung geänderten Dateien wiederherstellen.</string>
     <string name="apm_failed_to_disable">Das Modul \"%s\" konnte nicht aktiviert werden</string>
     <string name="home_selinux_status_disabled">Off</string>
     <string name="apm_magisk_conflict">Module sind aufgrund eines Konfliktes mit Magisk nicht verfügbar.</string>
@@ -87,7 +87,7 @@
     <string name="kpm_desc">Beschreibung</string>
     <string name="kpm_args">Args</string>
     <string name="su_selinux_via_hook">Umgehung über einhaken</string>
-    <string name="su_pkg_excluded_setting_title">Absondern</string>
+    <string name="su_pkg_excluded_setting_title">Änderungen Ausschließen</string>
     <string name="su_refresh">Aktualisieren</string>
     <string name="apm_desc">Beschreibung</string>
     <string name="apm_changelog">Update-Verlauf</string>
@@ -178,7 +178,38 @@
     <string name="settings_donot_store_superkey">Super-Key nicht lokal speichern</string>
     <string name="home_new_apatch_found">Neue Version verfügbar: %s, klicke, um upzugraden</string>
     <string name="mode_select_page_install_inactive_slot">Auf inaktiven Slot installieren (Nach OTA)</string>
-    <string name="hide_apatch_manager_summary">Installiere eine neue Manager-App mit einer zufälligen Package-ID und einem anpassbaren App-Namen</string>
+    <string name="hide_apatch_manager_summary">Installieren Sie eine neue Manager-Anwendung mit einer zufälligen Paket-ID und einer benutzerdefinierten Anwendungsbezeichnung</string>
     <string name="hide_apatch_dialog_summary">Wird als App-Bezeichnung auf dem Home-Screen genutzt</string>
     <string name="settings_donot_store_superkey_summary">Super-Key jedes mal authentifizieren, wenn der Manager startet</string>
+    <string name="kpm_control_dialog_content">Eingangskontrollparameter:</string>
+    <string name="mode_select_page_install_inactive_slot_warning">Dein Gerät wird **GEZWUNGEN**, nach dem Neustart den inaktiven Slot zu nutzen!
+\nNutze diese Funktion ausschließlich, wenn ein OTA-Update durchgeführt wurde.
+\nFortfahren?</string>
+    <string name="settings_custom_color_theme">Farbschema</string>
+    <string name="deep_orange_theme">Tieforangefarbenes Thema</string>
+    <string name="cyan_theme">Cyanfarbenes Thema</string>
+    <string name="deep_purple_theme">Tiefviolettes Thema</string>
+    <string name="indigo_theme">Indigo Thema</string>
+    <string name="light_blue_theme">Hellblaues Thema</string>
+    <string name="light_green_theme">Hellgrünes Thema</string>
+    <string name="lime_theme">Thema Limone</string>
+    <string name="orange_theme">Orangefarbenes Thema</string>
+    <string name="sakura_theme">Sakurkafarbenes Thema</string>
+    <string name="pink_theme">Rosafarbenes thema</string>
+    <string name="purple_theme">Lilafarbenes Thema</string>
+    <string name="teal_theme">Türkisblaues Thema</string>
+    <string name="yellow_theme">Gelbes Thema</string>
+    <string name="about_app_version">Version %1$s</string>
+    <string name="about_powered_by">Unterstützt durch %1$s</string>
+    <string name="red_theme">Rotes Thema</string>
+    <string name="about_app_desc">Kernel-Root-Lösung mit nur einem gestrippten Kernel-Image, das die Möglichkeit bietet, Systemmodule zu mounten und Kernel-Funktionen einzuhängen.</string>
+    <string name="settings_use_system_color_theme_summary">Verwenden Sie ein Farbthema, das von System mit aktuellen Tapeten erzeugt wird</string>
+    <string name="home_dialog_auth_fail_content">Unfähig, den Superschlüssel zu authentifizieren, daher APatch nicht richtig funktionieren kann.
+\nHier sind einige mögliche Gründe für Authentifizierungsfehler:
+\nANHANG Sie haben das Boot-Bild nicht mit KernelPatch gepatcht.
+\n2. Das gepatchte Boot-Bild wurde nicht aufgeblitzt.
+\n3. Super Schlüssel falsch.
+\n4. Ihr Gerät unterstützt APatch und KernelPatch nicht.
+\n
+\nBitte überprüfen und nochmal versuchen. Wenn es noch Probleme gibt, können Sie immer Fragen zu den Problemen des offiziellen Projektarchivs stellen.</string>
 </resources>
