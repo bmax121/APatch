@@ -196,9 +196,12 @@ pub fn on_post_data_fs() -> Result<()> {
     if crate::module::load_sepolicy_rule().is_err() {
         warn!("load sepolicy.rule failed");
     }
-    
-    if let Err(e) = mount::mount_tmpfs(utils::get_tmp_path()) {
-        warn!("do temp dir mount failed: {}", e);
+    if !utils::is_lite_mode(){
+        if let Err(e) = mount::mount_tmpfs(utils::get_tmp_path()) {
+            warn!("do temp dir mount failed: {}", e);
+        }
+    }else{
+        warn!("runing in lite_mode skip mount /degbug_ramdisk or /sbin");
     }
 
     // exec modules post-fs-data scripts

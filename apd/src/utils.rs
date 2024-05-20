@@ -80,6 +80,12 @@ pub fn is_safe_mode() -> bool {
     safemode
 }
 
+pub fn is_lite_mode() -> bool {
+    let litemode = Path::new(defs::LITEMOD_PATH).exists();
+    log::info!("litemode: {}", litemode);
+    litemode
+}
+
 pub fn get_zip_uncompressed_size(zip_path: &str) -> Result<u64> {
     let mut zip = zip::ZipArchive::new(std::fs::File::open(zip_path)?)?;
     let total: u64 = (0..zip.len())

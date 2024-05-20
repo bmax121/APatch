@@ -12,6 +12,8 @@ pub const DAEMON_PATH: &str = concatcp!(ADB_DIR, "apd");
 #[cfg(target_os = "android")]
 pub const SAFEMODE_PATH: &str = "/dev/.safemode";
 
+pub const LITEMOD_PATH: &str = concatcp!(ADB_DIR, "litemode");
+
 pub const MODULE_DIR: &str = concatcp!(ADB_DIR, "modules/");
 pub const MODULE_IMG: &str = concatcp!(WORKING_DIR, "modules.img");
 pub const MODULE_UPDATE_IMG: &str = concatcp!(WORKING_DIR, "modules_update.img");
