@@ -72,11 +72,7 @@ class PatchesViewModel : ViewModel() {
         patchDir.deleteRecursively()
         patchDir.mkdirs()
         val execs = listOf(
-            "libkptools.so",
-            "libmagiskboot.so",
-            "libbusybox.so",
-            "libkpatch.so",
-            "libbootctl.so"
+            "libkptools.so", "libmagiskboot.so", "libbusybox.so", "libkpatch.so", "libbootctl.so"
         )
         error = ""
 
@@ -408,32 +404,52 @@ class PatchesViewModel : ViewModel() {
             }
 
             if (mode == PatchMode.PATCH_AND_INSTALL) {
-                logs.add(" Reboot to finish the installation~")
+                logs.add("- Reboot to finish the installation...")
                 needReboot = true
                 APApplication.markNeedReboot()
             } else if (mode == PatchMode.INSTALL_TO_NEXT_SLOT) {
+                logs.add("- Connecting boot hal...")
                 val bootctlStatus = shell.newJob().add(
                     "cd $patchDir", "chmod 0777 $patchDir/bootctl", "./bootctl hal-info"
                 ).to(logs, logs).exec()
                 if (!bootctlStatus.isSuccess) {
-                    logs.add(" [X] Failed to connect to boot hal")
+                    logs.add("[X] Failed to connect to boot hal, you may need switch slot manually")
                 } else {
-                    val currSlot = shell.newJob().add(
-                        "cd $patchDir", "./bootctl get-current-slot"
-                    ).exec()
-                    val targetSlot = if (currSlot.out.toString().contains("0")) {
+                    val currSlot = shellForResult(
+                        shell, "cd $patchDir", "./bootctl get-current-slot"
+                    ).out.toString()
+                    val targetSlot = if (currSlot.contains("0")) {
                         1
                     } else {
                         0
                     }
+                    logs.add("- Switching to next slot: $targetSlot...")
                     val setNextActiveSlot = shell.newJob().add(
                         "cd $patchDir", "./bootctl set-active-boot-slot $targetSlot"
                     ).exec()
                     if (setNextActiveSlot.isSuccess) {
-                        logs.add(" Switch to next slot: $targetSlot done")
+                        logs.add("- Switch done")
+                        logs.add("- Writing boot marker script...")
+                        val markBootableScript = shell.newJob().add(
+                            "mkdir -p /data/adb/post-fs-data.d && rm -rf /data/adb/post-fs-data.d/post_ota.sh && touch /data/adb/post-fs-data.d/post_ota.sh",
+                            "echo \"chmod 0777 $patchDir/bootctl\" > /data/adb/post-fs-data.d/post_ota.sh",
+                            "echo \"chown root:root 0777 $patchDir/bootctl\" > /data/adb/post-fs-data.d/post_ota.sh",
+                            "echo \"$patchDir/bootctl mark-boot-successful\" > /data/adb/post-fs-data.d/post_ota.sh",
+                            "echo >> /data/adb/post-fs-data.d/post_ota.sh",
+                            "echo \"rm -rf $patchDir\" >> /data/adb/post-fs-data.d/post_ota.sh",
+                            "echo >> /data/adb/post-fs-data.d/post_ota.sh",
+                            "echo \"rm -f /data/adb/post-fs-data.d/post_ota.sh\" >> /data/adb/post-fs-data.d/post_ota.sh",
+                            "chmod 0777 /data/adb/post-fs-data.d/post_ota.sh",
+                            "chown root:root /data/adb/post-fs-data.d/post_ota.sh",
+                        ).to(logs, logs).exec()
+                        if (markBootableScript.isSuccess) {
+                            logs.add("- Boot marker script write done")
+                        } else {
+                            logs.add("[X] Boot marker scripts write failed")
+                        }
                     }
                 }
-                logs.add(" KernelPatch was successfully installed to next slot, reboot to finish the installation~")
+                logs.add("- Reboot to finish the installation...")
                 needReboot = true
                 APApplication.markNeedReboot()
             } else if (mode == PatchMode.PATCH_ONLY) {
