@@ -1,6 +1,5 @@
 package me.bmax.apatch.ui.screen
 
-import android.net.Uri
 import android.os.Environment
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -33,27 +32,27 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import androidx.navigation.NavHostController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.bmax.apatch.R
 import me.bmax.apatch.ui.component.KeyEventBlocker
-import me.bmax.apatch.util.ui.LocalSnackbarHost
+import me.bmax.apatch.ui.viewmodel.UIViewModel
 import me.bmax.apatch.util.installModule
 import me.bmax.apatch.util.reboot
+import me.bmax.apatch.util.ui.LocalSnackbarHost
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 @Composable
-@Destination
-fun InstallScreen(navigator: DestinationsNavigator, uri: Uri) {
+fun InstallScreen(navController: NavHostController, uiViewModel: UIViewModel) {
     var text by rememberSaveable { mutableStateOf("") }
     val logContent = rememberSaveable { StringBuilder() }
     var showFloatAction by rememberSaveable { mutableStateOf(false) }
+    val uri = uiViewModel.apModuleUri
 
     val snackBarHost = LocalSnackbarHost.current
     val scope = rememberCoroutineScope()
@@ -81,7 +80,7 @@ fun InstallScreen(navigator: DestinationsNavigator, uri: Uri) {
         topBar = {
             TopBar(
                 onBack = {
-                    navigator.popBackStack()
+                    navController.popBackStack()
                 },
                 onSave = {
                     scope.launch {

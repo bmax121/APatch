@@ -47,7 +47,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.ramcosta.composedestinations.annotation.Destination
 import kotlinx.coroutines.launch
 import me.bmax.apatch.Natives
 import me.bmax.apatch.R
@@ -59,7 +58,6 @@ import me.bmax.apatch.util.PkgConfig
 
 
 @OptIn(ExperimentalMaterialApi::class)
-@Destination
 @Composable
 fun SuperUserScreen() {
     val viewModel = viewModel<SuperUserViewModel>()

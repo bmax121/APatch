@@ -64,8 +64,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import androidx.navigation.NavHostController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -79,16 +78,16 @@ import me.bmax.apatch.ui.component.ModuleStateIndicator
 import me.bmax.apatch.ui.component.ModuleUpdateButton
 import me.bmax.apatch.ui.component.rememberConfirmDialog
 import me.bmax.apatch.ui.component.rememberLoadingDialog
-import me.bmax.apatch.ui.screen.destinations.InstallScreenDestination
 import me.bmax.apatch.ui.viewmodel.APModuleViewModel
+import me.bmax.apatch.ui.viewmodel.UIViewModel
 import me.bmax.apatch.util.DownloadListener
-import me.bmax.apatch.util.ui.LocalSnackbarHost
 import me.bmax.apatch.util.download
 import me.bmax.apatch.util.getRootShell
 import me.bmax.apatch.util.hasMagisk
 import me.bmax.apatch.util.reboot
 import me.bmax.apatch.util.shellForResult
 import me.bmax.apatch.util.toggleModule
+import me.bmax.apatch.util.ui.LocalSnackbarHost
 import me.bmax.apatch.util.uninstallModule
 import okhttp3.OkHttpClient
 
@@ -99,9 +98,8 @@ private fun getSafeMode(): Boolean {
     ).out.contains("IS_SAFE_MODE")
 }
 
-@Destination
 @Composable
-fun APModuleScreen(navigator: DestinationsNavigator) {
+fun APModuleScreen(navController: NavHostController, uiViewModel: UIViewModel) {
     val context = LocalContext.current
 
     val state by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
@@ -156,7 +154,8 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
 
                 Log.i("ModuleScreen", "select zip result: $uri")
 
-                navigator.navigate(InstallScreenDestination(uri))
+                uiViewModel.apModuleUri = uri
+                navController.navigate("Install")
 
                 viewModel.markNeedRefresh()
             }
@@ -198,7 +197,8 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
                         .fillMaxSize(),
                     state = moduleListState,
                     onInstallModule = {
-                        navigator.navigate(InstallScreenDestination(it))
+                        uiViewModel.apModuleUri = it
+                        navController.navigate("Install")
                     },
                     onClickModule = { id, name, hasWebUi ->
                         if (hasWebUi) {

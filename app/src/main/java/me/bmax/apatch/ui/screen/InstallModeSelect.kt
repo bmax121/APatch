@@ -29,27 +29,25 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import androidx.navigation.NavHostController
 import me.bmax.apatch.R
 import me.bmax.apatch.ui.component.rememberConfirmDialog
-import me.bmax.apatch.ui.screen.destinations.PatchesDestination
 import me.bmax.apatch.ui.viewmodel.PatchesViewModel
+import me.bmax.apatch.ui.viewmodel.UIViewModel
 import me.bmax.apatch.util.isABDevice
 import me.bmax.apatch.util.rootAvailable
 
 var selectedBootImage: Uri? = null
 
-@Destination
 @Composable
-fun InstallModeSelectScreen(navigator: DestinationsNavigator) {
+fun InstallModeSelectScreen(navController: NavHostController, uiViewModel: UIViewModel) {
     var installMethod by remember {
         mutableStateOf<InstallMethod?>(null)
     }
 
     Scaffold(topBar = {
         TopBar(
-            onBack = { navigator.popBackStack() },
+            onBack = { navController.popBackStack() },
         )
     }) {
         Column(modifier = Modifier.padding(it)) {
@@ -57,7 +55,8 @@ fun InstallModeSelectScreen(navigator: DestinationsNavigator) {
                 onSelected = { method ->
                     installMethod = method
                 },
-                navigator = navigator
+                navController = navController,
+                uiViewModel = uiViewModel
             )
 
         }
@@ -87,7 +86,8 @@ sealed class InstallMethod {
 @Composable
 private fun SelectInstallMethod(
     onSelected: (InstallMethod) -> Unit = {},
-    navigator: DestinationsNavigator
+    navController: NavHostController,
+    uiViewModel: UIViewModel
 ) {
     val rootAvailable = rootAvailable()
     val isAbDevice = isABDevice()
@@ -111,7 +111,8 @@ private fun SelectInstallMethod(
                 selectedOption = option
                 onSelected(option)
                 selectedBootImage = option.uri
-                navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.PATCH_ONLY))
+                uiViewModel.patchMode = PatchesViewModel.PatchMode.PATCH_ONLY
+                navController.navigate("Patches")
             }
         }
     }
@@ -119,7 +120,8 @@ private fun SelectInstallMethod(
     val confirmDialog = rememberConfirmDialog(onConfirm = {
         selectedOption = InstallMethod.DirectInstallToInactiveSlot
         onSelected(InstallMethod.DirectInstallToInactiveSlot)
-        navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.INSTALL_TO_NEXT_SLOT))
+        uiViewModel.patchMode = PatchesViewModel.PatchMode.INSTALL_TO_NEXT_SLOT
+        navController.navigate("Patches")
     }, onDismiss = null)
     val dialogTitle = stringResource(id = android.R.string.dialog_alert_title)
     val dialogContent = stringResource(id = R.string.mode_select_page_install_inactive_slot_warning)
@@ -139,7 +141,8 @@ private fun SelectInstallMethod(
             is InstallMethod.DirectInstall -> {
                 selectedOption = option
                 onSelected(option)
-                navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.PATCH_AND_INSTALL))
+                uiViewModel.patchMode = PatchesViewModel.PatchMode.PATCH_AND_INSTALL
+                navController.navigate("Patches")
             }
 
             is InstallMethod.DirectInstallToInactiveSlot -> {

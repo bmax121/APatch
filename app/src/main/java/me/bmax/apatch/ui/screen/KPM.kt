@@ -72,8 +72,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.window.DialogWindowProvider
 import androidx.compose.ui.window.PopupProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import androidx.navigation.NavHostController
 import com.topjohnwu.superuser.nio.ExtendedFile
 import com.topjohnwu.superuser.nio.FileSystemManager
 import kotlinx.coroutines.Dispatchers
@@ -89,21 +88,20 @@ import me.bmax.apatch.ui.component.LoadingDialogHandle
 import me.bmax.apatch.ui.component.ProvideMenuShape
 import me.bmax.apatch.ui.component.rememberConfirmDialog
 import me.bmax.apatch.ui.component.rememberLoadingDialog
-import me.bmax.apatch.ui.screen.destinations.PatchesDestination
 import me.bmax.apatch.ui.viewmodel.KPModel
 import me.bmax.apatch.ui.viewmodel.KPModuleViewModel
 import me.bmax.apatch.ui.viewmodel.PatchesViewModel
-import me.bmax.apatch.util.ui.APDialogBlurBehindUtils
+import me.bmax.apatch.ui.viewmodel.UIViewModel
 import me.bmax.apatch.util.inputStream
+import me.bmax.apatch.util.ui.APDialogBlurBehindUtils
 import me.bmax.apatch.util.writeTo
 import java.io.IOException
 
 private const val TAG = "KernelPatchModule"
 private lateinit var targetKPMToControl: KPModel.KPMInfo
 
-@Destination
 @Composable
-fun KPModuleScreen(navigator: DestinationsNavigator) {
+fun KPModuleScreen(navController: NavHostController, uiViewModel: UIViewModel) {
     val state by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
     if (state == APApplication.State.UNKNOWN_STATE) {
         Column(
@@ -199,7 +197,8 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
                                 expanded = false
                                 when (label) {
                                     moduleEmbed -> {
-                                        navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.PATCH_AND_INSTALL))
+                                        uiViewModel.patchMode = PatchesViewModel.PatchMode.PATCH_AND_INSTALL
+                                        navController.navigate("Patches")
                                     }
 
                                     moduleInstall -> {

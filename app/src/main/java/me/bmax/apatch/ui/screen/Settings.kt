@@ -67,7 +67,6 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.window.DialogWindowProvider
 import androidx.core.content.FileProvider
 import androidx.core.os.LocaleListCompat
-import com.ramcosta.composedestinations.annotation.Destination
 import dev.utils.app.AppUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -87,7 +86,6 @@ import me.bmax.apatch.util.setGlobalNamespaceEnabled
 import me.bmax.apatch.util.ui.APDialogBlurBehindUtils
 import java.util.Locale
 
-@Destination
 @Composable
 fun SettingScreen() {
     val state by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)

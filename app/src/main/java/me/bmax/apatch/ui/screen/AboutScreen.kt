@@ -34,16 +34,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.res.ResourcesCompat
+import androidx.navigation.NavHostController
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import me.bmax.apatch.BuildConfig
 import me.bmax.apatch.R
 import me.bmax.apatch.util.Version
 
-@Destination
 @Composable
-fun AboutScreen(navigator: DestinationsNavigator) {
+fun AboutScreen(navController: NavHostController) {
     val uriHandler = LocalUriHandler.current
     val drawable = ResourcesCompat.getDrawable(
         LocalContext.current.resources,
@@ -53,7 +51,7 @@ fun AboutScreen(navigator: DestinationsNavigator) {
 
     Scaffold(
         topBar = {
-            TopBar(onBack = { navigator.popBackStack() })
+            TopBar(onBack = { navController.popBackStack() })
         }) { innerPadding ->
         Column(
             modifier = Modifier

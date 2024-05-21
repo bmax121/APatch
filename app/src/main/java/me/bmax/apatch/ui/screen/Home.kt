@@ -82,9 +82,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.window.DialogWindowProvider
 import androidx.compose.ui.window.SecureFlagPolicy
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.RootNavGraph
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import androidx.navigation.NavHostController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import me.bmax.apatch.APApplication
@@ -93,10 +91,8 @@ import me.bmax.apatch.R
 import me.bmax.apatch.apApp
 import me.bmax.apatch.ui.component.ProvideMenuShape
 import me.bmax.apatch.ui.component.rememberConfirmDialog
-import me.bmax.apatch.ui.screen.destinations.AboutScreenDestination
-import me.bmax.apatch.ui.screen.destinations.InstallModeSelectScreenDestination
-import me.bmax.apatch.ui.screen.destinations.PatchesDestination
 import me.bmax.apatch.ui.viewmodel.PatchesViewModel
+import me.bmax.apatch.ui.viewmodel.UIViewModel
 import me.bmax.apatch.util.Version
 import me.bmax.apatch.util.Version.getManagerVersion
 import me.bmax.apatch.util.checkNewVersion
@@ -104,10 +100,8 @@ import me.bmax.apatch.util.getSELinuxStatus
 import me.bmax.apatch.util.reboot
 import me.bmax.apatch.util.ui.APDialogBlurBehindUtils
 
-@RootNavGraph(start = true)
-@Destination
 @Composable
-fun HomeScreen(navigator: DestinationsNavigator) {
+fun HomeScreen(navController: NavHostController, uiViewModel: UIViewModel) {
     var showPatchFloatAction by remember { mutableStateOf(true) }
 
     val kpState by APApplication.kpStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
@@ -119,8 +113,8 @@ fun HomeScreen(navigator: DestinationsNavigator) {
 
     Scaffold(topBar = {
         TopBar(onInstallClick = {
-            navigator.navigate(InstallModeSelectScreenDestination, true)
-        }, navigator, kpState)
+            navController.navigate("InstallModeSelect")
+        }, navController, kpState)
     }) { innerPadding ->
         Column(
             modifier = Modifier
@@ -131,7 +125,7 @@ fun HomeScreen(navigator: DestinationsNavigator) {
         ) {
             Spacer(Modifier.height(0.dp))
             WarningCard()
-            KStatusCard(kpState, apState, navigator)
+            KStatusCard(kpState, apState, navController, uiViewModel)
             if (kpState != APApplication.State.UNKNOWN_STATE && apState != APApplication.State.ANDROIDPATCH_INSTALLED) {
                 AStatusCard(apState)
             }
@@ -148,7 +142,7 @@ fun HomeScreen(navigator: DestinationsNavigator) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UninstallDialog(showDialog: MutableState<Boolean>, navigator: DestinationsNavigator) {
+fun UninstallDialog(showDialog: MutableState<Boolean>, navController: NavHostController, uiViewModel: UIViewModel) {
     BasicAlertDialog(
         onDismissRequest = { showDialog.value = false }, properties = DialogProperties(
             decorFitsSystemWindows = true,
@@ -187,7 +181,8 @@ fun UninstallDialog(showDialog: MutableState<Boolean>, navigator: DestinationsNa
                     TextButton(onClick = {
                         showDialog.value = false
                         APApplication.uninstallApatch()
-                        navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.UNPATCH))
+                        uiViewModel.patchMode = PatchesViewModel.PatchMode.UNPATCH
+                        navController.navigate("Patches")
                     }) {
                         Text(text = stringResource(id = R.string.home_dialog_uninstall_all))
                     }
@@ -382,7 +377,7 @@ fun RebootDropdownItem(@StringRes id: Int, reason: String = "") {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun TopBar(onInstallClick: () -> Unit, navigator: DestinationsNavigator, kpState: APApplication.State) {
+private fun TopBar(onInstallClick: () -> Unit, navController: NavHostController, kpState: APApplication.State) {
     val uriHandler = LocalUriHandler.current
     var showDropdownMoreOptions by remember { mutableStateOf(false) }
     var showDropdownReboot by remember { mutableStateOf(false) }
@@ -445,7 +440,7 @@ private fun TopBar(onInstallClick: () -> Unit, navigator: DestinationsNavigator,
                         DropdownMenuItem(text = {
                             Text(stringResource(R.string.home_more_menu_about))
                         }, onClick = {
-                            navigator.navigate(AboutScreenDestination)
+                            navController.navigate("About")
                             showDropdownMoreOptions = false
                         })
                     }
@@ -457,7 +452,7 @@ private fun TopBar(onInstallClick: () -> Unit, navigator: DestinationsNavigator,
 
 @Composable
 private fun KStatusCard(
-    kpState: APApplication.State, apState: APApplication.State, navigator: DestinationsNavigator
+    kpState: APApplication.State, apState: APApplication.State, navController: NavHostController, uiViewModel: UIViewModel
 ) {
 
     val showAuthFailedTipDialog = remember { mutableStateOf(false) }
@@ -472,7 +467,7 @@ private fun KStatusCard(
 
     val showUninstallDialog = remember { mutableStateOf(false) }
     if (showUninstallDialog.value) {
-        UninstallDialog(showDialog = showUninstallDialog, navigator)
+        UninstallDialog(showDialog = showUninstallDialog, navController, uiViewModel)
     }
 
     val cardBackgroundColor = when (kpState) {
@@ -492,7 +487,7 @@ private fun KStatusCard(
     ElevatedCard(
         onClick = {
             if (kpState != APApplication.State.KERNELPATCH_INSTALLED) {
-                navigator.navigate(InstallModeSelectScreenDestination)
+                navController.navigate("InstallModeSelect")
             }
         },
         colors = CardDefaults.elevatedCardColors(containerColor = cardBackgroundColor),
@@ -593,9 +588,11 @@ private fun KStatusCard(
                             APApplication.State.KERNELPATCH_NEED_UPDATE -> {
                                 // todo: remove legacy compact for kp < 0.9.0
                                 if (Version.installedKPVUInt() < 0x900u) {
-                                    navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.PATCH_ONLY))
+                                    navController.navigate("Patches")
+                                    uiViewModel.patchMode = PatchesViewModel.PatchMode.PATCH_ONLY
+                                    navController.navigate("Patches")
                                 } else {
-                                    navigator.navigate(InstallModeSelectScreenDestination)
+                                    navController.navigate("InstallModeSelect")
                                 }
                             }
 
@@ -611,7 +608,8 @@ private fun KStatusCard(
                                 if (apState == APApplication.State.ANDROIDPATCH_INSTALLED || apState == APApplication.State.ANDROIDPATCH_NEED_UPDATE) {
                                     showUninstallDialog.value = true
                                 } else {
-                                    navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.UNPATCH))
+                                    uiViewModel.patchMode = PatchesViewModel.PatchMode.UNPATCH
+                                    navController.navigate("Patches")
                                 }
                             }
                         }

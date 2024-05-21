@@ -6,7 +6,6 @@ compose-bom = "2024.05.00"
 lifecycle = "2.8.0"
 accompanist = "0.34.0"
 navigation = "2.7.7"
-compose-destination = "1.10.2"
 libsu = "5.2.2"
 sheets-compose-dialogs = "1.3.0"
 markdown = "4.6.2"
@@ -59,9 +58,6 @@ io-coil-kt-coil-compose = { group = "io.coil-kt", name = "coil-compose", version
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version = "1.8.1" }
 
 me-zhanghai-android-appiconloader-coil = { group = "me.zhanghai.android.appiconloader", name = "appiconloader-coil", version = "1.5.0" }
-
-compose-destinations-animations-core = { group = "io.github.raamcosta.compose-destinations", name = "animations-core", version.ref = "compose-destination" }
-compose-destinations-ksp = { group = "io.github.raamcosta.compose-destinations", name = "ksp", version.ref = "compose-destination" }
 
 sheet-compose-dialogs-core = { group = "com.maxkeppeler.sheets-compose-dialogs", name = "core", version.ref = "sheets-compose-dialogs"}
 sheet-compose-dialogs-list = { group = "com.maxkeppeler.sheets-compose-dialogs", name = "list", version.ref = "sheets-compose-dialogs"}

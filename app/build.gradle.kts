@@ -208,9 +208,6 @@ dependencies {
     implementation(libs.com.google.accompanist.drawablepainter)
     implementation(libs.com.google.accompanist.navigation.animation)
 
-    implementation(libs.compose.destinations.animations.core)
-    ksp(libs.compose.destinations.ksp)
-
     implementation(libs.com.github.topjohnwu.libsu.core)
     implementation(libs.com.github.topjohnwu.libsu.service)
     implementation(libs.com.github.topjohnwu.libsu.nio)

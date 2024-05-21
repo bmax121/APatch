@@ -13,16 +13,10 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
 import me.bmax.apatch.R
-import me.bmax.apatch.ui.screen.destinations.APModuleScreenDestination
-import me.bmax.apatch.ui.screen.destinations.HomeScreenDestination
-import me.bmax.apatch.ui.screen.destinations.KPModuleScreenDestination
-import me.bmax.apatch.ui.screen.destinations.SettingScreenDestination
-import me.bmax.apatch.ui.screen.destinations.SuperUserScreenDestination
 
 enum class BottomBarDestination(
-    val direction: DirectionDestinationSpec,
+    val direction: String,
     @StringRes val label: Int,
     val iconSelected: ImageVector,
     val iconNotSelected: ImageVector,
@@ -30,7 +24,7 @@ enum class BottomBarDestination(
     val aPatchRequired: Boolean,
 ) {
     Home(
-        HomeScreenDestination,
+        "Home",
         R.string.home,
         Icons.Filled.Home,
         Icons.Outlined.Home,
@@ -38,7 +32,7 @@ enum class BottomBarDestination(
         false
     ),
     KModule(
-        KPModuleScreenDestination,
+        "KPModule",
         R.string.kpm,
         Icons.Filled.Build,
         Icons.Outlined.Build,
@@ -46,7 +40,7 @@ enum class BottomBarDestination(
         false
     ),
     SuperUser(
-        SuperUserScreenDestination,
+        "SuperUser",
         R.string.su_title,
         Icons.Filled.Security,
         Icons.Outlined.Security,
@@ -54,7 +48,7 @@ enum class BottomBarDestination(
         false
     ),
     AModule(
-        APModuleScreenDestination,
+        "APModule",
         R.string.apm,
         Icons.Filled.Apps,
         Icons.Outlined.Apps,
@@ -62,7 +56,7 @@ enum class BottomBarDestination(
         true
     ),
     Settings(
-        SettingScreenDestination,
+        "Setting",
         R.string.settings,
         Icons.Filled.Settings,
         Icons.Outlined.Settings,
