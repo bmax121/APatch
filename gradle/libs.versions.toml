@@ -13,7 +13,6 @@ markdown = "4.6.2"
 ui = "1.6.7"
 webkit = "1.11.0"
 androidxCoreSplashscreen = "1.0.1"
-androidx-compose-compiler = "1.5.14"
 
 [plugins]
 agp-app = { id = "com.android.application", version.ref = "agp" }
@@ -23,13 +22,13 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 lsplugin-apksign = { id = "org.lsposed.lsplugin.apksign", version = "1.4" }
 lsplugin-resopt = { id = "org.lsposed.lsplugin.resopt", version = "1.6" }
 lsplugin-cmaker = { id = "org.lsposed.lsplugin.cmaker", version = "1.2" }
+kotlin-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 
 [libraries]
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version = "1.9.0" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
 
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
-androidx-compose-compiler = { group = "androidx.compose.compiler", name = "compiler", version.ref = "androidx-compose-compiler" }
 androidx-compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 androidx-compose-material = { group = "androidx.compose.material", name = "material" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }

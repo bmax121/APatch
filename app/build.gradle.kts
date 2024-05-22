@@ -1,11 +1,10 @@
 import com.android.build.gradle.internal.api.BaseVariantOutputImpl
-import java.net.URL
-import java.io.File
 import java.net.URI
 
 plugins {
     alias(libs.plugins.agp.app)
     alias(libs.plugins.kotlin)
+    alias(libs.plugins.kotlin.compose.compiler)
     alias(libs.plugins.ksp)
     alias(libs.plugins.lsplugin.apksign)
     alias(libs.plugins.lsplugin.resopt)
@@ -31,14 +30,20 @@ android {
             isDebuggable = true
             isMinifyEnabled = false
             isShrinkResources = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
         release {
             isMinifyEnabled = true
             isShrinkResources = true
             isDebuggable = false
             multiDexEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
 
@@ -58,8 +63,9 @@ android {
         jvmTarget = "21"
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.androidx.compose.compiler.get().version
+    composeCompiler {
+        enableIntrinsicRemember = true
+        enableNonSkippingGroupOptimization = true
     }
 
     packaging {
@@ -101,10 +107,7 @@ android {
 }
 
 fun registerDownloadTask(
-    taskName: String,
-    srcUrl: String,
-    destPath: String,
-    project: Project
+    taskName: String, srcUrl: String, destPath: String, project: Project
 ) {
     project.tasks.register(taskName) {
         val destFile = File(destPath)
@@ -166,10 +169,10 @@ registerDownloadTask(
 tasks.register<Copy>("mergeFlashableScript") {
     into("${project.projectDir}/src/main/resources/META-INF/com/google/android")
     from(rootProject.file("${project.rootDir}/scripts/update_binary.sh")) {
-         rename { "update-binary" }
+        rename { "update-binary" }
     }
     from(rootProject.file("${project.rootDir}/scripts/update_binary.sh")) {
-         rename { "updater-script" }
+        rename { "updater-script" }
     }
 }
 
