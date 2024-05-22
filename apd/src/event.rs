@@ -3,7 +3,6 @@ use log::{info, warn};
 use std::env;
 use std::{collections::HashMap, path::Path};
 
-use crate::defs::PTS_NAME;
 use crate::module::prune_modules;
 use crate::{
     assets, defs, mount, restorecon,

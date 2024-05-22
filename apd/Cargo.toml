@@ -10,7 +10,7 @@ rust-version = "1.77.2"
 anyhow = "1"
 clap = { version = "4", features = ["derive"] }
 const_format = "0.2"
-zip = { version = "1.3", features = ["deflate", "deflate-zlib", "deflate-zopfli", "bzip2", "time", "zstd"], default-features = false }
+zip = { version = "1.3", features = ["deflate", "deflate64", "bzip2", "time", "zstd"], default-features = false }
 zip-extensions = "0.6"
 java-properties = "2.0.0"
 log = "0.4"
