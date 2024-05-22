@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             val uiViewModel = viewModel<UIViewModel>()
-            APatchTheme {
+            APatchTheme(uiViewModel) {
                 val navController = rememberNavController()
                 val snackBarHostState = remember { SnackbarHostState() }
 
@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity() {
                             composable(route = "SuperUser") { SuperUserScreen() }
                             composable(route = "APModule") { APModuleScreen(navController, uiViewModel) }
                             composable(route = "Install") { InstallScreen(navController, uiViewModel) }
-                            composable(route = "Setting") { SettingScreen() }
+                            composable(route = "Setting") { SettingScreen(uiViewModel) }
                         }
                     }
                 }

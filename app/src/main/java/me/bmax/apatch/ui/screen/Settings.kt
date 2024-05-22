@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -77,6 +79,7 @@ import me.bmax.apatch.R
 import me.bmax.apatch.ui.component.SwitchItem
 import me.bmax.apatch.ui.component.rememberConfirmDialog
 import me.bmax.apatch.ui.component.rememberLoadingDialog
+import me.bmax.apatch.ui.viewmodel.UIViewModel
 import me.bmax.apatch.util.APatchKeyHelper
 import me.bmax.apatch.util.getBugreportFile
 import me.bmax.apatch.util.hideapk.HideAPK
@@ -87,7 +90,7 @@ import me.bmax.apatch.util.ui.APDialogBlurBehindUtils
 import java.util.Locale
 
 @Composable
-fun SettingScreen() {
+fun SettingScreen(uiViewModel: UIViewModel) {
     val state by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
     val kPatchReady = state != APApplication.State.UNKNOWN_STATE
     val aPatchReady = (state == APApplication.State.ANDROIDPATCH_INSTALLING ||
@@ -130,7 +133,7 @@ fun SettingScreen() {
 
         val showThemeChooseDialog = remember { mutableStateOf(false) }
         if (showThemeChooseDialog.value) {
-            ThemeChooseDialog(showThemeChooseDialog)
+            ThemeChooseDialog(showThemeChooseDialog, uiViewModel)
         }
 
         Column(
@@ -143,7 +146,6 @@ fun SettingScreen() {
             val context = LocalContext.current
             val scope = rememberCoroutineScope()
             val prefs = APApplication.sharedPreferences
-            val activity = LocalContext.current as Activity
 
             // clear key
             if (kPatchReady) {
@@ -238,63 +240,42 @@ fun SettingScreen() {
             }
 
             // Night Mode Follow System
-            var nightFollowSystem by rememberSaveable {
-                mutableStateOf(
-                    prefs.getBoolean("night_mode_follow_sys", true)
-                )
-            }
             SwitchItem(
                 icon = Icons.Filled.InvertColors,
                 title = stringResource(id = R.string.settings_night_mode_follow_sys),
                 summary = stringResource(id = R.string.settings_night_mode_follow_sys_summary),
-                checked = nightFollowSystem
+                checked = uiViewModel.nightFollowSystem
             ) {
                 prefs.edit().putBoolean("night_mode_follow_sys", it).apply()
-                nightFollowSystem = it
-
-                activity.recreate()
+                uiViewModel.nightFollowSystem = it
             }
 
             // Custom Night Theme Switch
-            if (!nightFollowSystem) {
-                var nightThemeEnabled by rememberSaveable {
-                    mutableStateOf(
-                        prefs.getBoolean("night_mode_enabled", false)
-                    )
-                }
+            if (!uiViewModel.nightFollowSystem) {
                 SwitchItem(
                     icon = Icons.Filled.DarkMode,
                     title = stringResource(id = R.string.settings_night_theme_enabled),
-                    checked = nightThemeEnabled
+                    checked = uiViewModel.darkTheme
                 ) {
                     prefs.edit().putBoolean("night_mode_enabled", it).apply()
-                    nightThemeEnabled = it
-
-                    activity.recreate()
+                    uiViewModel.darkTheme = it
                 }
             }
 
             // System dynamic color theme
             val isDynamicColorSupport = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
             if (isDynamicColorSupport) {
-                var useSystemDynamicColor by rememberSaveable {
-                    mutableStateOf(
-                        prefs.getBoolean("use_system_color_theme", true)
-                    )
-                }
                 SwitchItem(
                     icon = Icons.Filled.ColorLens,
                     title = stringResource(id = R.string.settings_use_system_color_theme),
                     summary = stringResource(id = R.string.settings_use_system_color_theme_summary),
-                    checked = useSystemDynamicColor
+                    checked = uiViewModel.dynamicColor
                 ) {
                     prefs.edit().putBoolean("use_system_color_theme", it).apply()
-                    useSystemDynamicColor = it
-
-                    activity.recreate()
+                    uiViewModel.dynamicColor = it
                 }
 
-                if (!useSystemDynamicColor) {
+                if (!uiViewModel.dynamicColor) {
                     ListItem(
                         headlineContent = {
                             Text(text = stringResource(id = R.string.settings_custom_color_theme))
@@ -305,7 +286,7 @@ fun SettingScreen() {
                         supportingContent = {
                             val colorMode = prefs.getString("custom_color", "blue")
                             Text(
-                                text = colorNameToString(colorMode.toString()),
+                                text = stringResource(colorNameToString(colorMode.toString())),
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.outline
                             )
@@ -325,7 +306,7 @@ fun SettingScreen() {
                     supportingContent = {
                         val colorMode = prefs.getString("custom_color", "blue")
                         Text(
-                            text = colorNameToString(colorMode.toString()),
+                            text = stringResource(colorNameToString(colorMode.toString())),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.outline
                         )
@@ -443,9 +424,8 @@ fun SettingScreen() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ThemeChooseDialog(showDialog: MutableState<Boolean>) {
+fun ThemeChooseDialog(showDialog: MutableState<Boolean>, uiViewModel: UIViewModel) {
     val prefs = APApplication.sharedPreferences
-    val activity = LocalContext.current as Activity
 
     BasicAlertDialog(
         onDismissRequest = { showDialog.value = false },
@@ -463,193 +443,13 @@ fun ThemeChooseDialog(showDialog: MutableState<Boolean>) {
             color = AlertDialogDefaults.containerColor,
         ) {
             LazyColumn {
-                item {
+                items(colorsList()) {
                     ListItem(
-                        headlineContent = { Text(text = stringResource(R.string.amber_theme)) },
+                        headlineContent = { Text(text = stringResource(it.nameId)) },
                         modifier = Modifier.clickable {
                             showDialog.value = false
-                            prefs.edit().putString("custom_color", "amber").apply()
-                            activity.recreate()
-                        }
-                    )
-                }
-                item {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(R.string.blue_grey_theme)) },
-                        modifier = Modifier.clickable {
-                            showDialog.value = false
-                            prefs.edit().putString("custom_color", "blue_grey").apply()
-                            activity.recreate()
-                        }
-                    )
-                }
-                item {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(R.string.blue_theme)) },
-                        modifier = Modifier.clickable {
-                            showDialog.value = false
-                            prefs.edit().putString("custom_color", "blue").apply()
-                            activity.recreate()
-                        }
-                    )
-                }
-                item {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(R.string.brown_theme)) },
-                        modifier = Modifier.clickable {
-                            showDialog.value = false
-                            prefs.edit().putString("custom_color", "brown").apply()
-                            activity.recreate()
-                        }
-                    )
-                }
-                item {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(R.string.cyan_theme)) },
-                        modifier = Modifier.clickable {
-                            showDialog.value = false
-                            prefs.edit().putString("custom_color", "cyan").apply()
-                            activity.recreate()
-                        }
-                    )
-                }
-                item {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(R.string.deep_orange_theme)) },
-                        modifier = Modifier.clickable {
-                            showDialog.value = false
-                            prefs.edit().putString("custom_color", "deep_orange").apply()
-                            activity.recreate()
-                        }
-                    )
-                }
-                item {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(R.string.deep_purple_theme)) },
-                        modifier = Modifier.clickable {
-                            showDialog.value = false
-                            prefs.edit().putString("custom_color", "deep_purple").apply()
-                            activity.recreate()
-                        }
-                    )
-                }
-                item {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(R.string.green_theme)) },
-                        modifier = Modifier.clickable {
-                            showDialog.value = false
-                            prefs.edit().putString("custom_color", "green").apply()
-                            activity.recreate()
-                        }
-                    )
-                }
-                item {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(R.string.indigo_theme)) },
-                        modifier = Modifier.clickable {
-                            showDialog.value = false
-                            prefs.edit().putString("custom_color", "indigo").apply()
-                            activity.recreate()
-                        }
-                    )
-                }
-                item {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(R.string.light_blue_theme)) },
-                        modifier = Modifier.clickable {
-                            showDialog.value = false
-                            prefs.edit().putString("custom_color", "light_blue").apply()
-                            activity.recreate()
-                        }
-                    )
-                }
-                item {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(R.string.light_green_theme)) },
-                        modifier = Modifier.clickable {
-                            showDialog.value = false
-                            prefs.edit().putString("custom_color", "light_green").apply()
-                            activity.recreate()
-                        }
-                    )
-                }
-                item {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(R.string.lime_theme)) },
-                        modifier = Modifier.clickable {
-                            showDialog.value = false
-                            prefs.edit().putString("custom_color", "lime").apply()
-                            activity.recreate()
-                        }
-                    )
-                }
-                item {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(R.string.orange_theme)) },
-                        modifier = Modifier.clickable {
-                            showDialog.value = false
-                            prefs.edit().putString("custom_color", "orange").apply()
-                            activity.recreate()
-                        }
-                    )
-                }
-                item {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(R.string.pink_theme)) },
-                        modifier = Modifier.clickable {
-                            showDialog.value = false
-                            prefs.edit().putString("custom_color", "pink").apply()
-                            activity.recreate()
-                        }
-                    )
-                }
-                item {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(R.string.purple_theme)) },
-                        modifier = Modifier.clickable {
-                            showDialog.value = false
-                            prefs.edit().putString("custom_color", "purple").apply()
-                            activity.recreate()
-                        }
-                    )
-                }
-                item {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(R.string.red_theme)) },
-                        modifier = Modifier.clickable {
-                            showDialog.value = false
-                            prefs.edit().putString("custom_color", "red").apply()
-                            activity.recreate()
-                        }
-                    )
-                }
-                item {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(R.string.sakura_theme)) },
-                        modifier = Modifier.clickable {
-                            showDialog.value = false
-                            prefs.edit().putString("custom_color", "sakura").apply()
-                            activity.recreate()
-                        }
-                    )
-                }
-                item {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(R.string.teal_theme)) },
-                        modifier = Modifier.clickable {
-                            showDialog.value = false
-                            prefs.edit().putString("custom_color", "teal").apply()
-                            activity.recreate()
-                        }
-                    )
-                }
-                item {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(R.string.yellow_theme)) },
-                        modifier = Modifier.clickable {
-                            showDialog.value = false
-                            prefs.edit().putString("custom_color", "yellow").apply()
-                            activity.recreate()
+                            prefs.edit().putString("custom_color", it.name).apply()
+                            uiViewModel.customColorScheme = it.name
                         }
                     )
                 }
@@ -664,29 +464,58 @@ fun ThemeChooseDialog(showDialog: MutableState<Boolean>) {
 }
 
 @Composable
-fun colorNameToString(colorName: String): String {
-    return when (colorName) {
-        "amber" -> stringResource(R.string.amber_theme)
-        "blue_grey" -> stringResource(R.string.blue_grey_theme)
-        "blue" -> stringResource(R.string.blue_theme)
-        "brown" -> stringResource(R.string.brown_theme)
-        "cyan" -> stringResource(R.string.cyan_theme)
-        "deep_orange" -> stringResource(R.string.deep_orange_theme)
-        "deep_purple" -> stringResource(R.string.deep_purple_theme)
-        "green" -> stringResource(R.string.green_theme)
-        "indigo" -> stringResource(R.string.indigo_theme)
-        "light_blue" -> stringResource(R.string.light_blue_theme)
-        "light_green" -> stringResource(R.string.light_green_theme)
-        "lime" -> stringResource(R.string.lime_theme)
-        "orange" -> stringResource(R.string.orange_theme)
-        "pink" -> stringResource(R.string.pink_theme)
-        "purple" -> stringResource(R.string.purple_theme)
-        "red" -> stringResource(R.string.red_theme)
-        "sakura" -> stringResource(R.string.sakura_theme)
-        "teal" -> stringResource(R.string.teal_theme)
-        "yellow" -> stringResource(R.string.yellow_theme)
-        else -> stringResource(R.string.blue_theme)
+private fun colorNameToString(colorName: String): Int {
+    return when(colorName) {
+        "amber" -> R.string.amber_theme
+        "blue_grey" -> R.string.blue_grey_theme
+        "blue" -> R.string.blue_theme
+        "brown" -> R.string.brown_theme
+        "cyan" -> R.string.cyan_theme
+        "deep_orange" -> R.string.deep_orange_theme
+        "deep_purple" -> R.string.deep_purple_theme
+        "green" -> R.string.green_theme
+        "indigo" -> R.string.indigo_theme
+        "light_blue" -> R.string.light_blue_theme
+        "light_green" -> R.string.light_green_theme
+        "lime" -> R.string.lime_theme
+        "orange" -> R.string.orange_theme
+        "pink" -> R.string.pink_theme
+        "purple" -> R.string.purple_theme
+        "red" -> R.string.red_theme
+        "sakura" -> R.string.sakura_theme
+        "teal" -> R.string.teal_theme
+        "yellow" -> R.string.yellow_theme
+        else -> R.string.blue_theme
     }
+}
+
+private data class APColor(
+    val name: String,
+    @StringRes val nameId: Int
+)
+
+private fun colorsList(): List<APColor> {
+    return listOf(
+        APColor("amber", R.string.amber_theme),
+        APColor("blue_grey", R.string.blue_grey_theme),
+        APColor("blue", R.string.blue_theme),
+        APColor("brown", R.string.brown_theme),
+        APColor("cyan", R.string.cyan_theme),
+        APColor("deep_orange", R.string.deep_orange_theme),
+        APColor("deep_purple", R.string.deep_purple_theme),
+        APColor("green", R.string.green_theme),
+        APColor("indigo", R.string.indigo_theme),
+        APColor("light_blue", R.string.light_blue_theme),
+        APColor("light_green", R.string.light_green_theme),
+        APColor("lime", R.string.lime_theme),
+        APColor("orange", R.string.orange_theme),
+        APColor("pink", R.string.pink_theme),
+        APColor("purple", R.string.purple_theme),
+        APColor("red", R.string.red_theme),
+        APColor("sakura", R.string.sakura_theme),
+        APColor("teal", R.string.teal_theme),
+        APColor("yellow", R.string.yellow_theme),
+    )
 }
 
 val suPathChecked: (path: String) -> Boolean = {
