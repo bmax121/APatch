@@ -1,6 +1,5 @@
 package me.bmax.apatch.ui.screen
 
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -80,6 +79,7 @@ import me.bmax.apatch.R
 import me.bmax.apatch.ui.component.SwitchItem
 import me.bmax.apatch.ui.component.rememberConfirmDialog
 import me.bmax.apatch.ui.component.rememberLoadingDialog
+import me.bmax.apatch.ui.theme.refreshTheme
 import me.bmax.apatch.util.APatchKeyHelper
 import me.bmax.apatch.util.getBugreportFile
 import me.bmax.apatch.util.hideapk.HideAPK
@@ -147,7 +147,6 @@ fun SettingScreen() {
             val context = LocalContext.current
             val scope = rememberCoroutineScope()
             val prefs = APApplication.sharedPreferences
-            val activity = LocalContext.current as Activity
 
             // clear key
             if (kPatchReady) {
@@ -255,8 +254,7 @@ fun SettingScreen() {
             ) {
                 prefs.edit().putBoolean("night_mode_follow_sys", it).apply()
                 nightFollowSystem = it
-
-                activity.recreate()
+                refreshTheme = true
             }
 
             // Custom Night Theme Switch
@@ -273,8 +271,7 @@ fun SettingScreen() {
                 ) {
                     prefs.edit().putBoolean("night_mode_enabled", it).apply()
                     nightThemeEnabled = it
-
-                    activity.recreate()
+                    refreshTheme = true
                 }
             }
 
@@ -294,8 +291,7 @@ fun SettingScreen() {
                 ) {
                     prefs.edit().putBoolean("use_system_color_theme", it).apply()
                     useSystemDynamicColor = it
-
-                    activity.recreate()
+                    refreshTheme = true
                 }
 
                 if (!useSystemDynamicColor) {
@@ -449,7 +445,6 @@ fun SettingScreen() {
 @Composable
 fun ThemeChooseDialog(showDialog: MutableState<Boolean>) {
     val prefs = APApplication.sharedPreferences
-    val activity = LocalContext.current as Activity
 
     BasicAlertDialog(
         onDismissRequest = { showDialog.value = false },
@@ -473,7 +468,7 @@ fun ThemeChooseDialog(showDialog: MutableState<Boolean>) {
                         modifier = Modifier.clickable {
                             showDialog.value = false
                             prefs.edit().putString("custom_color", it.name).apply()
-                            activity.recreate()
+                            refreshTheme = true
                         }
                     )
                 }
@@ -487,7 +482,6 @@ fun ThemeChooseDialog(showDialog: MutableState<Boolean>) {
 
 }
 
-@Composable
 private fun colorNameToString(colorName: String): Int {
     return when(colorName) {
         "amber" -> R.string.amber_theme

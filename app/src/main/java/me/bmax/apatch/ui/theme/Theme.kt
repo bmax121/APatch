@@ -1,6 +1,5 @@
 package me.bmax.apatch.ui.theme
 
-import android.content.Context
 import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
@@ -10,10 +9,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import kotlinx.coroutines.delay
 import me.bmax.apatch.APApplication
 
 @Composable
@@ -44,23 +49,43 @@ private fun SystemBarStyle(
     }
 }
 
+var refreshTheme = false
+
 @Composable
 fun APatchTheme(
     content: @Composable () -> Unit
 ) {
     val context = LocalContext.current
     val prefs = APApplication.sharedPreferences
-    val darkTheme = if (prefs.getBoolean("night_mode_follow_sys", true)) {
+
+    var darkThemeFollowSys by remember { mutableStateOf(prefs.getBoolean("night_mode_follow_sys", true)) }
+    var nightModeEnabled by remember { mutableStateOf(prefs.getBoolean("night_mode_enabled", false)) }
+    // Dynamic color is available on Android 12+, and custom 1t!
+    var dynamicColor by remember {
+        mutableStateOf(
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) prefs.getBoolean("use_system_color_theme", true) else false
+        )
+    }
+    var customColorScheme by remember { mutableStateOf(prefs.getString("custom_color", "blue")) }
+
+    LaunchedEffect(Unit) {
+        while(true) {
+            if(refreshTheme) {
+                darkThemeFollowSys = prefs.getBoolean("night_mode_follow_sys", true)
+                nightModeEnabled = prefs.getBoolean("night_mode_enabled", false)
+                dynamicColor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) prefs.getBoolean("use_system_color_theme", true) else false
+                customColorScheme = prefs.getString("custom_color", "blue")
+                refreshTheme = false
+            }
+            delay(50)
+        }
+    }
+
+    val darkTheme = if (darkThemeFollowSys) {
         isSystemInDarkTheme()
     } else {
-        prefs.getBoolean("night_mode_enabled", false)
+       nightModeEnabled
     }
-    // Dynamic color is available on Android 12+, and custom 1t!
-    val dynamicColor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) prefs.getBoolean(
-        "use_system_color_theme", true
-    ) else false
-
-    val customColorScheme = prefs.getString("custom_color", "blue")
 
     val colorScheme = if (!dynamicColor) {
         if (darkTheme) {
