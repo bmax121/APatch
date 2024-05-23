@@ -36,6 +36,7 @@
 
     <string name="about_source_code"><![CDATA[<p>View source code at %1$s<p/>Join our %2$s channel<p/>Join our %3$s group]]></string>
     <string name="send_log">Send Log</string>
+    <string name="save_log">Save Logs</string>
     <string name="safe_mode">Safe mode</string>
 
     <string name="super_key">SuperKey</string>
