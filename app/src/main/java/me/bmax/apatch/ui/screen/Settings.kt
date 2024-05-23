@@ -1,10 +1,10 @@
 package me.bmax.apatch.ui.screen
 
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -78,6 +79,7 @@ import me.bmax.apatch.R
 import me.bmax.apatch.ui.component.SwitchItem
 import me.bmax.apatch.ui.component.rememberConfirmDialog
 import me.bmax.apatch.ui.component.rememberLoadingDialog
+import me.bmax.apatch.ui.theme.refreshTheme
 import me.bmax.apatch.util.APatchKeyHelper
 import me.bmax.apatch.util.getBugreportFile
 import me.bmax.apatch.util.hideapk.HideAPK
@@ -92,9 +94,8 @@ import java.util.Locale
 fun SettingScreen() {
     val state by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
     val kPatchReady = state != APApplication.State.UNKNOWN_STATE
-    val aPatchReady = (state == APApplication.State.ANDROIDPATCH_INSTALLING ||
-            state == APApplication.State.ANDROIDPATCH_INSTALLED ||
-            state == APApplication.State.ANDROIDPATCH_NEED_UPDATE)
+    val aPatchReady =
+        (state == APApplication.State.ANDROIDPATCH_INSTALLING || state == APApplication.State.ANDROIDPATCH_INSTALLED || state == APApplication.State.ANDROIDPATCH_NEED_UPDATE)
     //val bIsManagerHide = AppUtils.getPackageName() != APPLICATION_ID
     var isGlobalNamespaceEnabled by rememberSaveable {
         mutableStateOf(false)
@@ -105,11 +106,9 @@ fun SettingScreen() {
     if (kPatchReady && aPatchReady) {
         isGlobalNamespaceEnabled = isGlobalNamespaceEnabled()
     }
-    Scaffold(
-        topBar = {
-            TopBar()
-        }
-    ) { paddingValues ->
+    Scaffold(topBar = {
+        TopBar()
+    }) { paddingValues ->
 
         val loadingDialog = rememberLoadingDialog()
         val clearKeyDialog = rememberConfirmDialog(onConfirm = {
@@ -145,20 +144,17 @@ fun SettingScreen() {
             val context = LocalContext.current
             val scope = rememberCoroutineScope()
             val prefs = APApplication.sharedPreferences
-            val activity = LocalContext.current as Activity
 
             // clear key
             if (kPatchReady) {
                 val clearKeyDialogTitle = stringResource(id = R.string.clear_super_key)
                 val clearKeyDialogContent =
                     stringResource(id = R.string.settings_clear_super_key_dialog)
-                ListItem(
-                    leadingContent = {
-                        Icon(
-                            Icons.Filled.Key,
-                            stringResource(id = R.string.super_key)
-                        )
-                    },
+                ListItem(leadingContent = {
+                    Icon(
+                        Icons.Filled.Key, stringResource(id = R.string.super_key)
+                    )
+                },
                     headlineContent = { Text(stringResource(id = R.string.clear_super_key)) },
                     modifier = Modifier.clickable {
                         clearKeyDialog.showConfirm(
@@ -167,26 +163,22 @@ fun SettingScreen() {
                             markdown = false,
                         )
 
-                    }
-                )
+                    })
             }
 
             // store key local?
-            SwitchItem(
-                icon = Icons.Filled.Key,
+            SwitchItem(icon = Icons.Filled.Key,
                 title = stringResource(id = R.string.settings_donot_store_superkey),
                 summary = stringResource(id = R.string.settings_donot_store_superkey_summary),
                 checked = bSkipStoreSuperKey,
                 onCheckedChange = {
                     bSkipStoreSuperKey = it
                     APatchKeyHelper.setShouldSkipStoreSuperKey(bSkipStoreSuperKey)
-                }
-            )
+                })
 
             // Global mount
             if (kPatchReady && aPatchReady) {
-                SwitchItem(
-                    icon = Icons.Filled.Engineering,
+                SwitchItem(icon = Icons.Filled.Engineering,
                     title = stringResource(id = R.string.settings_global_namespace_mode),
                     summary = stringResource(id = R.string.settings_global_namespace_mode_summary),
                     checked = isGlobalNamespaceEnabled,
@@ -199,8 +191,7 @@ fun SettingScreen() {
                             }
                         )
                         isGlobalNamespaceEnabled = it
-                    }
-                )
+                    })
             }
 
             // Webview Debug
@@ -253,8 +244,7 @@ fun SettingScreen() {
             ) {
                 prefs.edit().putBoolean("night_mode_follow_sys", it).apply()
                 nightFollowSystem = it
-
-                activity.recreate()
+                refreshTheme.value = true
             }
 
             // Custom Night Theme Switch
@@ -271,8 +261,7 @@ fun SettingScreen() {
                 ) {
                     prefs.edit().putBoolean("night_mode_enabled", it).apply()
                     nightThemeEnabled = it
-
-                    activity.recreate()
+                    refreshTheme.value = true
                 }
             }
 
@@ -292,48 +281,37 @@ fun SettingScreen() {
                 ) {
                     prefs.edit().putBoolean("use_system_color_theme", it).apply()
                     useSystemDynamicColor = it
-
-                    activity.recreate()
+                    refreshTheme.value = true
                 }
 
                 if (!useSystemDynamicColor) {
-                    ListItem(
-                        headlineContent = {
-                            Text(text = stringResource(id = R.string.settings_custom_color_theme))
-                        },
-                        modifier = Modifier.clickable {
-                            showThemeChooseDialog.value = true
-                        },
-                        supportingContent = {
-                            val colorMode = prefs.getString("custom_color", "blue")
-                            Text(
-                                text = colorNameToString(colorMode.toString()),
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.outline
-                            )
-                        },
-                        leadingContent = { Icon(Icons.Filled.FormatColorFill, null) }
-                    )
-
-                }
-            } else {
-                ListItem(
-                    headlineContent = {
+                    ListItem(headlineContent = {
                         Text(text = stringResource(id = R.string.settings_custom_color_theme))
-                    },
-                    modifier = Modifier.clickable {
+                    }, modifier = Modifier.clickable {
                         showThemeChooseDialog.value = true
-                    },
-                    supportingContent = {
+                    }, supportingContent = {
                         val colorMode = prefs.getString("custom_color", "blue")
                         Text(
-                            text = colorNameToString(colorMode.toString()),
+                            text = stringResource(colorNameToString(colorMode.toString())),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.outline
                         )
-                    },
-                    leadingContent = { Icon(Icons.Filled.FormatColorFill, null) }
-                )
+                    }, leadingContent = { Icon(Icons.Filled.FormatColorFill, null) })
+
+                }
+            } else {
+                ListItem(headlineContent = {
+                    Text(text = stringResource(id = R.string.settings_custom_color_theme))
+                }, modifier = Modifier.clickable {
+                    showThemeChooseDialog.value = true
+                }, supportingContent = {
+                    val colorMode = prefs.getString("custom_color", "blue")
+                    Text(
+                        text = stringResource(colorNameToString(colorMode.toString())),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.outline
+                    )
+                }, leadingContent = { Icon(Icons.Filled.FormatColorFill, null) })
             }
 
             /*
@@ -364,52 +342,39 @@ fun SettingScreen() {
 
             // su path
             if (kPatchReady) {
-                ListItem(
-                    leadingContent = {
-                        Icon(
-                            Icons.Filled.Commit,
-                            stringResource(id = R.string.setting_reset_su_path)
-                        )
-                    },
-                    supportingContent = {
-                    },
+                ListItem(leadingContent = {
+                    Icon(
+                        Icons.Filled.Commit, stringResource(id = R.string.setting_reset_su_path)
+                    )
+                },
+                    supportingContent = {},
                     headlineContent = { Text(stringResource(id = R.string.setting_reset_su_path)) },
                     modifier = Modifier.clickable {
                         showResetSuPathDialog.value = true
-                    }
-                )
+                    })
             }
 
             // language
-            ListItem(
-                headlineContent = {
-                    Text(text = stringResource(id = R.string.settings_app_language))
-                },
-                modifier = Modifier.clickable {
-                    showLanguageDialog.value = true
-                },
-                supportingContent = {
-                    Text(
-                        text = AppCompatDelegate.getApplicationLocales()[0]?.displayLanguage?.replaceFirstChar {
-                            if (it.isLowerCase()) it.titlecase(
-                                Locale.getDefault()
-                            ) else it.toString()
-                        } ?: stringResource(id = R.string.system_default),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.outline
-                    )
-                },
-                leadingContent = { Icon(Icons.Filled.Translate, null) }
-            )
+            ListItem(headlineContent = {
+                Text(text = stringResource(id = R.string.settings_app_language))
+            }, modifier = Modifier.clickable {
+                showLanguageDialog.value = true
+            }, supportingContent = {
+                Text(text = AppCompatDelegate.getApplicationLocales()[0]?.displayLanguage?.replaceFirstChar {
+                    if (it.isLowerCase()) it.titlecase(
+                        Locale.getDefault()
+                    ) else it.toString()
+                } ?: stringResource(id = R.string.system_default),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.outline)
+            }, leadingContent = { Icon(Icons.Filled.Translate, null) })
 
             // log
-            ListItem(
-                leadingContent = {
-                    Icon(
-                        Icons.Filled.BugReport,
-                        stringResource(id = R.string.send_log)
-                    )
-                },
+            ListItem(leadingContent = {
+                Icon(
+                    Icons.Filled.BugReport, stringResource(id = R.string.send_log)
+                )
+            },
                 headlineContent = { Text(stringResource(id = R.string.send_log)) },
                 modifier = Modifier.clickable {
                     scope.launch {
@@ -419,12 +384,9 @@ fun SettingScreen() {
                             }
                         }
                         val myPkgName = AppUtils.getPackageName()
-                        val uri: Uri =
-                            FileProvider.getUriForFile(
-                                context,
-                                "${myPkgName}.fileprovider",
-                                bugreport
-                            )
+                        val uri: Uri = FileProvider.getUriForFile(
+                            context, "${myPkgName}.fileprovider", bugreport
+                        )
                         val shareIntent = Intent(Intent.ACTION_SEND)
                         shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
                         shareIntent.setDataAndType(uri, "application/zip")
@@ -432,13 +394,11 @@ fun SettingScreen() {
 
                         context.startActivity(
                             Intent.createChooser(
-                                shareIntent,
-                                context.getString(R.string.send_log)
+                                shareIntent, context.getString(R.string.send_log)
                             )
                         )
                     }
-                }
-            )
+                })
         }
     }
 }
@@ -447,11 +407,9 @@ fun SettingScreen() {
 @Composable
 fun ThemeChooseDialog(showDialog: MutableState<Boolean>) {
     val prefs = APApplication.sharedPreferences
-    val activity = LocalContext.current as Activity
 
     BasicAlertDialog(
-        onDismissRequest = { showDialog.value = false },
-        properties = DialogProperties(
+        onDismissRequest = { showDialog.value = false }, properties = DialogProperties(
             decorFitsSystemWindows = true,
             usePlatformDefaultWidth = false,
         )
@@ -465,195 +423,13 @@ fun ThemeChooseDialog(showDialog: MutableState<Boolean>) {
             color = AlertDialogDefaults.containerColor,
         ) {
             LazyColumn {
-                item {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(R.string.amber_theme)) },
+                items(colorsList()) {
+                    ListItem(headlineContent = { Text(text = stringResource(it.nameId)) },
                         modifier = Modifier.clickable {
                             showDialog.value = false
-                            prefs.edit().putString("custom_color", "amber").apply()
-                            activity.recreate()
-                        }
-                    )
-                }
-                item {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(R.string.blue_grey_theme)) },
-                        modifier = Modifier.clickable {
-                            showDialog.value = false
-                            prefs.edit().putString("custom_color", "blue_grey").apply()
-                            activity.recreate()
-                        }
-                    )
-                }
-                item {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(R.string.blue_theme)) },
-                        modifier = Modifier.clickable {
-                            showDialog.value = false
-                            prefs.edit().putString("custom_color", "blue").apply()
-                            activity.recreate()
-                        }
-                    )
-                }
-                item {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(R.string.brown_theme)) },
-                        modifier = Modifier.clickable {
-                            showDialog.value = false
-                            prefs.edit().putString("custom_color", "brown").apply()
-                            activity.recreate()
-                        }
-                    )
-                }
-                item {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(R.string.cyan_theme)) },
-                        modifier = Modifier.clickable {
-                            showDialog.value = false
-                            prefs.edit().putString("custom_color", "cyan").apply()
-                            activity.recreate()
-                        }
-                    )
-                }
-                item {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(R.string.deep_orange_theme)) },
-                        modifier = Modifier.clickable {
-                            showDialog.value = false
-                            prefs.edit().putString("custom_color", "deep_orange").apply()
-                            activity.recreate()
-                        }
-                    )
-                }
-                item {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(R.string.deep_purple_theme)) },
-                        modifier = Modifier.clickable {
-                            showDialog.value = false
-                            prefs.edit().putString("custom_color", "deep_purple").apply()
-                            activity.recreate()
-                        }
-                    )
-                }
-                item {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(R.string.green_theme)) },
-                        modifier = Modifier.clickable {
-                            showDialog.value = false
-                            prefs.edit().putString("custom_color", "green").apply()
-                            activity.recreate()
-                        }
-                    )
-                }
-                item {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(R.string.indigo_theme)) },
-                        modifier = Modifier.clickable {
-                            showDialog.value = false
-                            prefs.edit().putString("custom_color", "indigo").apply()
-                            activity.recreate()
-                        }
-                    )
-                }
-                item {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(R.string.light_blue_theme)) },
-                        modifier = Modifier.clickable {
-                            showDialog.value = false
-                            prefs.edit().putString("custom_color", "light_blue").apply()
-                            activity.recreate()
-                        }
-                    )
-                }
-                item {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(R.string.light_green_theme)) },
-                        modifier = Modifier.clickable {
-                            showDialog.value = false
-                            prefs.edit().putString("custom_color", "light_green").apply()
-                            activity.recreate()
-                        }
-                    )
-                }
-                item {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(R.string.lime_theme)) },
-                        modifier = Modifier.clickable {
-                            showDialog.value = false
-                            prefs.edit().putString("custom_color", "lime").apply()
-                            activity.recreate()
-                        }
-                    )
-                }
-                item {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(R.string.orange_theme)) },
-                        modifier = Modifier.clickable {
-                            showDialog.value = false
-                            prefs.edit().putString("custom_color", "orange").apply()
-                            activity.recreate()
-                        }
-                    )
-                }
-                item {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(R.string.pink_theme)) },
-                        modifier = Modifier.clickable {
-                            showDialog.value = false
-                            prefs.edit().putString("custom_color", "pink").apply()
-                            activity.recreate()
-                        }
-                    )
-                }
-                item {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(R.string.purple_theme)) },
-                        modifier = Modifier.clickable {
-                            showDialog.value = false
-                            prefs.edit().putString("custom_color", "purple").apply()
-                            activity.recreate()
-                        }
-                    )
-                }
-                item {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(R.string.red_theme)) },
-                        modifier = Modifier.clickable {
-                            showDialog.value = false
-                            prefs.edit().putString("custom_color", "red").apply()
-                            activity.recreate()
-                        }
-                    )
-                }
-                item {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(R.string.sakura_theme)) },
-                        modifier = Modifier.clickable {
-                            showDialog.value = false
-                            prefs.edit().putString("custom_color", "sakura").apply()
-                            activity.recreate()
-                        }
-                    )
-                }
-                item {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(R.string.teal_theme)) },
-                        modifier = Modifier.clickable {
-                            showDialog.value = false
-                            prefs.edit().putString("custom_color", "teal").apply()
-                            activity.recreate()
-                        }
-                    )
-                }
-                item {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(R.string.yellow_theme)) },
-                        modifier = Modifier.clickable {
-                            showDialog.value = false
-                            prefs.edit().putString("custom_color", "yellow").apply()
-                            activity.recreate()
-                        }
-                    )
+                            prefs.edit().putString("custom_color", it.name).apply()
+                            refreshTheme.value = true
+                        })
                 }
 
             }
@@ -665,30 +441,37 @@ fun ThemeChooseDialog(showDialog: MutableState<Boolean>) {
 
 }
 
+private data class APColor(
+    val name: String, @StringRes val nameId: Int
+)
+
+private fun colorsList(): List<APColor> {
+    return listOf(
+        APColor("amber", R.string.amber_theme),
+        APColor("blue_grey", R.string.blue_grey_theme),
+        APColor("blue", R.string.blue_theme),
+        APColor("brown", R.string.brown_theme),
+        APColor("cyan", R.string.cyan_theme),
+        APColor("deep_orange", R.string.deep_orange_theme),
+        APColor("deep_purple", R.string.deep_purple_theme),
+        APColor("green", R.string.green_theme),
+        APColor("indigo", R.string.indigo_theme),
+        APColor("light_blue", R.string.light_blue_theme),
+        APColor("light_green", R.string.light_green_theme),
+        APColor("lime", R.string.lime_theme),
+        APColor("orange", R.string.orange_theme),
+        APColor("pink", R.string.pink_theme),
+        APColor("purple", R.string.purple_theme),
+        APColor("red", R.string.red_theme),
+        APColor("sakura", R.string.sakura_theme),
+        APColor("teal", R.string.teal_theme),
+        APColor("yellow", R.string.yellow_theme),
+    )
+}
+
 @Composable
-fun colorNameToString(colorName: String): String {
-    return when (colorName) {
-        "amber" -> stringResource(R.string.amber_theme)
-        "blue_grey" -> stringResource(R.string.blue_grey_theme)
-        "blue" -> stringResource(R.string.blue_theme)
-        "brown" -> stringResource(R.string.brown_theme)
-        "cyan" -> stringResource(R.string.cyan_theme)
-        "deep_orange" -> stringResource(R.string.deep_orange_theme)
-        "deep_purple" -> stringResource(R.string.deep_purple_theme)
-        "green" -> stringResource(R.string.green_theme)
-        "indigo" -> stringResource(R.string.indigo_theme)
-        "light_blue" -> stringResource(R.string.light_blue_theme)
-        "light_green" -> stringResource(R.string.light_green_theme)
-        "lime" -> stringResource(R.string.lime_theme)
-        "orange" -> stringResource(R.string.orange_theme)
-        "pink" -> stringResource(R.string.pink_theme)
-        "purple" -> stringResource(R.string.purple_theme)
-        "red" -> stringResource(R.string.red_theme)
-        "sakura" -> stringResource(R.string.sakura_theme)
-        "teal" -> stringResource(R.string.teal_theme)
-        "yellow" -> stringResource(R.string.yellow_theme)
-        else -> stringResource(R.string.blue_theme)
-    }
+private fun colorNameToString(colorName: String): Int {
+    return colorsList().find { it.name == colorName }?.nameId ?: R.string.blue_theme
 }
 
 val suPathChecked: (path: String) -> Boolean = {
@@ -701,8 +484,7 @@ fun ResetSUPathDialog(showDialog: MutableState<Boolean>) {
     val context = LocalContext.current
     var suPath by remember { mutableStateOf(Natives.suPath()) }
     BasicAlertDialog(
-        onDismissRequest = { showDialog.value = false },
-        properties = DialogProperties(
+        onDismissRequest = { showDialog.value = false }, properties = DialogProperties(
             decorFitsSystemWindows = true,
             usePlatformDefaultWidth = false,
         )
@@ -731,8 +513,7 @@ fun ResetSUPathDialog(showDialog: MutableState<Boolean>) {
                         .weight(weight = 1f, fill = false)
                         .padding(PaddingValues(bottom = 12.dp))
                         .align(Alignment.Start)
-                )
-                {
+                ) {
                     OutlinedTextField(
                         value = suPath,
                         onValueChange = {
@@ -744,26 +525,23 @@ fun ResetSUPathDialog(showDialog: MutableState<Boolean>) {
                 }
 
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
+                    modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End
                 ) {
                     TextButton(onClick = { showDialog.value = false }) {
 
                         Text(stringResource(id = android.R.string.cancel))
                     }
 
-                    Button(
-                        enabled = suPathChecked(suPath),
-                        onClick = {
-                            showDialog.value = false
-                            val success = Natives.resetSuPath(suPath)
-                            Toast.makeText(
-                                context,
-                                if (success) R.string.success else R.string.failure,
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            rootShellForResult("echo $suPath > ${APApplication.SU_PATH_FILE}")
-                        }) {
+                    Button(enabled = suPathChecked(suPath), onClick = {
+                        showDialog.value = false
+                        val success = Natives.resetSuPath(suPath)
+                        Toast.makeText(
+                            context,
+                            if (success) R.string.success else R.string.failure,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        rootShellForResult("echo $suPath > ${APApplication.SU_PATH_FILE}")
+                    }) {
                         Text(stringResource(id = android.R.string.ok))
                     }
                 }
@@ -784,8 +562,7 @@ fun RandomizePkgNameDialog(showDialog: MutableState<Boolean>) {
     var newPackageName by remember { mutableStateOf("") }
     var enable by remember { mutableStateOf(false) }
     BasicAlertDialog(
-        onDismissRequest = { showDialog.value = false },
-        properties = DialogProperties(
+        onDismissRequest = { showDialog.value = false }, properties = DialogProperties(
             decorFitsSystemWindows = true,
             usePlatformDefaultWidth = false,
 
@@ -829,8 +606,7 @@ fun RandomizePkgNameDialog(showDialog: MutableState<Boolean>) {
                         .weight(weight = 1f, fill = false)
                         .padding(PaddingValues(bottom = 12.dp))
                         .align(Alignment.Start)
-                )
-                {
+                ) {
                     OutlinedTextField(
                         value = newPackageName,
                         onValueChange = {
@@ -844,8 +620,7 @@ fun RandomizePkgNameDialog(showDialog: MutableState<Boolean>) {
 
                 // Buttons
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
+                    modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End
                 ) {
                     TextButton(onClick = { showDialog.value = false }) {
                         Text(stringResource(id = android.R.string.cancel))
@@ -888,23 +663,20 @@ fun LanguageDialog(showLanguageDialog: MutableState<Boolean>) {
             ) {
                 LazyColumn {
                     itemsIndexed(languages) { index, item ->
-                        ListItem(
-                            headlineContent = { Text(item) },
-                            modifier = Modifier.clickable {
-                                showLanguageDialog.value = false
-                                if (index == 0) {
-                                    AppCompatDelegate.setApplicationLocales(
-                                        LocaleListCompat.getEmptyLocaleList()
+                        ListItem(headlineContent = { Text(item) }, modifier = Modifier.clickable {
+                            showLanguageDialog.value = false
+                            if (index == 0) {
+                                AppCompatDelegate.setApplicationLocales(
+                                    LocaleListCompat.getEmptyLocaleList()
+                                )
+                            } else {
+                                AppCompatDelegate.setApplicationLocales(
+                                    LocaleListCompat.forLanguageTags(
+                                        languagesValues[index]
                                     )
-                                } else {
-                                    AppCompatDelegate.setApplicationLocales(
-                                        LocaleListCompat.forLanguageTags(
-                                            languagesValues[index]
-                                        )
-                                    )
-                                }
+                                )
                             }
-                        )
+                        })
                     }
                 }
             }
