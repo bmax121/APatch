@@ -79,16 +79,19 @@ object PkgConfig {
                 if (config.allow == 1) {
                     config.exclude = 0
                 }
+                // Make sure pkgName and uid matched
+                val filteredConfigs =
+                    configs.filter { it.key == pkg && it.value.profile.uid == uid }
                 if (config.allow == 0 && configs[pkg] != null && config.exclude != 0) {
-                    // revoke all uid
-                    val toRemove = configs.filter { it.key == pkg || it.value.profile.uid == uid }
-                    toRemove.forEach {
+                    filteredConfigs.forEach {
                         Log.d(TAG, "remove config: $it")
                         configs.remove(it.key)
                     }
                 } else {
-                    Log.d(TAG, "change config: $config")
-                    configs[config.pkg] = config
+                    filteredConfigs.forEach {
+                        Log.d(TAG, "change config: $config")
+                        configs[it.key] = config
+                    }
                 }
                 writeConfigs(configs)
             }
