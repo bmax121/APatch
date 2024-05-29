@@ -11,6 +11,7 @@ use std::{ffi::CStr, process::Command};
 use crate::{
     defs,
     utils::{self, umask},
+    package::synchronization_package_uid,
 };
 #[cfg(any(target_os = "linux", target_os = "android"))]
 use crate::pty::prepare_pty;
@@ -60,6 +61,7 @@ pub fn root_shell() -> Result<()> {
         "COMMAND",
     );
     opts.optflag("h", "help", "display this help message and exit");
+    opts.optflag("y", "synchronization", "synchronization packagelist id");
     opts.optflag("l", "login", "pretend the shell to be a login shell");
     opts.optflag(
         "p",
@@ -115,6 +117,11 @@ pub fn root_shell() -> Result<()> {
 
     if matches.opt_present("V") {
         println!("{}", defs::VERSION_CODE);
+        return Ok(());
+    }
+
+    if matches.opt_present("y") {
+        synchronization_package_uid();
         return Ok(());
     }
 

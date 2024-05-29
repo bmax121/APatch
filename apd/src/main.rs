@@ -9,6 +9,7 @@ mod module;
 mod mount;
 mod restorecon;
 mod utils;
+mod package;
 fn main() -> anyhow::Result<()> {
     cli::run()
 }
