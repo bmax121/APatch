@@ -212,4 +212,5 @@
     <string name="red_theme">Thème rouge</string>
     <string name="kpm_control_paramters">Paramètres</string>
     <string name="settings_night_mode_follow_sys_summary">Basculement automatique vers le thème sombre en fonction des paramètres du système</string>
+    <string name="save_log">Enregistrer les logs</string>
 </resources>

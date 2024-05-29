@@ -212,4 +212,5 @@
     <string name="amber_theme">Amber Tema</string>
     <string name="blue_grey_theme">BlueGrey Teması</string>
     <string name="green_theme">Yeşil Tema</string>
+    <string name="save_log">Günlükleri Kaydet</string>
 </resources>

@@ -75,4 +75,5 @@
     <string name="clear_super_key">Fjern tast</string>
     <string name="home_kpatch_info_title">Info</string>
     <string name="kpatch_version_update">Versjon: %s → %s</string>
+    <string name="success">Vellykket</string>
 </resources>

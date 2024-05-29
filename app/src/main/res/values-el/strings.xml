@@ -15,7 +15,7 @@
     <string name="reboot_recovery">Επανεκκίνηση στο Recovery</string>
     <string name="reboot_download">Επανεκκίνηση για λήψη</string>
     <string name="about">Σχετικά με το</string>
-    <string name="home_learn_apatch">Μάθετε το AndroidPatch</string>
+    <string name="home_learn_apatch">Μάθετε το APatch</string>
     <string name="home_click_to_learn_apatch">Μάθετε για τα χαρακτηριστικά του AndroidPatch και πώς να το χρησιμοποιείτε</string>
     <string name="settings_app_language">Γλώσσα</string>
     <string name="patch">Επιδιόρθωση</string>
@@ -42,7 +42,7 @@
     <string name="home_selinux_status">Κατάσταση SELinux</string>
     <string name="send_log">Αποστολή αρχείο καταγραφής</string>
     <string name="safe_mode">Ασφαλής λειτουργία</string>
-    <string name="about_source_code">Δείτε τον πηγαίο κώδικα στο %1$s<br/>Ενταχθείτε στο κανάλι μας %2$s</string>
+    <string name="about_source_code">&lt;p&gt;Δείτε τον πηγαίο κώδικα στο %1$s&lt;p/&gt;Ενταχθείτε στο κανάλι μας %2$s&lt;p/&gt;Ενταχθείτε στο γκρουπ %3$s μας</string>
     <string name="apm_uninstall_confirm">Απεγκαταστήστε την ενότητα \"%s\"?</string>
     <string name="apm_failed_to_disable">Δεν ήταν δυνατή η απενεργοποίηση της μονάδας \"%s\"</string>
     <string name="apm_empty">Δεν υπάρχει εγκατεστημένη μονάδα</string>
@@ -63,7 +63,7 @@
     <string name="home_install_unknown">Άγνωστος</string>
     <string name="home_installing">Εγκατάσταση του</string>
     <string name="apatch_version_update">Έκδοση: %s -&gt; %s</string>
-    <string name="home_su_path">su: %s</string>
+    <string name="home_su_path">Εκτέλεση su</string>
     <string name="home_auth_key_desc">Έναρξη μετά την πιστοποίηση</string>
     <string name="home_ap_cando_update">Ενημέρωση</string>
     <string name="home_kernel">Πυρήνας</string>
@@ -91,9 +91,10 @@
     <string name="kpm_apm_empty">Δεν έχει φορτωθεί καμία ενότητα</string>
     <string name="kpm_license">Άδεια</string>
     <string name="su_selinux_via_hook">παράκαμψη μέσω γάντζου</string>
-    <string name="su_pkg_excluded_setting_summary">για τις ενότητες</string>
     <string name="su_show_system_apps">Εμφάνιση εφαρμογών συστήματος</string>
     <string name="apm_uninstall_success">%s απεγκατεστημένο</string>
     <string name="success">Επιτυχία</string>
     <string name="failure">Αποτυχία</string>
+    <string name="settings_clear_super_key_dialog">Θέλετε πραγματικά να προχωρήσετε?</string>
+    <string name="settings_check_update">Έλεγχος ενημέρωσης</string>
 </resources>

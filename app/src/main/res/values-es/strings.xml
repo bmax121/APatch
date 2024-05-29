@@ -212,4 +212,5 @@
     <string name="about_telegram_group">Grupo de Telegram</string>
     <string name="kpm_control">Controlar</string>
     <string name="kpm_control_paramters">Parámetros</string>
+    <string name="save_log">Guardar registros</string>
 </resources>

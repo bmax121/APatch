@@ -29,7 +29,7 @@
     <string name="home_learn_apatch">অ্যান্ড্রয়েডপ্যাচ শিখুন</string>
     <string name="send_log">লগ পাঠান</string>
     <string name="reboot_edl">EDL এ রিবুট করুন</string>
-    <string name="home_click_to_learn_apatch">অ্যান্ড্রয়েডপ্যাচের বৈশিষ্ট্য এবং কীভাবে ব্যবহার করবেন সে সম্পর্কে জানুন</string>
+    <string name="home_click_to_learn_apatch">অ্যান্ড্রয়েড প্যাচের বৈশিষ্ট্য এবং কীভাবে ব্যবহার করবেন সে সম্পর্কে জানুন</string>
     <string name="patch_set_superkey">সুপারকি সেট করুন</string>
     <string name="home_patch_next_step">পরবর্তী ধাপ</string>
     <string name="home_click_to_install">ইনস্টল করতে ক্লিক করুন</string>
@@ -89,4 +89,22 @@
     <string name="apm_version">সংস্করণ</string>
     <string name="su_pkg_excluded_label">বাদ</string>
     <string name="apm_install">ইনস্টল করুন</string>
+    <string name="settings_app_language">ভাষা</string>
+    <string name="system_default">সিস্টেম ডিফল্ট</string>
+    <string name="settings_global_namespace_mode">গ্লোবাল নেমস্পেস মোড</string>
+    <string name="settings_global_namespace_mode_summary">সব রুট সেশনগুলো গ্লোবাল নেমস্পেসে ব্যবহার করুন</string>
+    <string name="settings_clear_super_key_dialog">আপনি কি সত্যিই চালিয়ে যেতে চান?</string>
+    <string name="settings_check_update">হালনাগাদ চেক করুন</string>
+    <string name="settings_check_update_summary">অ্যাপ খোলার সময় স্বয়ংক্রিয়ভাবে হালনাগাদ চেক করুন</string>
+    <string name="kpatch_shadow_path_title">কেপ্যাচ</string>
+    <string name="kpatch_version_update">সংস্করণ:</string>
+    <string name="clear_super_key">সুপার_কি মুছুন</string>
+    <string name="home_install_unknown_summary">ইন্সটল করতে ক্লিক করুন</string>
+    <string name="home_kpatch_info_title">তথ্য</string>
+    <string name="patch_config_title">প্যাচসমূহ</string>
+    <string name="save_log">লগ সঞ্চয় করুন</string>
+    <string name="home_ap_cando_reboot">রিবুট করুন</string>
+    <string name="success">সফল হয়েছে</string>
+    <string name="failure">ব্যর্থ হয়েছে</string>
+    <string name="patch">প্যাচ করুন</string>
 </resources>

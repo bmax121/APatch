@@ -30,7 +30,7 @@
     <string name="patch_title">Załataj</string>
     <string name="home_selinux_status_disabled">Wyłączony</string>
     <string name="home_selinux_status_enforcing">Egzekwowanie</string>
-    <string name="su_pkg_excluded_setting_summary">dla modułów</string>
+    <string name="su_pkg_excluded_setting_summary">Włączenie tej opcji pozwala APatch na przywrócenie dowolnych zmodyfikowanych plików przez moduły tej aplikacji.</string>
     <string name="su_title">Super użytkownik</string>
     <string name="kpm_version">Wersja</string>
     <string name="su_refresh">Odśwież</string>
@@ -74,7 +74,7 @@
     <string name="home_fingerprint">Odcisk palca</string>
     <string name="home_selinux_status_unknown">Nieznany</string>
     <string name="reboot_userspace">Szybki restart</string>
-    <string name="su_pkg_excluded_setting_title">Wyklucz</string>
+    <string name="su_pkg_excluded_setting_title">Wyklucz modyfikacje</string>
     <string name="kpm_kp_not_installed">KernelPatch jest niezainstalowany</string>
     <string name="clear_super_key">Wyczyść SuperKey</string>
     <string name="patch_warnning">Instalacja wiąże się z ryzykiem. Upewnij się, że utworzono kopię zapasową danych.</string>
@@ -212,4 +212,5 @@
     <string name="home_dialog_auth_fail_title">Uwierzytelnianie nie powiodło się</string>
     <string name="home_dialog_uninstall_title">Odinstaluj</string>
     <string name="home_kpatch_version">Wersja KernelPatch</string>
+    <string name="save_log">Zapisz logi</string>
 </resources>

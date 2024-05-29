@@ -6,7 +6,7 @@
     <string name="kernel_patch">Bản vá Kernel</string>
     <string name="android_patch">Bản vá Android</string>
     <string name="reboot">Khởi động lại</string>
-    <string name="settings">Cài đặt</string>
+    <string name="settings">Thiết đặt</string>
     <string name="reboot_userspace">Khởi động lại nhanh</string>
     <string name="reboot_recovery">Khởi động vào Recovery</string>
     <string name="reboot_bootloader">Khởi động vào Bootloader</string>
@@ -76,8 +76,8 @@
     <string name="home_patch_set_key_desc">Chỉ có thông tin xác thực cho KernelPatch</string>
     <string name="kpm_author">Tác giả</string>
     <string name="apm_not_installed">AndroidPatch chưa được cài đặt</string>
-    <string name="su_pkg_excluded_setting_title">Loại trừ</string>
-    <string name="su_pkg_excluded_setting_summary">Cho các mô-đun</string>
+    <string name="su_pkg_excluded_setting_title">Loại trừ sửa đổi</string>
+    <string name="su_pkg_excluded_setting_summary">Việc bật tùy chọn này sẽ cho phép APatch khôi phục mọi tệp đã sửa đổi theo mô-đun cho ứng dụng này.</string>
     <string name="su_show_system_apps">Hiển thị ứng dụng hệ thống</string>
     <string name="su_hide_system_apps">Ẩn ứng dụng hệ thống</string>
     <string name="su_refresh">Làm mới</string>
@@ -114,7 +114,7 @@
     <string name="kpm_control_dialog_content">Các thông số điều khiển đầu vào:</string>
     <string name="kpm_control_paramters">Thông số</string>
     <string name="kpm_control_failed">Lỗi hệ thống!</string>
-    <string name="settings_night_mode_follow_sys_summary">Tự động chuyển sang chủ đề tối theo cài đặt của hệ thống</string>
+    <string name="settings_night_mode_follow_sys_summary">Tự động chuyển sang chủ đề tối theo thiết đặt của hệ thống</string>
     <string name="settings_use_system_color_theme_summary">Sử dụng chủ đề màu do hệ thống tạo với hình nền hiện tại</string>
     <string name="settings_custom_color_theme">Chủ đề màu sắc</string>
     <string name="blue_grey_theme">Chủ đề BlueGrey</string>
@@ -187,7 +187,7 @@
     <string name="enable_web_debugging_summary">Có thể được sử dụng để gỡ lỗi WebUI, vui lòng chỉ bật khi cần.</string>
     <string name="settings_donot_store_superkey">Không lưu trữ Super Key</string>
     <string name="home_new_apatch_found">Đã có phiên bản mới: %s, Click vào tôi để nâng cấp</string>
-    <string name="settings_night_mode_follow_sys">Theo dõi chủ đề đen tối của hệ thống</string>
+    <string name="settings_night_mode_follow_sys">Theo chủ đề tối của hệ thống</string>
     <string name="settings_night_theme_enabled">Bật chủ đề tối</string>
     <string name="blue_theme">Chủ đề màu xanh</string>
     <string name="cyan_theme">Chủ đề màu lục lam</string>
@@ -212,4 +212,5 @@
     <string name="kpatch_version_update">Phiên bản: %s -&gt; %s</string>
     <string name="home_more_menu_about">Giới thiệu</string>
     <string name="home_dialog_uninstall_title">Gỡ cài đặt</string>
+    <string name="save_log">Lưu nhật ký</string>
 </resources>
