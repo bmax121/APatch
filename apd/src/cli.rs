@@ -32,6 +32,9 @@ enum Commands {
 
     /// Trigger `boot-complete` event
     BootCompleted,
+
+    /// Sync package uid from system's packages.list
+    SyncPackageUid,
 }
 
 #[derive(clap::Subcommand, Debug)]
@@ -69,7 +72,7 @@ pub fn run() -> Result<()> {
     android_logger::init_once(
         Config::default()
             .with_max_level(LevelFilter::Trace) // limit log level
-            .with_tag("APatchD"), 
+            .with_tag("APatchD"),
     );
 
     #[cfg(not(target_os = "android"))]
@@ -106,6 +109,8 @@ pub fn run() -> Result<()> {
         }
 
         Commands::Services => event::on_services(),
+
+        Commands::SyncPackageUid => event::on_sync_uid(),
     };
 
     if let Err(e) = &result {

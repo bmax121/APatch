@@ -1,7 +1,7 @@
+use serde::{Deserialize, Serialize};
 use std::fs::File;
 use std::io::{self, BufRead};
 use std::path::Path;
-use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize)] // Add Serialize trait
 struct PackageConfig {
@@ -13,7 +13,7 @@ struct PackageConfig {
     sctx: String,
 }
 
-fn read_package_config() -> Vec<PackageConfig> {
+fn read_ap_package_config() -> Vec<PackageConfig> {
     let file = match File::open("/data/adb/ap/package_config") {
         Ok(file) => file,
         Err(e) => {
@@ -36,7 +36,7 @@ fn read_package_config() -> Vec<PackageConfig> {
     package_configs
 }
 
-fn write_package_config(package_configs: &Vec<PackageConfig>) {
+fn write_ap_package_config(package_configs: &Vec<PackageConfig>) {
     let file = match File::create("/data/adb/ap/package_config") {
         Ok(file) => file,
         Err(e) => {
@@ -61,17 +61,16 @@ where
     Ok(io::BufReader::new(file).lines())
 }
 
-
-pub fn synchronization_package_uid() {
+pub fn synchronize_package_uid() {
     if let Ok(lines) = read_lines("/data/system/packages.list") {
-        let mut package_configs = read_package_config();
+        let mut package_configs = read_ap_package_config();
         for line in lines {
             if let Ok(line) = line {
                 let words: Vec<&str> = line.split_whitespace().collect();
                 if words.len() >= 2 {
                     if let Ok(uid) = words[1].parse::<i32>() {
                         package_configs
-                            .iter_mut()  // Use iter_mut() to get mutable references
+                            .iter_mut() // Use iter_mut() to get mutable references
                             .find(|config| config.pkg == words[0])
                             .map(|config| {
                                 config.uid = uid;
@@ -82,6 +81,6 @@ pub fn synchronization_package_uid() {
                 }
             }
         }
-        write_package_config(&package_configs);
+        write_ap_package_config(&package_configs);
     }
 }

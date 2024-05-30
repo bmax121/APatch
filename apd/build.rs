@@ -43,8 +43,8 @@ fn main() {
         }
     };
     let out_dir = env::var("OUT_DIR").expect("Failed to get $OUT_DIR");
-    println!("out_dir: ${out_dir}" );
-    println!("code: ${code}" );
+    println!("out_dir: ${out_dir}");
+    println!("code: ${code}");
     let out_dir = Path::new(&out_dir);
     File::create(Path::new(out_dir).join("VERSION_CODE"))
         .expect("Failed to create VERSION_CODE")

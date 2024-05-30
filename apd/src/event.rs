@@ -5,7 +5,9 @@ use std::{collections::HashMap, path::Path};
 
 use crate::module::prune_modules;
 use crate::{
-    assets, defs, mount, restorecon,
+    assets, defs, mount,
+    package::synchronize_package_uid,
+    restorecon,
     utils::{self, ensure_clean_dir},
 };
 
@@ -98,7 +100,6 @@ pub fn mount_systemlessly(module_dir: &str) -> Result<()> {
 }
 
 pub fn on_post_data_fs() -> Result<()> {
-
     utils::umask(0);
 
     #[cfg(unix)]
@@ -195,7 +196,7 @@ pub fn on_post_data_fs() -> Result<()> {
     if crate::module::load_sepolicy_rule().is_err() {
         warn!("load sepolicy.rule failed");
     }
-    
+
     if let Err(e) = mount::mount_tmpfs(utils::get_tmp_path()) {
         warn!("do temp dir mount failed: {}", e);
     }
@@ -268,11 +269,16 @@ pub fn on_boot_completed() -> Result<()> {
         }
     }
 
+    synchronize_package_uid();
     run_stage("boot-completed", false);
 
     Ok(())
 }
 
+pub fn on_sync_uid() -> Result<()> {
+    synchronize_package_uid();
+    return Ok(());
+}
 
 #[cfg(unix)]
 fn catch_bootlog() -> Result<()> {
