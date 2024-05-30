@@ -39,22 +39,22 @@ object PkgConfig {
         }
     }
 
-    fun readConfigs(): HashMap<String, Config> {
-        val configs = HashMap<String, Config>()
+    fun readConfigs(): HashMap<Int, Config> {
+        val configs = HashMap<Int, Config>()
         val file = File(APApplication.PACKAGE_CONFIG_FILE)
         if (file.exists()) {
             file.readLines().drop(1).filter { it.isNotEmpty() }.forEach {
                 Log.d(TAG, it)
                 val p = Config.fromLine(it)
                 if (!p.isDefault()) {
-                    configs[p.pkg] = p
+                    configs[p.profile.uid] = p
                 }
             }
         }
         return configs
     }
 
-    private fun writeConfigs(configs: HashMap<String, Config>) {
+    private fun writeConfigs(configs: HashMap<Int, Config>) {
         val file = File(APApplication.PACKAGE_CONFIG_FILE)
         if (!file.parentFile?.exists()!!) file.parentFile?.mkdirs()
         val writer = FileWriter(file, false)
@@ -73,25 +73,16 @@ object PkgConfig {
             synchronized(PkgConfig.javaClass) {
                 Natives.su()
                 val configs = readConfigs()
-                val pkg = config.pkg
                 val uid = config.profile.uid
                 // Root App should not be excluded
                 if (config.allow == 1) {
                     config.exclude = 0
                 }
-                // Make sure pkgName and uid matched
-                val filteredConfigs =
-                    configs.filter { it.key == pkg && it.value.profile.uid == uid }
-                if (config.allow == 0 && configs[pkg] != null && config.exclude != 0) {
-                    filteredConfigs.forEach {
-                        Log.d(TAG, "remove config: $it")
-                        configs.remove(it.key)
-                    }
+                if (config.allow == 0 && configs[uid] != null && config.exclude != 0) {
+                    configs.remove(uid)
                 } else {
-                    filteredConfigs.forEach {
-                        Log.d(TAG, "change config: $config")
-                        configs[it.key] = config
-                    }
+                    Log.d(TAG, "change config: $config")
+                    configs[config.profile.uid] = config
                 }
                 writeConfigs(configs)
             }

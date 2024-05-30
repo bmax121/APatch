@@ -120,7 +120,7 @@ class SuperUserViewModel : ViewModel() {
             val uids = Natives.suUids().toList()
             Log.d(TAG, "all allows: $uids")
 
-            var configs: HashMap<String, PkgConfig.Config> = HashMap()
+            var configs: HashMap<Int, PkgConfig.Config> = HashMap()
             thread {
                 Natives.su()
                 configs = PkgConfig.readConfigs()
@@ -133,8 +133,7 @@ class SuperUserViewModel : ViewModel() {
                 val uid = appInfo.uid
                 val actProfile = if (uids.contains(uid)) Natives.suProfile(uid) else null
                 val config = configs.getOrDefault(
-                    appInfo.packageName,
-                    PkgConfig.Config(appInfo.packageName, 0, 0, Natives.Profile(uid))
+                    appInfo.uid, PkgConfig.Config(appInfo.packageName, 0, 0, Natives.Profile(uid))
                 )
                 config.allow = 0
 
