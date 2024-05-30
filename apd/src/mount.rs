@@ -1,7 +1,6 @@
-use anyhow::{anyhow, bail, Ok, Result};
-use std::fs::create_dir;
 #[cfg(any(target_os = "linux", target_os = "android"))]
 use anyhow::Context;
+use anyhow::{anyhow, bail, Ok, Result};
 #[cfg(any(target_os = "linux", target_os = "android"))]
 #[allow(unused_imports)]
 use retry::delay::NoDelay;
@@ -9,15 +8,16 @@ use retry::delay::NoDelay;
 //use sys_mount::{unmount, FilesystemType, Mount, MountFlags, Unmount, UnmountFlags};
 #[cfg(any(target_os = "linux", target_os = "android"))]
 use rustix::{fd::AsFd, fs::CWD, mount::*};
+use std::fs::create_dir;
 
-use crate::defs::PTS_NAME;
 use crate::defs::AP_OVERLAY_SOURCE;
+use crate::defs::PTS_NAME;
 use log::{info, warn};
 #[cfg(any(target_os = "linux", target_os = "android"))]
 use procfs::process::Process;
+use std::fs;
 use std::path::Path;
 use std::path::PathBuf;
-use std::fs;
 
 pub struct AutoMountExt4 {
     target: String,
@@ -36,7 +36,7 @@ impl AutoMountExt4 {
         if !metadata.permissions().readonly() {
             println!("Source path is not read-only");
         }
-        
+
         mount_ext4(source, target)?;
         Ok(Self {
             target: target.to_string(),
@@ -73,7 +73,7 @@ impl Drop for AutoMountExt4 {
 #[cfg(any(target_os = "linux", target_os = "android"))]
 pub fn mount_image(src: &str, target: &str, _autodrop: bool) -> Result<()> {
     mount_ext4(src, target)?;
-        Ok(())
+    Ok(())
 }
 
 #[cfg(any(target_os = "linux", target_os = "android"))]
