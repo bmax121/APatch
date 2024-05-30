@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="patch_warnning">การติดตั้งนี้มีความเสี่ยง โปรดสำรองข้อมูลก่อนติดตั้ง</string>
-    <string name="home_learn_apatch">เรียนรู้เกี่ยวกับ AndroidPatch</string>
+    <string name="home_learn_apatch">เรียนรู้เกี่ยวกับ APatch</string>
     <string name="reboot">รีบูท</string>
     <string name="settings">ตั้งค่า</string>
     <string name="send_log">ส่ง บันทึก</string>
     <string name="home_auth_key_desc">เริ่มทำงานหลังจากได้รับการรับรอง</string>
-    <string name="home_click_to_learn_apatch">เรียนรู้เกี่ยวกับคุณสมบัติ AndroidPatch และวิธีการใช้</string>
+    <string name="home_click_to_learn_apatch">เรียนรู้เกี่ยวกับคุณสมบัติ APatch และวิธีการใช้</string>
     <string name="home_installing">กำลังติดตั้ง</string>
     <string name="home_ap_cando_uninstall">ถอนการติดตั้ง</string>
     <string name="home_ap_cando_install">ติดตั้ง</string>
@@ -86,7 +86,7 @@
     <string name="su_title">Superuser</string>
     <string name="clear_super_key">ล้าง คีย์</string>
     <string name="home_su_path">su: %s</string>
-    <string name="home_auth_key_title">ใส่ SuperUser คีย์</string>
+    <string name="home_auth_key_title">ใส่ SuperKey</string>
     <string name="home_selinux_status_enforcing">Enforcing</string>
     <string name="home_selinux_status_permissive">Permissive</string>
     <string name="home_selinux_status_unknown">ไม่ทราบ</string>
@@ -98,4 +98,33 @@
     <string name="system_default">ค่าเริ่มต้นของระบบ</string>
     <string name="settings_global_namespace_mode">Global Namespace Mode</string>
     <string name="settings_global_namespace_mode_summary">All root sessions use the global mount namespace</string>
+    <string name="success">สำเร็จ</string>
+    <string name="failure">ล้มเหลว</string>
+    <string name="home_kpatch_info_title">รายละเอียด</string>
+    <string name="home_ap_cando_reboot">รีบูต</string>
+    <string name="patch_config_title">แพทช์</string>
+    <string name="patch_mode_bootimg_patch">โหมด : แพทช์</string>
+    <string name="patch_mode_patch_and_install">โหมด : แพทช์ และติดตั้ง</string>
+    <string name="patch_mode_uninstall_patch">โหมด : ถอนการติดตั้ง Kpatch</string>
+    <string name="patch_select_bootimg_btn">เลือกการบูต</string>
+    <string name="patch_embed_kpm_btn">ฝัง KPM</string>
+    <string name="patch_start_patch_btn">เริ่ม</string>
+    <string name="patch_start_unpatch_btn">เลิกแพทช์</string>
+    <string name="patch_item_error">!!ข้อผิดพลาด!!</string>
+    <string name="patch_item_bootimg">บูตอิมเมจ</string>
+    <string name="patch_item_bootimg_dev">อุปกรณ์ :</string>
+    <string name="patch_item_kernel">เคอเนล</string>
+    <string name="patch_mode_install_to_next_slot">โหมด: ติดตั้งในช่องถัดไป (หลังจาก OTA)</string>
+    <string name="settings_clear_super_key_dialog">คุณต้องการดำเนินการต่อหรือไม่?</string>
+    <string name="settings_check_update_summary">ตรวจสอบการอัปเดตโดยอัตโนมัติเมื่อเปิดแอป</string>
+    <string name="settings_check_update">ตรวจสอบการอัพเดท</string>
+    <string name="home_install_unknown_summary">คลิกเพื่อติดตั้ง</string>
+    <string name="kpatch_version_update">เวอร์ชั่น %s</string>
+    <string name="kpatch_shadow_path_title">แพทซ์ เคอเนล</string>
+    <string name="patch_item_bootimg_slot">ช่อง:</string>
+    <string name="patch_item_kpimg_version">เวอร์ชั่น:</string>
+    <string name="patch_item_kpimg_config">กำหนดค่า</string>
+    <string name="patch_item_kpimg_comile_time">เวลา:</string>
+    <string name="save_log">บันทึก Logs</string>
+    <string name="patch_item_set_skey_label">super key ควรมีความยาวอย่างต่ำ 8 ตัวอักษรและมีทั้งเลขและพยัญชนะ</string>
 </resources>

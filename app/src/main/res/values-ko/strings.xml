@@ -212,4 +212,5 @@
     <string name="about_app_version">버전 %1$s</string>
     <string name="about_telegram_channel">Telegram 채널</string>
     <string name="about_telegram_group">Telegram 그룹</string>
+    <string name="save_log">로그 저장</string>
 </resources>

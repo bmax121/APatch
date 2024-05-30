@@ -131,8 +131,8 @@
     <string name="patch_item_set_skey_label">A SuperKey deve ter pelo menos 8 caracteres e incluir números e letras</string>
     <string name="hide_apatch_dialog_new_manager_name">Nome do novo gerenciador</string>
     <string name="hide_apatch_dialog_summary">Ele será usado como o novo nome do app mostrado na launcher</string>
-    <string name="hide_apatch_manager">Ocultar gerenciador do APatch</string>
-    <string name="hide_apatch_manager_summary">Instale um novo app gerenciador com um ID de pacote aleatório e nome personalizado</string>
+    <string name="hide_apatch_manager">Ocultar app do APatch</string>
+    <string name="hide_apatch_manager_summary">Instala o app oculto com ID aleatório e nome personalizado</string>
     <string name="hide_apatch_manager_failure">Falha ao ocultar. Por favor, reporte o bug!</string>
     <string name="kpm_embed">Incorporar</string>
     <string name="kpm_add_kpm">Adicionar KPM</string>
@@ -196,7 +196,7 @@
     <string name="sakura_theme">Sakura</string>
     <string name="about_app_version">Versão %1$s</string>
     <string name="about_telegram_group">Grupo do Telegram</string>
-    <string name="about_powered_by">Powered by %1$s</string>
+    <string name="about_powered_by">Fornecido por %1$s</string>
     <string name="yellow_theme">Amarelo</string>
     <string name="about_telegram_channel">Canal do Telegram</string>
     <string name="kpm_control">Controlar</string>
@@ -212,4 +212,5 @@
     <string name="deep_purple_theme">Roxo profundo</string>
     <string name="about_app_desc">Solução root do kernel com apenas uma imagem do kernel despojada, fornecendo a capacidade de montar módulos do sistema e realizar a interceptação de funções do kernel.</string>
     <string name="kpm_control_dialog_title">Controlar KPMódulo</string>
+    <string name="save_log">Salvar registros</string>
 </resources>

@@ -212,4 +212,5 @@
     <string name="blue_theme">藍色主題</string>
     <string name="yellow_theme">黃色主題</string>
     <string name="kpm_control_dialog_title">控制 KPModule</string>
+    <string name="save_log">儲存日誌</string>
 </resources>

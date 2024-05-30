@@ -29,13 +29,13 @@
     <string name="home_manager_version">Manager Version</string>
     <string name="su_pkg_excluded_setting_summary">Wenn Sie diese Option aktivieren, kann APatch alle von den Modulen für diese Anwendung geänderten Dateien wiederherstellen.</string>
     <string name="apm_failed_to_disable">Das Modul \"%s\" konnte nicht aktiviert werden</string>
-    <string name="home_selinux_status_disabled">Off</string>
+    <string name="home_selinux_status_disabled">Aus</string>
     <string name="apm_magisk_conflict">Module sind aufgrund eines Konfliktes mit Magisk nicht verfügbar.</string>
     <string name="apm_downloading">Modul \"%s\" wird heruntergeladen…</string>
     <string name="apm_start_downloading">Download von %s starten</string>
     <string name="kpm_unload_confirm">Modul \"%s\" entladen?</string>
     <string name="apm_failed_to_enable">Das Modul \"%s\" konnte nicht eingeschaltet werden</string>
-    <string name="home_apatch_version">APatch: %s</string>
+    <string name="home_apatch_version">APatch Version: %s</string>
     <string name="home_selinux_status">SELinux-Status</string>
     <string name="reboot_recovery">Neustart zur Recovery</string>
     <string name="reboot_download">Neustart zum Herunterladen</string>
@@ -48,13 +48,13 @@
     <string name="home_su_path">su: %s</string>
     <string name="patch_title">Patch</string>
     <string name="su_pkg_excluded_label">Absondern</string>
-    <string name="home_selinux_status_enforcing">Enforcing</string>
-    <string name="home_selinux_status_permissive">Permissive</string>
+    <string name="home_selinux_status_enforcing">Durchsetzung von</string>
+    <string name="home_selinux_status_permissive">Zulässig</string>
     <string name="reboot_userspace">Sanfter Neustart</string>
     <string name="super_key">Superschlüssel</string>
     <string name="clear_super_key">Superschlüssel löschen</string>
     <string name="patch_set_superkey">Superschlüssel festlegen</string>
-    <string name="home_installing">Installiere...</string>
+    <string name="home_installing">Installiere</string>
     <string name="home_auth_key_title">Superschlüssel eingeben</string>
     <string name="kpm">KPModule</string>
     <string name="home_selinux_status_unknown">Unbekannt</string>
@@ -212,4 +212,5 @@
 \n4. Ihr Gerät unterstützt APatch und KernelPatch nicht.
 \n
 \nBitte überprüfen und nochmal versuchen. Wenn es noch Probleme gibt, können Sie immer Fragen zu den Problemen des offiziellen Projektarchivs stellen.</string>
+    <string name="save_log">Protokolle speichern</string>
 </resources>
