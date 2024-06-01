@@ -82,7 +82,7 @@ object PkgConfig {
                     configs.remove(uid)
                 } else {
                     Log.d(TAG, "change config: $config")
-                    configs[config.profile.uid] = config
+                    configs[uid] = config
                 }
                 writeConfigs(configs)
             }

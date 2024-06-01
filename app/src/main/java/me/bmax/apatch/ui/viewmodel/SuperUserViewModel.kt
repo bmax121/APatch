@@ -133,7 +133,7 @@ class SuperUserViewModel : ViewModel() {
                 val uid = appInfo.uid
                 val actProfile = if (uids.contains(uid)) Natives.suProfile(uid) else null
                 val config = configs.getOrDefault(
-                    appInfo.uid, PkgConfig.Config(appInfo.packageName, 0, 0, Natives.Profile(uid))
+                    uid, PkgConfig.Config(appInfo.packageName, 0, 0, Natives.Profile(uid))
                 )
                 config.allow = 0
 
@@ -141,6 +141,9 @@ class SuperUserViewModel : ViewModel() {
                 if (actProfile != null) {
                     config.allow = 1
                     config.profile = actProfile
+                } else {
+                    // null profile from kernel need configure uid manually
+                    config.profile.uid = uid
                 }
                 AppInfo(
                     label = appInfo.loadLabel(apApp.packageManager).toString(),
