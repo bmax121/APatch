@@ -386,9 +386,7 @@ fun RebootDropdownItem(@StringRes id: Int, reason: String = "") {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TopBar(
-    onInstallClick: () -> Unit,
-    navigator: DestinationsNavigator,
-    kpState: APApplication.State
+    onInstallClick: () -> Unit, navigator: DestinationsNavigator, kpState: APApplication.State
 ) {
     val uriHandler = LocalUriHandler.current
     var showDropdownMoreOptions by remember { mutableStateOf(false) }
@@ -966,7 +964,9 @@ fun UpdateCard() {
             message = stringResource(id = R.string.home_new_apatch_found).format(newVersionCode),
             MaterialTheme.colorScheme.outlineVariant
         ) {
-            if (changelog.isNotEmpty()) {
+            if (changelog.isEmpty()) {
+                uriHandler.openUri(newVersionUrl)
+            } else {
                 updateDialog.showConfirm(
                     title = title, content = changelog, markdown = true, confirm = updateText
                 )
