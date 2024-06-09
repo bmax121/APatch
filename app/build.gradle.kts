@@ -59,8 +59,14 @@ android {
         buildConfigField("String", "buildKPV", "\"$kernelPatchVersion\"")
     }
 
-    kotlinOptions {
-        jvmTarget = "21"
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(JavaVersion.VERSION_22.majorVersion)
+        }
+    }
+
+    kotlin {
+        jvmToolchain(JavaVersion.VERSION_22.majorVersion.toInt())
     }
 
     composeCompiler {

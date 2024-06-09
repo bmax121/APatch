@@ -40,13 +40,8 @@ val androidTargetSdkVersion = 34
 val androidCompileSdkVersion = 34
 
 val androidCompileNdkVersion = "25.2.9519653"
-
-val androidSourceCompatibility = JavaVersion.VERSION_21
-val androidTargetCompatibility = JavaVersion.VERSION_21
-
 val managerVersionCode by extra(getVersionCode())
 val managerVersionName by extra(getVersionName())
-
 
 tasks.register<Delete>("clean") {
     delete(rootProject.layout.buildDirectory)
@@ -105,11 +100,6 @@ subprojects {
             lint {
                 abortOnError = true
                 checkReleaseBuilds = false
-            }
-
-            compileOptions {
-                sourceCompatibility = androidSourceCompatibility
-                targetCompatibility = androidTargetCompatibility
             }
         }
     }
