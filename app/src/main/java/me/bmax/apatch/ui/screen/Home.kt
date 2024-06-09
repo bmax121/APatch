@@ -978,13 +978,12 @@ fun UpdateCard() {
 @Composable
 fun LearnMoreCard() {
     val uriHandler = LocalUriHandler.current
-    val url = stringResource(R.string.home_learn_android_patch_url)
 
     ElevatedCard {
         Row(modifier = Modifier
             .fillMaxWidth()
             .clickable {
-                uriHandler.openUri(url)
+                uriHandler.openUri("https://apatch.top")
             }
             .padding(24.dp), verticalAlignment = Alignment.CenterVertically) {
             Column {
