@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
     <string name="app_name" translatable="false">APatch</string>
     <string name="apm_desc">Beskrivelse</string>
     <string name="home">Hjem</string>
@@ -76,4 +75,16 @@
     <string name="home_kpatch_info_title">Info</string>
     <string name="kpatch_version_update">Versjon: %s → %s</string>
     <string name="success">Vellykket</string>
+    <string name="home_device_info">Enhet</string>
+    <string name="home_system_version">Systemversjon</string>
+    <string name="mode_select_page_title">Installer</string>
+    <string name="settings_app_language">Språk</string>
+    <string name="home_ap_cando_reboot">Omstart</string>
+    <string name="patch_item_extra_version">versjon:</string>
+    <string name="home_kpatch_version">KernelPatch-versjon</string>
+    <string name="kpm_install">Installer</string>
+    <string name="apm_failed_to_enable">Kunne ikke skru på «%s»-modulen</string>
+    <string name="apm_failed_to_disable">Kunne ikke skru av «%s»-modulen</string>
+    <string name="apm_uninstall_confirm">Avinstaller «%s»-modulen?</string>
+    <string name="home_new_apatch_found">Klikk for å installere ny versjon %s.</string>
 </resources>

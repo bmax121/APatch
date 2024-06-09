@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
     <string name="app_name" translatable="false">APatch</string>
     <string name="reboot">Ponovno pokreni</string>
-    <string name="home">Početno</string>
+    <string name="home">Početna</string>
     <string name="patch">Patch</string>
     <string name="settings">Postavke</string>
     <string name="reboot_userspace">Glatko pokreni</string>
@@ -99,4 +98,6 @@
     <string name="settings_global_namespace_mode_summary">Sve root sesije koriste globalni mount namespace</string>
     <string name="home_patch_set_key_desc">Samo zaporke za KernelPatch</string>
     <string name="settings_clear_super_key_dialog">Želite li stvarno nastaviti?</string>
+    <string name="success">Uspješno</string>
+    <string name="failure">Neuspješno</string>
 </resources>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
     <string name="app_name" translatable="false">APatch</string>
     <string name="home">Fogar</string>
     <string name="patch_warnning">A instalación conleva uns riscos. Por favor, asegura os teus datos.</string>

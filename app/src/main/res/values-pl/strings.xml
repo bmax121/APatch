@@ -2,7 +2,6 @@
 <resources>
     <string name="apm">Moduł AP</string>
     <string name="super_key">Klucz Super</string>
-    <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
     <string name="app_name" translatable="false">APatch</string>
     <string name="kpm">Moduł KP</string>
     <string name="home">Strona główna</string>
