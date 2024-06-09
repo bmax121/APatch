@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">APatch</string>
-    <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
     <string name="patch_warnning">Η εγκατάσταση ενέχει κινδύνους. Βεβαιωθείτε ότι έχετε δημιουργήσει αντίγραφα ασφαλείας των δεδομένων σας.</string>
     <string name="kernel_patch">KernelPatch</string>
     <string name="android_patch">AndroidPatch</string>
@@ -25,7 +24,7 @@
     <string name="apm_update">Ενημέρωση</string>
     <string name="home_need_update">Νέα έκδοση διαθέσιμη</string>
     <string name="home_working">Εργασία</string>
-    <string name="patch_title">Patch</string>
+    <string name="patch_title">Επιδιόρθωση</string>
     <string name="kpatch_version">Έκδοση: %s</string>
     <string name="kpm_unload_confirm">Ξεφορτώστε την ενότητα \"%s\"?</string>
     <string name="apatch_version">Έκδοση: %s</string>
@@ -33,7 +32,7 @@
     <string name="su_title">Σούπερ χρήστης</string>
     <string name="apm_downloading">Λήψη της μονάδας \"%s\"…</string>
     <string name="su_hide_system_apps">Απόκρυψη εφαρμογών συστήματος</string>
-    <string name="home_selinux_status_disabled">Off</string>
+    <string name="home_selinux_status_disabled">Ανενεργό</string>
     <string name="kpm_author">Συγγραφέας</string>
     <string name="home_click_to_install">Κάντε κλικ για να εγκαταστήσετε</string>
     <string name="home_ap_cando_install">Εγκαταστήστε το</string>
@@ -97,4 +96,6 @@
     <string name="failure">Αποτυχία</string>
     <string name="settings_clear_super_key_dialog">Θέλετε πραγματικά να προχωρήσετε?</string>
     <string name="settings_check_update">Έλεγχος ενημέρωσης</string>
+    <string name="settings_check_update_summary">Αυτόματος έλεγχος για ενημερώσεις κατά το άνοιγμα της εφαρμογής</string>
+    <string name="save_log">Αποθήκευση αρχείων καταγραφής</string>
 </resources>

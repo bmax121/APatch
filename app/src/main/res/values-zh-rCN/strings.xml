@@ -2,7 +2,6 @@
 <resources>
     <string name="apm">系统模块</string>
     <string name="super_key">超级密钥</string>
-    <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
     <string name="app_name" translatable="false">APatch</string>
     <string name="kpm">内核模块</string>
     <string name="android_patch">系统补丁</string>

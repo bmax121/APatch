@@ -14,11 +14,11 @@
     <string name="home_patch_set_key_desc">Credenziale solo per KernelPatch</string>
     <string name="home_install_unknown">Sconosciuto</string>
     <string name="apm_uninstall_confirm">Sei sicuro di voler disinstallare il modulo \"%s\"?</string>
-    <string name="su_pkg_excluded_setting_title">Escludere</string>
+    <string name="su_pkg_excluded_setting_title">Escludere le modifiche</string>
     <string name="reboot_download">Riavvia in modalità Download</string>
     <string name="home_click_to_learn_apatch">Scopri le caratteristiche di APatch e come utilizzarlo</string>
     <string name="apm_version">Versione</string>
-    <string name="su_pkg_excluded_setting_summary">per i moduli</string>
+    <string name="su_pkg_excluded_setting_summary">Abilitare questa opzione permetterà a APatch di ripristinare qualsiasi file modificato dai moduli per questa applicazione.</string>
     <string name="reboot_edl">Riavvia in modalità EDL</string>
     <string name="home_installing">Installazione in corso</string>
     <string name="apm_start_downloading">Download di %s avviato</string>
@@ -86,7 +86,6 @@
     <string name="home_su_path">su: %s</string>
     <string name="apm">APModule</string>
     <string name="super_key">SuperKey</string>
-    <string name="home_learn_android_patch_url">https://github.com/bmax121/APatch</string>
     <string name="app_name" translatable="false">APatch</string>
     <string name="kpm">KPModule</string>
     <string name="clear_super_key">Elimina Chiave</string>
@@ -211,4 +210,6 @@
     <string name="about_app_desc">Soluzione Kernel Root con solo un\'immagine del kernel ridotta, che offre la possibilità di montare il modulo di sistema e agganciare la funzione Kernel.</string>
     <string name="about_telegram_channel">Canale Telegram</string>
     <string name="about_telegram_group">Gruppo Telegram</string>
+    <string name="save_log">Salva Logs</string>
+    <string name="about_powered_by">Offerto da %1$s</string>
 </resources>
