@@ -5,8 +5,8 @@ rm -rf $TMPDIR
 mkdir -p $TMPDIR 2>/dev/null
 
 ui_print() {
-  echo -n -e "ui_print $1\n" > /proc/self/fd/$FD
-  echo -n -e "ui_print\n" > /proc/self/fd/$FD
+  echo -n -e "ui_print $1\n" > /proc/self/fd/$2
+  echo -n -e "ui_print\n" > /proc/self/fd/$2
 }
 
 ui_print "- Welecom to apatch twrp tool"
