@@ -53,6 +53,7 @@ android {
         aidl = true
         buildConfig = true
         compose = true
+        prefab = true
     }
 
     defaultConfig {
@@ -92,6 +93,12 @@ android {
         }
     }
 
+    externalNativeBuild {
+        cmake {
+            path("src/main/cpp/CMakeLists.txt")
+        }
+    }
+
     androidResources {
         generateLocaleConfig = true
     }
@@ -120,11 +127,11 @@ fun registerDownloadTask(
 
         doLast {
             if (!destFile.exists() || isFileUpdated(srcUrl, destFile)) {
-                println("Downloading $srcUrl to ${destFile.absolutePath}")
+                println(" - Downloading $srcUrl to ${destFile.absolutePath}")
                 downloadFile(srcUrl, destFile)
-                println("Download completed.")
+                println(" - Download completed.")
             } else {
-                println("File is up to date, skipping download.")
+                println(" - File is up-to-date, skipping download.")
             }
         }
     }
@@ -152,23 +159,9 @@ registerDownloadTask(
 )
 
 registerDownloadTask(
-    taskName = "downloadKpatch",
-    srcUrl = "https://github.com/bmax121/KernelPatch/releases/download/$kernelPatchVersion/kpatch-android",
-    destPath = "${project.projectDir}/libs/arm64-v8a/libkpatch.so",
-    project = project
-)
-
-registerDownloadTask(
     taskName = "downloadKptools",
     srcUrl = "https://github.com/bmax121/KernelPatch/releases/download/$kernelPatchVersion/kptools-android",
     destPath = "${project.projectDir}/libs/arm64-v8a/libkptools.so",
-    project = project
-)
-
-registerDownloadTask(
-    taskName = "downloadApjni",
-    srcUrl = "https://github.com/bmax121/KernelPatch/releases/download/$kernelPatchVersion/libapjni.so",
-    destPath = "${project.projectDir}/libs/arm64-v8a/libapjni.so",
     project = project
 )
 
@@ -184,9 +177,7 @@ tasks.register<Copy>("mergeFlashableScript") {
 
 tasks.getByName("preBuild").dependsOn(
     "downloadKpimg",
-    "downloadKpatch",
     "downloadKptools",
-    "downloadApjni",
     "mergeFlashableScript",
 )
 
@@ -276,4 +267,5 @@ dependencies {
 
     implementation(libs.markdown)
     implementation(libs.com.google.accompanist.webview)
+    compileOnly(libs.cxx)
 }

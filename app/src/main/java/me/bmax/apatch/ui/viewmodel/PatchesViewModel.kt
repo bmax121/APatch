@@ -357,7 +357,7 @@ class PatchesViewModel : ViewModel() {
             }
             logs.add("****************************")
 
-            var patchCommand = "boot_patch.sh $superkey ${srcBoot.path}"
+            var patchCommand = "boot_patch.sh \"$superkey\" ${srcBoot.path}"
             if (mode == PatchMode.PATCH_AND_INSTALL || mode == PatchMode.INSTALL_TO_NEXT_SLOT) {
                 patchCommand += " true"
             }
@@ -375,16 +375,15 @@ class PatchesViewModel : ViewModel() {
             }
             for (i in 0..<existedExtras.size) {
                 val extra = existedExtras[i]
-                patchCommand += " -E ${extra.name}"
+                patchCommand += " -E \"${extra.name}\""
                 if (extra.args.isNotEmpty()) {
-                    patchCommand += " -A ${extra.args}"
+                    patchCommand += " -A \"${extra.args}\""
                 }
                 if (extra.event.isNotEmpty()) {
-                    patchCommand += " -V ${extra.event}"
+                    patchCommand += " -V \"${extra.event}\""
                 }
-                patchCommand += " -T ${extra.type.desc}"
+                patchCommand += " -T \"${extra.type.desc}\""
             }
-            patchCommand += " -K kpatch"
 
             Log.i(TAG, "patchCommand: $patchCommand")
 

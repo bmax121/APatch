@@ -75,3 +75,4 @@ bcpkix = { group = "org.bouncycastle", name = "bcpkix-jdk18on", version = "1.78.
 
 com-google-accompanist-webview = { group = "com.google.accompanist", name = "accompanist-webview", version.ref = "accompanist" }
 androidx-webkit = { group = "androidx.webkit", name = "webkit", version.ref = "webkit" }
+cxx = { module = "org.lsposed.libcxx:libcxx", version = "27.0.11718014-beta1" }

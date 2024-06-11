@@ -77,10 +77,10 @@ object Natives {
         return nativeUnloadKernelPatchModule(APApplication.superKey, moduleName)
     }
 
-    private external fun nativeKernelPatchModuleNum(superKey: String, moduleName: String): Long
+    private external fun nativeKernelPatchModuleNum(superKey: String): Long
 
-    fun kernelPatchModuleNum(moduleName: String): Long {
-        return nativeKernelPatchModuleNum(APApplication.superKey, moduleName)
+    fun kernelPatchModuleNum(): Long {
+        return nativeKernelPatchModuleNum(APApplication.superKey)
     }
 
     private external fun nativeKernelPatchModuleList(superKey: String): String

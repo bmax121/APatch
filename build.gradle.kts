@@ -13,33 +13,18 @@ plugins {
 
 cmaker {
     default {
-        arguments.addAll(
-            arrayOf(
-                "-DANDROID_STL=c++_static",
-            )
-        )
-        val flags = arrayOf(
-            "-Wno-gnu-string-literal-operator-template",
-            "-Wno-c++2b-extensions",
-        )
-        cFlags.addAll(flags)
-        cppFlags.addAll(flags)
+        arguments += "-DANDROID_STL=none"
         abiFilters("arm64-v8a")
-    }
-    buildTypes {
-        if (it.name == "release") {
-            arguments += "-DDEBUG_SYMBOLS_PATH=${project.layout.buildDirectory}/symbols"
-        }
     }
 }
 
-project.ext.set("kernelPatchVersion", "0.10.7")
+project.ext.set("kernelPatchVersion", "0.11.0-dev")
 
 val androidMinSdkVersion = 26
 val androidTargetSdkVersion = 34
 val androidCompileSdkVersion = 34
 
-val androidCompileNdkVersion = "25.2.9519653"
+val androidCompileNdkVersion = "26.3.11579264"
 val managerVersionCode by extra(getVersionCode())
 val managerVersionName by extra(getVersionName())
 

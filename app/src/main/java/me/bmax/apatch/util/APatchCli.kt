@@ -33,7 +33,7 @@ fun createRootShell(): Shell {
     val builder = Shell.Builder.create()
     return try {
         builder.setInitializers(RootShellInitializer::class.java).build(
-            getKPatchPath(), APApplication.superKey, "su", "-Z", APApplication.MAGISK_SCONTEXT
+            "/system/bin/truncate", APApplication.superKey, "-Z", APApplication.MAGISK_SCONTEXT
         )
     } catch (e: Throwable) {
         Log.e(TAG, "su failed: ", e)
@@ -64,7 +64,7 @@ fun tryGetRootShell(): Shell {
     val builder = Shell.Builder.create()
     return try {
         builder.build(
-            getKPatchPath(), APApplication.superKey, "su", "-Z", APApplication.MAGISK_SCONTEXT
+            "/system/bin/truncate", APApplication.superKey, "-Z", APApplication.MAGISK_SCONTEXT
         )
     } catch (e: Throwable) {
         Log.e(TAG, "su failed: ", e)
