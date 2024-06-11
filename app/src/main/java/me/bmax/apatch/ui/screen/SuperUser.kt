@@ -202,7 +202,13 @@ private fun AppItem(
         trailingContent = {
             Switch(checked = rootGranted, onCheckedChange = {
                 rootGranted = !rootGranted
-                config.allow = if (rootGranted) 1 else 0
+                if (rootGranted) {
+                    config.allow = 1
+                    config.exclude = 0
+                } else {
+                    config.allow = 0
+                }
+                config.profile.uid = app.uid
                 if (rootGranted) {
                     Natives.grantSu(app.uid, 0, config.profile.scontext)
                 } else {
@@ -236,6 +242,10 @@ private fun AppItem(
                 onCheckedChange = {
                     excludeApp = if (it) 1 else 0
                     config.exclude = excludeApp
+                    if (excludeApp == 1) {
+                        config.profile.toUid = app.uid
+                    }
+                    config.profile.uid = app.uid
                     PkgConfig.changeConfig(config)
                 },
             )
