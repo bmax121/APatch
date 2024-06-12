@@ -12,6 +12,13 @@ use crate::{defs, event, module, utils};
 #[derive(Parser, Debug)]
 #[command(author, version = defs::VERSION_CODE, about, long_about = None)]
 struct Args {
+    #[arg(
+        short,
+        long,
+        value_name = "KEY",
+        help = "Super key for authentication root"
+    )]
+    superkey: Option<String>,
     #[command(subcommand)]
     command: Commands,
 }
@@ -89,9 +96,9 @@ pub fn run() -> Result<()> {
     log::info!("command: {:?}", cli.command);
 
     let result = match cli.command {
-        Commands::PostFsData => event::on_post_data_fs(),
+        Commands::PostFsData => event::on_post_data_fs(cli.superkey),
 
-        Commands::BootCompleted => event::on_boot_completed(),
+        Commands::BootCompleted => event::on_boot_completed(cli.superkey),
 
         Commands::Module { command } => {
             #[cfg(any(target_os = "linux", target_os = "android"))]
@@ -108,7 +115,7 @@ pub fn run() -> Result<()> {
             }
         }
 
-        Commands::Services => event::on_services(),
+        Commands::Services => event::on_services(cli.superkey),
 
         Commands::SyncPackageUid => event::on_sync_uid(),
     };

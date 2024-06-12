@@ -4,20 +4,20 @@ use std::io::{self, BufRead};
 use std::path::Path;
 
 #[derive(Deserialize, Serialize)] // Add Serialize trait
-struct PackageConfig {
-    pkg: String,
-    exclude: i32,
-    allow: i32,
-    uid: i32,
-    to_uid: i32,
-    sctx: String,
+pub struct PackageConfig {
+    pub pkg: String,
+    pub exclude: i32,
+    pub allow: i32,
+    pub uid: i32,
+    pub to_uid: i32,
+    pub sctx: String,
 }
 
-fn read_ap_package_config() -> Vec<PackageConfig> {
+pub fn read_ap_package_config() -> Vec<PackageConfig> {
     let file = match File::open("/data/adb/ap/package_config") {
         Ok(file) => file,
         Err(e) => {
-            eprintln!("Error opening file: {}", e);
+            warn!("Error opening file: {}", e);
             return Vec::new();
         }
     };
@@ -28,7 +28,7 @@ fn read_ap_package_config() -> Vec<PackageConfig> {
         match record {
             Ok(config) => package_configs.push(config),
             Err(e) => {
-                eprintln!("Error deserializing record: {}", e);
+                warn!("Error deserializing record: {}", e);
             }
         }
     }
@@ -40,7 +40,7 @@ fn write_ap_package_config(package_configs: &Vec<PackageConfig>) {
     let file = match File::create("/data/adb/ap/package_config") {
         Ok(file) => file,
         Err(e) => {
-            eprintln!("Error creating file: {}", e);
+            warn!("Error creating file: {}", e);
             return;
         }
     };
@@ -48,7 +48,7 @@ fn write_ap_package_config(package_configs: &Vec<PackageConfig>) {
 
     for config in package_configs {
         if let Err(e) = writer.serialize(config) {
-            eprintln!("Error serializing record: {}", e);
+            warn!("Error serializing record: {}", e);
         }
     }
 }
@@ -76,7 +76,7 @@ pub fn synchronize_package_uid() {
                                 config.uid = uid;
                             });
                     } else {
-                        eprintln!("Error parsing uid: {}", words[1]);
+                        warn!("Error parsing uid: {}", words[1]);
                     }
                 }
             }

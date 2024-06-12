@@ -1,6 +1,7 @@
 use anyhow::{bail, Context, Result};
 use log::{info, warn};
 use std::env;
+use std::process::Command;
 use std::{collections::HashMap, path::Path};
 
 use crate::module::prune_modules;
@@ -8,6 +9,7 @@ use crate::{
     assets, defs, mount,
     package::synchronize_package_uid,
     restorecon,
+    supercall::{init_notify_su_path, init_notify_su_uid},
     utils::{self, ensure_clean_dir},
 };
 
@@ -99,11 +101,20 @@ pub fn mount_systemlessly(module_dir: &str) -> Result<()> {
     Ok(())
 }
 
-pub fn on_post_data_fs() -> Result<()> {
+pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     utils::umask(0);
 
     #[cfg(unix)]
     let _ = catch_bootlog();
+
+    init_notify_su_uid(&superkey);
+
+    init_notify_su_path(&superkey);
+
+    Command::new(assets::MAGISKPOLICY_PATH)
+        .arg("--live")
+        .arg("--magisk")
+        .status()?;
 
     if utils::has_magisk() {
         warn!("Magisk detected, skip post-fs-data!");
@@ -248,14 +259,14 @@ fn run_stage(stage: &str, block: bool) {
     }
 }
 
-pub fn on_services() -> Result<()> {
+pub fn on_services(_superkey: Option<String>) -> Result<()> {
     info!("on_services triggered!");
     run_stage("service", false);
 
     Ok(())
 }
 
-pub fn on_boot_completed() -> Result<()> {
+pub fn on_boot_completed(_superkey: Option<String>) -> Result<()> {
     info!("on_boot_completed triggered!");
     let module_update_img = Path::new(defs::MODULE_UPDATE_IMG);
     let module_img = Path::new(defs::MODULE_IMG);
@@ -269,7 +280,7 @@ pub fn on_boot_completed() -> Result<()> {
         }
     }
 
-    synchronize_package_uid();
+    //synchronize_package_uid();
     run_stage("boot-completed", false);
 
     Ok(())
