@@ -21,7 +21,7 @@ extern "C" {
             return -EINVAL;
         }
 
-        const char *skey = env->GetStringUTFChars(superKey, NULL);
+        const char *skey = env->GetStringUTFChars(superKey, nullptr);
         bool rc = sc_ready(skey);
         env->ReleaseStringUTFChars(superKey, skey);
         return rc;
@@ -34,7 +34,7 @@ extern "C" {
             LOGE("Super Key is null!");
             return -EINVAL;
         }
-        const char *skey = env->GetStringUTFChars(superKey, NULL);
+        const char *skey = env->GetStringUTFChars(superKey, nullptr);
         uint32_t version = sc_kp_ver(skey);
         env->ReleaseStringUTFChars(superKey, skey);
         return version;
@@ -47,9 +47,9 @@ extern "C" {
             LOGE("Super Key is null!");
             return -EINVAL;
         }
-        const char *skey = env->GetStringUTFChars(superKey, NULL);
-        const char *sctx = 0;
-        if (scontext) sctx = env->GetStringUTFChars(scontext, NULL);
+        const char *skey = env->GetStringUTFChars(superKey, nullptr);
+        const char *sctx = nullptr;
+        if (scontext) sctx = env->GetStringUTFChars(scontext, nullptr);
         struct su_profile profile = { 0 };
         profile.uid = getuid();
         profile.to_uid = (uid_t)to_uid;
@@ -70,9 +70,9 @@ extern "C" {
             LOGE("Super Key is null!");
             return -EINVAL;
         }
-        const char *skey = env->GetStringUTFChars(superKey, NULL);
-        const char *sctx = 0;
-        if (scontext) sctx = env->GetStringUTFChars(scontext, NULL);
+        const char *skey = env->GetStringUTFChars(superKey, nullptr);
+        const char *sctx = nullptr;
+        if (scontext) sctx = env->GetStringUTFChars(scontext, nullptr);
         struct su_profile profile = { 0 };
         profile.uid = getuid();
         profile.to_uid = 0;
@@ -89,7 +89,7 @@ extern "C" {
             LOGE("Super Key is null!");
             return -EINVAL;
         }
-        const char *skey = env->GetStringUTFChars(superKey, NULL);
+        const char *skey = env->GetStringUTFChars(superKey, nullptr);
         long rc = sc_su_uid_nums(skey);
         env->ReleaseStringUTFChars(superKey, skey);
         return rc;
@@ -102,7 +102,7 @@ extern "C" {
             LOGE("Super Key is null!");
             return nullptr;
         }
-        const char *skey = env->GetStringUTFChars(superKey, NULL);
+        const char *skey = env->GetStringUTFChars(superKey, nullptr);
         int num = sc_su_uid_nums(skey);
         int uids[num];
         long n = sc_su_allow_uids(skey, (uid_t *)uids, num);
@@ -122,7 +122,7 @@ extern "C" {
             LOGE("Super Key is null!");
             return nullptr;
         }
-        const char *skey = env->GetStringUTFChars(superKey, NULL);
+        const char *skey = env->GetStringUTFChars(superKey, nullptr);
         struct su_profile profile = { 0 };
         long rc = sc_su_uid_profile(skey, (uid_t)uid, &profile);
         if (rc < 0) [[unlikely]] {
@@ -153,10 +153,10 @@ extern "C" {
             LOGE("Super Key is null!");
             return -EINVAL;
         }
-        const char *skey = env->GetStringUTFChars(superKey, NULL);
-        const char *path = env->GetStringUTFChars(modulePath, NULL);
-        const char *args = env->GetStringUTFChars(jargs, NULL);
-        long rc = sc_kpm_load(skey, path, args, 0);
+        const char *skey = env->GetStringUTFChars(superKey, nullptr);
+        const char *path = env->GetStringUTFChars(modulePath, nullptr);
+        const char *args = env->GetStringUTFChars(jargs, nullptr);
+        long rc = sc_kpm_load(skey, path, args, nullptr);
         if (rc < 0) [[unlikely]] {
             LOGE("nativeLoadKernelPatchModule error: %ld", rc);
         }
@@ -175,9 +175,9 @@ extern "C" {
             LOGE("Super Key is null!");
             return nullptr;
         }
-        const char *skey = env->GetStringUTFChars(superKey, NULL);
-        const char *name = env->GetStringUTFChars(modName, NULL);
-        const char *ctlargs = env->GetStringUTFChars(jctlargs, NULL);
+        const char *skey = env->GetStringUTFChars(superKey, nullptr);
+        const char *name = env->GetStringUTFChars(modName, nullptr);
+        const char *ctlargs = env->GetStringUTFChars(jctlargs, nullptr);
 
         char buf[4096] = { '\0' };
         long rc = sc_kpm_control(skey, name, ctlargs, buf, sizeof(buf));
@@ -208,9 +208,9 @@ extern "C" {
             LOGE("Super Key is null!");
             return -EINVAL;
         }
-        const char *skey = env->GetStringUTFChars(superKey, NULL);
-        const char *name = env->GetStringUTFChars(modName, NULL);
-        long rc = sc_kpm_unload(skey, name, 0);
+        const char *skey = env->GetStringUTFChars(superKey, nullptr);
+        const char *name = env->GetStringUTFChars(modName, nullptr);
+        long rc = sc_kpm_unload(skey, name, nullptr);
         if (rc < 0) [[unlikely]] {
             LOGE("nativeUnloadKernelPatchModule error: %ld", rc);
         }
@@ -227,7 +227,7 @@ extern "C" {
             LOGE("Super Key is null!");
             return -EINVAL;
         }
-        const char *skey = env->GetStringUTFChars(superKey, NULL);
+        const char *skey = env->GetStringUTFChars(superKey, nullptr);
         long rc = sc_kpm_nums(skey);
         if (rc < 0) [[unlikely]] {
             LOGE("nativeKernelPatchModuleNum error: %ld", rc);
@@ -244,7 +244,7 @@ extern "C" {
             LOGE("Super Key is null!");
             return nullptr;
         }
-        const char *skey = env->GetStringUTFChars(superKey, NULL);
+        const char *skey = env->GetStringUTFChars(superKey, nullptr);
         char buf[4096] = { '\0' };
         long rc = sc_kpm_list(skey, buf, sizeof(buf));
         if (rc < 0) [[unlikely]] {
@@ -263,8 +263,8 @@ extern "C" {
             LOGE("Super Key is null!");
             return nullptr;
         }
-        const char *skey = env->GetStringUTFChars(superKey, NULL);
-        const char *name = env->GetStringUTFChars(modName, NULL);
+        const char *skey = env->GetStringUTFChars(superKey, nullptr);
+        const char *name = env->GetStringUTFChars(modName, nullptr);
         char buf[1024] = { '\0' };
         long rc = sc_kpm_info(skey, name, buf, sizeof(buf));
         if (rc < 0) [[unlikely]] {
@@ -282,8 +282,8 @@ extern "C" {
             LOGE("Super Key is null!");
             return -EINVAL;
         }
-        const char *skey = env->GetStringUTFChars(superKey, NULL);
-        const char *sctx = env->GetStringUTFChars(scontext, NULL);
+        const char *skey = env->GetStringUTFChars(superKey, nullptr);
+        const char *sctx = env->GetStringUTFChars(scontext, nullptr);
         struct su_profile profile = { 0 };
         profile.uid = uid;
         profile.to_uid = to_uid;
@@ -301,7 +301,7 @@ extern "C" {
             LOGE("Super Key is null!");
             return -EINVAL;
         }
-        const char *skey = env->GetStringUTFChars(superKey, NULL);
+        const char *skey = env->GetStringUTFChars(superKey, nullptr);
         long rc = sc_su_revoke_uid(skey, (uid_t)uid);
         env->ReleaseStringUTFChars(superKey, skey);
         return rc;
@@ -313,7 +313,7 @@ extern "C" {
             LOGE("Super Key is null!");
             return nullptr;
         }
-        const char *skey = env->GetStringUTFChars(superKey, NULL);
+        const char *skey = env->GetStringUTFChars(superKey, nullptr);
         char buf[SU_PATH_MAX_LEN] = { '\0' };
         long rc = sc_su_get_path(skey, buf, sizeof(buf));
         if (rc < 0) [[unlikely]] {
@@ -330,8 +330,8 @@ extern "C" {
             LOGE("Super Key is null!");
             return -EINVAL;
         }
-        const char *skey = env->GetStringUTFChars(superKey, NULL);
-        const char *path = env->GetStringUTFChars(jpath, NULL);
+        const char *skey = env->GetStringUTFChars(superKey, nullptr);
+        const char *path = env->GetStringUTFChars(jpath, nullptr);
         long rc = sc_su_reset_path(skey, path);
         env->ReleaseStringUTFChars(superKey, skey);
         env->ReleaseStringUTFChars(jpath, path);
