@@ -1,7 +1,6 @@
 use anyhow::{bail, Context, Result};
 use log::{info, warn};
 use std::env;
-use std::process::Command;
 use std::{collections::HashMap, path::Path};
 
 use crate::module::prune_modules;
@@ -106,11 +105,6 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
 
     #[cfg(unix)]
     let _ = catch_bootlog();
-
-    Command::new(assets::MAGISKPOLICY_PATH)
-        .arg("--live")
-        .arg("--magisk")
-        .status()?;
 
     init_load_su_uid(&superkey);
 
