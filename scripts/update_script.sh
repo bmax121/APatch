@@ -47,7 +47,7 @@ ui_print "- Target image: $BOOTIMAGE"
 # Detect version and architecture
 api_level_arch_detect
 
-[ $API -lt 23 ] && abort "! APATCH only support Android 6.0 and above"
+[ $API -lt 23 ] && abort "! APATCH only supports Android 6.0 and above"
 
 ui_print "- Device platform: $ABI"
 
