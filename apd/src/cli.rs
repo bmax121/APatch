@@ -6,7 +6,7 @@ use android_logger::Config;
 #[cfg(target_os = "android")]
 use log::LevelFilter;
 
-use crate::{defs, event, module, utils};
+use crate::{defs, event, module, supercall, utils};
 
 /// APatch cli
 #[derive(Parser, Debug)]
@@ -94,6 +94,10 @@ pub fn run() -> Result<()> {
     let cli = Args::parse();
 
     log::info!("command: {:?}", cli.command);
+
+    if let Some(ref _superkey) = cli.superkey {
+        supercall::privilege_apd_profile(&cli.superkey);
+    }
 
     let result = match cli.command {
         Commands::PostFsData => event::on_post_data_fs(cli.superkey),

@@ -9,7 +9,7 @@ use crate::{
     assets, defs, mount,
     package::synchronize_package_uid,
     restorecon,
-    supercall::{init_notify_su_path, init_notify_su_uid},
+    supercall::{init_load_su_path, init_load_su_uid},
     utils::{self, ensure_clean_dir},
 };
 
@@ -107,14 +107,14 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     #[cfg(unix)]
     let _ = catch_bootlog();
 
-    init_notify_su_uid(&superkey);
-
-    init_notify_su_path(&superkey);
-
     Command::new(assets::MAGISKPOLICY_PATH)
         .arg("--live")
         .arg("--magisk")
         .status()?;
+
+    init_load_su_uid(&superkey);
+
+    init_load_su_path(&superkey);
 
     if utils::has_magisk() {
         warn!("Magisk detected, skip post-fs-data!");

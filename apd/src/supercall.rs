@@ -3,6 +3,7 @@ use log::{info, warn};
 use std::ffi::{CStr, CString};
 use std::fs::File;
 use std::io::{self, Read};
+use std::process;
 
 use crate::package::read_ap_package_config;
 
@@ -12,6 +13,7 @@ const PATCH: c_long = 0;
 
 const __NR_SUPERCALL: c_long = 45;
 const SUPERCALL_KERNELPATCH_VER: c_long = 0x1008;
+const SUPERCALL_SU: c_long = 0x1010;
 const SUPERCALL_SU_GRANT_UID: c_long = 0x1100;
 const SUPERCALL_SU_RESET_PATH: c_long = 0x1111;
 
@@ -68,6 +70,20 @@ fn sc_su_grant_uid(key: &CStr, profile: &SuProfile) -> c_long {
     }
 }
 
+fn sc_su(key: &CStr, profile: &SuProfile) -> c_long {
+    if key.to_bytes().is_empty() {
+        return (-libc::EINVAL).into();
+    }
+    unsafe {
+        syscall(
+            __NR_SUPERCALL,
+            key.as_ptr(),
+            compact_cmd(key, SUPERCALL_SU),
+            profile,
+        )
+    }
+}
+
 fn sc_su_reset_path(key: &CStr, path: &CStr) -> c_long {
     if key.to_bytes().is_empty() || path.to_bytes().is_empty() {
         return (-libc::EINVAL).into();
@@ -97,7 +113,31 @@ fn convert_string_to_u8_array(s: &String) -> [u8; SUPERCALL_SCONTEXT_LEN] {
     u8_array
 }
 
-pub fn init_notify_su_uid(superkey: &Option<String>) {
+pub fn privilege_apd_profile(superkey: &Option<String>) {
+    let key = match superkey.as_ref() {
+        Some(key_str) => match CString::new(key_str.clone()) {
+            Ok(cstr) => Some(cstr),
+            Err(e) => {
+                warn!("Failed to convert superkey: {}", e);
+                None
+            }
+        },
+        None => None,
+    };
+
+    let all_allow_ctx: String = "u:r:magisk:s0".to_string();
+    let profile = SuProfile {
+        uid: process::id().try_into().expect("PID conversion failed"),
+        to_uid: 0,
+        scontext: convert_string_to_u8_array(&all_allow_ctx),
+    };
+    if let Some(ref key) = key {
+        let result = sc_su(key, &profile);
+        info!("[privilege_apd_profile] result = {}", result);
+    }
+}
+
+pub fn init_load_su_uid(superkey: &Option<String>) {
     let package_configs = read_ap_package_config();
 
     let key = match superkey.as_ref() {
@@ -128,7 +168,7 @@ pub fn init_notify_su_uid(superkey: &Option<String>) {
     }
 }
 
-pub fn init_notify_su_path(superkey: &Option<String>) {
+pub fn init_load_su_path(superkey: &Option<String>) {
     let su_path_file = "/data/adb/ap/su_path";
 
     match read_file_to_string(su_path_file) {
@@ -149,9 +189,9 @@ pub fn init_notify_su_path(superkey: &Option<String>) {
                     Ok(su_path_cstr) => {
                         let result = sc_su_reset_path(&superkey_cstr, &su_path_cstr);
                         if result == 0 {
-                            info!("Path reset successfully");
+                            info!("suPath load successfully");
                         } else {
-                            warn!("Failed to reset path, error code: {}", result);
+                            warn!("Failed to load su path, error code: {}", result);
                         }
                     }
                     Err(e) => {
