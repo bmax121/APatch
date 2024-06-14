@@ -165,6 +165,15 @@ registerDownloadTask(
     project = project
 )
 
+// Compat kp version less than 0.10.7
+// TODO: Remove in future
+registerDownloadTask(
+    taskName = "downloadCompatKpatch",
+    srcUrl = "https://github.com/bmax121/KernelPatch/releases/download/0.10.7/kpatch-android",
+    destPath = "${project.projectDir}/libs/arm64-v8a/libkpatch.so",
+    project = project
+)
+
 tasks.register<Copy>("mergeFlashableScript") {
     into("${project.projectDir}/src/main/resources/META-INF/com/google/android")
     from(rootProject.file("${project.rootDir}/scripts/update_binary.sh")) {
@@ -178,6 +187,7 @@ tasks.register<Copy>("mergeFlashableScript") {
 tasks.getByName("preBuild").dependsOn(
     "downloadKpimg",
     "downloadKptools",
+    "downloadCompatKpatch",
     "mergeFlashableScript",
 )
 

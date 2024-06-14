@@ -26,21 +26,15 @@ class APApplication : Application() {
     enum class State {
         UNKNOWN_STATE,
 
-        KERNELPATCH_INSTALLED,
-        KERNELPATCH_NEED_UPDATE,
-        KERNELPATCH_NEED_REBOOT,
-        KERNELPATCH_UNINSTALLING,
+        KERNELPATCH_INSTALLED, KERNELPATCH_NEED_UPDATE, KERNELPATCH_NEED_REBOOT, KERNELPATCH_UNINSTALLING,
 
-        ANDROIDPATCH_NOT_INSTALLED,
-        ANDROIDPATCH_INSTALLED,
-        ANDROIDPATCH_INSTALLING,
-        ANDROIDPATCH_NEED_UPDATE,
-        ANDROIDPATCH_UNINSTALLING,
+        ANDROIDPATCH_NOT_INSTALLED, ANDROIDPATCH_INSTALLED, ANDROIDPATCH_INSTALLING, ANDROIDPATCH_NEED_UPDATE, ANDROIDPATCH_UNINSTALLING,
     }
 
 
     companion object {
         const val APD_PATH = "/data/adb/apd"
+
         @Deprecated("No more KPatch ELF from 0.11.0-dev")
         const val KPATCH_PATH = "/data/adb/kpatch"
         const val SUPERCMD = "/system/bin/truncate"
@@ -110,9 +104,7 @@ class APApplication : Application() {
         @Suppress("DEPRECATION")
         fun installApatch() {
             val state = _apStateLiveData.value
-            if (state != State.ANDROIDPATCH_NOT_INSTALLED &&
-                state != State.ANDROIDPATCH_NEED_UPDATE
-            ) {
+            if (state != State.ANDROIDPATCH_NOT_INSTALLED && state != State.ANDROIDPATCH_NEED_UPDATE) {
                 return
             }
             _apStateLiveData.value = State.ANDROIDPATCH_INSTALLING

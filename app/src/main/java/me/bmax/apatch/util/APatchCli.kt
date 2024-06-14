@@ -20,7 +20,6 @@ private fun getKPatchPath(): String {
     return apApp.applicationInfo.nativeLibraryDir + File.separator + "libkpatch.so"
 }
 
-
 class RootShellInitializer : Shell.Initializer() {
     override fun onInit(context: Context, shell: Shell): Boolean {
         shell.newJob().add("export PATH=\$PATH:/system_ext/bin:/vendor/bin").exec()
@@ -40,7 +39,13 @@ fun createRootShell(): Shell {
         Log.e(TAG, "su failed: ", e)
         try {
             Log.e(TAG, "retry compat kpatch su")
-            return builder.build(APApplication.KPATCH_PATH, APApplication.superKey, "su", "-Z", APApplication.MAGISK_SCONTEXT)
+            return builder.build(
+                getKPatchPath(),
+                APApplication.superKey,
+                "su",
+                "-Z",
+                APApplication.MAGISK_SCONTEXT
+            )
         } catch (e: Throwable) {
             Log.e(TAG, "retry compat kpatch su failed: ", e)
             return builder.build("sh")
@@ -78,7 +83,13 @@ fun tryGetRootShell(): Shell {
         Log.e(TAG, "su failed: ", e)
         return try {
             Log.e(TAG, "retry compat kpatch su")
-            builder.build(APApplication.KPATCH_PATH, APApplication.superKey, "su", "-Z", APApplication.MAGISK_SCONTEXT)
+            builder.build(
+                getKPatchPath(),
+                APApplication.superKey,
+                "su",
+                "-Z",
+                APApplication.MAGISK_SCONTEXT
+            )
         } catch (e: Throwable) {
             Log.e(TAG, "retry kpatch su failed: ", e)
             return try {
