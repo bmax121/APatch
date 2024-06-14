@@ -6,21 +6,20 @@
     <string name="kernel_patch">KernelPatch</string>
     <string name="android_patch">AndroidPatch</string>
     <string name="reboot">Reiniciar</string>
-    <string name="settings">Configurações</string>
+    <string name="settings">Definições</string>
     <string name="reboot_recovery">Reiniciar para o modo de recuperação</string>
-    <string name="about">Sobre</string>
-    <string name="home_learn_apatch">Aprenda sobre Patch</string>
-    <string name="home_click_to_learn_apatch">Conheça os recursos do Patch e como usá-lo</string>
+    <string name="about">Acerca</string>
+    <string name="home_learn_apatch">Aprender APatch</string>
+    <string name="home_click_to_learn_apatch">Aprenda sobre as características de APatch e como usar</string>
     <string name="super_key">Chave de Segurança</string>
     <string name="patch_set_superkey">Definir Chave de Segurança</string>
     <string name="home_patch_next_step">Próximo Passo</string>
     <string name="home_install_unknown">Desconhecido</string>
     <string name="home_click_to_install">Clique para instalar</string>
     <string name="home_need_update">Nova versão Disponível</string>
-    <string name="apatch_version">Versão:
-\n%s</string>
+    <string name="apatch_version">Versão: %d.%d.%d</string>
     <string name="home_auth_key_title">Digitar SuperKey</string>
-    <string name="home_ap_cando_update">Atualização</string>
+    <string name="home_ap_cando_update">Atualizar</string>
     <string name="home_ap_cando_uninstall">Desinstalar</string>
     <string name="patch_title">Patch</string>
     <string name="home_kernel">Kernel</string>
@@ -34,11 +33,10 @@
     <string name="safe_mode">Modo Seguro</string>
     <string name="home_patch_set_key_desc">Apenas credencial para KernelPatch</string>
     <string name="home_not_installed">Não instalado</string>
-    <string name="kpatch_version">Versão: %d.%d.%d</string>
+    <string name="kpatch_version">Versão: %s</string>
     <string name="home_working">Funcionado</string>
     <string name="home_installing">Instalando</string>
-    <string name="apatch_version_update">Versão:
-\n%s -&gt; %s</string>
+    <string name="apatch_version_update">Versão: %s -&gt; %s</string>
     <string name="home_ap_cando_install">Instalar</string>
     <string name="home_selinux_status_unknown">Desconhecido</string>
     <string name="kpm_load">Carregar</string>
@@ -93,25 +91,26 @@
     <string name="apm_new_version_available">Clique para instalar a nova versão, %s.</string>
     <string name="apm_not_installed">AndroidPatch não instalado</string>
     <string name="system_default">Padrão do sistema</string>
-    <string name="settings_app_language">Linguagem</string>
-    <string name="patch">Aplicar o Patch</string>
+    <string name="settings_app_language">Idioma</string>
+    <string name="patch">Patch</string>
     <string name="settings_global_namespace_mode">Modo de Namespace Global</string>
     <string name="settings_global_namespace_mode_summary">Todas as sessões root usam o Global Mount Namespace</string>
-    <string name="settings_check_update">Checar por atualização</string>
+    <string name="settings_check_update">Verificar atualização</string>
     <string name="success">Sucesso</string>
     <string name="failure">Falha</string>
-    <string name="settings_clear_super_key_dialog">Você realmente deseja prosseguir?</string>
-    <string name="settings_check_update_summary">Verifique automaticamente se há atualizações ao abrir o aplicativo</string>
+    <string name="settings_clear_super_key_dialog">Você realmente quer prosseguir?</string>
+    <string name="settings_check_update_summary">Verifique automaticamente as atualizações ao abrir o aplicativo</string>
     <string name="home_install_unknown_summary">Clique para instalar</string>
-    <string name="kpatch_version_update">Versão: %s -&gt; %s</string>
-    <string name="home_kpatch_info_title">Informações</string>
-    <string name="patch_select_bootimg_btn">Selecione boot</string>
-    <string name="patch_start_patch_btn">Iniciar</string>
+    <string name="kpatch_version_update">Versão:
+\n%s -&gt; %s</string>
+    <string name="home_kpatch_info_title">Informação</string>
+    <string name="patch_select_bootimg_btn">Selecione a inicialização</string>
+    <string name="patch_start_patch_btn">Início</string>
     <string name="patch_item_bootimg">inicialização</string>
     <string name="patch_item_extra_name">nome:</string>
     <string name="kpatch_shadow_path_title">kpatch</string>
-    <string name="home_ap_cando_reboot">Reinício</string>
-    <string name="patch_config_title">Patches</string>
+    <string name="home_ap_cando_reboot">Reiniciar</string>
+    <string name="patch_config_title">Luz azul Tema</string>
     <string name="patch_mode_bootimg_patch">Modo: Patch</string>
     <string name="patch_item_kpimg_comile_time">tempo:</string>
     <string name="patch_item_extra_version">versão:</string>
@@ -140,9 +139,9 @@
     <string name="about_telegram_channel">Telegram Canal</string>
     <string name="about_telegram_group">Telegram Grupo</string>
     <string name="about_app_version">Versão %1$s</string>
-    <string name="about_powered_by">Desenvolvido por %1$s</string>
+    <string name="about_powered_by">Alimentado por %1$s</string>
     <string name="about_app_desc">Solução Kernel Root com apenas uma imagem de kernel removida, fornecendo a capacidade de montar o módulo do sistema e conectar a função do Kernel.</string>
-    <string name="patch_mode_patch_and_install">Modo: Patch e instalação</string>
+    <string name="patch_mode_patch_and_install">Modo: Patch e instalar</string>
     <string name="home_dialog_auth_fail_content">Não foi possível autenticar a Chave Mestra, portanto, APach pode não funcionar corretamente.
 \n
 \nAqui estão alguns possíveis motivos para a falha de autenticação:
@@ -156,11 +155,11 @@
 \n4. Seu dispositivo não oferece suporte a APatch e KernelPatch.
 \n
 \nPor favor verifique e tente novamente. Se ainda houver problemas, você sempre poderá fazer perguntas na página de \'issues\' do repositório oficial.</string>
-    <string name="patch_mode_install_to_next_slot">Modo: Instalar no outro slot (após o OTA)</string>
+    <string name="patch_mode_install_to_next_slot">Modo: Instalar para o próximo slot (depois da OTA)</string>
     <string name="patch_mode_uninstall_patch">Modo: Desinstalar KPatch</string>
     <string name="patch_embed_kpm_btn">Introduzir KPM</string>
     <string name="patch_start_unpatch_btn">Desfazer o Patch</string>
-    <string name="patch_item_error">!!ERRO!!</string>
+    <string name="patch_item_error">ERRO!</string>
     <string name="patch_item_kpimg_config">configuração:</string>
     <string name="patch_item_new_extra_kpm">Implementar novo</string>
     <string name="patch_item_existed_extra_kpm">Existia</string>
@@ -186,4 +185,13 @@
     <string name="home_more_menu_about">Sobre</string>
     <string name="kpm_control_dialog_title">Controlar KPModule</string>
     <string name="settings_night_theme_enabled">Habilitar tema Escuro</string>
+    <string name="save_log">Salvar registros</string>
+    <string name="mode_select_page_title">instalar</string>
+    <string name="kpm_install">Instalar</string>
+    <string name="patch_item_extra_event">evento:</string>
+    <string name="patch_item_bootimg_slot">slot:</string>
+    <string name="patch_item_bootimg_dev">dispositivo:</string>
+    <string name="patch_item_kernel">Kernel</string>
+    <string name="patch_item_kpimg">kpimg</string>
+    <string name="patch_item_kpimg_version">versão:</string>
 </resources>
