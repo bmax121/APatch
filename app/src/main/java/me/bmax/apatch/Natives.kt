@@ -63,9 +63,7 @@ object Natives {
     }
 
     private external fun nativeLoadKernelPatchModule(
-        superKey: String,
-        modulePath: String,
-        args: String
+        superKey: String, modulePath: String, args: String
     ): Long
 
     fun loadKernelPatchModule(modulePath: String, args: String): Long {
@@ -94,9 +92,7 @@ object Natives {
     }
 
     private external fun nativeControlKernelPatchModule(
-        superKey: String,
-        modName: String,
-        jctlargs: String
+        superKey: String, modName: String, jctlargs: String
     ): KPMCtlRes
 
     fun kernelPatchModuleControl(moduleName: String, controlArg: String): KPMCtlRes {
@@ -106,10 +102,7 @@ object Natives {
     external fun nativeThreadSu(superKey: String, uid: Int, scontext: String?): Long
 
     private external fun nativeGrantSu(
-        superKey: String,
-        uid: Int,
-        toUid: Int,
-        scontext: String?
+        superKey: String, uid: Int, toUid: Int, scontext: String?
     ): Long
 
     fun grantSu(uid: Int, toUid: Int, scontext: String?): Long {
@@ -130,6 +123,11 @@ object Natives {
     private external fun nativeResetSuPath(superKey: String, path: String): Boolean
     fun resetSuPath(path: String): Boolean {
         return nativeResetSuPath(APApplication.superKey, path)
+    }
+
+    private external fun nativeGetSafeMode(superKey: String): Boolean
+    fun getSafeMode(): Boolean {
+        return nativeGetSafeMode(APApplication.superKey)
     }
 
 }

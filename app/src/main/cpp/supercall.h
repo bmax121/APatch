@@ -416,6 +416,18 @@ static inline long sc_skey_root_enable(const char *key, bool enable)
     return ret;
 }
 
+/**
+ * @brief Get whether in safe mode
+ *
+ * @param key
+ * @return long
+ */
+static inline long sc_su_get_safemode(const char *key)
+{
+    if (!key || !key[0]) return -EINVAL;
+    return syscall(__NR_supercall, key, compact_cmd(key, SUPERCALL_SU_GET_SAFEMODE));
+}
+
 // todo
 static inline long sc_pid_virt_to_phys(const char *key, pid_t pid, unsigned long vaddr)
 {

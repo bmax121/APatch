@@ -337,4 +337,17 @@ extern "C" {
         env->ReleaseStringUTFChars(jpath, path);
         return rc == 0;
     }
+
+JNIEXPORT jboolean JNICALL Java_me_bmax_apatch_Natives_nativeGetSafeMode(JNIEnv *env, jobject /* this */,
+                                                                         jstring superKey)
+    {
+        if (!superKey) [[unlikely]] {
+            LOGE("Super Key is null!");
+            return -EINVAL;
+        }
+        const char *skey = env->GetStringUTFChars(superKey, nullptr);
+        long rc = sc_su_get_safemode(skey);
+        env->ReleaseStringUTFChars(superKey, skey);
+        return rc == 1;
+    }
 }
