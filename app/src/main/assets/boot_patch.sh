@@ -71,8 +71,7 @@ if [ $? -ne 0 ]; then
   exit $?
 fi
 
-# shellcheck disable=SC2039
-if [[ $FLASH_TO_DEVICE == *"true"* ]]; then
+if [ "$FLASH_TO_DEVICE" = "true" ]; then
   # flash
   if [ -b "$BOOTIMAGE" ] || [ -c "$BOOTIMAGE" ] && [ -f "new-boot.img" ]; then
     echo "- Flashing new boot image"
