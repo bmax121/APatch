@@ -1,4 +1,6 @@
 use anyhow::{bail, Context, Error, Ok, Result};
+use log::{info, warn};
+use std::ffi::CString;
 use std::{
     fs::{self, create_dir_all, File, OpenOptions},
     io::{ErrorKind::AlreadyExists, Write},
@@ -13,6 +15,8 @@ use std::os::unix::prelude::PermissionsExt;
 
 use crate::defs;
 use std::fs::metadata;
+
+use crate::supercall::sc_su_get_safemode;
 
 pub fn ensure_clean_dir(dir: &str) -> Result<()> {
     let path = Path::new(dir);
@@ -65,19 +69,28 @@ pub fn getprop(_prop: &str) -> Option<String> {
     unimplemented!()
 }
 
-pub fn is_safe_mode() -> bool {
+pub fn is_safe_mode(superkey: Option<String>) -> bool {
     let safemode = getprop("persist.sys.safemode")
         .filter(|prop| prop == "1")
         .is_some()
         || getprop("ro.sys.safemode")
             .filter(|prop| prop == "1")
             .is_some();
-    log::info!("safemode: {}", safemode);
+    info!("safemode: {}", safemode);
     if safemode {
         return true;
     }
-    let safemode = Path::new(defs::SAFEMODE_PATH).exists();
-    log::info!("kernel_safemode: {}", safemode);
+    let safemode = superkey
+        .as_ref()
+        .and_then(|key_str| CString::new(key_str.as_str()).ok())
+        .map_or_else(
+            || {
+                warn!("[is_safe_mode] No valid superkey provided, assuming safemode as false.");
+                false
+            },
+            |cstr| sc_su_get_safemode(&cstr) != 0,
+        );
+    info!("kernel_safemode: {}", safemode);
     safemode
 }
 

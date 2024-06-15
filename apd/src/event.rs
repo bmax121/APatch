@@ -127,7 +127,7 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
         Err(_) => println!("{} not found", key),
     }
 
-    let safe_mode = crate::utils::is_safe_mode();
+    let safe_mode = crate::utils::is_safe_mode(superkey.clone());
 
     if safe_mode {
         // we should still mount modules.img to `/data/adb/modules` in safe mode
@@ -222,14 +222,14 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
         warn!("do systemless mount failed: {}", e);
     }
 
-    run_stage("post-mount", true);
+    run_stage("post-mount", superkey, true);
 
     std::env::set_current_dir("/").with_context(|| "failed to chdir to /")?;
 
     Ok(())
 }
 
-fn run_stage(stage: &str, block: bool) {
+fn run_stage(stage: &str, superkey: Option<String>, block: bool) {
     utils::umask(0);
 
     if utils::has_magisk() {
@@ -237,7 +237,7 @@ fn run_stage(stage: &str, block: bool) {
         return;
     }
 
-    if crate::utils::is_safe_mode() {
+    if crate::utils::is_safe_mode(superkey) {
         warn!("safe mode, skip {stage} scripts");
         if let Err(e) = crate::module::disable_all_modules() {
             warn!("disable all modules failed: {}", e);
@@ -253,14 +253,14 @@ fn run_stage(stage: &str, block: bool) {
     }
 }
 
-pub fn on_services(_superkey: Option<String>) -> Result<()> {
+pub fn on_services(superkey: Option<String>) -> Result<()> {
     info!("on_services triggered!");
-    run_stage("service", false);
+    run_stage("service", superkey, false);
 
     Ok(())
 }
 
-pub fn on_boot_completed(_superkey: Option<String>) -> Result<()> {
+pub fn on_boot_completed(superkey: Option<String>) -> Result<()> {
     info!("on_boot_completed triggered!");
     let module_update_img = Path::new(defs::MODULE_UPDATE_IMG);
     let module_img = Path::new(defs::MODULE_IMG);
@@ -275,7 +275,7 @@ pub fn on_boot_completed(_superkey: Option<String>) -> Result<()> {
     }
 
     //synchronize_package_uid();
-    run_stage("boot-completed", false);
+    run_stage("boot-completed", superkey, false);
 
     Ok(())
 }

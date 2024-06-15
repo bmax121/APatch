@@ -16,6 +16,7 @@ const SUPERCALL_KERNELPATCH_VER: c_long = 0x1008;
 const SUPERCALL_SU: c_long = 0x1010;
 const SUPERCALL_SU_GRANT_UID: c_long = 0x1100;
 const SUPERCALL_SU_RESET_PATH: c_long = 0x1111;
+const SUPERCALL_SU_GET_SAFEMODE: c_long = 0x1112;
 
 const SUPERCALL_SCONTEXT_LEN: usize = 0x60;
 
@@ -66,6 +67,19 @@ fn sc_su_grant_uid(key: &CStr, profile: &SuProfile) -> c_long {
             key.as_ptr(),
             compact_cmd(key, SUPERCALL_SU_GRANT_UID),
             profile,
+        )
+    }
+}
+
+pub fn sc_su_get_safemode(key: &CStr) -> c_long {
+    if key.to_bytes().is_empty() {
+        return (-libc::EINVAL).into();
+    }
+    unsafe {
+        syscall(
+            __NR_SUPERCALL,
+            key.as_ptr(),
+            compact_cmd(key, SUPERCALL_SU_GET_SAFEMODE),
         )
     }
 }
