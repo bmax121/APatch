@@ -27,4 +27,4 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 
 target_link_libraries(${PROJECT_NAME} PRIVATE log)
 target_compile_options(${PROJECT_NAME} PRIVATE -flto)
-target_link_options(${PROJECT_NAME} PRIVATE "-Wl,--build-id=none" "-Wl,-icf=safe,--lto-O3" "-Wl,-s,-x,--gc-sections" "-Wl,--no-undefined")
+target_link_options(${PROJECT_NAME} PRIVATE "-Wl,--build-id=none" "-Wl,-icf=all,--lto-O3" "-Wl,-s,-x,--gc-sections" "-Wl,--no-undefined")
