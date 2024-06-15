@@ -87,7 +87,7 @@ pub fn is_safe_mode(superkey: Option<String>) -> bool {
                 warn!("[is_safe_mode] No valid superkey provided, assuming safemode as false.");
                 false
             },
-            |cstr| sc_su_get_safemode(&cstr) != 0,
+            |cstr| sc_su_get_safemode(&cstr) == 1,
         );
     info!("kernel_safemode: {}", safemode);
     safemode

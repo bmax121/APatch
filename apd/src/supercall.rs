@@ -73,7 +73,8 @@ fn sc_su_grant_uid(key: &CStr, profile: &SuProfile) -> c_long {
 
 pub fn sc_su_get_safemode(key: &CStr) -> c_long {
     if key.to_bytes().is_empty() {
-        return (-libc::EINVAL).into();
+        warn!("[sc_su_get_safemode] null superkey, tell apd we are not in safemode!");
+        return 0;
     }
     unsafe {
         syscall(
