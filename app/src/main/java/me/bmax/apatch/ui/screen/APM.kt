@@ -70,7 +70,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.bmax.apatch.APApplication
-import me.bmax.apatch.APApplication.Companion.SAFEMODE_FILE
+import me.bmax.apatch.Natives
 import me.bmax.apatch.R
 import me.bmax.apatch.ui.WebUIActivity
 import me.bmax.apatch.ui.component.ConfirmResult
@@ -82,22 +82,13 @@ import me.bmax.apatch.ui.component.rememberLoadingDialog
 import me.bmax.apatch.ui.screen.destinations.InstallScreenDestination
 import me.bmax.apatch.ui.viewmodel.APModuleViewModel
 import me.bmax.apatch.util.DownloadListener
-import me.bmax.apatch.util.ui.LocalSnackbarHost
 import me.bmax.apatch.util.download
-import me.bmax.apatch.util.getRootShell
 import me.bmax.apatch.util.hasMagisk
 import me.bmax.apatch.util.reboot
-import me.bmax.apatch.util.shellForResult
 import me.bmax.apatch.util.toggleModule
+import me.bmax.apatch.util.ui.LocalSnackbarHost
 import me.bmax.apatch.util.uninstallModule
 import okhttp3.OkHttpClient
-
-private fun getSafeMode(): Boolean {
-    val shell = getRootShell()
-    return shellForResult(
-        shell, "[ -e $SAFEMODE_FILE ] && echo 'IS_SAFE_MODE'"
-    ).out.contains("IS_SAFE_MODE")
-}
 
 @Destination
 @Composable
@@ -131,9 +122,7 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
         }
     }
 
-    // TODO: notify boot_completed event to kernel to skip writing /dev/.safemode
-    //val isSafeMode = getSafeMode()
-    val isSafeMode = false
+    val isSafeMode = Natives.getSafeMode()
     val hasMagisk = hasMagisk()
     val hideInstallButton = isSafeMode || hasMagisk || !viewModel.isOverlayAvailable
 
@@ -335,7 +324,8 @@ private fun ModuleList(
         }
     }
 
-    val refreshState = rememberPullRefreshState(refreshing = viewModel.isRefreshing,
+    val refreshState = rememberPullRefreshState(
+        refreshing = viewModel.isRefreshing,
         onRefresh = { viewModel.fetchModuleList() })
     Box(modifier.pullRefresh(refreshState)) {
         LazyColumn(
