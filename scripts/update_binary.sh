@@ -1,12 +1,13 @@
 #!/sbin/sh
 #
 TMPDIR=/dev/tmp
+TD=$2
 rm -rf $TMPDIR
 mkdir -p $TMPDIR 2>/dev/null
 
 ui_print() {
-  echo -n -e "ui_print $1\n" > /proc/self/fd/$2
-  echo -n -e "ui_print\n" > /proc/self/fd/$2
+  echo -n -e "ui_print $1\n" > /proc/self/fd/$TD
+  echo -n -e "ui_print\n" > /proc/self/fd/$TD
 }
 
 ui_print "- Welcome to Apatch twrp tool"
