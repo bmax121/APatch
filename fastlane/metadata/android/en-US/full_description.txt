@@ -1,0 +1,25 @@
+The patching of Android kernel and Android system.
+<ul>
+<li>A new kernel-based root solution for Android devices.</li>
+<li>APM: Support for modules similar to Magisk.</li>
+<li>KPM: Support for modules that allow you to inject any code into the kernel (Requires kernel function <code>inline-hook</code> and <code>syscall-table-hook</code> enabled).</li>
+<li>APatch relies on KernelPatch.</li>
+<li>The APatch UI and the APModule source code have been derived and modified from KernelSU.</li>
+</ul>
+<ul>
+<li>Only supports the ARM64 architecture.</li>
+<li>Only supports Android kernel versions 3.18 - 6.1</li>
+</ul>
+Support for Samsung devices with security protection: Planned
+Kernel configs:
+<ul>
+<li>
+<code>CONFIG_KALLSYMS=y</code> and <code>CONFIG_KALLSYMS_ALL=y</code>
+</li>
+<li>
+<code>CONFIG_KALLSYMS=y</code> and <code>CONFIG_KALLSYMS_ALL=n</code>: Initial support
+</li>
+</ul>
+The <strong>SuperKey</strong> has higher privileges than root access.
+Weak or compromised keys can lead to unauthorized control of your device.
+It is critical to use robust keys and safeguard them from exposure to maintain the security of your device.
