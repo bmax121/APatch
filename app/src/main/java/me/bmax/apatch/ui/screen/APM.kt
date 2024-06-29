@@ -122,7 +122,8 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
         }
     }
 
-    val isSafeMode = Natives.getSafeMode()
+    //TODO: FIXME -> val isSafeMode = Natives.getSafeMode()
+    val isSafeMode = false;
     val hasMagisk = hasMagisk()
     val hideInstallButton = isSafeMode || hasMagisk || !viewModel.isOverlayAvailable
 
