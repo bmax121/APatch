@@ -4,10 +4,11 @@ use std::env;
 use std::{collections::HashMap, path::Path};
 
 use crate::module::prune_modules;
+use crate::supercall::fork_for_result;
 use crate::{
     assets, defs, mount,
     package::synchronize_package_uid,
-    restorecon,
+    restorecon, supercall,
     supercall::{init_load_su_path, init_load_su_uid},
     utils::{self, ensure_clean_dir},
 };
@@ -109,6 +110,12 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     init_load_su_uid(&superkey);
 
     init_load_su_path(&superkey);
+
+    let args = ["/data/adb/ap/bin/magiskpolicy", "--magisk", "--live"];
+    fork_for_result("/data/adb/ap/bin/magiskpolicy", &args, &superkey);
+
+    info!("Re-privilege apd profile after injecting sepolicy");
+    supercall::privilege_apd_profile(&superkey);
 
     if utils::has_magisk() {
         warn!("Magisk detected, skip post-fs-data!");
