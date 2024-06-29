@@ -144,6 +144,7 @@ dependencies = [
  "derive-new",
  "encoding_rs",
  "env_logger",
+ "errno 0.3.9",
  "extattr",
  "getopts",
  "humansize",

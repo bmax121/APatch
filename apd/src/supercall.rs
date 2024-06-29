@@ -1,9 +1,14 @@
-use libc::{c_long, execv, fork, pid_t, setenv, syscall, wait, EINVAL};
+use errno::errno;
+use libc::{c_int, c_long, execv, fork, pid_t, setenv, syscall, wait, EINVAL};
 use log::{info, warn};
 use std::ffi::{CStr, CString};
-use std::fs::File;
-use std::io::{self, Read};
-use std::process::exit;
+use std::fmt::Write;
+use std::fs::{File, OpenOptions};
+use std::io::{self, Error, Read};
+use std::os::fd::AsRawFd;
+use std::process::{exit, Child, Command};
+use std::thread::sleep;
+use std::time::Duration;
 use std::{process, ptr};
 
 use crate::package::read_ap_package_config;
@@ -13,6 +18,7 @@ const MINOR: c_long = 11;
 const PATCH: c_long = 0;
 
 const __NR_SUPERCALL: c_long = 45;
+const SUPERCALL_KLOG: c_long = 0x1004;
 const SUPERCALL_KERNELPATCH_VER: c_long = 0x1008;
 const SUPERCALL_KERNEL_VER: c_long = 0x1009;
 const SUPERCALL_SU: c_long = 0x1010;
@@ -150,6 +156,20 @@ fn sc_k_ver(key: &CStr) -> Result<u32, i32> {
     Ok(ret as u32)
 }
 
+fn sc_klog(key: &CStr, msg: &CStr) -> c_long {
+    if key.to_bytes().is_empty() || msg.to_bytes().is_empty() {
+        return (-EINVAL).into();
+    }
+    unsafe {
+        syscall(
+            __NR_SUPERCALL,
+            key.as_ptr(),
+            compact_cmd(key, SUPERCALL_KLOG),
+            msg.as_ptr(),
+        ) as c_long
+    }
+}
+
 fn read_file_to_string(path: &str) -> io::Result<String> {
     let mut file = File::open(path)?;
     let mut content = String::new();
@@ -244,6 +264,80 @@ fn set_env_var(key: &str, value: &str) {
     }
 }
 
+fn log_kernel(key: &CStr, _fmt: &str, args: std::fmt::Arguments) -> c_long {
+    let mut buf = String::with_capacity(1024);
+    write!(&mut buf, "{}", args).expect("Error formatting string");
+
+    let c_buf = CString::new(buf).expect("CString::new failed");
+    sc_klog(key, &c_buf)
+}
+
+#[macro_export]
+macro_rules! log_kernel {
+    ($key:expr, $fmt:expr, $($arg:tt)*) => (
+        log_kernel($key, $fmt, std::format_args!($fmt, $($arg)*))
+    )
+}
+
+fn save_log(args: &[&str], file: &str) -> Result<(), Error> {
+    match unsafe { fork() } {
+        -1 => {
+            warn!("{} fork for dmesg error: {}", process::id(), -1);
+            Err(Error::last_os_error())
+        }
+        0 => {
+            // Child process
+            let fd = OpenOptions::new()
+                .write(true)
+                .truncate(true)
+                .create(true)
+                .open(file)?;
+
+            unsafe {
+                libc::dup2(fd.as_raw_fd(), libc::STDOUT_FILENO);
+                libc::dup2(fd.as_raw_fd(), libc::STDERR_FILENO);
+                libc::close(fd.as_raw_fd());
+            }
+
+            let command_result = Command::new(args[0])
+                .args(&args[1..])
+                .spawn()
+                .and_then(|mut child: Child| child.wait());
+
+            match command_result {
+                Ok(status) => {
+                    if !status.success() {
+                        eprintln!(
+                            "{} save log > {} error: exited with status {:?}",
+                            process::id(),
+                            file,
+                            status
+                        );
+                        exit(1);
+                    }
+                }
+                Err(err) => {
+                    eprintln!("{} save log > {} error: {}", process::id(), file, err);
+                    exit(1);
+                }
+            }
+
+            exit(0);
+        }
+        _ => {
+            // Parent process
+            sleep(Duration::from_secs(1));
+            info!("{} save log status: success", process::id());
+            Ok(())
+        }
+    }
+}
+
+pub fn save_dmesg(file: &str) -> Result<(), Error> {
+    let dmesg_argv = ["/system/bin/dmesg"];
+    save_log(&dmesg_argv, file)
+}
+
 pub fn fork_for_result(exec: &str, argv: &[&str], key: &Option<String>) {
     let mut cmd = String::new();
     for arg in argv {
@@ -257,14 +351,20 @@ pub fn fork_for_result(exec: &str, argv: &[&str], key: &Option<String>) {
         unsafe {
             let pid: pid_t = fork();
             if pid < 0 {
-                //log_kernel("%d fork %s error: %d\n", libc::getpid(), exec, pid);
+                log_kernel!(
+                    &superkey_cstr,
+                    "{} fork {} error: {}\n",
+                    libc::getpid(),
+                    exec,
+                    -1
+                );
             } else if pid == 0 {
                 set_env_var("KERNELPATCH", "true");
                 let kpver = format!("{:x}", sc_kp_ver(&superkey_cstr).unwrap_or(0));
                 set_env_var("KERNELPATCH_VERSION", kpver.as_str());
                 let kver = format!("{:x}", sc_k_ver(&superkey_cstr).unwrap_or(0));
                 set_env_var("KERNEL_VERSION", kver.as_str());
-                //setenv("SUPERKEY", key.as_ptr(), 1);
+
                 let c_exec = CString::new(exec).expect("CString::new failed");
                 let c_argv: Vec<CString> =
                     argv.iter().map(|&arg| CString::new(arg).unwrap()).collect();
@@ -273,12 +373,27 @@ pub fn fork_for_result(exec: &str, argv: &[&str], key: &Option<String>) {
                 c_argv_ptrs.push(ptr::null());
 
                 execv(c_exec.as_ptr(), c_argv_ptrs.as_ptr());
-                //log_kernel("%d exec %s error: %s\n", libc::getpid(), cmd, strerror(errno));
+
+                log_kernel!(
+                    &superkey_cstr,
+                    "{} exec {} error: {}\n",
+                    libc::getpid(),
+                    cmd,
+                    CStr::from_ptr(libc::strerror(errno().0))
+                        .to_string_lossy()
+                        .into_owned()
+                );
                 exit(1); // execv only returns on error
             } else {
-                let mut status: libc::c_int = 0;
+                let mut status: c_int = 0;
                 wait(&mut status);
-                //log_kernel("%d wait %s status: 0x%x\n", libc::getpid(), cmd, status);
+                log_kernel!(
+                    &superkey_cstr,
+                    "{} wait {} status: 0x{}\n",
+                    libc::getpid(),
+                    cmd,
+                    status
+                );
             }
         }
     } else {

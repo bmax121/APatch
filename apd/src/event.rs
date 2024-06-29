@@ -1,7 +1,8 @@
 use anyhow::{bail, Context, Result};
 use log::{info, warn};
-use std::env;
+use std::os::unix::fs::PermissionsExt;
 use std::{collections::HashMap, path::Path};
+use std::{env, fs};
 
 use crate::module::prune_modules;
 use crate::supercall::fork_for_result;
@@ -122,6 +123,15 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
         return Ok(());
     }
 
+    // Create log environment
+    if Path::new(defs::APATCH_LOG_FOLDER).exists() {
+        fs::remove_dir_all(defs::APATCH_LOG_FOLDER).expect("Failed to remove previous log dir");
+    }
+
+    fs::create_dir(defs::APATCH_LOG_FOLDER).expect("Failed to create log folder");
+    let permissions = fs::Permissions::from_mode(0o700);
+    fs::set_permissions(defs::APATCH_LOG_FOLDER, permissions).expect("Failed to set permissions");
+
     let key = "KERNELPATCH_VERSION";
     match env::var(key) {
         Ok(value) => println!("{}: {}", key, value),
@@ -134,7 +144,7 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
         Err(_) => println!("{} not found", key),
     }
 
-    let safe_mode = crate::utils::is_safe_mode(superkey.clone());
+    let safe_mode = utils::is_safe_mode(superkey.clone());
 
     if safe_mode {
         // we should still mount modules.img to `/data/adb/modules` in safe mode
@@ -244,7 +254,10 @@ fn run_stage(stage: &str, superkey: Option<String>, block: bool) {
         return;
     }
 
-    if crate::utils::is_safe_mode(superkey) {
+    let log_path = format!("{}trigger_{}.log", defs::APATCH_LOG_FOLDER, stage);
+    supercall::save_dmesg(log_path.as_str()).expect("Failed to save dmesg");
+
+    if utils::is_safe_mode(superkey) {
         warn!("safe mode, skip {stage} scripts");
         if let Err(e) = crate::module::disable_all_modules() {
             warn!("disable all modules failed: {}", e);
