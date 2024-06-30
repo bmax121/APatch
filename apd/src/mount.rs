@@ -31,10 +31,17 @@ impl AutoMountExt4 {
         let path = Path::new(source);
         if !path.exists() {
             println!("Source path does not exist");
-        }
-        let metadata = fs::metadata(path)?;
-        if !metadata.permissions().readonly() {
-            println!("Source path is not read-only");
+        } else {
+            let metadata = fs::metadata(path)?;
+            let permissions = metadata.permissions();
+            let mode = permissions.mode();
+            if permissions.readonly() {
+                println!(
+                    "File permissions: {:o} (octal), read-only: {}",
+                    mode & 0o777,
+                    permissions.readonly()
+                );
+            }
         }
 
         mount_ext4(source, target)?;
