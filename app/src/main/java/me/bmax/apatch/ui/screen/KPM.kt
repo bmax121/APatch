@@ -204,7 +204,7 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
 
                                     moduleInstall -> {
                                         Toast.makeText(
-                                            current, "Not support now!", Toast.LENGTH_SHORT
+                                            current, "Not supported yet!", Toast.LENGTH_SHORT
                                         ).show()
                                     }
 
