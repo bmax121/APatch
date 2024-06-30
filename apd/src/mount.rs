@@ -9,6 +9,8 @@ use retry::delay::NoDelay;
 #[cfg(any(target_os = "linux", target_os = "android"))]
 use rustix::{fd::AsFd, fs::CWD, mount::*};
 use std::fs::create_dir;
+#[cfg(any(target_os = "linux", target_os = "android"))]
+use std::os::unix::fs::PermissionsExt;
 
 use crate::defs::AP_OVERLAY_SOURCE;
 use crate::defs::PTS_NAME;
@@ -35,12 +37,18 @@ impl AutoMountExt4 {
             let metadata = fs::metadata(path)?;
             let permissions = metadata.permissions();
             let mode = permissions.mode();
-            if permissions.readonly() {
+            
+            if permissions.readonly()
+            #[cfg(any(target_os = "linux", target_os = "android"))]
+            {
                 println!(
-                    "File permissions: {:o} (octal), read-only: {}",
+                    "File permissions: {:o} (octal)",
                     mode & 0o777,
-                    permissions.readonly()
                 );
+            }
+            #[cfg(target_os = "windows")]
+            {
+                println!("not support");
             }
         }
 
