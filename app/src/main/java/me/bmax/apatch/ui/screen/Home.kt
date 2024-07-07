@@ -983,7 +983,7 @@ fun LearnMoreCard() {
         Row(modifier = Modifier
             .fillMaxWidth()
             .clickable {
-                uriHandler.openUri("https://apatch.top")
+                uriHandler.openUri("https://apatch.dev")
             }
             .padding(24.dp), verticalAlignment = Alignment.CenterVertically) {
             Column {
