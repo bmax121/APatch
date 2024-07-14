@@ -37,13 +37,11 @@ impl AutoMountExt4 {
             let metadata = fs::metadata(path)?;
             let permissions = metadata.permissions();
             let mode = permissions.mode();
-            
-            if permissions.readonly(){
-            #[cfg(any(target_os = "linux", target_os = "android"))]
-            println!("File permissions: {:o} (octal)",mode & 0o777);
-            
-            }
 
+            if permissions.readonly() {
+                #[cfg(any(target_os = "linux", target_os = "android"))]
+                println!("File permissions: {:o} (octal)", mode & 0o777);
+            }
         }
 
         mount_ext4(source, target)?;
