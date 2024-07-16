@@ -13,7 +13,7 @@
     <string name="reboot_download">إعادة تشغيل إلى وضع التنزيل</string>
     <string name="reboot_edl">إعادة تشغيل إلى EDL</string>
     <string name="about">عنْ التطبيق</string>
-    <string name="home_learn_apatch">تعلم AndroidPatch</string>
+    <string name="home_learn_apatch">تعلم APatch</string>
     <string name="home_click_to_learn_apatch">تعرف على ميزات AndroidPatch وكيفية استخدامه</string>
     <string name="about_source_code">&lt;p&gt;عرض كود المصدر على %1$s&lt;p/&gt;انضم إلى قناتنا %2$s&lt;p/&gt;انضم إلى مجموعتنا %3$s</string>
     <string name="send_log">إرسال السجل</string>

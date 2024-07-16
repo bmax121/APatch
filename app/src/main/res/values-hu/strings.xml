@@ -60,7 +60,7 @@
     <string name="patch">Javítás</string>
     <string name="reboot_bootloader">Újraindítás a Bootloaderbe</string>
     <string name="settings_global_namespace_mode_summary">Minden root munkamenet az általános csatolási névteret használja</string>
-    <string name="home_learn_apatch">AndroidPatch tanulása</string>
+    <string name="home_learn_apatch">APatch tanulása</string>
     <string name="apm_overlay_fs_not_available">A modulok elérhetetlenek, mert az OverlayFS ki van kapcsolva a kernel által.</string>
     <string name="settings_clear_super_key_dialog">Tényleg folytatni akarod?</string>
     <string name="home_click_to_learn_apatch">Ismerd meg az AndroidPatch funkcióit és használatát</string>
@@ -127,4 +127,8 @@
     <string name="kpm_unload">Kitöltés</string>
     <string name="kpm_unload_confirm">\"%s\" modul kitöltése?</string>
     <string name="su_title">Superuser</string>
+    <string name="success">Sikeres</string>
+    <string name="failure">Hiba</string>
+    <string name="settings_check_update_summary">Frissítések automatikus keresése minden induláskor</string>
+    <string name="settings_check_update">Frissítés ellenőrzése</string>
 </resources>
