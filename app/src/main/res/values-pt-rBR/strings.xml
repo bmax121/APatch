@@ -168,7 +168,7 @@
     <string name="home_new_apatch_found">Nova versão %s está disponível, clique para atualizar.</string>
     <string name="patch_mode_install_to_next_slot">Modo: Instalar no slot inativo (após o OTA)</string>
     <string name="home_device_info">Dispositivo</string>
-    <string name="home_dialog_uninstall_ap_only">Remover AndroidPatch</string>
+    <string name="home_dialog_uninstall_ap_only">Desinstalar AndroidPatch</string>
     <string name="home_dialog_uninstall_all">Desinstalar tudo</string>
     <string name="home_install_unknown_summary">Clique para instalar</string>
     <string name="home_system_version">Versão do sistema</string>
@@ -209,7 +209,7 @@
     <string name="indigo_theme">Azul-anil</string>
     <string name="brown_theme">Marrom</string>
     <string name="deep_purple_theme">Roxo profundo</string>
-    <string name="about_app_desc">Solução root do kernel com apenas uma imagem do kernel despojada, fornecendo a capacidade de montar módulos do sistema e realizar a interceptação de funções do kernel.</string>
+    <string name="about_app_desc">Solução root do kernel com uma única imagem despojada, oferecendo a capacidade de montar módulos do sistema e interceptar funções do kernel.</string>
     <string name="kpm_control_dialog_title">Controlar KPMódulo</string>
     <string name="save_log">Salvar registros</string>
 </resources>

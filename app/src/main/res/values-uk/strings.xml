@@ -42,7 +42,7 @@
     <string name="kpm_author">Автор</string>
     <string name="kpm_args">Аргументи</string>
     <string name="su_selinux_via_hook">Обхід через хук</string>
-    <string name="su_pkg_excluded_setting_title">Виключити</string>
+    <string name="su_pkg_excluded_setting_title">Виключити модифікації</string>
     <string name="su_show_system_apps">Показати системні додатки</string>
     <string name="su_refresh">Оновити</string>
     <string name="apm">Модулі</string>
@@ -76,7 +76,7 @@
     <string name="kpm_version">Версія</string>
     <string name="su_title">Суперкористувач</string>
     <string name="su_pkg_excluded_label">Виключити</string>
-    <string name="su_pkg_excluded_setting_summary">для модулів</string>
+    <string name="su_pkg_excluded_setting_summary">Увімкнення цієї опції дозволить APatch відновити будь-які модифіковані файли, змінені модулями для цієї програми.</string>
     <string name="su_hide_system_apps">Приховати системні додатки</string>
     <string name="apm_empty">Немає встановлених модулів</string>
     <string name="apm_install">Встановити</string>
@@ -211,4 +211,5 @@
     <string name="kpm_control_paramters">Параметри</string>
     <string name="settings_night_mode_follow_sys">Слідкувати за системно темою</string>
     <string name="settings_night_theme_enabled">Увімкнути темну тему</string>
+    <string name="save_log">Зберегти журнали</string>
 </resources>
