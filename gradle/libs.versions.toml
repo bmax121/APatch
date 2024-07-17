@@ -53,7 +53,7 @@ com-github-topjohnwu-libsu-io= { group = "com.github.topjohnwu.libsu", name = "i
 
 dev-rikka-rikkax-parcelablelist = { module = "dev.rikka.rikkax.parcelablelist:parcelablelist", version = "2.0.1" }
 
-io-coil-kt-coil-compose = { group = "io.coil-kt", name = "coil-compose", version = "2.6.0" }
+io-coil-kt-coil-compose = { group = "io.coil-kt", name = "coil-compose", version = "2.7.0" }
 
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version = "1.8.1" }
 
@@ -75,4 +75,4 @@ bcpkix = { group = "org.bouncycastle", name = "bcpkix-jdk18on", version = "1.78.
 
 com-google-accompanist-webview = { group = "com.google.accompanist", name = "accompanist-webview", version.ref = "accompanist" }
 androidx-webkit = { group = "androidx.webkit", name = "webkit", version.ref = "webkit" }
-cxx = { module = "org.lsposed.libcxx:libcxx", version = "27.0.11718014-beta1" }
+cxx = { module = "org.lsposed.libcxx:libcxx", version = "27.0.12077973" }
