@@ -80,21 +80,13 @@ android {
             useLegacyPackaging = true
         }
         resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-            excludes += "/META-INF/**.version"
-            excludes += "META-INF/versions/9/OSGI-INF/MANIFEST.MF"
-            excludes += "okhttp3/**"
-            excludes += "kotlin/**"
-            excludes += "/org/bouncycastle/**"
-            excludes += "org/**"
-            excludes += "**.properties"
-            excludes += "**.bin"
-            excludes += "kotlin-tooling-metadata.json"
+            excludes += "**"
         }
     }
 
     externalNativeBuild {
         cmake {
+            version = "3.28.0+"
             path("src/main/cpp/CMakeLists.txt")
         }
     }
