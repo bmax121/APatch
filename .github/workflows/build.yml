@@ -51,13 +51,10 @@ jobs:
         with:
           gradle-home-cache-cleanup: true
 
-      - name: Setup Android NDK
-        uses: nttld/setup-ndk@v1
-        id: setup-ndk
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
         with:
-          ndk-version: r26d
-          add-to-path: true
-          local-cache: true
+          packages: ''
 
       - name: Install toolchain
         run: |
@@ -103,6 +100,7 @@ jobs:
         with:
           name: APatch
           path: ${{steps.sign_app.outputs.signedReleaseFile}}
+
       - name: Post to channel
         if: ${{github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && github.ref_type != 'tag'}}
         env:
@@ -119,6 +117,7 @@ jobs:
             URL=$(python3 .github/scripts/telegram_url.py -1001910818234)
             curl -v "$URL" -F Release=@${{ steps.sign_app.outputs.signedReleaseFile }}
           fi
+
       - name: Release apk
         env: 
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
