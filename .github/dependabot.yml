@@ -28,6 +28,8 @@ updates:
     directory: apd/
     schedule:
       interval: daily
+    allow:
+      - dependency-type: "all"
     groups:
       rust-dependencies:
         patterns:
