@@ -1,5 +1,6 @@
 use crate::module::prune_modules;
 use crate::supercall::fork_for_result;
+use crate::utils::switch_cgroups;
 use crate::{
     assets, defs, mount, restorecon, supercall,
     supercall::{init_load_su_path, init_load_su_uid, refresh_su_list},
@@ -11,7 +12,9 @@ use notify::event::{ModifyKind, RenameMode};
 use notify::{Config, Event, EventKind, INotifyWatcher, RecursiveMode, Watcher};
 use std::ffi::CStr;
 use std::os::unix::fs::PermissionsExt;
+use std::os::unix::process::CommandExt;
 use std::path::PathBuf;
+use std::process::Command;
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
 use std::{collections::HashMap, path::Path, thread};
@@ -44,7 +47,7 @@ fn mount_partition(partition_name: &str, lowerdir: &Vec<String>) -> Result<()> {
 
 pub fn mount_systemlessly(module_dir: &str) -> Result<()> {
     // construct overlay mount params
-    let dir = std::fs::read_dir(module_dir);
+    let dir = fs::read_dir(module_dir);
     let Ok(dir) = dir else {
         bail!("open {} failed", defs::MODULE_DIR);
     };
@@ -178,15 +181,15 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
 
     if Path::new(module_update_img).exists() {
         if module_update_flag.exists() {
-            // if modules_update.img exists, and the the flag indicate this is an update
-            // this make sure that if the update failed, we will fallback to the old image
+            // if modules_update.img exists, and the flag indicate this is an update
+            // this make sure that if the update failed, we will fall back to the old image
             // if we boot succeed, we will rename the modules_update.img to modules.img #on_boot_complete
             target_update_img = &module_update_img;
             // And we should delete the flag immediately
-            std::fs::remove_file(module_update_flag)?;
+            fs::remove_file(module_update_flag)?;
         } else {
             // if modules_update.img exists, but the flag not exist, we should delete it
-            std::fs::remove_file(module_update_img)?;
+            fs::remove_file(module_update_img)?;
         }
     }
 
@@ -244,7 +247,7 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
 
     run_stage("post-mount", superkey, true);
 
-    std::env::set_current_dir("/").with_context(|| "failed to chdir to /")?;
+    env::set_current_dir("/").with_context(|| "failed to chdir to /")?;
 
     Ok(())
 }
@@ -283,21 +286,42 @@ pub fn on_services(superkey: Option<String>) -> Result<()> {
     Ok(())
 }
 
+fn run_uid_monitor() {
+    info!("Trigger run_uid_monitor!");
+
+    let mut command = &mut Command::new("/data/adb/apd");
+    {
+        command = command.process_group(0);
+        command = unsafe {
+            command.pre_exec(|| {
+                // ignore the error?
+                switch_cgroups();
+                Ok(())
+            })
+        };
+    }
+    command = command.arg("uid-listener");
+
+    command
+        .spawn()
+        .map(|_| ())
+        .expect("[run_uid_monitor] Failed to run uid monitor");
+}
+
 pub fn on_boot_completed(superkey: Option<String>) -> Result<()> {
     info!("on_boot_completed triggered!");
     let module_update_img = Path::new(defs::MODULE_UPDATE_IMG);
     let module_img = Path::new(defs::MODULE_IMG);
     if module_update_img.exists() {
-        // this is a update and we successfully booted
-        if std::fs::rename(module_update_img, module_img).is_err() {
+        // this is an update and we successfully booted
+        if fs::rename(module_update_img, module_img).is_err() {
             warn!("Failed to rename images, copy it now.",);
-            std::fs::copy(module_update_img, module_img)
-                .with_context(|| "Failed to copy images")?;
-            std::fs::remove_file(module_update_img).with_context(|| "Failed to remove image!")?;
+            fs::copy(module_update_img, module_img).with_context(|| "Failed to copy images")?;
+            fs::remove_file(module_update_img).with_context(|| "Failed to remove image!")?;
         }
     }
 
-    //synchronize_package_uid();
+    run_uid_monitor();
     run_stage("boot-completed", superkey, false);
 
     Ok(())
@@ -364,17 +388,17 @@ fn catch_bootlog() -> Result<()> {
     let oldapatchlog = logdir.join("apatch.old.log");
 
     if aptchlog.exists() {
-        std::fs::rename(&aptchlog, oldapatchlog)?;
+        fs::rename(&aptchlog, oldapatchlog)?;
     }
 
-    let aptchlog = std::fs::File::create(aptchlog)?;
+    let aptchlog = fs::File::create(aptchlog)?;
 
     // timeout -s 9 30s logcat > apatch.log
     let result = unsafe {
-        std::process::Command::new("timeout")
+        Command::new("timeout")
             .process_group(0)
             .pre_exec(|| {
-                utils::switch_cgroups();
+                switch_cgroups();
                 Ok(())
             })
             .arg("-s")
