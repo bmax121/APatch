@@ -62,7 +62,8 @@ where
 }
 
 pub fn synchronize_package_uid() {
-    info!("Enter synchronize_package_uid");
+    info!("[synchronize_package_uid] Start synchronizing root list with system packages...");
+
     if let Ok(lines) = read_lines("/data/system/packages.list") {
         let mut package_configs = read_ap_package_config();
 

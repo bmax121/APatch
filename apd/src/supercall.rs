@@ -1,21 +1,21 @@
+use crate::package::{read_ap_package_config, synchronize_package_uid};
 use errno::errno;
-use libc::{c_int, c_long, execv, fork, pid_t, setenv, syscall, wait, EINVAL};
-use log::{info, warn};
+use libc::{c_int, c_long, execv, fork, pid_t, setenv, syscall, uid_t, wait, EINVAL};
+use log::{error, info, warn};
 use std::ffi::{CStr, CString};
 use std::fmt::Write;
 use std::fs::{File, OpenOptions};
 use std::io::{self, Error, Read};
 use std::os::fd::AsRawFd;
 use std::process::{exit, Child, Command};
+use std::sync::{Arc, Mutex};
 use std::thread::sleep;
 use std::time::Duration;
 use std::{process, ptr};
 
-use crate::package::read_ap_package_config;
-
 const MAJOR: c_long = 0;
 const MINOR: c_long = 11;
-const PATCH: c_long = 0;
+const PATCH: c_long = 1;
 
 const __NR_SUPERCALL: c_long = 45;
 const SUPERCALL_KLOG: c_long = 0x1004;
@@ -23,6 +23,9 @@ const SUPERCALL_KERNELPATCH_VER: c_long = 0x1008;
 const SUPERCALL_KERNEL_VER: c_long = 0x1009;
 const SUPERCALL_SU: c_long = 0x1010;
 const SUPERCALL_SU_GRANT_UID: c_long = 0x1100;
+const SUPERCALL_SU_REVOKE_UID: c_long = 0x1101;
+const SUPERCALL_SU_NUMS: c_long = 0x1102;
+const SUPERCALL_SU_LIST: c_long = 0x1103;
 const SUPERCALL_SU_RESET_PATH: c_long = 0x1111;
 const SUPERCALL_SU_GET_SAFEMODE: c_long = 0x1112;
 
@@ -62,6 +65,20 @@ fn compact_cmd(key: &CStr, cmd: c_long) -> c_long {
         ver_and_cmd(cmd)
     } else {
         hash_key_cmd(key, cmd)
+    }
+}
+
+fn sc_su_revoke_uid(key: &CStr, uid: uid_t) -> c_long {
+    if key.to_bytes().is_empty() {
+        return (-EINVAL).into();
+    }
+    unsafe {
+        syscall(
+            __NR_SUPERCALL,
+            key.as_ptr(),
+            compact_cmd(key, SUPERCALL_SU_REVOKE_UID),
+            uid,
+        ) as c_long
     }
 }
 
@@ -170,6 +187,37 @@ fn sc_klog(key: &CStr, msg: &CStr) -> c_long {
     }
 }
 
+fn sc_su_uid_nums(key: &CStr) -> c_long {
+    if key.to_bytes().is_empty() {
+        return (-EINVAL).into();
+    }
+    unsafe {
+        syscall(
+            __NR_SUPERCALL,
+            key.as_ptr(),
+            compact_cmd(key, SUPERCALL_SU_NUMS),
+        ) as c_long
+    }
+}
+
+fn sc_su_allow_uids(key: &CStr, buf: &mut [uid_t]) -> c_long {
+    if key.to_bytes().is_empty() {
+        return (-EINVAL).into();
+    }
+    if buf.is_empty() {
+        return (-EINVAL).into();
+    }
+    unsafe {
+        syscall(
+            __NR_SUPERCALL,
+            key.as_ptr(),
+            compact_cmd(key, SUPERCALL_SU_LIST),
+            buf.as_mut_ptr(),
+            buf.len() as i32,
+        ) as c_long
+    }
+}
+
 fn read_file_to_string(path: &str) -> io::Result<String> {
     let mut file = File::open(path)?;
     let mut content = String::new();
@@ -187,6 +235,52 @@ fn convert_string_to_u8_array(s: &str) -> [u8; SUPERCALL_SCONTEXT_LEN] {
 
 fn convert_superkey(s: &Option<String>) -> Option<CString> {
     s.as_ref().and_then(|s| CString::new(s.clone()).ok())
+}
+
+pub fn refresh_su_list(skey: &CStr, mutex: &Arc<Mutex<()>>) {
+    let _lock = mutex.lock().unwrap();
+
+    let num = sc_su_uid_nums(skey);
+    if num < 0 {
+        error!("[refresh_su_list] Error getting number of UIDs: {}", num);
+        return;
+    }
+    let num = num as usize;
+    let mut uids = vec![0 as uid_t; num];
+    let n = sc_su_allow_uids(skey, &mut uids);
+    if n < 0 {
+        error!("[refresh_su_list] Error getting su list");
+        return;
+    }
+    for uid in &uids {
+        if *uid == 0 || *uid == 2000 {
+            warn!("[refresh_su_list] Skip revoking critical uid: {}", uid);
+            continue;
+        }
+        info!("[refresh_su_list] Revoking {} root permission...", uid);
+        let rc = sc_su_revoke_uid(skey, *uid);
+        if rc != 0 {
+            error!("[refresh_su_list] Error revoking UID: {}", rc);
+        }
+    }
+
+    synchronize_package_uid();
+
+    let package_configs = read_ap_package_config();
+    for config in package_configs {
+        if config.allow == 1 && config.exclude == 0 {
+            let profile = SuProfile {
+                uid: config.uid,
+                to_uid: config.to_uid,
+                scontext: convert_string_to_u8_array(&config.sctx),
+            };
+            let result = sc_su_grant_uid(skey, &profile);
+            info!(
+                "[refresh_su_list] Loading {}: result = {}",
+                config.pkg, result
+            );
+        }
+    }
 }
 
 pub fn privilege_apd_profile(superkey: &Option<String>) {

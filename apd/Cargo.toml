@@ -34,6 +34,7 @@ sha256 = "1"
 tempdir = "0.3"
 chrono = "0.4"
 errno = "0.3.9"
+notify = "6.1"
 
 [target.'cfg(any(target_os = "android", target_os = "linux"))'.dependencies]
 rustix = { git = "https://github.com/AndroidPatch/rustix", branch = "main", features = ["all-apis"] }
