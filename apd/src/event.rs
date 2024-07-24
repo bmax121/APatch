@@ -1,18 +1,21 @@
-use anyhow::{bail, Context, Result};
-use log::{info, warn};
-use std::os::unix::fs::PermissionsExt;
-use std::{collections::HashMap, path::Path};
-use std::{env, fs};
-
 use crate::module::prune_modules;
 use crate::supercall::fork_for_result;
 use crate::{
-    assets, defs, mount,
-    package::synchronize_package_uid,
-    restorecon, supercall,
-    supercall::{init_load_su_path, init_load_su_uid},
+    assets, defs, mount, restorecon, supercall,
+    supercall::{init_load_su_path, init_load_su_uid, refresh_su_list},
     utils::{self, ensure_clean_dir},
 };
+use anyhow::{bail, Context, Result};
+use log::{info, warn};
+use notify::event::{ModifyKind, RenameMode};
+use notify::{Config, Event, EventKind, INotifyWatcher, RecursiveMode, Watcher};
+use std::ffi::CStr;
+use std::os::unix::fs::PermissionsExt;
+use std::path::PathBuf;
+use std::sync::{Arc, Mutex};
+use std::time::Duration;
+use std::{collections::HashMap, path::Path, thread};
+use std::{env, fs};
 
 fn mount_partition(partition_name: &str, lowerdir: &Vec<String>) -> Result<()> {
     if lowerdir.is_empty() {
@@ -300,9 +303,54 @@ pub fn on_boot_completed(superkey: Option<String>) -> Result<()> {
     Ok(())
 }
 
-pub fn on_sync_uid() -> Result<()> {
-    synchronize_package_uid();
-    return Ok(());
+pub fn start_uid_listener() -> Result<()> {
+    info!("start_uid_listener triggered!");
+    println!("[start_uid_listener] Registering...");
+
+    // create inotify instance
+    const SYS_PACKAGES_LIST_TMP: &str = "/data/system/packages.list.tmp";
+    let sys_packages_list_tmp = PathBuf::from(&SYS_PACKAGES_LIST_TMP);
+    let dir: PathBuf = sys_packages_list_tmp.parent().unwrap().into();
+
+    let (tx, rx) = std::sync::mpsc::channel();
+    let tx_clone = tx.clone();
+    let mutex = Arc::new(Mutex::new(()));
+
+    let mut watcher = INotifyWatcher::new(
+        move |ev: notify::Result<Event>| match ev {
+            Ok(Event {
+                kind: EventKind::Modify(ModifyKind::Name(RenameMode::Both)),
+                paths,
+                ..
+            }) => {
+                if paths.contains(&sys_packages_list_tmp) {
+                    info!("[uid_monitor] System packages list changed, sending to tx...");
+                    tx_clone.send(false).unwrap()
+                }
+            }
+            Err(err) => warn!("inotify error: {err}"),
+            _ => (),
+        },
+        Config::default(),
+    )?;
+
+    watcher.watch(dir.as_ref(), RecursiveMode::NonRecursive)?;
+
+    let mut debounce = false;
+    while let Ok(delayed) = rx.recv() {
+        if delayed {
+            debounce = false;
+            let skey = CStr::from_bytes_with_nul(b"su\0")
+                .expect("[start_uid_listener] CStr::from_bytes_with_nul failed");
+            refresh_su_list(&skey, &mutex);
+        } else if !debounce {
+            thread::sleep(Duration::from_secs(1));
+            debounce = true;
+            tx.send(true).unwrap();
+        }
+    }
+
+    Ok(())
 }
 
 #[cfg(unix)]
