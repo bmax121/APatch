@@ -146,7 +146,7 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
 
                 Log.i("ModuleScreen", "select zip result: $uri")
 
-                navigator.navigate(InstallScreenDestination(uri))
+                navigator.navigate(InstallScreenDestination(uri, MODULE_TYPE.APM))
 
                 viewModel.markNeedRefresh()
             }
@@ -188,7 +188,7 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
                         .fillMaxSize(),
                     state = moduleListState,
                     onInstallModule = {
-                        navigator.navigate(InstallScreenDestination(it))
+                        navigator.navigate(InstallScreenDestination(it, MODULE_TYPE.APM))
                     },
                     onClickModule = { id, name, hasWebUi ->
                         if (hasWebUi) {
