@@ -78,6 +78,7 @@ fun InstallScreen(navigator: DestinationsNavigator, uri: Uri, type: MODULE_TYPE)
                 text += "$it\n"
                 logContent.append(it).append("\n")
             }, onStderr = {
+                text += "$it\n"
                 logContent.append(it).append("\n")
             })
 

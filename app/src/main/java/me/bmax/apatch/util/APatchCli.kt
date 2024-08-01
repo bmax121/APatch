@@ -9,13 +9,18 @@ import android.util.Log
 import com.topjohnwu.superuser.CallbackList
 import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.ShellUtils
+import com.topjohnwu.superuser.nio.ExtendedFile
+import com.topjohnwu.superuser.nio.FileSystemManager
 import dev.utils.common.ZipUtils
 import me.bmax.apatch.APApplication
 import me.bmax.apatch.APApplication.Companion.SUPERCMD
 import me.bmax.apatch.BuildConfig
+import me.bmax.apatch.Natives
 import me.bmax.apatch.apApp
 import me.bmax.apatch.ui.screen.MODULE_TYPE
 import java.io.File
+import java.util.UUID
+import kotlin.concurrent.thread
 
 
 private const val TAG = "APatchCli"
@@ -181,7 +186,23 @@ fun installModule(
             result = shell.newJob().add("$cmd").to(stdoutCallback, stderrCallback)
                     .exec().isSuccess
         } else {
-//            ZipUtils.
+            val randomDir = UUID.randomUUID().toString()
+            val tmpUnzipDir: ExtendedFile =
+                FileSystemManager.getLocal().getFile(apApp.filesDir.parent, randomDir)
+
+            try {
+                var ufiles = ZipUtils.unzipFile(file, tmpUnzipDir)
+                ufiles.forEach { stdoutCallback.add(it.name) }
+            } catch (e: Exception) {
+                stderrCallback.add(e.toString())
+            }
+
+            val propFile = File(tmpUnzipDir, "module.prop")
+
+
+
+            val moduleDir = "${APApplication.KPMS_DIR}/$randomDir"
+
 
 
         }
