@@ -80,7 +80,16 @@ android {
             useLegacyPackaging = true
         }
         resources {
-            excludes += "**"
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/META-INF/**.version"
+            excludes += "META-INF/versions/9/OSGI-INF/MANIFEST.MF"
+            excludes += "okhttp3/**"
+            excludes += "kotlin/**"
+            excludes += "/org/bouncycastle/**"
+            excludes += "org/**"
+            excludes += "**.properties"
+            excludes += "**.bin"
+            excludes += "kotlin-tooling-metadata.json"
         }
     }
 
@@ -171,9 +180,15 @@ tasks.register<Copy>("mergeFlashableScript") {
     from(rootProject.file("${project.rootDir}/scripts/update_binary.sh")) {
         rename { "update-binary" }
     }
-    from(rootProject.file("${project.rootDir}/scripts/update_binary.sh")) {
+    from(rootProject.file("${project.rootDir}/scripts/update_script.sh")) {
         rename { "updater-script" }
     }
+}
+
+tasks.register<Copy>("mergeAPScript") {
+    into("${project.projectDir}/src/main/resources/addon")
+    from(rootProject.file("${project.rootDir}/scripts/InstallAP.sh"))
+    from(rootProject.file("${project.rootDir}/scripts/UninstallAP.sh"))
 }
 
 tasks.getByName("preBuild").dependsOn(
@@ -181,6 +196,7 @@ tasks.getByName("preBuild").dependsOn(
     "downloadKptools",
     "downloadCompatKpatch",
     "mergeFlashableScript",
+    "mergeAPScript",
 )
 
 // https://github.com/bbqsrc/cargo-ndk
