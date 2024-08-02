@@ -185,9 +185,10 @@ tasks.register<Copy>("mergeFlashableScript") {
     }
 }
 
-tasks.register<Copy>("mergeInstallAP") {
+tasks.register<Copy>("mergeAPScript") {
     into("${project.projectDir}/src/main/resources/addon")
     from(rootProject.file("${project.rootDir}/scripts/InstallAP.sh"))
+    from(rootProject.file("${project.rootDir}/scripts/UninstallAP.sh"))
 }
 
 tasks.getByName("preBuild").dependsOn(
@@ -195,7 +196,7 @@ tasks.getByName("preBuild").dependsOn(
     "downloadKptools",
     "downloadCompatKpatch",
     "mergeFlashableScript",
-    "mergeInstallAP",
+    "mergeAPScript",
 )
 
 // https://github.com/bbqsrc/cargo-ndk
