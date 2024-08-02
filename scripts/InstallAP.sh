@@ -15,7 +15,7 @@ function ui_printfile() {
 
 function apatchNote(){
 	ui_print "- Apatch Patch Done"
-	ui_print "- Apatch Key is apatch66"
+	ui_print "- Apatch Key is $skey"
 	ui_print "- We do have saved Origin Boot image to /data"
 	ui_print "- If you encounter bootloop, reboot into Recovery and flash it"
 	exit
@@ -32,7 +32,7 @@ function boot_execute_ab(){
 	./lib/arm64-v8a/libmagiskboot.so unpack boot.img
 	mv kernel kernel-origin
 	# ./lib/arm64-v8a/libkptools.so boot-patch -b boot.img --magiskboot ./lib/arm64-v8a/libmagiskboot.so >> /dev/tmp/install/log
-	./lib/arm64-v8a/libkptools.so -p --image kernel-origin --skey "apatch66" --kpimg ./assets/kpimg --out ./kernel >> /dev/tmp/install/log
+	./lib/arm64-v8a/libkptools.so -p --image kernel-origin --skey "$skey" --kpimg ./assets/kpimg --out ./kernel >> /dev/tmp/install/log
 	if [[ ! "$?" == 0 ]]; then
 		failed
 	fi
@@ -47,7 +47,7 @@ function boot_execute(){
 	./lib/arm64-v8a/libmagiskboot.so unpack boot.img
 	mv kernel kernel-origin
 	# ./lib/arm64-v8a/libkptools.so boot-patch -b boot.img --magiskboot ./lib/arm64-v8a/libmagiskboot.so >> /dev/tmp/install/log
-	./lib/arm64-v8a/libkptools.so -p --image kernel-origin --skey "apatch66" --kpimg ./assets/kpimg --out ./kernel >> /dev/tmp/install/log
+	./lib/arm64-v8a/libkptools.so -p --image kernel-origin --skey "$skey" --kpimg ./assets/kpimg --out ./kernel >> /dev/tmp/install/log
 	if [[ ! "$?" == 0 ]]; then
 		failed
 	fi
@@ -68,10 +68,15 @@ chmod a+x ./lib/arm64-v8a/libmagiskboot.so
 
 slot=$(getprop ro.boot.slot_suffix)
 
+skey=$(cat /proc/sys/kernel/random/uuid | cut -d \- -f1)
+
 if [[ ! "$slot" == "" ]]; then
 
 	ui_print ""
 	ui_print "- You are using A/B device."
+
+	# Script author
+	ui_print "- Install Script by SakuraKyuo"
 
 	# Get kernel
 	ui_print ""
