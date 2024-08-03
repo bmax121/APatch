@@ -52,7 +52,7 @@ fi
 if [ ! $(sh extract-ikconfig kernel | grep CONFIG_KALLSYMS=y) ]; then
 	echo "- Patcher has Aborted!"
 	echo "- APatch requires CONFIG_KALLSYMS to be Enabled."
-	echo "- But your kernel seems NOT enable it."
+	echo "- But your kernel seems NOT enabled it."
 	exit 0
 fi
 

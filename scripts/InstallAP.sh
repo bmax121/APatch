@@ -16,7 +16,7 @@ function ui_printfile() {
 function kernelFlagsErr(){
 	ui_print "- Installation has Aborted!"
 	ui_print "- APatch requires CONFIG_KALLSYMS to be Enabled."
-	ui_print "- But your kernel seems NOT enable it."
+	ui_print "- But your kernel seems NOT enabled it."
 	exit
 }
 
