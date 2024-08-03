@@ -16,7 +16,7 @@ cf2='0123456789'
 
 dump_config()
 {
-	if	pos=`tr "$cf1\n$cf2" "\n$cf2=" < "$1" | grep -abo "^$cf2"`
+	if	pos=`tr "$cf1\n$cf2" "\n$cf2=" < "$1" | toybox grep -abo "^$cf2"`
 	then
 		pos=${pos%%:*}
 		tail -c+$(($pos+8)) "$1" | zcat > $tmp1 2> /dev/null
