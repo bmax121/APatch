@@ -1,4 +1,4 @@
-#!/sbin/sh
+#!/bin/sh
 
 TMPDIR=/dev/tmp
 rm -rf $TMPDIR
@@ -27,5 +27,5 @@ if echo "$3" | $BBBIN grep -q "uninstall"; then
 elif echo "$3" | $BBBIN grep -q "uninstaller"; then
   exec $BBBIN sh "$INSTALLER/addon/UninstallAP.sh" "$@"
 else
-  exec $BBBIN sh "$INSTALLER/META-INF/com/google/android/updater-script" "$@"
+  exec $BBBIN sh "$INSTALLER/addon/InstallAP.sh" "$@"
 fi

@@ -1,4 +1,4 @@
-#!/sbin/bash
+#!/bin/sh
 # By SakuraKyuo
 
 OUTFD=/proc/self/fd/$2

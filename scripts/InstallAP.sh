@@ -1,7 +1,7 @@
-#!/sbin/bash
+#!/bin/sh
 # By SakuraKyuo
 
-OUTFD=$1
+OUTFD=/proc/self/fd/$2
 
 function ui_print() {
   echo -e "ui_print $1\nui_print" >> $OUTFD
@@ -31,7 +31,6 @@ function failed(){
 function boot_execute_ab(){
 	./lib/arm64-v8a/libmagiskboot.so unpack boot.img
 	mv kernel kernel-origin
-	# ./lib/arm64-v8a/libkptools.so boot-patch -b boot.img --magiskboot ./lib/arm64-v8a/libmagiskboot.so >> /dev/tmp/install/log
 	./lib/arm64-v8a/libkptools.so -p --image kernel-origin --skey "$skey" --kpimg ./assets/kpimg --out ./kernel >> /dev/tmp/install/log
 	if [[ ! "$?" == 0 ]]; then
 		failed
@@ -46,7 +45,6 @@ function boot_execute_ab(){
 function boot_execute(){
 	./lib/arm64-v8a/libmagiskboot.so unpack boot.img
 	mv kernel kernel-origin
-	# ./lib/arm64-v8a/libkptools.so boot-patch -b boot.img --magiskboot ./lib/arm64-v8a/libmagiskboot.so >> /dev/tmp/install/log
 	./lib/arm64-v8a/libkptools.so -p --image kernel-origin --skey "$skey" --kpimg ./assets/kpimg --out ./kernel >> /dev/tmp/install/log
 	if [[ ! "$?" == 0 ]]; then
 		failed
