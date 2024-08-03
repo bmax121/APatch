@@ -31,8 +31,8 @@ function failed(){
 function boot_execute_ab(){
 	./lib/arm64-v8a/libmagiskboot.so unpack boot.img
 	mv kernel kernel-origin
-	./lib/arm64-v8a/libkptools.so -p --image kernel-origin --skey "$skey" --kpimg ./assets/kpimg --out ./kernel >> /dev/tmp/install/log
-	if [[ ! "$?" == 0 ]]; then
+	./lib/arm64-v8a/libkptools.so -p --image kernel-origin --skey "$skey" --kpimg ./assets/kpimg --out ./kernel 2>&1 | tee /dev/tmp/install/log
+	if [[ ! $(cat /dev/tmp/install/log | grep "patch done") ]]; then
 		failed
 	fi
 	ui_printfile /dev/tmp/install/log
@@ -45,8 +45,8 @@ function boot_execute_ab(){
 function boot_execute(){
 	./lib/arm64-v8a/libmagiskboot.so unpack boot.img
 	mv kernel kernel-origin
-	./lib/arm64-v8a/libkptools.so -p --image kernel-origin --skey "$skey" --kpimg ./assets/kpimg --out ./kernel >> /dev/tmp/install/log
-	if [[ ! "$?" == 0 ]]; then
+	./lib/arm64-v8a/libkptools.so -p --image kernel-origin --skey "$skey" --kpimg ./assets/kpimg --out ./kernel 2>&1 | tee /dev/tmp/install/log
+	if [[ ! $(cat /dev/tmp/install/log | grep "patch done") ]]; then
 		failed
 	fi
 	ui_printfile /dev/tmp/install/log
