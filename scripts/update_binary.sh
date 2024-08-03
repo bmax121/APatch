@@ -20,12 +20,12 @@ $BBBIN rm -rf $TMPDIR/lib
 
 export INSTALLER=$TMPDIR/install
 $BBBIN mkdir -p $INSTALLER
-$BBBIN unzip -o "$3" "assets/*" "addon/*" "META-INF/com/google/*" "lib/*" "META-INF/com/google/*" -x "lib/*/libbusybox.so" -d $INSTALLER >&2
+$BBBIN unzip -o "$3" "assets/*" "META-INF/com/google/*" "lib/*" "META-INF/com/google/*" -x "lib/*/libbusybox.so" -d $INSTALLER >&2
 export ASH_STANDALONE=1
 if echo "$3" | $BBBIN grep -q "uninstall"; then
-  exec $BBBIN sh "$INSTALLER/addon/UninstallAP.sh" "$@"
+  exec $BBBIN sh "$INSTALLER/assets/UninstallAP.sh" "$@"
 elif echo "$3" | $BBBIN grep -q "uninstaller"; then
-  exec $BBBIN sh "$INSTALLER/addon/UninstallAP.sh" "$@"
+  exec $BBBIN sh "$INSTALLER/assets/UninstallAP.sh" "$@"
 else
-  exec $BBBIN sh "$INSTALLER/addon/InstallAP.sh" "$@"
+  exec $BBBIN sh "$INSTALLER/assets/InstallAP.sh" "$@"
 fi

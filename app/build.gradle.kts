@@ -186,7 +186,7 @@ tasks.register<Copy>("mergeFlashableScript") {
 }
 
 tasks.register<Copy>("mergeAPScript") {
-    into("${project.projectDir}/src/main/resources/addon")
+    into("${project.projectDir}/src/main/resources/assets")
     from(rootProject.file("${project.rootDir}/scripts/InstallAP.sh"))
     from(rootProject.file("${project.rootDir}/scripts/UninstallAP.sh"))
 }
