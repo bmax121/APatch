@@ -53,6 +53,7 @@ class APApplication : Application() {
         const val APATCH_VERSION_PATH = APATCH_FOLDER + "version"
         private const val MAGISKPOLICY_BIN_PATH = APATCH_BIN_FOLDER + "magiskpolicy"
         private const val BUSYBOX_BIN_PATH = APATCH_BIN_FOLDER + "busybox"
+        private const val TOYBOX_BIN_PATH = APATCH_BIN_FOLDER + "toybox"
         private const val RESETPROP_BIN_PATH = APATCH_BIN_FOLDER + "resetprop"
         const val MAGISK_SCONTEXT = "u:r:magisk:s0"
 
@@ -127,6 +128,8 @@ class APApplication : Application() {
                 "chmod +x $RESETPROP_BIN_PATH",
                 "cp -f ${nativeDir}/libbusybox.so $BUSYBOX_BIN_PATH",
                 "chmod +x $BUSYBOX_BIN_PATH",
+                "cp -f ${nativeDir}/libtoybox.so $TOYBOX_BIN_PATH",
+                "chmod +x $TOYBOX_BIN_PATH",
 
                 "touch $PACKAGE_CONFIG_FILE",
                 "touch $SU_PATH_FILE",
