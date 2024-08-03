@@ -13,6 +13,13 @@ function ui_printfile() {
   done < $1;
 }
 
+function kernelFlagsErr(){
+	ui_print "- Installation has Aborted!"
+	ui_print "- APatch requires CONFIG_KALLSYMS to be Enabled."
+	ui_print "- But your kernel seems NOT enable it."
+	exit
+}
+
 function apatchNote(){
 	ui_print "- Apatch Patch Done"
 	ui_print "- Apatch Key is $skey"
@@ -30,6 +37,9 @@ function failed(){
 
 function boot_execute_ab(){
 	./lib/arm64-v8a/libmagiskboot.so unpack boot.img
+	if [[ ! "$(./assets/extract-ikconfig ./kernel | grep CONFIG_KALLSYMS= | cut -d = -f 2)" == "y" ]]; then
+		kernelFlagsErr
+	fi
 	mv kernel kernel-origin
 	# ./lib/arm64-v8a/libkptools.so boot-patch -b boot.img --magiskboot ./lib/arm64-v8a/libmagiskboot.so >> /dev/tmp/install/log
 	./lib/arm64-v8a/libkptools.so -p --image kernel-origin --skey "$skey" --kpimg ./assets/kpimg --out ./kernel >> /dev/tmp/install/log
@@ -45,6 +55,9 @@ function boot_execute_ab(){
 
 function boot_execute(){
 	./lib/arm64-v8a/libmagiskboot.so unpack boot.img
+	if [[ ! "$(./assets/extract-ikconfig ./kernel | grep CONFIG_KALLSYMS= | cut -d = -f 2)" == "y" ]]; then
+		kernelFlagsErr
+	fi
 	mv kernel kernel-origin
 	# ./lib/arm64-v8a/libkptools.so boot-patch -b boot.img --magiskboot ./lib/arm64-v8a/libmagiskboot.so >> /dev/tmp/install/log
 	./lib/arm64-v8a/libkptools.so -p --image kernel-origin --skey "$skey" --kpimg ./assets/kpimg --out ./kernel >> /dev/tmp/install/log
@@ -63,6 +76,7 @@ function main(){
 cd /dev/tmp/install
 
 chmod a+x ./assets/kpimg
+chmod a+x ./assets/extract-ikconfig
 chmod a+x ./lib/arm64-v8a/libkptools.so
 chmod a+x ./lib/arm64-v8a/libmagiskboot.so
 
