@@ -14,8 +14,8 @@ function ui_printfile() {
 }
 
 function apatchNote(){
-	ui_print "- Apatch Patch Done"
-	ui_print "- Apatch Key is $skey"
+	ui_print "- APatch Patch Done"
+	ui_print "- APatch Key is $skey"
 	ui_print "- We do have saved Origin Boot image to /data"
 	ui_print "- If you encounter bootloop, reboot into Recovery and flash it"
 	exit
