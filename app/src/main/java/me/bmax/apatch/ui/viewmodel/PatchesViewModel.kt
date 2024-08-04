@@ -34,6 +34,7 @@ import org.ini4j.Ini
 import java.io.File
 import java.io.IOException
 import java.io.StringReader
+import java.util.regex.Pattern
 
 private const val TAG = "PatchViewModel"
 
@@ -354,6 +355,17 @@ class PatchesViewModel : ViewModel() {
                     Log.d(TAG, "" + e)
                     patchLog += "\n"
                 }
+            }
+
+            val specialCharactersPattern = Pattern.compile("[$\"\'\\[\\]]")
+
+            if (specialCharactersPattern.matcher(superkey).find()) {
+                val msg = " SuperKey contains special characters: \$\" \'[]"
+                error = msg
+                patching = false
+                return@launch
+            } else {
+                error = ""
             }
             logs.add("****************************")
 
