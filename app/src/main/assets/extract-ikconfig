@@ -31,15 +31,17 @@ dump_config()
 # Check invocation:
 me=${0##*/}
 img=$1
-if	[ $# -ne 1 -o ! -s "$img" ]
-then
-	echo "Usage: $me <kernel-image>" >&2
-	exit 2
-fi
+path=$2
 
 # Prepare temp files:
-tmp1=$(toybox mktemp -t ikconfig.XXXXXX)
-tmp2=$(toybox mktemp -t ikconfig.XXXXXX)
+if [ $# -ne 2 ]
+then
+	tmp1=$(toybox mktemp -t ikconfig.XXXXXX)
+	tmp2=$(toybox mktemp -t ikconfig.XXXXXX)
+else
+	tmp1=$(toybox mktemp -p $2)
+	tmp2=$(toybox mktemp -p $2)
+fi
 trap "rm -f $tmp1 $tmp2" 0
 
 # Initial attempt for uncompressed images or objects:
