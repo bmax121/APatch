@@ -40,6 +40,7 @@ android {
             isShrinkResources = true
             isDebuggable = false
             multiDexEnabled = true
+            vcsInfo.include = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -80,16 +81,8 @@ android {
             useLegacyPackaging = true
         }
         resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-            excludes += "/META-INF/**.version"
-            excludes += "META-INF/versions/9/OSGI-INF/MANIFEST.MF"
-            excludes += "okhttp3/**"
-            excludes += "kotlin/**"
-            excludes += "/org/bouncycastle/**"
-            excludes += "org/**"
-            excludes += "**.properties"
-            excludes += "**.bin"
-            excludes += "kotlin-tooling-metadata.json"
+            excludes += "**"
+            merges += "META-INF/com/google/android/**"
         }
     }
 
@@ -175,7 +168,7 @@ registerDownloadTask(
     project = project
 )
 
-tasks.register<Copy>("mergeFlashableScript") {
+tasks.register<Copy>("mergeScripts") {
     into("${project.projectDir}/src/main/resources/META-INF/com/google/android")
     from(rootProject.file("${project.rootDir}/scripts/update_binary.sh")) {
         rename { "update-binary" }
@@ -185,19 +178,11 @@ tasks.register<Copy>("mergeFlashableScript") {
     }
 }
 
-tasks.register<Copy>("mergeAPScript") {
-    into("${project.projectDir}/src/main/resources/assets")
-    from(rootProject.file("${project.rootDir}/scripts/InstallAP.sh"))
-    from(rootProject.file("${project.rootDir}/scripts/UninstallAP.sh"))
-    from(rootProject.file("${project.rootDir}/scripts/extract-ikconfig"))
-}
-
 tasks.getByName("preBuild").dependsOn(
     "downloadKpimg",
     "downloadKptools",
     "downloadCompatKpatch",
-    "mergeFlashableScript",
-    "mergeAPScript",
+    "mergeScripts",
 )
 
 // https://github.com/bbqsrc/cargo-ndk
