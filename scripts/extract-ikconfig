@@ -38,8 +38,8 @@ then
 fi
 
 # Prepare temp files:
-tmp1=$(mktemp -t ikconfig.XXXXXX)
-tmp2=$(mktemp -t ikconfig.XXXXXX)
+tmp1=$(toybox mktemp -t ikconfig.XXXXXX)
+tmp2=$(toybox mktemp -t ikconfig.XXXXXX)
 trap "rm -f $tmp1 $tmp2" 0
 
 # Initial attempt for uncompressed images or objects:
