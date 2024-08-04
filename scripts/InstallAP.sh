@@ -1,7 +1,7 @@
-#!/sbin/bash
+#!/bin/sh
 # By SakuraKyuo
 
-OUTFD=$1
+OUTFD=/proc/self/fd/$2
 
 function ui_print() {
   echo -e "ui_print $1\nui_print" >> $OUTFD
@@ -13,9 +13,16 @@ function ui_printfile() {
   done < $1;
 }
 
+function kernelFlagsErr(){
+	ui_print "- Installation has Aborted!"
+	ui_print "- APatch requires CONFIG_KALLSYMS to be Enabled."
+	ui_print "- But your kernel seems NOT enabled it."
+	exit
+}
+
 function apatchNote(){
-	ui_print "- Apatch Patch Done"
-	ui_print "- Apatch Key is $skey"
+	ui_print "- APatch Patch Done"
+	ui_print "- APatch Key is $skey"
 	ui_print "- We do have saved Origin Boot image to /data"
 	ui_print "- If you encounter bootloop, reboot into Recovery and flash it"
 	exit
@@ -30,10 +37,12 @@ function failed(){
 
 function boot_execute_ab(){
 	./lib/arm64-v8a/libmagiskboot.so unpack boot.img
+	if [[ ! "$(./assets/extract-ikconfig ./kernel | grep CONFIG_KALLSYMS= | cut -d = -f 2)" == "y" ]]; then
+		kernelFlagsErr
+	fi
 	mv kernel kernel-origin
-	# ./lib/arm64-v8a/libkptools.so boot-patch -b boot.img --magiskboot ./lib/arm64-v8a/libmagiskboot.so >> /dev/tmp/install/log
-	./lib/arm64-v8a/libkptools.so -p --image kernel-origin --skey "$skey" --kpimg ./assets/kpimg --out ./kernel >> /dev/tmp/install/log
-	if [[ ! "$?" == 0 ]]; then
+	./lib/arm64-v8a/libkptools.so -p --image kernel-origin --skey "$skey" --kpimg ./assets/kpimg --out ./kernel 2>&1 | tee /dev/tmp/install/log
+	if [[ ! $(cat /dev/tmp/install/log | grep "patch done") ]]; then
 		failed
 	fi
 	ui_printfile /dev/tmp/install/log
@@ -45,10 +54,12 @@ function boot_execute_ab(){
 
 function boot_execute(){
 	./lib/arm64-v8a/libmagiskboot.so unpack boot.img
+	if [[ ! "$(./assets/extract-ikconfig ./kernel | grep CONFIG_KALLSYMS= | cut -d = -f 2)" == "y" ]]; then
+		kernelFlagsErr
+	fi
 	mv kernel kernel-origin
-	# ./lib/arm64-v8a/libkptools.so boot-patch -b boot.img --magiskboot ./lib/arm64-v8a/libmagiskboot.so >> /dev/tmp/install/log
-	./lib/arm64-v8a/libkptools.so -p --image kernel-origin --skey "$skey" --kpimg ./assets/kpimg --out ./kernel >> /dev/tmp/install/log
-	if [[ ! "$?" == 0 ]]; then
+	./lib/arm64-v8a/libkptools.so -p --image kernel-origin --skey "$skey" --kpimg ./assets/kpimg --out ./kernel 2>&1 | tee /dev/tmp/install/log
+	if [[ ! $(cat /dev/tmp/install/log | grep "patch done") ]]; then
 		failed
 	fi
 	ui_printfile /dev/tmp/install/log
@@ -63,6 +74,7 @@ function main(){
 cd /dev/tmp/install
 
 chmod a+x ./assets/kpimg
+chmod a+x ./assets/extract-ikconfig
 chmod a+x ./lib/arm64-v8a/libkptools.so
 chmod a+x ./lib/arm64-v8a/libmagiskboot.so
 

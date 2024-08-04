@@ -88,7 +88,7 @@ class PatchesViewModel : ViewModel() {
 
         // Extract scripts
         for (script in listOf(
-            "boot_patch.sh", "boot_unpatch.sh", "boot_extract.sh", "util_functions.sh", "kpimg"
+            "boot_patch.sh", "boot_unpatch.sh", "boot_extract.sh", "util_functions.sh", "kpimg", "extract-ikconfig"
         )) {
             val dest = File(patchDir, script)
             apApp.assets.open(script).writeTo(dest)
