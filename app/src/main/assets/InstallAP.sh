@@ -37,7 +37,7 @@ function failed(){
 
 function boot_execute_ab(){
 	./lib/arm64-v8a/libmagiskboot.so unpack boot.img
-	if [[ ! "$(./assets/extract-ikconfig ./kernel | grep CONFIG_KALLSYMS= | cut -d = -f 2)" == "y" ]]; then
+	if [[ ! $(sh assets/extract-ikconfig ./kernel | grep CONFIG_KALLSYMS=y) ]]; then
 		kernelFlagsErr
 	fi
 	mv kernel kernel-origin
@@ -54,7 +54,7 @@ function boot_execute_ab(){
 
 function boot_execute(){
 	./lib/arm64-v8a/libmagiskboot.so unpack boot.img
-	if [[ ! "$(./assets/extract-ikconfig ./kernel | grep CONFIG_KALLSYMS= | cut -d = -f 2)" == "y" ]]; then
+	if [[ ! $(sh assets/extract-ikconfig ./kernel | grep CONFIG_KALLSYMS=y) ]]; then
 		kernelFlagsErr
 	fi
 	mv kernel kernel-origin

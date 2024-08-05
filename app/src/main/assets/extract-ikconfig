@@ -1,52 +1,26 @@
 #!/bin/sh
-# ----------------------------------------------------------------------
-# extract-ikconfig - Extract the .config file from a kernel image
+# ref: kernel/configs.c: .rodata ( ... IKCFG_ST.........................IKCFG_ED ... )
+#                                              ^ kernel/config_data.gz ^
+#      scripts/extract-ikconfig
 #
-# This will only work when the kernel was compiled with CONFIG_IKCONFIG.
-#
-# The obscure use of the "tr" filter is to work around older versions of
-# "grep" that report the byte offset of the line instead of the pattern.
-#
-# (c) 2009,2010 Dick Streefland <dick@streefland.net>
-# Licensed under the terms of the GNU General Public License.
-# ----------------------------------------------------------------------
 
-cf1='IKCFG_ST\037\213\010'
-cf2='0123456789'
-
-dump_config()
-{
-	if	pos=`tr "$cf1\n$cf2" "\n$cf2=" < "$1" | toybox grep -abo "^$cf2"`
-	then
-		pos=${pos%%:*}
-		tail -c+$(($pos+8)) "$1" | zcat > $tmp1 2> /dev/null
-		if	[ $? != 1 ]
-		then	# exit status must be 0 or 2 (trailing garbage warning)
-			cat $tmp1
-			exit 0
-		fi
-	fi
-}
-
-# Check invocation:
 me=${0##*/}
 img=$1
-path=$2
-
-# Prepare temp files:
-if [ $# -ne 2 ]
-then
-	tmp1=$(toybox mktemp -t ikconfig.XXXXXX)
-	tmp2=$(toybox mktemp -t ikconfig.XXXXXX)
-else
-	tmp1=$(toybox mktemp -p $2)
-	tmp2=$(toybox mktemp -p $2)
+if [ $# -ne 1 -o ! -s "$img" ]; then
+  echo "Usage: $me <kernel-image>" >&2
+  exit 2
 fi
-trap "rm -f $tmp1 $tmp2" 0
 
-# Initial attempt for uncompressed images or objects:
-dump_config "$img"
+pos=$(toybox grep -abo "IKCFG_ST" $img)
+[ $? -ne 0 ] && echo "$me: Cannot find kernel config." >&2 && exit 1
 
-# Bail out:
-echo "$me: Cannot find kernel config." >&2
-exit 1
+pos=${pos%%:*}
+kcfg_start=$(($pos+8))
+
+pos=$(toybox grep -abo "IKCFG_ED" $img)
+pos=${pos%%:*}
+kcfg_end=$(($pos-1))
+
+kcfg_bytes=$(($kcfg_end-$kcfg_start+1))
+
+dd if=$img bs=1 skip=$kcfg_start count=$kcfg_bytes status=none | zcat
