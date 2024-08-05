@@ -144,6 +144,9 @@ class PatchesViewModel : ViewModel() {
                 if (checkSuperKeyValidation(superkey)) {
                     this.superkey = superkey
                 }
+                if (!checkSuperKeyCharacters(superkey)) {
+                    this.superkey = superkey
+                }
                 var kpmNum = kernel["extra_num"]?.toInt()
                 if (kpmNum == null) {
                     val extras = ini["extras"]
@@ -184,6 +187,10 @@ class PatchesViewModel : ViewModel() {
 
     val checkSuperKeyValidation: (superKey: String) -> Boolean = { superKey ->
         superKey.length in 8..63 && superKey.any { it.isDigit() } && superKey.any { it.isLetter() }
+    }
+
+    val checkSuperKeyCharacters: (superKey: String) -> Boolean = { superKey ->
+        superKey.any { it == '$' || it == '"' || it == '\'' || it == '[' || it == ']' || it == '`' }
     }
 
     fun copyAndParseBootimg(uri: Uri) {
