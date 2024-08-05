@@ -301,23 +301,23 @@ private fun ExtraItem(extra: KPModel.IExtraInfo, existed: Boolean, onDelete: () 
             if (extra.type == KPModel.ExtraType.KPM) {
                 val kpmInfo: KPModel.KPMInfo = extra as KPModel.KPMInfo
                 Text(
-                    text = "${stringResource(id = R.string.patch_item_extra_name)} ${kpmInfo.name}",
+                    text = "${stringResource(id = R.string.patch_item_extra_name) + " "} ${kpmInfo.name}",
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Text(
-                    text = "${stringResource(id = R.string.patch_item_extra_version)} ${kpmInfo.version}",
+                    text = "${stringResource(id = R.string.patch_item_extra_version) + " "} ${kpmInfo.version}",
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Text(
-                    text = "${stringResource(id = R.string.patch_item_extra_kpm_license)} ${kpmInfo.license}",
+                    text = "${stringResource(id = R.string.patch_item_extra_kpm_license) + " "} ${kpmInfo.license}",
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Text(
-                    text = "${stringResource(id = R.string.patch_item_extra_author)} ${kpmInfo.author}",
+                    text = "${stringResource(id = R.string.patch_item_extra_author) + " "} ${kpmInfo.author}",
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Text(
-                    text = "${stringResource(id = R.string.patch_item_extra_kpm_desciption)} ${kpmInfo.description}",
+                    text = "${stringResource(id = R.string.patch_item_extra_kpm_desciption) + " "} ${kpmInfo.description}",
                     style = MaterialTheme.typography.bodyMedium
                 )
                 var event by remember { mutableStateOf(kpmInfo.event) }
@@ -327,7 +327,7 @@ private fun ExtraItem(extra: KPModel.IExtraInfo, existed: Boolean, onDelete: () 
                         .background(Color.LightGray)
                 ) {
                     Text(
-                        text = stringResource(id = R.string.patch_item_extra_event),
+                        text = stringResource(id = R.string.patch_item_extra_event) + " ",
                         style = MaterialTheme.typography.bodyMedium
                     )
                     BasicTextField(
@@ -347,7 +347,7 @@ private fun ExtraItem(extra: KPModel.IExtraInfo, existed: Boolean, onDelete: () 
                         .background(Color.LightGray)
                 ) {
                     Text(
-                        text = stringResource(id = R.string.patch_item_extra_args),
+                        text = stringResource(id = R.string.patch_item_extra_args) + " ",
                         style = MaterialTheme.typography.bodyMedium
                     )
                     BasicTextField(
@@ -466,16 +466,16 @@ private fun KernelPatchImageView(kpImgInfo: KPModel.KPImgInfo) {
                 )
             }
             Text(
-                text = stringResource(id = R.string.patch_item_kpimg_version) + Version.uInt2String(
+                text = stringResource(id = R.string.patch_item_kpimg_version) + " " + Version.uInt2String(
                     kpImgInfo.version.substring(2).toUInt(16)
                 ), style = MaterialTheme.typography.bodyMedium
             )
             Text(
-                text = stringResource(id = R.string.patch_item_kpimg_comile_time) + kpImgInfo.compileTime,
+                text = stringResource(id = R.string.patch_item_kpimg_comile_time) + " " + kpImgInfo.compileTime,
                 style = MaterialTheme.typography.bodyMedium
             )
             Text(
-                text = stringResource(id = R.string.patch_item_kpimg_config) + kpImgInfo.config,
+                text = stringResource(id = R.string.patch_item_kpimg_config) + " " + kpImgInfo.config,
                 style = MaterialTheme.typography.bodyMedium
             )
         }
