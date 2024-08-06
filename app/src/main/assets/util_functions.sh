@@ -238,11 +238,21 @@ get_next_slot() {
 }
 
 find_boot_image() {
-  if [ ! -z $SLOT ]; then
-    BOOTIMAGE=$(find_block "boot$SLOT")
-  fi
-  if [ -z $BOOTIMAGE ]; then
-    BOOTIMAGE=$(find_block kern-a android_boot kernel bootimg boot lnx boot_a)
+  if $RECOVERYMODE; then
+    BOOTIMAGE=$(find_block "recovery$SLOT" "sos")
+  elif [ -L "/dev/block/by-name/init_boot$SLOT" ] && uname -r | grep -vq "android12-"; then
+    # init_boot is only used with GKI 13+. It is possible that some devices with init_boot
+    # partition still uses Android 12 GKI, so we need to explicitly detect that scenario.
+    BOOTIMAGE=$(readlink -f "/dev/block/by-name/init_boot$SLOT")
+  elif [ -L "/dev/block/by-name/boot$SLOT" ]; then
+    # Standard location since AOSP Android 10+
+    BOOTIMAGE=$(readlink -f "/dev/block/by-name/boot$SLOT")
+  elif [ -n "$SLOT" ]; then
+    # Fallback for A/B devices running < Android 10
+    BOOTIMAGE=$(find_block "ramdisk$SLOT" "boot$SLOT")
+  else
+    # Fallback for all legacy and non-standard devices
+    BOOTIMAGE=$(find_block ramdisk kern-a android_boot kernel bootimg boot lnx boot_a)
   fi
   if [ -z $BOOTIMAGE ]; then
     # Lets see what fstabs tells me
