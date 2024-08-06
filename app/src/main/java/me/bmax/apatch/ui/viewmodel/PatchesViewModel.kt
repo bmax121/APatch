@@ -34,6 +34,8 @@ import org.ini4j.Ini
 import java.io.File
 import java.io.IOException
 import java.io.StringReader
+import java.io.BufferedReader
+import java.io.InputStreamReader
 
 private const val TAG = "PatchViewModel"
 
@@ -357,45 +359,66 @@ class PatchesViewModel : ViewModel() {
             }
             logs.add("****************************")
 
-            var patchCommand = "boot_patch.sh \"$superkey\" ${srcBoot.path}"
+            val patchCommand = mutableListOf("./busybox sh boot_patch.sh \"$0\" \"$@\"")
+            patchCommand.addAll(listOf(superkey, srcBoot.path))
+
             if (mode == PatchMode.PATCH_AND_INSTALL || mode == PatchMode.INSTALL_TO_NEXT_SLOT) {
-                patchCommand += " true"
+                patchCommand.add("true")
+                patchCommand.addAll(0, listOf("truncate", APApplication.superKey, "-Z", APApplication.MAGISK_SCONTEXT, "-c", ))
+            } else {
+                patchCommand.addAll(0, listOf("sh", "-c"))
             }
 
             for (i in 0..<newExtrasFileName.size) {
-                patchCommand += " -M ${newExtrasFileName[i]}"
+                patchCommand.addAll(listOf("-M", newExtrasFileName[i]))
                 val extra = newExtras[i]
                 if (extra.args.isNotEmpty()) {
-                    patchCommand += " -A ${extra.args}"
+                    patchCommand.addAll(listOf("-A", extra.args))
                 }
                 if (extra.event.isNotEmpty()) {
-                    patchCommand += " -V ${extra.event}"
+                    patchCommand.addAll(listOf("-V", extra.event))
                 }
-                patchCommand += " -T ${extra.type.desc}"
+                patchCommand.addAll(listOf("-T", extra.type.desc))
             }
             for (i in 0..<existedExtras.size) {
                 val extra = existedExtras[i]
-                patchCommand += " -E \"${extra.name}\""
+                patchCommand.addAll(listOf("-E", extra.name))
                 if (extra.args.isNotEmpty()) {
-                    patchCommand += " -A \"${extra.args}\""
+                    patchCommand.addAll(listOf("-A", extra.args))
                 }
                 if (extra.event.isNotEmpty()) {
-                    patchCommand += " -V \"${extra.event}\""
+                    patchCommand.addAll(listOf("-V", extra.event))
                 }
-                patchCommand += " -T \"${extra.type.desc}\""
+                patchCommand.addAll(listOf("-T", extra.type.desc))
             }
+
+            val builder = ProcessBuilder(patchCommand)
 
             Log.i(TAG, "patchCommand: $patchCommand")
 
-            val result = shell.newJob().add(
-                "export ASH_STANDALONE=1", "cd $patchDir", "./busybox sh $patchCommand"
-            ).to(logs, logs).exec()
-            var succ = result.isSuccess
+            builder.environment().put("ASH_STANDALONE", "1")
+            builder.directory(patchDir)
+            builder.redirectErrorStream(true)
+
+            val process = builder.start()
+
+            Thread {
+                BufferedReader(InputStreamReader(process.inputStream)).use { reader ->
+                    var line: String?
+                    while (reader.readLine().also { line = it } != null) {
+                        patchLog += line
+                        Log.i(TAG, "" + line)
+                        patchLog += "\n"
+                    }
+                }
+            }.start()
+
+            var succ = process.waitFor() == 0
 
             if (!succ) {
                 val msg = " Patch failed."
                 error = msg
-                error += result.err.joinToString("\n")
+//                error += result.err.joinToString("\n")
                 logs.add(error)
                 logs.add("****************************")
                 patching = false
