@@ -370,7 +370,6 @@ private fun ExtraItem(extra: KPModel.IExtraInfo, existed: Boolean, onDelete: () 
 private fun SetSuperKeyView(viewModel: PatchesViewModel) {
     var skey by remember { mutableStateOf(viewModel.superkey) }
     var showWarn by remember { mutableStateOf(!viewModel.checkSuperKeyValidation(skey)) }
-    var charactersWarn by remember { mutableStateOf(!viewModel.checkSuperKeyCharacters(skey)) }
     var keyVisible by remember { mutableStateOf(false) }
     ElevatedCard(
         colors = CardDefaults.elevatedCardColors(containerColor = run {
@@ -400,14 +399,6 @@ private fun SetSuperKeyView(viewModel: PatchesViewModel) {
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
-            if (charactersWarn) {
-                Spacer(modifier = Modifier.height(3.dp))
-                Text(
-                    color = Color.Red,
-                    text = stringResource(id = R.string.patch_item_set_skey_invalid_label),
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
             Column {
                 //Spacer(modifier = Modifier.height(8.dp))
                 Box(
@@ -430,14 +421,6 @@ private fun SetSuperKeyView(viewModel: PatchesViewModel) {
                             } else {
                                 viewModel.superkey = ""
                                 showWarn = true
-                            }
-
-                            if (viewModel.checkSuperKeyCharacters(it)) {
-                                viewModel.superkey = it
-                                charactersWarn = false
-                            } else {
-                                viewModel.superkey = ""
-                                charactersWarn = true
                             }
                         },
                     )
