@@ -359,14 +359,27 @@ class PatchesViewModel : ViewModel() {
             }
             logs.add("****************************")
 
-            val patchCommand = mutableListOf("./busybox sh boot_patch.sh \"$0\" \"$@\"")
-            patchCommand.addAll(listOf(superkey, srcBoot.path))
+            var patchCommand = mutableListOf("./busybox sh boot_patch.sh \"$0\" \"$@\"")
+
+            // adapt for 0.10.7 and lower KP
+            var isKpOld = false
 
             if (mode == PatchMode.PATCH_AND_INSTALL || mode == PatchMode.INSTALL_TO_NEXT_SLOT) {
-                patchCommand.add("true")
-                patchCommand.addAll(0, listOf("truncate", APApplication.superKey, "-Z", APApplication.MAGISK_SCONTEXT, "-c", ))
+
+                val KPCheck = shell.newJob().add("truncate $superkey -Z u:r:magisk:s0 -c whoami").exec()
+
+                if (KPCheck.isSuccess) {
+                    patchCommand.addAll(0, listOf("truncate", APApplication.superKey, "-Z", APApplication.MAGISK_SCONTEXT, "-c"))
+                    patchCommand.addAll(listOf(superkey, srcBoot.path, "true"))
+                } else {
+                    patchCommand = mutableListOf("./busybox", "sh", "boot_patch.sh")
+                    patchCommand.addAll(listOf(superkey, srcBoot.path, "true"))
+                    isKpOld = true
+                }
+
             } else {
                 patchCommand.addAll(0, listOf("sh", "-c"))
+                patchCommand.addAll(listOf(superkey, srcBoot.path))
             }
 
             for (i in 0..<newExtrasFileName.size) {
@@ -396,24 +409,35 @@ class PatchesViewModel : ViewModel() {
 
             Log.i(TAG, "patchCommand: $patchCommand")
 
-            builder.environment().put("ASH_STANDALONE", "1")
-            builder.directory(patchDir)
-            builder.redirectErrorStream(true)
+            var succ = false
 
-            val process = builder.start()
+            if (isKpOld) {
+                val resultString = "\"" + patchCommand.joinToString(separator = "\" \"") + "\""
+                val result = shell.newJob().add(
+                    "export ASH_STANDALONE=1",
+                    "cd $patchDir",
+                    "$resultString",
+                ).to(logs, logs).exec()
+                succ = result.isSuccess
+            } else {
+                builder.environment().put("ASH_STANDALONE", "1")
+                builder.directory(patchDir)
+                builder.redirectErrorStream(true)
 
-            Thread {
-                BufferedReader(InputStreamReader(process.inputStream)).use { reader ->
-                    var line: String?
-                    while (reader.readLine().also { line = it } != null) {
-                        patchLog += line
-                        Log.i(TAG, "" + line)
-                        patchLog += "\n"
+                val process = builder.start()
+
+                Thread {
+                    BufferedReader(InputStreamReader(process.inputStream)).use { reader ->
+                        var line: String?
+                        while (reader.readLine().also { line = it } != null) {
+                            patchLog += line
+                            Log.i(TAG, "" + line)
+                            patchLog += "\n"
+                        }
                     }
-                }
-            }.start()
-
-            var succ = process.waitFor() == 0
+                }.start()
+                succ = process.waitFor() == 0
+            }
 
             if (!succ) {
                 val msg = " Patch failed."
