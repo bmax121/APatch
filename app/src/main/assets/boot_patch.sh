@@ -28,7 +28,7 @@ echo "****************************"
 echo " APatch Boot Image Patcher"
 echo "****************************"
 
-SUPERKEY=$1
+SUPERKEY="$1"
 BOOTIMAGE=$2
 FLASH_TO_DEVICE=$3
 shift 2
@@ -49,6 +49,13 @@ echo "- Unpacking boot image"
   fi
 fi
 
+if [ ! $(sh extract-ikconfig kernel | grep CONFIG_KALLSYMS=y) ]; then
+	echo "- Patcher has Aborted!"
+	echo "- APatch requires CONFIG_KALLSYMS to be Enabled."
+	echo "- But your kernel seems NOT enabled it."
+	exit 0
+fi
+
 mv kernel kernel.ori
 
 echo "- Patching kernel"
@@ -65,6 +72,12 @@ fi
 
 echo "- Repacking boot image"
 ./magiskboot repack "$BOOTIMAGE" >/dev/null 2>&1
+
+if [ ! $(sh extract-ikconfig kernel.ori | grep CONFIG_KALLSYMS_ALL=y) ]; then
+	echo "- Detected CONFIG_KALLSYMS_ALL is not set!"
+	echo "- APatch has patched but maybe your device won't boot."
+	echo "- Make sure you have original boot image backup."
+fi
 
 if [ $? -ne 0 ]; then
   >&2 echo "- Repack error: $?"

@@ -11,8 +11,14 @@ anyhow = "1"
 csv = "1.3.0"
 clap = { version = "4", features = ["derive"] }
 const_format = "0.2"
-zip = { version = "2.1", features = ["deflate", "deflate64", "bzip2", "time", "zstd", "lzma", "xz"], default-features = false }
-zip-extensions = "0.8"
+zip = { version = "2.1.5", default-features = false }
+zip-extensions = { version = "0.8.1", features = [
+    "deflate",
+    "deflate64",
+    "time",
+    "lzma",
+    "xz",
+], default-features = false }
 java-properties = "2.0.0"
 log = "0.4"
 env_logger = "0.11"

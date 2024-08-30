@@ -40,6 +40,7 @@ android {
             isShrinkResources = true
             isDebuggable = false
             multiDexEnabled = true
+            vcsInfo.include = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -81,6 +82,7 @@ android {
         }
         resources {
             excludes += "**"
+            merges += "META-INF/com/google/android/**"
         }
     }
 
@@ -166,21 +168,21 @@ registerDownloadTask(
     project = project
 )
 
-tasks.register<Copy>("mergeFlashableScript") {
+tasks.register<Copy>("mergeScripts") {
     into("${project.projectDir}/src/main/resources/META-INF/com/google/android")
     from(rootProject.file("${project.rootDir}/scripts/update_binary.sh")) {
         rename { "update-binary" }
     }
-    from(rootProject.file("${project.rootDir}/scripts/update_binary.sh")) {
+    from(rootProject.file("${project.rootDir}/scripts/update_script.sh")) {
         rename { "updater-script" }
     }
 }
 
 tasks.getByName("preBuild").dependsOn(
-//    "downloadKpimg",
-//    "downloadKptools",
-//    "downloadCompatKpatch",
-//    "mergeFlashableScript",
+    "downloadKpimg",
+    "downloadKptools",
+    "downloadCompatKpatch",
+    "mergeScripts",
 )
 
 // https://github.com/bbqsrc/cargo-ndk
@@ -199,9 +201,9 @@ tasks.register<Copy>("buildApd") {
 }
 
 tasks.configureEach {
-//    if (name == "mergeDebugJniLibFolders" || name == "mergeReleaseJniLibFolders") {
-//        dependsOn("buildApd")
-//    }
+    if (name == "mergeDebugJniLibFolders" || name == "mergeReleaseJniLibFolders") {
+        dependsOn("buildApd")
+    }
 }
 
 tasks.register<Exec>("cargoClean") {
