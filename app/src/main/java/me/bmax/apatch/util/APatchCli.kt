@@ -18,7 +18,9 @@ import me.bmax.apatch.BuildConfig
 import me.bmax.apatch.Natives
 import me.bmax.apatch.apApp
 import me.bmax.apatch.ui.screen.MODULE_TYPE
+import org.ini4j.Ini
 import java.io.File
+import java.io.StringReader
 import java.util.UUID
 import kotlin.concurrent.thread
 
@@ -155,16 +157,50 @@ fun uninstallModule(id: String): Boolean {
     return result
 }
 
+fun installKPM(file: File, shell: Shell, stdoutCallback: CallbackList<String?>, stderrCallback: CallbackList<String?>): Boolean {
+    val randomDir = UUID.randomUUID().toString()
+    val tmpUnzipDir: ExtendedFile =
+        FileSystemManager.getLocal().getFile(apApp.filesDir.parent, randomDir)
+
+    try {
+        var ufiles = ZipUtils.unzipFile(file, tmpUnzipDir)
+        ufiles.forEach { stdoutCallback.add(it.name) }
+    } catch (e: Exception) {
+        stderrCallback.add(e.toString())
+        return false
+    }
+
+    val propFile = File(tmpUnzipDir, "module.prop")
+    val ini = Ini(propFile)
+    val name = ini["name"]
+
+    if(name == null) {
+        stderrCallback.add("Invalid name in module.prop")
+        return false
+    }
+
+    val moduleDir = "${APApplication.KPMS_DIR}/$randomDir"
+
+    val cmd = arrayOf(
+        "rm -rf ${moduleDir}",
+        "cp -rf ${moduleDir} ${tmpUnzipDir}"
+    )
+    val result = shell.newJob().add(*cmd).to(stdoutCallback, stderrCallback)
+        .exec().isSuccess
+
+    return result
+}
+
 fun installModule(
     uri: Uri, type: MODULE_TYPE, onFinish: (Boolean) -> Unit, onStdout: (String) -> Unit, onStderr: (String) -> Unit
 ): Boolean {
     val resolver = apApp.contentResolver
+
     with(resolver.openInputStream(uri)) {
         val file = File(apApp.cacheDir, "module_" + type + ".zip")
         file.outputStream().use { output ->
             this?.copyTo(output)
         }
-
 
         val stdoutCallback: CallbackList<String?> = object : CallbackList<String?>() {
             override fun onAddElement(s: String?) {
@@ -184,27 +220,9 @@ fun installModule(
         if(type == MODULE_TYPE.APM) {
             val cmd = "${APApplication.APD_PATH} module install ${file.absolutePath}"
             result = shell.newJob().add("$cmd").to(stdoutCallback, stderrCallback)
-                    .exec().isSuccess
+                .exec().isSuccess
         } else {
-            val randomDir = UUID.randomUUID().toString()
-            val tmpUnzipDir: ExtendedFile =
-                FileSystemManager.getLocal().getFile(apApp.filesDir.parent, randomDir)
-
-            try {
-                var ufiles = ZipUtils.unzipFile(file, tmpUnzipDir)
-                ufiles.forEach { stdoutCallback.add(it.name) }
-            } catch (e: Exception) {
-                stderrCallback.add(e.toString())
-            }
-
-            val propFile = File(tmpUnzipDir, "module.prop")
-
-
-
-            val moduleDir = "${APApplication.KPMS_DIR}/$randomDir"
-
-
-
+            result = installKPM(file, shell, stdoutCallback, stderrCallback)
         }
 
         Log.i(TAG, "install $type module $uri result: $result")
