@@ -58,6 +58,11 @@ enum Module {
         id: String,
     },
 
+    Run {
+        /// module id,Run Action for action.sh mannual
+        id: String,
+    },
+
     /// enable module <id>
     Enable {
         /// module id
@@ -121,6 +126,7 @@ pub fn run() -> Result<()> {
             match command {
                 Module::Install { zip } => module::install_module(&zip),
                 Module::Uninstall { id } => module::uninstall_module(&id),
+                Module::Run { id } => module::run_action(&id),
                 Module::Enable { id } => module::enable_module(&id),
                 Module::Disable { id } => module::disable_module(&id),
                 Module::List => module::list_modules(),
