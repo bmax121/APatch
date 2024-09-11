@@ -36,9 +36,9 @@ import coil.ImageLoader
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.animations.defaults.NestedNavGraphDefaultAnimations
 import com.ramcosta.composedestinations.animations.defaults.RootNavGraphDefaultAnimations
-import com.ramcosta.composedestinations.navigation.popBackStack
 import com.ramcosta.composedestinations.rememberNavHostEngine
 import com.ramcosta.composedestinations.utils.isRouteOnBackStackAsState
+import com.ramcosta.composedestinations.utils.rememberDestinationsNavigator
 import me.bmax.apatch.APApplication
 import me.bmax.apatch.ui.screen.BottomBarDestination
 import me.bmax.apatch.ui.screen.NavGraphs
@@ -67,12 +67,12 @@ class MainActivity : AppCompatActivity() {
                 val navHostEngine = rememberNavHostEngine(
                     navHostContentAlignment = Alignment.TopCenter,
                     rootDefaultAnimations = RootNavGraphDefaultAnimations(enterTransition = {
-                        fadeIn(animationSpec = tween(300))
-                    }, exitTransition = { fadeOut(animationSpec = tween(300)) }),
+                        fadeIn(animationSpec = tween(150))
+                    }, exitTransition = { fadeOut(animationSpec = tween(150)) }),
                     defaultAnimationsForNestedNavGraph = mapOf(
                         NavGraphs.root to NestedNavGraphDefaultAnimations(enterTransition = {
-                            fadeIn(animationSpec = tween(300))
-                        }, exitTransition = { fadeOut(animationSpec = tween(300)) }),
+                            fadeIn(animationSpec = tween(150))
+                        }, exitTransition = { fadeOut(animationSpec = tween(150)) }),
                     )
                 )
                 Scaffold(bottomBar = { BottomBar(navController) },
@@ -113,6 +113,7 @@ private fun BottomBar(navController: NavHostController) {
     val kPatchReady = state != APApplication.State.UNKNOWN_STATE
     val aPatchReady =
         (state == APApplication.State.ANDROIDPATCH_INSTALLING || state == APApplication.State.ANDROIDPATCH_INSTALLED || state == APApplication.State.ANDROIDPATCH_NEED_UPDATE)
+    val navigator = navController.rememberDestinationsNavigator()
 
     NavigationBar(tonalElevation = 8.dp) {
         BottomBarDestination.entries.forEach { destination ->
@@ -123,11 +124,11 @@ private fun BottomBar(navController: NavHostController) {
             if (hideDestination) return@forEach
             NavigationBarItem(selected = isCurrentDestOnBackStack, onClick = {
                 if (isCurrentDestOnBackStack) {
-                    navController.popBackStack(destination.direction, false)
+                    navigator.popBackStack(destination.direction, false)
                 }
 
-                navController.navigate(destination.direction.route) {
-                    popUpTo(NavGraphs.root.route) {
+                navigator.navigate(destination.direction) {
+                    popUpTo(NavGraphs.root) {
                         saveState = true
                     }
                     launchSingleTop = true

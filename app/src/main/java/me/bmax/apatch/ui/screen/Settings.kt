@@ -394,7 +394,7 @@ fun SettingScreen() {
             if (showLogBottomSheet) {
                 ModalBottomSheet(
                     onDismissRequest = { showLogBottomSheet = false },
-                    windowInsets = WindowInsets(0, 0, 0, 0),
+                    contentWindowInsets = { WindowInsets(0, 0, 0, 0) },
                     content = {
                         Row(
                             modifier = Modifier
@@ -429,7 +429,8 @@ fun SettingScreen() {
                                                 }
                                             context.startActivity(
                                                 Intent.createChooser(
-                                                    savefile, context.getString(R.string.save_log)
+                                                    savefile,
+                                                    context.getString(R.string.save_log)
                                                 )
                                             )
                                             showLogBottomSheet = false

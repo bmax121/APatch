@@ -82,6 +82,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.window.DialogWindowProvider
 import androidx.compose.ui.window.SecureFlagPolicy
+import androidx.lifecycle.compose.dropUnlessResumed
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -121,8 +122,8 @@ fun HomeScreen(navigator: DestinationsNavigator) {
     }
 
     Scaffold(topBar = {
-        TopBar(onInstallClick = {
-            navigator.navigate(InstallModeSelectScreenDestination, true)
+        TopBar(onInstallClick = dropUnlessResumed {
+            navigator.navigate(InstallModeSelectScreenDestination)
         }, navigator, kpState)
     }) { innerPadding ->
         Column(
