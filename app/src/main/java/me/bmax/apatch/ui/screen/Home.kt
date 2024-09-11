@@ -417,12 +417,6 @@ private fun TopBar(
                         showDropdownReboot = false
                     }) {
                         RebootDropdownItem(id = R.string.reboot)
-
-                        val pm =
-                            LocalContext.current.getSystemService(Context.POWER_SERVICE) as PowerManager?
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && pm?.isRebootingUserspaceSupported == true) {
-                            RebootDropdownItem(id = R.string.reboot_userspace, reason = "userspace")
-                        }
                         RebootDropdownItem(id = R.string.reboot_recovery, reason = "recovery")
                         RebootDropdownItem(id = R.string.reboot_bootloader, reason = "bootloader")
                         RebootDropdownItem(id = R.string.reboot_download, reason = "download")
