@@ -10,6 +10,7 @@ use const_format::concatcp;
 use is_executable::is_executable;
 use java_properties::PropertiesIter;
 use log::{info, warn};
+use regex_lite::Regex;
 use std::{
     collections::HashMap,
     env::var as env_var,
@@ -126,7 +127,7 @@ fn get_minimal_image_size(img: &str) -> Result<u64> {
 
     let output = String::from_utf8_lossy(&output.stdout);
     println!("- {}", output.trim());
-    let regex = regex::Regex::new(r"filesystem: (\d+)")?;
+    let regex = Regex::new(r"filesystem: (\d+)")?;
     let result = regex
         .captures(&output)
         .ok_or(anyhow::anyhow!("regex not match"))?;
