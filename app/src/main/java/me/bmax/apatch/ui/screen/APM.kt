@@ -190,7 +190,7 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
                     onInstallModule = {
                         navigator.navigate(InstallScreenDestination(it))
                     },
-                    onClickModule = { id, name, hasWebUi ->
+                    onClickModule = { id, name, hasWebUi, hasAction  ->
                         if (hasWebUi) {
                             context.startActivity(
                                 Intent(
@@ -199,6 +199,15 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
                                     .putExtra("name", name)
                             )
                         }
+                        if (hasAction){
+                            context.startActivity(
+                                Intent(
+                                    context, WebUIActivity::class.java
+                                ).setData(Uri.parse("apatch://webui/$id")).putExtra("id", id)
+                                    .putExtra("name", name)
+                            )
+                        }
+
                     })
             }
         }
@@ -212,7 +221,7 @@ private fun ModuleList(
     modifier: Modifier = Modifier,
     state: LazyListState,
     onInstallModule: (Uri) -> Unit,
-    onClickModule: (id: String, name: String, hasWebUi: Boolean) -> Unit
+    onClickModule: (id: String, name: String, hasWebUi: Boolean ,hasAction: Boolean) -> Unit
 ) {
     val failedEnable = stringResource(R.string.apm_failed_to_enable)
     val failedDisable = stringResource(R.string.apm_failed_to_disable)
@@ -414,7 +423,7 @@ private fun ModuleList(
                                 )
                             }
                         }, onClick = {
-                            onClickModule(it.id, it.name, it.hasWebUi)
+                            onClickModule(it.id, it.name, it.hasWebUi,it.hasAction)
                         })
                         // fix last item shadow incomplete in LazyColumn
                         Spacer(Modifier.height(1.dp))
