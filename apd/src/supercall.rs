@@ -7,11 +7,12 @@ use std::fmt::Write;
 use std::fs::{File, OpenOptions};
 use std::io::{self, Error, Read};
 use std::os::fd::AsRawFd;
+use std::os::unix::fs::PermissionsExt;
 use std::process::{exit, Child, Command};
 use std::sync::{Arc, Mutex};
 use std::thread::sleep;
 use std::time::Duration;
-use std::{process, ptr};
+use std::{fs, process, ptr};
 
 const MAJOR: c_long = 0;
 const MINOR: c_long = 11;
@@ -386,6 +387,8 @@ fn save_log(args: &[&str], file: &str) -> Result<(), Error> {
                 .truncate(true)
                 .create(true)
                 .open(file)?;
+            let permissions = fs::Permissions::from_mode(0o700);
+            fs::set_permissions(file, permissions).expect("Failed to set permissions");
 
             unsafe {
                 libc::dup2(fd.as_raw_fd(), libc::STDOUT_FILENO);
