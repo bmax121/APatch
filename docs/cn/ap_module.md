@@ -83,6 +83,7 @@ APatch 模块就是一个放置在 `/data/adb/modules` 内且满足如下结构�
 │   ├── service.sh          <--- 这个脚本将会在 late_start 服务模式下运行
 │   ├── boot-completed.sh   <--- 这个脚本将会在 Android 系统启动完毕后以服务模式运行
 |   ├── uninstall.sh        <--- 这个脚本将会在模块被卸载时运行
+|   ├── action.sh           <--- 这个脚本将会在管理器模块中点击 Action 时运行
 │   ├── system.prop         <--- 这个文件中指定的属性将会在系统启动时通过 resetprop 更改
 │   ├── sepolicy.rule       <--- 这个文件中的 SELinux 策略将会在系统启动时加载
 │   │

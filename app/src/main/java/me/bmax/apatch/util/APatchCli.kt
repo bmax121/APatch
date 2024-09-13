@@ -40,11 +40,7 @@ fun createRootShell(): Shell {
         try {
             Log.e(TAG, "retry compat kpatch su")
             return builder.build(
-                getKPatchPath(),
-                APApplication.superKey,
-                "su",
-                "-Z",
-                APApplication.MAGISK_SCONTEXT
+                getKPatchPath(), APApplication.superKey, "su", "-Z", APApplication.MAGISK_SCONTEXT
             )
         } catch (e: Throwable) {
             Log.e(TAG, "retry compat kpatch su failed: ", e)
@@ -84,11 +80,7 @@ fun tryGetRootShell(): Shell {
         return try {
             Log.e(TAG, "retry compat kpatch su")
             builder.build(
-                getKPatchPath(),
-                APApplication.superKey,
-                "su",
-                "-Z",
-                APApplication.MAGISK_SCONTEXT
+                getKPatchPath(), APApplication.superKey, "su", "-Z", APApplication.MAGISK_SCONTEXT
             )
         } catch (e: Throwable) {
             Log.e(TAG, "retry kpatch su failed: ", e)
@@ -180,6 +172,30 @@ fun installModule(
         onFinish(result.isSuccess)
         return result.isSuccess
     }
+}
+
+fun runAPModuleAction(
+    moduleId: String, onStdout: (String) -> Unit, onStderr: (String) -> Unit
+): Boolean {
+    val shell = getRootShell()
+
+    val stdoutCallback: CallbackList<String?> = object : CallbackList<String?>() {
+        override fun onAddElement(s: String?) {
+            onStdout(s ?: "")
+        }
+    }
+
+    val stderrCallback: CallbackList<String?> = object : CallbackList<String?>() {
+        override fun onAddElement(s: String?) {
+            onStderr(s ?: "")
+        }
+    }
+
+    val result = shell.newJob().add("${APApplication.APD_PATH} module action $moduleId")
+        .to(stdoutCallback, stderrCallback).exec()
+    Log.i(TAG, "APModule runAction result: $result")
+
+    return result.isSuccess
 }
 
 fun reboot(reason: String = "") {
