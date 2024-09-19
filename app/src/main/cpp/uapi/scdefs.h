@@ -55,11 +55,21 @@ static inline long hash_key(const char *key)
 #define SUPERCALL_KEY_MAX_LEN 0x40
 #define SUPERCALL_SCONTEXT_LEN 0x60
 
+struct su_profile_ext
+{
+    union
+    {
+        bool exclude;
+    };
+    char _[32];
+};
+
 struct su_profile
 {
     uid_t uid;
     uid_t to_uid;
     char scontext[SUPERCALL_SCONTEXT_LEN];
+    struct su_profile_ext ext;
 };
 
 #ifdef ANDROID
