@@ -102,11 +102,11 @@ object Natives {
     external fun nativeThreadSu(superKey: String, uid: Int, scontext: String?): Long
 
     private external fun nativeGrantSu(
-        superKey: String, uid: Int, toUid: Int, scontext: String?
+        superKey: String, uid: Int, toUid: Int, scontext: String?, exclude: Boolean
     ): Long
 
-    fun grantSu(uid: Int, toUid: Int, scontext: String?): Long {
-        return nativeGrantSu(APApplication.superKey, uid, toUid, scontext)
+    fun grantSu(uid: Int, toUid: Int, scontext: String?, exclude: Boolean): Long {
+        return nativeGrantSu(APApplication.superKey, uid, toUid, scontext, false)
     }
 
     private external fun nativeRevokeSu(superKey: String, uid: Int): Long

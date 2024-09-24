@@ -276,7 +276,7 @@ extern "C" {
     }
 
     JNIEXPORT jlong JNICALL Java_me_bmax_apatch_Natives_nativeGrantSu(JNIEnv *env, jobject /* this */, jstring superKey,
-                                                                      jint uid, jint to_uid, jstring scontext)
+                                                                      jint uid, jint to_uid, jstring scontext, jboolean exclude)
     {
         if (!superKey) [[unlikely]] {
             LOGE("Super Key is null!");
@@ -287,6 +287,7 @@ extern "C" {
         struct su_profile profile = { 0 };
         profile.uid = uid;
         profile.to_uid = to_uid;
+        profile.ext.exclude = exclude;
         if (sctx) strncpy(profile.scontext, sctx, sizeof(profile.scontext) - 1);
         long rc = sc_su_grant_uid(skey, &profile);
         env->ReleaseStringUTFChars(superKey, skey);
