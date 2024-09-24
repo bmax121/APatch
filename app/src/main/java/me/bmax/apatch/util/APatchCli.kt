@@ -9,13 +9,25 @@ import android.util.Log
 import com.topjohnwu.superuser.CallbackList
 import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.ShellUtils
+import com.topjohnwu.superuser.nio.ExtendedFile
+import com.topjohnwu.superuser.nio.FileSystemManager
+import dev.utils.common.ZipUtils
 import me.bmax.apatch.APApplication
+import me.bmax.apatch.APApplication.Companion.SUPERCMD
 import me.bmax.apatch.BuildConfig
+import me.bmax.apatch.Natives
 import me.bmax.apatch.apApp
+import me.bmax.apatch.ui.screen.MODULE_TYPE
+import org.ini4j.Ini
 import java.io.File
+import java.io.StringReader
+import java.util.UUID
+import kotlin.concurrent.thread
 
 
 private const val TAG = "APatchCli"
+
+@Suppress("DEPRECATION")
 private fun getKPatchPath(): String {
     return apApp.applicationInfo.nativeLibraryDir + File.separator + "libkpatch.so"
 }
@@ -33,7 +45,7 @@ fun createRootShell(): Shell {
     val builder = Shell.Builder.create().setInitializers(RootShellInitializer::class.java)
     return try {
         builder.build(
-            "/system/bin/truncate", APApplication.superKey, "-Z", APApplication.MAGISK_SCONTEXT
+            SUPERCMD, APApplication.superKey, "-Z", APApplication.MAGISK_SCONTEXT
         )
     } catch (e: Throwable) {
         Log.e(TAG, "su failed: ", e)
@@ -73,7 +85,7 @@ fun tryGetRootShell(): Shell {
     val builder = Shell.Builder.create()
     return try {
         builder.build(
-            "/system/bin/truncate", APApplication.superKey, "-Z", APApplication.MAGISK_SCONTEXT
+            SUPERCMD, APApplication.superKey, "-Z", APApplication.MAGISK_SCONTEXT
         )
     } catch (e: Throwable) {
         Log.e(TAG, "su failed: ", e)
@@ -137,18 +149,50 @@ fun uninstallModule(id: String): Boolean {
     return result
 }
 
+fun installKPM(file: File, shell: Shell, stdoutCallback: CallbackList<String?>, stderrCallback: CallbackList<String?>): Boolean {
+    val randomDir = UUID.randomUUID().toString()
+    val tmpUnzipDir: ExtendedFile =
+        FileSystemManager.getLocal().getFile(apApp.filesDir.parent, randomDir)
+
+    try {
+        var ufiles = ZipUtils.unzipFile(file, tmpUnzipDir)
+        ufiles.forEach { stdoutCallback.add(it.name) }
+    } catch (e: Exception) {
+        stderrCallback.add(e.toString())
+        return false
+    }
+
+    val propFile = File(tmpUnzipDir, "module.prop")
+    val ini = Ini(propFile)
+    val name = ini["name"]
+
+    if(name == null) {
+        stderrCallback.add("Invalid name in module.prop")
+        return false
+    }
+
+    val moduleDir = "${APApplication.KPMS_DIR}/$randomDir"
+
+    val cmd = arrayOf(
+        "rm -rf ${moduleDir}",
+        "cp -rf ${moduleDir} ${tmpUnzipDir}"
+    )
+    val result = shell.newJob().add(*cmd).to(stdoutCallback, stderrCallback)
+        .exec().isSuccess
+
+    return result
+}
+
 fun installModule(
-    uri: Uri, onFinish: (Boolean) -> Unit, onStdout: (String) -> Unit, onStderr: (String) -> Unit
+    uri: Uri, type: MODULE_TYPE, onFinish: (Boolean) -> Unit, onStdout: (String) -> Unit, onStderr: (String) -> Unit
 ): Boolean {
     val resolver = apApp.contentResolver
+
     with(resolver.openInputStream(uri)) {
-        val file = File(apApp.cacheDir, "module.zip")
+        val file = File(apApp.cacheDir, "module_" + type + ".zip")
         file.outputStream().use { output ->
             this?.copyTo(output)
         }
-        val cmd = "module install ${file.absolutePath}"
-
-        val shell = getRootShell()
 
         val stdoutCallback: CallbackList<String?> = object : CallbackList<String?>() {
             override fun onAddElement(s: String?) {
@@ -162,15 +206,23 @@ fun installModule(
             }
         }
 
-        val result =
-            shell.newJob().add("${APApplication.APD_PATH} $cmd").to(stdoutCallback, stderrCallback)
-                .exec()
-        Log.i(TAG, "install module $uri result: $result")
+        val shell = getRootShell()
+
+        var result = false
+        if(type == MODULE_TYPE.APM) {
+            val cmd = "${APApplication.APD_PATH} module install ${file.absolutePath}"
+            result = shell.newJob().add("$cmd").to(stdoutCallback, stderrCallback)
+                .exec().isSuccess
+        } else {
+            result = installKPM(file, shell, stdoutCallback, stderrCallback)
+        }
+
+        Log.i(TAG, "install $type module $uri result: $result")
 
         file.delete()
 
-        onFinish(result.isSuccess)
-        return result.isSuccess
+        onFinish(result)
+        return result
     }
 }
 
