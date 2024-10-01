@@ -14,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.topjohnwu.superuser.CallbackList
 import com.topjohnwu.superuser.ShellUtils
+import com.topjohnwu.superuser.internal.UiThreadHandler
 import me.bmax.apatch.util.createRootShell
 import org.json.JSONArray
 import org.json.JSONObject
@@ -50,9 +51,7 @@ class WebViewInterface(val context: Context, private val webView: WebView) {
 
     @JavascriptInterface
     fun exec(
-        cmd: String,
-        options: String?,
-        callbackFunc: String
+        cmd: String, options: String?, callbackFunc: String
     ) {
         val finalCommand = StringBuilder()
         processOptions(finalCommand, options)
@@ -63,12 +62,11 @@ class WebViewInterface(val context: Context, private val webView: WebView) {
         val stdout = result.out.joinToString(separator = "\n")
         val stderr = result.err.joinToString(separator = "\n")
 
-        val jsCode =
-            "javascript: (function() { try { ${callbackFunc}(${result.code}, ${
-                JSONObject.quote(
-                    stdout
-                )
-            }, ${JSONObject.quote(stderr)}); } catch(e) { console.error(e); } })();"
+        val jsCode = "javascript: (function() { try { ${callbackFunc}(${result.code}, ${
+            JSONObject.quote(
+                stdout
+            )
+        }, ${JSONObject.quote(stderr)}); } catch(e) { console.error(e); } })();"
         webView.post {
             webView.loadUrl(jsCode)
         }
@@ -95,24 +93,23 @@ class WebViewInterface(val context: Context, private val webView: WebView) {
         val shell = createRootShell()
 
         val emitData = fun(name: String, data: String) {
-            val jsCode =
-                "javascript: (function() { try { ${callbackFunc}.${name}.emit('data', ${
-                    JSONObject.quote(
-                        data
-                    )
-                }); } catch(e) { console.error('emitData', e); } })();"
+            val jsCode = "javascript: (function() { try { ${callbackFunc}.${name}.emit('data', ${
+                JSONObject.quote(
+                    data
+                )
+            }); } catch(e) { console.error('emitData', e); } })();"
             webView.post {
                 webView.loadUrl(jsCode)
             }
         }
 
-        val stdout = object : CallbackList<String>() {
+        val stdout = object : CallbackList<String>(UiThreadHandler::runAndWait) {
             override fun onAddElement(s: String) {
                 emitData("stdout", s)
             }
         }
 
-        val stderr = object : CallbackList<String>() {
+        val stderr = object : CallbackList<String>(UiThreadHandler::runAndWait) {
             override fun onAddElement(s: String) {
                 emitData("stderr", s)
             }
@@ -180,7 +177,6 @@ fun hideSystemUI(window: Window) {
 fun showSystemUI(window: Window) {
     WindowCompat.setDecorFitsSystemWindows(window, true)
     WindowInsetsControllerCompat(
-        window,
-        window.decorView
+        window, window.decorView
     ).show(WindowInsetsCompat.Type.systemBars())
 }
