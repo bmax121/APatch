@@ -76,9 +76,7 @@ android {
 
     composeCompiler {
         featureFlags = setOf(
-            ComposeFeatureFlag.IntrinsicRemember,
-            ComposeFeatureFlag.OptimizeNonSkippingGroups,
-            ComposeFeatureFlag.StrongSkipping.disabled()
+            ComposeFeatureFlag.OptimizeNonSkippingGroups
         )
     }
 
