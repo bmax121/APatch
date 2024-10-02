@@ -3,7 +3,7 @@ use crate::supercall::fork_for_result;
 use crate::utils::switch_cgroups;
 use crate::{
     assets, defs, mount, restorecon, supercall,
-    supercall::{init_load_su_path, init_load_su_uid, refresh_su_list},
+    supercall::{init_load_package_uid_config, init_load_su_path, refresh_ap_package_list},
     utils::{self, ensure_clean_dir},
 };
 use anyhow::{bail, Context, Result};
@@ -114,7 +114,7 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     #[cfg(unix)]
     let _ = catch_bootlog();
 
-    init_load_su_uid(&superkey);
+    init_load_package_uid_config(&superkey);
 
     init_load_su_path(&superkey);
 
@@ -366,7 +366,7 @@ pub fn start_uid_listener() -> Result<()> {
             debounce = false;
             let skey = CStr::from_bytes_with_nul(b"su\0")
                 .expect("[start_uid_listener] CStr::from_bytes_with_nul failed");
-            refresh_su_list(&skey, &mutex);
+            refresh_ap_package_list(&skey, &mutex);
         } else if !debounce {
             thread::sleep(Duration::from_secs(1));
             debounce = true;

@@ -1,6 +1,6 @@
 use crate::package::{read_ap_package_config, synchronize_package_uid};
 use errno::errno;
-use libc::{c_int, c_long, execv, fork, pid_t, setenv, syscall, uid_t, wait, EINVAL};
+use libc::{c_int, c_long, c_void, execv, fork, pid_t, setenv, syscall, uid_t, wait, EINVAL};
 use log::{error, info, warn};
 use std::ffi::{CStr, CString};
 use std::fmt::Write;
@@ -18,11 +18,14 @@ const MAJOR: c_long = 0;
 const MINOR: c_long = 11;
 const PATCH: c_long = 1;
 
+const KSTORAGE_EXCLUDE_LIST_GROUP: i32 = 1;
+
 const __NR_SUPERCALL: c_long = 45;
 const SUPERCALL_KLOG: c_long = 0x1004;
 const SUPERCALL_KERNELPATCH_VER: c_long = 0x1008;
 const SUPERCALL_KERNEL_VER: c_long = 0x1009;
 const SUPERCALL_SU: c_long = 0x1010;
+const SUPERCALL_KSTORAGE_WRITE: c_long = 0x1041;
 const SUPERCALL_SU_GRANT_UID: c_long = 0x1100;
 const SUPERCALL_SU_REVOKE_UID: c_long = 0x1101;
 const SUPERCALL_SU_NUMS: c_long = 0x1102;
@@ -33,52 +36,15 @@ const SUPERCALL_SU_GET_SAFEMODE: c_long = 0x1112;
 const SUPERCALL_SCONTEXT_LEN: usize = 0x60;
 
 #[repr(C)]
-union SuProfileExtUnion {
-    exclude: bool,
-}
-
-#[repr(C)]
-struct SuProfileExt {
-    union_data: SuProfileExtUnion,
-    padding: [u8; 32], // char _[32];
-}
-
-#[repr(C)]
 struct SuProfile {
     uid: i32,
     to_uid: i32,
     scontext: [u8; SUPERCALL_SCONTEXT_LEN],
-    ext: SuProfileExt,
-}
-
-fn hash_key(key: &CStr) -> c_long {
-    key.to_bytes().iter().fold(1000000007, |hash, &byte| {
-        hash.wrapping_mul(31).wrapping_add(byte as c_long)
-    })
-}
-
-fn hash_key_cmd(key: &CStr, cmd: c_long) -> c_long {
-    (hash_key(key) & 0xFFFF0000) | cmd
 }
 
 fn ver_and_cmd(cmd: c_long) -> c_long {
     let version_code: u32 = ((MAJOR << 16) + (MINOR << 8) + PATCH).try_into().unwrap();
     ((version_code as c_long) << 32) | (0x1158 << 16) | (cmd & 0xFFFF)
-}
-
-fn compact_cmd(key: &CStr, cmd: c_long) -> c_long {
-    let ver = unsafe {
-        syscall(
-            __NR_SUPERCALL,
-            key.as_ptr(),
-            ver_and_cmd(SUPERCALL_KERNELPATCH_VER),
-        ) as c_long
-    };
-    if ver >= 0x0a05 {
-        ver_and_cmd(cmd)
-    } else {
-        hash_key_cmd(key, cmd)
-    }
 }
 
 fn sc_su_revoke_uid(key: &CStr, uid: uid_t) -> c_long {
@@ -89,7 +55,7 @@ fn sc_su_revoke_uid(key: &CStr, uid: uid_t) -> c_long {
         syscall(
             __NR_SUPERCALL,
             key.as_ptr(),
-            compact_cmd(key, SUPERCALL_SU_REVOKE_UID),
+            ver_and_cmd(SUPERCALL_SU_REVOKE_UID),
             uid,
         ) as c_long
     }
@@ -103,10 +69,45 @@ fn sc_su_grant_uid(key: &CStr, profile: &SuProfile) -> c_long {
         syscall(
             __NR_SUPERCALL,
             key.as_ptr(),
-            compact_cmd(key, SUPERCALL_SU_GRANT_UID),
+            ver_and_cmd(SUPERCALL_SU_GRANT_UID),
             profile,
         ) as c_long
     }
+}
+
+fn sc_kstorage_write(
+    key: &CStr,
+    gid: i32,
+    did: i64,
+    data: *mut c_void,
+    offset: i32,
+    dlen: i32,
+) -> c_long {
+    if key.to_bytes().is_empty() {
+        return (-EINVAL).into();
+    }
+    unsafe {
+        syscall(
+            __NR_SUPERCALL,
+            key.as_ptr(),
+            ver_and_cmd(SUPERCALL_KSTORAGE_WRITE),
+            gid as c_long,
+            did as c_long,
+            data,
+            (((offset as i64) << 32) | (dlen as i64)) as c_long,
+        ) as c_long
+    }
+}
+
+fn sc_set_ap_mod_exclude(key: &CStr, uid: i64, exclude: i32) -> c_long {
+    sc_kstorage_write(
+        key,
+        KSTORAGE_EXCLUDE_LIST_GROUP,
+        uid,
+        &exclude as *const i32 as *mut c_void,
+        0,
+        std::mem::size_of::<i32>() as i32,
+    )
 }
 
 pub fn sc_su_get_safemode(key: &CStr) -> c_long {
@@ -125,7 +126,7 @@ pub fn sc_su_get_safemode(key: &CStr) -> c_long {
         syscall(
             __NR_SUPERCALL,
             key_ptr,
-            compact_cmd(key, SUPERCALL_SU_GET_SAFEMODE),
+            ver_and_cmd(SUPERCALL_SU_GET_SAFEMODE),
         ) as c_long
     }
 }
@@ -138,7 +139,7 @@ fn sc_su(key: &CStr, profile: &SuProfile) -> c_long {
         syscall(
             __NR_SUPERCALL,
             key.as_ptr(),
-            compact_cmd(key, SUPERCALL_SU),
+            ver_and_cmd(SUPERCALL_SU),
             profile,
         ) as c_long
     }
@@ -152,7 +153,7 @@ fn sc_su_reset_path(key: &CStr, path: &CStr) -> c_long {
         syscall(
             __NR_SUPERCALL,
             key.as_ptr(),
-            compact_cmd(key, SUPERCALL_SU_RESET_PATH),
+            ver_and_cmd(SUPERCALL_SU_RESET_PATH),
             path.as_ptr(),
         ) as c_long
     }
@@ -166,7 +167,7 @@ fn sc_kp_ver(key: &CStr) -> Result<u32, i32> {
         syscall(
             __NR_SUPERCALL,
             key.as_ptr(),
-            compact_cmd(key, SUPERCALL_KERNELPATCH_VER),
+            ver_and_cmd(SUPERCALL_KERNELPATCH_VER),
         )
     };
     Ok(ret as u32)
@@ -180,7 +181,7 @@ fn sc_k_ver(key: &CStr) -> Result<u32, i32> {
         syscall(
             __NR_SUPERCALL,
             key.as_ptr(),
-            compact_cmd(key, SUPERCALL_KERNEL_VER),
+            ver_and_cmd(SUPERCALL_KERNEL_VER),
         )
     };
     Ok(ret as u32)
@@ -194,7 +195,7 @@ fn sc_klog(key: &CStr, msg: &CStr) -> c_long {
         syscall(
             __NR_SUPERCALL,
             key.as_ptr(),
-            compact_cmd(key, SUPERCALL_KLOG),
+            ver_and_cmd(SUPERCALL_KLOG),
             msg.as_ptr(),
         ) as c_long
     }
@@ -204,13 +205,7 @@ fn sc_su_uid_nums(key: &CStr) -> c_long {
     if key.to_bytes().is_empty() {
         return (-EINVAL).into();
     }
-    unsafe {
-        syscall(
-            __NR_SUPERCALL,
-            key.as_ptr(),
-            compact_cmd(key, SUPERCALL_SU_NUMS),
-        ) as c_long
-    }
+    unsafe { syscall(__NR_SUPERCALL, key.as_ptr(), ver_and_cmd(SUPERCALL_SU_NUMS)) as c_long }
 }
 
 fn sc_su_allow_uids(key: &CStr, buf: &mut [uid_t]) -> c_long {
@@ -224,7 +219,7 @@ fn sc_su_allow_uids(key: &CStr, buf: &mut [uid_t]) -> c_long {
         syscall(
             __NR_SUPERCALL,
             key.as_ptr(),
-            compact_cmd(key, SUPERCALL_SU_LIST),
+            ver_and_cmd(SUPERCALL_SU_LIST),
             buf.as_mut_ptr(),
             buf.len() as i32,
         ) as c_long
@@ -250,7 +245,7 @@ fn convert_superkey(s: &Option<String>) -> Option<CString> {
     s.as_ref().and_then(|s| CString::new(s.clone()).ok())
 }
 
-pub fn refresh_su_list(skey: &CStr, mutex: &Arc<Mutex<()>>) {
+pub fn refresh_ap_package_list(skey: &CStr, mutex: &Arc<Mutex<()>>) {
     let _lock = mutex.lock().unwrap();
 
     let num = sc_su_uid_nums(skey);
@@ -267,13 +262,19 @@ pub fn refresh_su_list(skey: &CStr, mutex: &Arc<Mutex<()>>) {
     }
     for uid in &uids {
         if *uid == 0 || *uid == 2000 {
-            warn!("[refresh_su_list] Skip revoking critical uid: {}", uid);
+            warn!(
+                "[refresh_ap_package_list] Skip revoking critical uid: {}",
+                uid
+            );
             continue;
         }
-        info!("[refresh_su_list] Revoking {} root permission...", uid);
+        info!(
+            "[refresh_ap_package_list] Revoking {} root permission...",
+            uid
+        );
         let rc = sc_su_revoke_uid(skey, *uid);
         if rc != 0 {
-            error!("[refresh_su_list] Error revoking UID: {}", rc);
+            error!("[refresh_ap_package_list] Error revoking UID: {}", rc);
         }
     }
 
@@ -286,14 +287,17 @@ pub fn refresh_su_list(skey: &CStr, mutex: &Arc<Mutex<()>>) {
                 uid: config.uid,
                 to_uid: config.to_uid,
                 scontext: convert_string_to_u8_array(&config.sctx),
-                ext: SuProfileExt {
-                    union_data: SuProfileExtUnion { exclude: false },
-                    padding: [0; 32],
-                },
             };
             let result = sc_su_grant_uid(skey, &profile);
             info!(
-                "[refresh_su_list] Loading {}: result = {}",
+                "[refresh_ap_package_list] Loading {}: result = {}",
+                config.pkg, result
+            );
+        }
+        if config.allow == 0 && config.exclude == 1 {
+            let result = sc_set_ap_mod_exclude(skey, config.uid as i64, 1);
+            info!(
+                "[refresh_ap_package_list] Loading exclude {}: result = {}",
                 config.pkg, result
             );
         }
@@ -308,10 +312,6 @@ pub fn privilege_apd_profile(superkey: &Option<String>) {
         uid: process::id().try_into().expect("PID conversion failed"),
         to_uid: 0,
         scontext: convert_string_to_u8_array(all_allow_ctx),
-        ext: SuProfileExt {
-            union_data: SuProfileExtUnion { exclude: false },
-            padding: [0; 32],
-        },
     };
     if let Some(ref key) = key {
         let result = sc_su(key, &profile);
@@ -319,7 +319,7 @@ pub fn privilege_apd_profile(superkey: &Option<String>) {
     }
 }
 
-pub fn init_load_su_uid(superkey: &Option<String>) {
+pub fn init_load_package_uid_config(superkey: &Option<String>) {
     let package_configs = read_ap_package_config();
     let key = convert_superkey(superkey);
 
@@ -330,13 +330,17 @@ pub fn init_load_su_uid(superkey: &Option<String>) {
                     uid: config.uid,
                     to_uid: config.to_uid,
                     scontext: convert_string_to_u8_array(&config.sctx),
-                    ext: SuProfileExt {
-                        union_data: SuProfileExtUnion { exclude: false },
-                        padding: [0; 32],
-                    },
                 };
                 let result = sc_su_grant_uid(key, &profile);
                 info!("Processed {}: result = {}", config.pkg, result);
+            } else {
+                warn!("Superkey is None, skipping config: {}", config.pkg);
+            }
+        }
+        if config.allow == 0 && config.exclude == 1 {
+            if let Some(ref key) = key {
+                let result = sc_set_ap_mod_exclude(key, config.uid as i64, 1);
+                info!("Processed exclude {}: result = {}", config.pkg, result);
             } else {
                 warn!("Superkey is None, skipping config: {}", config.pkg);
             }

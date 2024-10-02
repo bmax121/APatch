@@ -96,6 +96,30 @@ extern "C" {
         return rc;
     }
 
+    JNIEXPORT jint JNICALL Java_me_bmax_apatch_Natives_nativeSetUidExclude(JNIEnv *env, jobject /* this */, jstring superKey, jint uid, jint exclude)
+    {
+        if (!superKey) [[unlikely]] {
+            LOGE("Super Key is null!");
+            return -EINVAL;
+        }
+        const char *skey = env->GetStringUTFChars(superKey, nullptr);
+        long rc = sc_set_ap_mod_exclude(skey, (uid_t) uid, exclude);
+        env->ReleaseStringUTFChars(superKey, skey);
+        return rc;
+    }
+
+    JNIEXPORT jint JNICALL Java_me_bmax_apatch_Natives_nativeGetUidExclude(JNIEnv *env, jobject /* this */, jstring superKey, uid_t uid)
+    {
+        if (!superKey) [[unlikely]] {
+            LOGE("Super Key is null!");
+            return -EINVAL;
+        }
+        const char *skey = env->GetStringUTFChars(superKey, nullptr);
+        long rc = sc_get_ap_mod_exclude(skey, uid);
+        env->ReleaseStringUTFChars(superKey, skey);
+        return rc;
+    }
+
     JNIEXPORT jintArray JNICALL Java_me_bmax_apatch_Natives_nativeSuUids(JNIEnv *env, jobject /* this */,
                                                                          jstring superKey)
     {

@@ -41,12 +41,22 @@ static inline long hash_key(const char *key)
 #define SUPERCALL_KPM_LIST 0x1031
 #define SUPERCALL_KPM_INFO 0x1032
 
-#define SUPERCALL_MEM_PHYS 0x1041
-#define SUPERCALL_MEM_KERNEL_PHYS 0x1042
-#define SUPERCALL_MEM_MAP_KERNEL 0x1048
-#define SUPERCALL_MEM_MAP_USER 0x1049
-#define SUPERCALL_MEM_PROT 0x1049
-#define SUPERCALL_MEM_CACHE_FLUSH 0x1049
+struct kernel_storage
+{
+    void *data;
+    int len;
+};
+
+#define SUPERCALL_KSTORAGE_ALLOC_GROUP 0x1040
+#define SUPERCALL_KSTORAGE_WRITE 0x1041
+#define SUPERCALL_KSTORAGE_READ 0x1042
+#define SUPERCALL_KSTORAGE_REMOVE 0x1043
+#define SUPERCALL_KSTORAGE_REMOVE_GROUP 0x1044
+
+#define KSTORAGE_SU_LIST_GROUP 0
+#define KSTORAGE_EXCLUDE_LIST_GROUP 1
+#define KSTORAGE_UNUSED_GROUP_2 2
+#define KSTORAGE_UNUSED_GROUP_3 3
 
 #define SUPERCALL_BOOTLOG 0x10fd
 #define SUPERCALL_PANIC 0x10fe
@@ -55,21 +65,11 @@ static inline long hash_key(const char *key)
 #define SUPERCALL_KEY_MAX_LEN 0x40
 #define SUPERCALL_SCONTEXT_LEN 0x60
 
-struct su_profile_ext
-{
-    union
-    {
-        bool exclude;
-    };
-    char _[32];
-};
-
 struct su_profile
 {
     uid_t uid;
     uid_t to_uid;
     char scontext[SUPERCALL_SCONTEXT_LEN];
-    struct su_profile_ext ext;
 };
 
 #ifdef ANDROID

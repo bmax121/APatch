@@ -216,6 +216,7 @@ private fun AppItem(
                 PkgConfig.changeConfig(config)
                 if (config.allow == 1) {
                     Natives.grantSu(app.uid, 0, config.profile.scontext)
+                    Natives.setUidExclude(app.uid, 0)
                 } else {
                     Natives.revokeSu(app.uid)
                 }
@@ -254,6 +255,7 @@ private fun AppItem(
                     config.exclude = excludeApp
                     config.profile.uid = app.uid
                     PkgConfig.changeConfig(config)
+                    Natives.setUidExclude(app.uid, excludeApp)
                 },
             )
         }

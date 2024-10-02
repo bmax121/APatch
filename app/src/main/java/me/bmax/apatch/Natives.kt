@@ -114,6 +114,16 @@ object Natives {
         return nativeRevokeSu(APApplication.superKey, uid)
     }
 
+    private external fun nativeSetUidExclude(superKey: String, uid: Int, exclude: Int): Int
+    fun setUidExclude(uid: Int, exclude: Int): Int {
+        return nativeSetUidExclude(APApplication.superKey, uid, exclude)
+    }
+
+    private external fun nativeGetUidExclude(superKey: String, uid: Int): Int
+    fun isUidExclude(uid: Int): Int {
+        return nativeGetUidExclude(APApplication.superKey, uid)
+    }
+
     private external fun nativeSuProfile(superKey: String, uid: Int): Profile
 
     fun suProfile(uid: Int): Profile {
