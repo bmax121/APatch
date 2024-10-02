@@ -1,6 +1,7 @@
 package me.bmax.apatch.util
 
 import android.util.Log
+import androidx.core.content.pm.PackageInfoCompat
 import me.bmax.apatch.APApplication
 import me.bmax.apatch.BuildConfig
 import me.bmax.apatch.Natives
@@ -76,10 +77,10 @@ object Version {
     }
 
 
-    @Suppress("DEPRECATION")
-    fun getManagerVersion(): Pair<String, Int> {
+    fun getManagerVersion(): Pair<String, Long> {
         val packageInfo = apApp.packageManager.getPackageInfo(apApp.packageName, 0)!!
-        return Pair(packageInfo.versionName!!, packageInfo.versionCode)
+        val versionCode = PackageInfoCompat.getLongVersionCode(packageInfo)
+        return Pair(packageInfo.versionName!!, versionCode)
     }
 
     var installedApdVInt: Int = 0

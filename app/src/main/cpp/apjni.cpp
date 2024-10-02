@@ -8,6 +8,7 @@
 #include <jni.h>
 #include <android/log.h>
 #include <cstring>
+#include <vector>
 
 #include "apjni.hpp"
 #include "supercall.h"
@@ -104,13 +105,16 @@ extern "C" {
         }
         const char *skey = env->GetStringUTFChars(superKey, nullptr);
         int num = sc_su_uid_nums(skey);
-        int uids[num];
-        long n = sc_su_allow_uids(skey, (uid_t *)uids, num);
+        std::vector<int> uids(num);
+
+        long n = sc_su_allow_uids(skey, (uid_t *)uids.data(), num);
         if (n > 0) [[unlikely]] {
-            jintArray array = env->NewIntArray(num);
-            env->SetIntArrayRegion(array, 0, n, uids);
+            jintArray array = env->NewIntArray(n);
+            env->SetIntArrayRegion(array, 0, n, uids.data());
+            env->ReleaseStringUTFChars(superKey, skey);
             return array;
         }
+
         env->ReleaseStringUTFChars(superKey, skey);
         return env->NewIntArray(0);
     }

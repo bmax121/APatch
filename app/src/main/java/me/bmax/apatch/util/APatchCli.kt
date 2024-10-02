@@ -2,9 +2,13 @@ package me.bmax.apatch.util
 
 import android.content.ContentResolver
 import android.content.Context
+import android.content.pm.PackageManager
+import android.content.pm.Signature
 import android.database.Cursor
 import android.net.Uri
+import android.os.Build
 import android.provider.OpenableColumns
+import android.util.Base64
 import android.util.Log
 import com.topjohnwu.superuser.CallbackList
 import com.topjohnwu.superuser.Shell
@@ -13,7 +17,10 @@ import me.bmax.apatch.APApplication
 import me.bmax.apatch.BuildConfig
 import me.bmax.apatch.apApp
 import java.io.File
-
+import java.security.MessageDigest
+import java.security.cert.CertificateFactory
+import java.security.cert.X509Certificate
+import java.util.zip.ZipFile
 
 private const val TAG = "APatchCli"
 private fun getKPatchPath(): String {
@@ -27,7 +34,6 @@ class RootShellInitializer : Shell.Initializer() {
     }
 }
 
-@Suppress("DEPRECATION")
 fun createRootShell(): Shell {
     Shell.enableVerboseLogging = BuildConfig.DEBUG
     val builder = Shell.Builder.create().setInitializers(RootShellInitializer::class.java)
@@ -67,7 +73,6 @@ fun rootAvailable(): Boolean {
     return shell.isRoot
 }
 
-@Suppress("DEPRECATION")
 fun tryGetRootShell(): Shell {
     Shell.enableVerboseLogging = BuildConfig.DEBUG
     val builder = Shell.Builder.create()
@@ -233,24 +238,6 @@ fun setGlobalNamespaceEnabled(value: String) {
         }
 }
 
-fun forceStopApp(packageName: String) {
-    val shell = getRootShell()
-    val result = shell.newJob().add("am force-stop $packageName").exec()
-    Log.i(TAG, "force stop $packageName result: $result")
-}
-
-fun launchApp(packageName: String) {
-    val shell = getRootShell()
-    val result =
-        shell.newJob().add("monkey -p $packageName -c android.intent.category.LAUNCHER 1").exec()
-    Log.i(TAG, "launch $packageName result: $result")
-}
-
-fun restartApp(packageName: String) {
-    forceStopApp(packageName)
-    launchApp(packageName)
-}
-
 fun getFileNameFromUri(context: Context, uri: Uri): String? {
     var fileName: String? = null
     val contentResolver: ContentResolver = context.contentResolver
@@ -261,4 +248,73 @@ fun getFileNameFromUri(context: Context, uri: Uri): String? {
         }
     }
     return fileName
+}
+
+@Suppress("DEPRECATION")
+private fun signatureFromAPI(context: Context): ByteArray? {
+    return try {
+        val packageInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            context.packageManager.getPackageInfo(
+                context.packageName, PackageManager.GET_SIGNING_CERTIFICATES
+            )
+        } else {
+            context.packageManager.getPackageInfo(
+                context.packageName,
+                PackageManager.GET_SIGNATURES
+            )
+        }
+
+        val signatures: Array<out Signature>? =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                packageInfo.signingInfo?.apkContentsSigners
+            } else {
+                packageInfo.signatures
+            }
+
+        signatures?.firstOrNull()?.toByteArray()
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
+    }
+}
+
+private fun signatureFromAPK(context: Context): ByteArray? {
+    var signatureBytes: ByteArray? = null
+    try {
+        ZipFile(context.packageResourcePath).use { zipFile ->
+            val entries = zipFile.entries()
+            while (entries.hasMoreElements() && signatureBytes == null) {
+                val entry = entries.nextElement()
+                if (entry.name.matches("(META-INF/.*)\\.(RSA|DSA|EC)".toRegex())) {
+                    zipFile.getInputStream(entry).use { inputStream ->
+                        val certFactory = CertificateFactory.getInstance("X509")
+                        val x509Cert =
+                            certFactory.generateCertificate(inputStream) as X509Certificate
+                        signatureBytes = x509Cert.encoded
+                    }
+                }
+            }
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+    return signatureBytes
+}
+
+private fun validateSignature(signatureBytes: ByteArray?, validSignature: String): Boolean {
+    signatureBytes ?: return false
+    val digest = MessageDigest.getInstance("SHA-256")
+    val signatureHash = Base64.encodeToString(digest.digest(signatureBytes), Base64.NO_WRAP)
+    return signatureHash == validSignature
+}
+
+fun verifyAppSignature(validSignature: String): Boolean {
+    val context = apApp.applicationContext
+    val apkSignature = signatureFromAPK(context)
+    val apiSignature = signatureFromAPI(context)
+
+    return validateSignature(apiSignature, validSignature) && validateSignature(
+        apkSignature,
+        validSignature
+    )
 }

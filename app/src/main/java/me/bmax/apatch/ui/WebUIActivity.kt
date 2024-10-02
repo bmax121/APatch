@@ -2,6 +2,7 @@ package me.bmax.apatch.ui
 
 import android.annotation.SuppressLint
 import android.app.ActivityManager
+import android.os.Build
 import android.os.Bundle
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
@@ -18,12 +19,18 @@ import java.io.File
 class WebUIActivity : ComponentActivity() {
     private lateinit var webViewInterface: WebViewInterface
 
-    @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val moduleId = intent.getStringExtra("id")!!
         val name = intent.getStringExtra("name")!!
-        setTaskDescription(ActivityManager.TaskDescription("APatch - $name"))
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            @Suppress("DEPRECATION")
+            setTaskDescription(ActivityManager.TaskDescription("APatch - $name"))
+        } else {
+            val taskDescription =
+                ActivityManager.TaskDescription.Builder().setLabel("APatch - $name").build()
+            setTaskDescription(taskDescription)
+        }
 
         val prefs = APApplication.sharedPreferences
         WebView.setWebContentsDebuggingEnabled(prefs.getBoolean("enable_web_debugging", false))

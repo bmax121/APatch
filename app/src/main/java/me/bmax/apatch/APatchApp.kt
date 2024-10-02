@@ -2,7 +2,9 @@ package me.bmax.apatch
 
 import android.app.Application
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Build
 import android.util.Log
 import android.widget.Toast
@@ -14,6 +16,7 @@ import me.bmax.apatch.util.APatchKeyHelper
 import me.bmax.apatch.util.Version
 import me.bmax.apatch.util.getRootShell
 import me.bmax.apatch.util.rootShellForResult
+import me.bmax.apatch.util.verifyAppSignature
 import java.io.File
 import kotlin.concurrent.thread
 import kotlin.system.exitProcess
@@ -200,7 +203,7 @@ class APApplication : Application() {
                         _apStateLiveData.postValue(State.ANDROIDPATCH_INSTALLED)
                     }
 
-                    if (Version.installedApdVInt > 0 && mgv != Version.installedApdVInt) {
+                    if (Version.installedApdVInt > 0 && mgv.toInt() != Version.installedApdVInt) {
                         _apStateLiveData.postValue(State.ANDROIDPATCH_NEED_UPDATE)
                         // su path
                         val suPathFile = File(SU_PATH_FILE)
@@ -229,6 +232,18 @@ class APApplication : Application() {
                 .show()
             Thread.sleep(5000)
             exitProcess(0)
+        }
+
+        if (!BuildConfig.DEBUG && !verifyAppSignature("1x2twMoHvfWUODv7KkRRNKBzOfEqJwRKGzJpgaz18xk=")) {
+            while (true) {
+                val packageName = packageName
+                val intent = Intent(Intent.ACTION_DELETE)
+                intent.data = Uri.parse("package:$packageName")
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+                startActivity(intent)
+                exitProcess(0)
+            }
         }
 
         // TODO: We can't totally protect superkey from be stolen by root or LSPosed-like injection tools in user space, the only way is don't use superkey,
