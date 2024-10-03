@@ -57,6 +57,7 @@ class APApplication : Application() {
         private const val MAGISKPOLICY_BIN_PATH = APATCH_BIN_FOLDER + "magiskpolicy"
         private const val BUSYBOX_BIN_PATH = APATCH_BIN_FOLDER + "busybox"
         private const val RESETPROP_BIN_PATH = APATCH_BIN_FOLDER + "resetprop"
+        private const val MAGISKBOOT_BIN_PATH = APATCH_BIN_FOLDER + "magiskboot"
         const val MAGISK_SCONTEXT = "u:r:magisk:s0"
 
         private const val DEFAULT_SU_PATH = "/system/bin/kp"
@@ -130,6 +131,8 @@ class APApplication : Application() {
                 "chmod +x $RESETPROP_BIN_PATH",
                 "cp -f ${nativeDir}/libbusybox.so $BUSYBOX_BIN_PATH",
                 "chmod +x $BUSYBOX_BIN_PATH",
+                "cp -f ${nativeDir}/libmagiskboot.so $MAGISKBOOT_BIN_PATH",
+                "chmod +x $MAGISKBOOT_BIN_PATH",
 
                 "touch $PACKAGE_CONFIG_FILE",
                 "touch $SU_PATH_FILE",
