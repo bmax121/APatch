@@ -2,15 +2,15 @@
 agp = "8.7.0"
 kotlin = "2.0.20"
 ksp = "2.0.20-1.0.25"
-compose-bom = "2024.09.02"
+compose-bom = "2024.09.03"
 lifecycle = "2.8.6"
 accompanist = "0.36.0"
 compose-destination = "1.11.6"
 libsu = "6.0.0"
 sheets-compose-dialogs = "1.3.0"
 markdown = "4.6.2"
-ui = "1.7.2"
-webkit = "1.12.0"
+ui = "1.7.3"
+webkit = "1.12.1"
 androidxCoreSplashscreen = "1.0.1"
 
 [plugins]
