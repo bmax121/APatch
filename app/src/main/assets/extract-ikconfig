@@ -11,13 +11,13 @@ if [ $# -ne 1 -o ! -s "$img" ]; then
   exit 2
 fi
 
-pos=$(toybox grep -abo "IKCFG_ST" $img)
+pos=$(./toybox grep -abo "IKCFG_ST" $img)
 [ $? -ne 0 ] && echo "$me: Cannot find kernel config." >&2 && exit 1
 
 pos=${pos%%:*}
 kcfg_start=$(($pos+8))
 
-pos=$(toybox grep -abo "IKCFG_ED" $img)
+pos=$(./toybox grep -abo "IKCFG_ED" $img)
 pos=${pos%%:*}
 kcfg_end=$(($pos-1))
 
