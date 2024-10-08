@@ -19,6 +19,12 @@ The patching of Android kernel and Android system.
 - APatch relies on [KernelPatch](https://github.com/bmax121/KernelPatch/).
 - The APatch UI and the APModule source code have been derived and modified from [KernelSU](https://github.com/tiann/KernelSU).
 
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/me.bmax.apatch/)
+
+Or download the latest APK from the [Releases Section](https://github.com/bmax121/APatch/releases/latest).
+
 ## Supported Versions
 
 - Only supports the ARM64 architecture.
