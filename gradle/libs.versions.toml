@@ -1,15 +1,15 @@
 [versions]
-agp = "8.7.0"
+agp = "8.7.1"
 kotlin = "2.0.21"
 ksp = "2.0.21-1.0.25"
-compose-bom = "2024.09.03"
+compose-bom = "2024.10.00"
 lifecycle = "2.8.6"
 accompanist = "0.36.0"
 compose-destination = "1.11.7"
 libsu = "6.0.0"
 sheets-compose-dialogs = "1.3.0"
 markdown = "4.6.2"
-ui = "1.7.3"
+ui = "1.7.4"
 webkit = "1.12.1"
 androidxCoreSplashscreen = "1.0.1"
 
@@ -24,7 +24,7 @@ lsplugin-cmaker = { id = "org.lsposed.lsplugin.cmaker", version = "1.2" }
 kotlin-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 
 [libraries]
-androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version = "1.9.2" }
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version = "1.9.3" }
 
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
 androidx-compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
