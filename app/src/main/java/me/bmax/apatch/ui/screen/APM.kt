@@ -65,6 +65,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.ExecuteAPMActionScreenDestination
+import com.ramcosta.composedestinations.generated.destinations.InstallScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -78,8 +81,6 @@ import me.bmax.apatch.ui.component.ModuleStateIndicator
 import me.bmax.apatch.ui.component.ModuleUpdateButton
 import me.bmax.apatch.ui.component.rememberConfirmDialog
 import me.bmax.apatch.ui.component.rememberLoadingDialog
-import me.bmax.apatch.ui.screen.destinations.InstallScreenDestination
-import me.bmax.apatch.ui.screen.destinations.ExecuteAPMActionScreenDestination
 import me.bmax.apatch.ui.viewmodel.APModuleViewModel
 import me.bmax.apatch.util.DownloadListener
 import me.bmax.apatch.util.download
@@ -90,7 +91,7 @@ import me.bmax.apatch.util.ui.LocalSnackbarHost
 import me.bmax.apatch.util.uninstallModule
 import okhttp3.OkHttpClient
 
-@Destination
+@Destination<RootGraph>
 @Composable
 fun APModuleScreen(navigator: DestinationsNavigator) {
     val context = LocalContext.current

@@ -48,6 +48,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootGraph
 import kotlinx.coroutines.launch
 import me.bmax.apatch.Natives
 import me.bmax.apatch.R
@@ -59,7 +60,7 @@ import me.bmax.apatch.util.PkgConfig
 
 
 @OptIn(ExperimentalMaterialApi::class)
-@Destination
+@Destination<RootGraph>
 @Composable
 fun SuperUserScreen() {
     val viewModel = viewModel<SuperUserViewModel>()

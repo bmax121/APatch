@@ -30,17 +30,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.PatchesDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import me.bmax.apatch.R
 import me.bmax.apatch.ui.component.rememberConfirmDialog
-import me.bmax.apatch.ui.screen.destinations.PatchesDestination
 import me.bmax.apatch.ui.viewmodel.PatchesViewModel
 import me.bmax.apatch.util.isABDevice
 import me.bmax.apatch.util.rootAvailable
 
 var selectedBootImage: Uri? = null
 
-@Destination
+@Destination<RootGraph>
 @Composable
 fun InstallModeSelectScreen(navigator: DestinationsNavigator) {
     var installMethod by remember {

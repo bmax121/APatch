@@ -4,7 +4,7 @@ kotlin = "2.0.21"
 ksp = "2.0.21-1.0.25"
 compose-bom = "2024.10.00"
 lifecycle = "2.8.6"
-compose-destination = "1.11.7"
+compose-destination = "2.1.0-beta13"
 libsu = "6.0.0"
 sheets-compose-dialogs = "1.3.0"
 
@@ -49,7 +49,7 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 
 me-zhanghai-android-appiconloader-coil = { group = "me.zhanghai.android.appiconloader", name = "appiconloader-coil", version = "1.5.0" }
 
-compose-destinations-animations-core = { group = "io.github.raamcosta.compose-destinations", name = "animations-core", version.ref = "compose-destination" }
+compose-destinations-core = { group = "io.github.raamcosta.compose-destinations", name = "core", version.ref = "compose-destination" }
 compose-destinations-ksp = { group = "io.github.raamcosta.compose-destinations", name = "ksp", version.ref = "compose-destination" }
 
 sheet-compose-dialogs-core = { group = "com.maxkeppeler.sheets-compose-dialogs", name = "core", version.ref = "sheets-compose-dialogs"}

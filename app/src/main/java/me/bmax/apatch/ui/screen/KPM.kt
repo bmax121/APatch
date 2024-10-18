@@ -73,6 +73,8 @@ import androidx.compose.ui.window.DialogWindowProvider
 import androidx.compose.ui.window.PopupProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.PatchesDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.topjohnwu.superuser.nio.ExtendedFile
 import com.topjohnwu.superuser.nio.FileSystemManager
@@ -89,7 +91,6 @@ import me.bmax.apatch.ui.component.LoadingDialogHandle
 import me.bmax.apatch.ui.component.ProvideMenuShape
 import me.bmax.apatch.ui.component.rememberConfirmDialog
 import me.bmax.apatch.ui.component.rememberLoadingDialog
-import me.bmax.apatch.ui.screen.destinations.PatchesDestination
 import me.bmax.apatch.ui.viewmodel.KPModel
 import me.bmax.apatch.ui.viewmodel.KPModuleViewModel
 import me.bmax.apatch.ui.viewmodel.PatchesViewModel
@@ -101,7 +102,7 @@ import java.io.IOException
 private const val TAG = "KernelPatchModule"
 private lateinit var targetKPMToControl: KPModel.KPMInfo
 
-@Destination
+@Destination<RootGraph>
 @Composable
 fun KPModuleScreen(navigator: DestinationsNavigator) {
     val state by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)

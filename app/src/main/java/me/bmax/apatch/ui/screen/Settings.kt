@@ -75,7 +75,7 @@ import androidx.compose.ui.window.DialogWindowProvider
 import androidx.core.content.FileProvider
 import androidx.core.os.LocaleListCompat
 import com.ramcosta.composedestinations.annotation.Destination
-
+import com.ramcosta.composedestinations.annotation.RootGraph
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -98,7 +98,7 @@ import me.bmax.apatch.util.ui.APDialogBlurBehindUtils
 import me.bmax.apatch.util.ui.NavigationBarsSpacer
 import java.util.Locale
 
-@Destination
+@Destination<RootGraph>
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun SettingScreen() {

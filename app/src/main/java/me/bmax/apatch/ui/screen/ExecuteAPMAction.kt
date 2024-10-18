@@ -30,6 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -44,7 +45,7 @@ import java.util.Date
 import java.util.Locale
 
 @Composable
-@Destination
+@Destination<RootGraph>
 fun ExecuteAPMActionScreen(navigator: DestinationsNavigator, moduleId: String) {
     var text by rememberSaveable { mutableStateOf("") }
     val logContent = rememberSaveable { StringBuilder() }

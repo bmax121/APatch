@@ -62,6 +62,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootGraph
 import dev.utils.app.permission.PermissionUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -74,7 +75,7 @@ import me.bmax.apatch.util.reboot
 
 private const val TAG = "Patches"
 
-@Destination
+@Destination<RootGraph>
 @Composable
 fun Patches(mode: PatchesViewModel.PatchMode) {
     val permissionRequest = remember { mutableStateOf(false) }

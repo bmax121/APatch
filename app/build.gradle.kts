@@ -255,7 +255,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
 
-    implementation(libs.compose.destinations.animations.core)
+    implementation(libs.compose.destinations.core)
     ksp(libs.compose.destinations.ksp)
 
     implementation(libs.com.github.topjohnwu.libsu.core)

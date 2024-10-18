@@ -37,12 +37,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import me.bmax.apatch.BuildConfig
 import me.bmax.apatch.R
 import me.bmax.apatch.util.Version
 
-@Destination
+@Destination<RootGraph>
 @Composable
 fun AboutScreen(navigator: DestinationsNavigator) {
     val uriHandler = LocalUriHandler.current
