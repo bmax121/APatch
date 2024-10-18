@@ -18,7 +18,6 @@ import java.io.FileOutputStream
 import java.io.OutputStream
 import java.security.SecureRandom
 
-
 private const val TAG = "HideAPK"
 
 object HideAPK {
@@ -102,8 +101,8 @@ object HideAPK {
             return false
 
         val cmds = arrayOf(
-            "pm install -r -t ${patchedApk}",
-            "[ $? = 0 ] && appops set ${newPkgName} REQUEST_INSTALL_PACKAGES allow;",
+            "pm install -r -t $patchedApk",
+            "[ $? = 0 ] && appops set $newPkgName REQUEST_INSTALL_PACKAGES allow;",
             "am start -n $newPkgName/$APPLICATION_ID.ui.MainActivity",
             "pm uninstall $APPLICATION_ID",
         )

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -23,18 +24,18 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.content.res.ResourcesCompat
-import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import me.bmax.apatch.BuildConfig
@@ -45,16 +46,12 @@ import me.bmax.apatch.util.Version
 @Composable
 fun AboutScreen(navigator: DestinationsNavigator) {
     val uriHandler = LocalUriHandler.current
-    val drawable = ResourcesCompat.getDrawable(
-        LocalContext.current.resources,
-        R.mipmap.ic_launcher,
-        LocalContext.current.theme
-    )
 
     Scaffold(
         topBar = {
             TopBar(onBack = { navigator.popBackStack() })
-        }) { innerPadding ->
+        }
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
@@ -63,11 +60,17 @@ fun AboutScreen(navigator: DestinationsNavigator) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(20.dp))
-            Image(
-                painter = rememberDrawablePainter(drawable),
-                contentDescription = "icon",
-                modifier = Modifier.size(95.dp)
-            )
+            Surface(
+                modifier = Modifier.size(95.dp),
+                color = colorResource(id = R.color.ic_launcher_background),
+                shape = CircleShape
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                    contentDescription = "icon",
+                    modifier = Modifier.scale(1.4f)
+                )
+            }
 
             Spacer(modifier = Modifier.height(20.dp))
             Text(
