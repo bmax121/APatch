@@ -26,9 +26,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
@@ -46,6 +43,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -374,7 +372,7 @@ fun KPMControlDialog(showDialog: MutableState<Boolean>) {
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
 private fun KPModuleList(
     viewModel: KPModuleViewModel, modifier: Modifier = Modifier, state: LazyListState
@@ -414,9 +412,11 @@ private fun KPModuleList(
         }
     }
 
-    val refreshState = rememberPullRefreshState(refreshing = viewModel.isRefreshing,
-        onRefresh = { viewModel.fetchModuleList() })
-    Box(modifier.pullRefresh(refreshState)) {
+    PullToRefreshBox(
+        modifier = modifier,
+        onRefresh = { viewModel.fetchModuleList() },
+        isRefreshing = viewModel.isRefreshing
+    ) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             state = state,
@@ -443,7 +443,6 @@ private fun KPModuleList(
                         }
                     }
                 }
-
                 else -> {
                     items(viewModel.moduleList) { module ->
                         val scope = rememberCoroutineScope()
@@ -464,12 +463,6 @@ private fun KPModuleList(
                 }
             }
         }
-
-        PullRefreshIndicator(
-            refreshing = viewModel.isRefreshing, state = refreshState, modifier = Modifier.align(
-                Alignment.TopCenter
-            )
-        )
     }
 }
 
