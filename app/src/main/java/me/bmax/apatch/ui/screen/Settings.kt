@@ -761,33 +761,35 @@ fun LanguageDialog(showLanguageDialog: MutableState<Boolean>) {
 
     if (showLanguageDialog.value) {
         BasicAlertDialog(
-            onDismissRequest = { showLanguageDialog.value = false },
-            properties = DialogProperties(usePlatformDefaultWidth = false),
+            onDismissRequest = { showLanguageDialog.value = false }
         ) {
             Surface(
                 modifier = Modifier
                     .width(150.dp)
                     .wrapContentHeight(),
-                shape = RoundedCornerShape(20.dp),
+                shape = RoundedCornerShape(28.dp),
                 tonalElevation = AlertDialogDefaults.TonalElevation,
                 color = AlertDialogDefaults.containerColor,
             ) {
                 LazyColumn {
                     itemsIndexed(languages) { index, item ->
-                        ListItem(headlineContent = { Text(item) }, modifier = Modifier.clickable {
-                            showLanguageDialog.value = false
-                            if (index == 0) {
-                                AppCompatDelegate.setApplicationLocales(
-                                    LocaleListCompat.getEmptyLocaleList()
-                                )
-                            } else {
-                                AppCompatDelegate.setApplicationLocales(
-                                    LocaleListCompat.forLanguageTags(
-                                        languagesValues[index]
+                        ListItem(
+                            headlineContent = { Text(item) },
+                            modifier = Modifier.clickable {
+                                showLanguageDialog.value = false
+                                if (index == 0) {
+                                    AppCompatDelegate.setApplicationLocales(
+                                        LocaleListCompat.getEmptyLocaleList()
                                     )
-                                )
+                                } else {
+                                    AppCompatDelegate.setApplicationLocales(
+                                        LocaleListCompat.forLanguageTags(
+                                            languagesValues[index]
+                                        )
+                                    )
+                                }
                             }
-                        })
+                        )
                     }
                 }
             }
