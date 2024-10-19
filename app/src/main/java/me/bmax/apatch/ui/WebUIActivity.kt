@@ -27,8 +27,7 @@ class WebUIActivity : ComponentActivity() {
             @Suppress("DEPRECATION")
             setTaskDescription(ActivityManager.TaskDescription("APatch - $name"))
         } else {
-            val taskDescription =
-                ActivityManager.TaskDescription.Builder().setLabel("APatch - $name").build()
+            val taskDescription = ActivityManager.TaskDescription.Builder().setLabel("APatch - $name").build()
             setTaskDescription(taskDescription)
         }
 
