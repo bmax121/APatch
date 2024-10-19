@@ -232,7 +232,10 @@ tasks.clean {
 }
 
 dependencies {
+    implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.webkit)
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.material.icons.extended)
@@ -240,13 +243,7 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.core.splashscreen)
-    implementation(libs.androidx.runtime.livedata)
-    implementation(libs.androidx.webkit)
-    implementation(libs.timber)
-    implementation(libs.devappx)
-    implementation(libs.ini4j)
-    implementation(libs.bcpkix)
+    implementation(libs.androidx.compose.runtime.livedata)
 
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
@@ -276,5 +273,9 @@ dependencies {
     implementation(libs.sheet.compose.dialogs.input)
 
     implementation(libs.markdown)
+
+    implementation(libs.timber)
+    implementation(libs.ini4j)
+    implementation(libs.bcpkix)
     compileOnly(libs.cxx)
 }

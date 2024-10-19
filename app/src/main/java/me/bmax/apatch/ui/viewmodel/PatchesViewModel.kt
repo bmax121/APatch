@@ -1,22 +1,25 @@
 package me.bmax.apatch.ui.viewmodel
 
+import android.content.ContentValues
+import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.provider.MediaStore
 import android.system.Os
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.topjohnwu.superuser.CallbackList
 import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.nio.ExtendedFile
 import com.topjohnwu.superuser.nio.FileSystemManager
-import dev.utils.app.MediaStoreUtils
-import dev.utils.app.UriUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.bmax.apatch.APApplication
@@ -31,20 +34,21 @@ import me.bmax.apatch.util.inputStream
 import me.bmax.apatch.util.shellForResult
 import me.bmax.apatch.util.writeTo
 import org.ini4j.Ini
+import java.io.BufferedReader
 import java.io.File
 import java.io.IOException
-import java.io.StringReader
-import java.io.BufferedReader
 import java.io.InputStreamReader
+import java.io.StringReader
 
 private const val TAG = "PatchViewModel"
 
 class PatchesViewModel : ViewModel() {
+
     enum class PatchMode(val sId: Int) {
-        PATCH_ONLY(R.string.patch_mode_bootimg_patch), PATCH_AND_INSTALL(R.string.patch_mode_patch_and_install), INSTALL_TO_NEXT_SLOT(
-            R.string.patch_mode_install_to_next_slot
-        ),
-        UNPATCH(R.string.patch_mode_uninstall_patch),
+        PATCH_ONLY(R.string.patch_mode_bootimg_patch),
+        PATCH_AND_INSTALL(R.string.patch_mode_patch_and_install),
+        INSTALL_TO_NEXT_SLOT(R.string.patch_mode_install_to_next_slot),
+        UNPATCH(R.string.patch_mode_uninstall_patch)
     }
 
     var bootSlot by mutableStateOf("")
@@ -64,8 +68,7 @@ class PatchesViewModel : ViewModel() {
     var error by mutableStateOf("")
     var patchLog by mutableStateOf("")
 
-    private val patchDir: ExtendedFile =
-        FileSystemManager.getLocal().getFile(apApp.filesDir.parent, "patch")
+    private val patchDir: ExtendedFile = FileSystemManager.getLocal().getFile(apApp.filesDir.parent, "patch")
     private var srcBoot: ExtendedFile = patchDir.getChildFile("boot.img")
     private var shell: Shell = createRootShell()
     private var prepared: Boolean = false
@@ -416,7 +419,7 @@ class PatchesViewModel : ViewModel() {
                 val result = shell.newJob().add(
                     "export ASH_STANDALONE=1",
                     "cd $patchDir",
-                    "$resultString",
+                    resultString,
                 ).to(logs, logs).exec()
                 succ = result.isSuccess
             } else {
@@ -500,15 +503,14 @@ class PatchesViewModel : ViewModel() {
                 APApplication.markNeedReboot()
             } else if (mode == PatchMode.PATCH_ONLY) {
                 val newBootFile = patchDir.getChildFile("new-boot.img")
-                val outDir =
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                val outDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
                 if (!outDir.exists()) outDir.mkdirs()
                 val outPath = File(outDir, outFilename)
-                val inputUri = UriUtils.getUriForFile(newBootFile)
+                val inputUri = newBootFile.getUri(apApp)
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    val outUri = MediaStoreUtils.createDownloadUri(outFilename)
-                    succ = MediaStoreUtils.insertDownload(outUri, inputUri)
+                    val outUri = createDownloadUri(apApp, outFilename)
+                    succ = insertDownload(apApp, outUri, inputUri)
                 } else {
                     newBootFile.inputStream().copyAndClose(outPath.outputStream())
                 }
@@ -524,4 +526,41 @@ class PatchesViewModel : ViewModel() {
             patching = false
         }
     }
+
+    @RequiresApi(Build.VERSION_CODES.Q)
+    fun createDownloadUri(context: Context, outFilename: String): Uri? {
+        val contentValues = ContentValues().apply {
+            put(MediaStore.Downloads.DISPLAY_NAME, outFilename)
+            put(MediaStore.Downloads.MIME_TYPE, "application/octet-stream")
+            put(MediaStore.Downloads.IS_PENDING, 1)
+        }
+
+        val resolver = context.contentResolver
+        return resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.Q)
+    fun insertDownload(context: Context, outUri: Uri?, inputUri: Uri): Boolean {
+        if (outUri == null) return false
+
+        val resolver = context.contentResolver
+        resolver.openInputStream(inputUri)?.use { inputStream ->
+            resolver.openOutputStream(outUri)?.use { outputStream ->
+                inputStream.copyTo(outputStream)
+            }
+        }
+
+        val contentValues = ContentValues().apply {
+            put(MediaStore.Downloads.IS_PENDING, 0)
+        }
+        resolver.update(outUri, contentValues, null, null)
+
+        return true
+    }
+
+    fun File.getUri(context: Context): Uri {
+        val authority = "${context.packageName}.fileprovider"
+        return FileProvider.getUriForFile(context, authority, this)
+    }
+
 }
