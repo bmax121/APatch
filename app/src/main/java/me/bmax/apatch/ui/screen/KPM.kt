@@ -72,6 +72,7 @@ import androidx.compose.ui.window.PopupProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
+import com.ramcosta.composedestinations.generated.destinations.InstallScreenDestination
 import com.ramcosta.composedestinations.generated.destinations.PatchesDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.topjohnwu.superuser.nio.ExtendedFile
@@ -146,6 +147,20 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
             val failToastText = stringResource(id = R.string.kpm_load_toast_failed)
             val loadingDialog = rememberLoadingDialog()
 
+            val selectZipLauncher = rememberLauncherForActivityResult(
+                contract = ActivityResultContracts.StartActivityForResult()
+            ) {
+                if (it.resultCode != RESULT_OK) {
+                    return@rememberLauncherForActivityResult
+                }
+                val data = it.data ?: return@rememberLauncherForActivityResult
+                val uri = data.data ?: return@rememberLauncherForActivityResult
+
+                Log.i(TAG, "select zip result: $uri")
+
+                navigator.navigate(InstallScreenDestination(uri, MODULE_TYPE.KPM))
+            }
+
             val selectKpmLauncher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.StartActivityForResult()
             ) {
@@ -169,7 +184,6 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
                 }
             }
 
-            val current = LocalContext.current
             var expanded by remember { mutableStateOf(false) }
             val options = listOf(moduleEmbed, moduleInstall, moduleLoad)
 
@@ -202,9 +216,10 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
                                     }
 
                                     moduleInstall -> {
-                                        Toast.makeText(
-                                            current, "Not supported yet!", Toast.LENGTH_SHORT
-                                        ).show()
+//                                        val intent = Intent(Intent.ACTION_GET_CONTENT)
+//                                        intent.type = "application/zip"
+//                                        selectZipLauncher.launch(intent)
+                                        Toast.makeText(context, "Under development", Toast.LENGTH_SHORT).show()
                                     }
 
                                     moduleLoad -> {

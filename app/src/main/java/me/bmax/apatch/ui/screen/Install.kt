@@ -49,9 +49,14 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+enum class MODULE_TYPE {
+    KPM,
+    APM
+}
+
 @Composable
 @Destination<RootGraph>
-fun InstallScreen(navigator: DestinationsNavigator, uri: Uri) {
+fun InstallScreen(navigator: DestinationsNavigator, uri: Uri, type: MODULE_TYPE) {
     var text by rememberSaveable { mutableStateOf("") }
     val logContent = rememberSaveable { StringBuilder() }
     var showFloatAction by rememberSaveable { mutableStateOf(false) }
@@ -65,7 +70,7 @@ fun InstallScreen(navigator: DestinationsNavigator, uri: Uri) {
             return@LaunchedEffect
         }
         withContext(Dispatchers.IO) {
-            installModule(uri, onFinish = { success ->
+            installModule(uri, type, onFinish = { success ->
                 if (success) {
                     showFloatAction = true
                 }
@@ -73,6 +78,7 @@ fun InstallScreen(navigator: DestinationsNavigator, uri: Uri) {
                 text += "$it\n"
                 logContent.append(it).append("\n")
             }, onStderr = {
+                text += "$it\n"
                 logContent.append(it).append("\n")
             })
         }
@@ -90,7 +96,7 @@ fun InstallScreen(navigator: DestinationsNavigator, uri: Uri) {
                         val date = format.format(Date())
                         val file = File(
                             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-                            "APatch_install_log_${date}.log"
+                            "APatch_install_${type}_log_${date}.log"
                         )
                         file.writeText(logContent.toString())
                         snackBarHost.showSnackbar("Log saved to ${file.absolutePath}")

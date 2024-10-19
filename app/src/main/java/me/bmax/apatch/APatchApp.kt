@@ -45,12 +45,12 @@ class APApplication : Application() {
         private const val APATCH_BIN_FOLDER = APATCH_FOLDER + "bin/"
         private const val APATCH_LOG_FOLDER = APATCH_FOLDER + "log/"
         private const val APD_LINK_PATH = APATCH_BIN_FOLDER + "apd"
-        private const val KPATCH_LINK_PATH = APATCH_BIN_FOLDER + "kpatch"
         const val PACKAGE_CONFIG_FILE = APATCH_FOLDER + "package_config"
         const val SU_PATH_FILE = APATCH_FOLDER + "su_path"
         const val SAFEMODE_FILE = "/dev/.safemode"
         private const val NEED_REBOOT_FILE = "/dev/.need_reboot"
         const val GLOBAL_NAMESPACE_FILE = "/data/adb/.global_namespace_enable"
+        const val KPMS_DIR = APATCH_FOLDER + "kpms/"
 
         @Deprecated("Use 'apd -V'")
         const val APATCH_VERSION_PATH = APATCH_FOLDER + "version"
@@ -239,7 +239,6 @@ class APApplication : Application() {
 
         if (!BuildConfig.DEBUG && !verifyAppSignature("1x2twMoHvfWUODv7KkRRNKBzOfEqJwRKGzJpgaz18xk=")) {
             while (true) {
-                val packageName = packageName
                 val intent = Intent(Intent.ACTION_DELETE)
                 intent.data = Uri.parse("package:$packageName")
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
