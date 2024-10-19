@@ -14,8 +14,10 @@ import com.topjohnwu.superuser.CallbackList
 import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.ShellUtils
 import me.bmax.apatch.APApplication
+import me.bmax.apatch.APApplication.Companion.SUPERCMD
 import me.bmax.apatch.BuildConfig
 import me.bmax.apatch.apApp
+import me.bmax.apatch.ui.screen.MODULE_TYPE
 import java.io.File
 import java.security.MessageDigest
 import java.security.cert.CertificateFactory
@@ -23,6 +25,8 @@ import java.security.cert.X509Certificate
 import java.util.zip.ZipFile
 
 private const val TAG = "APatchCli"
+
+@Suppress("DEPRECATION")
 private fun getKPatchPath(): String {
     return apApp.applicationInfo.nativeLibraryDir + File.separator + "libkpatch.so"
 }
@@ -39,7 +43,7 @@ fun createRootShell(): Shell {
     val builder = Shell.Builder.create().setInitializers(RootShellInitializer::class.java)
     return try {
         builder.build(
-            "/system/bin/truncate", APApplication.superKey, "-Z", APApplication.MAGISK_SCONTEXT
+            SUPERCMD, APApplication.superKey, "-Z", APApplication.MAGISK_SCONTEXT
         )
     } catch (e: Throwable) {
         Log.e(TAG, "su failed: ", e)
@@ -78,7 +82,7 @@ fun tryGetRootShell(): Shell {
     val builder = Shell.Builder.create()
     return try {
         builder.build(
-            "/system/bin/truncate", APApplication.superKey, "-Z", APApplication.MAGISK_SCONTEXT
+            SUPERCMD, APApplication.superKey, "-Z", APApplication.MAGISK_SCONTEXT
         )
     } catch (e: Throwable) {
         Log.e(TAG, "su failed: ", e)
@@ -143,17 +147,15 @@ fun uninstallModule(id: String): Boolean {
 }
 
 fun installModule(
-    uri: Uri, onFinish: (Boolean) -> Unit, onStdout: (String) -> Unit, onStderr: (String) -> Unit
+    uri: Uri, type: MODULE_TYPE, onFinish: (Boolean) -> Unit, onStdout: (String) -> Unit, onStderr: (String) -> Unit
 ): Boolean {
     val resolver = apApp.contentResolver
     with(resolver.openInputStream(uri)) {
-        val file = File(apApp.cacheDir, "module.zip")
+        val file = File(apApp.cacheDir, "module_" + type + ".zip")
         file.outputStream().use { output ->
             this?.copyTo(output)
         }
-        val cmd = "module install ${file.absolutePath}"
 
-        val shell = getRootShell()
 
         val stdoutCallback: CallbackList<String?> = object : CallbackList<String?>() {
             override fun onAddElement(s: String?) {
@@ -167,15 +169,25 @@ fun installModule(
             }
         }
 
-        val result =
-            shell.newJob().add("${APApplication.APD_PATH} $cmd").to(stdoutCallback, stderrCallback)
-                .exec()
-        Log.i(TAG, "install module $uri result: $result")
+        val shell = getRootShell()
+
+        var result = false
+        if(type == MODULE_TYPE.APM) {
+            val cmd = "${APApplication.APD_PATH} module install ${file.absolutePath}"
+            result = shell.newJob().add("$cmd").to(stdoutCallback, stderrCallback)
+                    .exec().isSuccess
+        } else {
+//            ZipUtils.
+
+
+        }
+
+        Log.i(TAG, "install $type module $uri result: $result")
 
         file.delete()
 
-        onFinish(result.isSuccess)
-        return result.isSuccess
+        onFinish(result)
+        return result
     }
 }
 
