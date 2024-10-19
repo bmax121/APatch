@@ -83,19 +83,21 @@ import me.bmax.apatch.APApplication
 import me.bmax.apatch.BuildConfig
 import me.bmax.apatch.Natives
 import me.bmax.apatch.R
+import me.bmax.apatch.ui.MainActivity
 import me.bmax.apatch.ui.component.SwitchItem
 import me.bmax.apatch.ui.component.rememberConfirmDialog
 import me.bmax.apatch.ui.component.rememberLoadingDialog
 import me.bmax.apatch.ui.theme.refreshTheme
 import me.bmax.apatch.util.APatchKeyHelper
 import me.bmax.apatch.util.getBugreportFile
-import me.bmax.apatch.util.getFileNameFromUri
 import me.bmax.apatch.util.hideapk.HideAPK
 import me.bmax.apatch.util.isGlobalNamespaceEnabled
 import me.bmax.apatch.util.rootShellForResult
 import me.bmax.apatch.util.setGlobalNamespaceEnabled
 import me.bmax.apatch.util.ui.APDialogBlurBehindUtils
 import me.bmax.apatch.util.ui.NavigationBarsSpacer
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 @Destination<RootGraph>
@@ -407,29 +409,18 @@ fun SettingScreen() {
                                     .padding(16.dp)
                                     .clickable {
                                         scope.launch {
-                                            val bugreport = loadingDialog.withLoading {
-                                                withContext(Dispatchers.IO) {
-                                                    getBugreportFile(context)
-                                                }
-                                            }
-
-                                            val uri: Uri = FileProvider.getUriForFile(
-                                                context,
-                                                "${BuildConfig.APPLICATION_ID}.fileprovider",
-                                                bugreport
-                                            )
-                                            val filename = getFileNameFromUri(context, uri)
-                                            val savefile =
+                                            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH_mm")
+                                            val current = LocalDateTime.now().format(formatter)
+                                            val createFileIntent =
                                                 Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
                                                     addCategory(Intent.CATEGORY_OPENABLE)
-                                                    type = "application/zip"
-                                                    putExtra(Intent.EXTRA_STREAM, uri)
-                                                    putExtra(Intent.EXTRA_TITLE, filename)
-                                                    flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                                                    putExtra(Intent.EXTRA_TITLE, "APatch_bugreport_${current}.tar.gz")
+                                                    type = "application/gzip"
+                                                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                                                 }
-                                            context.startActivity(
+                                            (context as MainActivity).exportBugreportLauncher.launch(
                                                 Intent.createChooser(
-                                                    savefile,
+                                                    createFileIntent,
                                                     context.getString(R.string.save_log)
                                                 )
                                             )
@@ -471,10 +462,11 @@ fun SettingScreen() {
                                                 bugreport
                                             )
 
-                                            val shareIntent = Intent(Intent.ACTION_SEND)
-                                            shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
-                                            shareIntent.setDataAndType(uri, "application/zip")
-                                            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                                            val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                                                putExtra(Intent.EXTRA_STREAM, uri)
+                                                setDataAndType(uri, "application/gzip")
+                                                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                                            }
 
                                             context.startActivity(
                                                 Intent.createChooser(
