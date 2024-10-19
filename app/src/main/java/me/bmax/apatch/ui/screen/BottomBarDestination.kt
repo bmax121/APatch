@@ -13,13 +13,13 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.ramcosta.composedestinations.generated.destinations.APModuleScreenDestination
+import com.ramcosta.composedestinations.generated.destinations.HomeScreenDestination
+import com.ramcosta.composedestinations.generated.destinations.KPModuleScreenDestination
+import com.ramcosta.composedestinations.generated.destinations.SettingScreenDestination
+import com.ramcosta.composedestinations.generated.destinations.SuperUserScreenDestination
 import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
 import me.bmax.apatch.R
-import me.bmax.apatch.ui.screen.destinations.APModuleScreenDestination
-import me.bmax.apatch.ui.screen.destinations.HomeScreenDestination
-import me.bmax.apatch.ui.screen.destinations.KPModuleScreenDestination
-import me.bmax.apatch.ui.screen.destinations.SettingScreenDestination
-import me.bmax.apatch.ui.screen.destinations.SuperUserScreenDestination
 
 enum class BottomBarDestination(
     val direction: DirectionDestinationSpec,

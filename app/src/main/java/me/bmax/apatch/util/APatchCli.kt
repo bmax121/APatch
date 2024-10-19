@@ -156,7 +156,6 @@ fun installModule(
             this?.copyTo(output)
         }
 
-
         val stdoutCallback: CallbackList<String?> = object : CallbackList<String?>() {
             override fun onAddElement(s: String?) {
                 onStdout(s ?: "")
@@ -178,8 +177,6 @@ fun installModule(
                     .exec().isSuccess
         } else {
 //            ZipUtils.
-
-
         }
 
         Log.i(TAG, "install $type module $uri result: $result")

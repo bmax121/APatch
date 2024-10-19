@@ -3,6 +3,7 @@ package me.bmax.apatch.ui.screen
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -60,9 +61,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
-import dev.utils.app.permission.PermissionUtils
+import com.ramcosta.composedestinations.annotation.RootGraph
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -74,10 +77,9 @@ import me.bmax.apatch.util.reboot
 
 private const val TAG = "Patches"
 
-@Destination
+@Destination<RootGraph>
 @Composable
 fun Patches(mode: PatchesViewModel.PatchMode) {
-    val permissionRequest = remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
     val scope = rememberCoroutineScope()
 
@@ -111,25 +113,19 @@ fun Patches(mode: PatchesViewModel.PatchMode) {
                 .verticalScroll(scrollState),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            val current = LocalContext.current
+            val context = LocalContext.current
 
             // request permissions
-            PermissionUtils.permission(
+            val permissions = arrayOf(
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.READ_EXTERNAL_STORAGE
-            ).callback(object : PermissionUtils.PermissionCallback {
-                override fun onGranted() {
-                    permissionRequest.value = false
-                }
-
-                override fun onDenied(
-                    grantedList: MutableList<String>?,
-                    deniedList: MutableList<String>?,
-                    notFoundList: MutableList<String>?
-                ) {
-                    permissionRequest.value = false
-                }
-            }).request(current as Activity)
+            )
+            val permissionsToRequest = permissions.filter {
+                ContextCompat.checkSelfPermission(context, it) != PackageManager.PERMISSION_GRANTED
+            }
+            if (permissionsToRequest.isNotEmpty()) {
+                ActivityCompat.requestPermissions(context as Activity, permissionsToRequest.toTypedArray(), 1001)
+            }
 
             PatchMode(mode)
             ErrorView(viewModel.error)

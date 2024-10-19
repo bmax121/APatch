@@ -75,7 +75,7 @@ import androidx.compose.ui.window.DialogWindowProvider
 import androidx.core.content.FileProvider
 import androidx.core.os.LocaleListCompat
 import com.ramcosta.composedestinations.annotation.Destination
-
+import com.ramcosta.composedestinations.annotation.RootGraph
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -98,7 +98,7 @@ import me.bmax.apatch.util.ui.APDialogBlurBehindUtils
 import me.bmax.apatch.util.ui.NavigationBarsSpacer
 import java.util.Locale
 
-@Destination
+@Destination<RootGraph>
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun SettingScreen() {
@@ -761,33 +761,35 @@ fun LanguageDialog(showLanguageDialog: MutableState<Boolean>) {
 
     if (showLanguageDialog.value) {
         BasicAlertDialog(
-            onDismissRequest = { showLanguageDialog.value = false },
-            properties = DialogProperties(usePlatformDefaultWidth = false),
+            onDismissRequest = { showLanguageDialog.value = false }
         ) {
             Surface(
                 modifier = Modifier
                     .width(150.dp)
                     .wrapContentHeight(),
-                shape = RoundedCornerShape(20.dp),
+                shape = RoundedCornerShape(28.dp),
                 tonalElevation = AlertDialogDefaults.TonalElevation,
                 color = AlertDialogDefaults.containerColor,
             ) {
                 LazyColumn {
                     itemsIndexed(languages) { index, item ->
-                        ListItem(headlineContent = { Text(item) }, modifier = Modifier.clickable {
-                            showLanguageDialog.value = false
-                            if (index == 0) {
-                                AppCompatDelegate.setApplicationLocales(
-                                    LocaleListCompat.getEmptyLocaleList()
-                                )
-                            } else {
-                                AppCompatDelegate.setApplicationLocales(
-                                    LocaleListCompat.forLanguageTags(
-                                        languagesValues[index]
+                        ListItem(
+                            headlineContent = { Text(item) },
+                            modifier = Modifier.clickable {
+                                showLanguageDialog.value = false
+                                if (index == 0) {
+                                    AppCompatDelegate.setApplicationLocales(
+                                        LocaleListCompat.getEmptyLocaleList()
                                     )
-                                )
+                                } else {
+                                    AppCompatDelegate.setApplicationLocales(
+                                        LocaleListCompat.forLanguageTags(
+                                            languagesValues[index]
+                                        )
+                                    )
+                                }
                             }
-                        })
+                        )
                     }
                 }
             }

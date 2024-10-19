@@ -2,8 +2,6 @@ package me.bmax.apatch.util.hideapk
 
 import android.content.Context
 import android.widget.Toast
-import dev.utils.app.AppUtils.getPackageManager
-import dev.utils.app.AppUtils.getPackageName
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Runnable
 import kotlinx.coroutines.withContext
@@ -17,7 +15,6 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
 import java.security.SecureRandom
-
 
 private const val TAG = "HideAPK"
 
@@ -91,7 +88,7 @@ object HideAPK {
 
     @JvmStatic
     private fun patchAndHide(context: Context, label: String): Boolean {
-        val apkPath: String = getPackageManager().getApplicationInfo(getPackageName(), 0).sourceDir
+        val apkPath: String = context.packageManager.getApplicationInfo(context.packageName, 0).sourceDir
         val source = File(apkPath)
 
         // Generate a new random package name and signature
@@ -102,8 +99,8 @@ object HideAPK {
             return false
 
         val cmds = arrayOf(
-            "pm install -r -t ${patchedApk}",
-            "[ $? = 0 ] && appops set ${newPkgName} REQUEST_INSTALL_PACKAGES allow;",
+            "pm install -r -t $patchedApk",
+            "[ $? = 0 ] && appops set $newPkgName REQUEST_INSTALL_PACKAGES allow;",
             "am start -n $newPkgName/$APPLICATION_ID.ui.MainActivity",
             "pm uninstall $APPLICATION_ID",
         )
