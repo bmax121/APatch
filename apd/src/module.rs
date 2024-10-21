@@ -4,7 +4,6 @@ use crate::{
     assets, defs, mount,
     restorecon::{restore_syscon, setsyscon},
 };
-
 use anyhow::{anyhow, bail, ensure, Context, Result};
 use const_format::concatcp;
 use is_executable::is_executable;
@@ -14,7 +13,7 @@ use regex_lite::Regex;
 use std::{
     collections::HashMap,
     env::var as env_var,
-    fs::{remove_dir_all, remove_file, set_permissions, File, Permissions},
+    fs,
     io::Cursor,
     path::{Path, PathBuf},
     process::{Command, Stdio},
@@ -136,7 +135,7 @@ fn get_minimal_image_size(img: &str) -> Result<u64> {
     Ok(result)
 }
 
-fn check_image(img: &str) -> Result<()> {
+pub fn check_image(img: &str) -> Result<()> {
     let result = Command::new("e2fsck")
         .args(["-yf", img])
         .stdout(Stdio::piped())
@@ -156,7 +155,7 @@ fn check_image(img: &str) -> Result<()> {
     Ok(())
 }
 
-fn grow_image_size(img: &str, extra_size: u64) -> Result<()> {
+pub fn grow_image_size(img: &str, extra_size: u64) -> Result<()> {
     let minimal_size = get_minimal_image_size(img)?; // the minimal size is in KB
     let target_size = minimal_size * 1024 + extra_size;
 
@@ -300,8 +299,7 @@ pub fn load_system_prop() -> Result<()> {
 
 pub fn prune_modules() -> Result<()> {
     foreach_module(false, |module| {
-        remove_file(module.join(defs::UPDATE_FILE_NAME)).ok();
-
+        std::fs::remove_file(module.join(defs::UPDATE_FILE_NAME)).ok();
         if !module.join(defs::REMOVE_FILE_NAME).exists() {
             return Ok(());
         }
@@ -315,10 +313,15 @@ pub fn prune_modules() -> Result<()> {
             }
         }
 
-        if let Err(e) = remove_dir_all(module) {
+        if let Err(e) = std::fs::remove_dir_all(module) {
             warn!("Failed to remove {}: {}", module.display(), e);
         }
+        let module_path = module.display().to_string();
+        let updated_path = module_path.replace(defs::MODULE_DIR, defs::MODULE_UPDATE_TMP_DIR);
 
+        if let Err(e) = std::fs::remove_dir_all(&updated_path) {
+            warn!("Failed to remove {}: {}", updated_path, e);
+        }
         Ok(())
     })?;
 
@@ -356,237 +359,104 @@ fn _install_module(zip: &str) -> Result<()> {
         bail!("module id not found in module.prop!");
     };
 
-    let modules_img = Path::new(defs::MODULE_IMG);
-    let modules_update_img = Path::new(defs::MODULE_UPDATE_IMG);
-    let module_update_tmp_dir = defs::MODULE_UPDATE_TMP_DIR;
 
-    let modules_img_exist = modules_img.exists();
-    let modules_update_img_exist = modules_update_img.exists();
+    let modules_dir = Path::new(defs::MODULE_DIR);
+    let modules_update_dir= Path::new(defs::MODULE_UPDATE_TMP_DIR);
+    if !Path::new(modules_dir).exists() {
+        fs::create_dir(modules_dir).expect("Failed to create modules folder");
+        let permissions = fs::Permissions::from_mode(0o700);
+        fs::set_permissions(modules_dir, permissions).expect("Failed to set permissions");
 
-    // prepare the tmp module img
-    let tmp_module_img = defs::MODULE_UPDATE_TMP_IMG;
-    let tmp_module_path = Path::new(tmp_module_img);
-    if tmp_module_path.exists() {
-        std::fs::remove_file(tmp_module_path)?;
     }
 
-    let default_reserve_size = 256 * 1024 * 1024;
-    let zip_uncompressed_size = get_zip_uncompressed_size(zip)?;
-    let grow_size = default_reserve_size + zip_uncompressed_size;
 
-    info!(
-        "zip uncompressed size: {}",
-        humansize::format_size(zip_uncompressed_size, humansize::DECIMAL)
-    );
-    info!(
-        "grow size: {}",
-        humansize::format_size(grow_size, humansize::DECIMAL)
-    );
-
-    println!("- Preparing image");
-    println!(
-        "- Module size: {}",
-        humansize::format_size(zip_uncompressed_size, humansize::DECIMAL)
-    );
-
-    if !modules_img_exist && !modules_update_img_exist {
-        // if no modules and modules_update, it is brand new installation, we should create a new img
-        // create a tmp module img and mount it to modules_update
-        info!("Creating brand new module image");
-        File::create(tmp_module_img)
-            .context("Failed to create ext4 image file")?
-            .set_len(grow_size)
-            .context("Failed to extend ext4 image")?;
-
-        // format the img to ext4 filesystem
-        let result = Command::new("mkfs.ext4")
-            .arg("-b")
-            .arg("1024")
-            .arg(tmp_module_img)
-            .stdout(Stdio::piped())
-            .output()?;
-        ensure!(
-            result.status.success(),
-            "Failed to format ext4 image: {}",
-            String::from_utf8(result.stderr).unwrap()
-        );
-
-        check_image(tmp_module_img)?;
-    } else if modules_update_img_exist {
-        // modules_update.img exists, we should use it as tmp img
-        info!("Using existing modules_update.img as tmp image");
-        std::fs::copy(modules_update_img, tmp_module_img).with_context(|| {
-            format!(
-                "Failed to copy {} to {}",
-                modules_update_img.display(),
-                tmp_module_img
-            )
-        })?;
-        // grow size of the tmp image
-        grow_image_size(tmp_module_img, grow_size)?;
-    } else {
-        // modules.img exists, we should use it as tmp img
-        info!("Using existing modules.img as tmp image");
-        std::fs::copy(modules_img, tmp_module_img).with_context(|| {
-            format!(
-                "Failed to copy {} to {}",
-                modules_img.display(),
-                tmp_module_img
-            )
-        })?;
-        // grow size of the tmp image
-        grow_image_size(tmp_module_img, grow_size)?;
-    }
-
-    // ensure modules_update exists
-    ensure_dir_exists(module_update_tmp_dir)?;
-
-    // mount the modules_update.img to mountpoint
-    println!("- Mounting image");
-
-    let _dontdrop = mount::AutoMountExt4::try_new(tmp_module_img, module_update_tmp_dir, true)?;
-
-    info!("mounted {} to {}", tmp_module_img, module_update_tmp_dir);
-
-    setsyscon(module_update_tmp_dir)?;
-
-    let module_dir = format!("{module_update_tmp_dir}/{module_id}");
-    ensure_clean_dir(&module_dir)?;
+    let module_dir = format!("{}{}",modules_dir.display(),module_id.clone());
+    let module_update_dir = format!("{}{}",modules_update_dir.display(),module_id.clone());
     info!("module dir: {}", module_dir);
 
+    if !Path::new(defs::MODULE_DIR).exists() {
+        fs::create_dir(defs::MODULE_DIR).expect("Failed to create module folder");
+        let permissions = fs::Permissions::from_mode(0o700);
+        fs::set_permissions(module_dir.clone(), permissions).expect("Failed to set permissions");
+    }
     // unzip the image and move it to modules_update/<id> dir
-    let file = File::open(zip)?;
+    let file = std::fs::File::open(zip)?;
     let mut archive = zip::ZipArchive::new(file)?;
     archive.extract(&module_dir)?;
 
     // set permission and selinux context for $MOD/system
-    let module_system_dir = PathBuf::from(module_dir).join("system");
+    let module_system_dir = PathBuf::from(module_dir.clone()).join("system");
     if module_system_dir.exists() {
         #[cfg(unix)]
-        set_permissions(&module_system_dir, Permissions::from_mode(0o755))?;
+        std::fs::set_permissions(&module_system_dir, std::fs::Permissions::from_mode(0o755))?;
         restore_syscon(&module_system_dir)?;
     }
 
     exec_install_script(zip)?;
-
-    info!("rename {tmp_module_img} to {}", defs::MODULE_UPDATE_IMG);
-    // all done, rename the tmp image to modules_update.img
-    if std::fs::rename(tmp_module_img, defs::MODULE_UPDATE_IMG).is_err() {
-        warn!("Rename image failed, try copy it.");
-        std::fs::copy(tmp_module_img, defs::MODULE_UPDATE_IMG)
-            .with_context(|| "Failed to copy image.".to_string())?;
-        let _ = std::fs::remove_file(tmp_module_img);
-    }
-
     mark_update()?;
-
-    info!("Module install successfully!");
-
     Ok(())
 }
 
 pub fn install_module(zip: &str) -> Result<()> {
     let result = _install_module(zip);
-    if let Err(ref e) = result {
-        // error happened, do some cleanup!
-        let _ = std::fs::remove_file(defs::MODULE_UPDATE_TMP_IMG);
-        let _ = mount::umount_dir(defs::MODULE_UPDATE_TMP_DIR);
-        println!("- Error: {e}");
-    }
     result
 }
 
-fn update_module<F>(update_dir: &str, id: &str, func: F) -> Result<()>
-where
-    F: Fn(&str, &str) -> Result<()>,
-{
-    ensure_boot_completed()?;
-
-    let modules_img = Path::new(defs::MODULE_IMG);
-    let modules_update_img = Path::new(defs::MODULE_UPDATE_IMG);
-    let modules_update_tmp_img = Path::new(defs::MODULE_UPDATE_TMP_IMG);
-    if !modules_update_img.exists() && !modules_img.exists() {
-        bail!("Please install module first!");
-    } else if modules_update_img.exists() {
-        info!(
-            "copy {} to {}",
-            modules_update_img.display(),
-            modules_update_tmp_img.display()
-        );
-        std::fs::copy(modules_update_img, modules_update_tmp_img)?;
-    } else {
-        info!(
-            "copy {} to {}",
-            modules_img.display(),
-            modules_update_tmp_img.display()
-        );
-        std::fs::copy(modules_img, modules_update_tmp_img)?;
-    }
-
-    // ensure modules_update dir exist
-    ensure_clean_dir(update_dir)?;
-
-    // mount the modules_update img
-    let _dontdrop = mount::AutoMountExt4::try_new(defs::MODULE_UPDATE_TMP_IMG, update_dir, true)?;
-
-    // call the operation func
-    let result = func(id, update_dir);
-
-    if let Err(e) = std::fs::rename(modules_update_tmp_img, defs::MODULE_UPDATE_IMG) {
-        warn!("Rename image failed: {e}, try copy it.");
-        std::fs::copy(modules_update_tmp_img, defs::MODULE_UPDATE_IMG)
-            .with_context(|| "Failed to copy image.".to_string())?;
-        let _ = std::fs::remove_file(modules_update_tmp_img);
-    }
-
-    mark_update()?;
-
-    result
-}
 
 pub fn uninstall_module(id: &str) -> Result<()> {
-    update_module(defs::MODULE_UPDATE_TMP_DIR, id, |mid, update_dir| {
-        let dir = Path::new(update_dir);
-        ensure!(dir.exists(), "No module installed");
+    let modules_dir = Path::new(defs::MODULE_DIR);
+    let update_dir = format!("{}/{}",modules_dir.display(),id);
+    let remote_update_file = format!("{}/{}{}",defs::MODULE_UPDATE_TMP_DIR,id,defs::REMOVE_FILE_NAME);
+    let dir = Path::new(&update_dir);
+    ensure!(dir.exists(), "No module installed");
 
-        // iterate the modules_update dir, find the module to be removed
-        let dir = std::fs::read_dir(dir)?;
-        for entry in dir.flatten() {
-            let path = entry.path();
-            let module_prop = path.join("module.prop");
-            if !module_prop.exists() {
-                continue;
-            }
-            let content = std::fs::read(module_prop)?;
-            let mut module_id: String = String::new();
-            PropertiesIter::new_with_encoding(Cursor::new(content), encoding_rs::UTF_8).read_into(
-                |k, v| {
-                    if k.eq("id") {
-                        module_id = v;
-                    }
-                },
-            )?;
-            if module_id.eq(mid) {
-                let remove_file = path.join(defs::REMOVE_FILE_NAME);
-                File::create(remove_file).with_context(|| "Failed to create remove file.")?;
-                break;
-            }
+    // iterate the modules_update dir, find the module to be removed
+    let dir = std::fs::read_dir(dir)?;
+    for entry in dir.flatten() {
+        let path = entry.path();
+        let module_prop = path.join("module.prop");
+        if !module_prop.exists() {
+            continue;
         }
-
-        // santity check
-        let target_module_path = format!("{update_dir}/{mid}");
-        let target_module = Path::new(&target_module_path);
-        if target_module.exists() {
-            let remove_file = target_module.join(defs::REMOVE_FILE_NAME);
-            if !remove_file.exists() {
-                File::create(remove_file).with_context(|| "Failed to create remove file.")?;
-            }
+        let content = std::fs::read(module_prop)?;
+        let mut module_id: String = String::new();
+        PropertiesIter::new_with_encoding(Cursor::new(content), encoding_rs::UTF_8).read_into(
+            |k, v| {
+                if k.eq("id") {
+                    module_id = v;
+                }
+            },
+        )?;
+        if module_id.eq(id) {
+            let remove_file = path.join(defs::REMOVE_FILE_NAME);
+            std::fs::File::create(remove_file).with_context(|| "Failed to create remove file.")?;
+            std::fs::File::create(remote_update_file).with_context(|| "Failed to create remove file.")?;
+            break;
         }
+    }
 
-        let _ = mark_module_state(id, defs::REMOVE_FILE_NAME, true);
+    // santity check
+    let target_module_path = format!("{}/{}",modules_dir.display(),id);
+    let target_module = Path::new(&target_module_path);
+    if target_module.exists() {
+        let remove_file = target_module.join(defs::REMOVE_FILE_NAME);
+        if !remove_file.exists() {
+            std::fs::File::create(remove_file).with_context(|| "Failed to create remove file.")?;
+        }
+    }
 
-        Ok(())
-    })
+    let modules_dir_update = Path::new(defs::MODULE_UPDATE_TMP_DIR);
+    let target_module_path_update = format!("{}/{}",modules_dir_update.display(),id);
+    let target_module_update = Path::new(&target_module_path_update);
+    if target_module_update.exists() {
+        let remove_file_update = target_module_update.join(defs::REMOVE_FILE_NAME);
+        if !remove_file_update.exists() {
+            std::fs::File::create(remove_file_update).with_context(|| "Failed to create remove file.")?;
+        }
+    }
+  
+    Ok(())
+
 }
 
 pub fn run_action(id: &str) -> Result<()> {
@@ -633,15 +503,25 @@ fn _enable_module(module_dir: &str, mid: &str, enable: bool) -> Result<()> {
 }
 
 pub fn enable_module(id: &str) -> Result<()> {
-    update_module(defs::MODULE_UPDATE_TMP_DIR, id, |mid, update_dir| {
-        _enable_module(update_dir, mid, true)
-    })
+    let update_dir = Path::new(defs::MODULE_DIR);
+    if let Some(module_dir_str) = update_dir.to_str() {
+        _enable_module(module_dir_str, id, true)
+    } else {
+        info!("enable module failed");
+        Ok(())
+    }
+
 }
 
 pub fn disable_module(id: &str) -> Result<()> {
-    update_module(defs::MODULE_UPDATE_TMP_DIR, id, |mid, update_dir| {
-        _enable_module(update_dir, mid, false)
-    })
+    let update_dir = Path::new(defs::MODULE_DIR);
+    if let Some(module_dir_str) = update_dir.to_str() {
+        _enable_module(module_dir_str, id, false)
+    } else {
+        info!("disable module failed");
+        Ok(())
+    }
+
 }
 
 pub fn disable_all_modules() -> Result<()> {

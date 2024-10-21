@@ -1,4 +1,4 @@
-use crate::module::prune_modules;
+use crate::module;
 use crate::supercall::fork_for_result;
 use crate::utils::switch_cgroups;
 use crate::{
@@ -6,7 +6,7 @@ use crate::{
     supercall::{init_load_package_uid_config, init_load_su_path, refresh_ap_package_list},
     utils::{self, ensure_clean_dir},
 };
-use anyhow::{bail, Context, Result};
+use anyhow::{bail, Context, Result, ensure};
 use log::{info, warn};
 use notify::event::{ModifyKind, RenameMode};
 use notify::{Config, Event, EventKind, INotifyWatcher, RecursiveMode, Watcher};
@@ -108,6 +108,26 @@ pub fn mount_systemlessly(module_dir: &str) -> Result<()> {
     Ok(())
 }
 
+pub fn calculate_total_size(path: &Path) -> std::io::Result<u64> {
+    let mut total_size = 0;
+    if path.is_dir() {
+        // 遍历目录中的所有条目
+        for entry in fs::read_dir(path)? {
+            let entry = entry?;
+            let file_type = entry.file_type()?;
+            if file_type.is_file() {
+                // 计算文件大小
+                total_size += entry.metadata()?.len();
+            } else if file_type.is_dir() {
+                // 递归计算子目录大小
+                total_size += calculate_total_size(&entry.path())?;
+            }
+        }
+    }
+
+    Ok(total_size)
+}
+
 pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     utils::umask(0);
 
@@ -197,42 +217,97 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
         }
     }
 
-    let module_update_img = defs::MODULE_UPDATE_IMG;
-    let module_img = defs::MODULE_IMG;
+    //let module_update_img = defs::MODULE_UPDATE_IMG;
+    let module_update_dir  = defs::MODULE_UPDATE_TMP_DIR;
+    //let module_img = defs::MODULE_IMG;
     let module_dir = defs::MODULE_DIR;
-    let module_update_flag = Path::new(defs::WORKING_DIR).join(defs::UPDATE_FILE_NAME);
+    //let module_update_flag = Path::new(defs::WORKING_DIR).join(defs::UPDATE_FILE_NAME);
 
-    // modules.img is the default image
-    let mut target_update_img = &module_img;
+
+    //let mut target_update_img = &module_img;
 
     // we should clean the module mount point if it exists
     ensure_clean_dir(module_dir)?;
 
-    assets::ensure_binaries().with_context(|| "binary missing")?;
+    //assets::ensure_binaries().with_context(|| "binary missing")?;
 
-    if Path::new(module_update_img).exists() {
-        if module_update_flag.exists() {
+    //if Path::new(module_update_img).exists() {
+    //    if module_update_flag.exists() {
             // if modules_update.img exists, and the flag indicate this is an update
             // this make sure that if the update failed, we will fall back to the old image
             // if we boot succeed, we will rename the modules_update.img to modules.img #on_boot_complete
-            target_update_img = &module_update_img;
+    //        target_update_img = &module_update_img;
             // And we should delete the flag immediately
-            fs::remove_file(module_update_flag)?;
-        } else {
+    //        fs::remove_file(module_update_flag)?;
+    //    } else {
             // if modules_update.img exists, but the flag not exist, we should delete it
-            fs::remove_file(module_update_img)?;
+    //        fs::remove_file(module_update_img)?;
+    //    }
+    //}
+
+    //if !Path::new(target_update_img).exists() {
+    //    return Ok(());
+    //}
+    let tmp_module_img = defs::MODULE_UPDATE_TMP_IMG;
+
+    if !Path::new("/data/adb/re").exists(){
+        info!("- Preparing image");
+        
+        let tmp_module_path = Path::new(tmp_module_img);
+        if tmp_module_path.exists() {
+            std::fs::remove_file(tmp_module_path)?;
         }
+        let total_size = calculate_total_size(Path::new(module_update_dir.clone()))?; // 传递引用
+        info!("Total size of files in '{}': {} bytes", tmp_module_path.display(), total_size);
+        
+        let grow_size = 256 * 1024 * 1024 + total_size;
+
+        fs::File::create(tmp_module_img)
+                .context("Failed to create ext4 image file")?
+                .set_len(grow_size)
+                .context("Failed to extend ext4 image")?;
+
+        let result = Command::new("mkfs.ext4")
+        .arg("-b")
+        .arg("1024")
+        .arg(tmp_module_img)
+        .stdout(std::process::Stdio::piped())
+        .output()?;
+        ensure!(
+            result.status.success(),
+            "Failed to format ext4 image: {}",
+            String::from_utf8(result.stderr).unwrap()
+        );
+
+        info!("Checking Image");
+        module::check_image(tmp_module_img)?;
+
+    }
+    
+    info!("- Mounting image");
+    mount::AutoMountExt4::try_new(tmp_module_img, module_dir, false)
+        .with_context(|| "mount module image failed".to_string())?;
+    info!("mounted {} to {}", tmp_module_img, module_dir);
+
+    restorecon::setsyscon(module_dir);
+    
+    let result = Command::new("sh")
+        .arg("-c")
+        .arg(format!("cp --preserve=context -R {}* {};",module_update_dir.clone(),module_dir.clone()))
+        .status()?;
+    if result.success() {
+        info!("Successfully copy file");
+    } else {
+        info!("Failed to copy file");
     }
 
-    if !Path::new(target_update_img).exists() {
-        return Ok(());
-    }
 
+  
     // we should always mount the module.img to module dir
     // becuase we may need to operate the module dir in safe mode
-    info!("mount module image: {target_update_img} to {module_dir}");
-    mount::AutoMountExt4::try_new(target_update_img, module_dir, false)
-        .with_context(|| "mount module image failed".to_string())?;
+    //info!("mount module image: {target_update_img} to {module_dir}");
+   // mount::AutoMountExt4::try_new(target_update_img, module_dir, false)
+    //    .with_context(|| "mount module image failed".to_string())?;
 
     // if we are in safe mode, we should disable all modules
     if safe_mode {
@@ -243,7 +318,7 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
         return Ok(());
     }
 
-    if let Err(e) = prune_modules() {
+    if let Err(e) = module::prune_modules() {
         warn!("prune modules failed: {}", e);
     }
 
@@ -338,16 +413,6 @@ fn run_uid_monitor() {
 
 pub fn on_boot_completed(superkey: Option<String>) -> Result<()> {
     info!("on_boot_completed triggered!");
-    let module_update_img = Path::new(defs::MODULE_UPDATE_IMG);
-    let module_img = Path::new(defs::MODULE_IMG);
-    if module_update_img.exists() {
-        // this is an update and we successfully booted
-        if fs::rename(module_update_img, module_img).is_err() {
-            warn!("Failed to rename images, copy it now.",);
-            fs::copy(module_update_img, module_img).with_context(|| "Failed to copy images")?;
-            fs::remove_file(module_update_img).with_context(|| "Failed to remove image!")?;
-        }
-    }
 
     run_uid_monitor();
     run_stage("boot-completed", superkey, false);

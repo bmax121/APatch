@@ -3,7 +3,7 @@ use const_format::concatcp;
 pub const ADB_DIR: &str = "/data/adb/";
 pub const WORKING_DIR: &str = concatcp!(ADB_DIR, "ap/");
 pub const BINARY_DIR: &str = concatcp!(WORKING_DIR, "bin/");
-pub const LOG_DIR: &str = concatcp!(WORKING_DIR, "log/");
+pub const APATCH_LOG_FOLDER: &str = concatcp!(WORKING_DIR, "log/");
 
 pub const AP_RC_PATH: &str = concatcp!(WORKING_DIR, ".aprc");
 pub const AP_OVERLAY_SOURCE: &str = "APatch";
@@ -12,7 +12,6 @@ pub const DAEMON_PATH: &str = concatcp!(ADB_DIR, "apd");
 pub const MODULE_DIR: &str = concatcp!(ADB_DIR, "modules/");
 pub const MODULE_IMG: &str = concatcp!(WORKING_DIR, "modules.img");
 pub const MODULE_UPDATE_IMG: &str = concatcp!(WORKING_DIR, "modules_update.img");
-
 pub const MODULE_UPDATE_TMP_IMG: &str = concatcp!(WORKING_DIR, "update_tmp.img");
 
 // warning: this directory should not change, or you need to change the code in module_installer.sh!!!
@@ -34,4 +33,4 @@ pub const PTS_NAME: &str = "pts";
 pub const VERSION_CODE: &str = include_str!(concat!(env!("OUT_DIR"), "/VERSION_CODE"));
 pub const VERSION_NAME: &str = include_str!(concat!(env!("OUT_DIR"), "/VERSION_NAME"));
 
-pub const APATCH_LOG_FOLDER: &str = "/data/adb/ap/log/";
+
