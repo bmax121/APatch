@@ -112,7 +112,6 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     utils::umask(0);
 
     #[cfg(unix)]
-    let _ = catch_bootlog();
 
     init_load_package_uid_config(&superkey);
 
@@ -130,14 +129,55 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     }
 
     // Create log environment
-    if Path::new(defs::APATCH_LOG_FOLDER).exists() {
-        fs::remove_dir_all(defs::APATCH_LOG_FOLDER).expect("Failed to remove previous log dir");
+    if !Path::new(defs::APATCH_LOG_FOLDER).exists() {
+        fs::create_dir(defs::APATCH_LOG_FOLDER).expect("Failed to create log folder");
+        let permissions = fs::Permissions::from_mode(0o700);
+        fs::set_permissions(defs::APATCH_LOG_FOLDER, permissions).expect("Failed to set permissions");
+
     }
 
-    fs::create_dir(defs::APATCH_LOG_FOLDER).expect("Failed to create log folder");
-    let permissions = fs::Permissions::from_mode(0o700);
-    fs::set_permissions(defs::APATCH_LOG_FOLDER, permissions).expect("Failed to set permissions");
 
+    let delete_old_files = Command::new("sh")
+        .arg("-c")
+        .arg(format!("rm {}*.old",defs::APATCH_LOG_FOLDER))
+        .status()?;
+
+    if delete_old_files.success() {
+        println!("Successfully deleted .old files.");
+    } else {
+        eprintln!("Failed to delete .old files.");
+    }
+
+    // for all file to .old
+    let rename_files = Command::new("sh")
+        .arg("-c")
+        .arg(format!("for file in {}*; do mv \"$file\" \"$file.old\"; done" , defs::APATCH_LOG_FOLDER))
+        .status()?;
+
+    if rename_files.success() {
+        println!("Successfully renamed files to .old.");
+    } else {
+        eprintln!("Failed to rename files.");
+    }
+
+    let log_path = format!("{}demsg.log", defs::APATCH_LOG_FOLDER);
+    supercall::save_dmesg(log_path.as_str()).expect("Failed to save dmesg");
+    //let cmd = format!("logcat -b main,system,crash -f {} logcatcher-bootlog:S &", defs::APATCH_LOG_FOLDER);
+    unsafe{
+        let _ = Command::new("logcat")
+        .process_group(0)
+        .pre_exec(|| {
+            switch_cgroups();
+            Ok(())
+        })
+        .arg("-b")
+        .arg("main,system,crash")
+        .arg("-f")
+        .arg(format!("{}locat.log",defs::APATCH_LOG_FOLDER))
+        .arg("logcatcher-bootlog:S")
+        .arg("&")
+        .spawn();
+    }
     let key = "KERNELPATCH_VERSION";
     match env::var(key) {
         Ok(value) => println!("{}: {}", key, value),
@@ -260,9 +300,6 @@ fn run_stage(stage: &str, superkey: Option<String>, block: bool) {
         return;
     }
 
-    let log_path = format!("{}trigger_{}.log", defs::APATCH_LOG_FOLDER, stage);
-    supercall::save_dmesg(log_path.as_str()).expect("Failed to save dmesg");
-
     if utils::is_safe_mode(superkey) {
         warn!("safe mode, skip {stage} scripts");
         if let Err(e) = crate::module::disable_all_modules() {
@@ -377,41 +414,3 @@ pub fn start_uid_listener() -> Result<()> {
     Ok(())
 }
 
-#[cfg(unix)]
-fn catch_bootlog() -> Result<()> {
-    use std::os::unix::process::CommandExt;
-    use std::process::Stdio;
-
-    let logdir = Path::new(defs::LOG_DIR);
-    utils::ensure_dir_exists(logdir)?;
-    let aptchlog = logdir.join("apatch.log");
-    let oldapatchlog = logdir.join("apatch.old.log");
-
-    if aptchlog.exists() {
-        fs::rename(&aptchlog, oldapatchlog)?;
-    }
-
-    let aptchlog = fs::File::create(aptchlog)?;
-
-    // timeout -s 9 30s logcat > apatch.log
-    let result = unsafe {
-        Command::new("timeout")
-            .process_group(0)
-            .pre_exec(|| {
-                switch_cgroups();
-                Ok(())
-            })
-            .arg("-s")
-            .arg("9")
-            .arg("30s")
-            .arg("logcat")
-            .stdout(Stdio::from(aptchlog))
-            .spawn()
-    };
-
-    if let Err(e) = result {
-        warn!("Failed to start logcat: {:#}", e);
-    }
-
-    Ok(())
-}
