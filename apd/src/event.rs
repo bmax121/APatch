@@ -136,40 +136,30 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
 
     }
 
-
-    let delete_old_files = Command::new("sh")
+    // for all file to .old
+    let result = Command::new("sh")
         .arg("-c")
-        .arg(format!("rm {}*.old",defs::APATCH_LOG_FOLDER))
+        .arg(format!("rm {}*.old; for file in {}*; do mv \"$file\" \"$file.old\"; done",defs::APATCH_LOG_FOLDER,defs::APATCH_LOG_FOLDER))
         .status()?;
-
-    if delete_old_files.success() {
+    if result.success() {
         println!("Successfully deleted .old files.");
     } else {
         eprintln!("Failed to delete .old files.");
     }
 
-    // for all file to .old
-    let rename_files = Command::new("sh")
-        .arg("-c")
-        .arg(format!("for file in {}*; do mv \"$file\" \"$file.old\"; done" , defs::APATCH_LOG_FOLDER))
-        .status()?;
-
-    if rename_files.success() {
-        println!("Successfully renamed files to .old.");
-    } else {
-        eprintln!("Failed to rename files.");
-    }
-
-    let log_path = format!("{}demsg.log", defs::APATCH_LOG_FOLDER);
+    let log_path = format!("{}dmesg.log", defs::APATCH_LOG_FOLDER);
     supercall::save_dmesg(log_path.as_str()).expect("Failed to save dmesg");
-    //let cmd = format!("logcat -b main,system,crash -f {} logcatcher-bootlog:S &", defs::APATCH_LOG_FOLDER);
     unsafe{
-        let _ = Command::new("logcat")
+        let _ = Command::new("timeout")
         .process_group(0)
         .pre_exec(|| {
             switch_cgroups();
             Ok(())
         })
+        .arg("-s")
+        .arg("9")
+        .arg("120s")
+        .arg("logcat")
         .arg("-b")
         .arg("main,system,crash")
         .arg("-f")
@@ -178,6 +168,7 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
         .arg("&")
         .spawn();
     }
+
     let key = "KERNELPATCH_VERSION";
     match env::var(key) {
         Ok(value) => println!("{}: {}", key, value),
