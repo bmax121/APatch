@@ -53,18 +53,28 @@ fun ExecuteAPMActionScreen(navigator: DestinationsNavigator, moduleId: String) {
     val snackBarHost = LocalSnackbarHost.current
     val scope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
+    var actionResult: Boolean
 
     LaunchedEffect(Unit) {
         if (text.isNotEmpty()) {
             return@LaunchedEffect
         }
         withContext(Dispatchers.IO) {
-            runAPModuleAction(moduleId, onStdout = {
-                text += "$it\n"
-                logContent.append(it).append("\n")
-            }, onStderr = {
-                logContent.append(it).append("\n")
-            })
+            runAPModuleAction(
+                moduleId,
+                onStdout = {
+                    text += "$it\n"
+                    logContent.append(it).append("\n")
+                },
+                onStderr = {
+                    logContent.append(it).append("\n")
+                }
+            ).let {
+                actionResult = it
+            }
+        }
+        if (actionResult == true) {
+            navigator.popBackStack()
         }
     }
 
