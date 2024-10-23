@@ -130,7 +130,7 @@ pub fn calculate_total_size(path: &Path) -> std::io::Result<u64> {
 
 pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     utils::umask(0);
-
+    use std::process::Stdio;
     #[cfg(unix)]
 
     init_load_package_uid_config(&superkey);
@@ -168,7 +168,7 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     }
 
     let log_path = format!("{}dmesg.log", defs::APATCH_LOG_FOLDER);
-    supercall::save_dmesg(log_path.as_str()).expect("Failed to save dmesg");
+    //supercall::save_dmesg(log_path.as_str()).expect("Failed to save dmesg");
     unsafe{
         let _ = Command::new("timeout")
         .process_group(0)
@@ -188,6 +188,22 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
         .arg("&")
         .spawn();
     }
+    let bootlog = std::fs::File::create(log_path)?;
+    let _ = unsafe {
+        std::process::Command::new("timeout")
+            .process_group(0)
+            .pre_exec(|| {
+                utils::switch_cgroups();
+                Ok(())
+            })
+            .arg("-s")
+            .arg("9")
+            .arg("120s")
+            .arg("dmesg")
+            .arg("-w")
+            .stdout(Stdio::from(bootlog))
+            .spawn()
+    };
 
     let key = "KERNELPATCH_VERSION";
     match env::var(key) {

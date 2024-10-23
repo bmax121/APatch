@@ -402,66 +402,6 @@ macro_rules! log_kernel {
     )
 }
 
-fn save_log(args: &[&str], file: &str) -> Result<(), Error> {
-    match unsafe { fork() } {
-        -1 => {
-            warn!("{} fork for dmesg error: {}", process::id(), -1);
-            Err(Error::last_os_error())
-        }
-        0 => {
-            // Child process
-            let fd = OpenOptions::new()
-                .write(true)
-                .truncate(true)
-                .create(true)
-                .open(file)?;
-            let permissions = fs::Permissions::from_mode(0o700);
-            fs::set_permissions(file, permissions).expect("Failed to set permissions");
-
-            unsafe {
-                libc::dup2(fd.as_raw_fd(), libc::STDOUT_FILENO);
-                libc::dup2(fd.as_raw_fd(), libc::STDERR_FILENO);
-                libc::close(fd.as_raw_fd());
-            }
-
-            let command_result = Command::new(args[0])
-                .args(&args[1..])
-                .spawn()
-                .and_then(|mut child: Child| child.wait());
-
-            match command_result {
-                Ok(status) => {
-                    if !status.success() {
-                        eprintln!(
-                            "{} save log > {} error: exited with status {:?}",
-                            process::id(),
-                            file,
-                            status
-                        );
-                        exit(1);
-                    }
-                }
-                Err(err) => {
-                    eprintln!("{} save log > {} error: {}", process::id(), file, err);
-                    exit(1);
-                }
-            }
-
-            exit(0);
-        }
-        _ => {
-            // Parent process
-            sleep(Duration::from_secs(1));
-            info!("{} save log status: success", process::id());
-            Ok(())
-        }
-    }
-}
-
-pub fn save_dmesg(file: &str) -> Result<(), Error> {
-    let dmesg_argv = ["/system/bin/dmesg"];
-    save_log(&dmesg_argv, file)
-}
 
 pub fn fork_for_result(exec: &str, argv: &[&str], key: &Option<String>) {
     let mut cmd = String::new();
