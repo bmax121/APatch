@@ -461,7 +461,13 @@ pub fn uninstall_module(id: &str) -> Result<()> {
 
 pub fn run_action(id: &str) -> Result<()> {
     let action_script_path = format!("/data/adb/modules/{}/action.sh", id);
-    let result = Command::new(assets::BUSYBOX_PATH)
+    unsafe{
+        let result = Command::new(assets::BUSYBOX_PATH)
+        .process_group(0)
+        .pre_exec(|| {
+            switch_cgroups();
+            Ok(())
+        })
         .args(["sh", &action_script_path])
         .env("ASH_STANDALONE", "1")
         .env(
@@ -477,7 +483,8 @@ pub fn run_action(id: &str) -> Result<()> {
         .env("APATCH_VER_CODE", defs::VERSION_CODE)
         .env("OUTFD", "1")
         .status()?;
-    ensure!(result.success(), "Failed to execute action script");
+        ensure!(result.success(), "Failed to execute action script");
+    }
     Ok(())
 }
 
