@@ -359,19 +359,16 @@ fn _install_module(zip: &str) -> Result<()> {
         bail!("module id not found in module.prop!");
     };
 
-
     let modules_dir = Path::new(defs::MODULE_DIR);
-    let modules_update_dir= Path::new(defs::MODULE_UPDATE_TMP_DIR);
+    let modules_update_dir = Path::new(defs::MODULE_UPDATE_TMP_DIR);
     if !Path::new(modules_dir).exists() {
         fs::create_dir(modules_dir).expect("Failed to create modules folder");
         let permissions = fs::Permissions::from_mode(0o700);
         fs::set_permissions(modules_dir, permissions).expect("Failed to set permissions");
-
     }
 
-
-    let module_dir = format!("{}{}",modules_dir.display(),module_id.clone());
-    let module_update_dir = format!("{}{}",modules_update_dir.display(),module_id.clone());
+    let module_dir = format!("{}{}", modules_dir.display(), module_id.clone());
+    let module_update_dir = format!("{}{}", modules_update_dir.display(), module_id.clone());
     info!("module dir: {}", module_dir);
 
     if !Path::new(defs::MODULE_DIR).exists() {
@@ -402,11 +399,15 @@ pub fn install_module(zip: &str) -> Result<()> {
     result
 }
 
-
 pub fn uninstall_module(id: &str) -> Result<()> {
     let modules_dir = Path::new(defs::MODULE_DIR);
-    let update_dir = format!("{}/{}",modules_dir.display(),id);
-    let remote_update_file = format!("{}/{}{}",defs::MODULE_UPDATE_TMP_DIR,id,defs::REMOVE_FILE_NAME);
+    let update_dir = format!("{}/{}", modules_dir.display(), id);
+    let remote_update_file = format!(
+        "{}/{}{}",
+        defs::MODULE_UPDATE_TMP_DIR,
+        id,
+        defs::REMOVE_FILE_NAME
+    );
     let dir = Path::new(&update_dir);
     ensure!(dir.exists(), "No module installed");
 
@@ -430,13 +431,14 @@ pub fn uninstall_module(id: &str) -> Result<()> {
         if module_id.eq(id) {
             let remove_file = path.join(defs::REMOVE_FILE_NAME);
             std::fs::File::create(remove_file).with_context(|| "Failed to create remove file.")?;
-            std::fs::File::create(remote_update_file).with_context(|| "Failed to create remove file.")?;
+            std::fs::File::create(remote_update_file)
+                .with_context(|| "Failed to create remove file.")?;
             break;
         }
     }
 
     // santity check
-    let target_module_path = format!("{}/{}",modules_dir.display(),id);
+    let target_module_path = format!("{}/{}", modules_dir.display(), id);
     let target_module = Path::new(&target_module_path);
     if target_module.exists() {
         let remove_file = target_module.join(defs::REMOVE_FILE_NAME);
@@ -446,43 +448,43 @@ pub fn uninstall_module(id: &str) -> Result<()> {
     }
 
     let modules_dir_update = Path::new(defs::MODULE_UPDATE_TMP_DIR);
-    let target_module_path_update = format!("{}/{}",modules_dir_update.display(),id);
+    let target_module_path_update = format!("{}/{}", modules_dir_update.display(), id);
     let target_module_update = Path::new(&target_module_path_update);
     if target_module_update.exists() {
         let remove_file_update = target_module_update.join(defs::REMOVE_FILE_NAME);
         if !remove_file_update.exists() {
-            std::fs::File::create(remove_file_update).with_context(|| "Failed to create remove file.")?;
+            std::fs::File::create(remove_file_update)
+                .with_context(|| "Failed to create remove file.")?;
         }
     }
-  
-    Ok(())
 
+    Ok(())
 }
 
 pub fn run_action(id: &str) -> Result<()> {
     let action_script_path = format!("/data/adb/modules/{}/action.sh", id);
-    unsafe{
+    unsafe {
         let result = Command::new(assets::BUSYBOX_PATH)
-        .process_group(0)
-        .pre_exec(|| {
-            switch_cgroups();
-            Ok(())
-        })
-        .args(["sh", &action_script_path])
-        .env("ASH_STANDALONE", "1")
-        .env(
-            "PATH",
-            format!(
-                "{}:{}",
-                env_var("PATH").unwrap(),
-                defs::BINARY_DIR.trim_end_matches('/')
-            ),
-        )
-        .env("APATCH", "true")
-        .env("APATCH_VER", defs::VERSION_NAME)
-        .env("APATCH_VER_CODE", defs::VERSION_CODE)
-        .env("OUTFD", "1")
-        .status()?;
+            .process_group(0)
+            .pre_exec(|| {
+                switch_cgroups();
+                Ok(())
+            })
+            .args(["sh", &action_script_path])
+            .env("ASH_STANDALONE", "1")
+            .env(
+                "PATH",
+                format!(
+                    "{}:{}",
+                    env_var("PATH").unwrap(),
+                    defs::BINARY_DIR.trim_end_matches('/')
+                ),
+            )
+            .env("APATCH", "true")
+            .env("APATCH_VER", defs::VERSION_NAME)
+            .env("APATCH_VER_CODE", defs::VERSION_CODE)
+            .env("OUTFD", "1")
+            .status()?;
         ensure!(result.success(), "Failed to execute action script");
     }
     Ok(())
@@ -517,7 +519,6 @@ pub fn enable_module(id: &str) -> Result<()> {
         info!("enable module failed");
         Ok(())
     }
-
 }
 
 pub fn disable_module(id: &str) -> Result<()> {
@@ -528,7 +529,6 @@ pub fn disable_module(id: &str) -> Result<()> {
         info!("disable module failed");
         Ok(())
     }
-
 }
 
 pub fn disable_all_modules() -> Result<()> {

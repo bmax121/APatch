@@ -6,7 +6,7 @@ use crate::{
     supercall::{init_load_package_uid_config, init_load_su_path, refresh_ap_package_list},
     utils::{self, ensure_clean_dir},
 };
-use anyhow::{bail, Context, Result, ensure};
+use anyhow::{bail, ensure, Context, Result};
 use log::{info, warn};
 use notify::event::{ModifyKind, RenameMode};
 use notify::{Config, Event, EventKind, INotifyWatcher, RecursiveMode, Watcher};
@@ -132,7 +132,6 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     utils::umask(0);
     use std::process::Stdio;
     #[cfg(unix)]
-
     init_load_package_uid_config(&superkey);
 
     init_load_su_path(&superkey);
@@ -152,14 +151,18 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     if !Path::new(defs::APATCH_LOG_FOLDER).exists() {
         fs::create_dir(defs::APATCH_LOG_FOLDER).expect("Failed to create log folder");
         let permissions = fs::Permissions::from_mode(0o700);
-        fs::set_permissions(defs::APATCH_LOG_FOLDER, permissions).expect("Failed to set permissions");
-
+        fs::set_permissions(defs::APATCH_LOG_FOLDER, permissions)
+            .expect("Failed to set permissions");
     }
 
     // for all file to .old
     let result = Command::new("sh")
         .arg("-c")
-        .arg(format!("rm {}*.old; for file in {}*; do mv \"$file\" \"$file.old\"; done",defs::APATCH_LOG_FOLDER,defs::APATCH_LOG_FOLDER))
+        .arg(format!(
+            "rm {}*.old; for file in {}*; do mv \"$file\" \"$file.old\"; done",
+            defs::APATCH_LOG_FOLDER,
+            defs::APATCH_LOG_FOLDER
+        ))
         .status()?;
     if result.success() {
         println!("Successfully deleted .old files.");
@@ -169,24 +172,24 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
 
     let log_path = format!("{}dmesg.log", defs::APATCH_LOG_FOLDER);
     //supercall::save_dmesg(log_path.as_str()).expect("Failed to save dmesg");
-    unsafe{
+    unsafe {
         let _ = Command::new("timeout")
-        .process_group(0)
-        .pre_exec(|| {
-            switch_cgroups();
-            Ok(())
-        })
-        .arg("-s")
-        .arg("9")
-        .arg("120s")
-        .arg("logcat")
-        .arg("-b")
-        .arg("main,system,crash")
-        .arg("-f")
-        .arg(format!("{}locat.log",defs::APATCH_LOG_FOLDER))
-        .arg("logcatcher-bootlog:S")
-        .arg("&")
-        .spawn();
+            .process_group(0)
+            .pre_exec(|| {
+                switch_cgroups();
+                Ok(())
+            })
+            .arg("-s")
+            .arg("9")
+            .arg("120s")
+            .arg("logcat")
+            .arg("-b")
+            .arg("main,system,crash")
+            .arg("-f")
+            .arg(format!("{}locat.log", defs::APATCH_LOG_FOLDER))
+            .arg("logcatcher-bootlog:S")
+            .arg("&")
+            .spawn();
     }
     let bootlog = std::fs::File::create(log_path)?;
     let _ = unsafe {
@@ -234,11 +237,10 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     }
 
     //let module_update_img = defs::MODULE_UPDATE_IMG;
-    let module_update_dir  = defs::MODULE_UPDATE_TMP_DIR;
+    let module_update_dir = defs::MODULE_UPDATE_TMP_DIR;
     //let module_img = defs::MODULE_IMG;
     let module_dir = defs::MODULE_DIR;
     //let module_update_flag = Path::new(defs::WORKING_DIR).join(defs::UPDATE_FILE_NAME);
-
 
     //let mut target_update_img = &module_img;
 
@@ -249,14 +251,14 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
 
     //if Path::new(module_update_img).exists() {
     //    if module_update_flag.exists() {
-            // if modules_update.img exists, and the flag indicate this is an update
-            // this make sure that if the update failed, we will fall back to the old image
-            // if we boot succeed, we will rename the modules_update.img to modules.img #on_boot_complete
+    // if modules_update.img exists, and the flag indicate this is an update
+    // this make sure that if the update failed, we will fall back to the old image
+    // if we boot succeed, we will rename the modules_update.img to modules.img #on_boot_complete
     //        target_update_img = &module_update_img;
-            // And we should delete the flag immediately
+    // And we should delete the flag immediately
     //        fs::remove_file(module_update_flag)?;
     //    } else {
-            // if modules_update.img exists, but the flag not exist, we should delete it
+    // if modules_update.img exists, but the flag not exist, we should delete it
     //        fs::remove_file(module_update_img)?;
     //    }
     //}
@@ -266,29 +268,33 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     //}
     let tmp_module_img = defs::MODULE_UPDATE_TMP_IMG;
 
-    if !Path::new("/data/adb/re").exists(){
+    if !Path::new("/data/adb/re").exists() {
         info!("- Preparing image");
-        
+
         let tmp_module_path = Path::new(tmp_module_img);
         if tmp_module_path.exists() {
             std::fs::remove_file(tmp_module_path)?;
         }
         let total_size = calculate_total_size(Path::new(module_update_dir.clone()))?; // 传递引用
-        info!("Total size of files in '{}': {} bytes", tmp_module_path.display(), total_size);
-        
+        info!(
+            "Total size of files in '{}': {} bytes",
+            tmp_module_path.display(),
+            total_size
+        );
+
         let grow_size = 256 * 1024 * 1024 + total_size;
 
         fs::File::create(tmp_module_img)
-                .context("Failed to create ext4 image file")?
-                .set_len(grow_size)
-                .context("Failed to extend ext4 image")?;
+            .context("Failed to create ext4 image file")?
+            .set_len(grow_size)
+            .context("Failed to extend ext4 image")?;
 
         let result = Command::new("mkfs.ext4")
-        .arg("-b")
-        .arg("1024")
-        .arg(tmp_module_img)
-        .stdout(std::process::Stdio::piped())
-        .output()?;
+            .arg("-b")
+            .arg("1024")
+            .arg(tmp_module_img)
+            .stdout(std::process::Stdio::piped())
+            .output()?;
         ensure!(
             result.status.success(),
             "Failed to format ext4 image: {}",
@@ -297,19 +303,22 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
 
         info!("Checking Image");
         module::check_image(tmp_module_img)?;
-
     }
-    
+
     info!("- Mounting image");
     mount::AutoMountExt4::try_new(tmp_module_img, module_dir, false)
         .with_context(|| "mount module image failed".to_string())?;
     info!("mounted {} to {}", tmp_module_img, module_dir);
 
     restorecon::setsyscon(module_dir);
-    
+
     let result = Command::new("sh")
         .arg("-c")
-        .arg(format!("cp --preserve=context -R {}* {};",module_update_dir.clone(),module_dir.clone()))
+        .arg(format!(
+            "cp --preserve=context -R {}* {};",
+            module_update_dir.clone(),
+            module_dir.clone()
+        ))
         .status()?;
     if result.success() {
         info!("Successfully copy file");
@@ -317,12 +326,10 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
         info!("Failed to copy file");
     }
 
-
-  
     // we should always mount the module.img to module dir
     // becuase we may need to operate the module dir in safe mode
     //info!("mount module image: {target_update_img} to {module_dir}");
-   // mount::AutoMountExt4::try_new(target_update_img, module_dir, false)
+    // mount::AutoMountExt4::try_new(target_update_img, module_dir, false)
     //    .with_context(|| "mount module image failed".to_string())?;
 
     // if we are in safe mode, we should disable all modules
@@ -485,4 +492,3 @@ pub fn start_uid_listener() -> Result<()> {
 
     Ok(())
 }
-

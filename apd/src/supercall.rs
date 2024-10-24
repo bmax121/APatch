@@ -402,7 +402,6 @@ macro_rules! log_kernel {
     )
 }
 
-
 pub fn fork_for_result(exec: &str, argv: &[&str], key: &Option<String>) {
     let mut cmd = String::new();
     for arg in argv {
