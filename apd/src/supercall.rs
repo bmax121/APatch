@@ -4,15 +4,15 @@ use libc::{c_int, c_long, c_void, execv, fork, pid_t, setenv, syscall, uid_t, wa
 use log::{error, info, warn};
 use std::ffi::{CStr, CString};
 use std::fmt::Write;
-use std::fs::{File, OpenOptions};
-use std::io::{self, Error, Read};
-use std::os::fd::AsRawFd;
-use std::os::unix::fs::PermissionsExt;
-use std::process::{exit, Child, Command};
+use std::fs::File;
+use std::io::{self, Read};
+
+
+use std::process::exit;
 use std::sync::{Arc, Mutex};
-use std::thread::sleep;
-use std::time::Duration;
-use std::{fs, process, ptr};
+
+
+use std::{process, ptr};
 
 const MAJOR: c_long = 0;
 const MINOR: c_long = 11;

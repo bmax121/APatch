@@ -1,8 +1,7 @@
 #[allow(clippy::wildcard_imports)]
 use crate::utils::*;
 use crate::{
-    assets, defs, mount,
-    restorecon::{restore_syscon, setsyscon},
+    assets, defs, restorecon,
 };
 use anyhow::{anyhow, bail, ensure, Context, Result};
 use const_format::concatcp;
@@ -371,22 +370,33 @@ fn _install_module(zip: &str) -> Result<()> {
     let module_update_dir = format!("{}{}", modules_update_dir.display(), module_id.clone());
     info!("module dir: {}", module_dir);
 
-    if !Path::new(defs::MODULE_DIR).exists() {
-        fs::create_dir(defs::MODULE_DIR).expect("Failed to create module folder");
+    if !Path::new(&module_dir.clone()).exists() {
+        fs::create_dir(&module_dir.clone()).expect("Failed to create module folder");
         let permissions = fs::Permissions::from_mode(0o700);
         fs::set_permissions(module_dir.clone(), permissions).expect("Failed to set permissions");
     }
     // unzip the image and move it to modules_update/<id> dir
     let file = std::fs::File::open(zip)?;
     let mut archive = zip::ZipArchive::new(file)?;
-    archive.extract(&module_dir)?;
+    for i in 0..archive.len() {
+        let mut file = archive.by_index(i)?;
+        let file_name = file.name().to_string();
+
+        if file_name == "module.prop" {
+            let output_path = Path::new(&module_dir).join(&file_name);
+            let mut output_file = std::fs::File::create(&output_path)?;
+
+            std::io::copy(&mut file, &mut output_file)?;
+            println!("Extracted: {}", output_path.display());
+        }
+    }
 
     // set permission and selinux context for $MOD/system
     let module_system_dir = PathBuf::from(module_dir.clone()).join("system");
     if module_system_dir.exists() {
         #[cfg(unix)]
         std::fs::set_permissions(&module_system_dir, std::fs::Permissions::from_mode(0o755))?;
-        restore_syscon(&module_system_dir)?;
+        restorecon::restore_syscon(&module_system_dir)?;
     }
 
     exec_install_script(zip)?;
@@ -400,6 +410,7 @@ pub fn install_module(zip: &str) -> Result<()> {
 }
 
 pub fn uninstall_module(id: &str) -> Result<()> {
+    mark_update();
     let modules_dir = Path::new(defs::MODULE_DIR);
     let update_dir = format!("{}/{}", modules_dir.display(), id);
     let remote_update_file = format!(
@@ -513,21 +524,38 @@ fn _enable_module(module_dir: &str, mid: &str, enable: bool) -> Result<()> {
 
 pub fn enable_module(id: &str) -> Result<()> {
     let update_dir = Path::new(defs::MODULE_DIR);
+    let update_dir_update = Path::new(defs::MODULE_UPDATE_TMP_DIR);
+    
+    enable_module_update(id, update_dir);  
+    enable_module_update(id, update_dir_update)?;  
+
+    Ok(())
+}
+
+pub fn enable_module_update(id: &str,update_dir: &Path) -> Result<()> {
     if let Some(module_dir_str) = update_dir.to_str() {
-        _enable_module(module_dir_str, id, true)
+        _enable_module(module_dir_str, id, true)  
     } else {
-        info!("enable module failed");
-        Ok(())
+        log::info!("Enable module failed: Invalid path");
+        Err(anyhow::anyhow!("Invalid module directory")) 
     }
 }
 
 pub fn disable_module(id: &str) -> Result<()> {
     let update_dir = Path::new(defs::MODULE_DIR);
+    let update_dir_update = Path::new(defs::MODULE_UPDATE_TMP_DIR);
+    disable_module_update(id, update_dir);  
+    disable_module_update(id, update_dir_update)?;  
+
+    Ok(())
+}
+
+pub fn disable_module_update(id: &str,update_dir: &Path) -> Result<()> {
     if let Some(module_dir_str) = update_dir.to_str() {
-        _enable_module(module_dir_str, id, false)
+        _enable_module(module_dir_str, id, false)  
     } else {
-        info!("disable module failed");
-        Ok(())
+        log::info!("Disable module failed: Invalid path");
+        Err(anyhow::anyhow!("Invalid module directory")) 
     }
 }
 
@@ -539,7 +567,13 @@ pub fn disable_all_modules() -> Result<()> {
     }
 
     // we assume the module dir is already mounted
-    let dir = std::fs::read_dir(defs::MODULE_DIR)?;
+    disable_all_modules_update(defs::MODULE_DIR);
+    disable_all_modules_update(defs::MODULE_UPDATE_TMP_DIR)?;
+    Ok(())
+}
+
+pub fn disable_all_modules_update(dir: &str) -> Result<()> {
+    let dir = std::fs::read_dir(dir)?;
     for entry in dir.flatten() {
         let path = entry.path();
         let disable_flag = path.join(defs::DISABLE_FILE_NAME);
@@ -547,9 +581,9 @@ pub fn disable_all_modules() -> Result<()> {
             warn!("Failed to disable module: {}: {}", path.display(), e);
         }
     }
-
     Ok(())
 }
+
 
 fn _list_modules(path: &str) -> Vec<HashMap<String, String>> {
     // first check enabled modules

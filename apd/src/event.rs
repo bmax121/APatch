@@ -240,49 +240,32 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     let module_update_dir = defs::MODULE_UPDATE_TMP_DIR;
     //let module_img = defs::MODULE_IMG;
     let module_dir = defs::MODULE_DIR;
-    //let module_update_flag = Path::new(defs::WORKING_DIR).join(defs::UPDATE_FILE_NAME);
-
-    //let mut target_update_img = &module_img;
+    let module_update_flag = Path::new(defs::WORKING_DIR).join(defs::UPDATE_FILE_NAME);
 
     // we should clean the module mount point if it exists
     ensure_clean_dir(module_dir)?;
 
-    //assets::ensure_binaries().with_context(|| "binary missing")?;
+    assets::ensure_binaries().with_context(|| "binary missing")?;
 
-    //if Path::new(module_update_img).exists() {
-    //    if module_update_flag.exists() {
-    // if modules_update.img exists, and the flag indicate this is an update
-    // this make sure that if the update failed, we will fall back to the old image
-    // if we boot succeed, we will rename the modules_update.img to modules.img #on_boot_complete
-    //        target_update_img = &module_update_img;
-    // And we should delete the flag immediately
-    //        fs::remove_file(module_update_flag)?;
-    //    } else {
-    // if modules_update.img exists, but the flag not exist, we should delete it
-    //        fs::remove_file(module_update_img)?;
-    //    }
-    //}
-
-    //if !Path::new(target_update_img).exists() {
-    //    return Ok(());
-    //}
     let tmp_module_img = defs::MODULE_UPDATE_TMP_IMG;
-
-    if !Path::new("/data/adb/re").exists() {
+    let tmp_module_path = Path::new(tmp_module_img);
+    if module_update_flag.exists() || !tmp_module_path.exists() {// only if modules change,then renew modules file
+        info!("remove update flag");
+        fs::remove_file(module_update_flag);
         info!("- Preparing image");
 
-        let tmp_module_path = Path::new(tmp_module_img);
+        
         if tmp_module_path.exists() {
             std::fs::remove_file(tmp_module_path)?;
         }
-        let total_size = calculate_total_size(Path::new(module_update_dir.clone()))?; // 传递引用
+        let total_size = calculate_total_size(Path::new(module_update_dir.clone()))?; 
         info!(
             "Total size of files in '{}': {} bytes",
             tmp_module_path.display(),
             total_size
         );
 
-        let grow_size = 256 * 1024 * 1024 + total_size;
+        let grow_size =  128 * 1024 * 1024 + total_size;
 
         fs::File::create(tmp_module_img)
             .context("Failed to create ext4 image file")?
@@ -303,36 +286,32 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
 
         info!("Checking Image");
         module::check_image(tmp_module_img)?;
+        info!("- Mounting image");
+        mount::AutoMountExt4::try_new(tmp_module_img, module_dir, false)
+            .with_context(|| "mount module image failed".to_string())?;
+        info!("mounted {} to {}", tmp_module_img, module_dir);
+        restorecon::setsyscon(module_dir);
+        let result = Command::new("sh")
+            .arg("-c")
+            .arg(format!(
+                "cp --preserve=context -R {}* {};",
+                module_update_dir.clone(),
+                module_dir.clone()
+            ))
+            .status()?;
+        if result.success() {
+            info!("Successfully copy file");
+        } else {
+            info!("Failed to copy file");
+        }
+    }else{//mounting last time img file
+
+        info!("- Mounting image");
+        mount::AutoMountExt4::try_new(tmp_module_img, module_dir, false)
+            .with_context(|| "mount module image failed".to_string())?;
     }
 
-    info!("- Mounting image");
-    mount::AutoMountExt4::try_new(tmp_module_img, module_dir, false)
-        .with_context(|| "mount module image failed".to_string())?;
-    info!("mounted {} to {}", tmp_module_img, module_dir);
-
-    restorecon::setsyscon(module_dir);
-
-    let result = Command::new("sh")
-        .arg("-c")
-        .arg(format!(
-            "cp --preserve=context -R {}* {};",
-            module_update_dir.clone(),
-            module_dir.clone()
-        ))
-        .status()?;
-    if result.success() {
-        info!("Successfully copy file");
-    } else {
-        info!("Failed to copy file");
-    }
-
-    // we should always mount the module.img to module dir
-    // becuase we may need to operate the module dir in safe mode
-    //info!("mount module image: {target_update_img} to {module_dir}");
-    // mount::AutoMountExt4::try_new(target_update_img, module_dir, false)
-    //    .with_context(|| "mount module image failed".to_string())?;
-
-    // if we are in safe mode, we should disable all modules
+    
     if safe_mode {
         warn!("safe mode, skip post-fs-data scripts and disable all modules!");
         if let Err(e) = crate::module::disable_all_modules() {
