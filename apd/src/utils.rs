@@ -93,13 +93,6 @@ pub fn is_safe_mode(superkey: Option<String>) -> bool {
     safemode
 }
 
-pub fn get_zip_uncompressed_size(zip_path: &str) -> Result<u64> {
-    let mut zip = zip::ZipArchive::new(std::fs::File::open(zip_path)?)?;
-    let total: u64 = (0..zip.len())
-        .map(|i| zip.by_index(i).unwrap().size())
-        .sum();
-    Ok(total)
-}
 
 #[cfg(any(target_os = "linux", target_os = "android"))]
 pub fn switch_mnt_ns(pid: i32) -> Result<()> {

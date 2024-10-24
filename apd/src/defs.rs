@@ -10,8 +10,6 @@ pub const AP_OVERLAY_SOURCE: &str = "APatch";
 pub const DAEMON_PATH: &str = concatcp!(ADB_DIR, "apd");
 
 pub const MODULE_DIR: &str = concatcp!(ADB_DIR, "modules/");
-pub const MODULE_IMG: &str = concatcp!(WORKING_DIR, "modules.img");
-pub const MODULE_UPDATE_IMG: &str = concatcp!(WORKING_DIR, "modules_update.img");
 pub const MODULE_UPDATE_TMP_IMG: &str = concatcp!(WORKING_DIR, "update_tmp.img");
 
 // warning: this directory should not change, or you need to change the code in module_installer.sh!!!

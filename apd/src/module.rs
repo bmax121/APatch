@@ -8,7 +8,6 @@ use const_format::concatcp;
 use is_executable::is_executable;
 use java_properties::PropertiesIter;
 use log::{info, warn};
-use regex_lite::Regex;
 use std::{
     collections::HashMap,
     env::var as env_var,
@@ -115,24 +114,6 @@ fn foreach_active_module(f: impl FnMut(&Path) -> Result<()>) -> Result<()> {
     foreach_module(true, f)
 }
 
-fn get_minimal_image_size(img: &str) -> Result<u64> {
-    check_image(img)?;
-
-    let output = Command::new("resize2fs")
-        .args(["-P", img])
-        .stdout(Stdio::piped())
-        .output()?;
-
-    let output = String::from_utf8_lossy(&output.stdout);
-    println!("- {}", output.trim());
-    let regex = Regex::new(r"filesystem: (\d+)")?;
-    let result = regex
-        .captures(&output)
-        .ok_or(anyhow::anyhow!("regex not match"))?;
-    let result = &result[1];
-    let result = u64::from_str(result)?;
-    Ok(result)
-}
 
 pub fn check_image(img: &str) -> Result<()> {
     let result = Command::new("e2fsck")
@@ -154,30 +135,7 @@ pub fn check_image(img: &str) -> Result<()> {
     Ok(())
 }
 
-pub fn grow_image_size(img: &str, extra_size: u64) -> Result<()> {
-    let minimal_size = get_minimal_image_size(img)?; // the minimal size is in KB
-    let target_size = minimal_size * 1024 + extra_size;
 
-    // check image
-    check_image(img)?;
-
-    println!(
-        "- Target image size: {}",
-        humansize::format_size(target_size, humansize::DECIMAL)
-    );
-    let target_size = target_size / 1024 + 1024;
-    info!("resize image to {target_size}K, minimal size is {minimal_size}K");
-    let result = Command::new("resize2fs")
-        .args([img, &format!("{target_size}K")])
-        .stdout(Stdio::piped())
-        .status()
-        .with_context(|| format!("Failed to exec resize2fs {img}"))?;
-    ensure!(result.success(), "Failed to resize2fs: {}", result);
-
-    check_image(img)?;
-
-    Ok(())
-}
 
 pub fn load_sepolicy_rule() -> Result<()> {
     foreach_active_module(|path| {
@@ -367,7 +325,7 @@ fn _install_module(zip: &str) -> Result<()> {
     }
 
     let module_dir = format!("{}{}", modules_dir.display(), module_id.clone());
-    let module_update_dir = format!("{}{}", modules_update_dir.display(), module_id.clone());
+    let _module_update_dir = format!("{}{}", modules_update_dir.display(), module_id.clone());
     info!("module dir: {}", module_dir);
 
     if !Path::new(&module_dir.clone()).exists() {
@@ -410,7 +368,6 @@ pub fn install_module(zip: &str) -> Result<()> {
 }
 
 pub fn uninstall_module(id: &str) -> Result<()> {
-    mark_update();
     let modules_dir = Path::new(defs::MODULE_DIR);
     let update_dir = format!("{}/{}", modules_dir.display(), id);
     let remote_update_file = format!(
@@ -468,7 +425,7 @@ pub fn uninstall_module(id: &str) -> Result<()> {
                 .with_context(|| "Failed to create remove file.")?;
         }
     }
-
+    mark_update()?;
     Ok(())
 }
 
@@ -526,7 +483,7 @@ pub fn enable_module(id: &str) -> Result<()> {
     let update_dir = Path::new(defs::MODULE_DIR);
     let update_dir_update = Path::new(defs::MODULE_UPDATE_TMP_DIR);
     
-    enable_module_update(id, update_dir);  
+    let _ = enable_module_update(id, update_dir);  
     enable_module_update(id, update_dir_update)?;  
 
     Ok(())
@@ -544,7 +501,7 @@ pub fn enable_module_update(id: &str,update_dir: &Path) -> Result<()> {
 pub fn disable_module(id: &str) -> Result<()> {
     let update_dir = Path::new(defs::MODULE_DIR);
     let update_dir_update = Path::new(defs::MODULE_UPDATE_TMP_DIR);
-    disable_module_update(id, update_dir);  
+    let _ = disable_module_update(id, update_dir);  
     disable_module_update(id, update_dir_update)?;  
 
     Ok(())
@@ -567,7 +524,7 @@ pub fn disable_all_modules() -> Result<()> {
     }
 
     // we assume the module dir is already mounted
-    disable_all_modules_update(defs::MODULE_DIR);
+    let _ = disable_all_modules_update(defs::MODULE_DIR);
     disable_all_modules_update(defs::MODULE_UPDATE_TMP_DIR)?;
     Ok(())
 }

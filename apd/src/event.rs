@@ -251,14 +251,14 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     let tmp_module_path = Path::new(tmp_module_img);
     if module_update_flag.exists() || !tmp_module_path.exists() {// only if modules change,then renew modules file
         info!("remove update flag");
-        fs::remove_file(module_update_flag);
+        let _ = fs::remove_file(module_update_flag);
         info!("- Preparing image");
 
         
         if tmp_module_path.exists() {
             std::fs::remove_file(tmp_module_path)?;
         }
-        let total_size = calculate_total_size(Path::new(module_update_dir.clone()))?; 
+        let total_size = calculate_total_size(Path::new(module_update_dir))?; 
         info!(
             "Total size of files in '{}': {} bytes",
             tmp_module_path.display(),
@@ -290,13 +290,13 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
         mount::AutoMountExt4::try_new(tmp_module_img, module_dir, false)
             .with_context(|| "mount module image failed".to_string())?;
         info!("mounted {} to {}", tmp_module_img, module_dir);
-        restorecon::setsyscon(module_dir);
+        let _ = restorecon::setsyscon(module_dir);
         let result = Command::new("sh")
             .arg("-c")
             .arg(format!(
                 "cp --preserve=context -R {}* {};",
-                module_update_dir.clone(),
-                module_dir.clone()
+                module_update_dir,
+                module_dir
             ))
             .status()?;
         if result.success() {
