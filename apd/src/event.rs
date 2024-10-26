@@ -19,6 +19,7 @@ use std::sync::{Arc, Mutex};
 use std::time::Duration;
 use std::{collections::HashMap, path::Path, thread};
 use std::{env, fs};
+use rustix::{fd::AsFd, fs::CWD, mount::*};
 
 fn mount_partition(partition_name: &str, lowerdir: &Vec<String>) -> Result<()> {
     if lowerdir.is_empty() {
@@ -108,23 +109,33 @@ pub fn mount_systemlessly(module_dir: &str) -> Result<()> {
     Ok(())
 }
 
+pub fn systemless_bind_mount(module_dir: &str) -> Result<()> {
+    //let propagation_flags = MountPropagationFlags::PRIVATE;
+
+    //let combined_flags = MountFlags::empty() | MountFlags::from_bits_truncate(propagation_flags.bits());
+    // set tmp_path prvate
+    //mount("tmpfs",utils::get_tmp_path(),"tmpfs",combined_flags,"")?;
+ 
+    // construct bind mount params
+    info!("unimplemented");
+
+
+    Ok(())
+}
+
 pub fn calculate_total_size(path: &Path) -> std::io::Result<u64> {
     let mut total_size = 0;
     if path.is_dir() {
-        // 遍历目录中的所有条目
         for entry in fs::read_dir(path)? {
             let entry = entry?;
             let file_type = entry.file_type()?;
             if file_type.is_file() {
-                // 计算文件大小
                 total_size += entry.metadata()?.len();
             } else if file_type.is_dir() {
-                // 递归计算子目录大小
                 total_size += calculate_total_size(&entry.path())?;
             }
         }
     }
-
     Ok(total_size)
 }
 
@@ -154,59 +165,26 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
         fs::set_permissions(defs::APATCH_LOG_FOLDER, permissions)
             .expect("Failed to set permissions");
     }
-
+    let mut command_string = format!(
+        "rm {}*.old; for file in {}*; do mv \"$file\" \"$file.old\"; done",
+        defs::APATCH_LOG_FOLDER,
+        defs::APATCH_LOG_FOLDER
+    );
+    let mut args = vec!["-c", &command_string]; 
     // for all file to .old
-    let result = Command::new("sh")
-        .arg("-c")
-        .arg(format!(
-            "rm {}*.old; for file in {}*; do mv \"$file\" \"$file.old\"; done",
-            defs::APATCH_LOG_FOLDER,
-            defs::APATCH_LOG_FOLDER
-        ))
-        .status()?;
+    let result = utils::run_command("sh", &args, None)?.wait()?;
     if result.success() {
-        println!("Successfully deleted .old files.");
+        info!("Successfully deleted .old files.");
     } else {
-        eprintln!("Failed to delete .old files.");
+        info!("Failed to delete .old files.");
     }
-
-    let log_path = format!("{}dmesg.log", defs::APATCH_LOG_FOLDER);
-    //supercall::save_dmesg(log_path.as_str()).expect("Failed to save dmesg");
-    unsafe {
-        let _ = Command::new("timeout")
-            .process_group(0)
-            .pre_exec(|| {
-                switch_cgroups();
-                Ok(())
-            })
-            .arg("-s")
-            .arg("9")
-            .arg("120s")
-            .arg("logcat")
-            .arg("-b")
-            .arg("main,system,crash")
-            .arg("-f")
-            .arg(format!("{}locat.log", defs::APATCH_LOG_FOLDER))
-            .arg("logcatcher-bootlog:S")
-            .arg("&")
-            .spawn();
-    }
-    let bootlog = std::fs::File::create(log_path)?;
-    let _ = unsafe {
-        std::process::Command::new("timeout")
-            .process_group(0)
-            .pre_exec(|| {
-                utils::switch_cgroups();
-                Ok(())
-            })
-            .arg("-s")
-            .arg("9")
-            .arg("120s")
-            .arg("dmesg")
-            .arg("-w")
-            .stdout(Stdio::from(bootlog))
-            .spawn()
-    };
+    let logcat_path = format!("{}locat.log", defs::APATCH_LOG_FOLDER);
+    let dmesg_path = format!("{}dmesg.log", defs::APATCH_LOG_FOLDER);
+    let bootlog = std::fs::File::create(dmesg_path)?;
+    args = vec!["-s","9","120s","logcat","-b","main,system,crash","-f",&logcat_path,"logcatcher-bootlog:S","&"];
+    let _ = utils::run_command("timeout", &args, None)?.wait()?;
+    args = vec!["-s","9","120s","dmesg","-w"];
+    let _ = utils::run_command("timeout", &args, Some(Stdio::from(bootlog)))?.wait()?;
 
     let key = "KERNELPATCH_VERSION";
     match env::var(key) {
@@ -235,55 +213,36 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
             warn!("exec common post-fs-data scripts failed: {}", e);
         }
     }
-
-    //let module_update_img = defs::MODULE_UPDATE_IMG;
-    let module_update_dir = defs::MODULE_UPDATE_TMP_DIR;
-    //let module_img = defs::MODULE_IMG;
-    let module_dir = defs::MODULE_DIR;
-    let module_update_flag = Path::new(defs::WORKING_DIR).join(defs::UPDATE_FILE_NAME);
-
-    // we should clean the module mount point if it exists
-    ensure_clean_dir(module_dir)?;
-
+    let module_update_dir = defs::MODULE_UPDATE_TMP_DIR; //save module place
+    let module_dir = defs::MODULE_DIR;// run modules place
+    let module_update_flag = Path::new(defs::WORKING_DIR).join(defs::UPDATE_FILE_NAME);// if update ,there will be renew modules file
     assets::ensure_binaries().with_context(|| "binary missing")?;
 
-    let tmp_module_img = defs::MODULE_UPDATE_TMP_IMG;
+    let tmp_module_img = defs::MODULE_UPDATE_TMP_IMG; 
     let tmp_module_path = Path::new(tmp_module_img);
-    if module_update_flag.exists() || !tmp_module_path.exists() {// only if modules change,then renew modules file
+
+    if (module_update_flag.exists() || !tmp_module_path.exists()) && utils::should_enable_overlay()? {// only if modules change,then renew modules file
+        ensure_clean_dir(module_dir)?;
         info!("remove update flag");
         let _ = fs::remove_file(module_update_flag);
         info!("- Preparing image");
-
-        
-        if tmp_module_path.exists() {
+        if tmp_module_path.exists() { //if it have update,remove tmp file
             std::fs::remove_file(tmp_module_path)?;
         }
-        let total_size = calculate_total_size(Path::new(module_update_dir))?; 
-        info!(
-            "Total size of files in '{}': {} bytes",
-            tmp_module_path.display(),
-            total_size
-        );
-
+        let total_size = calculate_total_size(Path::new(module_update_dir))?; //create modules adapt size
+        info!("Total size of files in '{}': {} bytes",tmp_module_path.display(),total_size);
         let grow_size =  128 * 1024 * 1024 + total_size;
-
         fs::File::create(tmp_module_img)
             .context("Failed to create ext4 image file")?
             .set_len(grow_size)
             .context("Failed to extend ext4 image")?;
-
         let result = Command::new("mkfs.ext4")
             .arg("-b")
             .arg("1024")
             .arg(tmp_module_img)
             .stdout(std::process::Stdio::piped())
             .output()?;
-        ensure!(
-            result.status.success(),
-            "Failed to format ext4 image: {}",
-            String::from_utf8(result.stderr).unwrap()
-        );
-
+        ensure!(result.status.success(),"Failed to format ext4 image: {}",String::from_utf8(result.stderr).unwrap());
         info!("Checking Image");
         module::check_image(tmp_module_img)?;
         info!("- Mounting image");
@@ -291,24 +250,16 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
             .with_context(|| "mount module image failed".to_string())?;
         info!("mounted {} to {}", tmp_module_img, module_dir);
         let _ = restorecon::setsyscon(module_dir);
-        let result = Command::new("sh")
-            .arg("-c")
-            .arg(format!(
-                "cp --preserve=context -R {}* {};",
-                module_update_dir,
-                module_dir
-            ))
-            .status()?;
-        if result.success() {
-            info!("Successfully copy file");
-        } else {
-            info!("Failed to copy file");
-        }
-    }else{//mounting last time img file
-
+        command_string = format!("cp --preserve=context -R {}* {};",module_update_dir,module_dir);
+        args = vec!["-c",&command_string];
+        let _ = utils::run_command("sh", &args, None)?.wait()?;
+    }else if utils::should_enable_overlay()? {//mounting last time img file
+        ensure_clean_dir(module_dir)?;
         info!("- Mounting image");
         mount::AutoMountExt4::try_new(tmp_module_img, module_dir, false)
             .with_context(|| "mount module image failed".to_string())?;
+    }else { //this shoud be mount update to modules
+        info!("do nothing here");
     }
 
     
@@ -347,10 +298,17 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     if let Err(e) = crate::module::load_system_prop() {
         warn!("load system.prop failed: {}", e);
     }
+    if !utils::should_enable_overlay()? {
+        // mount module systemlessly by overlay
+        if let Err(e) = mount_systemlessly(module_dir) {
+            warn!("do systemless mount failed: {}", e);
+        }
+    }else{
+        if let Err(e) = systemless_bind_mount(module_dir) {
+            warn!("do systemless bind_mount failed: {}", e);
+        }
+        
 
-    // mount module systemlessly by overlay
-    if let Err(e) = mount_systemlessly(module_dir) {
-        warn!("do systemless mount failed: {}", e);
     }
 
     run_stage("post-mount", superkey, true);
