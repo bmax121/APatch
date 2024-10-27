@@ -49,6 +49,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -97,6 +98,7 @@ import me.bmax.apatch.util.outputStream
 import me.bmax.apatch.util.rootShellForResult
 import me.bmax.apatch.util.setGlobalNamespaceEnabled
 import me.bmax.apatch.util.ui.APDialogBlurBehindUtils
+import me.bmax.apatch.util.ui.LocalSnackbarHost
 import me.bmax.apatch.util.ui.NavigationBarsSpacer
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -120,15 +122,25 @@ fun SettingScreen() {
     if (kPatchReady && aPatchReady) {
         isGlobalNamespaceEnabled = isGlobalNamespaceEnabled()
     }
-    Scaffold(topBar = {
-        TopBar()
-    }) { paddingValues ->
+
+    val snackBarHost = LocalSnackbarHost.current
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(stringResource(R.string.settings)) },
+            )
+        },
+        snackbarHost = { SnackbarHost(snackBarHost) }
+    ) { paddingValues ->
 
         val loadingDialog = rememberLoadingDialog()
-        val clearKeyDialog = rememberConfirmDialog(onConfirm = {
-            APatchKeyHelper.clearConfigKey()
-            APApplication.superKey = ""
-        })
+        val clearKeyDialog = rememberConfirmDialog(
+            onConfirm = {
+                APatchKeyHelper.clearConfigKey()
+                APApplication.superKey = ""
+            }
+        )
 
         val showLanguageDialog = rememberSaveable { mutableStateOf(false) }
         LanguageDialog(showLanguageDialog)
@@ -152,18 +164,20 @@ fun SettingScreen() {
 
         val scope = rememberCoroutineScope()
         val context = LocalContext.current
+        val logSavedMessage = stringResource(R.string.log_saved)
         val exportBugreportLauncher = rememberLauncherForActivityResult(
             ActivityResultContracts.CreateDocument("application/gzip")
         ) { uri: Uri? ->
-            scope.launch(Dispatchers.IO) {
-                uri?.outputStream()?.use { output ->
-                    loadingDialog.withLoading {
-                        withContext(Dispatchers.IO) {
-                            getBugreportFile(context)
+            if (uri != null) {
+                scope.launch(Dispatchers.IO) {
+                    loadingDialog.show()
+                    uri.outputStream().use { output ->
+                        getBugreportFile(context).inputStream().use {
+                            it.copyTo(output)
                         }
-                    }.inputStream().use {
-                        it.copyTo(output)
                     }
+                    loadingDialog.hide()
+                    snackBarHost.showSnackbar(message = logSavedMessage)
                 }
             }
         }
@@ -228,7 +242,7 @@ fun SettingScreen() {
                     })
             }
 
-            // Webview Debug
+            // WebView Debug
             if (aPatchReady) {
                 var enableWebDebugging by rememberSaveable {
                     mutableStateOf(
@@ -429,7 +443,8 @@ fun SettingScreen() {
                                     .padding(16.dp)
                                     .clickable {
                                         scope.launch {
-                                            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH_mm")
+                                            val formatter =
+                                                DateTimeFormatter.ofPattern("yyyy-MM-dd_HH_mm")
                                             val current = LocalDateTime.now().format(formatter)
                                             exportBugreportLauncher.launch("APatch_bugreport_${current}.tar.gz")
                                             showLogBottomSheet = false
@@ -798,12 +813,4 @@ fun LanguageDialog(showLanguageDialog: MutableState<Boolean>) {
             APDialogBlurBehindUtils.setupWindowBlurListener(dialogWindowProvider.window)
         }
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun TopBar() {
-    TopAppBar(
-        title = { Text(stringResource(R.string.settings)) },
-    )
 }
