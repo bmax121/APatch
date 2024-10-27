@@ -298,7 +298,7 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     if let Err(e) = crate::module::load_system_prop() {
         warn!("load system.prop failed: {}", e);
     }
-    if !utils::should_enable_overlay()? {
+    if utils::should_enable_overlay()? {
         // mount module systemlessly by overlay
         if let Err(e) = mount_systemlessly(module_dir) {
             warn!("do systemless mount failed: {}", e);
