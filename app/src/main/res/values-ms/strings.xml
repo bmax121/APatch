@@ -5,7 +5,6 @@
     <string name="patch_warnning">Pemasangan datang dengan risiko. Sila pastikan anda telah membuat sandaran data.</string>
     <string name="reboot">But semula (Reboot)</string>
     <string name="settings">Tetapan</string>
-    <string name="reboot_userspace">But semula lembut (Soft reboot)</string>
     <string name="about">Perihal</string>
     <string name="home_learn_apatch">Ketahui tentang APatch</string>
     <string name="reboot_recovery">But semula ke Recovery</string>
@@ -69,4 +68,7 @@
     <string name="patch_item_bootimg_slot">slot:</string>
     <string name="kpm_version">Versi</string>
     <string name="patch">tampalan</string>
+    <string name="apm_uninstall_failed">APatch</string>
+    <string name="apm_uninstall_success">APatch</string>
+    <string name="apm_install">APatch</string>
 </resources>

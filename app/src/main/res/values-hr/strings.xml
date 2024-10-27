@@ -5,7 +5,6 @@
     <string name="home">Početna</string>
     <string name="patch">Patch</string>
     <string name="settings">Postavke</string>
-    <string name="reboot_userspace">Glatko pokreni</string>
     <string name="reboot_recovery">Pokreni u Recovery</string>
     <string name="reboot_bootloader">Pokreni u Bootloader</string>
     <string name="reboot_download">Pokreni u Download</string>
@@ -100,4 +99,5 @@
     <string name="settings_clear_super_key_dialog">Želite li stvarno nastaviti?</string>
     <string name="success">Uspješno</string>
     <string name="failure">Neuspješno</string>
+    <string name="settings_check_update">Provjeriti ažuriranja</string>
 </resources>

@@ -3,14 +3,13 @@
     <string name="app_name" translatable="false">APatch</string>
     <string name="kernel_patch">KernelPatch</string>
     <string name="android_patch">AndroidPatch</string>
-    <string name="reboot_userspace">Redémarrage logiciel</string>
     <string name="reboot_recovery">Redémarrer en mode récupération</string>
     <string name="reboot_download">Redémarrer en mode téléchargement</string>
     <string name="reboot_edl">Redémarrer en mode EDL</string>
     <string name="about">À propos</string>
     <string name="home_learn_apatch">En apprendre plus sur AndroidPatch</string>
     <string name="home">Accueil</string>
-    <string name="patch_warnning">L\'installation d\'APatch comporte des risques. Assurez-vous que vos données soient sauvegardées avant de continuer.</string>
+    <string name="patch_warnning">L\'installation comporte des risques. Assurez-vous d\'avoir sauvegardé vos données.</string>
     <string name="settings">Paramètres</string>
     <string name="reboot_bootloader">Redémarrage en mode bootloader</string>
     <string name="reboot">Redémarrer</string>
@@ -118,15 +117,15 @@
     <string name="patch_item_bootimg_slot">slot :</string>
     <string name="patch_item_bootimg_dev">appareil :</string>
     <string name="patch_item_kpimg">kpimg</string>
-    <string name="patch_item_kpimg_version">version :</string>
-    <string name="patch_item_kpimg_comile_time">heure :</string>
-    <string name="patch_item_kpimg_config">config :</string>
+    <string name="patch_item_kpimg_version">Version :</string>
+    <string name="patch_item_kpimg_comile_time">Date :</string>
+    <string name="patch_item_kpimg_config">Config :</string>
     <string name="patch_item_new_extra_kpm">Intégrer un nouveau</string>
-    <string name="patch_item_extra_name">nom :</string>
-    <string name="patch_item_extra_author">auteur :</string>
-    <string name="patch_item_extra_kpm_license">licence :</string>
-    <string name="patch_item_extra_kpm_desciption">description :</string>
-    <string name="patch_item_extra_event">événement :</string>
+    <string name="patch_item_extra_name">Nom :</string>
+    <string name="patch_item_extra_author">Auteur :</string>
+    <string name="patch_item_extra_kpm_license">Licence :</string>
+    <string name="patch_item_extra_kpm_desciption">Description :</string>
+    <string name="patch_item_extra_event">Événement :</string>
     <string name="patch_item_skey">Clé</string>
     <string name="kpm_add_kpm">Ajouter un KPM</string>
     <string name="kpm_install">Installer</string>
@@ -134,8 +133,8 @@
     <string name="setting_reset_su_path">Réinitialiser le chemin su</string>
     <string name="kpatch_shadow_path_title">kpatch</string>
     <string name="patch_mode_uninstall_patch">Mode : Dépatch</string>
-    <string name="patch_item_extra_version">version :</string>
-    <string name="patch_item_extra_args">arguments :</string>
+    <string name="patch_item_extra_version">Version :</string>
+    <string name="patch_item_extra_args">Args :</string>
     <string name="hide_apatch_manager">Masquer le gestionnaire APatch</string>
     <string name="setting_reset_su_new_path">nouveau chemin complet</string>
     <string name="patch_item_existed_extra_kpm">Existait</string>
@@ -212,4 +211,5 @@
     <string name="kpm_control_paramters">Paramètres</string>
     <string name="settings_night_mode_follow_sys_summary">Basculement automatique vers le thème sombre en fonction des paramètres du système</string>
     <string name="save_log">Enregistrer les logs</string>
+    <string name="apm_action">Action</string>
 </resources>

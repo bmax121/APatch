@@ -6,7 +6,6 @@
     <string name="android_patch">AndroidPatch</string>
     <string name="settings">Instellingen</string>
     <string name="reboot">Opnieuw Opstarten</string>
-    <string name="reboot_userspace">Zacht opnieuw opstarten</string>
     <string name="reboot_edl">Start opnieuw op naar EDL</string>
     <string name="about">Over</string>
     <string name="settings_app_language">Taal</string>
@@ -94,4 +93,6 @@
     <string name="settings_clear_super_key_dialog">Wil je zeker verder gaan?</string>
     <string name="success">Succes</string>
     <string name="failure">Mislukking</string>
+    <string name="settings_check_update">Controleer op update</string>
+    <string name="settings_check_update_summary">Automatisch controleren op updates als je de app opent</string>
 </resources>

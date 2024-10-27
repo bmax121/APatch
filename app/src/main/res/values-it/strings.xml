@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="apm_reboot_to_apply">Riavvia per rendere effettive le modifiche</string>
-    <string name="android_patch">AndroidPatch</string>
+    <string name="android_patch">Patch di Android</string>
     <string name="kpm_unload_confirm">Sei sicuro di voler rimuovere il modulo \"%s\"?</string>
     <string name="apm_uninstall_success">%s disinstallato</string>
     <string name="send_log">Invia log</string>
@@ -32,10 +32,9 @@
     <string name="su_show_system_apps">Mostra app di sistema</string>
     <string name="home_ap_cando_install">Installa</string>
     <string name="reboot_recovery">Riavvia in Recovery</string>
-    <string name="reboot_userspace">Riavvio veloce</string>
     <string name="home_learn_apatch">Scopri APatch</string>
     <string name="apm_failed_to_disable">Impossibile disabilitare il modulo \"%s\"</string>
-    <string name="kernel_patch">KernelPatch</string>
+    <string name="kernel_patch">Patch di Kernel</string>
     <string name="home_click_to_install">Clicca per installare</string>
     <string name="home_selinux_status_unknown">Sconosciuto</string>
     <string name="about">Informazioni</string>
@@ -92,7 +91,7 @@
     <string name="apm_not_installed">AndroidPatch non installato</string>
     <string name="system_default">Predefinito di sistema</string>
     <string name="settings_app_language">Lingua</string>
-    <string name="patch">Patch</string>
+    <string name="patch">Applicare una patch</string>
     <string name="settings_global_namespace_mode">Modalità Namespace Globale</string>
     <string name="settings_global_namespace_mode_summary">Tutte le sessioni di root erediteranno il namespace globale</string>
     <string name="settings_check_update">Controlla Aggiornamento</string>

@@ -11,7 +11,6 @@
     <string name="home_install_unknown">Hindi alam</string>
     <string name="home_click_to_learn_apatch">Alamin ang mga features ng AndroidPatch at kung paano ito gamitin</string>
     <string name="home_installing">Installing</string>
-    <string name="reboot_userspace">Soft Reboot</string>
     <string name="home_learn_apatch">Alamin ang AndroidPatch</string>
     <string name="home_click_to_install">I-click para mag install</string>
     <string name="patch_set_superkey">I-set ang SuperKey</string>
@@ -77,4 +76,17 @@
     <string name="apm_downloading">Ini-download ang module: %s</string>
     <string name="apm_new_version_available">Bagong bersyon: %s ay available, i-click para i-upgrade</string>
     <string name="home">Tahanan</string>
+    <string name="patch">Mga patch</string>
+    <string name="reboot_recovery">I-reboot sa Recovery</string>
+    <string name="reboot_bootloader">I-reboot sa Bootloader</string>
+    <string name="reboot_download">I-reboot sa Download</string>
+    <string name="reboot_edl">I-reboot sa EDL</string>
+    <string name="about">Tungkol nito</string>
+    <string name="settings_app_language">Wika</string>
+    <string name="system_default">Default ng system</string>
+    <string name="settings_global_namespace_mode">Pandaigdigang Namespace Mode</string>
+    <string name="settings_global_namespace_mode_summary">Ginagamit ng lahat ng root session ang pandaigdigang mount namespace</string>
+    <string name="settings_clear_super_key_dialog">Gusto mo ba talagang magpatuloy?</string>
+    <string name="success">Matagumpay</string>
+    <string name="failure">Hindi matagumpay</string>
 </resources>

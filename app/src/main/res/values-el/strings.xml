@@ -8,7 +8,6 @@
     <string name="settings">Ρυθμίσεις</string>
     <string name="reboot_bootloader">Επανεκκίνηση στον Bootloader</string>
     <string name="home">Αρχική σελίδα</string>
-    <string name="reboot_userspace">Μαλακή επανεκκίνηση</string>
     <string name="system_default">Προεπιλογή συστήματος</string>
     <string name="reboot_edl">Επανεκκίνηση σε EDL</string>
     <string name="reboot_recovery">Επανεκκίνηση στο Recovery</string>

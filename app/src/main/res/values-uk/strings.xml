@@ -6,7 +6,6 @@
     <string name="android_patch">AndroidPatch</string>
     <string name="reboot">Перезавантаження</string>
     <string name="settings">Налаштування</string>
-    <string name="reboot_userspace">М\'яке Перезавантаження</string>
     <string name="reboot_recovery">Перезавантаження в режим відновлення</string>
     <string name="reboot_bootloader">Перезавантаження в завантажувач</string>
     <string name="reboot_download">Перезавантаження в режим завантаження</string>
@@ -111,18 +110,18 @@
     <string name="patch_item_bootimg_dev">пристрій:</string>
     <string name="patch_item_kernel">Ядро</string>
     <string name="patch_item_kpimg">kpimg</string>
-    <string name="patch_item_kpimg_version">версія:</string>
-    <string name="patch_item_kpimg_comile_time">час:</string>
-    <string name="patch_item_kpimg_config">налаштування:</string>
+    <string name="patch_item_kpimg_version">Версія:</string>
+    <string name="patch_item_kpimg_comile_time">Час:</string>
+    <string name="patch_item_kpimg_config">Налаштування:</string>
     <string name="patch_item_new_extra_kpm">Вбудувати новий</string>
     <string name="patch_item_existed_extra_kpm">Існуючий</string>
-    <string name="patch_item_extra_name">ім\'я:</string>
-    <string name="patch_item_extra_version">версія:</string>
-    <string name="patch_item_extra_author">автор:</string>
-    <string name="patch_item_extra_kpm_license">ліцензія:</string>
-    <string name="patch_item_extra_kpm_desciption">опис:</string>
-    <string name="patch_item_extra_args">аргументи:</string>
-    <string name="patch_item_extra_event">подія:</string>
+    <string name="patch_item_extra_name">Ім\'я:</string>
+    <string name="patch_item_extra_version">Версія:</string>
+    <string name="patch_item_extra_author">Автор:</string>
+    <string name="patch_item_extra_kpm_license">Ліцензія:</string>
+    <string name="patch_item_extra_kpm_desciption">Опис:</string>
+    <string name="patch_item_extra_args">Аргументи:</string>
+    <string name="patch_item_extra_event">Подія:</string>
     <string name="patch_item_set_skey_label">Довжина суперключа повинна бути не менше 8 символів і включати числа і букви</string>
     <string name="patch_item_skey">Суперключ</string>
     <string name="settings_clear_super_key_dialog">Ви дійсно хочете продовжити?</string>
@@ -212,4 +211,5 @@
     <string name="settings_night_mode_follow_sys">Слідкувати за системно темою</string>
     <string name="settings_night_theme_enabled">Увімкнути темну тему</string>
     <string name="save_log">Зберегти журнали</string>
+    <string name="apm_action">Дія</string>
 </resources>
