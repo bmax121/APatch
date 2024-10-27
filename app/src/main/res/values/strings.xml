@@ -243,4 +243,8 @@
     <string name="about_telegram_channel">Telegram Channel</string>
     <string name="about_telegram_group">Telegram Group</string>
     <string name="about_powered_by">Powered by %1$s</string>
+
+    <string name="crash_handle_title">App crashed..</string>
+    <string name="crash_handle_copy">Copy crash log</string>
+    <string name="crash_handle_copied">Copied crash log to clipboard.</string>
 </resources>

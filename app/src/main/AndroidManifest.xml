@@ -45,6 +45,10 @@
             android:exported="false"
             android:theme="@style/Theme.APatch.WebUI" />
 
+        <activity
+            android:name=".ui.CrashHandleActivity"
+            android:exported="false" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"

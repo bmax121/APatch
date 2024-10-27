@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.topjohnwu.superuser.CallbackList
+import me.bmax.apatch.ui.CrashHandleActivity
 import me.bmax.apatch.util.APatchCli
 import me.bmax.apatch.util.APatchKeyHelper
 import me.bmax.apatch.util.Version
@@ -25,7 +26,12 @@ lateinit var apApp: APApplication
 
 const val TAG = "APatch"
 
-class APApplication : Application() {
+class APApplication : Application(), Thread.UncaughtExceptionHandler {
+
+    init {
+        Thread.setDefaultUncaughtExceptionHandler(this)
+    }
+
     enum class State {
         UNKNOWN_STATE,
 
@@ -262,5 +268,18 @@ class APApplication : Application() {
 
     fun updateBackupWarningState(state: Boolean) {
         sharedPreferences.edit().putBoolean(SHOW_BACKUP_WARN, state).apply()
+    }
+
+    override fun uncaughtException(t: Thread, e: Throwable) {
+        val exceptionMessage = Log.getStackTraceString(e)
+        val threadName = t.name
+        Log.e(TAG, "Error on thread $threadName:\n $exceptionMessage")
+        val intent = Intent(this, CrashHandleActivity::class.java).apply {
+            putExtra("exception_message", exceptionMessage)
+            putExtra("thread", threadName)
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        }
+        startActivity(intent)
+        exitProcess(10)
     }
 }
