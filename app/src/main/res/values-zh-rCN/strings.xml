@@ -213,4 +213,8 @@
     <string name="about_telegram_channel">Telegram 频道</string>
     <string name="about_telegram_group">Telegram 群组</string>
     <string name="about_powered_by">由 %1$s 驱动</string>
+
+    <string name="crash_handle_title">应用崩溃了…</string>
+    <string name="crash_handle_copy">复制崩溃日志</string>
+    <string name="crash_handle_copied">崩溃日志已复制到剪贴板。</string>
 </resources>
