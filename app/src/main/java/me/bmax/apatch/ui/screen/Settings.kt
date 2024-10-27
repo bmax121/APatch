@@ -4,6 +4,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.clickable
@@ -83,7 +85,6 @@ import me.bmax.apatch.APApplication
 import me.bmax.apatch.BuildConfig
 import me.bmax.apatch.Natives
 import me.bmax.apatch.R
-import me.bmax.apatch.ui.MainActivity
 import me.bmax.apatch.ui.component.SwitchItem
 import me.bmax.apatch.ui.component.rememberConfirmDialog
 import me.bmax.apatch.ui.component.rememberLoadingDialog
@@ -92,6 +93,7 @@ import me.bmax.apatch.util.APatchKeyHelper
 import me.bmax.apatch.util.getBugreportFile
 import me.bmax.apatch.util.hideapk.HideAPK
 import me.bmax.apatch.util.isGlobalNamespaceEnabled
+import me.bmax.apatch.util.outputStream
 import me.bmax.apatch.util.rootShellForResult
 import me.bmax.apatch.util.setGlobalNamespaceEnabled
 import me.bmax.apatch.util.ui.APDialogBlurBehindUtils
@@ -147,6 +149,24 @@ fun SettingScreen() {
         }
 
         var showLogBottomSheet by remember { mutableStateOf(false) }
+
+        val scope = rememberCoroutineScope()
+        val context = LocalContext.current
+        val exportBugreportLauncher = rememberLauncherForActivityResult(
+            ActivityResultContracts.CreateDocument("application/gzip")
+        ) { uri: Uri? ->
+            scope.launch(Dispatchers.IO) {
+                uri?.outputStream()?.use { output ->
+                    loadingDialog.withLoading {
+                        withContext(Dispatchers.IO) {
+                            getBugreportFile(context)
+                        }
+                    }.inputStream().use {
+                        it.copyTo(output)
+                    }
+                }
+            }
+        }
 
         Column(
             modifier = Modifier
@@ -411,22 +431,11 @@ fun SettingScreen() {
                                         scope.launch {
                                             val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH_mm")
                                             val current = LocalDateTime.now().format(formatter)
-                                            val createFileIntent =
-                                                Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
-                                                    addCategory(Intent.CATEGORY_OPENABLE)
-                                                    putExtra(Intent.EXTRA_TITLE, "APatch_bugreport_${current}.tar.gz")
-                                                    type = "application/gzip"
-                                                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                                                }
-                                            (context as MainActivity).exportBugreportLauncher.launch(
-                                                Intent.createChooser(
-                                                    createFileIntent,
-                                                    context.getString(R.string.save_log)
-                                                )
-                                            )
+                                            exportBugreportLauncher.launch("APatch_bugreport_${current}.tar.gz")
                                             showLogBottomSheet = false
                                         }
-                                    }) {
+                                    }
+                                ) {
                                     Icon(
                                         Icons.Filled.Save,
                                         contentDescription = null,
