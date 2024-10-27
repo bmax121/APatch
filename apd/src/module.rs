@@ -3,6 +3,7 @@ use crate::utils::*;
 use crate::{
     assets, defs, restorecon,
 };
+use regex_lite::Regex;
 use anyhow::{anyhow, bail, ensure, Context, Result};
 use const_format::concatcp;
 use is_executable::is_executable;
@@ -35,9 +36,19 @@ const INSTALL_MODULE_SCRIPT: &str = concatcp!(
 fn exec_install_script(module_file: &str) -> Result<()> {
     let realpath = std::fs::canonicalize(module_file)
         .with_context(|| format!("realpath: {module_file} failed"))?;
+    
+    let mut content;
 
+    if !should_enable_overlay()? {
+        content = INSTALL_MODULE_SCRIPT.to_string();
+        let re = Regex::new(r"(?m)^(handle_partition\(\)\s*\{)").unwrap();
+        let modified_content = re.replace_all(&content, "$0\n    return;");
+        content = modified_content.to_string(); // 更新 content 变量
+    } else {
+        content = INSTALL_MODULE_SCRIPT.to_string();
+    }
     let result = Command::new(assets::BUSYBOX_PATH)
-        .args(["sh", "-c", INSTALL_MODULE_SCRIPT])
+        .args(["sh", "-c", &content])
         .env("ASH_STANDALONE", "1")
         .env(
             "PATH",
@@ -303,7 +314,6 @@ fn _install_module(zip: &str) -> Result<()> {
     let zip_path = PathBuf::from_str(zip)?;
     let zip_path = zip_path.canonicalize()?;
     zip_extract_file_to_memory(&zip_path, &entry_path, &mut buffer)?;
-
     let mut module_prop = HashMap::new();
     PropertiesIter::new_with_encoding(Cursor::new(buffer), encoding_rs::UTF_8).read_into(
         |k, v| {
@@ -319,15 +329,15 @@ fn _install_module(zip: &str) -> Result<()> {
     let modules_dir = Path::new(defs::MODULE_DIR);
     let modules_update_dir = Path::new(defs::MODULE_UPDATE_TMP_DIR);
     if !Path::new(modules_dir).exists() {
+        
         fs::create_dir(modules_dir).expect("Failed to create modules folder");
         let permissions = fs::Permissions::from_mode(0o700);
         fs::set_permissions(modules_dir, permissions).expect("Failed to set permissions");
     }
 
     let module_dir = format!("{}{}", modules_dir.display(), module_id.clone());
-    let _module_update_dir = format!("{}{}", modules_update_dir.display(), module_id.clone());
+    let module_update_dir = format!("{}{}", modules_update_dir.display(), module_id.clone());
     info!("module dir: {}", module_dir);
-
     if !Path::new(&module_dir.clone()).exists() {
         fs::create_dir(&module_dir.clone()).expect("Failed to create module folder");
         let permissions = fs::Permissions::from_mode(0o700);
@@ -336,16 +346,18 @@ fn _install_module(zip: &str) -> Result<()> {
     // unzip the image and move it to modules_update/<id> dir
     let file = std::fs::File::open(zip)?;
     let mut archive = zip::ZipArchive::new(file)?;
-    for i in 0..archive.len() {
-        let mut file = archive.by_index(i)?;
-        let file_name = file.name().to_string();
+    if should_enable_overlay()? {
+        for i in 0..archive.len() {
+            let mut file = archive.by_index(i)?;
+            let file_name = file.name().to_string();
 
-        if file_name == "module.prop" {
-            let output_path = Path::new(&module_dir).join(&file_name);
-            let mut output_file = std::fs::File::create(&output_path)?;
+            if file_name == "module.prop" {
+                let output_path = Path::new(&module_dir).join(&file_name);
+                let mut output_file = std::fs::File::create(&output_path)?;
 
-            std::io::copy(&mut file, &mut output_file)?;
-            println!("Extracted: {}", output_path.display());
+                std::io::copy(&mut file, &mut output_file)?;
+                println!("Extracted: {}", output_path.display());
+            }
         }
     }
 
@@ -356,8 +368,18 @@ fn _install_module(zip: &str) -> Result<()> {
         std::fs::set_permissions(&module_system_dir, std::fs::Permissions::from_mode(0o755))?;
         restorecon::restore_syscon(&module_system_dir)?;
     }
-
     exec_install_script(zip)?;
+    if !should_enable_overlay()? {
+        let command_string = format!(
+            "rm -r {};cp --preserve=context -R {}* {};rm -r {}",
+            module_dir,
+            module_update_dir,
+            modules_dir.display(),
+            modules_update_dir.display()
+        );
+        let args = vec!["-c",&command_string];
+        let _result = run_command("sh", &args, None)?.wait()?;
+    }
     mark_update()?;
     Ok(())
 }
@@ -367,16 +389,9 @@ pub fn install_module(zip: &str) -> Result<()> {
     result
 }
 
-pub fn uninstall_module(id: &str) -> Result<()> {
-    let modules_dir = Path::new(defs::MODULE_DIR);
-    let update_dir = format!("{}/{}", modules_dir.display(), id);
-    let remote_update_file = format!(
-        "{}/{}{}",
-        defs::MODULE_UPDATE_TMP_DIR,
-        id,
-        defs::REMOVE_FILE_NAME
-    );
-    let dir = Path::new(&update_dir);
+pub fn _uninstall_module(id: &str, update_dir: &str) -> Result<()> {
+    
+    let dir = Path::new(update_dir);
     ensure!(dir.exists(), "No module installed");
 
     // iterate the modules_update dir, find the module to be removed
@@ -398,63 +413,38 @@ pub fn uninstall_module(id: &str) -> Result<()> {
         )?;
         if module_id.eq(id) {
             let remove_file = path.join(defs::REMOVE_FILE_NAME);
-            std::fs::File::create(remove_file).with_context(|| "Failed to create remove file.")?;
-            std::fs::File::create(remote_update_file)
-                .with_context(|| "Failed to create remove file.")?;
+            fs::File::create(remove_file).with_context(|| "Failed to create remove file.")?;
             break;
         }
     }
 
     // santity check
-    let target_module_path = format!("{}/{}", modules_dir.display(), id);
+    let target_module_path = format!("{update_dir}/{id}");
     let target_module = Path::new(&target_module_path);
     if target_module.exists() {
         let remove_file = target_module.join(defs::REMOVE_FILE_NAME);
         if !remove_file.exists() {
-            std::fs::File::create(remove_file).with_context(|| "Failed to create remove file.")?;
+        fs::File::create(remove_file).with_context(|| "Failed to create remove file.")?;
         }
     }
 
-    let modules_dir_update = Path::new(defs::MODULE_UPDATE_TMP_DIR);
-    let target_module_path_update = format!("{}/{}", modules_dir_update.display(), id);
-    let target_module_update = Path::new(&target_module_path_update);
-    if target_module_update.exists() {
-        let remove_file_update = target_module_update.join(defs::REMOVE_FILE_NAME);
-        if !remove_file_update.exists() {
-            std::fs::File::create(remove_file_update)
-                .with_context(|| "Failed to create remove file.")?;
-        }
+    let _ = mark_module_state(id, defs::REMOVE_FILE_NAME, true);
+    Ok(())
+
+}
+pub fn uninstall_module(id: &str) -> Result<()> {
+    let result = _uninstall_module(id, defs::MODULE_DIR);  
+    if should_enable_overlay()?{
+        _uninstall_module(id, defs::MODULE_UPDATE_TMP_DIR)?;
+    }else{
+        return result;
     }
-    mark_update()?;
     Ok(())
 }
 
 pub fn run_action(id: &str) -> Result<()> {
     let action_script_path = format!("/data/adb/modules/{}/action.sh", id);
-    unsafe {
-        let result = Command::new(assets::BUSYBOX_PATH)
-            .process_group(0)
-            .pre_exec(|| {
-                switch_cgroups();
-                Ok(())
-            })
-            .args(["sh", &action_script_path])
-            .env("ASH_STANDALONE", "1")
-            .env(
-                "PATH",
-                format!(
-                    "{}:{}",
-                    env_var("PATH").unwrap(),
-                    defs::BINARY_DIR.trim_end_matches('/')
-                ),
-            )
-            .env("APATCH", "true")
-            .env("APATCH_VER", defs::VERSION_NAME)
-            .env("APATCH_VER_CODE", defs::VERSION_CODE)
-            .env("OUTFD", "1")
-            .status()?;
-        ensure!(result.success(), "Failed to execute action script");
-    }
+    let _ = exec_script(&action_script_path, true);
     Ok(())
 }
 
@@ -483,9 +473,12 @@ pub fn enable_module(id: &str) -> Result<()> {
     let update_dir = Path::new(defs::MODULE_DIR);
     let update_dir_update = Path::new(defs::MODULE_UPDATE_TMP_DIR);
     
-    let _ = enable_module_update(id, update_dir);  
-    enable_module_update(id, update_dir_update)?;  
-
+    let result = enable_module_update(id, update_dir);  
+    if should_enable_overlay()?{
+        enable_module_update(id, update_dir_update)?;  
+    }else{
+        return result;
+    }
     Ok(())
 }
 
@@ -501,8 +494,14 @@ pub fn enable_module_update(id: &str,update_dir: &Path) -> Result<()> {
 pub fn disable_module(id: &str) -> Result<()> {
     let update_dir = Path::new(defs::MODULE_DIR);
     let update_dir_update = Path::new(defs::MODULE_UPDATE_TMP_DIR);
-    let _ = disable_module_update(id, update_dir);  
-    disable_module_update(id, update_dir_update)?;  
+    let result = disable_module_update(id, update_dir);  
+
+    if should_enable_overlay()?{
+        disable_module_update(id, update_dir_update)?;
+    }else{
+        return result;
+    }
+    
 
     Ok(())
 }
