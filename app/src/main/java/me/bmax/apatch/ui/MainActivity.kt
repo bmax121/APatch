@@ -1,12 +1,10 @@
 package me.bmax.apatch.ui
 
 import android.annotation.SuppressLint
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
@@ -33,7 +31,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.core.content.FileProvider
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
@@ -47,10 +44,8 @@ import com.ramcosta.composedestinations.rememberNavHostEngine
 import com.ramcosta.composedestinations.utils.isRouteOnBackStackAsState
 import com.ramcosta.composedestinations.utils.rememberDestinationsNavigator
 import me.bmax.apatch.APApplication
-import me.bmax.apatch.BuildConfig
 import me.bmax.apatch.ui.screen.BottomBarDestination
 import me.bmax.apatch.ui.theme.APatchTheme
-import me.bmax.apatch.util.getBugreportFile
 import me.bmax.apatch.util.ui.LocalSnackbarHost
 import me.zhanghai.android.appiconloader.coil.AppIconFetcher
 import me.zhanghai.android.appiconloader.coil.AppIconKeyer
@@ -58,21 +53,6 @@ import me.zhanghai.android.appiconloader.coil.AppIconKeyer
 class MainActivity : AppCompatActivity() {
 
     private var isLoading by mutableStateOf(true)
-
-    val exportBugreportLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                val bugreport = getBugreportFile(this)
-                val uri: Uri = FileProvider.getUriForFile(this, "${BuildConfig.APPLICATION_ID}.fileprovider", bugreport)
-                result.data?.data?.let {
-                    contentResolver.openOutputStream(it)?.use { output ->
-                        contentResolver.openInputStream(uri)?.use { input ->
-                            input.copyTo(output)
-                        }
-                    }
-                }
-            }
-        }
 
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
