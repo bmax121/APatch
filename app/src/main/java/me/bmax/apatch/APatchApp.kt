@@ -140,7 +140,7 @@ class APApplication : Application(), Thread.UncaughtExceptionHandler {
                 "chmod +x $BUSYBOX_BIN_PATH",
                 "cp -f ${nativeDir}/libmagiskboot.so $MAGISKBOOT_BIN_PATH",
                 "chmod +x $MAGISKBOOT_BIN_PATH",
-                "cp -f ${nativeDir}/libmagisk_mount.so $MAGISKMOUNT_BIN_PATH",
+                "cp -f ${nativeDir}/libmagic_mount.so $MAGISKMOUNT_BIN_PATH",
                 "chmod +x $MAGISKMOUNT_BIN_PATH",
 
                 "touch $PACKAGE_CONFIG_FILE",
