@@ -182,9 +182,28 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     let dmesg_path = format!("{}dmesg.log", defs::APATCH_LOG_FOLDER);
     let bootlog = std::fs::File::create(dmesg_path)?;
     args = vec!["-s","9","120s","logcat","-b","main,system,crash","-f",&logcat_path,"logcatcher-bootlog:S","&"];
-    let _ = utils::run_command("timeout", &args, None)?.wait()?;
+    let _ = unsafe {
+        std::process::Command::new("timeout")
+            .process_group(0)
+            .pre_exec(|| {
+                utils::switch_cgroups();
+                Ok(())
+            })
+            .args(args)
+            .spawn()
+    };
     args = vec!["-s","9","120s","dmesg","-w"];
-    let _ = utils::run_command("timeout", &args, Some(Stdio::from(bootlog)))?.wait()?;
+    let result = unsafe {
+        std::process::Command::new("timeout")
+            .process_group(0)
+            .pre_exec(|| {
+                utils::switch_cgroups();
+                Ok(())
+            })
+            .args(args)
+            .stdout(Stdio::from(bootlog))
+            .spawn()
+    };
 
     let key = "KERNELPATCH_VERSION";
     match env::var(key) {
