@@ -24,8 +24,17 @@ use zip_extensions::zip_extract_file_to_memory;
 use std::os::unix::{prelude::PermissionsExt, process::CommandExt};
 
 const INSTALLER_CONTENT: &str = include_str!("./installer.sh");
+const INSTALLER_CONTENT_: &str = include_str!("./installer_bind.sh");
 const INSTALL_MODULE_SCRIPT: &str = concatcp!(
     INSTALLER_CONTENT,
+    "\n",
+    "install_module",
+    "\n",
+    "exit 0",
+    "\n"
+);
+const INSTALL_MODULE_SCRIPT_: &str = concatcp!(
+    INSTALLER_CONTENT_,
     "\n",
     "install_module",
     "\n",
@@ -40,8 +49,7 @@ fn exec_install_script(module_file: &str) -> Result<()> {
     let mut content;
 
     if !should_enable_overlay()? {
-        content = INSTALL_MODULE_SCRIPT.to_string();
-        content = content.replace("_update", "");
+        content = INSTALL_MODULE_SCRIPT_.to_string();
     } else {
         content = INSTALL_MODULE_SCRIPT.to_string();
     }

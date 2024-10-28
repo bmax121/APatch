@@ -117,7 +117,8 @@ pub fn systemless_bind_mount(module_dir: &str) -> Result<()> {
     //mount("tmpfs",utils::get_tmp_path(),"tmpfs",combined_flags,"")?;
  
     // construct bind mount params
-    info!("unimplemented");
+    let mut args = vec!["mount"];
+    let _ = utils::run_command("/data/adb/ap/bin/magiskmount",&args,None);
 
 
     Ok(())
