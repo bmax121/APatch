@@ -41,9 +41,7 @@ fn exec_install_script(module_file: &str) -> Result<()> {
 
     if !should_enable_overlay()? {
         content = INSTALL_MODULE_SCRIPT.to_string();
-        let re = Regex::new(r"(?m)^(handle_partition\(\)\s*\{)").unwrap();
-        let modified_content = re.replace_all(&content, "$0\n    return;");
-        content = modified_content.to_string(); // 更新 content 变量
+        content = content.replace("_update", "");
     } else {
         content = INSTALL_MODULE_SCRIPT.to_string();
     }
@@ -369,17 +367,6 @@ fn _install_module(zip: &str) -> Result<()> {
         restorecon::restore_syscon(&module_system_dir)?;
     }
     exec_install_script(zip)?;
-    if !should_enable_overlay()? {
-        let command_string = format!(
-            "rm -r {};cp --preserve=context -R {}* {};rm -r {}",
-            module_dir,
-            module_update_dir,
-            modules_dir.display(),
-            modules_update_dir.display()
-        );
-        let args = vec!["-c",&command_string];
-        let _result = run_command("sh", &args, None)?.wait()?;
-    }
     mark_update()?;
     Ok(())
 }
