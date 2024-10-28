@@ -277,7 +277,7 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
         info!("- Mounting image");
         mount::AutoMountExt4::try_new(tmp_module_img, module_dir, false)
             .with_context(|| "mount module image failed".to_string())?;
-    }else { //this shoud be mount update to modules
+    }else { 
         info!("do nothing here");
     }
 
