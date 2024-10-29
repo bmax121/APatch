@@ -118,17 +118,8 @@ pub fn systemless_bind_mount(module_dir: &str) -> Result<()> {
  
     // construct bind mount params
     let mut args = vec!["mount"];
-    let _ = unsafe {
-        std::process::Command::new("/data/adb/ap/bin/magiskmount")
-            .process_group(0)
-            .pre_exec(|| {
-                utils::switch_cgroups();
-                Ok(())
-            })
-            .args(args)
-            .spawn()
-    };
-    
+    let result = utils::run_command("/data/adb/ap/bin/magiskmount", &args, None)?.wait()?;
+
     Ok(())
 }
 
