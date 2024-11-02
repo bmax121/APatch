@@ -282,7 +282,7 @@ pub fn refresh_ap_package_list(skey: &CStr, mutex: &Arc<Mutex<()>>) {
 
     let package_configs = read_ap_package_config();
     for config in package_configs {
-        if config.allow == 1 && config.exclude == 0 {
+        if config.allow == 1 {
             let profile = SuProfile {
                 uid: config.uid,
                 to_uid: config.to_uid,
@@ -294,7 +294,7 @@ pub fn refresh_ap_package_list(skey: &CStr, mutex: &Arc<Mutex<()>>) {
                 config.pkg, result
             );
         }
-        if config.allow == 0 && config.exclude == 1 {
+        if config.exclude == 1 {
             let result = sc_set_ap_mod_exclude(skey, config.uid as i64, 1);
             info!(
                 "[refresh_ap_package_list] Loading exclude {}: result = {}",
