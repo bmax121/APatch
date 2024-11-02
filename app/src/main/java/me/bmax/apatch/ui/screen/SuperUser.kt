@@ -147,14 +147,7 @@ private fun AppItem(
 
     ListItem(
         modifier = Modifier.clickable(onClick = {
-            if (!rootGranted) {
-                showEditProfile = !showEditProfile
-            } else {
-                rootGranted = false
-                config.allow = 0
-                Natives.revokeSu(app.uid)
-                PkgConfig.changeConfig(config)
-            }
+            showEditProfile = !showEditProfile
         }),
         headlineContent = { Text(app.label) },
         leadingContent = {
@@ -212,7 +205,7 @@ private fun AppItem(
             })
         },
     )
-    if (showEditProfile && !rootGranted) {
+    if (showEditProfile) {
         //var viahook by remember { mutableStateOf(app.config.profile.scontext.isEmpty()) }
 
         Column(modifier = Modifier.padding(start = 24.dp, end = 24.dp)) {
@@ -236,8 +229,6 @@ private fun AppItem(
                 onCheckedChange = {
                     if (it) {
                         excludeApp = 1
-                        config.allow = 0
-                        Natives.revokeSu(app.uid)
                     } else {
                         excludeApp = 0
                     }
