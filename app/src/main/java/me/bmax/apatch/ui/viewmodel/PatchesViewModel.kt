@@ -36,6 +36,7 @@ import me.bmax.apatch.util.writeTo
 import org.ini4j.Ini
 import java.io.BufferedReader
 import java.io.File
+import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.InputStreamReader
 import java.io.StringReader
@@ -543,19 +544,22 @@ class PatchesViewModel : ViewModel() {
     fun insertDownload(context: Context, outUri: Uri?, inputUri: Uri): Boolean {
         if (outUri == null) return false
 
-        val resolver = context.contentResolver
-        resolver.openInputStream(inputUri)?.use { inputStream ->
-            resolver.openOutputStream(outUri)?.use { outputStream ->
-                inputStream.copyTo(outputStream)
+        try {
+            val resolver = context.contentResolver
+            resolver.openInputStream(inputUri)?.use { inputStream ->
+                resolver.openOutputStream(outUri)?.use { outputStream ->
+                    inputStream.copyTo(outputStream)
+                }
             }
-        }
+            val contentValues = ContentValues().apply {
+                put(MediaStore.Downloads.IS_PENDING, 0)
+            }
+            resolver.update(outUri, contentValues, null, null)
 
-        val contentValues = ContentValues().apply {
-            put(MediaStore.Downloads.IS_PENDING, 0)
+            return true
+        } catch (_: FileNotFoundException) {
+            return false
         }
-        resolver.update(outUri, contentValues, null, null)
-
-        return true
     }
 
     fun File.getUri(context: Context): Uri {
