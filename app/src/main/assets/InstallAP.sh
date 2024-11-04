@@ -82,6 +82,16 @@ slot=$(getprop ro.boot.slot_suffix)
 
 skey=$(cat /proc/sys/kernel/random/uuid | cut -d \- -f1)
 
+while true; do
+    if [[ "$skey" =~ ^[0-9]+$ ]]; then
+        skey=$(cat /proc/sys/kernel/random/uuid | cut -d \- -f1)
+    elif [[ "$skey" =~ ^[a-zA-Z]+$ ]]; then
+        skey=$(cat /proc/sys/kernel/random/uuid | cut -d \- -f1)
+    else
+        break
+    fi
+done
+
 if [[ ! "$slot" == "" ]]; then
 
 	ui_print ""
