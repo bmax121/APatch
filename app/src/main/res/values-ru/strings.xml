@@ -36,7 +36,7 @@
     <string name="apm_install">Установить</string>
     <string name="reboot">Перезагрузить</string>
     <string name="settings">Настройки</string>
-    <string name="reboot_recovery">Перезагрузить для Восстановления</string>
+    <string name="reboot_recovery">Перезагрузить в Recovery</string>
     <string name="reboot_bootloader">Перезагрузить в Bootloader</string>
     <string name="reboot_download">Перезагрузить в Download</string>
     <string name="reboot_edl">Перезагрузить в EDL</string>
@@ -91,7 +91,7 @@
     <string name="apm_not_installed">AndroidPatch не установлен</string>
     <string name="settings_app_language">Язык</string>
     <string name="system_default">Системный (по умолчанию)</string>
-    <string name="patch">Исправление</string>
+    <string name="patch">Патч</string>
     <string name="settings_global_namespace_mode">Режим глобального пространства имён</string>
     <string name="settings_global_namespace_mode_summary">Все сеансы суперпользователя используют монтирование глобального пространства имён</string>
     <string name="kpatch_version_update">Версия: %s → %s</string>
@@ -131,7 +131,7 @@
     <string name="kpm_install">Установить</string>
     <string name="kpm_embed">Встроить</string>
     <string name="kpm_add_kpm">Добавить KPM</string>
-    <string name="success">Успех</string>
+    <string name="success">Успешно</string>
     <string name="hide_apatch_manager">Скрыть приложение APatch</string>
     <string name="hide_apatch_manager_failure">Не удалось скрыть, пожалуйста, сообщите об ошибке!</string>
     <string name="hide_apatch_dialog_summary">Оно будет использоваться как новое название приложения в меню приложений</string>
