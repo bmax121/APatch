@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="patch_warnning">Při instalaci může dojít k problémům. Ujistěte se prosím že vaše data jsou zálohovaná.</string>
+    <string name="reboot_bootloader">Restartovat do Bootloaderu</string>
+    <string name="reboot_recovery">Restartovat do Recovery</string>
+    <string name="reboot_edl">Restartovat do EDL</string>
+    <string name="about">O projektu</string>
+    <string name="settings_app_language">Jazyk</string>
+    <string name="home_working">Funguje 😋</string>
+    <string name="home_ap_cando_install">Instalovat</string>
+    <string name="home_ap_cando_uninstall">Odinstalovat</string>
+    <string name="home_ap_cando_reboot">Restartovat</string>
+    <string name="patch_title">Záplatuj</string>
+    <string name="patch_config_title">Záplaty</string>
+    <string name="patch_mode_bootimg_patch">Režim: Záplata</string>
+    <string name="patch_mode_install_to_next_slot">Režim: Instalace do dalšího slotu (po OTA)</string>
+    <string name="patch_mode_patch_and_install">Režim: Záplata a instalace</string>
+    <string name="patch_mode_uninstall_patch">Režim: Odinstalovat KPatch</string>
+    <string name="patch_select_bootimg_btn">Vyberte boot</string>
+    <string name="patch_embed_kpm_btn">Vlož KPM</string>
+    <string name="patch_start_patch_btn">Začít</string>
+    <string name="reboot_download">Restartovat do Download</string>
+    <string name="reboot">Restartovat</string>
+    <string name="settings">Nastavení</string>
+    <string name="home_click_to_learn_apatch">Zjistěte více o funkcích APatch a jak jej používat</string>
+    <string name="home_ap_cando_update">Aktualizovat</string>
+    <string name="home">Úvodní strana</string>
+    <string name="success">Úspěšně</string>
+    <string name="failure">Neúspěch</string>
+    <string name="patch">Záplata</string>
+    <string name="kernel_patch">Záplata jádra</string>
+    <string name="android_patch">Android Záplata</string>
+    <string name="system_default">Dle systému</string>
+    <string name="settings_global_namespace_mode">Režim globálního jmenného prostoru</string>
+    <string name="settings_global_namespace_mode_summary">Všechny kořenové relace používají globální montážní názevspace</string>
+    <string name="settings_clear_super_key_dialog">Opravdu chcete postupovat?</string>
+    <string name="patch_item_new_extra_kpm">Vložit nové</string>
+    <string name="purple_theme">Fialový motiv</string>
+    <string name="settings_check_update">Zkontrolujte aktualizaci</string>
+    <string name="patch_item_kpimg_version">Verze</string>
+    <string name="patch_item_kpimg_comile_time">Čas:</string>
+    <string name="patch_item_kpimg_config">Konfigurace:</string>
+</resources>

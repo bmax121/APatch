@@ -8,7 +8,6 @@
     <string name="android_patch">Parche de Android</string>
     <string name="reboot">Reiniciar</string>
     <string name="settings">Configuración</string>
-    <string name="reboot_userspace">Reinicio suave</string>
     <string name="reboot_bootloader">Reiniciar no cargador de arranque</string>
     <string name="reboot_download">Reiniciar para descargar</string>
     <string name="reboot_edl">Reiniciar a EDL</string>

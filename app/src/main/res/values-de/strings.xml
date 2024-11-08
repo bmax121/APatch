@@ -49,7 +49,6 @@
     <string name="su_pkg_excluded_label">Absondern</string>
     <string name="home_selinux_status_enforcing">Durchsetzung von</string>
     <string name="home_selinux_status_permissive">Zulässig</string>
-    <string name="reboot_userspace">Sanfter Neustart</string>
     <string name="super_key">Superschlüssel</string>
     <string name="clear_super_key">Superschlüssel löschen</string>
     <string name="patch_set_superkey">Superschlüssel festlegen</string>
@@ -121,7 +120,7 @@
     <string name="patch_item_extra_kpm_license">Lizenz:</string>
     <string name="patch_item_extra_kpm_desciption">Beschreibung:</string>
     <string name="patch_item_extra_args">Argumente:</string>
-    <string name="patch_item_extra_event">Veranstaltungen:</string>
+    <string name="patch_item_extra_event">Ereignis:</string>
     <string name="patch_item_skey">Superschlüssel</string>
     <string name="patch_start_patch_btn">Start</string>
     <string name="patch_item_kernel">Kernel</string>
@@ -212,4 +211,5 @@
 \n
 \nBitte überprüfen und nochmal versuchen. Wenn es noch Probleme gibt, können Sie immer Fragen zu den Problemen des offiziellen Projektarchivs stellen.</string>
     <string name="save_log">Protokolle speichern</string>
+    <string name="apm_action">Aktion</string>
 </resources>

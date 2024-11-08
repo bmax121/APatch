@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home">خانه</string>
+    <string name="success">موفق</string>
+    <string name="failure">ناموفق</string>
+    <string name="reboot_recovery">راه اندازی به ریکاوری</string>
+    <string name="reboot_download">راه اندازی به دانلود مود</string>
+    <string name="reboot_edl">راه اندازی به EDL</string>
+    <string name="about">درباره</string>
+    <string name="system_default">تنظیمات پیشفرض سیستم</string>
+    <string name="settings_global_namespace_mode">Global Namespace Mode</string>
+    <string name="settings_clear_super_key_dialog">آیا واقعا میخواهید ادامه دهید؟</string>
+    <string name="settings_check_update">برسی نسخه به روز</string>
+    <string name="home_click_to_learn_apatch">با ویژگی های APatch و نحو استفاده آن آشنا شوید</string>
+    <string name="home_learn_apatch">با APatch آشنا شو</string>
+    <string name="send_log">ارسال گزارش</string>
+    <string name="save_log">ذخیره گزارش</string>
+    <string name="safe_mode">حالت امن</string>
+    <string name="super_key">SuperKey</string>
+    <string name="patch_warnning">نصب با خطر همراه است! لطفا مطمئن شوید که از اطلاعات شما نسخه پشتیبان تهیه شده است.</string>
+    <string name="settings_app_language">زبان</string>
+    <string name="reboot">راه اندازی مجدد</string>
+    <string name="settings">تنظیمات</string>
+    <string name="patch">پچ</string>
+    <string name="kernel_patch">پچ کردن کرنل</string>
+    <string name="reboot_bootloader">راه اندازی به بوتلودر</string>
+    <string name="android_patch">پچ کردن اندروید</string>
+    <string name="settings_check_update_summary">هنگام باز کردن برنامه، به طور خودکار نسخه به روز را برسی کن</string>
+</resources>

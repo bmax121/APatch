@@ -72,7 +72,6 @@
     <string name="home_working">Włączony</string>
     <string name="home_fingerprint">Odcisk palca</string>
     <string name="home_selinux_status_unknown">Nieznany</string>
-    <string name="reboot_userspace">Szybki restart</string>
     <string name="su_pkg_excluded_setting_title">Wyklucz modyfikacje</string>
     <string name="kpm_kp_not_installed">KernelPatch jest niezainstalowany</string>
     <string name="clear_super_key">Wyczyść SuperKey</string>
@@ -108,18 +107,18 @@
     <string name="patch_item_bootimg_dev">urządzenie:</string>
     <string name="patch_item_kernel">jądro</string>
     <string name="patch_item_kpimg">kpimg</string>
-    <string name="patch_item_kpimg_version">wersja:</string>
-    <string name="patch_item_kpimg_comile_time">czas:</string>
-    <string name="patch_item_kpimg_config">konfiguracja:</string>
+    <string name="patch_item_kpimg_version">Wersja:</string>
+    <string name="patch_item_kpimg_comile_time">Czas:</string>
+    <string name="patch_item_kpimg_config">Konfiguracja:</string>
     <string name="patch_item_new_extra_kpm">osadź nowy</string>
     <string name="patch_item_existed_extra_kpm">istniejący</string>
-    <string name="patch_item_extra_name">nazwa:</string>
-    <string name="patch_item_extra_version">wersja:</string>
-    <string name="patch_item_extra_author">autor:</string>
-    <string name="patch_item_extra_kpm_license">licencja:</string>
-    <string name="patch_item_extra_kpm_desciption">opis:</string>
-    <string name="patch_item_extra_args">argumenty:</string>
-    <string name="patch_item_extra_event">zdarzenie:</string>
+    <string name="patch_item_extra_name">Nazwa:</string>
+    <string name="patch_item_extra_version">Wersja:</string>
+    <string name="patch_item_extra_author">Autor:</string>
+    <string name="patch_item_extra_kpm_license">Licencja:</string>
+    <string name="patch_item_extra_kpm_desciption">Opis:</string>
+    <string name="patch_item_extra_args">Argumenty:</string>
+    <string name="patch_item_extra_event">Wydarzenie:</string>
     <string name="patch_item_skey">superkey</string>
     <string name="kpatch_shadow_path_title">kpatch</string>
     <string name="patch_item_set_skey_label">Długość superkey\'a powinna wynosić co najmniej 8 znaków i zawierać zarówno cyfry, jak i litery</string>
@@ -212,4 +211,5 @@
     <string name="home_dialog_uninstall_title">Odinstaluj</string>
     <string name="home_kpatch_version">Wersja KernelPatch</string>
     <string name="save_log">Zapisz logi</string>
+    <string name="apm_action">Akcja</string>
 </resources>

@@ -7,14 +7,13 @@
     <string name="android_patch">AndroidPatch</string>
     <string name="reboot">Repornește</string>
     <string name="settings">Setări</string>
-    <string name="reboot_userspace">Repornire Soft</string>
     <string name="reboot_recovery">Repornește la Recovery</string>
     <string name="reboot_bootloader">Repornește la Bootloader</string>
     <string name="reboot_download">Repornește la Download</string>
     <string name="reboot_edl">Repornește la EDL</string>
     <string name="about">Despre</string>
     <string name="home_learn_apatch">Invata APatch</string>
-    <string name="about_source_code">Vezi codul sursă la %1$s<br/> Intră pe canalul nostru %2$s</string>
+    <string name="about_source_code">Vezi codul sursă la %1$s<br/> Alătură-te canalului nostru %2$s <p/>Devin-o membrul grupului %3$s</string>
     <string name="send_log">Trimite un log</string>
     <string name="clear_super_key">Șterge cheia</string>
     <string name="patch_set_superkey">Setează Superkey</string>
@@ -26,13 +25,13 @@
     <string name="home_working">Funcțional</string>
     <string name="home_installing">Instalare</string>
     <string name="home_need_update">Versiune nouă disponibilă</string>
-    <string name="kpatch_version">Versiune: %d.%d.%d</string>
+    <string name="kpatch_version">Versiune: %s</string>
     <string name="apatch_version">Versiune:
 \n%s</string>
     <string name="apatch_version_update">Versiune:
 \n%s -&gt; %s</string>
-    <string name="home_su_path">su: %s</string>
-    <string name="home_apatch_version">APatch: %s</string>
+    <string name="home_su_path">Executable su</string>
+    <string name="home_apatch_version">Versiune APatch</string>
     <string name="home_auth_key_title">Introdu Superkey</string>
     <string name="home_auth_key_desc">Pornește după certificare</string>
     <string name="home_ap_cando_install">Instalează</string>
@@ -58,8 +57,8 @@
     <string name="kpm_args">Argumente</string>
     <string name="su_title">Super-utilizator</string>
     <string name="su_selinux_via_hook">ocolire prin hook</string>
-    <string name="su_pkg_excluded_setting_title">Exclude</string>
-    <string name="su_pkg_excluded_setting_summary">pentru module</string>
+    <string name="su_pkg_excluded_setting_title">Exclude Modificarile</string>
+    <string name="su_pkg_excluded_setting_summary">Activarea acestei opțiuni va permite APatch să restaureze orice fișiere modificate de către modulele pentru această aplicație.</string>
     <string name="su_show_system_apps">Arată aplicațiile de sistem</string>
     <string name="su_hide_system_apps">Ascunde aplicațiile de sistem</string>
     <string name="su_refresh">Reîmprospătează</string>
@@ -67,7 +66,7 @@
     <string name="apm_not_installed">AndroidPatch nu este instalat</string>
     <string name="apm_failed_to_enable">Nu se poate porni modulul \"%s\"</string>
     <string name="apm_empty">Niciun modul instalat</string>
-    <string name="apm_remove">Dezinstalează</string>
+    <string name="apm_remove">Elimină</string>
     <string name="apm_install">Instalează</string>
     <string name="apm_uninstall_confirm">Dezinstalezi modulul \"%s\"?</string>
     <string name="apm_uninstall_success">%s dezinstalat</string>
@@ -94,7 +93,7 @@
     <string name="apm_failed_to_disable">Nu se poate opri modulul \"%s\"</string>
     <string name="settings_app_language">Limbă</string>
     <string name="system_default">Implicit de sistem</string>
-    <string name="patch">Patch</string>
+    <string name="patch">Interval</string>
     <string name="settings_global_namespace_mode">Modul de spațiu de nume global</string>
     <string name="settings_global_namespace_mode_summary">Toate sesiunile root folosesc spațiul de nume de montare global</string>
     <string name="success">Succes</string>
@@ -107,4 +106,112 @@
     <string name="home_kpatch_info_title">Informații</string>
     <string name="kpatch_shadow_path_title">kpatch</string>
     <string name="home_ap_cando_reboot">Restart</string>
+    <string name="save_log">salvează datele</string>
+    <string name="patch_config_title">selectia</string>
+    <string name="patch_mode_bootimg_patch">Mod: Patch</string>
+    <string name="patch_mode_patch_and_install">Mod: Patch și instalează</string>
+    <string name="patch_mode_uninstall_patch">Mod: Dezinstalează KPatch</string>
+    <string name="patch_select_bootimg_btn">Selectați boot</string>
+    <string name="patch_mode_install_to_next_slot">Mod: Instalați în slotul următor (După OTA)</string>
+    <string name="patch_embed_kpm_btn">Încorporați KPM</string>
+    <string name="patch_start_patch_btn">Incepe</string>
+    <string name="patch_start_unpatch_btn">UnPatch</string>
+    <string name="patch_item_kpimg">kpimg</string>
+    <string name="patch_item_kpimg_version">Versiune:</string>
+    <string name="patch_item_kpimg_config">Configurație:</string>
+    <string name="patch_item_new_extra_kpm">Incorporeaza nou</string>
+    <string name="patch_item_kpimg_comile_time">Timp:</string>
+    <string name="patch_item_bootimg">bootimg</string>
+    <string name="patch_item_error">!!EROARE!!</string>
+    <string name="patch_item_bootimg_slot">slot:</string>
+    <string name="patch_item_kernel">Nucleu:</string>
+    <string name="patch_item_bootimg_dev">dispozitiv</string>
+    <string name="mode_select_page_title">Instaleaza</string>
+    <string name="mode_select_page_install_inactive_slot_warning">Dispozitivul dvs. va fi **Forțat** să pornească în slotul inactiv curent după o repornire!
+\nFolosiți această opțiune numai după terminarea OTA.
+\nContinua?</string>
+    <string name="purple_theme">Tema Purple</string>
+    <string name="red_theme">Tema Red</string>
+    <string name="sakura_theme">Tema Sakura</string>
+    <string name="hide_apatch_manager">Ascunde APatch Manager</string>
+    <string name="hide_apatch_manager_summary">Instalați o nouă aplicație de manager cu un ID aleatoriu și o etichetă personalizată a aplicației</string>
+    <string name="enable_web_debugging_summary">Poate fi folosit pentru a depana WebUI, vă rugăm să activați numai când este necesar.</string>
+    <string name="settings_donot_store_superkey">Nu stocați super parola in local</string>
+    <string name="settings_donot_store_superkey_summary">Autentificați super-cheia de fiecare dată când managerul pornește</string>
+    <string name="home_new_apatch_found">Versiunea noua disponibila: %s, apasa pentru a actualiza</string>
+    <string name="mode_select_page_patch_and_install">Corectează și instalează</string>
+    <string name="mode_select_page_select_file">Selectați o imagine de pornire pentru corecție</string>
+    <string name="mode_select_page_install_inactive_slot">Instalați în slot inactiv (după OTA)</string>
+    <string name="home_dialog_auth_fail_title">Autentificare nereusita</string>
+    <string name="teal_theme">Tema Teal</string>
+    <string name="yellow_theme">Tema Yellow</string>
+    <string name="about_app_version">Versiunea %1$s</string>
+    <string name="enable_web_debugging">Activați depanarea WebView</string>
+    <string name="setting_reset_su_path">Resetați calea</string>
+    <string name="setting_reset_su_new_path">Cale noua deplina</string>
+    <string name="amber_theme">Tema chihlimbarului</string>
+    <string name="blue_grey_theme">Tema BlueGrey</string>
+    <string name="cyan_theme">Cyan</string>
+    <string name="brown_theme">Tema Maro</string>
+    <string name="deep_orange_theme">Tema Deep Orange</string>
+    <string name="apm_action">Actiune</string>
+    <string name="settings_custom_color_theme">Tema de culoare</string>
+    <string name="blue_theme">Tema Albastra</string>
+    <string name="deep_purple_theme">Tema Deep Purple</string>
+    <string name="green_theme">Tema Green</string>
+    <string name="indigo_theme">Tema Indigo</string>
+    <string name="light_blue_theme">Tema Ligh Blue</string>
+    <string name="light_green_theme">Tema Light Green</string>
+    <string name="lime_theme">Tema Lime</string>
+    <string name="orange_theme">Tema Orange</string>
+    <string name="pink_theme">Tema Pink</string>
+    <string name="apm_webui_open">Deschis</string>
+    <string name="home_dialog_auth_fail_content">Nu se poate autentifica super-cheia, prin urmare APatch nu poate funcționa corect.
+\nIată câteva motive posibile pentru eșecul autentificării:
+\n1. Nu ați corectat imaginea de pornire cu KernelPatch.
+\n2. Imaginea de boot corecţionată nu a fost flash.
+\n3. Super cheie greșită.
+\n4. Dispozitivul dvs. nu acceptă APatch și KernelPatch.
+\n
+\nVă rugăm să verificați și să încercați din nou. Dacă există încă probleme, puteți oricând să puneți întrebări pe pagina de probleme a depozitului oficial.</string>
+    <string name="settings_use_system_color_theme_summary">Utilizați o temă de culoare generată de sistem cu fundalul actual</string>
+    <string name="home_device_info">Dispozitiv</string>
+    <string name="kpm_add_kpm">Adaugă KPM</string>
+    <string name="kpm_install">Instalează</string>
+    <string name="settings_night_mode_follow_sys">Urmați Tema Dark al sistemului</string>
+    <string name="patch_item_extra_version">Versiune:</string>
+    <string name="patch_item_extra_author">Autor:</string>
+    <string name="patch_item_extra_args">Argumente:</string>
+    <string name="kpm_control_paramters">Parametri</string>
+    <string name="kpm_control_outMsg">Mesaj</string>
+    <string name="kpm_control_ok">Operațiune reusită!</string>
+    <string name="kpm_control_failed">Operațiune ieșuată!</string>
+    <string name="settings_night_mode_follow_sys_summary">Comutați automat la tema întunecată cu setarea sistemului</string>
+    <string name="settings_night_theme_enabled">Activeaza Dark Tema</string>
+    <string name="settings_use_system_color_theme">Tema de culoare a sistemului</string>
+    <string name="patch_item_existed_extra_kpm">Existent</string>
+    <string name="patch_item_extra_kpm_license">Licență:</string>
+    <string name="patch_item_extra_kpm_desciption">Descripție:</string>
+    <string name="patch_item_extra_event">Eveniment:</string>
+    <string name="patch_item_skey">Super Key</string>
+    <string name="patch_item_set_skey_label">Lungimea super key trebuie să fie cel puțin de 8 caractere și trebuie sa includă numere și litere</string>
+    <string name="home_system_version">Versiune de sistem</string>
+    <string name="home_kpatch_version">Versiune KernelPatch</string>
+    <string name="kpm_control">Verifica</string>
+    <string name="hide_apatch_dialog_new_manager_name">Nume Nou de Manager</string>
+    <string name="hide_apatch_dialog_summary">Va fi folosit ca noua etichetă a aplicației afișată în launcher</string>
+    <string name="hide_apatch_manager_failure">Nu s-a ascuns, vă rugăm să raportați eroarea!</string>
+    <string name="home_more_menu_feedback_or_suggestion">Feedback sau sugestie</string>
+    <string name="about_telegram_channel">Canalul Telegram</string>
+    <string name="home_more_menu_about">Despre</string>
+    <string name="home_dialog_uninstall_title">Dezinstaleaza</string>
+    <string name="home_dialog_uninstall_ap_only">Elimina AndroidPatch</string>
+    <string name="home_dialog_uninstall_all">Dezinstaleaza tot</string>
+    <string name="kpm_control_dialog_title">Controlați KPModule</string>
+    <string name="kpm_control_dialog_content">Indicați parametrii de verificare:</string>
+    <string name="about_telegram_group">Grupul Telegram</string>
+    <string name="about_app_desc">Soluție Kernel Root cu doar o imagine a kernel-ului, oferind capacitatea de a monta modulul de sistem și de a lega funcția Kernel.</string>
+    <string name="about_powered_by">Produs de %1$s</string>
+    <string name="kpm_embed">Încorporează</string>
+    <string name="patch_item_extra_name">Nume:</string>
 </resources>

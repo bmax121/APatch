@@ -15,7 +15,6 @@
     <string name="android_patch">AndroidPatch</string>
     <string name="reboot">Reiniciar</string>
     <string name="settings">Configurações</string>
-    <string name="reboot_userspace">Reinicialização suave</string>
     <string name="reboot_recovery">Reiniciar em modo Recovery</string>
     <string name="reboot_bootloader">Reiniciar em modo Bootloader</string>
     <string name="reboot_download">Reiniciar em modo Download</string>
@@ -24,7 +23,7 @@
     <string name="home_learn_apatch">Saiba mais sobre o APatch</string>
     <string name="home_click_to_learn_apatch">Conheça os recursos do APatch e como usá-lo</string>
     <string name="about_source_code">&lt;p&gt;Veja o código-fonte no %1$s&lt;p/&gt;Participe do nosso canal do %2$s&lt;p/&gt;Participe do nosso grupo do %3$s</string>
-    <string name="send_log">Reportar registro</string>
+    <string name="send_log">Reportar registros</string>
     <string name="safe_mode">Modo de segurança</string>
     <string name="super_key">SuperKey</string>
     <string name="patch_set_superkey">Definir SuperKey</string>
@@ -39,7 +38,7 @@
     <string name="kpatch_version">Versão: %s</string>
     <string name="apatch_version">Versão: %s</string>
     <string name="home_su_path">Su executável</string>
-    <string name="apatch_version_update">Versão: %s -&gt; %s</string>
+    <string name="apatch_version_update">Versão: %s → %s</string>
     <string name="home_apatch_version">Versão do APatch</string>
     <string name="home_auth_key_title">Inserir SuperKey</string>
     <string name="home_auth_key_desc">Iniciar após a certificação</string>
@@ -95,7 +94,7 @@
     <string name="patch">Patch</string>
     <string name="settings_global_namespace_mode">Modo de namespace global</string>
     <string name="settings_global_namespace_mode_summary">Todas as sessões root usam o namespace de montagem global</string>
-    <string name="kpatch_version_update">Versão: %s -&gt; %s</string>
+    <string name="kpatch_version_update">Versão: %s → %s</string>
     <string name="kpatch_shadow_path_title">kpatch</string>
     <string name="home_kpatch_info_title">Informações</string>
     <string name="home_ap_cando_reboot">Reiniciar</string>
@@ -105,16 +104,16 @@
     <string name="patch_item_bootimg_dev">dispositivo:</string>
     <string name="patch_item_kernel">Kernel</string>
     <string name="patch_item_kpimg">kpimg</string>
-    <string name="patch_item_kpimg_version">versão:</string>
-    <string name="patch_item_kpimg_comile_time">hora:</string>
-    <string name="patch_item_kpimg_config">configuração:</string>
+    <string name="patch_item_kpimg_version">Versão:</string>
+    <string name="patch_item_kpimg_comile_time">Hora:</string>
+    <string name="patch_item_kpimg_config">Configuração:</string>
     <string name="patch_item_new_extra_kpm">Incorporar novo</string>
     <string name="patch_item_existed_extra_kpm">Existia</string>
-    <string name="patch_item_extra_name">nome:</string>
-    <string name="patch_item_extra_version">versão:</string>
-    <string name="patch_item_extra_author">autor:</string>
-    <string name="patch_item_extra_kpm_license">licença:</string>
-    <string name="patch_item_extra_kpm_desciption">descrição:</string>
+    <string name="patch_item_extra_name">Nome:</string>
+    <string name="patch_item_extra_version">Versão:</string>
+    <string name="patch_item_extra_author">Autor:</string>
+    <string name="patch_item_extra_kpm_license">Licença:</string>
+    <string name="patch_item_extra_kpm_desciption">Descrição:</string>
     <string name="patch_select_bootimg_btn">Selecionar boot</string>
     <string name="patch_embed_kpm_btn">Incorporar KPM</string>
     <string name="patch_start_patch_btn">Iniciar</string>
@@ -123,8 +122,8 @@
     <string name="patch_mode_patch_and_install">Modo: Patch e instalação</string>
     <string name="patch_mode_uninstall_patch">Modo: Desinstalar KPatch</string>
     <string name="patch_start_unpatch_btn">UnPatch</string>
-    <string name="patch_item_extra_args">argumentos:</string>
-    <string name="patch_item_extra_event">evento:</string>
+    <string name="patch_item_extra_args">Argumentos:</string>
+    <string name="patch_item_extra_event">Evento:</string>
     <string name="patch_item_skey">SuperKey</string>
     <string name="settings_clear_super_key_dialog">Você realmente deseja continuar?</string>
     <string name="patch_item_set_skey_label">A SuperKey deve ter pelo menos 8 caracteres e incluir números e letras</string>
@@ -137,7 +136,7 @@
     <string name="kpm_add_kpm">Adicionar KPM</string>
     <string name="kpm_install">Instalar</string>
     <string name="failure">Falha</string>
-    <string name="setting_reset_su_new_path">novo caminho completo</string>
+    <string name="setting_reset_su_new_path">Novo caminho completo</string>
     <string name="success">Sucesso</string>
     <string name="setting_reset_su_path">Redefinir caminho su</string>
     <string name="settings_check_update_summary">Verifique automaticamente se há atualizações ao abrir o app</string>
@@ -154,7 +153,7 @@
 \nAqui estão alguns possíveis motivos para falha de autenticação:
 \n1. Você não fez patch do boot.img com KernelPatch.
 \n2. O boot.img corrigido não foi flashado.
-\n3. A SuperKey está errada.
+\n3. A SuperKey está incorreta.
 \n4. Seu dispositivo não oferece suporte ao APatch e KernelPatch.
 \n
 \nPor favor, verifique e tente novamente. Se ainda houver problemas, você pode fazer perguntas na página de problemas do repositório oficial.</string>
@@ -212,4 +211,5 @@
     <string name="about_app_desc">Solução root do kernel com uma única imagem despojada, oferecendo a capacidade de montar módulos do sistema e interceptar funções do kernel.</string>
     <string name="kpm_control_dialog_title">Controlar KPMódulo</string>
     <string name="save_log">Salvar registros</string>
+    <string name="apm_action">Ação</string>
 </resources>

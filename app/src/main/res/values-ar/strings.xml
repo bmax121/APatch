@@ -2,12 +2,11 @@
 <resources>
     <string name="app_name" translatable="false">APatch</string>
     <string name="home">الرئيسية</string>
-    <string name="patch_warnning">التثبيت يأتي بمخاطر. يرجى التأكد من عمل نسخ احتياطي لبياناتك.</string>
+    <string name="patch_warnning">التثبيت يأتي أحيانا بمخاطر. يرجى التأكد من عمل نسخ احتياطي لبياناتك.</string>
     <string name="kernel_patch">KernelPatch</string>
     <string name="android_patch">AndroidPatch</string>
     <string name="reboot">إعادة تشغيل</string>
     <string name="settings">الإعدادات</string>
-    <string name="reboot_userspace">إعادة تشغيل ناعمة</string>
     <string name="reboot_recovery">إعادة تشغيل إلي وضع الاسترداد</string>
     <string name="reboot_bootloader">إعادة تشغيل إلى محمل الإقلاع</string>
     <string name="reboot_download">إعادة تشغيل إلى وضع التنزيل</string>
@@ -137,7 +136,7 @@
     <string name="hide_apatch_manager_failure">فشل الإخفاء، يرجى الإبلاغ عن الخطأ!</string>
     <string name="setting_reset_su_new_path">مسار كامل جديد</string>
     <string name="setting_reset_su_path">إعادة تعيين مسار su</string>
-    <string name="success">نجاح</string>
+    <string name="success">ناجحة</string>
     <string name="failure">فشل</string>
     <string name="mode_select_page_title">تثبيت</string>
     <string name="settings_check_update">البحث عن تحديث</string>
@@ -212,4 +211,5 @@
     <string name="red_theme">مظهر أحمر</string>
     <string name="about_app_version">إصدار %1$s</string>
     <string name="save_log">‮‬حفظ السجلات</string>
+    <string name="apm_action">الإجراء</string>
 </resources>

@@ -3,7 +3,7 @@
     <string name="app_name" translatable="false">APatch</string>
     <string name="home">Главная</string>
     <string name="super_key">SuperKey</string>
-    <string name="patch_warnning">Пожалуйста, убедитесь, что у вас есть резервная копия ваших данных. Установка на свой страх и риск.</string>
+    <string name="patch_warnning">Пожалуйста, убедитесь, что у вас есть резервная копия ваших данных. Установка сопряжена с рисками.</string>
     <string name="kernel_patch">KernelPatch</string>
     <string name="android_patch">AndroidPatch</string>
     <string name="home_not_installed">Не установлен</string>
@@ -36,7 +36,6 @@
     <string name="apm_install">Установить</string>
     <string name="reboot">Перезагрузить</string>
     <string name="settings">Настройки</string>
-    <string name="reboot_userspace">Мягкая перезагрузка</string>
     <string name="reboot_recovery">Перезагрузить в Recovery</string>
     <string name="reboot_bootloader">Перезагрузить в Bootloader</string>
     <string name="reboot_download">Перезагрузить в Download</string>
@@ -212,4 +211,5 @@
     <string name="blue_theme">Синяя тема</string>
     <string name="enable_web_debugging_summary">Используется для отладки WebUI. Пожалуйста, включайте только при необходимости.</string>
     <string name="save_log">Сохранить логи</string>
+    <string name="apm_action">Действие</string>
 </resources>

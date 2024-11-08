@@ -17,7 +17,7 @@
     <string name="home_install_unknown">Desconhecido</string>
     <string name="home_click_to_install">Clique para instalar</string>
     <string name="home_need_update">Nova versão Disponível</string>
-    <string name="apatch_version">Versão: %d.%d.%d</string>
+    <string name="apatch_version">Versão: %s</string>
     <string name="home_auth_key_title">Digitar SuperKey</string>
     <string name="home_ap_cando_update">Atualizar</string>
     <string name="home_ap_cando_uninstall">Desinstalar</string>
@@ -40,7 +40,6 @@
     <string name="home_ap_cando_install">Instalar</string>
     <string name="home_selinux_status_unknown">Desconhecido</string>
     <string name="kpm_load">Carregar</string>
-    <string name="reboot_userspace">Reinicialização suave</string>
     <string name="reboot_bootloader">Reiniciar em modo Bootloader</string>
     <string name="reboot_download">Reiniciar no modo Download</string>
     <string name="reboot_edl">Reiniciar no modo EDL</string>
@@ -56,7 +55,7 @@
     <string name="su_selinux_via_hook">ignorar via hook</string>
     <string name="kpm_version">Versão</string>
     <string name="apm_downloading">Baixando \"%s\" módulo…</string>
-    <string name="about_source_code">Veja o código-fonte no %1$s<br/>Junte-se ao nosso canal do %2$s</string>
+    <string name="about_source_code">&lt;p&gt;Veja o código-fonte no %1$s&lt;p/&gt;Junte-se ao nosso canal do %2$s&lt;/p&lt;Junte-se ao nosso grupo %3$s</string>
     <string name="clear_super_key">Limpar chave</string>
     <string name="home_apatch_version">Versão APatch</string>
     <string name="kpm_license">Licença</string>
@@ -101,22 +100,21 @@
     <string name="settings_clear_super_key_dialog">Você realmente quer prosseguir?</string>
     <string name="settings_check_update_summary">Verifique automaticamente as atualizações ao abrir o aplicativo</string>
     <string name="home_install_unknown_summary">Clique para instalar</string>
-    <string name="kpatch_version_update">Versão:
-\n%s -&gt; %s</string>
+    <string name="kpatch_version_update">Versão: %s -&gt; %s</string>
     <string name="home_kpatch_info_title">Informação</string>
     <string name="patch_select_bootimg_btn">Selecione a inicialização</string>
     <string name="patch_start_patch_btn">Início</string>
     <string name="patch_item_bootimg">inicialização</string>
-    <string name="patch_item_extra_name">nome:</string>
+    <string name="patch_item_extra_name">Nome:</string>
     <string name="kpatch_shadow_path_title">kpatch</string>
     <string name="home_ap_cando_reboot">Reiniciar</string>
     <string name="patch_config_title">Luz azul Tema</string>
     <string name="patch_mode_bootimg_patch">Modo: Patch</string>
-    <string name="patch_item_kpimg_comile_time">tempo:</string>
-    <string name="patch_item_extra_version">versão:</string>
-    <string name="patch_item_extra_author">autor:</string>
-    <string name="patch_item_extra_kpm_license">licença:</string>
-    <string name="patch_item_extra_kpm_desciption">descrição:</string>
+    <string name="patch_item_kpimg_comile_time">Tempo:</string>
+    <string name="patch_item_extra_version">Versão:</string>
+    <string name="patch_item_extra_author">Autor:</string>
+    <string name="patch_item_extra_kpm_license">Licença:</string>
+    <string name="patch_item_extra_kpm_desciption">Descrição:</string>
     <string name="settings_custom_color_theme">Tema de cores</string>
     <string name="blue_grey_theme">Tema BlueGrey</string>
     <string name="blue_theme">Tema Blue</string>
@@ -143,15 +141,10 @@
     <string name="about_app_desc">Solução Kernel Root com apenas uma imagem de kernel removida, fornecendo a capacidade de montar o módulo do sistema e conectar a função do Kernel.</string>
     <string name="patch_mode_patch_and_install">Modo: Patch e instalar</string>
     <string name="home_dialog_auth_fail_content">Não foi possível autenticar a Chave Mestra, portanto, APach pode não funcionar corretamente.
-\n
 \nAqui estão alguns possíveis motivos para a falha de autenticação:
-\n
 \n1. Você não fez patch da imagem de boot com Kernel Patch.
-\n
 \n2. A imagem de boot patch não foi atualizada.
-\n
 \n3. Chave Mestra errada.
-\n
 \n4. Seu dispositivo não oferece suporte a APatch e KernelPatch.
 \n
 \nPor favor verifique e tente novamente. Se ainda houver problemas, você sempre poderá fazer perguntas na página de \'issues\' do repositório oficial.</string>
@@ -160,10 +153,10 @@
     <string name="patch_embed_kpm_btn">Introduzir KPM</string>
     <string name="patch_start_unpatch_btn">Desfazer o Patch</string>
     <string name="patch_item_error">ERRO!</string>
-    <string name="patch_item_kpimg_config">configuração:</string>
+    <string name="patch_item_kpimg_config">Configuração:</string>
     <string name="patch_item_new_extra_kpm">Implementar novo</string>
     <string name="patch_item_existed_extra_kpm">Existia</string>
-    <string name="patch_item_extra_args">argumentos:</string>
+    <string name="patch_item_extra_args">Argumentos:</string>
     <string name="patch_item_skey">Chave Mestra</string>
     <string name="patch_item_set_skey_label">O comprimento da Chave Mestra deve ter pelo menos 8 caracteres e incluir números e letras</string>
     <string name="home_kpatch_version">Versão do KernelPatch</string>
@@ -188,12 +181,12 @@
     <string name="save_log">Salvar registros</string>
     <string name="mode_select_page_title">instalar</string>
     <string name="kpm_install">Instalar</string>
-    <string name="patch_item_extra_event">evento:</string>
+    <string name="patch_item_extra_event">Evento:</string>
     <string name="patch_item_bootimg_slot">slot:</string>
     <string name="patch_item_bootimg_dev">dispositivo:</string>
     <string name="patch_item_kernel">Kernel</string>
     <string name="patch_item_kpimg">kpimg</string>
-    <string name="patch_item_kpimg_version">versão:</string>
+    <string name="patch_item_kpimg_version">Versão:</string>
     <string name="home_device_info">Dispositivo</string>
     <string name="home_system_version">Versão do sistema</string>
     <string name="kpm_add_kpm">Adicionar KPM</string>
@@ -218,4 +211,5 @@
     <string name="settings_use_system_color_theme">Tema System Color</string>
     <string name="settings_use_system_color_theme_summary">Use um tema de cor gerado pelo sistema com papel de parede atual</string>
     <string name="amber_theme">Tema Amber</string>
+    <string name="apm_action">Ação</string>
 </resources>
