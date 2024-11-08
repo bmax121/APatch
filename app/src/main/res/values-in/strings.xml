@@ -8,7 +8,7 @@
     <string name="app_name" translatable="false">APatch</string>
     <string name="kpm">KPModul</string>
     <string name="reboot_recovery">But ke Recovery</string>
-    <string name="reboot">Re-but</string>
+    <string name="reboot">Re-But</string>
     <string name="settings">Setelan</string>
     <string name="reboot_bootloader">But ke Bootloader</string>
     <string name="home_click_to_learn_apatch">Pelajari fitur dan penggunaan APatch</string>
@@ -73,7 +73,6 @@
     <string name="su_title">SuperUser</string>
     <string name="su_selinux_via_hook">bypass via hook</string>
     <string name="kpm_version">Versi</string>
-    <string name="reboot_userspace">Soft-but</string>
     <string name="home_selinux_status_unknown">Unknown</string>
     <string name="home_selinux_status_permissive">Permissive</string>
     <string name="home_selinux_status">Status SELinux</string>
@@ -98,7 +97,7 @@
     <string name="settings_clear_super_key_dialog">Yakin untuk melanjutkan?</string>
     <string name="kpatch_version_update">Versi: %s -&gt; %s</string>
     <string name="home_kpatch_info_title">Info</string>
-    <string name="home_ap_cando_reboot">Re-but</string>
+    <string name="home_ap_cando_reboot">re-but</string>
     <string name="patch_config_title">Patch</string>
     <string name="patch_embed_kpm_btn">Tanam KPM</string>
     <string name="patch_mode_bootimg_patch">Mode: Patch</string>
@@ -212,4 +211,5 @@
     <string name="kpm_control_outMsg">Pesan</string>
     <string name="settings_night_mode_follow_sys">Tema Gelap Sistem</string>
     <string name="save_log">Simpan Log</string>
+    <string name="apm_action">Tindakan</string>
 </resources>

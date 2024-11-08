@@ -4,7 +4,6 @@
     <string name="android_patch">AndroidPatch</string>
     <string name="reboot">Reboot</string>
     <string name="settings">Aturan</string>
-    <string name="reboot_userspace">Soft Reboot</string>
     <string name="reboot_download">Mbalek nang Donlot</string>
     <string name="about_source_code">Delok kode sumber nang %1$s%1$sGabong saluran %2$s awakdewe</string>
     <string name="send_log">Kirem catatan</string>

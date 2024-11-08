@@ -75,7 +75,6 @@
     <string name="patch_set_superkey">SuperKey 설정</string>
     <string name="patch_title">패치</string>
     <string name="su_title">슈퍼유저</string>
-    <string name="reboot_userspace">소프트 재시작</string>
     <string name="reboot_recovery">리커버리로 재시작</string>
     <string name="su_selinux_via_hook">훅으로 우회하기</string>
     <string name="kpm_unload_confirm">\"%s\" 모듈을 제거하시겠습니까?</string>

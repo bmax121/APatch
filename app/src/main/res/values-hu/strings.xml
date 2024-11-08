@@ -59,7 +59,7 @@
     <string name="patch_warnning">A telepítés kockázatokkal jár. Kérjük, készíts biztonsági másolatot az adataidról.</string>
     <string name="patch">Javítás</string>
     <string name="reboot_bootloader">Újraindítás a Bootloaderbe</string>
-    <string name="settings_global_namespace_mode_summary">Minden root munkamenet az általános csatolási névteret használja</string>
+    <string name="settings_global_namespace_mode_summary">Minden gyökérmunka a globális hegyi neveket használja</string>
     <string name="home_learn_apatch">APatch tanulása</string>
     <string name="apm_overlay_fs_not_available">A modulok elérhetetlenek, mert az OverlayFS ki van kapcsolva a kernel által.</string>
     <string name="settings_clear_super_key_dialog">Tényleg folytatni akarod?</string>
@@ -117,12 +117,11 @@
     <string name="home">Kezdőlap</string>
     <string name="kernel_patch">KernelPatch</string>
     <string name="android_patch">AndroidPatch</string>
-    <string name="reboot_userspace">Szoftveres Újraindítás</string>
     <string name="reboot_recovery">Újaraindítás a Visszaállítóba</string>
     <string name="reboot_download">Újraindítás a Letöltés-módba</string>
     <string name="reboot_edl">Újraindítás az EDL-be</string>
     <string name="about">Rólunk</string>
-    <string name="settings_global_namespace_mode">Általános Névtér Mód</string>
+    <string name="settings_global_namespace_mode">Globális névtér mód</string>
     <string name="home_working">Működik</string>
     <string name="kpm_unload">Kitöltés</string>
     <string name="kpm_unload_confirm">\"%s\" modul kitöltése?</string>

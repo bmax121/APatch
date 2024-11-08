@@ -9,7 +9,6 @@
     <string name="home_click_to_learn_apatch">Aprende sobre las características de APatch y cómo usarlas</string>
     <string name="reboot_edl">Reiniciar en modo EDL</string>
     <string name="reboot_recovery">Reiniciar a Recovery</string>
-    <string name="reboot_userspace">Reinicio parcial</string>
     <string name="home_learn_apatch">Aprende sobre APatch</string>
     <string name="about">Acerca de</string>
     <string name="reboot">Reiniciar</string>
@@ -112,20 +111,20 @@
     <string name="patch_item_bootimg_dev">dispositivo:</string>
     <string name="patch_item_kernel">Kernel</string>
     <string name="patch_item_kpimg">kpimg</string>
-    <string name="patch_item_kpimg_version">versión:</string>
-    <string name="patch_item_kpimg_comile_time">hora:</string>
-    <string name="patch_item_kpimg_config">config:</string>
+    <string name="patch_item_kpimg_version">Versión:</string>
+    <string name="patch_item_kpimg_comile_time">Hora:</string>
+    <string name="patch_item_kpimg_config">Config:</string>
     <string name="patch_item_new_extra_kpm">Insertar nuevo</string>
     <string name="patch_item_existed_extra_kpm">Existió</string>
-    <string name="patch_item_extra_version">versión:</string>
-    <string name="patch_item_extra_author">autor:</string>
-    <string name="patch_item_extra_kpm_license">licencia:</string>
-    <string name="patch_item_extra_kpm_desciption">descripción:</string>
-    <string name="patch_item_extra_args">args:</string>
-    <string name="patch_item_extra_event">evento:</string>
+    <string name="patch_item_extra_version">Versión:</string>
+    <string name="patch_item_extra_author">Autor:</string>
+    <string name="patch_item_extra_kpm_license">Licencia:</string>
+    <string name="patch_item_extra_kpm_desciption">Descripción:</string>
+    <string name="patch_item_extra_args">Argumentos:</string>
+    <string name="patch_item_extra_event">Evento:</string>
     <string name="patch_item_skey">Super Key</string>
     <string name="patch_item_set_skey_label">La longitud de la super key debe ser de al menos 8 caracteres e incluir tanto números como letras</string>
-    <string name="patch_item_extra_name">nombre:</string>
+    <string name="patch_item_extra_name">Nombre:</string>
     <string name="patch_item_error">¡ERROR!</string>
     <string name="patch_item_bootimg_slot">slot:</string>
     <string name="hide_apatch_manager">Ocultar APatch Manager</string>
@@ -212,4 +211,5 @@
     <string name="kpm_control">Control</string>
     <string name="kpm_control_paramters">Parámetros</string>
     <string name="save_log">Guardar registro</string>
+    <string name="apm_action">Acción</string>
 </resources>
