@@ -73,7 +73,7 @@ fi
 echo "- Repacking boot image"
 ./magiskboot repack "$BOOTIMAGE" >/dev/null 2>&1
 
-if [ ! $(sh extract-ikconfig kernel.ori | grep CONFIG_KALLSYMS_ALL=y) ]; then
+if [ ! $(./kptools -i kernel.ori -f | grep CONFIG_KALLSYMS_ALL=y) ]; then
 	echo "- Detected CONFIG_KALLSYMS_ALL is not set!"
 	echo "- APatch has patched but maybe your device won't boot."
 	echo "- Make sure you have original boot image backup."

@@ -37,7 +37,7 @@ function failed(){
 
 function boot_execute_ab(){
 	./lib/arm64-v8a/libmagiskboot.so unpack boot.img
-	if [[ ! $(sh assets/extract-ikconfig ./kernel | grep CONFIG_KALLSYMS=y) ]]; then
+	if [[ ! $(./lib/arm64-v8a/libkptools.so -i ./kernel -f | grep CONFIG_KALLSYMS=y) ]]; then
 		kernelFlagsErr
 	fi
 	mv kernel kernel-origin
@@ -54,7 +54,7 @@ function boot_execute_ab(){
 
 function boot_execute(){
 	./lib/arm64-v8a/libmagiskboot.so unpack boot.img
-	if [[ ! $(sh assets/extract-ikconfig ./kernel | grep CONFIG_KALLSYMS=y) ]]; then
+	if [[ ! $(./lib/arm64-v8a/libkptools.so -i ./kernel -f | grep CONFIG_KALLSYMS=y) ]]; then
 		kernelFlagsErr
 	fi
 	mv kernel kernel-origin
@@ -74,7 +74,6 @@ function main(){
 cd /dev/tmp/install
 
 chmod a+x ./assets/kpimg
-chmod a+x ./assets/extract-ikconfig
 chmod a+x ./lib/arm64-v8a/libkptools.so
 chmod a+x ./lib/arm64-v8a/libmagiskboot.so
 
