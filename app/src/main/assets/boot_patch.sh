@@ -49,7 +49,7 @@ echo "- Unpacking boot image"
   fi
 fi
 
-if [ ! $(sh extract-ikconfig kernel | grep CONFIG_KALLSYMS=y) ]; then
+if [ ! $(./kptools -i kernel -f | grep CONFIG_KALLSYMS=y) ]; then
 	echo "- Patcher has Aborted!"
 	echo "- APatch requires CONFIG_KALLSYMS to be Enabled."
 	echo "- But your kernel seems NOT enabled it."
