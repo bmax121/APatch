@@ -57,7 +57,7 @@
     <string name="patch_warnning">Інсталяція має ризики. Будь ласка, створіть резервну копію ваших даних.</string>
     <string name="reboot_edl">Перезавантаження в EDL</string>
     <string name="home_click_to_learn_apatch">Дізнайтеся більше про можливості APatch і про його використання</string>
-    <string name="about_source_code">&lt;p&gt;Перегляньте відкритий код на %1$s&lt;p/&gt; Приєднуйтеся до нашого %2$s каналу&lt;p/&gt;Приєднуйтеся до нашої %2$s групи</string>
+    <string name="about_source_code"><![CDATA[<p> Перегляньте вихідний код на %1$s<p/> Приєднуйтеся до нашого каналу %2$s<p/> Приєднуйтеся до нашої групи %3$s]]></string>
     <string name="send_log">Надіслати звіт</string>
     <string name="apatch_version_update">Версія: %s → %s</string>
     <string name="home_apatch_version">Версія APatch %s</string>
@@ -210,6 +210,10 @@
     <string name="kpm_control_paramters">Параметри</string>
     <string name="settings_night_mode_follow_sys">Слідкувати за системно темою</string>
     <string name="settings_night_theme_enabled">Увімкнути темну тему</string>
-    <string name="save_log">Зберегти журнали</string>
+    <string name="save_log">Зберегти журнал</string>
     <string name="apm_action">Дія</string>
+    <string name="log_saved">Журнал збережено</string>
+    <string name="crash_handle_title">Збій програми..</string>
+    <string name="crash_handle_copied">Журнал збоїв скопійовано в буфер обміну.</string>
+    <string name="crash_handle_copy">Копіювати журнал збоїв</string>
 </resources>

@@ -22,7 +22,7 @@
     <string name="about">Sobre</string>
     <string name="home_learn_apatch">Saiba mais sobre o APatch</string>
     <string name="home_click_to_learn_apatch">Conheça os recursos do APatch e como usá-lo</string>
-    <string name="about_source_code">&lt;p&gt;Veja o código-fonte no %1$s&lt;p/&gt;Participe do nosso canal do %2$s&lt;p/&gt;Participe do nosso grupo do %3$s</string>
+    <string name="about_source_code"><![CDATA[<p>Veja o código-fonte no %1$s<p/>Participe do nosso canal do %2$s<p/>Participe do nosso grupo do %3$s]]></string>
     <string name="send_log">Reportar registros</string>
     <string name="safe_mode">Modo de segurança</string>
     <string name="super_key">SuperKey</string>
@@ -212,4 +212,8 @@
     <string name="kpm_control_dialog_title">Controlar KPMódulo</string>
     <string name="save_log">Salvar registros</string>
     <string name="apm_action">Ação</string>
+    <string name="crash_handle_copied">Registro de falhas copiado</string>
+    <string name="crash_handle_title">O app travou...</string>
+    <string name="crash_handle_copy">Copiar registro de falhas</string>
+    <string name="log_saved">Registros salvos</string>
 </resources>

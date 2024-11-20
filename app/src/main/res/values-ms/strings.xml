@@ -71,4 +71,6 @@
     <string name="apm_uninstall_failed">APatch</string>
     <string name="apm_uninstall_success">APatch</string>
     <string name="apm_install">APatch</string>
+    <string name="apm_version">Versi</string>
+    <string name="apm_update">Kemas kini</string>
 </resources>
