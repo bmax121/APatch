@@ -212,4 +212,5 @@
     <string name="home_kpatch_version">Wersja KernelPatch</string>
     <string name="save_log">Zapisz logi</string>
     <string name="apm_action">Akcja</string>
+    <string name="log_saved">Log zapisany</string>
 </resources>

@@ -82,7 +82,7 @@
     <string name="apm_failed_to_enable">Không thể kích hoạt mô-đun %s</string>
     <string name="clear_super_key">Xóa SuperKey</string>
     <string name="apm_magisk_conflict">Modules không khả dụng do xung đột với Magisk.</string>
-    <string name="about_source_code">&lt;p&gt;Xem mã nguồn tại %1$s&lt;p/&gt;Tham gia kênh %2$s của chúng tôi &lt;p/&gt;Tham gia nhóm %3$s của chúng tôi</string>
+    <string name="about_source_code"><![CDATA[<p>Xem mã nguồn tại %1$s<p/>Tham gia kênh %2$s của chúng tôi<p/>Tham gia nhóm %3$s của chúng tôi]]></string>
     <string name="home_su_path">Thực thi Su</string>
     <string name="home_kernel">Kernel</string>
     <string name="kpm">KPModule</string>
@@ -211,4 +211,9 @@
     <string name="home_more_menu_about">Giới thiệu</string>
     <string name="home_dialog_uninstall_title">Gỡ cài đặt</string>
     <string name="save_log">Lưu nhật ký</string>
+    <string name="log_saved">Đã lưu nhật ký</string>
+    <string name="crash_handle_title">Ứng dụng bị sập..</string>
+    <string name="crash_handle_copy">Sao chép nhật ký sự cố</string>
+    <string name="crash_handle_copied">Đã sao chép nhật ký sự cố vào bảng tạm.</string>
+    <string name="apm_action">Hoạt động</string>
 </resources>

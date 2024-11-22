@@ -57,7 +57,7 @@
     <string name="apm_magisk_conflict">Модули не доступны, они конфликтуют с Magisk.</string>
     <string name="home_learn_apatch">Узнайте об APatch</string>
     <string name="home_click_to_learn_apatch">Узнайте о возможностях APatch и о том, как его использовать</string>
-    <string name="about_source_code"><p>Посмотрите исходный код на %1$s<p/>Присоединяйтесь к нашему %2$s каналу</p>Присоединяйтесь к нашей %3$s группе</string>
+    <string name="about_source_code"><![CDATA[<p>Посмотрите исходный код на %1$s<p/>Присоединяйтесь к нашему %2$s каналу</p>Присоединяйтесь к нашей %3$s группе]]></string>
     <string name="apm_update">Обновить</string>
     <string name="apm_downloading">Загрузка модуля \"%s\"…</string>
     <string name="apm_start_downloading">Начало загрузки %s</string>
@@ -212,4 +212,8 @@
     <string name="enable_web_debugging_summary">Используется для отладки WebUI. Пожалуйста, включайте только при необходимости.</string>
     <string name="save_log">Сохранить логи</string>
     <string name="apm_action">Действие</string>
+    <string name="crash_handle_copy">Скопировать логи ошибки</string>
+    <string name="crash_handle_copied">Лог ошибки скопирован в буфер обмена.</string>
+    <string name="log_saved">Логи сохранены</string>
+    <string name="crash_handle_title">В приложении возникла ошибка...</string>
 </resources>

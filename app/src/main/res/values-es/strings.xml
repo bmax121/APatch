@@ -14,7 +14,7 @@
     <string name="reboot">Reiniciar</string>
     <string name="settings">Configuración</string>
     <string name="reboot_bootloader">Reiniciar a Bootloader</string>
-    <string name="about_source_code">&lt;p&gt;Ver código fuente en %1$s &lt;p/&gt;Únete a nuestro canal de %2$s &lt;p/&gt;Únete a nuestro grupo en %3$s</string>
+    <string name="about_source_code"><![CDATA[<p>Ver código fuente en %1$s<p/>Unirse a nuestro canal de %2$s<p/>Unirse a nuestro grupo de %3$s]]></string>
     <string name="send_log">Enviar registro</string>
     <string name="kpatch_version">Versión: %s</string>
     <string name="home_patch_set_key_desc">Clave única para KernelPatch</string>
@@ -212,4 +212,8 @@
     <string name="kpm_control_paramters">Parámetros</string>
     <string name="save_log">Guardar registro</string>
     <string name="apm_action">Acción</string>
+    <string name="log_saved">Registro guardado</string>
+    <string name="crash_handle_copy">Copiar registro de fallos</string>
+    <string name="crash_handle_title">La aplicación fallo…</string>
+    <string name="crash_handle_copied">Se copió el registro de fallos al portapapeles.</string>
 </resources>

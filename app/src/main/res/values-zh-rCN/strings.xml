@@ -27,18 +27,18 @@
     <string name="home">主页</string>
     <string name="patch_set_superkey">设置超级密钥</string>
     <string name="settings">设置</string>
-    <string name="home_working">生效中 😋</string>
+    <string name="home_working">工作中 😋</string>
     <string name="home_patch_next_step">下一步</string>
     <string name="home_not_installed">未安装</string>
     <string name="reboot_bootloader">重启至 Bootloader</string>
-    <string name="about_source_code">&lt;p&gt;在 %1$s 查看源码&lt;p/&gt;加入我们的 %2$s 频道&lt;p/&gt;加入我们的 %3$s 讨论组</string>
+    <string name="about_source_code"><![CDATA[<p>在%1$s查看源码<p/>加入我们的%2$s频道<p/>加入我们的%3$s讨论组]]></string>
     <string name="home_auth_key_desc">通过验证后开始使用</string>
     <string name="kpatch_version">版本：%s</string>
     <string name="home_ap_cando_uninstall">卸载</string>
     <string name="apatch_version">版本：%s</string>
     <string name="home_ap_cando_install">安装</string>
     <string name="home_apatch_version">APatch 版本</string>
-    <string name="home_su_path">SU 程序路径</string>
+    <string name="home_su_path">可执行su路径</string>
     <string name="home_ap_cando_update">更新</string>
     <string name="apatch_version_update">版本：%s → %s</string>
     <string name="home_auth_key_title">输入超级密钥</string>
@@ -214,7 +214,7 @@
     <string name="about_telegram_group">Telegram 群组</string>
     <string name="about_powered_by">由 %1$s 驱动</string>
     <string name="apm_action">激活</string>
-    <string name="crash_handle_title">应用崩溃了…</string>
+    <string name="crash_handle_title">应用崩溃了..</string>
     <string name="crash_handle_copy">复制崩溃日志</string>
     <string name="crash_handle_copied">崩溃日志已复制到剪贴板。</string>
 </resources>
