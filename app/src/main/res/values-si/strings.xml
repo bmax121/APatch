@@ -10,7 +10,7 @@
     <string name="home_patch_next_step">ඉදිරියට</string>
     <string name="home_not_installed">ස්ථාපනය වී නොමැත</string>
     <string name="home_click_to_install">ස්ථාපනය කරන්න</string>
-    <string name="home_need_update">අලුත් Version එකක් තිබේ</string>
+    <string name="home_need_update">නව අනුවාදයක් තිබේ</string>
     <string name="home_ap_cando_install">ස්ථාපනය කරන්න</string>
     <string name="home_ap_cando_uninstall">ඉවත් කරන්න</string>
     <string name="kpm_kp_not_installed">KernelPatch ස්ථාපනය කර නොමැත</string>
@@ -23,7 +23,7 @@
     <string name="apm_uninstall_failed">ඉවත් කිරීමට නොහැකි විය: %s</string>
     <string name="apm_failed_to_disable">මෙම මොඩියුලය ක්‍රියාවිරහිත කිරීමට නොහැකි විය: %s</string>
     <string name="apm_reboot_to_apply">Apply කිරීම සඳහා reboot කිරීම අනිවාර්ය වේ</string>
-    <string name="apm_new_version_available">අළුත් වර්ෂන් එක ස්ථාපනය සඳහා ක්ලික් කරන්න, %s.</string>
+    <string name="apm_new_version_available">නව අනුවාදය ස්ථාපනයට ඔබන්න, %s.</string>
     <string name="home_learn_apatch">AndroidPatch ගැන ඉගෙන ගන්න</string>
     <string name="home_click_to_learn_apatch">මෙතන Click කරන්න</string>
     <string name="patch_warnning">Install කරද්දි මොකක්ම හරි අවුලක් ආවොත් ඔයාගේ Data lost වේවි. ඒක නිසා වැදගත් දේවල් Backup කරගෙනම ඉන්න.</string>
@@ -51,9 +51,8 @@
     <string name="reboot_recovery">Recovery එකට</string>
     <string name="reboot_bootloader">Fastboot mode එකට</string>
     <string name="reboot_download">Download mode එකට</string>
-    <string name="kpatch_version">වර්ෂන් එක: %d.%d.%d</string>
-    <string name="apatch_version_update">වර්ෂන් එක:
-\n%s -&gt; %s</string>
+    <string name="kpatch_version">අනුවාදය: %s</string>
+    <string name="apatch_version_update">අනුවාදය: %s -&gt; %s</string>
     <string name="android_patch">AndroidPatch</string>
     <string name="home_su_path">රූට්:%s</string>
     <string name="home_ap_cando_update">යාවත්කාලීන කරන්න</string>
@@ -69,22 +68,21 @@
     <string name="kpm_desc">අවරෝහණ</string>
     <string name="su_title">රූට්</string>
     <string name="su_pkg_excluded_setting_summary">මොඩියුල්ස් සඳහා</string>
-    <string name="home_apatch_version">A-පැච්: %s</string>
+    <string name="home_apatch_version">APatch අනුවාදය</string>
     <string name="home_kernel">කර්නල් එක</string>
-    <string name="home_manager_version">මෘදුකාංගයෙහි වර්ෂන් එක</string>
+    <string name="home_manager_version">කළමනාකරණයේ අනුවාදය</string>
     <string name="home_fingerprint">ආරක්ෂක සළකුණ</string>
     <string name="su_refresh">නැවත අලුත් කරන්න</string>
     <string name="apm">මොඩියුල්ස්</string>
     <string name="system_default">Android හි භාෂාවම</string>
-    <string name="apm_version">වර්ෂන් එක</string>
+    <string name="apm_version">අනුවාදය</string>
     <string name="apm_desc">අවරෝහණ</string>
     <string name="apm_changelog">අලුත් දේවල්</string>
     <string name="apm_downloading">\"%s\" මොඩියුලය බාගත වෙමින්…</string>
     <string name="apm_start_downloading">බාගත කිරීම ආරම්භ කළා %s</string>
     <string name="settings_app_language">භාෂාව</string>
-    <string name="kpm_version">වර්ෂන් එක</string>
-    <string name="apatch_version">වර්ෂන් එක:
-\n%s</string>
+    <string name="kpm_version">අනුවාදය</string>
+    <string name="apatch_version">අනුවාදය: %s</string>
     <string name="patch_title">පැච් කරන්න</string>
     <string name="apm_author">කතෲ</string>
     <string name="patch">පැච් කරන්න</string>
@@ -123,7 +121,7 @@
     <string name="patch_item_kpimg_version">අනුවාදය:</string>
     <string name="patch_item_kpimg_comile_time">වේලාව:</string>
     <string name="patch_item_extra_name">නම:</string>
-    <string name="home_system_version">පද්ධති අනුවාදය</string>
+    <string name="home_system_version">පද්ධතියේ අනුවාදය</string>
     <string name="home_kpatch_version">KernelPatch අනුවාදය</string>
     <string name="kpm_embed">Embed</string>
     <string name="su_selinux_via_hook">Hook වලින් බයිපාස්</string>
@@ -165,7 +163,7 @@
     <string name="hide_apatch_manager_failure">හංගන්න බෑ වගේනේ, කරුණාකර අවුල වාර්තා කරන්න!</string>
     <string name="setting_reset_su_path">Su patch රීසෙට් කරන්න</string>
     <string name="settings_donot_store_superkey">Super Key එක phone එකේ කොහේවත් තියාගන්න එපා</string>
-    <string name="home_new_apatch_found">අලුත් එකක් තියේ: %s, එක දාගන්න මෙතන ඔබන්න</string>
+    <string name="home_new_apatch_found">නව අනුවාදයක් තිබේ: %s, උත්ශ්‍රේණියට ඔබන්න</string>
     <string name="home_dialog_auth_fail_title">සත්‍යාපනය වැරදි වගේ</string>
     <string name="kpm_control_dialog_content">ඉන්පුට් control parameters:</string>
     <string name="kpm_control_ok">වැඩේ ගොඩ ලොක්කා!</string>

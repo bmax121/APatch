@@ -55,7 +55,7 @@
     <string name="apm_uninstall_failed">\"%s\" kaldırılamadı</string>
     <string name="kpm_author">Geliştirici</string>
     <string name="apm_failed_to_enable">\"%s\" modülü aktifleştirilemedi</string>
-    <string name="home">Anasayfa</string>
+    <string name="home">Ana Sayfa</string>
     <string name="patch_set_superkey">Süper Anahtar\'ı ayarla</string>
     <string name="apm_downloading">\"%s\"modülü indiriliyor…</string>
     <string name="su_hide_system_apps">Sistem uygulamalarını gizle</string>
@@ -210,6 +210,10 @@
     <string name="amber_theme">Amber Tema</string>
     <string name="blue_grey_theme">BlueGrey Teması</string>
     <string name="green_theme">Yeşil Tema</string>
-    <string name="save_log">Günlükleri Kaydet</string>
+    <string name="save_log">Günlüğü Kaydet</string>
     <string name="apm_action">Eylem</string>
+    <string name="log_saved">Log Kurtarıldı</string>
+    <string name="crash_handle_title">App çöktü.</string>
+    <string name="crash_handle_copy">Çökme raporunu kopyala</string>
+    <string name="crash_handle_copied">Çökme raporu panoya kopyalandı.</string>
 </resources>

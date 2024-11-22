@@ -31,7 +31,7 @@
     <string name="home_ap_cando_uninstall">I-uninstall</string>
     <string name="kpm_args">Args</string>
     <string name="home_fingerprint">Fingerprint</string>
-    <string name="safe_mode">Safe mode</string>
+    <string name="safe_mode">Safe na mode</string>
     <string name="home_selinux_status_unknown">Hindi alam</string>
     <string name="home_selinux_status_permissive">Pamahinang (Permissive)</string>
     <string name="home_selinux_status">SELinux status</string>
@@ -89,4 +89,8 @@
     <string name="settings_clear_super_key_dialog">Gusto mo ba talagang magpatuloy?</string>
     <string name="success">Matagumpay</string>
     <string name="failure">Hindi matagumpay</string>
+    <string name="log_saved">Na-save ang Log</string>
+    <string name="crash_handle_copy">Kopyahin ang log sa pag-crash</string>
+    <string name="crash_handle_copied">Nakopya ang log sa pag-crash sa clipboard.</string>
+    <string name="clear_super_key">Alisin ang SuperKey</string>
 </resources>

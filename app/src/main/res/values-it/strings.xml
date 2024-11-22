@@ -211,4 +211,5 @@
     <string name="about_telegram_group">Gruppo Telegram</string>
     <string name="save_log">Salva Logs</string>
     <string name="about_powered_by">Offerto da %1$s</string>
+    <string name="crash_handle_copied">Copia contenuto del crash log negli appunti</string>
 </resources>

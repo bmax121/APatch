@@ -55,7 +55,7 @@
     <string name="su_selinux_via_hook">ignorar via hook</string>
     <string name="kpm_version">Versão</string>
     <string name="apm_downloading">Baixando \"%s\" módulo…</string>
-    <string name="about_source_code">&lt;p&gt;Veja o código-fonte no %1$s&lt;p/&gt;Junte-se ao nosso canal do %2$s&lt;/p&lt;Junte-se ao nosso grupo %3$s</string>
+    <string name="about_source_code"><![CDATA[<p>Veja o código-fonte em %1$s<p/>Participe do nosso canal %2$s<p/>Participe do nosso grupo %3$s]]></string>
     <string name="clear_super_key">Limpar chave</string>
     <string name="home_apatch_version">Versão APatch</string>
     <string name="kpm_license">Licença</string>
@@ -212,4 +212,8 @@
     <string name="settings_use_system_color_theme_summary">Use um tema de cor gerado pelo sistema com papel de parede atual</string>
     <string name="amber_theme">Tema Amber</string>
     <string name="apm_action">Ação</string>
+    <string name="log_saved">Registro salvo</string>
+    <string name="crash_handle_title">O aplicativo travou..</string>
+    <string name="crash_handle_copy">Copiar registro de falha</string>
+    <string name="crash_handle_copied">Registro de falhas copiado para a área de transferência.</string>
 </resources>

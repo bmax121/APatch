@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name" translatable="false">APatch</string>
     <string name="home_click_to_learn_apatch">Erfahren Sie mehr über die Funktionen von APatch und wie Sie diese verwenden</string>
-    <string name="about_source_code">&lt;p&gt;Quellcode anzeigen unter %1$s&lt;p/&gt;Trete unserem %2$s Kanel bei&lt;p/&gt;Trete unserer %3$s Gruppe bei</string>
+    <string name="about_source_code"><![CDATA[<p>Quellcode anzeigen unter %1$s<p/>Trete unserem %2$s Kanel bei<p/>Trete unserer %3$s Gruppe bei]]></string>
     <string name="home">Startseite</string>
     <string name="reboot">Neustart</string>
     <string name="settings">Einstellungen</string>
@@ -210,6 +210,10 @@
 \n4. Ihr Gerät unterstützt APatch und KernelPatch nicht.
 \n
 \nBitte überprüfen und nochmal versuchen. Wenn es noch Probleme gibt, können Sie immer Fragen zu den Problemen des offiziellen Projektarchivs stellen.</string>
-    <string name="save_log">Protokolle speichern</string>
+    <string name="save_log">Protokoll speichern</string>
     <string name="apm_action">Aktion</string>
+    <string name="log_saved">Protokoll gespeichert</string>
+    <string name="crash_handle_copy">Absturzprotokoll kopieren</string>
+    <string name="crash_handle_copied">Der Absturzprotokoll wurde in den Zwischenspeicher kopiert.</string>
+    <string name="crash_handle_title">App ist abgestürzt.</string>
 </resources>
