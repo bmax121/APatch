@@ -1,5 +1,6 @@
 package me.bmax.apatch.ui.screen
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -212,42 +214,30 @@ private fun AppItem(
             })
         },
     )
-    if (showEditProfile && !rootGranted) {
-        //var viahook by remember { mutableStateOf(app.config.profile.scontext.isEmpty()) }
 
-        Column(modifier = Modifier.padding(start = 24.dp, end = 24.dp)) {
-            /*SwitchItem(
-                icon = Icons.Filled.Security,
-                title = "SU Thread",
-                summary = "bypass selinux via hooks",
-                checked = viahook,
-                onCheckedChange = {
-                    viahook = !viahook
-                    if (viahook) app.config.profile.scontext = ""
-                    else app.config.profile.scontext = APApplication.MAGISK_SCONTEXT
-                    PkgConfig.changeConfig(app.config)
-                },
-            )*/
-            SwitchItem(
-                icon = Icons.Filled.Security,
-                title = stringResource(id = R.string.su_pkg_excluded_setting_title),
-                summary = stringResource(id = R.string.su_pkg_excluded_setting_summary),
-                checked = excludeApp == 1,
-                onCheckedChange = {
-                    if (it) {
-                        excludeApp = 1
-                        config.allow = 0
-                        Natives.revokeSu(app.uid)
-                    } else {
-                        excludeApp = 0
-                    }
-                    config.exclude = excludeApp
-                    config.profile.uid = app.uid
-                    PkgConfig.changeConfig(config)
-                    Natives.setUidExclude(app.uid, excludeApp)
-                },
-            )
-        }
+    AnimatedVisibility(
+        visible = showEditProfile && !rootGranted,
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp)
+    ) {
+        SwitchItem(
+            icon = Icons.Filled.Security,
+            title = stringResource(id = R.string.su_pkg_excluded_setting_title),
+            summary = stringResource(id = R.string.su_pkg_excluded_setting_summary),
+            checked = excludeApp == 1,
+            onCheckedChange = {
+                if (it) {
+                    excludeApp = 1
+                    config.allow = 0
+                    Natives.revokeSu(app.uid)
+                } else {
+                    excludeApp = 0
+                }
+                config.exclude = excludeApp
+                config.profile.uid = app.uid
+                PkgConfig.changeConfig(config)
+                Natives.setUidExclude(app.uid, excludeApp)
+            },
+        )
     }
 }
 
