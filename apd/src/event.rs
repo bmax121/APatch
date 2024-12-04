@@ -8,18 +8,20 @@ use crate::{
 };
 use anyhow::{bail, ensure, Context, Result};
 use log::{info, warn};
+use crate::m_mount;
 use notify::event::{ModifyKind, RenameMode};
 use notify::{Config, Event, EventKind, INotifyWatcher, RecursiveMode, Watcher};
 use std::ffi::CStr;
 use std::os::unix::fs::PermissionsExt;
 use std::os::unix::process::CommandExt;
-use std::path::PathBuf;
+use std::path::{PathBuf,Path};
 use std::process::Command;
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
-use std::{collections::HashMap, path::Path, thread};
+use std::{collections::HashMap, thread};
 use std::{env, fs};
 use rustix::{fd::AsFd, fs::CWD, mount::*};
+use std::fs::{remove_dir_all, rename};
 
 fn mount_partition(partition_name: &str, lowerdir: &Vec<String>) -> Result<()> {
     if lowerdir.is_empty() {
@@ -117,9 +119,7 @@ pub fn systemless_bind_mount(module_dir: &str) -> Result<()> {
     //mount("tmpfs",utils::get_tmp_path(),"tmpfs",combined_flags,"")?;
  
     // construct bind mount params
-    let mut args = vec!["mount"];
-    let result = utils::run_command("/data/adb/ap/bin/magiskmount", &args, None)?.wait()?;
-
+    m_mount::magic_mount()?;
     Ok(())
 }
 
@@ -166,7 +166,7 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
             .expect("Failed to set permissions");
     }
     let mut command_string = format!(
-        "rm {}*.old; for file in {}*; do mv \"$file\" \"$file.old\"; done",
+        "rm {}*.old.log; for file in {}*; do mv \"$file\" \"$file.old.log\"; done",
         defs::APATCH_LOG_FOLDER,
         defs::APATCH_LOG_FOLDER
     );
@@ -278,7 +278,24 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
         mount::AutoMountExt4::try_new(tmp_module_img, module_dir, false)
             .with_context(|| "mount module image failed".to_string())?;
     }else { 
-        info!("do nothing here");
+        for entry in fs::read_dir(module_update_dir)? {
+            let entry = entry?;
+            let file_name = entry.file_name();
+            let file_name_str = file_name.to_string_lossy();
+
+            if entry.path().is_dir() {
+                let source_path = Path::new(module_update_dir).join(file_name_str.as_ref()); 
+                let target_path = Path::new(module_dir).join(file_name_str.as_ref()); 
+                if target_path.exists() {
+                    info!("Removing existing folder in target directory: {}", file_name_str);
+                    remove_dir_all(&target_path)?;  
+                }
+
+                info!("Moving {} to target directory", file_name_str);
+                rename(&source_path, &target_path)?;  
+            }
+        }
+        
     }
 
     

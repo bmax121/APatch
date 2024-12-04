@@ -1,5 +1,6 @@
 use anyhow::{bail, Context, Error, Ok, Result};
 use log::{info, warn};
+use const_format::concatcp;
 use std::ffi::CString;
 use std::{
     fs::{self,create_dir_all, File, OpenOptions},
@@ -201,4 +202,8 @@ pub fn get_tmp_path() -> &'static str {
         return defs::TEMP_DIR;
     }
     ""
+}
+pub fn get_work_dir() -> String {
+    let tmp_path = get_tmp_path();
+    format!("{}/workdir/", tmp_path)
 }

@@ -27,11 +27,11 @@ grep_cmdline() {
 }
 
 grep_prop() {
-  local REGEX="s/^$1=//p"
+  local REGEX="s/$1=//p"
   shift
   local FILES=$@
   [ -z "$FILES" ] && FILES='/system/build.prop'
-  cat $FILES 2>/dev/null | dos2unix | sed -n "$REGEX" | head -n 1
+  cat $FILES 2>/dev/null | dos2unix | sed -n "$REGEX" | head -n 1 | xargs
 }
 
 grep_get_prop() {
@@ -80,7 +80,7 @@ setup_flashable() {
   $BOOTMODE && return
   if [ -z $OUTFD ] || readlink /proc/$$/fd/$OUTFD | grep -q /tmp; then
     # We will have to manually find out OUTFD
-    for FD in `ls /proc/$$/fd`; do
+    for FD in /proc/$$/fd/*; do
       if readlink /proc/$$/fd/$FD | grep -q pipe; then
         if ps | grep -v grep | grep -qE " 3 $FD |status_fd=$FD"; then
           OUTFD=$FD
@@ -296,6 +296,19 @@ is_legacy_script() {
   return $?
 }
 
+handle_partition() {
+    PARTITION="$1"
+    REQUIRE_SYMLINK="$2"
+    if [ ! -e "$MODPATH/system/$PARTITION" ]; then
+        # no partition found
+        return;
+    fi
+
+    if [ "$REQUIRE_SYMLINK" = "false" ] || [ -L "/system/$PARTITION" ] && [ "$(readlink -f "/system/$PARTITION")" = "/$PARTITION" ]; then
+        ui_print "- Handle partition /$PARTITION"
+        ln -sf "./system/$PARTITION" "$MODPATH/$PARTITION"
+    fi
+}
 
 # Require OUTFD, ZIPFILE to be set
 install_module() {
@@ -319,7 +332,7 @@ install_module() {
   [ ! -f $TMPDIR/module.prop ] && abort "! Unable to extract zip file!"
 
   local MODDIRNAME=modules
-  $BOOTMODE && MODDIRNAME=modules
+  $BOOTMODE && MODDIRNAME=modules_update
   local MODULEROOT=$NVBASE/$MODDIRNAME
   MODID=`grep_prop id $TMPDIR/module.prop`
   MODNAME=`grep_prop name $TMPDIR/module.prop`
@@ -371,18 +384,22 @@ install_module() {
     [ -f $MODPATH/customize.sh ] && . $MODPATH/customize.sh
   fi
 
+  handle_partition vendor true
+  handle_partition system_ext true
+  handle_partition product true
+  handle_partition odm false
+
   # Handle replace folders
   for TARGET in $REPLACE; do
     ui_print "- Replace target: $TARGET"
-    mark_replace $MODPATH$TARGET
+    mark_replace "$MODPATH$TARGET"
   done
 
   # Handle remove files
   for TARGET in $REMOVE; do
     ui_print "- Remove target: $TARGET"
-    mark_remove $MODPATH$TARGET
+    mark_remove "$MODPATH$TARGET"
   done
-
 
   if $BOOTMODE; then
     mktouch $NVBASE/modules/$MODID/update
@@ -419,5 +436,5 @@ POSTFSDATAD=$NVBASE/post-fs-data.d
 SERVICED=$NVBASE/service.d
 
 # Some modules dependents on this
-export MAGISK_VER=27.0
-export MAGISK_VER_CODE=27000
+export MAGISK_VER=25.2
+export MAGISK_VER_CODE=25200
