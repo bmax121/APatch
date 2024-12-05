@@ -1,7 +1,7 @@
 #[allow(clippy::wildcard_imports)]
 use crate::utils::*;
 use crate::{
-    assets, defs, restorecon,
+    assets, defs, restorecon,utils,
 };
 use regex_lite::Regex;
 use anyhow::{anyhow, bail, ensure, Context, Result};
@@ -67,6 +67,7 @@ fn exec_install_script(module_file: &str) -> Result<()> {
         .env("APATCH", "true")
         .env("APATCH_VER", defs::VERSION_NAME)
         .env("APATCH_VER_CODE", defs::VERSION_CODE)
+        .env("APATCH_BIND_MOUNT", format!("{}", !utils::should_enable_overlay()?))
         .env("OUTFD", "1")
         .env("ZIPFILE", realpath)
         .status()?;
@@ -197,6 +198,7 @@ fn exec_script<T: AsRef<Path>>(path: T, wait: bool) -> Result<()> {
         .env("APATCH", "true")
         .env("APATCH_VER", defs::VERSION_NAME)
         .env("APATCH_VER_CODE", defs::VERSION_CODE)
+        .env("APATCH_BIND_MOUNT", format!("{}", !utils::should_enable_overlay()?))
         .env(
             "PATH",
             format!(
@@ -428,12 +430,13 @@ pub fn _uninstall_module(id: &str, update_dir: &str) -> Result<()> {
 
 }
 pub fn uninstall_module(id: &str) -> Result<()> {
-    let result = _uninstall_module(id, defs::MODULE_DIR);  
-    if should_enable_overlay()?{
-        _uninstall_module(id, defs::MODULE_UPDATE_TMP_DIR)?;
-    }else{
-        return result;
-    }
+    //let result = _uninstall_module(id, defs::MODULE_DIR);  
+    //if should_enable_overlay()?{
+    //    _uninstall_module(id, defs::MODULE_UPDATE_TMP_DIR)?;
+    //}else{
+    //    return result;
+    //}
+    _uninstall_module(id, defs::MODULE_DIR)?;
     Ok(())
 }
 
@@ -468,12 +471,13 @@ pub fn enable_module(id: &str) -> Result<()> {
     let update_dir = Path::new(defs::MODULE_DIR);
     let update_dir_update = Path::new(defs::MODULE_UPDATE_TMP_DIR);
     
-    let result = enable_module_update(id, update_dir);  
-    if should_enable_overlay()?{
-        enable_module_update(id, update_dir_update)?;  
-    }else{
-        return result;
-    }
+    //let result = enable_module_update(id, update_dir);  
+    //if should_enable_overlay()?{
+    //    enable_module_update(id, update_dir_update)?;  
+    //}else{
+    //    return result;
+    //}
+    enable_module_update(id, update_dir)?;  
     Ok(())
 }
 
@@ -489,14 +493,14 @@ pub fn enable_module_update(id: &str,update_dir: &Path) -> Result<()> {
 pub fn disable_module(id: &str) -> Result<()> {
     let update_dir = Path::new(defs::MODULE_DIR);
     let update_dir_update = Path::new(defs::MODULE_UPDATE_TMP_DIR);
-    let result = disable_module_update(id, update_dir);  
-
-    if should_enable_overlay()?{
-        disable_module_update(id, update_dir_update)?;
-    }else{
-        return result;
-    }
     
+    //let result = disable_module_update(id, update_dir);  
+    //if should_enable_overlay()?{
+    //    disable_module_update(id, update_dir_update)?;
+    //}else{
+    //    return result;
+    //}
+    disable_module_update(id, update_dir)?;  
 
     Ok(())
 }
@@ -518,8 +522,9 @@ pub fn disable_all_modules() -> Result<()> {
     }
 
     // we assume the module dir is already mounted
-    let _ = disable_all_modules_update(defs::MODULE_DIR);
-    disable_all_modules_update(defs::MODULE_UPDATE_TMP_DIR)?;
+    //let _ = disable_all_modules_update(defs::MODULE_DIR);
+    //disable_all_modules_update(defs::MODULE_UPDATE_TMP_DIR)?;
+    disable_all_modules_update(defs::MODULE_DIR)?;
     Ok(())
 }
 
