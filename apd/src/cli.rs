@@ -7,7 +7,7 @@ use android_logger::Config;
 use log::LevelFilter;
 
 use crate::{defs, event, module, supercall, utils};
-
+use std::ffi::{CString, CStr};
 /// APatch cli
 #[derive(Parser, Debug)]
 #[command(author, version = defs::VERSION_CODE, about, long_about = None)]
@@ -29,6 +29,11 @@ enum Commands {
     Module {
         #[command(subcommand)]
         command: Module,
+    },
+    /// Manage Kernel Patch modules
+    Kpm {
+        #[command(subcommand)]
+        command: Kpmsub,
     },
 
     /// Trigger `post-fs-data` event
@@ -79,6 +84,17 @@ enum Module {
     /// list all modules
     List,
 }
+#[derive(clap::Subcommand, Debug)]
+enum Kpmsub  {
+    /// Load Kernelpath module
+    Load {
+        // super_key
+        key: String,
+        // kpm module path
+        path: String
+    },
+
+}
 
 pub fn run() -> Result<()> {
     #[cfg(target_os = "android")]
@@ -117,6 +133,25 @@ pub fn run() -> Result<()> {
         Commands::BootCompleted => event::on_boot_completed(cli.superkey),
 
         Commands::UidListener => event::start_uid_listener(),
+
+        Commands::Kpm { command } => {
+            match command {
+                Kpmsub::Load { key,path } => {
+                    let key_cstr = CString::new(key).map_err(|_| anyhow::anyhow!("Invalid key string"))?;
+                    let path_cstr = CString::new(path).map_err(|_| anyhow::anyhow!("Invalid path string"))?;
+                    let ret = supercall::sc_kpm_load(key_cstr.as_c_str(),path_cstr.as_c_str(),None,std::ptr::null_mut());
+                    if ret < 0 {
+                        Err(anyhow::anyhow!("System call failed with error code {}", ret))
+                    } else {
+                        Ok(())
+                    }
+                
+                }
+                _ => Err(anyhow::anyhow!("Unsupported command")),
+                
+            }
+
+        } 
 
         Commands::Module { command } => {
             #[cfg(any(target_os = "linux", target_os = "android"))]

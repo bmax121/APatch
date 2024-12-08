@@ -32,6 +32,7 @@ const SUPERCALL_SU_NUMS: c_long = 0x1102;
 const SUPERCALL_SU_LIST: c_long = 0x1103;
 const SUPERCALL_SU_RESET_PATH: c_long = 0x1111;
 const SUPERCALL_SU_GET_SAFEMODE: c_long = 0x1112;
+const SUPERCALL_KPM_LOAD: c_long = 0x1020;
 
 const SUPERCALL_SCONTEXT_LEN: usize = 0x60;
 
@@ -144,7 +145,22 @@ fn sc_su(key: &CStr, profile: &SuProfile) -> c_long {
         ) as c_long
     }
 }
+pub fn sc_kpm_load(key: &CStr, path: &CStr, args: Option<&CStr>, reserved: *mut c_void) -> c_long {
+    if key.to_bytes().is_empty() || path.to_bytes().is_empty() {
+        return (-EINVAL).into();
+    }
 
+    unsafe {
+        syscall(
+            __NR_SUPERCALL,
+            key.as_ptr(),
+            ver_and_cmd(SUPERCALL_KPM_LOAD),
+            path.as_ptr(),
+            args.map_or(std::ptr::null(), |a| a.as_ptr()),
+            reserved,
+        ) as c_long
+    }
+}
 fn sc_su_reset_path(key: &CStr, path: &CStr) -> c_long {
     if key.to_bytes().is_empty() || path.to_bytes().is_empty() {
         return (-EINVAL).into();
