@@ -389,6 +389,11 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
         let dir = fs::read_dir(module_dir)?;
         for entry in dir.flatten() {
             let module_path = entry.path();
+            let disabled = module_path.join(defs::DISABLE_FILE_NAME).exists();
+            if disabled {
+                info!("module: {} is disabled, ignore!", module_path.display());
+                continue;
+            }
             if module_path.is_dir() {
                 let module_name = module_path.file_name().unwrap().to_string_lossy();
                 let module_dest = Path::new(&work_dir).join(module_name.as_ref());
