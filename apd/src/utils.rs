@@ -142,7 +142,7 @@ pub fn is_symlink(path: &str) -> bool {
 }
 pub fn should_enable_overlay() -> Result<bool> {
     //let bind_mount_exists = Path::new(defs::BIND_MOUNT_FILE).exists();
-    let overlay_exists = Path::new(defs::OVERFAY_FILE).exists();
+    let overlay_exists = Path::new(defs::OVERLAY_FILE).exists();
     let overlay_supported = is_overlayfs_supported()?;
 
     Ok(overlay_exists && overlay_supported)
