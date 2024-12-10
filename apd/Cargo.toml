@@ -39,7 +39,7 @@ getopts = "0.2"
 sha256 = "1"
 tempdir = "0.3"
 chrono = "0.4"
-errno = "0.3.9"
+errno = "0.3.10"
 notify = "7.0"
 
 [target.'cfg(any(target_os = "android", target_os = "linux"))'.dependencies]
