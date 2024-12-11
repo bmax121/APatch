@@ -96,7 +96,7 @@
     <string name="patch_item_extra_args">Args:</string>
     <string name="patch_item_extra_event">Event:</string>
     <string name="patch_item_skey">Super Key</string>
-    <string name="patch_item_set_skey_label">The length of super key should be at least 8 characters and include both numbers and letters</string>
+    <string name="patch_item_set_skey_label">Super Key should be 8-63 characters and include both numbers and letters, but no special characters</string>
 
 
     <string name="home_kernel">Kernel</string>
@@ -191,7 +191,7 @@
     <string name="mode_select_page_install_inactive_slot_warning">Your device will be **FORCED** to boot to the current inactive slot after a reboot!\nOnly use this option after OTA is done.\nContinue?</string>
 
     <string name="home_dialog_auth_fail_title">Authentication failed</string>
-    <string name="home_dialog_auth_fail_content">Unable to authenticate the super key, therefore APatch cannot work properly.\nHere are some possible reasons for authentication failure:\n1. You have not patched the boot image with KernelPatch.\n2. The patched boot image was not flashed.\n3. Super key wrong.\n4. Your device does not support APatch and KernelPatch.\n\nPlease check and try again. If there are still issues, you can always ask questions on the official repository\'s issues page.</string>
+    <string name="home_dialog_auth_fail_content">Unable to authenticate the super key, therefore APatch cannot work properly.\nHere are some possible reasons for authentication failure:\n1. You have not patched the boot image with KernelPatch.\n2. The patched boot image was not flashed.\n3. Super Key is wrong or contains special characters.\n4. Your device does not support APatch and KernelPatch.\n\nPlease check and try again. If there are still issues, you can always ask questions on the official repository\'s issues page.</string>
 
     <string name="home_more_menu_feedback_or_suggestion">Feedback or suggestion</string>
     <string name="home_more_menu_about">About</string>
