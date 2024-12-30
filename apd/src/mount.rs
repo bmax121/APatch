@@ -188,6 +188,7 @@ pub fn mount_devpts(dest: impl AsRef<Path>) -> Result<()> {
         MountFlags::empty(),
         "newinstance",
     )?;
+    mount_change(dest.as_ref(), MountPropagationFlags::PRIVATE).context("make devpts private")?;
     Ok(())
 }
 #[cfg(not(any(target_os = "linux", target_os = "android")))]
@@ -218,6 +219,7 @@ pub fn mount_tmpfs(dest: impl AsRef<Path>) -> Result<()> {
             "",
         )?;
     }
+    mount_change(dest.as_ref(), MountPropagationFlags::PRIVATE).context("make tmpfs private")?;
     let pts_dir = format!("{}/{PTS_NAME}", dest.as_ref().display());
     if let Err(e) = mount_devpts(pts_dir) {
         warn!("do devpts mount failed: {}", e);
