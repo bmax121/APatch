@@ -88,6 +88,8 @@ enum Module {
 enum Kpmsub  {
     /// Load Kernelpath module
     Load {
+        // secret key
+        key: String,
         // kpm module path
         path: String
     },
@@ -136,7 +138,7 @@ pub fn run() -> Result<()> {
 
         Commands::Kpm { command } => {
             match command {
-                Kpmsub::Load { path } => kpm::load_module(cli.superkey, path),
+                Kpmsub::Load { key, path } => kpm::load_module(key, path),
                 Kpmsub::List { } => kpm::list_modules(cli.superkey),
                 _ => Err(anyhow::anyhow!("Unsupported command")),
                 

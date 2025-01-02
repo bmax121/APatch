@@ -53,11 +53,8 @@ fn module_info(key_cstr: CString, name: String) -> anyhow::Result<ModuleInfo> {
     return Ok(info)
 }
 
-pub fn load_module(superkey: Option<String>, path: String) -> anyhow::Result<()> {
-    let key_cstr = match superkey {
-        Some(x) => CString::new(x).map_err(|_| anyhow::anyhow!("Invalid key string"))?,
-        None => return Err(anyhow::anyhow!("No superkey provided")),
-    };
+pub fn load_module(key: String, path: String) -> anyhow::Result<()> {
+    let key_cstr = CString::new(key).map_err(|_| anyhow::anyhow!("Invalid key string"))?;
     let path_cstr = CString::new(path).map_err(|_| anyhow::anyhow!("Invalid path string"))?;
     let ret = supercall::sc_kpm_load(key_cstr.as_c_str(),path_cstr.as_c_str(),None,std::ptr::null_mut());
     if ret < 0 {
