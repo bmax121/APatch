@@ -6,7 +6,7 @@ use android_logger::Config;
 #[cfg(target_os = "android")]
 use log::LevelFilter;
 
-use crate::{defs, event, module, supercall, utils};
+use crate::{defs, event, kpm, module, supercall, utils};
 use std::ffi::{CString, CStr};
 /// APatch cli
 #[derive(Parser, Debug)]
@@ -86,7 +86,7 @@ enum Module {
 }
 #[derive(clap::Subcommand, Debug)]
 enum Kpmsub  {
-    /// Load Kernelpath module
+    /// Load KernelPatch module
     Load {
         // super_key
         key: String,
@@ -94,6 +94,8 @@ enum Kpmsub  {
         path: String
     },
 
+    /// List all KernelPatch modules
+    List {},  
 }
 
 pub fn run() -> Result<()> {
@@ -136,17 +138,8 @@ pub fn run() -> Result<()> {
 
         Commands::Kpm { command } => {
             match command {
-                Kpmsub::Load { key,path } => {
-                    let key_cstr = CString::new(key).map_err(|_| anyhow::anyhow!("Invalid key string"))?;
-                    let path_cstr = CString::new(path).map_err(|_| anyhow::anyhow!("Invalid path string"))?;
-                    let ret = supercall::sc_kpm_load(key_cstr.as_c_str(),path_cstr.as_c_str(),None,std::ptr::null_mut());
-                    if ret < 0 {
-                        Err(anyhow::anyhow!("System call failed with error code {}", ret))
-                    } else {
-                        Ok(())
-                    }
-                
-                }
+                Kpmsub::Load { key, path } => kpm::load_module(key, path),
+                Kpmsub::List { } => kpm::list_modules(cli.superkey),
                 _ => Err(anyhow::anyhow!("Unsupported command")),
                 
             }

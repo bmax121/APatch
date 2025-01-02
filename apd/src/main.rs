@@ -12,6 +12,8 @@ mod pty;
 mod restorecon;
 mod supercall;
 mod utils;
+mod kpm;
+
 fn main() -> anyhow::Result<()> {
     cli::run()
 }
