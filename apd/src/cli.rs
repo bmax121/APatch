@@ -88,7 +88,7 @@ enum Module {
 enum Kpmsub  {
     /// Load Kernelpath module
     Load {
-        // secret key
+        // super_key
         key: String,
         // kpm module path
         path: String
