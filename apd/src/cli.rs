@@ -86,7 +86,7 @@ enum Module {
 }
 #[derive(clap::Subcommand, Debug)]
 enum Kpmsub  {
-    /// Load Kernelpath module
+    /// Load KernelPatch module
     Load {
         // super_key
         key: String,
@@ -94,7 +94,7 @@ enum Kpmsub  {
         path: String
     },
 
-    /// List all Kernelpath modules
+    /// List all KernelPatch modules
     List {},  
 }
 
