@@ -77,6 +77,7 @@ object PkgConfig {
                 // Root App should not be excluded
                 if (config.allow == 1) {
                     config.exclude = 0
+                    config.profile.scontext = APApplication.MAGISK_SCONTEXT
                 }
                 if (config.allow == 0 && configs[uid] != null && config.exclude != 0) {
                     configs.remove(uid)
