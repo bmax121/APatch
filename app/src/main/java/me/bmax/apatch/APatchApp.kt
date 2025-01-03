@@ -64,6 +64,7 @@ class APApplication : Application(), Thread.UncaughtExceptionHandler {
         private const val BUSYBOX_BIN_PATH = APATCH_BIN_FOLDER + "busybox"
         private const val RESETPROP_BIN_PATH = APATCH_BIN_FOLDER + "resetprop"
         private const val MAGISKBOOT_BIN_PATH = APATCH_BIN_FOLDER + "magiskboot"
+        const val DEFAULT_SCONTEXT = "u:r:untrusted_app:s0"
         const val MAGISK_SCONTEXT = "u:r:magisk:s0"
 
         private const val DEFAULT_SU_PATH = "/system/bin/kp"
