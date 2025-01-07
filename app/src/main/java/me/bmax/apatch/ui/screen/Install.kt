@@ -59,6 +59,7 @@ enum class MODULE_TYPE {
 @Destination<RootGraph>
 fun InstallScreen(navigator: DestinationsNavigator, uri: Uri, type: MODULE_TYPE) {
     var text by rememberSaveable { mutableStateOf("") }
+    var tempText : String
     val logContent = rememberSaveable { StringBuilder() }
     var showFloatAction by rememberSaveable { mutableStateOf(false) }
 
@@ -76,10 +77,20 @@ fun InstallScreen(navigator: DestinationsNavigator, uri: Uri, type: MODULE_TYPE)
                     showFloatAction = true
                 }
             }, onStdout = {
-                text += "$it\n"
+                tempText = "$it\n"
+                if (tempText.startsWith("[H[J")) { // clear command
+                    text = tempText.substring(6)
+                } else {
+                    text += tempText
+                }
                 logContent.append(it).append("\n")
             }, onStderr = {
-                text += "$it\n"
+                tempText = "$it\n"
+                if (tempText.startsWith("[H[J")) { // clear command
+                    text = tempText.substring(6)
+                } else {
+                    text += tempText
+                }
                 logContent.append(it).append("\n")
             })
         }

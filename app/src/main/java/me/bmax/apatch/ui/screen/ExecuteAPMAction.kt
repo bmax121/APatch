@@ -49,6 +49,7 @@ import java.util.Locale
 @Destination<RootGraph>
 fun ExecuteAPMActionScreen(navigator: DestinationsNavigator, moduleId: String) {
     var text by rememberSaveable { mutableStateOf("") }
+    var tempText : String
     val logContent = rememberSaveable { StringBuilder() }
     val snackBarHost = LocalSnackbarHost.current
     val scope = rememberCoroutineScope()
@@ -63,7 +64,12 @@ fun ExecuteAPMActionScreen(navigator: DestinationsNavigator, moduleId: String) {
             runAPModuleAction(
                 moduleId,
                 onStdout = {
-                    text += "$it\n"
+                    tempText = "$it\n"
+                    if (tempText.startsWith("[H[J")) { // clear command
+                        text = tempText.substring(6)
+                    } else {
+                        text += tempText
+                    }
                     logContent.append(it).append("\n")
                 },
                 onStderr = {
