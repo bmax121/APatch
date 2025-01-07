@@ -475,7 +475,7 @@ private fun ModuleItem(
 ) {
     val decoration = if (!module.remove) TextDecoration.None else TextDecoration.LineThrough
     val moduleAuthor = stringResource(id = R.string.apm_author)
-
+    val viewModel = viewModel<APModuleViewModel>()
     Surface(
         modifier = modifier,
         color = MaterialTheme.colorScheme.surface,
@@ -580,7 +580,10 @@ private fun ModuleItem(
 
                     if (module.hasActionScript) {
                         FilledTonalButton(
-                            onClick = { navigator.navigate(ExecuteAPMActionScreenDestination(module.id)) },
+                            onClick = { 
+                                navigator.navigate(ExecuteAPMActionScreenDestination(module.id))
+                                viewModel.markNeedRefresh()
+                            },
                             enabled = true,
                             contentPadding = PaddingValues(horizontal = 12.dp)
                         ) {
