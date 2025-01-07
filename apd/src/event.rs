@@ -79,6 +79,46 @@ fn mount_partition(partition_name: &str, lowerdir: &Vec<String>) -> Result<()> {
 
 pub fn mount_systemlessly(module_dir: &str,is_img: bool) -> Result<()> {
     // construct overlay mount params
+    if !is_img {
+
+        info!("fallback to modules.img");
+        let module_update_dir = defs::MODULE_DIR;
+        let module_dir = defs::MODULE_MOUNT_DIR;
+        let tmp_module_img = defs::MODULE_UPDATE_TMP_IMG; 
+        let tmp_module_path = Path::new(tmp_module_img);
+
+        ensure_clean_dir(module_dir)?;
+        info!("- Preparing image");
+        if tmp_module_path.exists() { //if it have update,remove tmp file
+            std::fs::remove_file(tmp_module_path)?;
+        }
+        let total_size = calculate_total_size(Path::new(module_update_dir))?; //create modules adapt size
+        info!("Total size of files in '{}': {} bytes",tmp_module_path.display(),total_size);
+        let grow_size =  128 * 1024 * 1024 + total_size;
+        fs::File::create(tmp_module_img)
+            .context("Failed to create ext4 image file")?
+            .set_len(grow_size)
+            .context("Failed to extend ext4 image")?;
+        let result = Command::new("mkfs.ext4")
+            .arg("-b")
+            .arg("1024")
+            .arg(tmp_module_img)
+            .stdout(std::process::Stdio::piped())
+            .output()?;
+        ensure!(result.status.success(),"Failed to format ext4 image: {}",String::from_utf8(result.stderr).unwrap());
+        info!("Checking Image");
+        module::check_image(tmp_module_img)?;
+        info!("- Mounting image");
+        mount::AutoMountExt4::try_new(tmp_module_img, module_dir, false)
+            .with_context(|| "mount module image failed".to_string())?;
+        info!("mounted {} to {}", tmp_module_img, module_dir);
+        let _ = restorecon::setsyscon(module_dir);
+        let command_string = format!("cp --preserve=context -R {}* {};",module_update_dir,module_dir);
+        let args = vec!["-c",&command_string];
+        let _ = utils::run_command("sh", &args, None)?.wait()?;
+        mount_systemlessly(module_dir,true)?;
+        return Ok(());
+    }
     let dir = fs::read_dir(module_dir);
     let Ok(dir) = dir else {
         bail!("open {} failed", defs::MODULE_DIR);
@@ -131,46 +171,7 @@ pub fn mount_systemlessly(module_dir: &str,is_img: bool) -> Result<()> {
         //ensure_file_exists(format!("{}",defs::BIND_MOUNT_FILE))?;
         //ensure_clean_dir(defs::MODULE_DIR)?;
         //info!("bind_mount enable,overlayfs is not work,clear module_dir");
-        if !is_img {
-
-            info!("fallback to modules.img");
-            let module_update_dir = defs::MODULE_DIR;
-            let module_dir = defs::MODULE_MOUNT_DIR;
-            let tmp_module_img = defs::MODULE_UPDATE_TMP_IMG; 
-            let tmp_module_path = Path::new(tmp_module_img);
-
-            ensure_clean_dir(module_dir)?;
-            info!("- Preparing image");
-            if tmp_module_path.exists() { //if it have update,remove tmp file
-                std::fs::remove_file(tmp_module_path)?;
-            }
-            let total_size = calculate_total_size(Path::new(module_update_dir))?; //create modules adapt size
-            info!("Total size of files in '{}': {} bytes",tmp_module_path.display(),total_size);
-            let grow_size =  128 * 1024 * 1024 + total_size;
-            fs::File::create(tmp_module_img)
-                .context("Failed to create ext4 image file")?
-                .set_len(grow_size)
-                .context("Failed to extend ext4 image")?;
-            let result = Command::new("mkfs.ext4")
-                .arg("-b")
-                .arg("1024")
-                .arg(tmp_module_img)
-                .stdout(std::process::Stdio::piped())
-                .output()?;
-            ensure!(result.status.success(),"Failed to format ext4 image: {}",String::from_utf8(result.stderr).unwrap());
-            info!("Checking Image");
-            module::check_image(tmp_module_img)?;
-            info!("- Mounting image");
-            mount::AutoMountExt4::try_new(tmp_module_img, module_dir, false)
-                .with_context(|| "mount module image failed".to_string())?;
-            info!("mounted {} to {}", tmp_module_img, module_dir);
-            let _ = restorecon::setsyscon(module_dir);
-            let command_string = format!("cp --preserve=context -R {}* {};",module_update_dir,module_dir);
-            let args = vec!["-c",&command_string];
-            let _ = utils::run_command("sh", &args, None)?.wait()?;
-            mount_systemlessly(module_dir,true)?;
-            return Ok(());
-        }
+        
         
     }
 
