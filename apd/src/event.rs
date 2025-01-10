@@ -333,15 +333,13 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     let tmp_module_img = defs::MODULE_UPDATE_TMP_IMG; 
     let tmp_module_path = Path::new(tmp_module_img);
     move_file(module_update_dir,module_dir)?;
-
-
-    
     info!("remove update flag");
     let _ = fs::remove_file(module_update_flag);
     if tmp_module_path.exists() { //if it have update,remove tmp file
         std::fs::remove_file(tmp_module_path)?;
     }
 
+    let lite_file = Path::new(defs::LITEMODE_FILE);
 
     
     if safe_mode {
@@ -364,10 +362,15 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     if crate::module::load_sepolicy_rule().is_err() {
         warn!("load sepolicy.rule failed");
     }
+    if lite_file.exists() {
+        info!("litemode runing skip mount tempfs")
+    }else{
+        if let Err(e) = mount::mount_tmpfs(utils::get_tmp_path()) {
+            warn!("do temp dir mount failed: {}", e);
+        }
 
-    if let Err(e) = mount::mount_tmpfs(utils::get_tmp_path()) {
-        warn!("do temp dir mount failed: {}", e);
     }
+    
 
     // exec modules post-fs-data scripts
     // TODO: Add timeout
@@ -379,50 +382,58 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     if let Err(e) = crate::module::load_system_prop() {
         warn!("load system.prop failed: {}", e);
     }
-    if utils::should_enable_overlay()? {
-        // mount module systemlessly by overlay
-        let work_dir = get_work_dir();
-        let tmp_dir = PathBuf::from(work_dir.clone());
-        ensure_dir_exists(&tmp_dir)?;
-        mount(defs::AP_OVERLAY_SOURCE, &tmp_dir, "tmpfs", MountFlags::empty(), "").context("mount tmp")?;
-        mount_change(&tmp_dir, MountPropagationFlags::PRIVATE).context("make tmp private")?;
-        let dir_names = vec!["vendor", "product", "system_ext", "odm", "oem", "system"];
-        let dir = fs::read_dir(module_dir)?;
-        for entry in dir.flatten() {
-            let module_path = entry.path();
-            let disabled = module_path.join(defs::DISABLE_FILE_NAME).exists();
-            if disabled {
-                info!("module: {} is disabled, ignore!", module_path.display());
-                continue;
-            }
-            if module_path.is_dir() {
-                let module_name = module_path.file_name().unwrap().to_string_lossy();
-                let module_dest = Path::new(&work_dir).join(module_name.as_ref());
 
-                for sub_dir in dir_names.iter() {
-                    let sub_dir_path = module_path.join(sub_dir);
-                    if sub_dir_path.exists() && sub_dir_path.is_dir() {
-                        let sub_dir_dest = module_dest.join(sub_dir);
-                        fs::create_dir_all(&sub_dir_dest)?;
+    
+    if lite_file.exists() {
+        info!("litemode runing skip mount state")
+    }else{
 
-                        copy_dir_with_xattr(&sub_dir_path, &sub_dir_dest)?;
+        if utils::should_enable_overlay()? {
+            // mount module systemlessly by overlay
+            let work_dir = get_work_dir();
+            let tmp_dir = PathBuf::from(work_dir.clone());
+            ensure_dir_exists(&tmp_dir)?;
+            mount(defs::AP_OVERLAY_SOURCE, &tmp_dir, "tmpfs", MountFlags::empty(), "").context("mount tmp")?;
+            mount_change(&tmp_dir, MountPropagationFlags::PRIVATE).context("make tmp private")?;
+            let dir_names = vec!["vendor", "product", "system_ext", "odm", "oem", "system"];
+            let dir = fs::read_dir(module_dir)?;
+            for entry in dir.flatten() {
+                let module_path = entry.path();
+                let disabled = module_path.join(defs::DISABLE_FILE_NAME).exists();
+                if disabled {
+                    info!("module: {} is disabled, ignore!", module_path.display());
+                    continue;
+                }
+                if module_path.is_dir() {
+                    let module_name = module_path.file_name().unwrap().to_string_lossy();
+                    let module_dest = Path::new(&work_dir).join(module_name.as_ref());
+    
+                    for sub_dir in dir_names.iter() {
+                        let sub_dir_path = module_path.join(sub_dir);
+                        if sub_dir_path.exists() && sub_dir_path.is_dir() {
+                            let sub_dir_dest = module_dest.join(sub_dir);
+                            fs::create_dir_all(&sub_dir_dest)?;
+    
+                            copy_dir_with_xattr(&sub_dir_path, &sub_dir_dest)?;
+                        }
                     }
                 }
             }
+            if let Err(e) = mount_systemlessly(&get_work_dir(),false) {
+                warn!("do systemless mount failed: {}", e);
+            }
+            if let Err(e) = unmount(&tmp_dir, UnmountFlags::DETACH) {
+                log::error!("failed to unmount tmp {}", e);
+            }
+        }else{
+            if let Err(e) = systemless_bind_mount(module_dir) {
+                warn!("do systemless bind_mount failed: {}", e);
+            }
+            
+    
         }
-        if let Err(e) = mount_systemlessly(&get_work_dir(),false) {
-            warn!("do systemless mount failed: {}", e);
-        }
-        if let Err(e) = unmount(&tmp_dir, UnmountFlags::DETACH) {
-            log::error!("failed to unmount tmp {}", e);
-        }
-    }else{
-        if let Err(e) = systemless_bind_mount(module_dir) {
-            warn!("do systemless bind_mount failed: {}", e);
-        }
-        
-
     }
+    
 
     run_stage("post-mount", superkey, true);
 
