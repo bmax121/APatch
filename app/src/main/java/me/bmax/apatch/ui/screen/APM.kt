@@ -125,7 +125,9 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
             viewModel.fetchModuleList()
         }
     }
-
+    val webUILauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { viewModel.fetchModuleList() }
     //TODO: FIXME -> val isSafeMode = Natives.getSafeMode()
     val isSafeMode = false
     val hasMagisk = hasMagisk()
@@ -201,7 +203,7 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
                     },
                     onClickModule = { id, name, hasWebUi ->
                         if (hasWebUi) {
-                            context.startActivity(
+                            webUILauncher.launch(
                                 Intent(
                                     context, WebUIActivity::class.java
                                 ).setData(Uri.parse("apatch://webui/$id")).putExtra("id", id)
@@ -475,7 +477,7 @@ private fun ModuleItem(
 ) {
     val decoration = if (!module.remove) TextDecoration.None else TextDecoration.LineThrough
     val moduleAuthor = stringResource(id = R.string.apm_author)
-
+    val viewModel = viewModel<APModuleViewModel>()
     Surface(
         modifier = modifier,
         color = MaterialTheme.colorScheme.surface,
@@ -580,7 +582,10 @@ private fun ModuleItem(
 
                     if (module.hasActionScript) {
                         FilledTonalButton(
-                            onClick = { navigator.navigate(ExecuteAPMActionScreenDestination(module.id)) },
+                            onClick = { 
+                                navigator.navigate(ExecuteAPMActionScreenDestination(module.id))
+                                viewModel.markNeedRefresh()
+                            },
                             enabled = true,
                             contentPadding = PaddingValues(horizontal = 12.dp)
                         ) {

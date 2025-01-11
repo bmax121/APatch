@@ -47,14 +47,20 @@ fun createRootShell(): Shell {
         )
     } catch (e: Throwable) {
         Log.e(TAG, "su failed: ", e)
-        try {
+        return try {
             Log.e(TAG, "retry compat kpatch su")
-            return builder.build(
+            builder.build(
                 getKPatchPath(), APApplication.superKey, "su", "-Z", APApplication.MAGISK_SCONTEXT
             )
         } catch (e: Throwable) {
-            Log.e(TAG, "retry compat kpatch su failed: ", e)
-            return builder.build("sh")
+            Log.e(TAG, "retry kpatch su failed: ", e)
+            return try {
+                Log.e(TAG, "retry su: ", e)
+                builder.build("su")
+            } catch (e: Throwable) {
+                Log.e(TAG, "retry su failed: ", e)
+                return builder.build("sh")
+            }
         }
     }
 }
