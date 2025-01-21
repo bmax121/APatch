@@ -15,7 +15,7 @@ The patching of Android kernel and Android system.
 
 - A new kernel-based root solution for Android devices.
 - APM: Support for modules similar to Magisk.
-- KPM: Support for modules that allow you to inject any code into the kernel (Requires kernel function `inline-hook` and `syscall-table-hook` enabled).
+- KPM: Support for modules that allow you to inject any code into the kernel (Provides kernel function `inline-hook` and `syscall-table-hook`).
 - APatch relies on [KernelPatch](https://github.com/bmax121/KernelPatch/).
 - The APatch UI and the APModule source code have been derived and modified from [KernelSU](https://github.com/tiann/KernelSU).
 
