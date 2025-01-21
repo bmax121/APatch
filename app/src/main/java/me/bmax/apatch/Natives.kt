@@ -16,7 +16,7 @@ object Natives {
     data class Profile(
         var uid: Int = 0,
         var toUid: Int = 0,
-        var scontext: String = APApplication.MAGISK_SCONTEXT,
+        var scontext: String = APApplication.DEFAULT_SCONTEXT,
     ) : Parcelable
 
     @Keep
