@@ -7,10 +7,8 @@ use std::fmt::Write;
 use std::fs::File;
 use std::io::{self, Read};
 
-
 use std::process::exit;
 use std::sync::{Arc, Mutex};
-
 
 use std::{process, ptr};
 

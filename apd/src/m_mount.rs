@@ -1,16 +1,14 @@
-use crate::defs::{
-    DISABLE_FILE_NAME, AP_OVERLAY_SOURCE, MODULE_DIR, SKIP_MOUNT_FILE_NAME,
-};
+use crate::defs::{AP_OVERLAY_SOURCE, DISABLE_FILE_NAME, MODULE_DIR, SKIP_MOUNT_FILE_NAME};
 use crate::m_mount::NodeFileType::{Directory, RegularFile, Symlink, Whiteout};
 use crate::restorecon::{lgetfilecon, lsetfilecon};
 use crate::utils::ensure_dir_exists;
+use crate::utils::get_work_dir;
 use anyhow::{bail, Context, Result};
 use extattr::lgetxattr;
 use rustix::fs::{
     bind_mount, chmod, chown, mount, move_mount, unmount, Gid, MetadataExt, Mode, MountFlags,
     MountPropagationFlags, Uid, UnmountFlags,
 };
-use crate::utils::get_work_dir;
 use rustix::mount::mount_change;
 use rustix::path::Arg;
 use std::cmp::PartialEq;
@@ -420,7 +418,14 @@ pub fn magic_mount() -> Result<()> {
         log::debug!("collected: {:#?}", root);
         let tmp_dir = PathBuf::from(get_work_dir());
         ensure_dir_exists(&tmp_dir)?;
-        mount(AP_OVERLAY_SOURCE, &tmp_dir, "tmpfs", MountFlags::empty(), "").context("mount tmp")?;
+        mount(
+            AP_OVERLAY_SOURCE,
+            &tmp_dir,
+            "tmpfs",
+            MountFlags::empty(),
+            "",
+        )
+        .context("mount tmp")?;
         mount_change(&tmp_dir, MountPropagationFlags::PRIVATE).context("make tmp private")?;
         let result = do_magic_mount("/", &tmp_dir, root, false);
         if let Err(e) = unmount(&tmp_dir, UnmountFlags::DETACH) {

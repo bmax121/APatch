@@ -1,21 +1,21 @@
 use anyhow::{bail, Context, Error, Ok, Result};
-use log::{info, warn};
 use const_format::concatcp;
+use log::{info, warn};
 use std::ffi::CString;
 use std::{
-    fs::{self,create_dir_all, File, OpenOptions},
-    io::{BufRead, BufReader,ErrorKind::AlreadyExists, Write},
+    fs::{self, create_dir_all, File, OpenOptions},
+    io::{BufRead, BufReader, ErrorKind::AlreadyExists, Write},
     path::Path,
-    process::Stdio
+    process::Stdio,
 };
 
-use std::process::Command;
+use crate::defs;
+use std::fs::metadata;
 #[allow(unused_imports)]
 use std::fs::{set_permissions, Permissions};
 #[cfg(unix)]
 use std::os::unix::prelude::PermissionsExt;
-use crate::defs;
-use std::fs::metadata;
+use std::process::Command;
 
 use crate::supercall::sc_su_get_safemode;
 
@@ -69,14 +69,18 @@ pub fn getprop(prop: &str) -> Option<String> {
 pub fn getprop(_prop: &str) -> Option<String> {
     unimplemented!()
 }
-pub fn run_command(command: &str, args: &[&str], stdout: Option<Stdio>) -> anyhow::Result<std::process::Child> {
+pub fn run_command(
+    command: &str,
+    args: &[&str],
+    stdout: Option<Stdio>,
+) -> anyhow::Result<std::process::Child> {
     let mut command_builder = Command::new(command);
     command_builder.args(args);
     if let Some(out) = stdout {
         command_builder.stdout(out);
     }
-    let child = command_builder.spawn()?;  
-    Ok(child) 
+    let child = command_builder.spawn()?;
+    Ok(child)
 }
 pub fn is_safe_mode(superkey: Option<String>) -> bool {
     let safemode = getprop("persist.sys.safemode")
@@ -103,7 +107,6 @@ pub fn is_safe_mode(superkey: Option<String>) -> bool {
     safemode
 }
 
-
 #[cfg(any(target_os = "linux", target_os = "android"))]
 pub fn switch_mnt_ns(pid: i32) -> Result<()> {
     use anyhow::ensure;
@@ -120,8 +123,8 @@ pub fn switch_mnt_ns(pid: i32) -> Result<()> {
 }
 
 pub fn is_overlayfs_supported() -> Result<bool> {
-    let file = File::open("/proc/filesystems")
-        .with_context(|| "Failed to open /proc/filesystems")?;
+    let file =
+        File::open("/proc/filesystems").with_context(|| "Failed to open /proc/filesystems")?;
     let reader = BufReader::new(file);
 
     let overlay_supported = reader.lines().any(|line| {
@@ -137,7 +140,7 @@ pub fn is_overlayfs_supported() -> Result<bool> {
 pub fn is_symlink(path: &str) -> bool {
     match fs::symlink_metadata(path) {
         std::result::Result::Ok(metadata) => metadata.file_type().is_symlink(),
-        std::result::Result::Err(_) => false, 
+        std::result::Result::Err(_) => false,
     }
 }
 pub fn should_enable_overlay() -> Result<bool> {

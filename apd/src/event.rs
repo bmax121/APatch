@@ -1,29 +1,29 @@
+use crate::m_mount;
 use crate::module;
 use crate::supercall::fork_for_result;
-use crate::utils::{switch_cgroups,ensure_dir_exists,get_work_dir,ensure_file_exists};
+use crate::utils::{ensure_dir_exists, ensure_file_exists, get_work_dir, switch_cgroups};
 use crate::{
     assets, defs, mount, restorecon, supercall,
     supercall::{init_load_package_uid_config, init_load_su_path, refresh_ap_package_list},
     utils::{self, ensure_clean_dir},
 };
 use anyhow::{bail, ensure, Context, Result};
+use extattr::{lgetxattr, lsetxattr, Flags as XattrFlags};
 use log::{info, warn};
-use crate::m_mount;
 use notify::event::{ModifyKind, RenameMode};
 use notify::{Config, Event, EventKind, INotifyWatcher, RecursiveMode, Watcher};
+use rustix::{fd::AsFd, fs::CWD, mount::*};
 use std::ffi::CStr;
+use std::fs::{remove_dir_all, rename};
 use std::os::unix::fs::PermissionsExt;
 use std::os::unix::process::CommandExt;
-use std::path::{PathBuf,Path};
+use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
 use std::{collections::HashMap, thread};
-use std::{env, fs,io};
-use rustix::{fd::AsFd, fs::CWD, mount::*};
-use std::fs::{remove_dir_all, rename};
+use std::{env, fs, io};
 use walkdir::WalkDir;
-use extattr::{lsetxattr, lgetxattr, Flags as XattrFlags};
 
 fn copy_with_xattr(src: &Path, dest: &Path) -> io::Result<()> {
     fs::copy(src, dest)?;
@@ -77,24 +77,28 @@ fn mount_partition(partition_name: &str, lowerdir: &Vec<String>) -> Result<()> {
     mount::mount_overlay(&partition, lowerdir, workdir, upperdir)
 }
 
-pub fn mount_systemlessly(module_dir: &str,is_img: bool) -> Result<()> {
+pub fn mount_systemlessly(module_dir: &str, is_img: bool) -> Result<()> {
     // construct overlay mount params
     if !is_img {
-
         info!("fallback to modules.img");
         let module_update_dir = defs::MODULE_DIR;
         let module_dir = defs::MODULE_MOUNT_DIR;
-        let tmp_module_img = defs::MODULE_UPDATE_TMP_IMG; 
+        let tmp_module_img = defs::MODULE_UPDATE_TMP_IMG;
         let tmp_module_path = Path::new(tmp_module_img);
 
         ensure_clean_dir(module_dir)?;
         info!("- Preparing image");
-        if tmp_module_path.exists() { //if it have update,remove tmp file
+        if tmp_module_path.exists() {
+            //if it have update,remove tmp file
             std::fs::remove_file(tmp_module_path)?;
         }
         let total_size = calculate_total_size(Path::new(module_update_dir))?; //create modules adapt size
-        info!("Total size of files in '{}': {} bytes",tmp_module_path.display(),total_size);
-        let grow_size =  128 * 1024 * 1024 + total_size;
+        info!(
+            "Total size of files in '{}': {} bytes",
+            tmp_module_path.display(),
+            total_size
+        );
+        let grow_size = 128 * 1024 * 1024 + total_size;
         fs::File::create(tmp_module_img)
             .context("Failed to create ext4 image file")?
             .set_len(grow_size)
@@ -105,7 +109,11 @@ pub fn mount_systemlessly(module_dir: &str,is_img: bool) -> Result<()> {
             .arg(tmp_module_img)
             .stdout(std::process::Stdio::piped())
             .output()?;
-        ensure!(result.status.success(),"Failed to format ext4 image: {}",String::from_utf8(result.stderr).unwrap());
+        ensure!(
+            result.status.success(),
+            "Failed to format ext4 image: {}",
+            String::from_utf8(result.stderr).unwrap()
+        );
         info!("Checking Image");
         module::check_image(tmp_module_img)?;
         info!("- Mounting image");
@@ -113,10 +121,13 @@ pub fn mount_systemlessly(module_dir: &str,is_img: bool) -> Result<()> {
             .with_context(|| "mount module image failed".to_string())?;
         info!("mounted {} to {}", tmp_module_img, module_dir);
         let _ = restorecon::setsyscon(module_dir);
-        let command_string = format!("cp --preserve=context -R {}* {};",module_update_dir,module_dir);
-        let args = vec!["-c",&command_string];
+        let command_string = format!(
+            "cp --preserve=context -R {}* {};",
+            module_update_dir, module_dir
+        );
+        let args = vec!["-c", &command_string];
         let _ = utils::run_command("sh", &args, None)?.wait()?;
-        mount_systemlessly(module_dir,true)?;
+        mount_systemlessly(module_dir, true)?;
         return Ok(());
     }
     let dir = fs::read_dir(module_dir);
@@ -171,8 +182,6 @@ pub fn mount_systemlessly(module_dir: &str,is_img: bool) -> Result<()> {
         //ensure_file_exists(format!("{}",defs::BIND_MOUNT_FILE))?;
         //ensure_clean_dir(defs::MODULE_DIR)?;
         //info!("bind_mount enable,overlayfs is not work,clear module_dir");
-        
-        
     }
 
     // mount other partitions
@@ -191,7 +200,7 @@ pub fn systemless_bind_mount(module_dir: &str) -> Result<()> {
     //let combined_flags = MountFlags::empty() | MountFlags::from_bits_truncate(propagation_flags.bits());
     // set tmp_path prvate
     //mount("tmpfs",utils::get_tmp_path(),"tmpfs",combined_flags,"")?;
- 
+
     // construct bind mount params
     m_mount::magic_mount()?;
     Ok(())
@@ -212,22 +221,25 @@ pub fn calculate_total_size(path: &Path) -> std::io::Result<u64> {
     }
     Ok(total_size)
 }
-pub fn move_file(module_update_dir: &str,module_dir: &str)-> Result<()> {
+pub fn move_file(module_update_dir: &str, module_dir: &str) -> Result<()> {
     for entry in fs::read_dir(module_update_dir)? {
         let entry = entry?;
         let file_name = entry.file_name();
         let file_name_str = file_name.to_string_lossy();
 
         if entry.path().is_dir() {
-            let source_path = Path::new(module_update_dir).join(file_name_str.as_ref()); 
-            let target_path = Path::new(module_dir).join(file_name_str.as_ref()); 
+            let source_path = Path::new(module_update_dir).join(file_name_str.as_ref());
+            let target_path = Path::new(module_dir).join(file_name_str.as_ref());
             if target_path.exists() {
-                info!("Removing existing folder in target directory: {}", file_name_str);
-                remove_dir_all(&target_path)?;  
+                info!(
+                    "Removing existing folder in target directory: {}",
+                    file_name_str
+                );
+                remove_dir_all(&target_path)?;
             }
 
             info!("Moving {} to target directory", file_name_str);
-            rename(&source_path, &target_path)?;  
+            rename(&source_path, &target_path)?;
         }
     }
     return Ok(());
@@ -263,7 +275,7 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
         defs::APATCH_LOG_FOLDER,
         defs::APATCH_LOG_FOLDER
     );
-    let mut args = vec!["-c", &command_string]; 
+    let mut args = vec!["-c", &command_string];
     // for all file to .old
     let result = utils::run_command("sh", &args, None)?.wait()?;
     if result.success() {
@@ -274,7 +286,18 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     let logcat_path = format!("{}locat.log", defs::APATCH_LOG_FOLDER);
     let dmesg_path = format!("{}dmesg.log", defs::APATCH_LOG_FOLDER);
     let bootlog = std::fs::File::create(dmesg_path)?;
-    args = vec!["-s","9","120s","logcat","-b","main,system,crash","-f",&logcat_path,"logcatcher-bootlog:S","&"];
+    args = vec![
+        "-s",
+        "9",
+        "120s",
+        "logcat",
+        "-b",
+        "main,system,crash",
+        "-f",
+        &logcat_path,
+        "logcatcher-bootlog:S",
+        "&",
+    ];
     let _ = unsafe {
         std::process::Command::new("timeout")
             .process_group(0)
@@ -285,7 +308,7 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
             .args(args)
             .spawn()
     };
-    args = vec!["-s","9","120s","dmesg","-w"];
+    args = vec!["-s", "9", "120s", "dmesg", "-w"];
     let result = unsafe {
         std::process::Command::new("timeout")
             .process_group(0)
@@ -326,22 +349,22 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
         }
     }
     let module_update_dir = defs::MODULE_UPDATE_TMP_DIR; //save module place
-    let module_dir = defs::MODULE_DIR;// run modules place
-    let module_update_flag = Path::new(defs::WORKING_DIR).join(defs::UPDATE_FILE_NAME);// if update ,there will be renew modules file
+    let module_dir = defs::MODULE_DIR; // run modules place
+    let module_update_flag = Path::new(defs::WORKING_DIR).join(defs::UPDATE_FILE_NAME); // if update ,there will be renew modules file
     assets::ensure_binaries().with_context(|| "binary missing")?;
 
-    let tmp_module_img = defs::MODULE_UPDATE_TMP_IMG; 
+    let tmp_module_img = defs::MODULE_UPDATE_TMP_IMG;
     let tmp_module_path = Path::new(tmp_module_img);
-    move_file(module_update_dir,module_dir)?;
+    move_file(module_update_dir, module_dir)?;
     info!("remove update flag");
     let _ = fs::remove_file(module_update_flag);
-    if tmp_module_path.exists() { //if it have update,remove tmp file
+    if tmp_module_path.exists() {
+        //if it have update,remove tmp file
         std::fs::remove_file(tmp_module_path)?;
     }
 
     let lite_file = Path::new(defs::LITEMODE_FILE);
 
-    
     if safe_mode {
         warn!("safe mode, skip post-fs-data scripts and disable all modules!");
         if let Err(e) = crate::module::disable_all_modules() {
@@ -364,13 +387,11 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     }
     if lite_file.exists() {
         info!("litemode runing skip mount tempfs")
-    }else{
+    } else {
         if let Err(e) = mount::mount_tmpfs(utils::get_tmp_path()) {
             warn!("do temp dir mount failed: {}", e);
         }
-
     }
-    
 
     // exec modules post-fs-data scripts
     // TODO: Add timeout
@@ -383,17 +404,22 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
         warn!("load system.prop failed: {}", e);
     }
 
-    
     if lite_file.exists() {
         info!("litemode runing skip mount state")
-    }else{
-
+    } else {
         if utils::should_enable_overlay()? {
             // mount module systemlessly by overlay
             let work_dir = get_work_dir();
             let tmp_dir = PathBuf::from(work_dir.clone());
             ensure_dir_exists(&tmp_dir)?;
-            mount(defs::AP_OVERLAY_SOURCE, &tmp_dir, "tmpfs", MountFlags::empty(), "").context("mount tmp")?;
+            mount(
+                defs::AP_OVERLAY_SOURCE,
+                &tmp_dir,
+                "tmpfs",
+                MountFlags::empty(),
+                "",
+            )
+            .context("mount tmp")?;
             mount_change(&tmp_dir, MountPropagationFlags::PRIVATE).context("make tmp private")?;
             let dir_names = vec!["vendor", "product", "system_ext", "odm", "oem", "system"];
             let dir = fs::read_dir(module_dir)?;
@@ -407,33 +433,30 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
                 if module_path.is_dir() {
                     let module_name = module_path.file_name().unwrap().to_string_lossy();
                     let module_dest = Path::new(&work_dir).join(module_name.as_ref());
-    
+
                     for sub_dir in dir_names.iter() {
                         let sub_dir_path = module_path.join(sub_dir);
                         if sub_dir_path.exists() && sub_dir_path.is_dir() {
                             let sub_dir_dest = module_dest.join(sub_dir);
                             fs::create_dir_all(&sub_dir_dest)?;
-    
+
                             copy_dir_with_xattr(&sub_dir_path, &sub_dir_dest)?;
                         }
                     }
                 }
             }
-            if let Err(e) = mount_systemlessly(&get_work_dir(),false) {
+            if let Err(e) = mount_systemlessly(&get_work_dir(), false) {
                 warn!("do systemless mount failed: {}", e);
             }
             if let Err(e) = unmount(&tmp_dir, UnmountFlags::DETACH) {
                 log::error!("failed to unmount tmp {}", e);
             }
-        }else{
+        } else {
             if let Err(e) = systemless_bind_mount(module_dir) {
                 warn!("do systemless bind_mount failed: {}", e);
             }
-            
-    
         }
     }
-    
 
     run_stage("post-mount", superkey, true);
 

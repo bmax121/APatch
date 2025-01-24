@@ -6,9 +6,9 @@ pub const BINARY_DIR: &str = concatcp!(WORKING_DIR, "bin/");
 pub const APATCH_LOG_FOLDER: &str = concatcp!(WORKING_DIR, "log/");
 
 pub const AP_RC_PATH: &str = concatcp!(WORKING_DIR, ".aprc");
-pub const GLOBAL_NAMESPACE_FILE: &str = concatcp!(ADB_DIR,".global_namespace_enable");
-pub const LITEMODE_FILE: &str = concatcp!(ADB_DIR,".litemode_enable");
-pub const OVERLAY_FILE: &str = concatcp!(ADB_DIR,".overlay_enable");
+pub const GLOBAL_NAMESPACE_FILE: &str = concatcp!(ADB_DIR, ".global_namespace_enable");
+pub const LITEMODE_FILE: &str = concatcp!(ADB_DIR, ".litemode_enable");
+pub const OVERLAY_FILE: &str = concatcp!(ADB_DIR, ".overlay_enable");
 pub const AP_OVERLAY_SOURCE: &str = "APatch";
 pub const DAEMON_PATH: &str = concatcp!(ADB_DIR, "apd");
 

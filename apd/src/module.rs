@@ -1,14 +1,12 @@
 #[allow(clippy::wildcard_imports)]
 use crate::utils::*;
-use crate::{
-    assets, defs, restorecon,utils,
-};
-use regex_lite::Regex;
+use crate::{assets, defs, restorecon, utils};
 use anyhow::{anyhow, bail, ensure, Context, Result};
 use const_format::concatcp;
 use is_executable::is_executable;
 use java_properties::PropertiesIter;
 use log::{info, warn};
+use regex_lite::Regex;
 use std::{
     collections::HashMap,
     env::var as env_var,
@@ -45,7 +43,7 @@ const INSTALL_MODULE_SCRIPT_: &str = concatcp!(
 fn exec_install_script(module_file: &str) -> Result<()> {
     let realpath = std::fs::canonicalize(module_file)
         .with_context(|| format!("realpath: {module_file} failed"))?;
-    
+
     let mut content;
 
     if !should_enable_overlay()? {
@@ -67,7 +65,10 @@ fn exec_install_script(module_file: &str) -> Result<()> {
         .env("APATCH", "true")
         .env("APATCH_VER", defs::VERSION_NAME)
         .env("APATCH_VER_CODE", defs::VERSION_CODE)
-        .env("APATCH_BIND_MOUNT", format!("{}", !utils::should_enable_overlay()?))
+        .env(
+            "APATCH_BIND_MOUNT",
+            format!("{}", !utils::should_enable_overlay()?),
+        )
         .env("OUTFD", "1")
         .env("ZIPFILE", realpath)
         .status()?;
@@ -132,7 +133,6 @@ fn foreach_active_module(f: impl FnMut(&Path) -> Result<()>) -> Result<()> {
     foreach_module(true, f)
 }
 
-
 pub fn check_image(img: &str) -> Result<()> {
     let result = Command::new("e2fsck")
         .args(["-yf", img])
@@ -152,8 +152,6 @@ pub fn check_image(img: &str) -> Result<()> {
     info!("e2fsck exit code: {}", code.unwrap_or(-1));
     Ok(())
 }
-
-
 
 pub fn load_sepolicy_rule() -> Result<()> {
     foreach_active_module(|path| {
@@ -198,7 +196,10 @@ fn exec_script<T: AsRef<Path>>(path: T, wait: bool) -> Result<()> {
         .env("APATCH", "true")
         .env("APATCH_VER", defs::VERSION_NAME)
         .env("APATCH_VER_CODE", defs::VERSION_CODE)
-        .env("APATCH_BIND_MOUNT", format!("{}", !utils::should_enable_overlay()?))
+        .env(
+            "APATCH_BIND_MOUNT",
+            format!("{}", !utils::should_enable_overlay()?),
+        )
         .env(
             "PATH",
             format!(
@@ -337,7 +338,6 @@ fn _install_module(zip: &str) -> Result<()> {
     let modules_dir = Path::new(defs::MODULE_DIR);
     let modules_update_dir = Path::new(defs::MODULE_UPDATE_TMP_DIR);
     if !Path::new(modules_dir).exists() {
-        
         fs::create_dir(modules_dir).expect("Failed to create modules folder");
         let permissions = fs::Permissions::from_mode(0o700);
         fs::set_permissions(modules_dir, permissions).expect("Failed to set permissions");
@@ -387,7 +387,6 @@ pub fn install_module(zip: &str) -> Result<()> {
 }
 
 pub fn _uninstall_module(id: &str, update_dir: &str) -> Result<()> {
-    
     let dir = Path::new(update_dir);
     ensure!(dir.exists(), "No module installed");
 
@@ -421,16 +420,15 @@ pub fn _uninstall_module(id: &str, update_dir: &str) -> Result<()> {
     if target_module.exists() {
         let remove_file = target_module.join(defs::REMOVE_FILE_NAME);
         if !remove_file.exists() {
-        fs::File::create(remove_file).with_context(|| "Failed to create remove file.")?;
+            fs::File::create(remove_file).with_context(|| "Failed to create remove file.")?;
         }
     }
 
     let _ = mark_module_state(id, defs::REMOVE_FILE_NAME, true);
     Ok(())
-
 }
 pub fn uninstall_module(id: &str) -> Result<()> {
-    //let result = _uninstall_module(id, defs::MODULE_DIR);  
+    //let result = _uninstall_module(id, defs::MODULE_DIR);
     //if should_enable_overlay()?{
     //    _uninstall_module(id, defs::MODULE_UPDATE_TMP_DIR)?;
     //}else{
@@ -470,47 +468,47 @@ fn _enable_module(module_dir: &str, mid: &str, enable: bool) -> Result<()> {
 pub fn enable_module(id: &str) -> Result<()> {
     let update_dir = Path::new(defs::MODULE_DIR);
     let update_dir_update = Path::new(defs::MODULE_UPDATE_TMP_DIR);
-    
-    //let result = enable_module_update(id, update_dir);  
+
+    //let result = enable_module_update(id, update_dir);
     //if should_enable_overlay()?{
-    //    enable_module_update(id, update_dir_update)?;  
+    //    enable_module_update(id, update_dir_update)?;
     //}else{
     //    return result;
     //}
-    enable_module_update(id, update_dir)?;  
+    enable_module_update(id, update_dir)?;
     Ok(())
 }
 
-pub fn enable_module_update(id: &str,update_dir: &Path) -> Result<()> {
+pub fn enable_module_update(id: &str, update_dir: &Path) -> Result<()> {
     if let Some(module_dir_str) = update_dir.to_str() {
-        _enable_module(module_dir_str, id, true)  
+        _enable_module(module_dir_str, id, true)
     } else {
         log::info!("Enable module failed: Invalid path");
-        Err(anyhow::anyhow!("Invalid module directory")) 
+        Err(anyhow::anyhow!("Invalid module directory"))
     }
 }
 
 pub fn disable_module(id: &str) -> Result<()> {
     let update_dir = Path::new(defs::MODULE_DIR);
     let update_dir_update = Path::new(defs::MODULE_UPDATE_TMP_DIR);
-    
-    //let result = disable_module_update(id, update_dir);  
+
+    //let result = disable_module_update(id, update_dir);
     //if should_enable_overlay()?{
     //    disable_module_update(id, update_dir_update)?;
     //}else{
     //    return result;
     //}
-    disable_module_update(id, update_dir)?;  
+    disable_module_update(id, update_dir)?;
 
     Ok(())
 }
 
-pub fn disable_module_update(id: &str,update_dir: &Path) -> Result<()> {
+pub fn disable_module_update(id: &str, update_dir: &Path) -> Result<()> {
     if let Some(module_dir_str) = update_dir.to_str() {
-        _enable_module(module_dir_str, id, false)  
+        _enable_module(module_dir_str, id, false)
     } else {
         log::info!("Disable module failed: Invalid path");
-        Err(anyhow::anyhow!("Invalid module directory")) 
+        Err(anyhow::anyhow!("Invalid module directory"))
     }
 }
 
@@ -539,7 +537,6 @@ pub fn disable_all_modules_update(dir: &str) -> Result<()> {
     }
     Ok(())
 }
-
 
 fn _list_modules(path: &str) -> Vec<HashMap<String, String>> {
     // first check enabled modules
