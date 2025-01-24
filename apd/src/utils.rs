@@ -151,14 +151,6 @@ pub fn should_enable_overlay() -> Result<bool> {
     Ok(overlay_exists && overlay_supported)
 }
 
-#[cfg(any(target_os = "linux", target_os = "android"))]
-pub fn unshare_mnt_ns() -> Result<()> {
-    use anyhow::ensure;
-    let ret = unsafe { libc::unshare(libc::CLONE_NEWNS) };
-    ensure!(ret == 0, "unshare mnt ns failed");
-    Ok(())
-}
-
 fn switch_cgroup(grp: &str, pid: u32) {
     let path = Path::new(grp).join("cgroup.procs");
     if !path.exists() {
