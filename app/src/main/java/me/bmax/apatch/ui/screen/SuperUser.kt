@@ -50,6 +50,7 @@ import coil.request.ImageRequest
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import kotlinx.coroutines.launch
+import me.bmax.apatch.APApplication
 import me.bmax.apatch.Natives
 import me.bmax.apatch.R
 import me.bmax.apatch.ui.component.ProvideMenuShape
@@ -200,6 +201,7 @@ private fun AppItem(
                     excludeApp = 0
                     config.allow = 1
                     config.exclude = 0
+                    config.profile.scontext = APApplication.MAGISK_SCONTEXT
                 } else {
                     config.allow = 0
                 }
@@ -228,6 +230,7 @@ private fun AppItem(
                 if (it) {
                     excludeApp = 1
                     config.allow = 0
+                    config.profile.scontext = APApplication.DEFAULT_SCONTEXT
                     Natives.revokeSu(app.uid)
                 } else {
                     excludeApp = 0
