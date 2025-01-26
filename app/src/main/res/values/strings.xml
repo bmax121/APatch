@@ -22,7 +22,7 @@
     <string name="about">About</string>
     <string name="settings_app_language">Language</string>
     <string name="system_default">System default</string>
-    <string name="settings_global_namespace_mode">Global Namespace Mode</string>
+    <string name="settings_global_namespace_mode">Global namespace mode</string>
     <string name="settings_global_namespace_mode_summary">All root sessions use the global mount namespace</string>
     <string name="settings_clear_super_key_dialog">Do you really want to proceed?</string>
 
@@ -33,16 +33,16 @@
     <string name="home_click_to_learn_apatch">Learn about the features of APatch and how to use</string>
 
     <string name="about_source_code"><![CDATA[<p>View source code at %1$s<p/>Join our %2$s channel<p/>Join our %3$s group]]></string>
-    <string name="send_log">Send Log</string>
-    <string name="save_log">Save Log</string>
-    <string name="log_saved">Log saved</string>
+    <string name="send_log">Send logs</string>
+    <string name="save_log">Save logs</string>
+    <string name="log_saved">Logs saved</string>
     <string name="safe_mode">Safe mode</string>
 
     <string name="super_key">SuperKey</string>
     <string name="clear_super_key">Clear SuperKey</string>
     <string name="patch_set_superkey">Set SuperKey</string>
     <string name="home_patch_set_key_desc">Only credential for KernelPatch</string>
-    <string name="home_patch_next_step">Next Step</string>
+    <string name="home_patch_next_step">Next step</string>
 
     <string name="home_not_installed">Not installed</string>
     <string name="home_install_unknown">Not installed or authenticated</string>
@@ -71,7 +71,7 @@
     <string name="patch_config_title">Patches</string>
     <string name="patch_mode_bootimg_patch">Mode: Patch</string>
     <string name="patch_mode_patch_and_install">Mode: Patch and install</string>
-    <string name="patch_mode_install_to_next_slot">Mode: Install to next slot (After OTA)</string>
+    <string name="patch_mode_install_to_next_slot">Mode: Install to inactive slot (After OTA)</string>
     <string name="patch_mode_uninstall_patch">Mode: Uninstall KPatch</string>
     <string name="patch_select_bootimg_btn">Select boot</string>
     <string name="patch_embed_kpm_btn">Embed KPM</string>
@@ -95,16 +95,15 @@
     <string name="patch_item_extra_kpm_desciption">Description:</string>
     <string name="patch_item_extra_args">Args:</string>
     <string name="patch_item_extra_event">Event:</string>
-    <string name="patch_item_skey">Super Key</string>
-    <string name="patch_item_set_skey_label">Super Key should be 8-63 characters and include both numbers and letters, but no special characters</string>
-
+    <string name="patch_item_skey">SuperKey</string>
+    <string name="patch_item_set_skey_label">The SuperKey should be 8-63 characters long and include numbers and letters, but no special characters.</string>
 
     <string name="home_kernel">Kernel</string>
-    <string name="home_manager_version">Manager Version</string>
+    <string name="home_manager_version">Manager version</string>
     <string name="home_fingerprint">Fingerprint</string>
 
     <string name="home_selinux_status">SELinux status</string>
-    <string name="home_selinux_status_disabled">Off</string>
+    <string name="home_selinux_status_disabled">Disabled</string>
     <string name="home_selinux_status_enforcing">Enforcing</string>
     <string name="home_selinux_status_permissive">Permissive</string>
     <string name="home_selinux_status_unknown">Unknown</string>
@@ -133,65 +132,64 @@
     <string name="kpm_desc">Desc</string>
     <string name="kpm_args">Args</string>
 
-
     <string name="su_title">Superuser</string>
     <string name="su_selinux_via_hook">bypass via hook</string>
     <string name="su_pkg_excluded_label">exclude</string>
-    <string name="su_pkg_excluded_setting_title">Exclude Modifications</string>
-    <string name="su_pkg_excluded_setting_summary">Enabling this option will allow APatch to restore any modified files by the modules for this application.</string>
+    <string name="su_pkg_excluded_setting_title">Exclude modifications</string>
+    <string name="su_pkg_excluded_setting_summary">Enabling this option will allow APatch to restore any files modified by the modules of this app.</string>
     <string name="su_show_system_apps">Show system apps</string>
     <string name="su_hide_system_apps">Hide system apps</string>
     <string name="su_refresh">Refresh</string>
 
     <string name="apm">APModule</string>
     <string name="apm_not_installed">AndroidPatch not installed</string>
-    <string name="apm_failed_to_enable">Could not turn on the \"%s\" module</string>
-    <string name="apm_failed_to_disable">Could not turn off the \"%s\" module</string>
+    <string name="apm_failed_to_enable">Couldn\'t turn on the \"%s\" module</string>
+    <string name="apm_failed_to_disable">Couldn\'t turn off the \"%s\" module</string>
     <string name="apm_empty">No module installed</string>
     <string name="apm_remove">Remove</string>
     <string name="apm_install">Install</string>
     <string name="apm_uninstall_confirm">Uninstall the \"%s\" module?</string>
     <string name="apm_uninstall_success">%s uninstalled</string>
-    <string name="apm_uninstall_failed">Could not uninstall %s</string>
+    <string name="apm_uninstall_failed">Couldn\'t uninstall %s</string>
     <string name="apm_version">Version</string>
     <string name="apm_author">Author</string>
     <string name="apm_desc">Desc</string>
-    <string name="apm_overlay_fs_not_available">Modules are unavailable as OverlayFS is disabled by the kernel.</string>
-    <string name="apm_magisk_conflict">Modules are unavailable due to a conflict with Magisk.</string>
+    <string name="apm_overlay_fs_not_available">Modules are unavailable as OverlayFS is disabled by the kernel!</string>
+    <string name="apm_magisk_conflict">Modules are unavailable due to a conflict with Magisk!</string>
     <string name="apm_reboot_to_apply">Reboot to take effect</string>
     <string name="apm_changelog">Changelog</string>
     <string name="apm_update">Update</string>
     <string name="apm_downloading">Downloading \"%s\" module…</string>
     <string name="apm_start_downloading">Start downloading %s</string>
-    <string name="apm_new_version_available">Click to install the new version, %s.</string>
+    <string name="apm_new_version_available">New version %s is available, click to upgrade.</string>
 
     <string name="hide_apatch_manager">Hide APatch Manager</string>
-    <string name="hide_apatch_manager_summary">Install a new manager app with a random package ID and custom app label</string>
-    <string name="hide_apatch_dialog_new_manager_name">New Manager Name</string>
+    <string name="hide_apatch_manager_summary">Install a new manager app with a random ID and custom label</string>
+    <string name="hide_apatch_dialog_new_manager_name">New manager name</string>
     <string name="hide_apatch_dialog_summary">It will be used as the new app label shown in launcher</string>
-    <string name="hide_apatch_manager_failure">Failed to hide, please report the bug!</string>
+    <string name="hide_apatch_manager_failure">Failed to hide. Please report the bug!</string>
 
     <string name="setting_reset_su_path">Reset su path</string>
-    <string name="setting_reset_su_new_path">new full path</string>
+    <string name="setting_reset_su_new_path">New full path</string>
 
     <string name="apm_webui_open">Open</string>
     <string name="apm_action">Action</string>
-    <string name="enable_web_debugging">Enable WebView Debugging</string>
-    <string name="enable_web_debugging_summary">Can be used to debug WebUI, please enable only when needed.</string>
+    <string name="enable_web_debugging">Enable WebView debugging</string>
+    <string name="enable_web_debugging_summary">Can be used to debug WebUI. Please enable only when needed.</string>
 
-    <string name="settings_donot_store_superkey">Don\'t store super key in local</string>
-    <string name="settings_donot_store_superkey_summary">Authenticate the super key every time the manager starts</string>
+    <string name="settings_donot_store_superkey">Don\'t store SuperKey in local</string>
+    <string name="settings_donot_store_superkey_summary">Authenticate the SuperKey every time the manager starts</string>
 
-    <string name="home_new_apatch_found">New version available: %s, Click me to upgrade</string>
+    <string name="home_new_apatch_found">New version %s is available, click to upgrade.</string>
 
     <string name="mode_select_page_title">Install</string>
-    <string name="mode_select_page_patch_and_install">Patch and Install</string>
+    <string name="mode_select_page_patch_and_install">Patch and install</string>
     <string name="mode_select_page_select_file">Select a boot image to Patch</string>
-    <string name="mode_select_page_install_inactive_slot">Install to Inactive Slot (After OTA)</string>
+    <string name="mode_select_page_install_inactive_slot">Install to inactive slot (After OTA)</string>
     <string name="mode_select_page_install_inactive_slot_warning">Your device will be **FORCED** to boot to the current inactive slot after a reboot!\nOnly use this option after OTA is done.\nContinue?</string>
 
     <string name="home_dialog_auth_fail_title">Authentication failed</string>
-    <string name="home_dialog_auth_fail_content">Unable to authenticate the super key, therefore APatch cannot work properly.\nHere are some possible reasons for authentication failure:\n1. You have not patched the boot image with KernelPatch.\n2. The patched boot image was not flashed.\n3. Super Key is wrong or contains special characters.\n4. Your device does not support APatch and KernelPatch.\n\nPlease check and try again. If there are still issues, you can always ask questions on the official repository\'s issues page.</string>
+    <string name="home_dialog_auth_fail_content">Unable to authenticate the SuperKey, therefore APatch cannot work properly.\nHere are some possible reasons for authentication failure:\n1. You didn\'t patch the boot.img with KernelPatch.\n2. The patched boot.img wasn\'t flashed.\n3. The SuperKey is wrong or contains special characters.\n4. Your device doesn\'t support APatch and KernelPatch.\n\nPlease check and try again. If there are still issues, you can always ask questions on the official repository\'s issues page.</string>
 
     <string name="home_more_menu_feedback_or_suggestion">Feedback or suggestion</string>
     <string name="home_more_menu_about">About</string>
@@ -199,7 +197,7 @@
     <string name="home_dialog_uninstall_title">Uninstall</string>
 
     <string name="home_dialog_uninstall_ap_only">Remove AndroidPatch</string>
-    <string name="home_dialog_uninstall_all">Uninstall All</string>
+    <string name="home_dialog_uninstall_all">Uninstall all</string>
 
     <string name="kpm_control_dialog_title">Control KPModule</string>
     <string name="kpm_control_dialog_content">Input control parameters:</string>
@@ -208,44 +206,44 @@
     <string name="kpm_control_ok">Operation succeeded!</string>
     <string name="kpm_control_failed">Operation failed!</string>
 
-    <string name="settings_night_mode_follow_sys">Follow System\'s Dark Theme</string>
-    <string name="settings_night_mode_follow_sys_summary">Automatically switch to dark theme with system\'s setting</string>
+    <string name="settings_night_mode_follow_sys">Follow system\'s dark theme</string>
+    <string name="settings_night_mode_follow_sys_summary">Automatically switch to dark theme based on system settings</string>
 
-    <string name="settings_night_theme_enabled">Enable Dark Theme</string>
+    <string name="settings_night_theme_enabled">Enable dark theme</string>
 
-    <string name="settings_use_system_color_theme">System Color Theme</string>
-    <string name="settings_use_system_color_theme_summary">Use a color theme generated by system with current wallpaper</string>
+    <string name="settings_use_system_color_theme">System color theme</string>
+    <string name="settings_use_system_color_theme_summary">Use a color theme generated by the system based on the current wallpaper</string>
 
-    <string name="settings_custom_color_theme">Color Theme</string>
-    <string name="amber_theme">Amber Theme</string>
-    <string name="blue_grey_theme">BlueGrey Theme</string>
-    <string name="blue_theme">Blue Theme</string>
-    <string name="brown_theme">Brown Theme</string>
-    <string name="cyan_theme">Cyan Theme</string>
-    <string name="deep_orange_theme">Deep Orange Theme</string>
-    <string name="deep_purple_theme">Deep Purple Theme</string>
-    <string name="green_theme">Green Theme</string>
-    <string name="indigo_theme">Indigo Theme</string>
-    <string name="light_blue_theme">Light Blue Theme</string>
-    <string name="light_green_theme">Light Green Theme</string>
-    <string name="lime_theme">Lime Theme</string>
-    <string name="orange_theme">Orange Theme</string>
-    <string name="pink_theme">Pink Theme</string>
-    <string name="purple_theme">Purple Theme</string>
-    <string name="red_theme">Red Theme</string>
-    <string name="sakura_theme">Sakura Theme</string>
-    <string name="teal_theme">Teal Theme</string>
-    <string name="yellow_theme">Yellow Theme</string>
+    <string name="settings_custom_color_theme">Color theme</string>
+    <string name="amber_theme">Amber</string>
+    <string name="blue_grey_theme">Blue grey</string>
+    <string name="blue_theme">Blue</string>
+    <string name="brown_theme">Brown</string>
+    <string name="cyan_theme">Cyan</string>
+    <string name="deep_orange_theme">Deep orange</string>
+    <string name="deep_purple_theme">Deep purple</string>
+    <string name="green_theme">Green</string>
+    <string name="indigo_theme">Indigo</string>
+    <string name="light_blue_theme">Light blue</string>
+    <string name="light_green_theme">Light green</string>
+    <string name="lime_theme">Lime</string>
+    <string name="orange_theme">Orange</string>
+    <string name="pink_theme">Pink</string>
+    <string name="purple_theme">Purple</string>
+    <string name="red_theme">Red</string>
+    <string name="sakura_theme">Sakura</string>
+    <string name="teal_theme">Teal</string>
+    <string name="yellow_theme">Yellow</string>
 
     <string name="about_app_version">Version %1$s</string>
-    <string name="about_app_desc">Kernel Root solution with only a stripped kernel image, providing the ability of mounting system module and hooking Kernel function.</string>
+    <string name="about_app_desc">Kernel root solution with only a stripped kernel image, providing the ability of mounting system module and hooking kernel function.</string>
     <string name="about_github" translatable="false">GitHub</string>
     <string name="about_weblate" translatable="false">Weblate</string>
-    <string name="about_telegram_channel">Telegram Channel</string>
-    <string name="about_telegram_group">Telegram Group</string>
+    <string name="about_telegram_channel">Telegram channel</string>
+    <string name="about_telegram_group">Telegram group</string>
     <string name="about_powered_by">Powered by %1$s</string>
 
-    <string name="crash_handle_title">App crashed..</string>
+    <string name="crash_handle_title">App crashed…</string>
     <string name="crash_handle_copy">Copy crash log</string>
-    <string name="crash_handle_copied">Copied crash log to clipboard.</string>
+    <string name="crash_handle_copied">Crash log copied to clipboard.</string>
 </resources>
