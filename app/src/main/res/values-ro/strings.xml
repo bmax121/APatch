@@ -166,14 +166,7 @@
     <string name="orange_theme">Tema Orange</string>
     <string name="pink_theme">Tema Pink</string>
     <string name="apm_webui_open">Deschis</string>
-    <string name="home_dialog_auth_fail_content">Nu se poate autentifica super-cheia, prin urmare APatch nu poate funcționa corect.
-\nIată câteva motive posibile pentru eșecul autentificării:
-\n1. Nu ați corectat imaginea de pornire cu KernelPatch.
-\n2. Imaginea de boot corecţionată nu a fost flash.
-\n3. Super cheie greșită.
-\n4. Dispozitivul dvs. nu acceptă APatch și KernelPatch.
-\n
-\nVă rugăm să verificați și să încercați din nou. Dacă există încă probleme, puteți oricând să puneți întrebări pe pagina de probleme a depozitului oficial.</string>
+    <string name="home_dialog_auth_fail_content">Nu se poate autentifica super-cheia, prin urmare APatch nu poate funcționa corect. \nIată câteva motive posibile pentru eșecul autentificării: \n1. Nu ați corectat imaginea de pornire cu KernelPatch. \n2. Imaginea de boot corecţionată nu a fost flash. \n3. Super cheie greșită. \n4. Dispozitivul dvs. nu acceptă APatch și KernelPatch. \n \nVă rugăm să verificați și să încercați din nou. Dacă există încă probleme, puteți oricând să puneți întrebări pe pagina de probleme a depozitului oficial.</string>
     <string name="settings_use_system_color_theme_summary">Utilizați o temă de culoare generată de sistem cu fundalul actual</string>
     <string name="home_device_info">Dispozitiv</string>
     <string name="kpm_add_kpm">Adaugă KPM</string>

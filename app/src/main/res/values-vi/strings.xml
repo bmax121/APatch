@@ -5,7 +5,7 @@
     <string name="kernel_patch">Bản vá Kernel</string>
     <string name="android_patch">Bản vá Android</string>
     <string name="reboot">Khởi động lại</string>
-    <string name="settings">Thiết đặt</string>
+    <string name="settings">Cài đặt</string>
     <string name="reboot_recovery">Khởi động vào Recovery</string>
     <string name="reboot_bootloader">Khởi động vào Bootloader</string>
     <string name="reboot_download">Khởi động vào Download</string>
@@ -25,7 +25,7 @@
     <string name="apatch_version_update">Phiên bản: %s -&gt; %s</string>
     <string name="home_auth_key_title">Nhập SuperKey</string>
     <string name="home_auth_key_desc">Bắt đầu sau khi được chứng nhận</string>
-    <string name="home_ap_cando_install">Cài đặt</string>
+    <string name="home_ap_cando_install">Tải Xuống</string>
     <string name="home_ap_cando_update">Cập nhật</string>
     <string name="home_ap_cando_uninstall">Gỡ cài đặt</string>
     <string name="patch_title">Bản vá</string>
@@ -99,14 +99,7 @@
     <string name="mode_select_page_select_file">Chọn boot image để Vá</string>
     <string name="home_dialog_auth_fail_title">Xác thực thất bại</string>
     <string name="mode_select_page_install_inactive_slot">Cài đặt vào khe không hoạt động (Sau OTA)</string>
-    <string name="home_dialog_auth_fail_content">Không thể xác thực SuperKey, do đó APatch không thể hoạt động bình thường.
-\nDưới đây là một số lý do có thể dẫn đến lỗi xác thực:
-\n1. Bạn chưa vá boot image bằng KernelPatch.
-\n2. Hình ảnh khởi động được vá không được flash.
-\n3. Super key sai.
-\n4. Thiết bị của bạn không hỗ trợ APatch và KernelPatch.
-\n
-\nVui lòng kiểm tra và thử lại. Nếu vẫn còn vấn đề, bạn luôn có thể đặt câu hỏi trên trang vấn đề của kho lưu trữ chính thức.</string>
+    <string name="home_dialog_auth_fail_content">Không thể xác thực SuperKey, do đó APatch không thể hoạt động bình thường. \nDưới đây là một số lý do có thể dẫn đến lỗi xác thực: \n1. Bạn chưa vá boot image bằng KernelPatch. \n2. Hình ảnh khởi động được vá không được flash. \n3. Super key sai. \n4. Thiết bị của bạn không hỗ trợ APatch và KernelPatch. \n \nVui lòng kiểm tra và thử lại. Nếu vẫn còn vấn đề, bạn luôn có thể đặt câu hỏi trên trang vấn đề của kho lưu trữ chính thức.</string>
     <string name="home_dialog_uninstall_all">Gỡ cài đặt tất cả</string>
     <string name="kpm_control_dialog_title">Kiểm soát KP Mô-đun</string>
     <string name="kpm_control_dialog_content">Các thông số điều khiển đầu vào:</string>
