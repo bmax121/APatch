@@ -8,15 +8,15 @@
     <string name="reboot_edl">راه اندازی به EDL</string>
     <string name="about">درباره</string>
     <string name="system_default">تنظیمات پیشفرض سیستم</string>
-    <string name="settings_global_namespace_mode">Global Namespace Mode</string>
+    <string name="settings_global_namespace_mode">حالت نام جهانی</string>
     <string name="settings_clear_super_key_dialog">آیا واقعا میخواهید ادامه دهید؟</string>
     <string name="settings_check_update">برسی نسخه به روز</string>
     <string name="home_click_to_learn_apatch">با ویژگی های APatch و نحو استفاده آن آشنا شوید</string>
     <string name="home_learn_apatch">با APatch آشنا شو</string>
-    <string name="send_log">ارسال گزارش</string>
-    <string name="save_log">ذخیره گزارش</string>
+    <string name="send_log">ارسال گزارشات</string>
+    <string name="save_log">ذخیره گزارشات</string>
     <string name="safe_mode">حالت امن</string>
-    <string name="super_key">SuperKey</string>
+    <string name="super_key">ابر کلید</string>
     <string name="patch_warnning">نصب با خطر همراه است! لطفا مطمئن شوید که از اطلاعات شما نسخه پشتیبان تهیه شده است.</string>
     <string name="settings_app_language">زبان</string>
     <string name="reboot">راه اندازی مجدد</string>
@@ -26,4 +26,184 @@
     <string name="reboot_bootloader">راه اندازی به بوتلودر</string>
     <string name="android_patch">پچ کردن اندروید</string>
     <string name="settings_check_update_summary">هنگام باز کردن برنامه، به طور خودکار نسخه به روز را برسی کن</string>
+    <string name="home_not_installed">نصب نشده</string>
+    <string name="home_need_update">نسخه جدید موجود است</string>
+    <string name="log_saved">گزارشات ذخیره شد</string>
+    <string name="home_ap_cando_reboot">راه اندازی مجدد</string>
+    <string name="patch_item_kernel">هسته</string>
+    <string name="home_kernel">هسته</string>
+    <string name="home_kpatch_info_title">درباره</string>
+    <string name="home_ap_cando_install">نصب</string>
+    <string name="home_ap_cando_uninstall">لغو نصب</string>
+    <string name="patch_title">پچ</string>
+    <string name="patch_start_patch_btn">آغاز</string>
+    <string name="patch_item_kpimg_version">نسخه:</string>
+    <string name="patch_item_kpimg_comile_time">مدت‌زمان:</string>
+    <string name="patch_item_extra_kpm_desciption">شرح:</string>
+    <string name="home_fingerprint">اثر انگشت</string>
+    <string name="home_selinux_status_disabled">غیرفعال</string>
+    <string name="home_selinux_status_enforcing">اجرا کردن</string>
+    <string name="home_selinux_status_permissive">مجاز</string>
+    <string name="home_selinux_status_unknown">ناشناخته</string>
+    <string name="home_device_info">دستگاه</string>
+    <string name="home_system_version">نسخه سیستم</string>
+    <string name="patch_item_extra_name">نام:</string>
+    <string name="patch_item_extra_version">نسخه:</string>
+    <string name="patch_item_extra_author">نویسنده:</string>
+    <string name="home_auth_key_title">واردکردن ابر کلید</string>
+    <string name="apatch_version_update">نسخه: %s -&gt; %s</string>
+    <string name="home_install_unknown_summary">برای نصب کلیک کنید</string>
+    <string name="home_click_to_install">برای نصب کلیک کنید</string>
+    <string name="home_working">در‌حال‌کار 😋</string>
+    <string name="home_installing">نصب کردن</string>
+    <string name="kpatch_version">نسخه: %s</string>
+    <string name="apatch_version">نسخه: %s</string>
+    <string name="kpatch_version_update">نسخه: %s -&gt; %s</string>
+    <string name="kpatch_shadow_path_title">پچk</string>
+    <string name="home_ap_cando_update">به روز رسانی</string>
+    <string name="patch_config_title">پچ ها</string>
+    <string name="patch_mode_bootimg_patch">حالت: پچ</string>
+    <string name="patch_start_unpatch_btn">لغو پچ</string>
+    <string name="patch_item_bootimg">ایمیج بوت</string>
+    <string name="patch_item_kpimg">ایمیج هسته</string>
+    <string name="patch_item_kpimg_config">پیکربندی:</string>
+    <string name="patch_item_new_extra_kpm">جاسازی جدید</string>
+    <string name="patch_item_extra_args">دستورات:</string>
+    <string name="patch_item_skey">ابر کلید</string>
+    <string name="settings_global_namespace_mode_summary">همه جلسات ریشه از فضای نام نصب جهانی استفاده می کنند</string>
+    <string name="about_source_code"><![CDATA[<p>مشاهده کد منبع در %1$s<p/>به کانال %2$s ما بپیوندید<p/>به گروه %3$s ما بپیوندید]]></string>
+    <string name="clear_super_key">حذف ابر کلید</string>
+    <string name="patch_set_superkey">تنظیم ابر کلید</string>
+    <string name="patch_embed_kpm_btn">قراردادن KPM</string>
+    <string name="patch_mode_install_to_next_slot">حالت: نصب در اسلات بعدی (بعد از OTA)</string>
+    <string name="patch_mode_uninstall_patch">حالت: حذف نصب KPatch</string>
+    <string name="patch_select_bootimg_btn">انتخاب بوت</string>
+    <string name="patch_item_extra_kpm_license">مجوز:</string>
+    <string name="home_manager_version">مدیر نسخه</string>
+    <string name="home_install_unknown">نصب نشده یا معتبر</string>
+    <string name="home_patch_set_key_desc">فقط اعتبار برای KernelPatch</string>
+    <string name="home_auth_key_desc">شروع بعد از صدور گواهینامه</string>
+    <string name="home_patch_next_step">گام بعد</string>
+    <string name="patch_item_error">!!! اوه!!!</string>
+    <string name="patch_item_bootimg_slot">اسلات:</string>
+    <string name="patch_item_bootimg_dev">دستگاه:</string>
+    <string name="patch_item_existed_extra_kpm">موجود</string>
+    <string name="patch_item_extra_event">رویداد:</string>
+    <string name="patch_item_set_skey_label">طول ابر کلید باید 8تا36 کاراکتر باشد و شامل عدد و حروف بدون کاراکتر های خاص باشد.</string>
+    <string name="home_selinux_status">وضعیت SELinux</string>
+    <string name="patch_mode_patch_and_install">حالت: پچ و نصب</string>
+    <string name="kpm_args">دستورات</string>
+    <string name="su_title">ابر کاربر</string>
+    <string name="home_su_path">ابر کلید اجرایی</string>
+    <string name="home_kpatch_version">نسخه پچ هسته</string>
+    <string name="kpm_load">بارگذاری</string>
+    <string name="kpm">ماژول KP</string>
+    <string name="kpm_kp_not_installed">وصله هسته نصب نشده است</string>
+    <string name="kpm_embed">جاسازی</string>
+    <string name="kpm_load_toast_succ">با موفقیت بارگذاری شد</string>
+    <string name="kpm_load_toast_failed">بارگذاری نا موفق بود</string>
+    <string name="kpm_unload_confirm">بارگذاری ماژول \"%s\" لغو‌شود؟</string>
+    <string name="kpm_unload">لغو‌بارگذاری</string>
+    <string name="kpm_control">کنترل</string>
+    <string name="kpm_desc">شرح</string>
+    <string name="su_selinux_via_hook">دور زدن از طریق قلاب</string>
+    <string name="su_pkg_excluded_setting_title">تغییرات صرف نظر شده</string>
+    <string name="su_pkg_excluded_setting_summary">فعال کردن این گزینه به APatch اجازه خواهد داد تا فایل‌های تغییر یافته توسط ماژول‌های این برنامه را بازیابی کند.</string>
+    <string name="su_hide_system_apps">مخفی کردن برنامه‌های سیستمی</string>
+    <string name="home_apatch_version">نسخه APatch</string>
+    <string name="kpm_add_kpm">اضافه کردن KPM</string>
+    <string name="kpm_apm_empty">هیچ ماژول بارگیری نشده</string>
+    <string name="kpm_install">نصب</string>
+    <string name="kpm_version">نسخه</string>
+    <string name="kpm_license">پروانه</string>
+    <string name="kpm_author">مالک</string>
+    <string name="su_pkg_excluded_label">مستثنی</string>
+    <string name="su_show_system_apps">نمایش برنامه‌های سیستمی</string>
+    <string name="su_refresh">تازه سازی</string>
+    <string name="apm">ماژول AP</string>
+    <string name="apm_not_installed">AndroidPatch نصب نشده</string>
+    <string name="apm_failed_to_enable">فعالسازی ماژول \"%s\" ناموفق بود</string>
+    <string name="enable_web_debugging">فعالسازی اشکال زدایی نمای وب</string>
+    <string name="enable_web_debugging_summary">می تواند برای اشکال زدایی رابط کاربری وب استفاده شود. لطفا فقط وقتی لازم است فعال کنید.</string>
+    <string name="settings_donot_store_superkey_summary">اعتبار سنجی ابر کلید با هر بار شروع مدیر</string>
+    <string name="mode_select_page_patch_and_install">وصله و نصب</string>
+    <string name="cyan_theme">فیروزه ای</string>
+    <string name="deep_orange_theme">نارنجی تیره</string>
+    <string name="deep_purple_theme">بنفش تیره</string>
+    <string name="green_theme">سبز</string>
+    <string name="indigo_theme">نیلی سیر</string>
+    <string name="light_blue_theme">آبی روشن</string>
+    <string name="purple_theme">بنفش</string>
+    <string name="red_theme">قرمز</string>
+    <string name="sakura_theme">شکوفه گیلاس</string>
+    <string name="teal_theme">سبز دودی</string>
+    <string name="yellow_theme">زرد</string>
+    <string name="about_telegram_group">گروه تلگرام</string>
+    <string name="crash_handle_title">برنامه کرش کرد…</string>
+    <string name="crash_handle_copied">گزارش کرش به کلیپ بورد کپی شد.</string>
+    <string name="apm_author">نویسنده</string>
+    <string name="apm_desc">توضیحات</string>
+    <string name="mode_select_page_install_inactive_slot">نصب در یک اسلات غیرفعال (بعد از OTA)</string>
+    <string name="home_dialog_auth_fail_title">اعتبار سنجی نا موفق بود</string>
+    <string name="home_dialog_uninstall_title">حذف نصب</string>
+    <string name="home_dialog_uninstall_ap_only">حذف AndroidPatch</string>
+    <string name="home_dialog_uninstall_all">حذف نصب همه</string>
+    <string name="kpm_control_dialog_content">پارامتر های کنترل ورودی:</string>
+    <string name="settings_night_mode_follow_sys">پیروی از تم تاریک سیستم</string>
+    <string name="about_telegram_channel">کانال تلگرام</string>
+    <string name="crash_handle_copy">کپی کردن گزارش کرش</string>
+    <string name="apm_failed_to_disable">غیرفعالسازی ماژول \"%s\" ناموفق بود</string>
+    <string name="apm_empty">ماژولی نصب نشده است</string>
+    <string name="apm_install">نصب</string>
+    <string name="apm_uninstall_confirm">ماژول \"%s\" حذف نصب شود؟</string>
+    <string name="apm_uninstall_success">\"%s\" حذف نصب شد</string>
+    <string name="apm_remove">حذف</string>
+    <string name="apm_uninstall_failed">حذف نصب \"%s\" ناموفق بود</string>
+    <string name="apm_magisk_conflict">ماژول ها به علت درگیری با Msgisk در دسترس نیستند!</string>
+    <string name="apm_changelog">گزارش تغییرات</string>
+    <string name="apm_update">بروزرسانی</string>
+    <string name="apm_downloading">بارگیری ماژول \"%s\" …</string>
+    <string name="apm_new_version_available">نسخه جدید %s در دسترس است، برای بروزرسانی کلیک کنید.</string>
+    <string name="hide_apatch_manager">مخفی کردن مدیر APatch</string>
+    <string name="apm_reboot_to_apply">برای اعمال مجددا راه اندازی کنید</string>
+    <string name="hide_apatch_manager_summary">نصب یک برنامه مدیریت با یک شناسه تصادفی و برچسب سفارشی</string>
+    <string name="hide_apatch_manager_failure">پنهان کردن ناموفق بود. لطفا ایراد را گزارش کنید!</string>
+    <string name="hide_apatch_dialog_new_manager_name">نام مدیر جدید</string>
+    <string name="hide_apatch_dialog_summary">به عنوان برچسب جدید برنامه برای نمایش در لانچر استفاده خواهد شد</string>
+    <string name="setting_reset_su_path">تنظیم مجدد مسیر su</string>
+    <string name="apm_webui_open">باز کردن</string>
+    <string name="apm_action">اجرا</string>
+    <string name="mode_select_page_select_file">یک نمونه بوت را برای وصله کردن انتخاب کنید</string>
+    <string name="home_new_apatch_found">نسخه جدید %s در دسترس است، برای بروزرسانی کلیک کنید.</string>
+    <string name="home_more_menu_about">درباره</string>
+    <string name="kpm_control_paramters">پارامتر ها</string>
+    <string name="kpm_control_ok">عملیات موفق بود!</string>
+    <string name="kpm_control_failed">عملیات ناموفق بود!</string>
+    <string name="settings_night_theme_enabled">فعالسازی تم تاریک</string>
+    <string name="settings_custom_color_theme">تم رنگی</string>
+    <string name="amber_theme">کهربایی</string>
+    <string name="blue_grey_theme">آبی-خاکستری</string>
+    <string name="brown_theme">قهوه ای</string>
+    <string name="light_green_theme">سبز روشن</string>
+    <string name="lime_theme">لیمویی</string>
+    <string name="orange_theme">نارنجی</string>
+    <string name="pink_theme">صورتی</string>
+    <string name="about_app_version">نسخه %1$s</string>
+    <string name="apm_overlay_fs_not_available">ماژول ها در دسترس نیستند زیرا OverlayFS توسط هسته غیرفعال شده است!</string>
+    <string name="mode_select_page_title">نصب</string>
+    <string name="home_more_menu_feedback_or_suggestion">بازخورد یا پیشنهاد</string>
+    <string name="apm_start_downloading">شروع بارگیری %s</string>
+    <string name="mode_select_page_install_inactive_slot_warning">دستگاه شما بعد از راه اندازی مجدد **مجبور خواهد شد** در اسلات غیرفعال فعلی راه اندازی شود!\nاز این گزینه فقط بعد از اتمام OTA استفاده کنید.\nادامه؟</string>
+    <string name="apm_version">نسخه</string>
+    <string name="blue_theme">آبی</string>
+    <string name="settings_donot_store_superkey">ابر کلید را به صورت محلی ذخیره نکنید</string>
+    <string name="setting_reset_su_new_path">مسیر کامل جدید</string>
+    <string name="kpm_control_outMsg">پیام</string>
+    <string name="settings_use_system_color_theme">تم رنگی سیستم</string>
+    <string name="kpm_control_dialog_title">کنترل KPModule</string>
+    <string name="home_dialog_auth_fail_content">"اعتبار سنجی ابر کلید ناموفق بود، بنابراین APatch نمی تواند به درستی کار کند. \nدلایل احتمالی:\n1. شما boot.img را به KernelPatch وصله نکردید.\n2. وصله boot.img فلش نشده است.\n3. ابر کلید اشتباه است یا حاوی کاراکترهای خاص است.\n4. دستگاه شما از APatch و KernelPatch پشتیبانی نمی کند.\n\nلطفا بررسی کنید و دوباره امتحان کنید. اگر هنوز مشکلات وجود دارند، همیشه می توانید در صفحه مسائل مخزن رسمی سؤال بپرسید. "</string>
+    <string name="settings_night_mode_follow_sys_summary">جابجایی خودکار به تم تاریک بر اساس تنظیمات سیستم</string>
+    <string name="settings_use_system_color_theme_summary">استفاده از تم رنگی تولید شده بر اساس تصویر زمینه فعلی سیستم</string>
+    <string name="about_app_desc">راه حل روت کرنل فقط با یک ایمیج جدا از کرنل،قابلیت نصب ماژول سیستم و قلاب کردن توابع کرنل را ارئه می دهد.</string>
+    <string name="about_powered_by">قدرت گرفته از %1$s</string>
 </resources>

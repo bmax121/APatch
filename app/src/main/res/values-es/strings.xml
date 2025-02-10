@@ -15,7 +15,7 @@
     <string name="settings">Configuración</string>
     <string name="reboot_bootloader">Reiniciar a Bootloader</string>
     <string name="about_source_code"><![CDATA[<p>Ver código fuente en %1$s<p/>Unirse a nuestro canal de %2$s<p/>Unirse a nuestro grupo de %3$s]]></string>
-    <string name="send_log">Enviar registro</string>
+    <string name="send_log">Enviar registros</string>
     <string name="kpatch_version">Versión: %s</string>
     <string name="home_patch_set_key_desc">Clave única para KernelPatch</string>
     <string name="home_install_unknown">No instalado o autenticado</string>
@@ -48,7 +48,7 @@
     <string name="kpm_load_toast_succ">Carga exitosa</string>
     <string name="kpm_unload_confirm">¿Deshabilitar módulo \"%s\"?</string>
     <string name="su_pkg_excluded_setting_title">Excluir modificaciones</string>
-    <string name="su_pkg_excluded_setting_summary">Activar esta opción permite restaurar cualquier archivo modificado por APatch en esta aplicación.</string>
+    <string name="su_pkg_excluded_setting_summary">Si activa esta opción, APatch podrá restaurar los archivos modificados por los módulos de esta aplicación.</string>
     <string name="su_pkg_excluded_label">excluir</string>
     <string name="su_title">Superusuario</string>
     <string name="kpm_desc">Descripción</string>
@@ -70,7 +70,7 @@
     <string name="apm_version">Versión</string>
     <string name="apm_start_downloading">Descargar %s</string>
     <string name="home_ap_cando_uninstall">Desinstalar</string>
-    <string name="apm_overlay_fs_not_available">Los módulos no están disponibles ya que OverlayFS está desactivado por el kernel.</string>
+    <string name="apm_overlay_fs_not_available">¡Los módulos no están disponibles ya que OverlayFS está desactivado por el kernel!</string>
     <string name="su_refresh">Actualizar</string>
     <string name="apm_failed_to_disable">No se pudo desactivar el módulo \"%s\"</string>
     <string name="kernel_patch">KernelPatch</string>
@@ -80,9 +80,9 @@
     <string name="apm_failed_to_enable">No se pudo activar el módulo \"%s\"</string>
     <string name="apm_downloading">Descargando módulo \"%s\"…</string>
     <string name="su_hide_system_apps">Ocultar aplicaciones del sistema</string>
-    <string name="apm_magisk_conflict">Los módulos no están disponibles debido a un conflicto con Magisk.</string>
+    <string name="apm_magisk_conflict">¡Los módulos no están disponibles debido a un conflicto con Magisk!</string>
     <string name="apm_desc">Descripción</string>
-    <string name="apm_new_version_available">Click para instalar nueva versión, %s.</string>
+    <string name="apm_new_version_available">Una nueva versión (%s) esta disponible. Toca para actualizar.</string>
     <string name="apm_empty">Ningún módulo instalado</string>
     <string name="apm_update">Actualizar</string>
     <string name="kpm">KPModule</string>
@@ -122,8 +122,8 @@
     <string name="patch_item_extra_kpm_desciption">Descripción:</string>
     <string name="patch_item_extra_args">Argumentos:</string>
     <string name="patch_item_extra_event">Evento:</string>
-    <string name="patch_item_skey">Super Key</string>
-    <string name="patch_item_set_skey_label">La longitud de la super key debe ser de al menos 8 caracteres e incluir tanto números como letras</string>
+    <string name="patch_item_skey">Super clave</string>
+    <string name="patch_item_set_skey_label">La super clave debe tener entre 8 y 63 caracteres e incluir números y letras, pero no caracteres especiales.</string>
     <string name="patch_item_extra_name">Nombre:</string>
     <string name="patch_item_error">¡ERROR!</string>
     <string name="patch_item_bootimg_slot">slot:</string>
@@ -131,12 +131,12 @@
     <string name="kpm_embed">Insertar</string>
     <string name="success">Exitoso</string>
     <string name="kpm_install">Instalar</string>
-    <string name="hide_apatch_dialog_new_manager_name">Nombre nuevo</string>
-    <string name="hide_apatch_manager_summary">Instalar una nueva aplicación con un ID aleatorio y etiqueta personalizada</string>
+    <string name="hide_apatch_dialog_new_manager_name">Nombre nuevo de APatch Manager</string>
+    <string name="hide_apatch_manager_summary">Instalar una nueva aplicación de APatch Manager con un ID aleatorio y una etiqueta personalizada</string>
     <string name="hide_apatch_dialog_summary">Será la nueva etiqueta de aplicación que se muestre en launcher</string>
-    <string name="hide_apatch_manager_failure">¡No se pudo ocultar, favor de reportar error!</string>
+    <string name="hide_apatch_manager_failure">No se pudo ocultar. ¡Por favor reporta el error!</string>
     <string name="setting_reset_su_path">Restablecer la ruta su</string>
-    <string name="setting_reset_su_new_path">nueva ruta completa</string>
+    <string name="setting_reset_su_new_path">Nueva ruta completa</string>
     <string name="failure">Fallido</string>
     <string name="kpm_add_kpm">Añadir KPM</string>
     <string name="settings_check_update_summary">Buscar actualizaciones automáticamente al abrir la aplicación</string>
@@ -147,7 +147,7 @@
     <string name="mode_select_page_select_file">Seleccione boot.img para parchar</string>
     <string name="home_dialog_auth_fail_title">Autenticación fallida</string>
     <string name="mode_select_page_title">Instalar</string>
-    <string name="mode_select_page_patch_and_install">Parchar e instalar</string>
+    <string name="mode_select_page_patch_and_install">Parchear e instalar</string>
     <string name="mode_select_page_install_inactive_slot_warning">¡Su dispositivo será **FORZADO** a iniciar en la ranura inactiva actual después del reinicio!
 \nUsar esta opción solo finalizar actualización OTA.
 \n¿Continuar?</string>
@@ -159,23 +159,16 @@
     <string name="home_dialog_uninstall_title">Desinstalar</string>
     <string name="home_dialog_uninstall_ap_only">Quitar AndroidPatch</string>
     <string name="home_dialog_uninstall_all">Desinstalar todo</string>
-    <string name="home_dialog_auth_fail_content">No se puede autenticar la super key, por lo que APatch no puede funcionar correctamente.
-\nA continuación se muestran algunas posibles razones del error de autenticación:
-\n1. No has parchado boot.img con KernelPatch.
-\n2. No has flasheado boot.img en fastboot.
-\n3. Super key incorrecta.
-\n4. Tu dispositivo no es compatible con APatch y KernelPatch.
-\n
-\nPor favor revisa e intenta de nuevo. Si aún hay problemas, siempre puedes preguntar en el apartado \"Issues\" del repositorio oficial.</string>
+    <string name="home_dialog_auth_fail_content">No se puede autenticar la super clave, por lo que APatch no puede funcionar correctamente. \nA continuación se muestran algunas posibles razones del error de autenticación: \n1. No has parcheado el boot.img con KernelPatch. \n2. No has flasheado el boot.img parcheado en fastboot. \n3. La super clave es incorrecta o contiene caracteres especiales.\n4. Tu dispositivo no es compatible con APatch y KernelPatch. \n \nPor favor, compruébalo e inténtalo de nuevo. Si sigue habiendo problemas, siempre puedes hacer preguntas en la página de problemas (Issues) del repositorio oficial.</string>
     <string name="apm_webui_open">Abrir</string>
-    <string name="enable_web_debugging_summary">Se puede usar para depurar WebUI; habilítelo solo cuando sea necesario.</string>
-    <string name="settings_donot_store_superkey">No guardar super key localmente</string>
-    <string name="patch_mode_install_to_next_slot">Modo: Instalar en el siguiente slot (después de OTA)</string>
-    <string name="settings_donot_store_superkey_summary">Autenticar super key cada vez que inicie APatch Manager</string>
-    <string name="home_new_apatch_found">Nueva versión disponible: %s, Clic para actualizar</string>
-    <string name="settings_use_system_color_theme">Color del tema del sistema</string>
+    <string name="enable_web_debugging_summary">Puede ser usado para depurar WebUI. Por favor, activelo sólo cuando sea necesario.</string>
+    <string name="settings_donot_store_superkey">No guardar la super clave localmente</string>
+    <string name="patch_mode_install_to_next_slot">Modo: Instalar en el slot inactivo (después de OTA)</string>
+    <string name="settings_donot_store_superkey_summary">Autenticar super clave cada vez que inicie APatch Manager</string>
+    <string name="home_new_apatch_found">Nueva versión disponible: %s, Toca para actualizar</string>
+    <string name="settings_use_system_color_theme">Color basado en el sistema</string>
     <string name="kpm_control_dialog_title">Control de KPModule</string>
-    <string name="settings_use_system_color_theme_summary">Utilizar un color generado por el sistema con el fondo de pantalla actual</string>
+    <string name="settings_use_system_color_theme_summary">Utiliza un tema de color generado por el sistema basado en el fondo de pantalla actual</string>
     <string name="settings_custom_color_theme">Color</string>
     <string name="deep_orange_theme">Naranja oscuro</string>
     <string name="deep_purple_theme">Morado oscuro</string>
@@ -194,9 +187,9 @@
     <string name="about_app_version">Versión %1$s</string>
     <string name="about_powered_by">Funciona con %1$s</string>
     <string name="kpm_control_ok">¡Operación realizada!</string>
-    <string name="settings_night_mode_follow_sys">Seguir tema oscuro del sistema</string>
-    <string name="settings_night_mode_follow_sys_summary">Cambia automáticamente al tema oscuro con la configuración del sistema</string>
-    <string name="settings_night_theme_enabled">Activar tema oscuro</string>
+    <string name="settings_night_mode_follow_sys">Seguir el tema oscuro del sistema</string>
+    <string name="settings_night_mode_follow_sys_summary">Cambia automáticamente al tema oscuro en función de la configuración del sistema</string>
+    <string name="settings_night_theme_enabled">Habilitar tema oscuro</string>
     <string name="kpm_control_dialog_content">Parámetros de control:</string>
     <string name="kpm_control_failed">¡Operación fallida!</string>
     <string name="amber_theme">Ámbar</string>
@@ -205,14 +198,14 @@
     <string name="blue_theme">Azul</string>
     <string name="brown_theme">Marrón</string>
     <string name="cyan_theme">Cian</string>
-    <string name="about_app_desc">Solución Kernel Root con solo una imagen de Kernel, con la habilidad de montar módulos de sistema y enlazar a funciones de Kernel.</string>
+    <string name="about_app_desc">Solución root basado en kernel con solo una imagen de kernel desensamblada, con la habilidad de montar módulos de sistema y enlazar a funciones de kernel.</string>
     <string name="about_telegram_channel">Canal de Telegram</string>
     <string name="about_telegram_group">Grupo de Telegram</string>
     <string name="kpm_control">Control</string>
     <string name="kpm_control_paramters">Parámetros</string>
-    <string name="save_log">Guardar registro</string>
+    <string name="save_log">Guardar registros</string>
     <string name="apm_action">Acción</string>
-    <string name="log_saved">Registro guardado</string>
+    <string name="log_saved">Registros guardados</string>
     <string name="crash_handle_copy">Copiar registro de fallos</string>
     <string name="crash_handle_title">La aplicación fallo…</string>
     <string name="crash_handle_copied">Se copió el registro de fallos al portapapeles.</string>

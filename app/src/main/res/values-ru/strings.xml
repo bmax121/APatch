@@ -47,21 +47,21 @@
     <string name="apm_version">Версия</string>
     <string name="apm_author">Автор</string>
     <string name="apm_desc">Описание</string>
-    <string name="apm_overlay_fs_not_available">Модули не доступны. OverlayFS отключен в ядре.</string>
+    <string name="apm_overlay_fs_not_available">Модули недоступны, так как OverlayFS отключен в ядре!</string>
     <string name="su_refresh">Обновить</string>
     <string name="su_show_system_apps">Показать системные приложения</string>
     <string name="su_hide_system_apps">Скрыть системные приложения</string>
-    <string name="send_log">Отправить лог</string>
+    <string name="send_log">Отправить логи</string>
     <string name="safe_mode">Безопасный режим</string>
     <string name="apm_reboot_to_apply">Перезагрузите, чтобы изменения вступили в силу</string>
-    <string name="apm_magisk_conflict">Модули не доступны, они конфликтуют с Magisk.</string>
+    <string name="apm_magisk_conflict">Модули недоступны из-за конфликта с Magisk!</string>
     <string name="home_learn_apatch">Узнайте об APatch</string>
     <string name="home_click_to_learn_apatch">Узнайте о возможностях APatch и о том, как его использовать</string>
     <string name="about_source_code"><![CDATA[<p>Посмотрите исходный код на %1$s<p/>Присоединяйтесь к нашему %2$s каналу</p>Присоединяйтесь к нашей %3$s группе]]></string>
     <string name="apm_update">Обновить</string>
     <string name="apm_downloading">Загрузка модуля \"%s\"…</string>
     <string name="apm_start_downloading">Начало загрузки %s</string>
-    <string name="apm_new_version_available">Нажмите что бы установить новую версию, %s.</string>
+    <string name="apm_new_version_available">Новая версия %s доступна, нажмите для обновления.</string>
     <string name="apm_changelog">Список изменений</string>
     <string name="patch_set_superkey">Введите SuperKey</string>
     <string name="kpm_load_toast_failed">Загрузка не удалась</string>
@@ -82,7 +82,7 @@
     <string name="su_selinux_via_hook">Обход через hook</string>
     <string name="su_pkg_excluded_label">исключён</string>
     <string name="su_pkg_excluded_setting_title">Исключить изменения</string>
-    <string name="su_pkg_excluded_setting_summary">Включение этой опции позволит APatch восстановить любые файлы этого приложения, которые были модифицированы модулями.</string>
+    <string name="su_pkg_excluded_setting_summary">Включение этой опции позволит APatch восстановить любые файлы, измененные модулями этого приложения.</string>
     <string name="home_ap_cando_install">Установка</string>
     <string name="home_ap_cando_update">Обновить</string>
     <string name="home_ap_cando_uninstall">Удалить</string>
@@ -126,7 +126,7 @@
     <string name="patch_item_extra_author">"Автор:"</string>
     <string name="patch_item_extra_kpm_license">"Лицензия:"</string>
     <string name="settings_clear_super_key_dialog">Вы действительно хотите продолжить?</string>
-    <string name="patch_item_set_skey_label">Длина SuperKey должна быть не менее 8 символов и включать цифры и буквы</string>
+    <string name="patch_item_set_skey_label">Длина SuperKey должна быть не менее 8 символов и включать как числа, так и буквы.</string>
     <string name="failure">Ошибка</string>
     <string name="kpm_install">Установить</string>
     <string name="kpm_embed">Встроить</string>
@@ -138,10 +138,10 @@
     <string name="hide_apatch_dialog_new_manager_name">Новое название менеджера</string>
     <string name="setting_reset_su_path">Изменить путь к su</string>
     <string name="hide_apatch_manager_summary">Установить новое приложение менеджера со случайным именем пакета и пользовательским названием приложения</string>
-    <string name="setting_reset_su_new_path">новый полный путь</string>
-    <string name="cyan_theme">Голубая тема</string>
-    <string name="pink_theme">Розовая тема</string>
-    <string name="lime_theme">Лаймовая тема</string>
+    <string name="setting_reset_su_new_path">Новый полный путь</string>
+    <string name="cyan_theme">Голубая</string>
+    <string name="pink_theme">Розовая</string>
+    <string name="lime_theme">Лаймовая</string>
     <string name="mode_select_page_select_file">Выберите образ ядра для патча</string>
     <string name="settings_donot_store_superkey">Не хранить SuperKey в памяти устройства</string>
     <string name="mode_select_page_install_inactive_slot_warning">Ваше устройство будет **ПРИНУДЕТЕЛЬНО** загружено в текущий неактивный слот после перезагрузки!
@@ -150,19 +150,12 @@
     <string name="kpm_control">Управление</string>
     <string name="mode_select_page_patch_and_install">Пропатчить и установить</string>
     <string name="settings_donot_store_superkey_summary">Вам придётся вводить SuperKey каждый раз при открытии менеджера</string>
-    <string name="home_dialog_auth_fail_content">Не удалось аутентифицировать SuperKey. Корректная работа APatch не может быть гарантирована.
-\nНиже приведены возможные причины не удачной аутентификации:
-\n1. Вы не пропатчили ядро используя KernelPatch.
-\n2. Пропатченное ядро не установлено.
-\n3. Вы ввели неверный SuperKey.
-\n4. Ваше устройство не поддерживает APatch и KernelPatch.
-\n
-\nПожалуйста, проверьте все и попробуйте снова. Если проблема не решена, вы всегда можете попросить помощи в разделе Issues официального репозитория.</string>
+    <string name="home_dialog_auth_fail_content">Не удалось аутентифицировать SuperKey. Корректная работа APatch не может быть гарантирована. \nНиже приведены возможные причины не удачной аутентификации: \n1. Вы не пропатчили ядро используя KernelPatch. \n2. Пропатченное ядро не установлено. \n3. Вы ввели неверный SuperKey. \n4. Ваше устройство не поддерживает APatch и KernelPatch. \n \nПожалуйста, проверьте все и попробуйте снова. Если проблема не решена, вы всегда можете попросить помощи в разделе Issues официального репозитория.</string>
     <string name="home_more_menu_about">О приложении</string>
     <string name="home_dialog_uninstall_ap_only">Удалить AndroidPatch</string>
     <string name="kpm_control_dialog_title">Управление KPModule</string>
     <string name="kpm_control_ok">Операция выполнена успешно!</string>
-    <string name="orange_theme">Оранжевая тема</string>
+    <string name="orange_theme">Оранжевая</string>
     <string name="settings_night_mode_follow_sys_summary">Автоматически переключает темную и светлую тему, следуя настройкам системы</string>
     <string name="about_app_desc">Решение для суперпользователя на уровне ядра, предоставляющее возможность монтировать модули системы и модифицировать функции ядра.</string>
     <string name="about_telegram_channel">Канал в Telegram</string>
@@ -170,11 +163,11 @@
     <string name="about_powered_by">Основано на %1$s</string>
     <string name="home_install_unknown_summary">Нажмите для установки</string>
     <string name="home_kpatch_version">Версия KernelPatch</string>
-    <string name="home_new_apatch_found">Доступна новая версия: %s. Нажмите, чтобы обновить</string>
+    <string name="home_new_apatch_found">Доступна новая версия: %s, Нажмите здесь для обновления.</string>
     <string name="mode_select_page_title">Установить</string>
     <string name="mode_select_page_install_inactive_slot">Установить в неактивный слот (после OTA)</string>
     <string name="home_dialog_auth_fail_title">Ошибка аутентификации</string>
-    <string name="home_dialog_uninstall_all">Полное удаление</string>
+    <string name="home_dialog_uninstall_all">Удалить все</string>
     <string name="home_more_menu_feedback_or_suggestion">Предложения и поддержка</string>
     <string name="home_dialog_uninstall_title">Удаление</string>
     <string name="kpm_control_dialog_content">"Входные параметры управления: "</string>
@@ -185,18 +178,18 @@
     <string name="settings_use_system_color_theme">Системная цветовая тема</string>
     <string name="settings_use_system_color_theme_summary">Использовать цветовую тему, созданную системой на основе текущих обоев</string>
     <string name="settings_custom_color_theme">Цветовая тема</string>
-    <string name="deep_orange_theme">Темно-оранжевая тема</string>
-    <string name="deep_purple_theme">Темно-фиолетовая тема</string>
-    <string name="light_blue_theme">Светло-синяя тема</string>
-    <string name="light_green_theme">Светло-зеленая тема</string>
-    <string name="purple_theme">Фиолетовая тема</string>
-    <string name="red_theme">Красная тема</string>
-    <string name="sakura_theme">Тема сакуры</string>
-    <string name="teal_theme">Сине-зеленая тема</string>
-    <string name="yellow_theme">Желтая тема</string>
-    <string name="green_theme">Зеленая тема</string>
-    <string name="indigo_theme">Сине-фиолетовая тема</string>
-    <string name="patch_mode_install_to_next_slot">Режим: Установить в следующий слот (После OTA)</string>
+    <string name="deep_orange_theme">Темно-оранжевая</string>
+    <string name="deep_purple_theme">Темно-фиолетовая</string>
+    <string name="light_blue_theme">Светло-синяя</string>
+    <string name="light_green_theme">Светло-зеленая</string>
+    <string name="purple_theme">Фиолетовая</string>
+    <string name="red_theme">Красная</string>
+    <string name="sakura_theme">Сакура</string>
+    <string name="teal_theme">Сине-зеленая</string>
+    <string name="yellow_theme">Желтая</string>
+    <string name="green_theme">Зеленая</string>
+    <string name="indigo_theme">Сине-фиолетовая</string>
+    <string name="patch_mode_install_to_next_slot">Режим: Установить в неактивный слот (После OTA)</string>
     <string name="about_app_version">Версия %1$s</string>
     <string name="apm_webui_open">Открыть</string>
     <string name="settings_check_update">Проверить обновления</string>
@@ -205,15 +198,15 @@
     <string name="home_system_version">Версия Android</string>
     <string name="settings_night_theme_enabled">Включить темную тему</string>
     <string name="enable_web_debugging">Включить отладку WebView</string>
-    <string name="amber_theme">Янтарная тема</string>
-    <string name="brown_theme">Коричневая тема</string>
-    <string name="blue_grey_theme">Сине-серая тема</string>
-    <string name="blue_theme">Синяя тема</string>
-    <string name="enable_web_debugging_summary">Используется для отладки WebUI. Пожалуйста, включайте только при необходимости.</string>
+    <string name="amber_theme">Янтарь</string>
+    <string name="brown_theme">Коричневая</string>
+    <string name="blue_grey_theme">Сине-серая</string>
+    <string name="blue_theme">Синяя</string>
+    <string name="enable_web_debugging_summary">Может использоваться для отладки WebUI. Пожалуйста, используйте только при необходимости.</string>
     <string name="save_log">Сохранить логи</string>
     <string name="apm_action">Действие</string>
     <string name="crash_handle_copy">Скопировать логи ошибки</string>
     <string name="crash_handle_copied">Лог ошибки скопирован в буфер обмена.</string>
     <string name="log_saved">Логи сохранены</string>
-    <string name="crash_handle_title">В приложении возникла ошибка...</string>
+    <string name="crash_handle_title">В приложении возникла ошибка…</string>
 </resources>
