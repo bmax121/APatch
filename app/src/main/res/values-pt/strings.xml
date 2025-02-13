@@ -13,7 +13,7 @@
     <string name="home_click_to_learn_apatch">Aprenda sobre as características de APatch e como usar</string>
     <string name="super_key">Chave de Segurança</string>
     <string name="patch_set_superkey">Definir Chave de Segurança</string>
-    <string name="home_patch_next_step">Próximo passo</string>
+    <string name="home_patch_next_step">Próximo Passo</string>
     <string name="home_install_unknown">Desconhecido</string>
     <string name="home_click_to_install">Clique para instalar</string>
     <string name="home_need_update">Nova versão Disponível</string>
@@ -29,7 +29,7 @@
     <string name="kpm_kp_not_installed">KernelPatch não instalado</string>
     <string name="kpm_load_toast_succ">Carregado com sucesso</string>
     <string name="kpm_load_toast_failed">Falha no carregamento</string>
-    <string name="send_log">Enviar logs</string>
+    <string name="send_log">Enviar Logs</string>
     <string name="safe_mode">Modo Seguro</string>
     <string name="home_patch_set_key_desc">Apenas credencial para KernelPatch</string>
     <string name="home_not_installed">Não instalado</string>
@@ -92,7 +92,7 @@
     <string name="system_default">Padrão do sistema</string>
     <string name="settings_app_language">Idioma</string>
     <string name="patch">Patch</string>
-    <string name="settings_global_namespace_mode">Modo de namespace global</string>
+    <string name="settings_global_namespace_mode">Modo de Namespace Global</string>
     <string name="settings_global_namespace_mode_summary">Todas as sessões root usam o Global Mount Namespace</string>
     <string name="settings_check_update">Verificar atualização</string>
     <string name="success">Sucesso</string>
@@ -140,8 +140,15 @@
     <string name="about_powered_by">Alimentado por %1$s</string>
     <string name="about_app_desc">Solução Kernel Root com apenas uma imagem de kernel removida, fornecendo a capacidade de montar o módulo do sistema e conectar a função do Kernel.</string>
     <string name="patch_mode_patch_and_install">Modo: Patch e instalar</string>
-    <string name="home_dialog_auth_fail_content">Não foi possível autenticar a Chave Mestra, portanto, APach pode não funcionar corretamente. \nAqui estão alguns possíveis motivos para a falha de autenticação: \n1. Você não fez patch da imagem de boot com Kernel Patch. \n2. A imagem de boot patch não foi atualizada. \n3. Chave Mestra errada. \n4. Seu dispositivo não oferece suporte a APatch e KernelPatch. \n \nPor favor verifique e tente novamente. Se ainda houver problemas, você sempre poderá fazer perguntas na página de \'issues\' do repositório oficial.</string>
-    <string name="patch_mode_install_to_next_slot">Modo: Instalar no slot inativo (após OTA)</string>
+    <string name="home_dialog_auth_fail_content">Não foi possível autenticar a Chave Mestra, portanto, APach pode não funcionar corretamente.
+\nAqui estão alguns possíveis motivos para a falha de autenticação:
+\n1. Você não fez patch da imagem de boot com Kernel Patch.
+\n2. A imagem de boot patch não foi atualizada.
+\n3. Chave Mestra errada.
+\n4. Seu dispositivo não oferece suporte a APatch e KernelPatch.
+\n
+\nPor favor verifique e tente novamente. Se ainda houver problemas, você sempre poderá fazer perguntas na página de \'issues\' do repositório oficial.</string>
+    <string name="patch_mode_install_to_next_slot">Modo: Instalar no próximo slot (depois da OTA)</string>
     <string name="patch_mode_uninstall_patch">Modo: Desinstalar KPatch</string>
     <string name="patch_embed_kpm_btn">Introduzir KPM</string>
     <string name="patch_start_unpatch_btn">Desfazer o Patch</string>
@@ -171,7 +178,7 @@
     <string name="home_more_menu_about">Acerca</string>
     <string name="kpm_control_dialog_title">Controlar KPModule</string>
     <string name="settings_night_theme_enabled">Habilitar tema escuro</string>
-    <string name="save_log">Salvar logs</string>
+    <string name="save_log">Salvar registros</string>
     <string name="mode_select_page_title">instalar</string>
     <string name="kpm_install">Instalar</string>
     <string name="patch_item_extra_event">Evento:</string>
@@ -205,7 +212,7 @@
     <string name="settings_use_system_color_theme_summary">Use um tema de cor gerado pelo sistema com papel de parede atual</string>
     <string name="amber_theme">Tema Amber</string>
     <string name="apm_action">Ação</string>
-    <string name="log_saved">Logs salvos</string>
+    <string name="log_saved">Registro salvo</string>
     <string name="crash_handle_title">O aplicativo travou..</string>
     <string name="crash_handle_copy">Copiar registro de falha</string>
     <string name="crash_handle_copied">Registro de falhas copiado para a área de transferência.</string>

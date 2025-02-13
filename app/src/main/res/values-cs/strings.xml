@@ -104,7 +104,7 @@
     <string name="hide_apatch_dialog_summary">Nový název bude zobrazen ve spouštěči</string>
     <string name="setting_reset_su_path">Obnovit cestu su</string>
     <string name="setting_reset_su_new_path">nová úplná cesta</string>
-    <string name="settings_donot_store_superkey_summary">Při každém spuštění manažera bude vyžadován SuperKlíč</string>
+    <string name="settings_donot_store_superkey_summary">Při každém spuštění manažera, bude vyžadován SuperKlíč</string>
     <string name="home_auth_key_title">Zadejte SuperKlíč</string>
     <string name="home_patch_set_key_desc">Pouze pro ověření KernelPatch</string>
     <string name="su_pkg_excluded_setting_summary">Zapnutí způsobí to, že APatch použije pro tuto aplikaci soubory, které nejsou upraveny moduly.</string>
@@ -138,7 +138,7 @@
     <string name="kernel_patch">KernelPatch</string>
     <string name="android_patch">AndroidPatch</string>
     <string name="apm_uninstall_failed">Nelze odinstalovat %s</string>
-    <string name="enable_web_debugging_summary">Může být použito k ladění WebUI. Prosím, tuto možnost povolte pouze v případě potřeby.</string>
+    <string name="enable_web_debugging_summary">Může být použit k ladění WebUI, prosím, povolte pouze v případě potřeby.</string>
     <string name="apm_empty">Není nainstalován žádný modul</string>
     <string name="apm_uninstall_confirm">Odinstalovat modul \"%s?</string>
     <string name="apm_magisk_conflict">Moduly nejsou k dispozici kvůli konfliktu s Magiskem.</string>
@@ -159,7 +159,7 @@
     <string name="home_new_apatch_found">Nová verze je k dispozici: %s, kliknutím aktualizovat</string>
     <string name="mode_select_page_select_file">Vybrat a záplatovat bootovací obraz</string>
     <string name="kpm_control_dialog_title">Ovládání KPModulu</string>
-    <string name="home_dialog_auth_fail_content">Nelze ověřit SuperKlíč, proto APatch nemůže správně fungovat.\nZde jsou některé možné důvody selhání:\n1. Bootovací obraz nebyl opraven pomocí KernelPatch.\n2. Opravený bootovací obraz nebyl flashován.\n3. SuperKlíč je špatný.\n4. Vaše zařízení nepodporuje APatch a KernelPatch.\n\nZkontrolujte prosím a zkuste to znovu. Pokud problémy přetrvávají, můžete se zeptat na stránce s problémy oficiálního úložiště.</string>
+    <string name="home_dialog_auth_fail_content">Nelze ověřit SuperKlíč, proto APatch nemůže správně fungovat.\nZde jsou některé možné důvody selhání:\n1. Neopravili jste boot obraz pomocí KernelPatch.\n2. Opravený boot obraz nebyl flashován.\n3. SuperKlíč je špatný.\n4. Vaše zařízení nepodporuje APatch a KernelPatch.\n\nZkontrolujte prosím a zkuste to znovu. Pokud problémy přetrvávají, můžete se zeptat na stránce s problémy oficiálního úložiště.</string>
     <string name="mode_select_page_patch_and_install">Záplatovat a nainstalovat</string>
     <string name="mode_select_page_install_inactive_slot_warning">Vaše zařízení bude po restartu **NUCENĚ** startovat do neaktivního slotu!\nTuto možnost použijte až po dokončení OTA.\nPokračovat?</string>
     <string name="mode_select_page_install_inactive_slot">Instalovat do neaktivního slotu (po OTA)</string>

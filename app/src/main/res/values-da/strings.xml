@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="home">Hjem</string>
-    <string name="failure">Fejl</string>
-    <string name="patch">Patch</string>
-    <string name="success">Success</string>
-    <string name="patch_warnning">Installation kommer med risici. Sørg for, at dine data er sikkerhedskopieret.</string>
-    <string name="home_click_to_install">Klik for at installere</string>
-</resources>
