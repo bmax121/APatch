@@ -8,7 +8,7 @@
     <string name="reboot_edl">Redémarrer en mode EDL</string>
     <string name="about">À propos</string>
     <string name="home_learn_apatch">En apprendre plus sur AndroidPatch</string>
-    <string name="home">Origine</string>
+    <string name="home">Accueil</string>
     <string name="patch_warnning">L\'installation comporte des risques. Assurez-vous d\'avoir sauvegardé vos données.</string>
     <string name="settings">Paramètres</string>
     <string name="reboot_bootloader">Redémarrage en mode bootloader</string>
@@ -27,7 +27,7 @@
     <string name="home_su_path">Exécutable su</string>
     <string name="home_apatch_version">Version d\'APatch</string>
     <string name="apatch_version_update">Version : %s -&gt; %s</string>
-    <string name="about_source_code"><![CDATA[<p>Voir le code source sur %1$s<p/>Rejoindre notre canal %2$s<p/>Rejoindre notre groupe %2$s]]></string>
+    <string name="about_source_code">&lt;p&gt;Voir le code source sur %1$s&lt;p/&gt;Rejoindre notre canal %2$s&lt;p/&gt;Rejoindre notre groupe %2$s</string>
     <string name="patch_set_superkey">Initialiser la clé</string>
     <string name="send_log">Envoyer le log</string>
     <string name="home_kernel">Noyau</string>
@@ -90,8 +90,8 @@
     <string name="su_pkg_excluded_setting_title">Exclure les modifications</string>
     <string name="apm_overlay_fs_not_available">Les modules sont indisponibles car OverlayFS est désactivé par le noyau.</string>
     <string name="patch">Patcher</string>
-    <string name="settings_app_language">Langue</string>
-    <string name="system_default">Système par défaut</string>
+    <string name="settings_app_language">Langage</string>
+    <string name="system_default">Par défaut</string>
     <string name="settings_global_namespace_mode">Mode espace de nommage global</string>
     <string name="settings_global_namespace_mode_summary">Toutes les sessions root utilisent l\'espace de nommage global</string>
     <string name="settings_clear_super_key_dialog">Voulez-vous vraiment continuer ?</string>
@@ -100,11 +100,11 @@
     <string name="home_ap_cando_reboot">Redémarrer</string>
     <string name="patch_config_title">Patches</string>
     <string name="patch_item_kernel">Noyau</string>
-    <string name="patch_item_set_skey_label">La longueur de la clé doit être d\'au moins 8 caractères et inclure à la fois des numéros et des lettres, mais pas de caractères spéciaux</string>
+    <string name="patch_item_set_skey_label">La longueur de la clé doit être d\'au moins 8 caractères et inclure à la fois des numéros et des lettres</string>
     <string name="hide_apatch_dialog_new_manager_name">Nouveau nom du gestionnaire</string>
     <string name="hide_apatch_dialog_summary">Il sera utilisé comme label de la nouvelle application affichée dans le lanceur d\'applications</string>
     <string name="hide_apatch_manager_summary">Installer un nouveau gestionnaire avec un identifiant de paquet aléatoire et un label d\'application personnalisé</string>
-    <string name="hide_apatch_manager_failure">Échec de la dissimulation, merci de signaler le bug !</string>
+    <string name="hide_apatch_manager_failure">Échec de la dissimulation, merci de signaler le bug !</string>
     <string name="patch_embed_kpm_btn">Intégrer un KPM</string>
     <string name="patch_start_patch_btn">Démarrer</string>
     <string name="success">Succès</string>
@@ -149,12 +149,12 @@
     <string name="home_system_version">Version du système</string>
     <string name="home_kpatch_version">Version de KernelPatch</string>
     <string name="enable_web_debugging_summary">Peut être utilisé pour déboguer l\'interface web, n\'activer cette option qu\'en cas de besoin.</string>
-    <string name="home_new_apatch_found">Nouvelle version disponible : %s, Cliquer pour mettre à jour</string>
+    <string name="home_new_apatch_found">Nouvelle version disponible : %s, Cliquer pour mettre à jour</string>
     <string name="home_dialog_auth_fail_title">Echec de l\'authentification</string>
     <string name="home_dialog_uninstall_title">Désinstaller</string>
     <string name="home_dialog_uninstall_ap_only">Supprimer AndroidPatch</string>
     <string name="home_dialog_uninstall_all">Désinstaller complètement</string>
-    <string name="patch_mode_install_to_next_slot">Mode : Installer dans le slot suivant (après OTA)</string>
+    <string name="patch_mode_install_to_next_slot">Mode : Installer dans le slot suivant (après OTA)</string>
     <string name="mode_select_page_title">Installer</string>
     <string name="mode_select_page_install_inactive_slot">Installer dans le slot inactif (après OTA)</string>
     <string name="home_more_menu_feedback_or_suggestion">Commentaires ou suggestions</string>
@@ -162,7 +162,14 @@
     <string name="mode_select_page_install_inactive_slot_warning">Votre appareil sera **FORCÉ** de démarrer sur le slot inactif actuel après un redémarrage !
 \nN\'utilisez cette option qu\'une fois l\'OTA terminée.
 \nContinuer ?</string>
-    <string name="home_dialog_auth_fail_content">Impossible d\'authentifier la clé, par conséquent APatch ne peut pas fonctionner correctement. \nVoici quelques raisons possibles de l\'échec de l\'authentification : \n1. Vous n\'avez pas patché l\'image de démarrage avec KernelPatch. \n2. L\'image de démarrage patchée n\'a pas été flashée. \n3. La clé est erronée. \n4. Votre appareil ne prend pas en charge APatch et KernelPatch. \n \nVeuillez vérifier et réessayer. Si des problèmes persistent, vous pouvez toujours poser vos questions sur le dépôt officiel.</string>
+    <string name="home_dialog_auth_fail_content">Impossible d\'authentifier la clé, par conséquent APatch ne peut pas fonctionner correctement.
+\nVoici quelques raisons possibles de l\'échec de l\'authentification :
+\n1. Vous n\'avez pas patché l\'image de démarrage avec KernelPatch.
+\n2. L\'image de démarrage patchée n\'a pas été flashée.
+\n3. La clé est erronée.
+\n4. Votre appareil ne prend pas en charge APatch et KernelPatch.
+\n
+\nVeuillez vérifier et réessayer. Si des problèmes persistent, vous pouvez toujours poser vos questions sur le dépôt officiel.</string>
     <string name="settings_donot_store_superkey">Ne pas stocker la clé localement</string>
     <string name="apm_webui_open">Ouvrir l\'interface web</string>
     <string name="enable_web_debugging">Activer le débogage WebView</string>
@@ -203,10 +210,6 @@
     <string name="red_theme">Thème rouge</string>
     <string name="kpm_control_paramters">Paramètres</string>
     <string name="settings_night_mode_follow_sys_summary">Basculement automatique vers le thème sombre en fonction des paramètres du système</string>
-    <string name="save_log">Enregistrer le journal</string>
+    <string name="save_log">Enregistrer les logs</string>
     <string name="apm_action">Action</string>
-    <string name="log_saved">Journal enregistré</string>
-    <string name="crash_handle_title">L’application a planté...</string>
-    <string name="crash_handle_copy">Copier le rapport de plantage</string>
-    <string name="crash_handle_copied">Rapport de plantage copié dans le presse-papiers.</string>
 </resources>

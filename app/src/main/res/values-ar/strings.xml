@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">APatch</string>
-    <string name="home">صفحة الرئيسية</string>
+    <string name="home">الرئيسية</string>
     <string name="patch_warnning">التثبيت يأتي أحيانا بمخاطر. يرجى التأكد من عمل نسخ احتياطي لبياناتك.</string>
     <string name="kernel_patch">KernelPatch</string>
     <string name="android_patch">AndroidPatch</string>
@@ -11,15 +11,15 @@
     <string name="reboot_bootloader">إعادة تشغيل إلى محمل الإقلاع</string>
     <string name="reboot_download">إعادة تشغيل إلى وضع التنزيل</string>
     <string name="reboot_edl">إعادة تشغيل إلى EDL</string>
-    <string name="about">حول التطبيق</string>
+    <string name="about">عنْ التطبيق</string>
     <string name="home_learn_apatch">تعلم APatch</string>
     <string name="home_click_to_learn_apatch">تعرف على ميزات AndroidPatch وكيفية استخدامه</string>
-    <string name="about_source_code"><![CDATA[<p> عرض كود المصدر على %1$s<p/> انضم إلى قناتنا %2$s انضم إلى مجموعتنا %3$s]]></string>
+    <string name="about_source_code">&lt;p&gt;عرض كود المصدر على %1$s&lt;p/&gt;انضم إلى قناتنا %2$s&lt;p/&gt;انضم إلى مجموعتنا %3$s</string>
     <string name="send_log">إرسال السجل</string>
     <string name="safe_mode">الوضع الآمن</string>
     <string name="super_key">المفتاح الخارق</string>
     <string name="clear_super_key">محو المفتاح الخارق</string>
-    <string name="patch_set_superkey">ضع المفتاح الخارق</string>
+    <string name="patch_set_superkey">تعيين المفتاح الخارق</string>
     <string name="home_patch_set_key_desc">اعتماد فقط لـKernelPatch</string>
     <string name="home_click_to_install">اضغط للتثبيت</string>
     <string name="home_working">يعمل</string>
@@ -93,7 +93,7 @@
     <string name="apm_downloading">تنزيل إضافة %s…</string>
     <string name="patch">باتش</string>
     <string name="settings_global_namespace_mode_summary">جميع مساحات الروت تستخدم مساحة الاسم العامة للتثبيت</string>
-    <string name="settings_global_namespace_mode">وضع APatchمساحة الاسم العام</string>
+    <string name="settings_global_namespace_mode">وضع مساحة الاسم العام</string>
     <string name="patch_item_kpimg">kpimg</string>
     <string name="patch_item_extra_name">الاسم:</string>
     <string name="patch_item_set_skey_label">يجب أن يكون طول المفتاح الخارق 8 أحرف على الأقل ويتضمن كلاً من الأرقام والحروف</string>
@@ -160,7 +160,14 @@
     <string name="mode_select_page_install_inactive_slot_warning">**سيتم إجبار جهازك** على التمهيد إلى الفتحة غير النشطة الحالية بعد إعادة التشغيل!
 \nاستخدم هذا الخيار فقط بعد انتهاء التحديث الهوائي.
 \nهل تريد المتابعة؟</string>
-    <string name="home_dialog_auth_fail_content">غير قادر على مصادقة المفتاح الخارق، وبالتالي لا يمكن لـ APatch العمل بشكل صحيح. \nفيما يلي بعض الأسباب المحتملة لفشل المصادقة: \n1. لم تقم بتصحيح صورة التمهيد باستخدام KernelPatch. \n2. لم يتم تثبيت صورة التمهيد المصححة. \n3. مفتاح خارق خطأ. \n4. جهازك لا يدعم APatch وKernelPatch. \n \nيرجى المراجعة وحاول مرة أخرى. إذا كانت لا تزال هناك مشكلات، فيمكنك دائمًا طرح الأسئلة على صفحة المشكلات الخاصة بالمستودع الرسمي.</string>
+    <string name="home_dialog_auth_fail_content">غير قادر على مصادقة المفتاح الخارق، وبالتالي لا يمكن لـ APatch العمل بشكل صحيح.
+\nفيما يلي بعض الأسباب المحتملة لفشل المصادقة:
+\n1. لم تقم بتصحيح صورة التمهيد باستخدام KernelPatch.
+\n2. لم يتم تثبيت صورة التمهيد المصححة.
+\n3. مفتاح خارق خطأ.
+\n4. جهازك لا يدعم APatch وKernelPatch.
+\n
+\nيرجى المراجعة وحاول مرة أخرى. إذا كانت لا تزال هناك مشكلات، فيمكنك دائمًا طرح الأسئلة على صفحة المشكلات الخاصة بالمستودع الرسمي.</string>
     <string name="patch_mode_patch_and_install">الوضع: باتش وتثبيت</string>
     <string name="patch_mode_install_to_next_slot">الوضع: التثبيت في الفتحة التالية (بعد OTA)</string>
     <string name="apm_webui_open">فتح</string>
@@ -205,8 +212,4 @@
     <string name="about_app_version">إصدار %1$s</string>
     <string name="save_log">‮‬حفظ السجلات</string>
     <string name="apm_action">الإجراء</string>
-    <string name="log_saved">تم حفظ السجل</string>
-    <string name="crash_handle_title">لقد تحطمت.</string>
-    <string name="crash_handle_copy">نسخ سجل الأعطال</string>
-    <string name="crash_handle_copied">تم نسخ سجل الأعطال إلى الحافظة.</string>
 </resources>

@@ -65,7 +65,7 @@
     <string name="apm_overlay_fs_not_available">커널에 의해 OverlayFS가 비활성화되어 모듈을 사용할 수 없습니다.</string>
     <string name="system_default">시스템 기본값</string>
     <string name="home_click_to_learn_apatch">APatch의 기능 및 사용 방법 알아보기</string>
-    <string name="about_source_code"><![CDATA[<p>%1$s에서 소스 코드 보기.<p/>%2$s 채널 참여<p/>%3$s 그룹 참여]]></string>
+    <string name="about_source_code">&lt;p&gt;%1$s에서 소스 코드 보기.&lt;p/&gt;%2$s 채널 참여&lt;p/&gt;%3$s 그룹 참여</string>
     <string name="safe_mode">안전 모드</string>
     <string name="kpm_load_toast_succ">불러오기 성공</string>
     <string name="home_learn_apatch">APatch 알아보기</string>
@@ -146,7 +146,14 @@
     <string name="home_system_version">시스템 버전</string>
     <string name="mode_select_page_title">설치</string>
     <string name="home_dialog_auth_fail_title">인증 실패</string>
-    <string name="home_dialog_auth_fail_content">SuperKey를 인증할 수 없어 APatch가 제대로 작동할 수 없습니다. \n다음은 인증 실패의 몇 가지 가능한 이유입니다: \n1. KernelPatch로 boot 이미지를 패치하지 않았습니다. \n2. 패치한 boot 이미지를 플래시하지 않았습니다. \n3. SuperKey가 틀림. \n4. 장치가 Apatch와 KernelPatch를 지원하지 않습니다. \n \n확인 후 다시 시도해주세요. 여전히 문제가 있는 경우 공식 repository의 issues 페이지에서 언제든지 질문할 수 있습니다.</string>
+    <string name="home_dialog_auth_fail_content">SuperKey를 인증할 수 없어 APatch가 제대로 작동할 수 없습니다.
+\n다음은 인증 실패의 몇 가지 가능한 이유입니다:
+\n1. KernelPatch로 boot 이미지를 패치하지 않았습니다.
+\n2. 패치한 boot 이미지를 플래시하지 않았습니다.
+\n3. SuperKey가 틀림.
+\n4. 장치가 Apatch와 KernelPatch를 지원하지 않습니다.
+\n
+\n확인 후 다시 시도해주세요. 여전히 문제가 있는 경우 공식 repository의 issues 페이지에서 언제든지 질문할 수 있습니다.</string>
     <string name="patch_item_kernel">커널</string>
     <string name="patch_item_kpimg">kpimg</string>
     <string name="patch_item_kpimg_version">버전:</string>
@@ -204,9 +211,4 @@
     <string name="about_telegram_channel">Telegram 채널</string>
     <string name="about_telegram_group">Telegram 그룹</string>
     <string name="save_log">로그 저장</string>
-    <string name="log_saved">로그 저장됨</string>
-    <string name="crash_handle_title">앱 충돌됨...</string>
-    <string name="crash_handle_copy">충돌 로그 복사</string>
-    <string name="apm_action">동작</string>
-    <string name="crash_handle_copied">충돌 로그가 클립보드에 복사됨.</string>
 </resources>

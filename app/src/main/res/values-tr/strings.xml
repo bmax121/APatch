@@ -5,7 +5,7 @@
     <string name="android_patch">AndroidPatch</string>
     <string name="kpm_unload_confirm">\"%s\" modülünü kaldır?</string>
     <string name="apm_uninstall_success">\"%s\" kaldırıldı</string>
-    <string name="send_log">Günlükleri gönder</string>
+    <string name="send_log">Kayıtları gönder</string>
     <string name="apm_install">Kur</string>
     <string name="home_auth_key_desc">Sertifikasyondan sonra başlar</string>
     <string name="kpatch_version">Sürüm: %s</string>
@@ -15,11 +15,11 @@
     <string name="home_patch_set_key_desc">KernelPatch için tek gerekli veri</string>
     <string name="home_install_unknown">Kurulmadı veya kimliği doğrulanmadı</string>
     <string name="apm_uninstall_confirm">\"%s\" modülünü kaldır?</string>
-    <string name="su_pkg_excluded_setting_title">Değişiklikleri hariç tut</string>
+    <string name="su_pkg_excluded_setting_title">Değişiklikleri Hariç Tut</string>
     <string name="reboot_download">İndirme modunda yeniden başlat</string>
     <string name="home_click_to_learn_apatch">APatch\'in özelliklerini ve nasıl kullanılacağını öğrenin</string>
     <string name="apm_version">Sürüm</string>
-    <string name="su_pkg_excluded_setting_summary">Bu seçeneğin etkinleştirilmesi APatch\'in bu uygulamanın modülleri tarafından değiştirilmiş herhangi bir dosyayı geri yüklemesine izin verecektir.</string>
+    <string name="su_pkg_excluded_setting_summary">Bu seçeneğin etkinleştirilmesi, APatch\'in bu uygulama için modüller tarafından değiştirilen tüm dosyaları geri yüklemesine izin verecektir.</string>
     <string name="reboot_edl">EDL modunda yeniden başlat</string>
     <string name="home_installing">Kuruluyor</string>
     <string name="apm_start_downloading">İndirme başladı: \"%s\"</string>
@@ -54,8 +54,8 @@
     <string name="apm_changelog">Değişiklik listesi</string>
     <string name="apm_uninstall_failed">\"%s\" kaldırılamadı</string>
     <string name="kpm_author">Geliştirici</string>
-    <string name="apm_failed_to_enable">\"%s\" modülü etkinleştirilemedi</string>
-    <string name="home">Ana sayfa</string>
+    <string name="apm_failed_to_enable">\"%s\" modülü aktifleştirilemedi</string>
+    <string name="home">Ana Sayfa</string>
     <string name="patch_set_superkey">Süper Anahtar\'ı ayarla</string>
     <string name="apm_downloading">\"%s\"modülü indiriliyor…</string>
     <string name="su_hide_system_apps">Sistem uygulamalarını gizle</string>
@@ -65,7 +65,7 @@
     <string name="home_ap_cando_update">Güncelle</string>
     <string name="kpm_load_toast_failed">Yüklenemedi</string>
     <string name="kpm_unload">Yüklemeyi kaldır</string>
-    <string name="home_selinux_status_disabled">Devredışı</string>
+    <string name="home_selinux_status_disabled">Kapalı</string>
     <string name="settings">Ayarlar</string>
     <string name="apm_new_version_available">Yeni sürüm %s, güncellemek için tıklayın.</string>
     <string name="apatch_version_update">Sürüm: %s -&gt; %s</string>
@@ -82,7 +82,7 @@
     <string name="kpm_license">Lisans</string>
     <string name="reboot_bootloader">Önyükleyici modunda yeniden başlat</string>
     <string name="kpm_apm_empty">Yüklü modül yok</string>
-    <string name="about_source_code"><![CDATA[<p>%1$s üzerinden kaynak koduna göz atın<p/>%2$s kanalımıza katılın<p/>%2$s grubumuza katılın]]></string>
+    <string name="about_source_code">&lt;p&gt;%1$s üzerinden kaynak koduna göz atın&lt;p/&gt;%2$s kanalımıza katılın&lt;p/&gt;%2$s grubumuza katılın</string>
     <string name="home_manager_version">Yönetici sürümü</string>
     <string name="kpm_load_toast_succ">Başarıyla yüklendi</string>
     <string name="apm_author">Geliştirici</string>
@@ -125,8 +125,8 @@
     <string name="patch_item_kpimg_config">Yapılandırma:</string>
     <string name="patch_item_new_extra_kpm">Yeni göm</string>
     <string name="patch_item_extra_event">Olay:</string>
-    <string name="patch_item_skey">SüperAnahtar</string>
-    <string name="patch_item_set_skey_label">SüperAnahtarın uzunluğu 8-63 karakter uzunluğunda olmalı ve rakam ve harf içermeli, fakat özel karakter içermemelidir.</string>
+    <string name="patch_item_skey">Süper Anahtar</string>
+    <string name="patch_item_set_skey_label">Süper anahtarın uzunluğu en az 8 karakter olmalı ve rakam ve harf içermelidir</string>
     <string name="hide_apatch_manager">APatch Yöneticisini Gizle</string>
     <string name="hide_apatch_dialog_summary">Başlatıcıda gösterilen yeni uygulama etiketi olarak kullanılacaktır</string>
     <string name="kpm_add_kpm">KPM ekle</string>
@@ -141,7 +141,7 @@
     <string name="failure">Başarısız</string>
     <string name="home_new_apatch_found">Yeni sürüm var: %s, Yükseltmek için tıklayın</string>
     <string name="settings_check_update">Güncellemeleri denetle</string>
-    <string name="patch_mode_install_to_next_slot">Mod: Aktif olmayan yuvaya kur (OTA\'dan sonra)</string>
+    <string name="patch_mode_install_to_next_slot">Mod: Sonraki yuvaya kur (OTA\'dan sonra)</string>
     <string name="mode_select_page_patch_and_install">Yama ve Kur</string>
     <string name="mode_select_page_select_file">Yama için bir önyükleme kalıbı seçin</string>
     <string name="home_dialog_auth_fail_title">Kimlik doğrulama başarısız</string>
@@ -152,7 +152,14 @@
     <string name="mode_select_page_install_inactive_slot_warning">Aygıtınız yeniden başlatıldıktan sonra geçerli etkin olmayan yuvaya önyükleme yapmaya **ZORLANACAK**!
 \nBu seçeneği yalnızca OTA tamamlandıktan sonra kullanın.
 \nDevam edilsin mi?</string>
-    <string name="home_dialog_auth_fail_content">Süper anahtarın kimliği doğrulanamıyor, bu nedenle APatch düzgün çalışamıyor. \nKimlik doğrulama başarısızlığının bazı olası nedenleri şunlardır: \n1. Önyükleme kalıbını KernelPatch ile yamalamadınız. \n2. Yamalı önyükleme kalıbı yazılmadı. \n3. Süper anahtar yanlış. \n4. Aygıtınız APatch ve KernelPatch desteklemiyor. \n \nLütfen gözden geçirin ve tekrar deneyin. Hala sorun varsa, resmi deponun sorunlar sayfasında her zaman soru sorabilirsiniz.</string>
+    <string name="home_dialog_auth_fail_content">Süper anahtarın kimliği doğrulanamıyor, bu nedenle APatch düzgün çalışamıyor.
+\nKimlik doğrulama başarısızlığının bazı olası nedenleri şunlardır:
+\n1. Önyükleme kalıbını KernelPatch ile yamalamadınız.
+\n2. Yamalı önyükleme kalıbı yazılmadı.
+\n3. Süper anahtar yanlış.
+\n4. Aygıtınız APatch ve KernelPatch desteklemiyor.
+\n
+\nLütfen gözden geçirin ve tekrar deneyin. Hala sorun varsa, resmi deponun sorunlar sayfasında her zaman soru sorabilirsiniz.</string>
     <string name="settings_check_update_summary">Uygulama açıldığında güncellemeleri otomatik olarak denetle</string>
     <string name="apm_webui_open">Aç</string>
     <string name="enable_web_debugging">Web Görünümü Hata Ayıklamayı Etkinleştir</string>
@@ -171,7 +178,7 @@
     <string name="kpm_control_failed">İşlem başarısız!</string>
     <string name="settings_night_theme_enabled">Koyu Temayı Etkinleştir</string>
     <string name="settings_custom_color_theme">Renk Teması</string>
-    <string name="light_blue_theme">Açık mavi</string>
+    <string name="light_blue_theme">Açık Mavi Tema</string>
     <string name="kpm_control_paramters">Parametreler</string>
     <string name="kpm_control_ok">İşlem başarılı!</string>
     <string name="settings_use_system_color_theme">Sistem Renk Teması</string>
@@ -179,21 +186,21 @@
     <string name="brown_theme">Kahverengi Tema</string>
     <string name="cyan_theme">Camgöbeği Tema</string>
     <string name="deep_orange_theme">Koyu Turuncu Tema</string>
-    <string name="deep_purple_theme">Koyu mor</string>
-    <string name="indigo_theme">Çivit Mavisi</string>
-    <string name="light_green_theme">Açık yeşil</string>
-    <string name="lime_theme">Açık yeşil</string>
-    <string name="orange_theme">Turuncu</string>
-    <string name="pink_theme">"Pembe "</string>
-    <string name="purple_theme">Mor</string>
-    <string name="red_theme">Kırmızı</string>
-    <string name="sakura_theme">Kiraz Çiçeği</string>
-    <string name="teal_theme">Cam göbeği</string>
-    <string name="yellow_theme">Sarı</string>
+    <string name="deep_purple_theme">Koyu Mor Tema</string>
+    <string name="indigo_theme">Çivit Mavisi Tema</string>
+    <string name="light_green_theme">Açık Yeşil Tema</string>
+    <string name="lime_theme">Kireç Teması</string>
+    <string name="orange_theme">Turuncu Tema</string>
+    <string name="pink_theme">Pembe Tema</string>
+    <string name="purple_theme">Mor Tema</string>
+    <string name="red_theme">Kırmızı Tema</string>
+    <string name="sakura_theme">Kiraz Çiçeği Teması</string>
+    <string name="teal_theme">Deniz Mavisi Teması</string>
+    <string name="yellow_theme">Sarı Tema</string>
     <string name="about_app_version">Sürüm %1$s</string>
     <string name="about_app_desc">Yalnızca sadeleştirilmiş bir çekirdek kalıbına sahip Çekirdek Root çözümü, sistem modülünü bağlama ve Çekirdek işlevini kancalama olanağı sağlar.</string>
-    <string name="about_telegram_channel">Telegram kanalı</string>
-    <string name="about_telegram_group">Telegram grubu</string>
+    <string name="about_telegram_channel">Telegram Kanalı</string>
+    <string name="about_telegram_group">Telegram Grubu</string>
     <string name="about_powered_by">%1$s desteğiyle</string>
     <string name="kpm_control_dialog_title">KPModule Denetimi</string>
     <string name="kpm_control_dialog_content">Giriş denetim parametreleri:</string>
@@ -202,11 +209,11 @@
     <string name="settings_use_system_color_theme_summary">Geçerli duvar kağıdı ile sistem tarafından oluşturulan bir renk teması kullanın</string>
     <string name="amber_theme">Amber Tema</string>
     <string name="blue_grey_theme">BlueGrey Teması</string>
-    <string name="green_theme">"Yeşil "</string>
-    <string name="save_log">Günlükleri kaydet</string>
+    <string name="green_theme">Yeşil Tema</string>
+    <string name="save_log">Günlüğü Kaydet</string>
     <string name="apm_action">Eylem</string>
-    <string name="log_saved">Günlükler kaydedildi</string>
-    <string name="crash_handle_title">Uygulama çöktü…</string>
+    <string name="log_saved">Log Kurtarıldı</string>
+    <string name="crash_handle_title">App çöktü.</string>
     <string name="crash_handle_copy">Çökme raporunu kopyala</string>
     <string name="crash_handle_copied">Çökme raporu panoya kopyalandı.</string>
 </resources>
