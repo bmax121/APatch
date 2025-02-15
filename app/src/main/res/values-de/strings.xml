@@ -25,22 +25,22 @@
     <string name="kpatch_version">Version: %s</string>
     <string name="apatch_version_update">Version: %s -&gt; %s</string>
     <string name="home_auth_key_desc">Start nach Zertifizierung</string>
-    <string name="home_manager_version">Manager Version</string>
-    <string name="su_pkg_excluded_setting_summary">Wenn Sie diese Option aktivieren, kann APatch alle von den Modulen für diese Anwendung geänderten Dateien wiederherstellen.</string>
-    <string name="apm_failed_to_disable">Das Modul \"%s\" konnte nicht aktiviert werden</string>
-    <string name="home_selinux_status_disabled">Aus</string>
-    <string name="apm_magisk_conflict">Module sind aufgrund eines Konfliktes mit Magisk nicht verfügbar.</string>
+    <string name="home_manager_version">Manager-Version</string>
+    <string name="su_pkg_excluded_setting_summary">Wenn Sie diese Option aktivieren, kann APatch alle von den Modulen dieser Anwendung geänderten Dateien wiederherstellen.</string>
+    <string name="apm_failed_to_disable">Das Modul \"%s\" konnte nicht deaktiviert werden</string>
+    <string name="home_selinux_status_disabled">Deaktiviert</string>
+    <string name="apm_magisk_conflict">Module sind aufgrund eines Konfliktes mit Magisk nicht verfügbar!</string>
     <string name="apm_downloading">Modul \"%s\" wird heruntergeladen…</string>
     <string name="apm_start_downloading">Download von %s starten</string>
     <string name="kpm_unload_confirm">Modul \"%s\" entladen?</string>
-    <string name="apm_failed_to_enable">Das Modul \"%s\" konnte nicht eingeschaltet werden</string>
-    <string name="home_apatch_version">APatch Version: %s</string>
+    <string name="apm_failed_to_enable">Das Modul \"%s\" konnte nicht aktiviert werden</string>
+    <string name="home_apatch_version">APatch Version</string>
     <string name="home_selinux_status">SELinux-Status</string>
-    <string name="reboot_recovery">Neustart zur Recovery</string>
+    <string name="reboot_recovery">Neustart zum Wiederherstellen</string>
     <string name="reboot_download">Neustart zum Herunterladen</string>
     <string name="reboot_edl">Neustart zur EDL</string>
-    <string name="about">Über uns</string>
-    <string name="send_log">Log-Datei senden</string>
+    <string name="about">Über</string>
+    <string name="send_log">Protokolle senden</string>
     <string name="safe_mode">Sicherer Modus</string>
     <string name="home_click_to_install">Zum Installieren klicken</string>
     <string name="home_working">Funktioniert</string>
@@ -65,7 +65,7 @@
     <string name="apm_uninstall_confirm">Modul \"%s\" deinstallieren?</string>
     <string name="apm_overlay_fs_not_available">Module sind nicht verfügbar, da OverlayFS vom Kernel deaktiviert ist.</string>
     <string name="apm_reboot_to_apply">Neustarten, um Änderungen zu speichern</string>
-    <string name="apm_new_version_available">Klicken Sie, um die neue Version von %s zu installieren.</string>
+    <string name="apm_new_version_available">Klicken Sie, um eine neue Version von %s zu installieren.</string>
     <string name="apm_uninstall_success">%s deinstalliert</string>
     <string name="kpm_load">Laden</string>
     <string name="kpm_version">Version</string>
@@ -85,14 +85,14 @@
     <string name="kpm_desc">Beschreibung</string>
     <string name="kpm_args">Args</string>
     <string name="su_selinux_via_hook">Umgehung über einhaken</string>
-    <string name="su_pkg_excluded_setting_title">Änderungen Ausschließen</string>
+    <string name="su_pkg_excluded_setting_title">Änderungen ausschließen</string>
     <string name="su_refresh">Aktualisieren</string>
     <string name="apm_desc">Beschreibung</string>
     <string name="apm_changelog">Update-Verlauf</string>
     <string name="settings_app_language">Sprache</string>
     <string name="system_default">Systemstandard</string>
     <string name="patch">Patch</string>
-    <string name="settings_global_namespace_mode">Globaler Namespace-Modus</string>
+    <string name="settings_global_namespace_mode">Globaler Namensraum-Modus</string>
     <string name="settings_global_namespace_mode_summary">Alle Root-Sitzungen verwenden den globalen Mount-Namespace</string>
     <string name="kpatch_shadow_path_title">kpatch</string>
     <string name="home_kpatch_info_title">Info</string>
@@ -121,15 +121,15 @@
     <string name="patch_item_extra_kpm_desciption">Beschreibung:</string>
     <string name="patch_item_extra_args">Argumente:</string>
     <string name="patch_item_extra_event">Ereignis:</string>
-    <string name="patch_item_skey">Superschlüssel</string>
+    <string name="patch_item_skey">SuperKey</string>
     <string name="patch_start_patch_btn">Start</string>
     <string name="patch_item_kernel">Kernel</string>
     <string name="patch_item_existed_extra_kpm">existiert</string>
-    <string name="patch_item_set_skey_label">Die Länge des Superschlüssels sollte mindestens 8 Zeichen umfassen und Zahlen und Buchstaben enthalten</string>
-    <string name="settings_check_update">Prüfe auf Update</string>
+    <string name="patch_item_set_skey_label">"Der SuperKey sollte  8-63 Zeichen lang sein und Zahlen sowie Buchstaben, aber keine Sonderzeichen enthalten."</string>
+    <string name="settings_check_update">Auf Aktualisierung prüfen</string>
     <string name="home_install_unknown_summary">Klicke zum Installieren</string>
     <string name="patch_mode_patch_and_install">Modus: Patchen und installieren</string>
-    <string name="enable_web_debugging">WebView Debugging aktivieren</string>
+    <string name="enable_web_debugging">WebView-Debugging aktivieren</string>
     <string name="blue_grey_theme">BlauGrau Thema</string>
     <string name="amber_theme">Bernstein Thema</string>
     <string name="blue_theme">Blaues Thema</string>
@@ -137,8 +137,8 @@
     <string name="green_theme">Grünes Thema</string>
     <string name="about_telegram_group">Telegram Gruppe</string>
     <string name="about_telegram_channel">Telegram Kanal</string>
-    <string name="settings_check_update_summary">Automatisch auf Updates prüfen, wenn die App geöffnet wird</string>
-    <string name="enable_web_debugging_summary">Kann zum debuggen von WebUI benutzt werden, nur bei Bedarf aktivieren.</string>
+    <string name="settings_check_update_summary">Automatisch auf Aktualisierungen prüfen, wenn die App geöffnet wird</string>
+    <string name="enable_web_debugging_summary">Kann zum debuggen von WebUI benutzt werden. Bitte nur bei Bedarf aktivieren.</string>
     <string name="apm_webui_open">Öffnen</string>
     <string name="failure">Fehlgeschlagen</string>
     <string name="success">Erfolg</string>
@@ -150,7 +150,7 @@
     <string name="kpm_add_kpm">KPM hinzufügen</string>
     <string name="kpm_install">Installieren</string>
     <string name="hide_apatch_manager">APatch Manager ausblenden</string>
-    <string name="setting_reset_su_new_path">neuer vollständiger Pfad</string>
+    <string name="setting_reset_su_new_path">Neuer vollständiger Pfad</string>
     <string name="hide_apatch_dialog_new_manager_name">Neuer Manager-Name</string>
     <string name="mode_select_page_patch_and_install">Patchen und installieren</string>
     <string name="mode_select_page_title">Installieren</string>
@@ -170,15 +170,15 @@
     <string name="settings_night_mode_follow_sys_summary">Automatisch mit der Systemeinstellung zum dunklen Thema wechseln</string>
     <string name="settings_night_theme_enabled">Dunkles Thema aktivieren</string>
     <string name="settings_use_system_color_theme">Systemfarbthema</string>
-    <string name="patch_mode_install_to_next_slot">Modus: In nächsten Slot installieren (Nach OTA)</string>
+    <string name="patch_mode_install_to_next_slot">Modus: In inaktivem Slot installieren (Nach OTA)</string>
     <string name="setting_reset_su_path">su-Pfad zurücksetzen</string>
-    <string name="hide_apatch_manager_failure">Verstecken fehlgeschlagen, bitte melde den Fehler!</string>
-    <string name="settings_donot_store_superkey">Super-Key nicht lokal speichern</string>
-    <string name="home_new_apatch_found">Neue Version verfügbar: %s, klicke, um upzugraden</string>
+    <string name="hide_apatch_manager_failure">Verstecken fehlgeschlagen. Bitte melde den Fehler!</string>
+    <string name="settings_donot_store_superkey">Superschlüssel nicht lokal speichern</string>
+    <string name="home_new_apatch_found">"Neue Version  %s jetzt verfügbar. Hier klicken um upzugraden."</string>
     <string name="mode_select_page_install_inactive_slot">Auf inaktiven Slot installieren (Nach OTA)</string>
-    <string name="hide_apatch_manager_summary">Installieren Sie eine neue Manager-Anwendung mit einer zufälligen Paket-ID und einer benutzerdefinierten Anwendungsbezeichnung</string>
+    <string name="hide_apatch_manager_summary">Installieren Sie eine neue Manager-App mit einer zufälligen Paket-ID und einer benutzerdefinierten Anwendungsbezeichnung</string>
     <string name="hide_apatch_dialog_summary">Wird als App-Bezeichnung auf dem Home-Screen genutzt</string>
-    <string name="settings_donot_store_superkey_summary">Super-Key jedes mal authentifizieren, wenn der Manager startet</string>
+    <string name="settings_donot_store_superkey_summary">"Superschlüssel  jedes mal authentifizieren, wenn der Manager startet"</string>
     <string name="kpm_control_dialog_content">Eingangskontrollparameter:</string>
     <string name="mode_select_page_install_inactive_slot_warning">Dein Gerät wird **GEZWUNGEN**, nach dem Neustart den inaktiven Slot zu nutzen!
 \nNutze diese Funktion ausschließlich, wenn ein OTA-Update durchgeführt wurde.
@@ -202,18 +202,11 @@
     <string name="red_theme">Rotes Thema</string>
     <string name="about_app_desc">Kernel-Root-Lösung mit nur einem gestrippten Kernel-Image, das die Möglichkeit bietet, Systemmodule zu mounten und Kernel-Funktionen einzuhängen.</string>
     <string name="settings_use_system_color_theme_summary">Verwenden Sie ein Farbthema, das von System mit aktuellen Tapeten erzeugt wird</string>
-    <string name="home_dialog_auth_fail_content">Unfähig, den Superschlüssel zu authentifizieren, daher APatch nicht richtig funktionieren kann.
-\nHier sind einige mögliche Gründe für Authentifizierungsfehler:
-\nANHANG Sie haben das Boot-Bild nicht mit KernelPatch gepatcht.
-\n2. Das gepatchte Boot-Bild wurde nicht aufgeblitzt.
-\n3. Super Schlüssel falsch.
-\n4. Ihr Gerät unterstützt APatch und KernelPatch nicht.
-\n
-\nBitte überprüfen und nochmal versuchen. Wenn es noch Probleme gibt, können Sie immer Fragen zu den Problemen des offiziellen Projektarchivs stellen.</string>
-    <string name="save_log">Protokoll speichern</string>
+    <string name="home_dialog_auth_fail_content">Superschlüssel kann nicht authentifiziert werden, daher kann APatch nicht richtig funktionieren. \nMögliche Gründe für Authentifizierungsfehler können sein: \n1. Das boot.img wurde nicht mit dem KernelPatch gepatcht. \n2. Das gepatchte boot.img wurde nicht geflasht. \n3. Superschlüssel ist falsch, oder enthält Sonderzeichen. \n4. Ihr Gerät unterstützt APatch und KernelPatch nicht. \n \nBitte überprüfen und nochmal versuchen. Wenn weiterhin Probleme auftreten, können Fragen auf der offiziellen Issues-Seite des Repository gestellt werden.</string>
+    <string name="save_log">Protokolle speichern</string>
     <string name="apm_action">Aktion</string>
-    <string name="log_saved">Protokoll gespeichert</string>
+    <string name="log_saved">Protokolle gespeichert</string>
     <string name="crash_handle_copy">Absturzprotokoll kopieren</string>
     <string name="crash_handle_copied">Der Absturzprotokoll wurde in den Zwischenspeicher kopiert.</string>
-    <string name="crash_handle_title">App ist abgestürzt.</string>
+    <string name="crash_handle_title">App ist abgestürzt…</string>
 </resources>

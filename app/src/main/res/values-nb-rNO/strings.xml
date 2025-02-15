@@ -3,10 +3,10 @@
     <string name="app_name" translatable="false">APatch</string>
     <string name="apm_desc">Beskrivelse</string>
     <string name="home">Hjem</string>
-    <string name="kernel_patch">KernelPatch</string>
+    <string name="kernel_patch">Kjerneoppdatering</string>
     <string name="settings">Innstillinger</string>
     <string name="about">Om</string>
-    <string name="android_patch">AndroidPatch</string>
+    <string name="android_patch">Android oppdatering</string>
     <string name="reboot">Omstart</string>
     <string name="reboot_recovery">Omstart til gjenoppretting</string>
     <string name="reboot_bootloader">Omstart til oppstartslaster</string>
@@ -58,7 +58,7 @@
     <string name="apatch_version">Versjon: %s</string>
     <string name="kpm_load_toast_failed">Innlasting mislyktes</string>
     <string name="patch_warnning">Installasjon medfører risiko. Forsikre deg om at dataen din er sikkerhetskopiert.</string>
-    <string name="reboot_download">Omstart til nedlastingsmodus</string>
+    <string name="reboot_download">Start på nytt for å laste ned</string>
     <string name="about_source_code">Vis kildekoden på vår %1$s<br/>Ta del%2$s i vår kanal</string>
     <string name="kpm_unload_confirm">Vil du laste ut modulen «%s»?</string>
     <string name="home_apatch_version">APatch: %s</string>
