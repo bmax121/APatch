@@ -194,14 +194,7 @@
     <string name="yellow_theme">Sarı Tema</string>
     <string name="about_app_version">Versiya %1$s</string>
     <string name="apm_webui_open">Aç</string>
-    <string name="home_dialog_auth_fail_content">Super açarın doğrulanması mümkün deyil, buna görə də APAtch düzgün işləyə bilməz.
-\nDoğrulama uğursuzluğunun bəzi mümkün səbəbləri bunlardır:
-\n1. Siz boot ­image-i KernelPatch ilə yamalamamısınız.
-\n2. Yamalı boot image flashlanmadı.
-\n3. Super açar səhvdir.
-\n4. Cihazınız APatch və KernelPatch-i dəstəkləmir.
-\n
-\nZəhmət olmasa yoxlayın və yenidən cəhd edin. Hələ də problemlər varsa, siz həmişə rəsmi repozitoriyanın problem səhifəsində sual verə bilərsiniz.</string>
+    <string name="home_dialog_auth_fail_content">Super açarın doğrulanması mümkün deyil, buna görə də APAtch düzgün işləyə bilməz. \nDoğrulama uğursuzluğunun bəzi mümkün səbəbləri bunlardır: \n1. Siz boot ­image-i KernelPatch ilə yamalamamısınız. \n2. Yamalı boot image flashlanmadı. \n3. Super açar səhvdir. \n4. Cihazınız APatch və KernelPatch-i dəstəkləmir. \n \nZəhmət olmasa yoxlayın və yenidən cəhd edin. Hələ də problemlər varsa, siz həmişə rəsmi repozitoriyanın problem səhifəsində sual verə bilərsiniz.</string>
     <string name="kpm_control_outMsg">Mesajlar</string>
     <string name="kpm_control_paramters">Parametrlər</string>
     <string name="kpm_control_dialog_content">Giriş nəzarət parametrləri:</string>
