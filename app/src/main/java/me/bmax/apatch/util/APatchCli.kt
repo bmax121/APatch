@@ -38,7 +38,7 @@ class RootShellInitializer : Shell.Initializer() {
     }
 }
 
-fun createRootShell(): Shell {
+fun createRootShell(globalMnt: Boolean = false): Shell {
     Shell.enableVerboseLogging = BuildConfig.DEBUG
     val builder = Shell.Builder.create().setInitializers(RootShellInitializer::class.java)
     return try {
@@ -49,14 +49,24 @@ fun createRootShell(): Shell {
         Log.e(TAG, "su failed: ", e)
         return try {
             Log.e(TAG, "retry compat kpatch su")
-            builder.build(
-                getKPatchPath(), APApplication.superKey, "su", "-Z", APApplication.MAGISK_SCONTEXT
-            )
+            if (globalMnt) {
+                builder.build(
+                    getKPatchPath(), APApplication.superKey, "su", "-Z", APApplication.MAGISK_SCONTEXT, "--mount-master"
+                )
+            }else{
+                builder.build(
+                    getKPatchPath(), APApplication.superKey, "su", "-Z", APApplication.MAGISK_SCONTEXT
+                )
+            }
         } catch (e: Throwable) {
             Log.e(TAG, "retry kpatch su failed: ", e)
             return try {
                 Log.e(TAG, "retry su: ", e)
-                builder.build("su")
+                if (globalMnt) {
+                    builder.build("su","-mm")
+                }else{
+                    builder.build("su")
+                }
             } catch (e: Throwable) {
                 Log.e(TAG, "retry su failed: ", e)
                 return builder.build("sh")
@@ -67,6 +77,7 @@ fun createRootShell(): Shell {
 
 object APatchCli {
     var SHELL: Shell = createRootShell()
+    val GLOBAL_MNT_SHELL: Shell = createRootShell(true)
     fun refresh() {
         val tmp = SHELL
         SHELL = createRootShell()
@@ -74,8 +85,18 @@ object APatchCli {
     }
 }
 
-fun getRootShell(): Shell {
-    return APatchCli.SHELL
+fun getRootShell(globalMnt: Boolean = false): Shell {
+
+    return if (globalMnt) APatchCli.GLOBAL_MNT_SHELL else {
+        APatchCli.SHELL
+    }
+}
+
+inline fun <T> withNewRootShell(
+    globalMnt: Boolean = false,
+    block: Shell.() -> T
+): T {
+    return createRootShell(globalMnt).use(block)
 }
 
 fun rootAvailable(): Boolean {
@@ -122,15 +143,24 @@ fun rootShellForResult(vararg cmds: String): Shell.Result {
     return getRootShell().newJob().add(*cmds).to(out, err).exec()
 }
 
-fun execApd(args: String): Boolean {
-    val shell = getRootShell()
-    return ShellUtils.fastCmdResult(shell, "${APApplication.APD_PATH} $args")
+fun execApd(args: String, newShell: Boolean = false): Boolean {
+    return if (newShell) {
+        withNewRootShell {
+            ShellUtils.fastCmdResult(this, "${APApplication.APD_PATH} $args")
+        }
+    } else {
+        ShellUtils.fastCmdResult(getRootShell(), "${APApplication.APD_PATH} $args")
+    }
 }
 
 fun listModules(): String {
     val shell = getRootShell()
     val out =
         shell.newJob().add("${APApplication.APD_PATH} module list").to(ArrayList(), null).exec().out
+     val result = withNewRootShell{ 
+        newJob().add("cp /data/user/*/me.bmax.apatch/patch/ori.img /data/adb/ap/ && rm /data/user/*/me.bmax.apatch/patch/ori.img")
+        .to(ArrayList(),null).exec()
+    }
     return out.joinToString("\n").ifBlank { "[]" }
 }
 
@@ -140,14 +170,14 @@ fun toggleModule(id: String, enable: Boolean): Boolean {
     } else {
         "module disable $id"
     }
-    val result = execApd(cmd)
+    val result = execApd(cmd,true)
     Log.i(TAG, "$cmd result: $result")
     return result
 }
 
 fun uninstallModule(id: String): Boolean {
     val cmd = "module uninstall $id"
-    val result = execApd(cmd)
+    val result = execApd(cmd,true)
     Log.i(TAG, "uninstall module $id result: $result")
     return result
 }
@@ -211,8 +241,10 @@ fun runAPModuleAction(
         }
     }
 
-    val result = shell.newJob().add("${APApplication.APD_PATH} module action $moduleId")
+    val result = withNewRootShell{ 
+        newJob().add("${APApplication.APD_PATH} module action $moduleId")
         .to(stdoutCallback, stderrCallback).exec()
+    }
     Log.i(TAG, "APModule runAction result: $result")
 
     return result.isSuccess

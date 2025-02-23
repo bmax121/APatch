@@ -56,6 +56,11 @@ if [ ! $(./kptools -i kernel -f | grep CONFIG_KALLSYMS=y) ]; then
 	exit 0
 fi
 
+if [  $(./kptools -i kernel -l | grep patched=false) ]; then
+	echo "- Backing boot.img "
+  cp "$BOOTIMAGE" "ori.img" >/dev/null 2>&1
+fi
+
 mv kernel kernel.ori
 
 echo "- Patching kernel"

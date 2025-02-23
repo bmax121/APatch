@@ -31,23 +31,32 @@ if [ $? -ne 0 ]; then
   fi
 fi
 
-mv kernel kernel.ori
+if [ ! $(./kptools -i kernel -l | grep patched=false) ]; then
+	echo "- kernel has been patched "
+  if [ -f "new-boot.img" ]; then
+    echo "- found backup boot.img ,use it for recovery"
+  else
+    mv kernel kernel.ori
+    echo "- Unpatching kernel"
+    ./kptools -u --image kernel.ori --out kernel
+    if [ $? -ne 0 ]; then
+      >&2 echo "- Unpatch error: $?"
+      exit $?
+    fi
+    echo "- Repacking boot image"
+    ./magiskboot repack "$BOOTIMAGE" >/dev/null 2>&1
+    if [ $? -ne 0 ]; then
+      >&2 echo "- Repack error: $?"
+      exit $?
+    fi
+  fi
 
-echo "- Unpatching kernel"
-./kptools -u --image kernel.ori --out kernel
-
-if [ $? -ne 0 ]; then
-  >&2 echo "- Unpatch error: $?"
-  exit $?
+else
+  echo "- no need unpatch"
+  exit 0
 fi
 
-echo "- Repacking boot image"
-./magiskboot repack "$BOOTIMAGE" >/dev/null 2>&1
 
-if [ $? -ne 0 ]; then
-  >&2 echo "- Repack error: $?"
-  exit $?
-fi
 
 if [ -f "new-boot.img" ]; then
   echo "- Flashing boot image"
