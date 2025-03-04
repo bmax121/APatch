@@ -1,8 +1,8 @@
 [versions]
-agp = "8.8.0"
+agp = "8.9.0"
 kotlin = "2.1.10"
-ksp = "2.1.10-1.0.29"
-compose-bom = "2025.01.01"
+ksp = "2.1.10-1.0.31"
+compose-bom = "2025.02.00"
 lifecycle = "2.8.7"
 compose-destination = "2.1.0-beta16"
 libsu = "6.0.0"
@@ -20,14 +20,14 @@ kotlin-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.
 
 [libraries]
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.7.0" }
-androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version = "1.10.0" }
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version = "1.10.1" }
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version = "1.0.1" }
 androidx-webkit = { group = "androidx.webkit", name = "webkit", version = "1.12.1" }
 
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
 androidx-compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 androidx-compose-material = { group = "androidx.compose.material", name = "material" }
-androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version = "1.4.0-alpha07" } # For material3 PullToRefresh, work around https://issuetracker.google.com/issues/359949836, remove the `version` when 1.4.0 released
+androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version = "1.4.0-alpha09" } # For material3 PullToRefresh, work around https://issuetracker.google.com/issues/359949836, remove the `version` when 1.4.0 released
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
