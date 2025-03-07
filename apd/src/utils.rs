@@ -1,9 +1,8 @@
-use anyhow::{bail, Context, Error, Ok, Result};
-use const_format::concatcp;
+use anyhow::{Context, Error, Ok, Result, bail};
 use log::{info, warn};
 use std::ffi::CString;
 use std::{
-    fs::{self, create_dir_all, File, OpenOptions},
+    fs::{self, File, OpenOptions, create_dir_all},
     io::{BufRead, BufReader, ErrorKind::AlreadyExists, Write},
     path::Path,
     process::Stdio,
@@ -12,7 +11,7 @@ use std::{
 use crate::defs;
 use std::fs::metadata;
 #[allow(unused_imports)]
-use std::fs::{set_permissions, Permissions};
+use std::fs::{Permissions, set_permissions};
 #[cfg(unix)]
 use std::os::unix::prelude::PermissionsExt;
 use std::process::Command;

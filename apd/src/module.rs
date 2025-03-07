@@ -1,12 +1,11 @@
 #[allow(clippy::wildcard_imports)]
 use crate::utils::*;
 use crate::{assets, defs, restorecon, utils};
-use anyhow::{anyhow, bail, ensure, Context, Result};
+use anyhow::{Context, Result, anyhow, bail, ensure};
 use const_format::concatcp;
 use is_executable::is_executable;
 use java_properties::PropertiesIter;
 use log::{info, warn};
-use regex_lite::Regex;
 use std::{
     collections::HashMap,
     env::var as env_var,
@@ -44,7 +43,7 @@ fn exec_install_script(module_file: &str) -> Result<()> {
     let realpath = std::fs::canonicalize(module_file)
         .with_context(|| format!("realpath: {module_file} failed"))?;
 
-    let mut content;
+    let content;
 
     if !should_enable_overlay()? {
         content = INSTALL_MODULE_SCRIPT_.to_string();
@@ -344,7 +343,7 @@ fn _install_module(zip: &str) -> Result<()> {
     }
 
     let module_dir = format!("{}{}", modules_dir.display(), module_id.clone());
-    let module_update_dir = format!("{}{}", modules_update_dir.display(), module_id.clone());
+    let _module_update_dir = format!("{}{}", modules_update_dir.display(), module_id.clone());
     info!("module dir: {}", module_dir);
     if !Path::new(&module_dir.clone()).exists() {
         fs::create_dir(&module_dir.clone()).expect("Failed to create module folder");
@@ -467,7 +466,7 @@ fn _enable_module(module_dir: &str, mid: &str, enable: bool) -> Result<()> {
 
 pub fn enable_module(id: &str) -> Result<()> {
     let update_dir = Path::new(defs::MODULE_DIR);
-    let update_dir_update = Path::new(defs::MODULE_UPDATE_TMP_DIR);
+    let _update_dir_update = Path::new(defs::MODULE_UPDATE_TMP_DIR);
 
     //let result = enable_module_update(id, update_dir);
     //if should_enable_overlay()?{
@@ -490,7 +489,7 @@ pub fn enable_module_update(id: &str, update_dir: &Path) -> Result<()> {
 
 pub fn disable_module(id: &str) -> Result<()> {
     let update_dir = Path::new(defs::MODULE_DIR);
-    let update_dir_update = Path::new(defs::MODULE_UPDATE_TMP_DIR);
+    let _update_dir_update = Path::new(defs::MODULE_UPDATE_TMP_DIR);
 
     //let result = disable_module_update(id, update_dir);
     //if should_enable_overlay()?{
@@ -567,12 +566,15 @@ fn _list_modules(path: &str) -> Vec<HashMap<String, String>> {
             });
 
         if !module_prop_map.contains_key("id") || module_prop_map["id"].is_empty() {
-            if let Some(id) = entry.file_name().to_str() {
-                info!("Use dir name as module id: {}", id);
-                module_prop_map.insert("id".to_owned(), id.to_owned());
-            } else {
-                info!("Failed to get module id: {:?}", module_prop);
-                continue;
+            match entry.file_name().to_str() {
+                Some(id) => {
+                    info!("Use dir name as module id: {}", id);
+                    module_prop_map.insert("id".to_owned(), id.to_owned());
+                }
+                _ => {
+                    info!("Failed to get module id: {:?}", module_prop);
+                    continue;
+                }
             }
         }
 

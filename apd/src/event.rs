@@ -1,18 +1,18 @@
 use crate::m_mount;
 use crate::module;
 use crate::supercall::fork_for_result;
-use crate::utils::{ensure_dir_exists, ensure_file_exists, get_work_dir, switch_cgroups};
+use crate::utils::{ensure_dir_exists, get_work_dir, switch_cgroups};
 use crate::{
     assets, defs, mount, restorecon, supercall,
     supercall::{init_load_package_uid_config, init_load_su_path, refresh_ap_package_list},
     utils::{self, ensure_clean_dir},
 };
-use anyhow::{bail, ensure, Context, Result};
-use extattr::{lgetxattr, lsetxattr, Flags as XattrFlags};
+use anyhow::{Context, Result, bail, ensure};
+use extattr::{Flags as XattrFlags, lgetxattr, lsetxattr};
 use log::{info, warn};
 use notify::event::{ModifyKind, RenameMode};
 use notify::{Config, Event, EventKind, INotifyWatcher, RecursiveMode, Watcher};
-use rustix::{fd::AsFd, fs::CWD, mount::*};
+use rustix::mount::*;
 use std::ffi::CStr;
 use std::fs::{remove_dir_all, rename};
 use std::os::unix::fs::PermissionsExt;
@@ -194,7 +194,7 @@ pub fn mount_systemlessly(module_dir: &str, is_img: bool) -> Result<()> {
     Ok(())
 }
 
-pub fn systemless_bind_mount(module_dir: &str) -> Result<()> {
+pub fn systemless_bind_mount(_module_dir: &str) -> Result<()> {
     //let propagation_flags = MountPropagationFlags::PRIVATE;
 
     //let combined_flags = MountFlags::empty() | MountFlags::from_bits_truncate(propagation_flags.bits());
@@ -270,7 +270,7 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
         fs::set_permissions(defs::APATCH_LOG_FOLDER, permissions)
             .expect("Failed to set permissions");
     }
-    let mut command_string = format!(
+    let command_string = format!(
         "rm -rf {}*.old.log; for file in {}*; do mv \"$file\" \"$file.old.log\"; done",
         defs::APATCH_LOG_FOLDER,
         defs::APATCH_LOG_FOLDER
@@ -309,7 +309,7 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
             .spawn()
     };
     args = vec!["-s", "9", "120s", "dmesg", "-w"];
-    let result = unsafe {
+    let _result = unsafe {
         std::process::Command::new("timeout")
             .process_group(0)
             .pre_exec(|| {

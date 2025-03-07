@@ -7,7 +7,7 @@ use android_logger::Config;
 use log::LevelFilter;
 
 use crate::{defs, event, module, supercall, utils};
-use std::ffi::{CStr, CString};
+use std::ffi::CString;
 /// APatch cli
 #[derive(Parser, Debug)]
 #[command(author, version = defs::VERSION_CODE, about, long_about = None)]
@@ -154,7 +154,6 @@ pub fn run() -> Result<()> {
                     Ok(())
                 }
             }
-            _ => Err(anyhow::anyhow!("Unsupported command")),
         },
 
         Commands::Module { command } => {

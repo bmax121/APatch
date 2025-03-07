@@ -14,7 +14,7 @@ use crate::{
     defs,
     utils::{self, umask},
 };
-use rustix::thread::{set_thread_res_gid, set_thread_res_uid, Gid, Uid};
+use rustix::thread::{Gid, Uid, set_thread_res_gid, set_thread_res_uid};
 
 fn print_usage(opts: Options) {
     let brief = "APatch\n\nUsage: <command> [options] [-] [user [argument...]]".to_string();
@@ -225,6 +225,6 @@ fn add_path_to_env(path: &str) -> Result<()> {
     let new_path = PathBuf::from(path.trim_end_matches('/'));
     paths.push(new_path);
     let new_path_env = env::join_paths(paths)?;
-    env::set_var("PATH", new_path_env);
+    unsafe { env::set_var("PATH", new_path_env) };
     Ok(())
 }

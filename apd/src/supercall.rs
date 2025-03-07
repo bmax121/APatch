@@ -1,6 +1,6 @@
 use crate::package::{read_ap_package_config, synchronize_package_uid};
 use errno::errno;
-use libc::{c_int, c_long, c_void, execv, fork, pid_t, setenv, syscall, uid_t, wait, EINVAL};
+use libc::{EINVAL, c_int, c_long, c_void, execv, fork, pid_t, setenv, syscall, uid_t, wait};
 use log::{error, info, warn};
 use std::ffi::{CStr, CString};
 use std::fmt::Write;
@@ -339,24 +339,30 @@ pub fn init_load_package_uid_config(superkey: &Option<String>) {
 
     for config in package_configs {
         if config.allow == 1 && config.exclude == 0 {
-            if let Some(ref key) = key {
-                let profile = SuProfile {
-                    uid: config.uid,
-                    to_uid: config.to_uid,
-                    scontext: convert_string_to_u8_array(&config.sctx),
-                };
-                let result = sc_su_grant_uid(key, &profile);
-                info!("Processed {}: result = {}", config.pkg, result);
-            } else {
-                warn!("Superkey is None, skipping config: {}", config.pkg);
+            match key {
+                Some(ref key) => {
+                    let profile = SuProfile {
+                        uid: config.uid,
+                        to_uid: config.to_uid,
+                        scontext: convert_string_to_u8_array(&config.sctx),
+                    };
+                    let result = sc_su_grant_uid(key, &profile);
+                    info!("Processed {}: result = {}", config.pkg, result);
+                }
+                _ => {
+                    warn!("Superkey is None, skipping config: {}", config.pkg);
+                }
             }
         }
         if config.allow == 0 && config.exclude == 1 {
-            if let Some(ref key) = key {
-                let result = sc_set_ap_mod_exclude(key, config.uid as i64, 1);
-                info!("Processed exclude {}: result = {}", config.pkg, result);
-            } else {
-                warn!("Superkey is None, skipping config: {}", config.pkg);
+            match key {
+                Some(ref key) => {
+                    let result = sc_set_ap_mod_exclude(key, config.uid as i64, 1);
+                    info!("Processed exclude {}: result = {}", config.pkg, result);
+                }
+                _ => {
+                    warn!("Superkey is None, skipping config: {}", config.pkg);
+                }
             }
         }
     }
@@ -369,8 +375,8 @@ pub fn init_load_su_path(superkey: &Option<String>) {
         Ok(su_path) => {
             let superkey_cstr = convert_superkey(superkey);
 
-            if let Some(superkey_cstr) = superkey_cstr {
-                match CString::new(su_path.trim()) {
+            match superkey_cstr {
+                Some(superkey_cstr) => match CString::new(su_path.trim()) {
                     Ok(su_path_cstr) => {
                         let result = sc_su_reset_path(&superkey_cstr, &su_path_cstr);
                         if result == 0 {
@@ -382,9 +388,10 @@ pub fn init_load_su_path(superkey: &Option<String>) {
                     Err(e) => {
                         warn!("Failed to convert su_path: {}", e);
                     }
+                },
+                _ => {
+                    warn!("Superkey is None, skipping...");
                 }
-            } else {
-                warn!("Superkey is None, skipping...");
             }
         }
         Err(e) => {
@@ -411,7 +418,7 @@ fn log_kernel(key: &CStr, _fmt: &str, args: std::fmt::Arguments) -> c_long {
 
 #[macro_export]
 macro_rules! log_kernel {
-    ($key:expr, $fmt:expr, $($arg:tt)*) => (
+    ($key:expr_2021, $fmt:expr_2021, $($arg:tt)*) => (
         log_kernel($key, $fmt, std::format_args!($fmt, $($arg)*))
     )
 }
@@ -425,56 +432,59 @@ pub fn fork_for_result(exec: &str, argv: &[&str], key: &Option<String>) {
 
     let superkey_cstr = convert_superkey(key);
 
-    if let Some(superkey_cstr) = superkey_cstr {
-        unsafe {
-            let pid: pid_t = fork();
-            if pid < 0 {
-                log_kernel!(
-                    &superkey_cstr,
-                    "{} fork {} error: {}\n",
-                    libc::getpid(),
-                    exec,
-                    -1
-                );
-            } else if pid == 0 {
-                set_env_var("KERNELPATCH", "true");
-                let kpver = format!("{:x}", sc_kp_ver(&superkey_cstr).unwrap_or(0));
-                set_env_var("KERNELPATCH_VERSION", kpver.as_str());
-                let kver = format!("{:x}", sc_k_ver(&superkey_cstr).unwrap_or(0));
-                set_env_var("KERNEL_VERSION", kver.as_str());
+    match superkey_cstr {
+        Some(superkey_cstr) => {
+            unsafe {
+                let pid: pid_t = fork();
+                if pid < 0 {
+                    log_kernel!(
+                        &superkey_cstr,
+                        "{} fork {} error: {}\n",
+                        libc::getpid(),
+                        exec,
+                        -1
+                    );
+                } else if pid == 0 {
+                    set_env_var("KERNELPATCH", "true");
+                    let kpver = format!("{:x}", sc_kp_ver(&superkey_cstr).unwrap_or(0));
+                    set_env_var("KERNELPATCH_VERSION", kpver.as_str());
+                    let kver = format!("{:x}", sc_k_ver(&superkey_cstr).unwrap_or(0));
+                    set_env_var("KERNEL_VERSION", kver.as_str());
 
-                let c_exec = CString::new(exec).expect("CString::new failed");
-                let c_argv: Vec<CString> =
-                    argv.iter().map(|&arg| CString::new(arg).unwrap()).collect();
-                let mut c_argv_ptrs: Vec<*const libc::c_char> =
-                    c_argv.iter().map(|arg| arg.as_ptr()).collect();
-                c_argv_ptrs.push(ptr::null());
+                    let c_exec = CString::new(exec).expect("CString::new failed");
+                    let c_argv: Vec<CString> =
+                        argv.iter().map(|&arg| CString::new(arg).unwrap()).collect();
+                    let mut c_argv_ptrs: Vec<*const libc::c_char> =
+                        c_argv.iter().map(|arg| arg.as_ptr()).collect();
+                    c_argv_ptrs.push(ptr::null());
 
-                execv(c_exec.as_ptr(), c_argv_ptrs.as_ptr());
+                    execv(c_exec.as_ptr(), c_argv_ptrs.as_ptr());
 
-                log_kernel!(
-                    &superkey_cstr,
-                    "{} exec {} error: {}\n",
-                    libc::getpid(),
-                    cmd,
-                    CStr::from_ptr(libc::strerror(errno().0))
-                        .to_string_lossy()
-                        .into_owned()
-                );
-                exit(1); // execv only returns on error
-            } else {
-                let mut status: c_int = 0;
-                wait(&mut status);
-                log_kernel!(
-                    &superkey_cstr,
-                    "{} wait {} status: 0x{}\n",
-                    libc::getpid(),
-                    cmd,
-                    status
-                );
+                    log_kernel!(
+                        &superkey_cstr,
+                        "{} exec {} error: {}\n",
+                        libc::getpid(),
+                        cmd,
+                        CStr::from_ptr(libc::strerror(errno().0))
+                            .to_string_lossy()
+                            .into_owned()
+                    );
+                    exit(1); // execv only returns on error
+                } else {
+                    let mut status: c_int = 0;
+                    wait(&mut status);
+                    log_kernel!(
+                        &superkey_cstr,
+                        "{} wait {} status: 0x{}\n",
+                        libc::getpid(),
+                        cmd,
+                        status
+                    );
+                }
             }
         }
-    } else {
-        warn!("[fork_for_result] SuperKey convert failed!");
+        _ => {
+            warn!("[fork_for_result] SuperKey convert failed!");
+        }
     }
 }

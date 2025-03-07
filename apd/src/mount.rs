@@ -1,6 +1,6 @@
 #[cfg(any(target_os = "linux", target_os = "android"))]
 use anyhow::Context;
-use anyhow::{anyhow, bail, Ok, Result};
+use anyhow::{Ok, Result, anyhow, bail};
 #[cfg(any(target_os = "linux", target_os = "android"))]
 #[allow(unused_imports)]
 use retry::delay::NoDelay;
@@ -88,20 +88,23 @@ pub fn mount_ext4(source: impl AsRef<Path>, target: impl AsRef<Path>) -> Result<
     let new_loopback = loopdev::LoopControl::open()?.next_free()?;
     new_loopback.with().attach(source)?;
     let lo = new_loopback.path().ok_or(anyhow!("no loop"))?;
-    if let Result::Ok(fs) = fsopen("ext4", FsOpenFlags::FSOPEN_CLOEXEC) {
-        let fs = fs.as_fd();
-        fsconfig_set_string(fs, "source", lo)?;
-        fsconfig_create(fs)?;
-        let mount = fsmount(fs, FsMountFlags::FSMOUNT_CLOEXEC, MountAttrFlags::empty())?;
-        move_mount(
-            mount.as_fd(),
-            "",
-            CWD,
-            target.as_ref(),
-            MoveMountFlags::MOVE_MOUNT_F_EMPTY_PATH,
-        )?;
-    } else {
-        mount(lo, target.as_ref(), "ext4", MountFlags::empty(), "")?;
+    match fsopen("ext4", FsOpenFlags::FSOPEN_CLOEXEC) {
+        Result::Ok(fs) => {
+            let fs = fs.as_fd();
+            fsconfig_set_string(fs, "source", lo)?;
+            fsconfig_create(fs)?;
+            let mount = fsmount(fs, FsMountFlags::FSMOUNT_CLOEXEC, MountAttrFlags::empty())?;
+            move_mount(
+                mount.as_fd(),
+                "",
+                CWD,
+                target.as_ref(),
+                MoveMountFlags::MOVE_MOUNT_F_EMPTY_PATH,
+            )?;
+        }
+        _ => {
+            mount(lo, target.as_ref(), "ext4", MountFlags::empty(), "")?;
+        }
     }
     Ok(())
 }
@@ -198,26 +201,29 @@ pub fn mount_devpts(_dest: impl AsRef<Path>) -> Result<()> {
 #[cfg(any(target_os = "linux", target_os = "android"))]
 pub fn mount_tmpfs(dest: impl AsRef<Path>) -> Result<()> {
     info!("mount tmpfs on {}", dest.as_ref().display());
-    if let Result::Ok(fs) = fsopen("tmpfs", FsOpenFlags::FSOPEN_CLOEXEC) {
-        let fs = fs.as_fd();
-        fsconfig_set_string(fs, "source", AP_OVERLAY_SOURCE)?;
-        fsconfig_create(fs)?;
-        let mount = fsmount(fs, FsMountFlags::FSMOUNT_CLOEXEC, MountAttrFlags::empty())?;
-        move_mount(
-            mount.as_fd(),
-            "",
-            CWD,
-            dest.as_ref(),
-            MoveMountFlags::MOVE_MOUNT_F_EMPTY_PATH,
-        )?;
-    } else {
-        mount(
-            AP_OVERLAY_SOURCE,
-            dest.as_ref(),
-            "tmpfs",
-            rustix::fs::MountFlags::empty(),
-            "",
-        )?;
+    match fsopen("tmpfs", FsOpenFlags::FSOPEN_CLOEXEC) {
+        Result::Ok(fs) => {
+            let fs = fs.as_fd();
+            fsconfig_set_string(fs, "source", AP_OVERLAY_SOURCE)?;
+            fsconfig_create(fs)?;
+            let mount = fsmount(fs, FsMountFlags::FSMOUNT_CLOEXEC, MountAttrFlags::empty())?;
+            move_mount(
+                mount.as_fd(),
+                "",
+                CWD,
+                dest.as_ref(),
+                MoveMountFlags::MOVE_MOUNT_F_EMPTY_PATH,
+            )?;
+        }
+        _ => {
+            mount(
+                AP_OVERLAY_SOURCE,
+                dest.as_ref(),
+                "tmpfs",
+                rustix::fs::MountFlags::empty(),
+                "",
+            )?;
+        }
     }
     mount_change(dest.as_ref(), MountPropagationFlags::PRIVATE).context("make tmpfs private")?;
     let pts_dir = format!("{}/{PTS_NAME}", dest.as_ref().display());
@@ -234,28 +240,31 @@ pub fn bind_mount(from: impl AsRef<Path>, to: impl AsRef<Path>) -> Result<()> {
         from.as_ref().display(),
         to.as_ref().display()
     );
-    if let Result::Ok(tree) = open_tree(
+    match open_tree(
         CWD,
         from.as_ref(),
         OpenTreeFlags::OPEN_TREE_CLOEXEC
             | OpenTreeFlags::OPEN_TREE_CLONE
             | OpenTreeFlags::AT_RECURSIVE,
     ) {
-        move_mount(
-            tree.as_fd(),
-            "",
-            CWD,
-            to.as_ref(),
-            MoveMountFlags::MOVE_MOUNT_F_EMPTY_PATH,
-        )?;
-    } else {
-        mount(
-            from.as_ref(),
-            to.as_ref(),
-            "",
-            MountFlags::BIND | MountFlags::REC,
-            "",
-        )?;
+        Result::Ok(tree) => {
+            move_mount(
+                tree.as_fd(),
+                "",
+                CWD,
+                to.as_ref(),
+                MoveMountFlags::MOVE_MOUNT_F_EMPTY_PATH,
+            )?;
+        }
+        _ => {
+            mount(
+                from.as_ref(),
+                to.as_ref(),
+                "",
+                MountFlags::BIND | MountFlags::REC,
+                "",
+            )?;
+        }
     }
     Ok(())
 }
