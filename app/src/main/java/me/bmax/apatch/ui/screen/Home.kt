@@ -329,9 +329,10 @@ fun AuthSuperKey(showDialog: MutableState<Boolean>, showFailedDialog: MutableSta
                         visualTransformation = if (keyVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
                     )
-                    IconButton(modifier = Modifier
-                        .size(40.dp)
-                        .padding(top = 15.dp, end = 5.dp),
+                    IconButton(
+                        modifier = Modifier
+                            .size(40.dp)
+                            .padding(top = 15.dp, end = 5.dp),
                         onClick = { keyVisible = !keyVisible }) {
                         Icon(
                             imageVector = if (keyVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
@@ -917,10 +918,11 @@ fun WarningCard(
             containerColor = color
         )
     ) {
-        Row(modifier = Modifier
-            .fillMaxWidth()
-            .then(onClick?.let { Modifier.clickable { it() } } ?: Modifier)
-            .padding(24.dp)) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .then(onClick?.let { Modifier.clickable { it() } } ?: Modifier)
+                .padding(24.dp)) {
             Text(
                 text = message, style = MaterialTheme.typography.bodyMedium
             )
@@ -971,12 +973,13 @@ fun LearnMoreCard() {
     val uriHandler = LocalUriHandler.current
 
     ElevatedCard {
-        Row(modifier = Modifier
-            .fillMaxWidth()
-            .clickable {
-                uriHandler.openUri("https://apatch.dev")
-            }
-            .padding(24.dp), verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    uriHandler.openUri("https://apatch.dev")
+                }
+                .padding(24.dp), verticalAlignment = Alignment.CenterVertically) {
             Column {
                 Text(
                     text = stringResource(R.string.home_learn_apatch),

@@ -30,6 +30,7 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.dropUnlessResumed
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -49,7 +50,7 @@ import java.util.Locale
 @Destination<RootGraph>
 fun ExecuteAPMActionScreen(navigator: DestinationsNavigator, moduleId: String) {
     var text by rememberSaveable { mutableStateOf("") }
-    var tempText : String
+    var tempText: String
     val logContent = rememberSaveable { StringBuilder() }
     val snackBarHost = LocalSnackbarHost.current
     val scope = rememberCoroutineScope()
@@ -79,7 +80,7 @@ fun ExecuteAPMActionScreen(navigator: DestinationsNavigator, moduleId: String) {
                 actionResult = it
             }
         }
-        if (actionResult == true) {
+        if (actionResult) {
             navigator.popBackStack()
         }
     }
@@ -87,7 +88,7 @@ fun ExecuteAPMActionScreen(navigator: DestinationsNavigator, moduleId: String) {
     Scaffold(
         topBar = {
             TopBar(
-                onBack = {
+                onBack = dropUnlessResumed {
                     navigator.popBackStack()
                 },
                 onSave = {

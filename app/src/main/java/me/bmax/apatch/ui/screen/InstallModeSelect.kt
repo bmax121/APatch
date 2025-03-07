@@ -29,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.compose.dropUnlessResumed
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.PatchesDestination
@@ -50,7 +51,7 @@ fun InstallModeSelectScreen(navigator: DestinationsNavigator) {
 
     Scaffold(topBar = {
         TopBar(
-            onBack = { navigator.popBackStack() },
+            onBack = dropUnlessResumed { navigator.popBackStack() },
         )
     }) {
         Column(modifier = Modifier.padding(it)) {
@@ -151,7 +152,8 @@ private fun SelectInstallMethod(
 
     Column {
         radioOptions.forEach { option ->
-            Row(verticalAlignment = Alignment.CenterVertically,
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {

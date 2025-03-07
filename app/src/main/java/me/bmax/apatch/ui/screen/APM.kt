@@ -159,7 +159,8 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
                     viewModel.markNeedRefresh()
                 }
 
-                FloatingActionButton(contentColor = MaterialTheme.colorScheme.onPrimary,
+                FloatingActionButton(
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
                     containerColor = MaterialTheme.colorScheme.primary,
                     onClick = {
                         // select the zip file to install
@@ -290,7 +291,8 @@ private fun ModuleList(
 
         val downloading = downloadingText.format(module.name)
         withContext(Dispatchers.IO) {
-            download(context,
+            download(
+                context,
                 downloadUrl,
                 fileName,
                 downloading,
@@ -582,7 +584,7 @@ private fun ModuleItem(
 
                     if (module.hasActionScript) {
                         FilledTonalButton(
-                            onClick = { 
+                            onClick = {
                                 navigator.navigate(ExecuteAPMActionScreenDestination(module.id))
                                 viewModel.markNeedRefresh()
                             },

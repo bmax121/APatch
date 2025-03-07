@@ -198,11 +198,12 @@ fun SettingScreen() {
                 val clearKeyDialogTitle = stringResource(id = R.string.clear_super_key)
                 val clearKeyDialogContent =
                     stringResource(id = R.string.settings_clear_super_key_dialog)
-                ListItem(leadingContent = {
-                    Icon(
-                        Icons.Filled.Key, stringResource(id = R.string.super_key)
-                    )
-                },
+                ListItem(
+                    leadingContent = {
+                        Icon(
+                            Icons.Filled.Key, stringResource(id = R.string.super_key)
+                        )
+                    },
                     headlineContent = { Text(stringResource(id = R.string.clear_super_key)) },
                     modifier = Modifier.clickable {
                         clearKeyDialog.showConfirm(
@@ -215,7 +216,8 @@ fun SettingScreen() {
             }
 
             // store key local?
-            SwitchItem(icon = Icons.Filled.Key,
+            SwitchItem(
+                icon = Icons.Filled.Key,
                 title = stringResource(id = R.string.settings_donot_store_superkey),
                 summary = stringResource(id = R.string.settings_donot_store_superkey_summary),
                 checked = bSkipStoreSuperKey,
@@ -226,7 +228,8 @@ fun SettingScreen() {
 
             // Global mount
             if (kPatchReady && aPatchReady) {
-                SwitchItem(icon = Icons.Filled.Engineering,
+                SwitchItem(
+                    icon = Icons.Filled.Engineering,
                     title = stringResource(id = R.string.settings_global_namespace_mode),
                     summary = stringResource(id = R.string.settings_global_namespace_mode_summary),
                     checked = isGlobalNamespaceEnabled,
@@ -390,11 +393,12 @@ fun SettingScreen() {
 
             // su path
             if (kPatchReady) {
-                ListItem(leadingContent = {
-                    Icon(
-                        Icons.Filled.Commit, stringResource(id = R.string.setting_reset_su_path)
-                    )
-                },
+                ListItem(
+                    leadingContent = {
+                        Icon(
+                            Icons.Filled.Commit, stringResource(id = R.string.setting_reset_su_path)
+                        )
+                    },
                     supportingContent = {},
                     headlineContent = { Text(stringResource(id = R.string.setting_reset_su_path)) },
                     modifier = Modifier.clickable {
@@ -418,11 +422,12 @@ fun SettingScreen() {
             }, leadingContent = { Icon(Icons.Filled.Translate, null) })
 
             // log
-            ListItem(leadingContent = {
-                Icon(
-                    Icons.Filled.BugReport, stringResource(id = R.string.send_log)
-                )
-            },
+            ListItem(
+                leadingContent = {
+                    Icon(
+                        Icons.Filled.BugReport, stringResource(id = R.string.send_log)
+                    )
+                },
                 headlineContent = { Text(stringResource(id = R.string.send_log)) },
                 modifier = Modifier.clickable {
                     showLogBottomSheet = true
@@ -439,24 +444,26 @@ fun SettingScreen() {
 
                         ) {
                             Box {
-                                Column(modifier = Modifier
-                                    .padding(16.dp)
-                                    .clickable {
-                                        scope.launch {
-                                            val formatter =
-                                                DateTimeFormatter.ofPattern("yyyy-MM-dd_HH_mm")
-                                            val current = LocalDateTime.now().format(formatter)
-                                            exportBugreportLauncher.launch("APatch_bugreport_${current}.tar.gz")
-                                            showLogBottomSheet = false
+                                Column(
+                                    modifier = Modifier
+                                        .padding(16.dp)
+                                        .clickable {
+                                            scope.launch {
+                                                val formatter =
+                                                    DateTimeFormatter.ofPattern("yyyy-MM-dd_HH_mm")
+                                                val current = LocalDateTime.now().format(formatter)
+                                                exportBugreportLauncher.launch("APatch_bugreport_${current}.tar.gz")
+                                                showLogBottomSheet = false
+                                            }
                                         }
-                                    }
                                 ) {
                                     Icon(
                                         Icons.Filled.Save,
                                         contentDescription = null,
                                         modifier = Modifier.align(Alignment.CenterHorizontally)
                                     )
-                                    Text(text = stringResource(id = R.string.save_log),
+                                    Text(
+                                        text = stringResource(id = R.string.save_log),
                                         modifier = Modifier.padding(top = 16.dp),
                                         textAlign = TextAlign.Center.also {
                                             LineHeightStyle(
@@ -470,43 +477,45 @@ fun SettingScreen() {
 
                             }
                             Box {
-                                Column(modifier = Modifier
-                                    .padding(16.dp)
-                                    .clickable {
-                                        scope.launch {
-                                            val bugreport = loadingDialog.withLoading {
-                                                withContext(Dispatchers.IO) {
-                                                    getBugreportFile(context)
+                                Column(
+                                    modifier = Modifier
+                                        .padding(16.dp)
+                                        .clickable {
+                                            scope.launch {
+                                                val bugreport = loadingDialog.withLoading {
+                                                    withContext(Dispatchers.IO) {
+                                                        getBugreportFile(context)
+                                                    }
                                                 }
-                                            }
 
-                                            val uri: Uri = FileProvider.getUriForFile(
-                                                context,
-                                                "${BuildConfig.APPLICATION_ID}.fileprovider",
-                                                bugreport
-                                            )
-
-                                            val shareIntent = Intent(Intent.ACTION_SEND).apply {
-                                                putExtra(Intent.EXTRA_STREAM, uri)
-                                                setDataAndType(uri, "application/gzip")
-                                                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                                            }
-
-                                            context.startActivity(
-                                                Intent.createChooser(
-                                                    shareIntent,
-                                                    context.getString(R.string.send_log)
+                                                val uri: Uri = FileProvider.getUriForFile(
+                                                    context,
+                                                    "${BuildConfig.APPLICATION_ID}.fileprovider",
+                                                    bugreport
                                                 )
-                                            )
-                                            showLogBottomSheet = false
-                                        }
-                                    }) {
+
+                                                val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                                                    putExtra(Intent.EXTRA_STREAM, uri)
+                                                    setDataAndType(uri, "application/gzip")
+                                                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                                                }
+
+                                                context.startActivity(
+                                                    Intent.createChooser(
+                                                        shareIntent,
+                                                        context.getString(R.string.send_log)
+                                                    )
+                                                )
+                                                showLogBottomSheet = false
+                                            }
+                                        }) {
                                     Icon(
                                         Icons.Filled.Share,
                                         contentDescription = null,
                                         modifier = Modifier.align(Alignment.CenterHorizontally)
                                     )
-                                    Text(text = stringResource(id = R.string.send_log),
+                                    Text(
+                                        text = stringResource(id = R.string.send_log),
                                         modifier = Modifier.padding(top = 16.dp),
                                         textAlign = TextAlign.Center.also {
                                             LineHeightStyle(
@@ -551,7 +560,8 @@ fun ThemeChooseDialog(showDialog: MutableState<Boolean>) {
         ) {
             LazyColumn {
                 items(colorsList()) {
-                    ListItem(headlineContent = { Text(text = stringResource(it.nameId)) },
+                    ListItem(
+                        headlineContent = { Text(text = stringResource(it.nameId)) },
                         modifier = Modifier.clickable {
                             showDialog.value = false
                             prefs.edit().putString("custom_color", it.name).apply()

@@ -219,7 +219,9 @@ private fun AppItem(
 
     AnimatedVisibility(
         visible = showEditProfile && !rootGranted,
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp)
     ) {
         SwitchItem(
             icon = Icons.Filled.Security,

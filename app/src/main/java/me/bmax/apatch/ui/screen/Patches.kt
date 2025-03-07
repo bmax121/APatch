@@ -124,7 +124,11 @@ fun Patches(mode: PatchesViewModel.PatchMode) {
                 ContextCompat.checkSelfPermission(context, it) != PackageManager.PERMISSION_GRANTED
             }
             if (permissionsToRequest.isNotEmpty()) {
-                ActivityCompat.requestPermissions(context as Activity, permissionsToRequest.toTypedArray(), 1001)
+                ActivityCompat.requestPermissions(
+                    context as Activity,
+                    permissionsToRequest.toTypedArray(),
+                    1001
+                )
             }
 
             PatchMode(mode)
@@ -280,7 +284,7 @@ private fun ExtraItem(extra: KPModel.IExtraInfo, existed: Boolean, onDelete: () 
                 Text(
                     text = stringResource(
                         id =
-                        if (existed) R.string.patch_item_existed_extra_kpm else R.string.patch_item_new_extra_kpm
+                            if (existed) R.string.patch_item_existed_extra_kpm else R.string.patch_item_new_extra_kpm
                     ) +
                             " " + extra.type.toString().uppercase(),
                     style = MaterialTheme.typography.bodyLarge,
@@ -288,7 +292,8 @@ private fun ExtraItem(extra: KPModel.IExtraInfo, existed: Boolean, onDelete: () 
                         .weight(1f)
                         .wrapContentWidth(Alignment.CenterHorizontally)
                 )
-                Icon(imageVector = Icons.Default.Delete,
+                Icon(
+                    imageVector = Icons.Default.Delete,
                     contentDescription = "Delete",
                     modifier = Modifier
                         .padding(end = 8.dp)

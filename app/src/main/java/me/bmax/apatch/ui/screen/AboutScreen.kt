@@ -36,6 +36,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.dropUnlessResumed
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -50,7 +51,7 @@ fun AboutScreen(navigator: DestinationsNavigator) {
 
     Scaffold(
         topBar = {
-            TopBar(onBack = { navigator.popBackStack() })
+            TopBar(onBack = dropUnlessResumed { navigator.popBackStack() })
         }
     ) { innerPadding ->
         Column(

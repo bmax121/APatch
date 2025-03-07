@@ -219,7 +219,11 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
 //                                        val intent = Intent(Intent.ACTION_GET_CONTENT)
 //                                        intent.type = "application/zip"
 //                                        selectZipLauncher.launch(intent)
-                                        Toast.makeText(context, "Under development", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(
+                                            context,
+                                            "Under development",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
                                     }
 
                                     moduleLoad -> {
@@ -458,6 +462,7 @@ private fun KPModuleList(
                         }
                     }
                 }
+
                 else -> {
                     items(viewModel.moduleList) { module ->
                         val scope = rememberCoroutineScope()
