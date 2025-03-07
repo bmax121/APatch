@@ -11,6 +11,7 @@ import android.os.Build
 import android.os.Environment
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import me.bmax.apatch.apApp
 
 @SuppressLint("Range")
 fun download(
@@ -44,8 +45,8 @@ fun download(
     }
 
     val request = DownloadManager.Request(Uri.parse(url)).setDestinationInExternalPublicDir(
-            Environment.DIRECTORY_DOWNLOADS, fileName
-        ).setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+        Environment.DIRECTORY_DOWNLOADS, fileName
+    ).setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
         .setMimeType("application/zip").setTitle(fileName).setDescription(description)
 
     downloadManager.enqueue(request)
@@ -55,7 +56,7 @@ fun checkNewVersion(): LatestVersionInfo {
     val url = "https://api.github.com/repos/bmax121/APatch/releases/latest"
     val defaultValue = LatestVersionInfo()
     runCatching {
-        okhttp3.OkHttpClient().newCall(okhttp3.Request.Builder().url(url).build()).execute()
+        apApp.okhttpClient.newCall(okhttp3.Request.Builder().url(url).build()).execute()
             .use { response ->
                 if (!response.isSuccessful) {
                     return defaultValue

@@ -4,10 +4,11 @@ import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.net.Uri
 import android.os.Build
 import android.util.Log
 import android.widget.Toast
+import androidx.core.content.edit
+import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.topjohnwu.superuser.CallbackList
@@ -18,17 +19,19 @@ import me.bmax.apatch.util.Version
 import me.bmax.apatch.util.getRootShell
 import me.bmax.apatch.util.rootShellForResult
 import me.bmax.apatch.util.verifyAppSignature
+import okhttp3.Cache
+import okhttp3.OkHttpClient
 import java.io.File
+import java.util.Locale
 import kotlin.concurrent.thread
 import kotlin.system.exitProcess
-import androidx.core.net.toUri
-import androidx.core.content.edit
 
 lateinit var apApp: APApplication
 
 const val TAG = "APatch"
 
 class APApplication : Application(), Thread.UncaughtExceptionHandler {
+    lateinit var okhttpClient: OkHttpClient
 
     init {
         Thread.setDefaultUncaughtExceptionHandler(this)
@@ -264,6 +267,16 @@ class APApplication : Application(), Thread.UncaughtExceptionHandler {
         sharedPreferences = getSharedPreferences(SP_NAME, Context.MODE_PRIVATE)
         APatchKeyHelper.setSharedPreferences(sharedPreferences)
         superKey = APatchKeyHelper.readSPSuperKey()
+
+        okhttpClient =
+            OkHttpClient.Builder().cache(Cache(File(cacheDir, "okhttp"), 10 * 1024 * 1024))
+                .addInterceptor { block ->
+                    block.proceed(
+                        block.request().newBuilder()
+                            .header("User-Agent", "APatch/${BuildConfig.VERSION_CODE}")
+                            .header("Accept-Language", Locale.getDefault().toLanguageTag()).build()
+                    )
+                }.build()
     }
 
     fun getBackupWarningState(): Boolean {

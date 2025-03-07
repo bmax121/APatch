@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import me.bmax.apatch.apApp
 import me.bmax.apatch.util.listModules
 import me.bmax.apatch.util.overlayFsAvailable
 import org.json.JSONArray
@@ -126,7 +127,7 @@ class APModuleViewModel : ViewModel() {
         val result = kotlin.runCatching {
             val url = m.updateJson
             Log.i(TAG, "checkUpdate url: $url")
-            val response = okhttp3.OkHttpClient()
+            val response = apApp.okhttpClient
                 .newCall(
                     okhttp3.Request.Builder()
                         .url(url)

@@ -76,6 +76,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.bmax.apatch.APApplication
 import me.bmax.apatch.R
+import me.bmax.apatch.apApp
 import me.bmax.apatch.ui.WebUIActivity
 import me.bmax.apatch.ui.component.ConfirmResult
 import me.bmax.apatch.ui.component.ModuleRemoveButton
@@ -91,7 +92,6 @@ import me.bmax.apatch.util.reboot
 import me.bmax.apatch.util.toggleModule
 import me.bmax.apatch.util.ui.LocalSnackbarHost
 import me.bmax.apatch.util.uninstallModule
-import okhttp3.OkHttpClient
 
 @Destination<RootGraph>
 @Composable
@@ -259,7 +259,7 @@ private fun ModuleList(
         val changelog = loadingDialog.withLoading {
             withContext(Dispatchers.IO) {
                 if (Patterns.WEB_URL.matcher(changelogUrl).matches()) {
-                    OkHttpClient().newCall(
+                    apApp.okhttpClient.newCall(
                         okhttp3.Request.Builder().url(changelogUrl).build()
                     ).execute().body!!.string()
                 } else {
