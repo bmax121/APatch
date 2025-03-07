@@ -16,8 +16,8 @@ macro(SET_OPTION option value)
 endmacro()
 
 set(CHERISH_POLLY_FLAGS "-mllvm -polly -mllvm -polly-run-dce -mllvm -polly-run-inliner -mllvm -polly-reschedule=1 -mllvm -polly-loopfusion-greedy=1 -mllvm -polly-postopts=1 -mllvm -polly-num-threads=0 -mllvm -polly-omp-backend=LLVM -mllvm -polly-scheduling=dynamic -mllvm -polly-scheduling-chunksize=1 -mllvm -polly-isl-arg=--no-schedule-serialize-sccs -mllvm -polly-ast-use-context -mllvm -polly-detect-keep-going -mllvm -polly-position=before-vectorizer -mllvm -polly-vectorizer=stripmine -mllvm -polly-detect-profitability-min-per-loop-insts=40 -mllvm -polly-invariant-load-hoisting")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${CHERISH_POLLY_FLAGS} -ffunction-sections -fdata-sections -fvisibility=hidden -fvisibility-inlines-hidden -O3 -flto")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CHERISH_POLLY_FLAGS} -ffunction-sections -fdata-sections -fvisibility=hidden -fvisibility-inlines-hidden -fno-rtti -fno-exceptions -O3 -flto")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${CHERISH_POLLY_FLAGS} -ffunction-sections -fdata-sections -fvisibility=hidden -fvisibility-inlines-hidden -O3 -flto -Wno-vla-cxx-extension")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CHERISH_POLLY_FLAGS} -ffunction-sections -fdata-sections -fvisibility=hidden -fvisibility-inlines-hidden -fno-rtti -fno-exceptions -O3 -flto -Wno-vla-cxx-extension")
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 

@@ -1,7 +1,6 @@
 import com.android.build.api.dsl.ApplicationDefaultConfig
 import com.android.build.api.dsl.CommonExtension
 import com.android.build.gradle.api.AndroidBasePlugin
-import java.io.ByteArrayOutputStream
 
 plugins {
     alias(libs.plugins.agp.app) apply false
@@ -29,22 +28,16 @@ val androidCompileNdkVersion = "28.0.13004108"
 val managerVersionCode by extra(getVersionCode())
 val managerVersionName by extra(getVersionName())
 
+fun Project.exec(command: String) = providers.exec {
+    commandLine(command.split(" "))
+}.standardOutput.asText.get().trim()
+
 fun getGitCommitCount(): Int {
-    val out = ByteArrayOutputStream()
-    exec {
-        commandLine("git", "rev-list", "--count", "HEAD")
-        standardOutput = out
-    }
-    return out.toString().trim().toInt()
+    return exec("git rev-list --count HEAD").trim().toInt()
 }
 
 fun getGitDescribe(): String {
-    val out = ByteArrayOutputStream()
-    exec {
-        commandLine("git", "describe", "--tags", "--always")
-        standardOutput = out
-    }
-    return out.toString().trim()
+    return exec("git describe --tags --always").trim()
 }
 
 fun getVersionCode(): Int {
