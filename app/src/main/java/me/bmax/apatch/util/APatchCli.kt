@@ -26,7 +26,6 @@ import java.util.zip.ZipFile
 
 private const val TAG = "APatchCli"
 
-@Suppress("DEPRECATION")
 private fun getKPatchPath(): String {
     return apApp.applicationInfo.nativeLibraryDir + File.separator + "libkpatch.so"
 }
@@ -157,10 +156,10 @@ fun listModules(): String {
     val shell = getRootShell()
     val out =
         shell.newJob().add("${APApplication.APD_PATH} module list").to(ArrayList(), null).exec().out
-     val result = withNewRootShell{ 
-        newJob().add("cp /data/user/*/me.bmax.apatch/patch/ori.img /data/adb/ap/ && rm /data/user/*/me.bmax.apatch/patch/ori.img")
-        .to(ArrayList(),null).exec()
-    }
+    withNewRootShell{
+       newJob().add("cp /data/user/*/me.bmax.apatch/patch/ori.img /data/adb/ap/ && rm /data/user/*/me.bmax.apatch/patch/ori.img")
+       .to(ArrayList(),null).exec()
+   }
     return out.joinToString("\n").ifBlank { "[]" }
 }
 
@@ -187,7 +186,7 @@ fun installModule(
 ): Boolean {
     val resolver = apApp.contentResolver
     with(resolver.openInputStream(uri)) {
-        val file = File(apApp.cacheDir, "module_" + type + ".zip")
+        val file = File(apApp.cacheDir, "module_$type.zip")
         file.outputStream().use { output ->
             this?.copyTo(output)
         }
@@ -209,7 +208,7 @@ fun installModule(
         var result = false
         if(type == MODULE_TYPE.APM) {
             val cmd = "${APApplication.APD_PATH} module install ${file.absolutePath}"
-            result = shell.newJob().add("$cmd").to(stdoutCallback, stderrCallback)
+            result = shell.newJob().add(cmd).to(stdoutCallback, stderrCallback)
                     .exec().isSuccess
         } else {
 //            ZipUtils.
@@ -227,7 +226,7 @@ fun installModule(
 fun runAPModuleAction(
     moduleId: String, onStdout: (String) -> Unit, onStderr: (String) -> Unit
 ): Boolean {
-    val shell = getRootShell()
+    getRootShell()
 
     val stdoutCallback: CallbackList<String?> = object : CallbackList<String?>() {
         override fun onAddElement(s: String?) {

@@ -21,6 +21,8 @@ import me.bmax.apatch.util.verifyAppSignature
 import java.io.File
 import kotlin.concurrent.thread
 import kotlin.system.exitProcess
+import androidx.core.net.toUri
+import androidx.core.content.edit
 
 lateinit var apApp: APApplication
 
@@ -248,7 +250,7 @@ class APApplication : Application(), Thread.UncaughtExceptionHandler {
         if (!BuildConfig.DEBUG && !verifyAppSignature("1x2twMoHvfWUODv7KkRRNKBzOfEqJwRKGzJpgaz18xk=")) {
             while (true) {
                 val intent = Intent(Intent.ACTION_DELETE)
-                intent.data = Uri.parse("package:$packageName")
+                intent.data = "package:$packageName".toUri()
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
                 startActivity(intent)
@@ -269,7 +271,7 @@ class APApplication : Application(), Thread.UncaughtExceptionHandler {
     }
 
     fun updateBackupWarningState(state: Boolean) {
-        sharedPreferences.edit().putBoolean(SHOW_BACKUP_WARN, state).apply()
+        sharedPreferences.edit { putBoolean(SHOW_BACKUP_WARN, state) }
     }
 
     override fun uncaughtException(t: Thread, e: Throwable) {
