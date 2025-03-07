@@ -25,7 +25,7 @@ val androidMinSdkVersion = 26
 val androidTargetSdkVersion = 35
 val androidCompileSdkVersion = 35
 
-val androidCompileNdkVersion = "27.2.12479018"
+val androidCompileNdkVersion = "28.0.13004108"
 val managerVersionCode by extra(getVersionCode())
 val managerVersionName by extra(getVersionName())
 
@@ -68,6 +68,7 @@ subprojects {
     plugins.withType(AndroidBasePlugin::class.java) {
         extensions.configure(CommonExtension::class.java) {
             compileSdk = androidCompileSdkVersion
+            buildToolsVersion = "35.0.1"
             ndkVersion = androidCompileNdkVersion
 
             defaultConfig {
