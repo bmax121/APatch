@@ -120,7 +120,7 @@ object Natives {
     }
 
     private external fun nativeGetUidExclude(superKey: String, uid: Int): Int
-    fun isUidExclude(uid: Int): Int {
+    fun isUidExcluded(uid: Int): Int {
         return nativeGetUidExclude(APApplication.superKey, uid)
     }
 

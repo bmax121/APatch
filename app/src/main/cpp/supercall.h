@@ -205,7 +205,7 @@ static inline long sc_set_ap_mod_exclude(const char *key, uid_t uid, int exclude
     if(exclude) {
         return sc_kstorage_write(key, KSTORAGE_EXCLUDE_LIST_GROUP, uid, &exclude, 0, sizeof(exclude));
     } else {
-        return sc_kstorage_remove(key, SUPERCALL_KSTORAGE_REMOVE, uid);
+        return sc_kstorage_remove(key, KSTORAGE_EXCLUDE_LIST_GROUP, uid);
     }
 }
 
