@@ -65,6 +65,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
@@ -137,46 +138,43 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
 
     Scaffold(
         topBar = {
-            TopBar()
-        },
-        floatingActionButton = if (hideInstallButton) {
-            { /* Empty */ }
-        } else {
-            {
-                val selectZipLauncher = rememberLauncherForActivityResult(
-                    contract = ActivityResultContracts.StartActivityForResult()
-                ) {
-                    if (it.resultCode != RESULT_OK) {
-                        return@rememberLauncherForActivityResult
-                    }
-                    val data = it.data ?: return@rememberLauncherForActivityResult
-                    val uri = data.data ?: return@rememberLauncherForActivityResult
-
-                    Log.i("ModuleScreen", "select zip result: $uri")
-
-                    navigator.navigate(InstallScreenDestination(uri, MODULE_TYPE.APM))
-
-                    viewModel.markNeedRefresh()
+        TopBar()
+    }, floatingActionButton = if (hideInstallButton) {
+        { /* Empty */ }
+    } else {
+        {
+            val selectZipLauncher = rememberLauncherForActivityResult(
+                contract = ActivityResultContracts.StartActivityForResult()
+            ) {
+                if (it.resultCode != RESULT_OK) {
+                    return@rememberLauncherForActivityResult
                 }
+                val data = it.data ?: return@rememberLauncherForActivityResult
+                val uri = data.data ?: return@rememberLauncherForActivityResult
 
-                FloatingActionButton(
-                    contentColor = MaterialTheme.colorScheme.onPrimary,
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    onClick = {
-                        // select the zip file to install
-                        val intent = Intent(Intent.ACTION_GET_CONTENT)
-                        intent.type = "application/zip"
-                        selectZipLauncher.launch(intent)
-                    }) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.package_import),
-                        contentDescription = null
-                    )
-                }
+                Log.i("ModuleScreen", "select zip result: $uri")
+
+                navigator.navigate(InstallScreenDestination(uri, MODULE_TYPE.APM))
+
+                viewModel.markNeedRefresh()
             }
-        },
-        snackbarHost = { SnackbarHost(snackBarHost) }
-    ) { innerPadding ->
+
+            FloatingActionButton(
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+                containerColor = MaterialTheme.colorScheme.primary,
+                onClick = {
+                    // select the zip file to install
+                    val intent = Intent(Intent.ACTION_GET_CONTENT)
+                    intent.type = "application/zip"
+                    selectZipLauncher.launch(intent)
+                }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.package_import),
+                    contentDescription = null
+                )
+            }
+        }
+    }, snackbarHost = { SnackbarHost(snackBarHost) }) { innerPadding ->
         when {
             hasMagisk -> {
                 Box(
@@ -194,7 +192,8 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
 
             else -> {
                 ModuleList(
-                    navigator, viewModel = viewModel,
+                    navigator,
+                    viewModel = viewModel,
                     modifier = Modifier
                         .padding(innerPadding)
                         .fillMaxSize(),
@@ -207,7 +206,7 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
                             webUILauncher.launch(
                                 Intent(
                                     context, WebUIActivity::class.java
-                                ).setData(Uri.parse("apatch://webui/$id")).putExtra("id", id)
+                                ).setData("apatch://webui/$id".toUri()).putExtra("id", id)
                                     .putExtra("name", name)
                             )
                         }
@@ -220,7 +219,7 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ModuleList(
     navigator: DestinationsNavigator,
@@ -336,9 +335,7 @@ private fun ModuleList(
             null
         }
         val result = snackBarHost.showSnackbar(
-            message = message,
-            actionLabel = actionLabel,
-            duration = SnackbarDuration.Long
+            message = message, actionLabel = actionLabel, duration = SnackbarDuration.Long
         )
         if (result == SnackbarResult.ActionPerformed) {
             reboot()
@@ -587,9 +584,7 @@ private fun ModuleItem(
                             onClick = {
                                 navigator.navigate(ExecuteAPMActionScreenDestination(module.id))
                                 viewModel.markNeedRefresh()
-                            },
-                            enabled = true,
-                            contentPadding = PaddingValues(horizontal = 12.dp)
+                            }, enabled = true, contentPadding = PaddingValues(horizontal = 12.dp)
                         ) {
                             Icon(
                                 modifier = Modifier.size(20.dp),

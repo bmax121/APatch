@@ -691,7 +691,6 @@ impl From<AtomicStatement> for FfiPolicy {
     }
 }
 
-
 pub fn check_rule(policy: &str) -> Result<()> {
     let path = Path::new(policy);
     let policy = if path.exists() {

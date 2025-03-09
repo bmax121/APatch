@@ -24,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -52,16 +53,15 @@ import java.util.Date
 import java.util.Locale
 
 enum class MODULE_TYPE {
-    KPM,
-    APM
+    KPM, APM
 }
 
 @Composable
 @Destination<RootGraph>
 fun InstallScreen(navigator: DestinationsNavigator, uri: Uri, type: MODULE_TYPE) {
-    var text by rememberSaveable { mutableStateOf("") }
+    var text by remember { mutableStateOf("") }
     var tempText: String
-    val logContent = rememberSaveable { StringBuilder() }
+    val logContent = remember { StringBuilder() }
     var showFloatAction by rememberSaveable { mutableStateOf(false) }
 
     val snackBarHost = LocalSnackbarHost.current
@@ -97,45 +97,38 @@ fun InstallScreen(navigator: DestinationsNavigator, uri: Uri, type: MODULE_TYPE)
         }
     }
 
-    Scaffold(
-        topBar = {
-            TopBar(
-                onBack = dropUnlessResumed {
-                    navigator.popBackStack()
-                },
-                onSave = {
-                    scope.launch {
-                        val format = SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", Locale.getDefault())
-                        val date = format.format(Date())
-                        val file = File(
-                            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-                            "APatch_install_${type}_log_${date}.log"
-                        )
-                        file.writeText(logContent.toString())
-                        snackBarHost.showSnackbar("Log saved to ${file.absolutePath}")
-                    }
-                }
-            )
-        },
-        floatingActionButton = {
-            if (showFloatAction) {
-                val reboot = stringResource(id = R.string.reboot)
-                ExtendedFloatingActionButton(
-                    onClick = {
-                        scope.launch {
-                            withContext(Dispatchers.IO) {
-                                reboot()
-                            }
-                        }
-                    },
-                    icon = { Icon(Icons.Filled.Refresh, reboot) },
-                    text = { Text(text = reboot) },
+    Scaffold(topBar = {
+        TopBar(onBack = dropUnlessResumed {
+            navigator.popBackStack()
+        }, onSave = {
+            scope.launch {
+                val format = SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", Locale.getDefault())
+                val date = format.format(Date())
+                val file = File(
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                    "APatch_install_${type}_log_${date}.log"
                 )
+                file.writeText(logContent.toString())
+                snackBarHost.showSnackbar("Log saved to ${file.absolutePath}")
             }
+        })
+    }, floatingActionButton = {
+        if (showFloatAction) {
+            val reboot = stringResource(id = R.string.reboot)
+            ExtendedFloatingActionButton(
+                onClick = {
+                    scope.launch {
+                        withContext(Dispatchers.IO) {
+                            reboot()
+                        }
+                    }
+                },
+                icon = { Icon(Icons.Filled.Refresh, reboot) },
+                text = { Text(text = reboot) },
+            )
+        }
 
-        },
-        snackbarHost = { SnackbarHost(snackBarHost) }
-    ) { innerPadding ->
+    }, snackbarHost = { SnackbarHost(snackBarHost) }) { innerPadding ->
         KeyEventBlocker {
             it.key == Key.VolumeDown || it.key == Key.VolumeUp
         }
@@ -162,22 +155,17 @@ fun InstallScreen(navigator: DestinationsNavigator, uri: Uri, type: MODULE_TYPE)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TopBar(onBack: () -> Unit = {}, onSave: () -> Unit = {}) {
-    TopAppBar(
-        title = { Text(stringResource(R.string.apm_install)) },
-        navigationIcon = {
-            IconButton(
-                onClick = onBack
-            ) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null) }
-        },
-        actions = {
-            IconButton(onClick = onSave) {
-                Icon(
-                    imageVector = Icons.Filled.Save,
-                    contentDescription = "Localized description"
-                )
-            }
+    TopAppBar(title = { Text(stringResource(R.string.apm_install)) }, navigationIcon = {
+        IconButton(
+            onClick = onBack
+        ) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null) }
+    }, actions = {
+        IconButton(onClick = onSave) {
+            Icon(
+                imageVector = Icons.Filled.Save, contentDescription = "Localized description"
+            )
         }
-    )
+    })
 }
 
 @Preview
