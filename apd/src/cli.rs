@@ -6,7 +6,7 @@ use android_logger::Config;
 #[cfg(target_os = "android")]
 use log::LevelFilter;
 
-use crate::{defs, event, module, supercall, utils};
+use crate::{defs, event, module, supercall, utils, sepolicy};
 use std::ffi::CString;
 /// APatch cli
 #[derive(Parser, Debug)]
@@ -30,11 +30,6 @@ enum Commands {
         #[command(subcommand)]
         command: Module,
     },
-    /// Manage Kernel Patch modules
-    Kpm {
-        #[command(subcommand)]
-        command: Kpmsub,
-    },
 
     /// Trigger `post-fs-data` event
     PostFsData,
@@ -47,6 +42,12 @@ enum Commands {
 
     /// Start uid listener for synchronizing root list
     UidListener,
+
+    /// SELinux policy Patch tool
+    Sepolicy {
+        #[command(subcommand)]
+        command: Sepolicy,
+    },
 }
 
 #[derive(clap::Subcommand, Debug)]
@@ -84,14 +85,13 @@ enum Module {
     /// list all modules
     List,
 }
+
 #[derive(clap::Subcommand, Debug)]
-enum Kpmsub {
-    /// Load Kernelpath module
-    Load {
-        // super_key
-        key: String,
-        // kpm module path
-        path: String,
+enum Sepolicy {
+    /// Check if sepolicy statement is supported/valid
+    Check {
+        /// sepolicy statements
+        sepolicy: String,
     },
 }
 
@@ -133,29 +133,6 @@ pub fn run() -> Result<()> {
 
         Commands::UidListener => event::start_uid_listener(),
 
-        Commands::Kpm { command } => match command {
-            Kpmsub::Load { key, path } => {
-                let key_cstr =
-                    CString::new(key).map_err(|_| anyhow::anyhow!("Invalid key string"))?;
-                let path_cstr =
-                    CString::new(path).map_err(|_| anyhow::anyhow!("Invalid path string"))?;
-                let ret = supercall::sc_kpm_load(
-                    key_cstr.as_c_str(),
-                    path_cstr.as_c_str(),
-                    None,
-                    std::ptr::null_mut(),
-                );
-                if ret < 0 {
-                    Err(anyhow::anyhow!(
-                        "System call failed with error code {}",
-                        ret
-                    ))
-                } else {
-                    Ok(())
-                }
-            }
-        },
-
         Commands::Module { command } => {
             #[cfg(any(target_os = "linux", target_os = "android"))]
             {
@@ -170,6 +147,10 @@ pub fn run() -> Result<()> {
                 Module::List => module::list_modules(),
             }
         }
+
+        Commands::Sepolicy { command } => match command {
+            Sepolicy::Check { sepolicy } => crate::sepolicy::check_rule(&sepolicy),
+        },
 
         Commands::Services => event::on_services(cli.superkey),
     };

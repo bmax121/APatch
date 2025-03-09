@@ -7,6 +7,7 @@ mod magic_mount;
 mod module;
 mod mount;
 mod package;
+mod sepolicy;
 #[cfg(any(target_os = "linux", target_os = "android"))]
 mod pty;
 mod restorecon;
