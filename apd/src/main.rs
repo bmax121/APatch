@@ -3,7 +3,7 @@ mod assets;
 mod cli;
 mod defs;
 mod event;
-mod m_mount;
+mod magic_mount;
 mod module;
 mod mount;
 mod package;

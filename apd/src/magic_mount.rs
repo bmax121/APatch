@@ -1,5 +1,5 @@
 use crate::defs::{AP_OVERLAY_SOURCE, DISABLE_FILE_NAME, MODULE_DIR, SKIP_MOUNT_FILE_NAME};
-use crate::m_mount::NodeFileType::{Directory, RegularFile, Symlink, Whiteout};
+use crate::magic_mount::NodeFileType::{Directory, RegularFile, Symlink, Whiteout};
 use crate::restorecon::{lgetfilecon, lsetfilecon};
 use crate::utils::ensure_dir_exists;
 use crate::utils::get_work_dir;
@@ -282,7 +282,7 @@ fn do_magic_mount<P: AsRef<Path>, WP: AsRef<Path>>(
                         Symlink => true,
                         Whiteout => real_path.exists(),
                         _ => {
-                            if let Ok(metadata) = real_path.metadata() {
+                            if let Ok(metadata) = real_path.symlink_metadata() {
                                 let file_type = NodeFileType::from_file_type(metadata.file_type())
                                     .unwrap_or(Whiteout);
                                 file_type != node.file_type || file_type == Symlink

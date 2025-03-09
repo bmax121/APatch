@@ -71,6 +71,11 @@ print_title() {
   ui_print "$bar"
 }
 
+check_sepolicy() {
+    /data/adb/apd sepolicy check "$1"
+    return $?
+}
+
 ######################
 # Environment Related
 ######################
@@ -436,5 +441,5 @@ POSTFSDATAD=$NVBASE/post-fs-data.d
 SERVICED=$NVBASE/service.d
 
 # Some modules dependents on this
-export MAGISK_VER=25.2
-export MAGISK_VER_CODE=25200
+export MAGISK_VER=27.0
+export MAGISK_VER_CODE=27000

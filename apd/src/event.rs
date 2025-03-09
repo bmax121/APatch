@@ -1,4 +1,4 @@
-use crate::m_mount;
+use crate::magic_mount;
 use crate::module;
 use crate::supercall::fork_for_result;
 use crate::utils::{ensure_dir_exists, get_work_dir, switch_cgroups};
@@ -202,7 +202,7 @@ pub fn systemless_bind_mount(_module_dir: &str) -> Result<()> {
     //mount("tmpfs",utils::get_tmp_path(),"tmpfs",combined_flags,"")?;
 
     // construct bind mount params
-    m_mount::magic_mount()?;
+    magic_mount::magic_mount()?;
     Ok(())
 }
 
