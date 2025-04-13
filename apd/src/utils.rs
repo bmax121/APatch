@@ -2,7 +2,7 @@ use anyhow::{Context, Error, Ok, Result, bail};
 use log::{info, warn};
 use std::ffi::CString;
 use std::{
-    fs::{self, File, OpenOptions, create_dir_all},
+    fs::{File, OpenOptions, create_dir_all},
     io::{BufRead, BufReader, ErrorKind::AlreadyExists, Write},
     path::Path,
     process::Stdio,
@@ -136,12 +136,7 @@ pub fn is_overlayfs_supported() -> Result<bool> {
 
     Ok(overlay_supported)
 }
-pub fn is_symlink(path: &str) -> bool {
-    match fs::symlink_metadata(path) {
-        std::result::Result::Ok(metadata) => metadata.file_type().is_symlink(),
-        std::result::Result::Err(_) => false,
-    }
-}
+
 pub fn should_enable_overlay() -> Result<bool> {
     //let bind_mount_exists = Path::new(defs::BIND_MOUNT_FILE).exists();
     let overlay_exists = Path::new(defs::OVERLAY_FILE).exists();

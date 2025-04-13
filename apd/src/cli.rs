@@ -6,8 +6,8 @@ use android_logger::Config;
 #[cfg(target_os = "android")]
 use log::LevelFilter;
 
-use crate::{defs, event, module, sepolicy, supercall, utils};
-use std::ffi::CString;
+use crate::{defs, event, module, supercall, utils};
+
 /// APatch cli
 #[derive(Parser, Debug)]
 #[command(author, version = defs::VERSION_CODE, about, long_about = None)]
