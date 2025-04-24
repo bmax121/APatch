@@ -88,45 +88,51 @@ pub fn mount_systemlessly(module_dir: &str, is_img: bool) -> Result<()> {
 
         ensure_clean_dir(module_dir)?;
         info!("- Preparing image");
-        if tmp_module_path.exists() {
-            //if it have update,remove tmp file
-            std::fs::remove_file(tmp_module_path)?;
+
+        let module_update_flag = Path::new(defs::WORKING_DIR).join(defs::UPDATE_FILE_NAME);
+        if module_update_flag.exists() {
+            if tmp_module_path.exists() {
+                //if it have update,remove tmp file
+                std::fs::remove_file(tmp_module_path)?;
+            }
+            let total_size = calculate_total_size(Path::new(module_update_dir))?; //create modules adapt size
+            info!(
+                "Total size of files in '{}': {} bytes",
+                tmp_module_path.display(),
+                total_size
+            );
+            let grow_size = 128 * 1024 * 1024 + total_size;
+            fs::File::create(tmp_module_img)
+                .context("Failed to create ext4 image file")?
+                .set_len(grow_size)
+                .context("Failed to extend ext4 image")?;
+            let result = Command::new("mkfs.ext4")
+                .arg("-b")
+                .arg("1024")
+                .arg(tmp_module_img)
+                .stdout(std::process::Stdio::piped())
+                .output()?;
+            ensure!(
+                result.status.success(),
+                "Failed to format ext4 image: {}",
+                String::from_utf8(result.stderr).unwrap()
+            );
+            info!("Checking Image");
+            module::check_image(tmp_module_img)?;
         }
-        let total_size = calculate_total_size(Path::new(module_update_dir))?; //create modules adapt size
-        info!(
-            "Total size of files in '{}': {} bytes",
-            tmp_module_path.display(),
-            total_size
-        );
-        let grow_size = 128 * 1024 * 1024 + total_size;
-        fs::File::create(tmp_module_img)
-            .context("Failed to create ext4 image file")?
-            .set_len(grow_size)
-            .context("Failed to extend ext4 image")?;
-        let result = Command::new("mkfs.ext4")
-            .arg("-b")
-            .arg("1024")
-            .arg(tmp_module_img)
-            .stdout(std::process::Stdio::piped())
-            .output()?;
-        ensure!(
-            result.status.success(),
-            "Failed to format ext4 image: {}",
-            String::from_utf8(result.stderr).unwrap()
-        );
-        info!("Checking Image");
-        module::check_image(tmp_module_img)?;
         info!("- Mounting image");
         mount::AutoMountExt4::try_new(tmp_module_img, module_dir, false)
             .with_context(|| "mount module image failed".to_string())?;
         info!("mounted {} to {}", tmp_module_img, module_dir);
         let _ = restorecon::setsyscon(module_dir);
-        let command_string = format!(
-            "cp --preserve=context -R {}* {};",
-            module_update_dir, module_dir
-        );
-        let args = vec!["-c", &command_string];
-        let _ = utils::run_command("sh", &args, None)?.wait()?;
+        if module_update_flag.exists() {
+            let command_string = format!(
+                "cp --preserve=context -R {}* {};",
+                module_update_dir, module_dir
+            );
+            let args = vec!["-c", &command_string];
+            let _ = utils::run_command("sh", &args, None)?.wait()?;
+        }
         mount_systemlessly(module_dir, true)?;
         return Ok(());
     }
@@ -356,8 +362,6 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     let tmp_module_img = defs::MODULE_UPDATE_TMP_IMG;
     let tmp_module_path = Path::new(tmp_module_img);
     move_file(module_update_dir, module_dir)?;
-    info!("remove update flag");
-    let _ = fs::remove_file(module_update_flag);
     if tmp_module_path.exists() {
         //if it have update,remove tmp file
         std::fs::remove_file(tmp_module_path)?;
@@ -457,7 +461,8 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
             }
         }
     }
-
+    info!("remove update flag");
+    let _ = fs::remove_file(module_update_flag);
     run_stage("post-mount", superkey, true);
 
     env::set_current_dir("/").with_context(|| "failed to chdir to /")?;
