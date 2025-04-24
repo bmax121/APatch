@@ -67,6 +67,22 @@ static inline long sc_klog(const char *key, const char *msg)
 }
 
 /**
+ * @brief Print build kernel time
+ * 
+ * @param key : superkey or 'su' string if caller uid is su allowed 
+ * @param buildtime 
+ * @param timestamp
+ * @return long 
+ */
+ static inline long sc_get_build_time(const char *key, const char *buildtime, size_t len)
+ {
+     if (!key || !key[0]) return -EINVAL;
+     if (!buildtime) return -EINVAL;
+     long ret = syscall(__NR_supercall, key, ver_and_cmd(key, SUPERCALL_BUILD_TIME), buildtime,len);
+     return ret;
+ }
+
+/**
  * @brief KernelPatch version number
  * 
  * @param key 

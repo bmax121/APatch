@@ -40,6 +40,22 @@ extern "C" {
         env->ReleaseStringUTFChars(superKey, skey);
         return version;
     }
+    
+    JNIEXPORT jstring JNICALL Java_me_bmax_apatch_Natives_nativeKernelPatchBuildTime(JNIEnv *env, jobject /* this */,
+        jstring superKey)
+    {
+        if (!superKey) [[unlikely]] {
+            LOGE("Super Key is null!");
+            return env->NewStringUTF("");
+        }
+        const char *skey = env->GetStringUTFChars(superKey, nullptr);
+        char buf[4096] = { '\0' };
+        
+        uint32_t ret = sc_get_build_time(skey,buf,sizeof(buf));
+        env->ReleaseStringUTFChars(superKey, skey);
+
+        return env->NewStringUTF(buf);
+    }
 
     JNIEXPORT jint JNICALL Java_me_bmax_apatch_Natives_nativeSu(JNIEnv *env, jobject /* this */, jstring superKey,
                                                                  jint to_uid, jstring scontext)

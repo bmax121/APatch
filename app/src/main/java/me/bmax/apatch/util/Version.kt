@@ -6,6 +6,17 @@ import me.bmax.apatch.APApplication
 import me.bmax.apatch.BuildConfig
 import me.bmax.apatch.Natives
 import me.bmax.apatch.apApp
+import me.bmax.apatch.util.shellForResult
+import org.ini4j.Ini
+import java.io.StringReader
+import me.bmax.apatch.ui.viewmodel.KPModel
+import com.topjohnwu.superuser.nio.ExtendedFile
+import com.topjohnwu.superuser.nio.FileSystemManager
+import com.topjohnwu.superuser.Shell
+import androidx.compose.runtime.mutableStateOf
+import java.io.File
+import android.system.Os
+
 
 /**
  * version string is like 0.9.0 or 0.9.0-dev
@@ -20,12 +31,66 @@ object Version {
         return vi.toUInt()
     }
 
+    fun getKpImg(): String {
+        var shell: Shell = createRootShell()
+        var kimgInfo = mutableStateOf(KPModel.KImgInfo("", false))
+        var kpimgInfo = mutableStateOf(KPModel.KPImgInfo("", "", "", "", ""))
+        val patchDir: ExtendedFile = FileSystemManager.getLocal().getFile(apApp.filesDir.parent, "patch")
+        patchDir.deleteRecursively()
+        patchDir.mkdirs()
+        val execs = listOf(
+            "libkptools.so", "libmagiskboot.so", "libbusybox.so", "libkpatch.so", "libbootctl.so"
+        )
+
+        val info = apApp.applicationInfo
+        val libs = File(info.nativeLibraryDir).listFiles { _, name ->
+            execs.contains(name)
+        } ?: emptyArray()
+
+        for (lib in libs) {
+            val name = lib.name.substring(3, lib.name.length - 3)
+            Os.symlink(lib.path, "$patchDir/$name")
+        }
+
+        for (script in listOf(
+            "boot_patch.sh", "boot_unpatch.sh", "boot_extract.sh", "util_functions.sh", "kpimg"
+        )) {
+            val dest = File(patchDir, script)
+            apApp.assets.open(script).writeTo(dest)
+        }
+        val result = shellForResult(
+            shell, "cd $patchDir", "./kptools -l -k kpimg"
+        )
+
+        if (result.isSuccess) {
+            val ini = Ini(StringReader(result.out.joinToString("\n")))
+            val kpimg = ini["kpimg"]
+            if (kpimg != null) {
+                kpimgInfo.value = KPModel.KPImgInfo(
+                    kpimg["version"].toString(),
+                    kpimg["compile_time"].toString(),
+                    kpimg["config"].toString(),
+                    APApplication.superKey,     // current key
+                    kpimg["root_superkey"].toString()      // possibly empty
+                )
+                return kpimg["compile_time"].toString()
+            } 
+        } 
+
+        return "unknown"
+    }
+
     fun uInt2String(ver: UInt): String {
         return "%d.%d.%d".format(
             ver.and(0xff0000u).shr(16).toInt(),
             ver.and(0xff00u).shr(8).toInt(),
             ver.and(0xffu).toInt()
         )
+    }
+    
+    fun installedKPTime(): String {
+        val time = Natives.kernelPatchBuildTime()
+        return if (time.startsWith("ERROR_")) "读取失败" else time
     }
 
     fun buildKPVUInt(): UInt {

@@ -62,6 +62,11 @@ object Natives {
         return nativeKernelPatchVersion(APApplication.superKey)
     }
 
+    private external fun nativeKernelPatchBuildTime(superKey: String): String
+    fun kernelPatchBuildTime(): String {
+        return nativeKernelPatchBuildTime(APApplication.superKey)
+    }
+
     private external fun nativeLoadKernelPatchModule(
         superKey: String, modulePath: String, args: String
     ): Long
