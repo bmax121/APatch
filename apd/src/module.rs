@@ -427,12 +427,6 @@ pub fn _uninstall_module(id: &str, update_dir: &str) -> Result<()> {
     Ok(())
 }
 pub fn uninstall_module(id: &str) -> Result<()> {
-    //let result = _uninstall_module(id, defs::MODULE_DIR);
-    //if should_enable_overlay()?{
-    //    _uninstall_module(id, defs::MODULE_UPDATE_TMP_DIR)?;
-    //}else{
-    //    return result;
-    //}
     _uninstall_module(id, defs::MODULE_DIR)?;
     Ok(())
 }
@@ -443,7 +437,7 @@ pub fn run_action(id: &str) -> Result<()> {
     Ok(())
 }
 
-fn _enable_module(module_dir: &str, mid: &str, enable: bool) -> Result<()> {
+fn _change_module_state(module_dir: &str, mid: &str, enable: bool) -> Result<()> {
     let src_module_path = format!("{module_dir}/{mid}");
     let src_module = Path::new(&src_module_path);
     ensure!(src_module.exists(), "module: {} not found!", mid);
@@ -464,68 +458,38 @@ fn _enable_module(module_dir: &str, mid: &str, enable: bool) -> Result<()> {
     Ok(())
 }
 
-pub fn enable_module(id: &str) -> Result<()> {
-    let update_dir = Path::new(defs::MODULE_DIR);
-    let _update_dir_update = Path::new(defs::MODULE_UPDATE_TMP_DIR);
-
-    //let result = enable_module_update(id, update_dir);
-    //if should_enable_overlay()?{
-    //    enable_module_update(id, update_dir_update)?;
-    //}else{
-    //    return result;
-    //}
-    enable_module_update(id, update_dir)?;
-    Ok(())
-}
-
-pub fn enable_module_update(id: &str, update_dir: &Path) -> Result<()> {
+pub fn _enable_module(id: &str, update_dir: &Path) -> Result<()> {
     if let Some(module_dir_str) = update_dir.to_str() {
-        _enable_module(module_dir_str, id, true)
+        _change_module_state(module_dir_str, id, true)
     } else {
         log::info!("Enable module failed: Invalid path");
         Err(anyhow::anyhow!("Invalid module directory"))
     }
 }
 
-pub fn disable_module(id: &str) -> Result<()> {
+pub fn enable_module(id: &str) -> Result<()> {
     let update_dir = Path::new(defs::MODULE_DIR);
-    let _update_dir_update = Path::new(defs::MODULE_UPDATE_TMP_DIR);
-
-    //let result = disable_module_update(id, update_dir);
-    //if should_enable_overlay()?{
-    //    disable_module_update(id, update_dir_update)?;
-    //}else{
-    //    return result;
-    //}
-    disable_module_update(id, update_dir)?;
-
+    _enable_module(id, update_dir)?;
     Ok(())
 }
 
-pub fn disable_module_update(id: &str, update_dir: &Path) -> Result<()> {
+pub fn _disable_module(id: &str, update_dir: &Path) -> Result<()> {
     if let Some(module_dir_str) = update_dir.to_str() {
-        _enable_module(module_dir_str, id, false)
+        _change_module_state(module_dir_str, id, false)
     } else {
         log::info!("Disable module failed: Invalid path");
         Err(anyhow::anyhow!("Invalid module directory"))
     }
 }
 
-pub fn disable_all_modules() -> Result<()> {
-    // Skip disabling modules since boot completed
-    if getprop("sys.boot_completed").as_deref() == Some("1") {
-        info!("System boot completed, no need to disable all modules");
-        return Ok(());
-    }
+pub fn disable_module(id: &str) -> Result<()> {
+    let module_dir = Path::new(defs::MODULE_DIR);
+    _disable_module(id, module_dir)?;
 
-    // we assume the module dir is already mounted
-    //let _ = disable_all_modules_update(defs::MODULE_DIR);
-    //disable_all_modules_update(defs::MODULE_UPDATE_TMP_DIR)?;
-    disable_all_modules_update(defs::MODULE_DIR)?;
     Ok(())
 }
 
-pub fn disable_all_modules_update(dir: &str) -> Result<()> {
+pub fn _disable_all_modules(dir: &str) -> Result<()> {
     let dir = std::fs::read_dir(dir)?;
     for entry in dir.flatten() {
         let path = entry.path();
@@ -536,6 +500,19 @@ pub fn disable_all_modules_update(dir: &str) -> Result<()> {
     }
     Ok(())
 }
+
+pub fn disable_all_modules() -> Result<()> {
+    // Skip disabling modules since boot completed
+    if getprop("sys.boot_completed").as_deref() == Some("1") {
+        info!("System boot completed, no need to disable all modules");
+        return Ok(());
+    }
+    mark_update()?;
+    _disable_all_modules(defs::MODULE_DIR)?;
+    Ok(())
+}
+
+
 
 fn _list_modules(path: &str) -> Vec<HashMap<String, String>> {
     // first check enabled modules

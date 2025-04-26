@@ -185,9 +185,6 @@ pub fn mount_systemlessly(module_dir: &str, is_img: bool) -> Result<()> {
     // mount /system first
     if let Err(e) = mount_partition("system", &system_lowerdir) {
         warn!("mount system failed: {:#}", e);
-        //ensure_file_exists(format!("{}",defs::BIND_MOUNT_FILE))?;
-        //ensure_clean_dir(defs::MODULE_DIR)?;
-        //info!("bind_mount enable,overlayfs is not work,clear module_dir");
     }
 
     // mount other partitions
@@ -201,13 +198,7 @@ pub fn mount_systemlessly(module_dir: &str, is_img: bool) -> Result<()> {
 }
 
 pub fn systemless_bind_mount(_module_dir: &str) -> Result<()> {
-    //let propagation_flags = MountPropagationFlags::PRIVATE;
-
-    //let combined_flags = MountFlags::empty() | MountFlags::from_bits_truncate(propagation_flags.bits());
-    // set tmp_path prvate
-    //mount("tmpfs",utils::get_tmp_path(),"tmpfs",combined_flags,"")?;
-
-    // construct bind mount params
+    // call magisk mount
     magic_mount::magic_mount()?;
     Ok(())
 }
@@ -359,14 +350,8 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     let module_update_flag = Path::new(defs::WORKING_DIR).join(defs::UPDATE_FILE_NAME); // if update ,there will be renew modules file
     assets::ensure_binaries().with_context(|| "binary missing")?;
 
-    let tmp_module_img = defs::MODULE_UPDATE_TMP_IMG;
-    let tmp_module_path = Path::new(tmp_module_img);
-    move_file(module_update_dir, module_dir)?;
-    if tmp_module_path.exists() {
-        //if it have update,remove tmp file
-        std::fs::remove_file(tmp_module_path)?;
-    }
 
+    move_file(module_update_dir, module_dir)?;
     let lite_file = Path::new(defs::LITEMODE_FILE);
 
     if safe_mode {
