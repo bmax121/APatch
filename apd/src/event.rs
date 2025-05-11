@@ -350,6 +350,7 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     let module_update_flag = Path::new(defs::WORKING_DIR).join(defs::UPDATE_FILE_NAME); // if update ,there will be renew modules file
     assets::ensure_binaries().with_context(|| "binary missing")?;
 
+    ensure_dir_exists(defs::MODULE_UPDATE_DIR)?;
 
     move_file(module_update_dir, module_dir)?;
     let lite_file = Path::new(defs::LITEMODE_FILE);
