@@ -127,7 +127,7 @@ pub fn mount_systemlessly(module_dir: &str, is_img: bool) -> Result<()> {
         let _ = restorecon::setsyscon(module_dir);
         if module_update_flag.exists() {
             let command_string = format!(
-                "cp --preserve=context -R {}* {};",
+                "cp --preserve=context -RP {}* {};",
                 module_update_dir, module_dir
             );
             let args = vec!["-c", &command_string];
@@ -136,6 +136,7 @@ pub fn mount_systemlessly(module_dir: &str, is_img: bool) -> Result<()> {
         mount_systemlessly(module_dir, true)?;
         return Ok(());
     }
+    let module_dir_origin = defs::MODULE_DIR;
     let dir = fs::read_dir(module_dir);
     let Ok(dir) = dir else {
         bail!("open {} failed", defs::MODULE_DIR);
@@ -154,7 +155,7 @@ pub fn mount_systemlessly(module_dir: &str, is_img: bool) -> Result<()> {
         if !module.is_dir() {
             continue;
         }
-        let disabled = module.join(defs::DISABLE_FILE_NAME).exists();
+        let disabled = Path::new(module_dir_origin).join(defs::DISABLE_FILE_NAME).exists();
         if disabled {
             info!("module: {} is disabled, ignore!", module.display());
             continue;
