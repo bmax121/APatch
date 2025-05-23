@@ -118,6 +118,10 @@ class APModuleViewModel : ViewModel() {
         }
     }
 
+    private fun sanitizeVersionString(version: String): String {
+        return version.replace(Regex("[^a-zA-Z0-9.\\-_]"), "_")
+    }
+
     fun checkUpdate(m: ModuleInfo): Triple<String, String, String> {
         val empty = Triple("", "", "")
         if (m.updateJson.isEmpty() || m.remove || m.update || !m.enabled) {
@@ -150,7 +154,7 @@ class APModuleViewModel : ViewModel() {
             JSONObject(result)
         }.getOrNull() ?: return empty
 
-        val version = updateJson.optString("version", "")
+        val version = sanitizeVersionString(updateJson.optString("version", ""))
         val versionCode = updateJson.optInt("versionCode", 0)
         val zipUrl = updateJson.optString("zipUrl", "")
         val changelog = updateJson.optString("changelog", "")
