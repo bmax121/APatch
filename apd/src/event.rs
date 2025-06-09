@@ -155,7 +155,9 @@ pub fn mount_systemlessly(module_dir: &str, is_img: bool) -> Result<()> {
         if !module.is_dir() {
             continue;
         }
-        let disabled = Path::new(module_dir_origin).join(defs::DISABLE_FILE_NAME).exists();
+        let disabled = Path::new(module_dir_origin)
+            .join(defs::DISABLE_FILE_NAME)
+            .exists();
         if disabled {
             info!("module: {} is disabled, ignore!", module.display());
             continue;

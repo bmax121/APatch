@@ -512,8 +512,6 @@ pub fn disable_all_modules() -> Result<()> {
     Ok(())
 }
 
-
-
 fn _list_modules(path: &str) -> Vec<HashMap<String, String>> {
     // first check enabled modules
     let dir = std::fs::read_dir(path);
