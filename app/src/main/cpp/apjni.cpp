@@ -51,7 +51,7 @@ extern "C" {
         const char *skey = env->GetStringUTFChars(superKey, nullptr);
         char buf[4096] = { '\0' };
         
-        uint32_t ret = sc_get_build_time(skey,buf,sizeof(buf));
+        sc_get_build_time(skey, buf, sizeof(buf));
         env->ReleaseStringUTFChars(superKey, skey);
 
         return env->NewStringUTF(buf);

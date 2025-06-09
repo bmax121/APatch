@@ -1,5 +1,6 @@
 package me.bmax.apatch.ui
 
+import android.content.ClipData
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -26,16 +27,18 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.ClipEntry
+import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.launch
 import me.bmax.apatch.BuildConfig
 import me.bmax.apatch.R
 import me.bmax.apatch.ui.theme.APatchTheme
@@ -69,7 +72,8 @@ class CrashHandleActivity : ComponentActivity() {
         val threadName = intent.getStringExtra("thread")
 
         val message = buildString {
-            append(appName).append(" version: ").append(versionName).append(" ($versionCode)").append("\n\n")
+            append(appName).append(" version: ").append(versionName).append(" ($versionCode)")
+                .append("\n\n")
             append("Brand: ").append(deviceBrand).append("\n")
             append("Model: ").append(deviceModel).append("\n")
             append("SDK Level: ").append(sdkLevel).append("\n")
@@ -91,29 +95,34 @@ class CrashHandleActivity : ComponentActivity() {
 private fun CrashHandleScreen(
     message: String
 ) {
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
-    val clipboardManager = LocalClipboardManager.current
+    val scrollBehavior =
+        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+    val clipboard = LocalClipboard.current
+    val scope = rememberCoroutineScope()
 
-    Scaffold(
-        contentWindowInsets = WindowInsets.safeDrawing,
-        topBar = {
-            LargeTopAppBar(
-                title = { Text(text = stringResource(R.string.crash_handle_title)) },
-                scrollBehavior = scrollBehavior,
-                windowInsets = WindowInsets.safeDrawing.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal)
-            )
-        },
-        floatingActionButton = {
-            ExtendedFloatingActionButton(
-                onClick = { clipboardManager.setText(AnnotatedString(message)) },
-                text = { Text(text = stringResource(R.string.crash_handle_copy)) },
-                icon = { Icon(imageVector = Icons.Outlined.ContentCopy, contentDescription = null) },
-                modifier = Modifier.windowInsetsPadding(
-                    WindowInsets.safeDrawing.only(WindowInsetsSides.End)
+    Scaffold(contentWindowInsets = WindowInsets.safeDrawing, topBar = {
+        LargeTopAppBar(
+            title = { Text(text = stringResource(R.string.crash_handle_title)) },
+            scrollBehavior = scrollBehavior,
+            windowInsets = WindowInsets.safeDrawing.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal)
+        )
+    }, floatingActionButton = {
+        ExtendedFloatingActionButton(
+            onClick = {
+            scope.launch {
+                clipboard.setClipEntry(
+                    ClipEntry(ClipData.newPlainText("CrashLog", message)),
                 )
+            }
+        }, text = { Text(text = stringResource(R.string.crash_handle_copy)) }, icon = {
+            Icon(
+                imageVector = Icons.Outlined.ContentCopy, contentDescription = null
             )
-        }
-    ) {
+        }, modifier = Modifier.windowInsetsPadding(
+            WindowInsets.safeDrawing.only(WindowInsetsSides.End)
+        )
+        )
+    }) {
         SelectionContainer(
             modifier = Modifier
                 .fillMaxSize()
@@ -121,17 +130,12 @@ private fun CrashHandleScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(it)
                 .padding(
-                    start = 16.dp,
-                    top = 16.dp,
-                    end = 16.dp,
-                    bottom = 16.dp + 56.dp + 16.dp
+                    start = 16.dp, top = 16.dp, end = 16.dp, bottom = 16.dp + 56.dp + 16.dp
                 )
         ) {
             Text(
-                text = message,
-                style = TextStyle(
-                    fontFamily = FontFamily.Monospace,
-                    fontSize = 11.sp
+                text = message, style = TextStyle(
+                    fontFamily = FontFamily.Monospace, fontSize = 11.sp
                 )
             )
         }
