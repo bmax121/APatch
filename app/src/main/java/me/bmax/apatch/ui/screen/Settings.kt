@@ -102,6 +102,7 @@ import me.bmax.apatch.util.ui.NavigationBarsSpacer
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import androidx.core.content.edit
 
 @Destination<RootGraph>
 @Composable
@@ -252,8 +253,9 @@ fun SettingScreen() {
                     summary = stringResource(id = R.string.enable_web_debugging_summary),
                     checked = enableWebDebugging
                 ) {
-                    APApplication.sharedPreferences.edit().putBoolean("enable_web_debugging", it)
-                        .apply()
+                    APApplication.sharedPreferences.edit {
+                        putBoolean("enable_web_debugging", it)
+                    }
                     enableWebDebugging = it
                 }
             }
@@ -271,7 +273,7 @@ fun SettingScreen() {
                 summary = stringResource(id = R.string.settings_check_update_summary),
                 checked = checkUpdate
             ) {
-                prefs.edit().putBoolean("check_update", it).apply()
+                prefs.edit { putBoolean("check_update", it) }
                 checkUpdate = it
             }
 
@@ -287,7 +289,7 @@ fun SettingScreen() {
                 summary = stringResource(id = R.string.settings_night_mode_follow_sys_summary),
                 checked = nightFollowSystem
             ) {
-                prefs.edit().putBoolean("night_mode_follow_sys", it).apply()
+                prefs.edit { putBoolean("night_mode_follow_sys", it) }
                 nightFollowSystem = it
                 refreshTheme.value = true
             }
@@ -304,7 +306,7 @@ fun SettingScreen() {
                     title = stringResource(id = R.string.settings_night_theme_enabled),
                     checked = nightThemeEnabled
                 ) {
-                    prefs.edit().putBoolean("night_mode_enabled", it).apply()
+                    prefs.edit { putBoolean("night_mode_enabled", it) }
                     nightThemeEnabled = it
                     refreshTheme.value = true
                 }
@@ -324,7 +326,7 @@ fun SettingScreen() {
                     summary = stringResource(id = R.string.settings_use_system_color_theme_summary),
                     checked = useSystemDynamicColor
                 ) {
-                    prefs.edit().putBoolean("use_system_color_theme", it).apply()
+                    prefs.edit { putBoolean("use_system_color_theme", it) }
                     useSystemDynamicColor = it
                     refreshTheme.value = true
                 }
@@ -558,7 +560,7 @@ fun ThemeChooseDialog(showDialog: MutableState<Boolean>) {
                         headlineContent = { Text(text = stringResource(it.nameId)) },
                         modifier = Modifier.clickable {
                             showDialog.value = false
-                            prefs.edit().putString("custom_color", it.name).apply()
+                            prefs.edit { putString("custom_color", it.name) }
                             refreshTheme.value = true
                         })
                 }
