@@ -62,6 +62,5 @@ markdown = { group = "io.noties.markwon", name = "core", version = "4.6.2" }
 
 timber = { group = "com.jakewharton.timber", name = "timber", version = "5.0.1" }
 ini4j = { group = "org.ini4j", name = "ini4j", version = "0.5.4" }
-bcpkix = { group = "org.bouncycastle", name = "bcpkix-jdk18on", version = "1.81" }
 
 cxx = { module = "org.lsposed.libcxx:libcxx", version = "28.1.13356709" }

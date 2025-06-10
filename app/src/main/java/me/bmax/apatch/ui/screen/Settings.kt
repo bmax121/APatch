@@ -92,7 +92,6 @@ import me.bmax.apatch.ui.component.rememberLoadingDialog
 import me.bmax.apatch.ui.theme.refreshTheme
 import me.bmax.apatch.util.APatchKeyHelper
 import me.bmax.apatch.util.getBugreportFile
-import me.bmax.apatch.util.hideapk.HideAPK
 import me.bmax.apatch.util.isGlobalNamespaceEnabled
 import me.bmax.apatch.util.outputStream
 import me.bmax.apatch.util.rootShellForResult
@@ -144,11 +143,6 @@ fun SettingScreen() {
 
         val showLanguageDialog = rememberSaveable { mutableStateOf(false) }
         LanguageDialog(showLanguageDialog)
-
-        /*val showRandomizePkgNameDialog = rememberSaveable { mutableStateOf(false) }
-        if (showRandomizePkgNameDialog.value) {
-            RandomizePkgNameDialog(showDialog = showRandomizePkgNameDialog)
-        }*/
 
         val showResetSuPathDialog = remember { mutableStateOf(false) }
         if (showResetSuPathDialog.value) {
@@ -678,94 +672,6 @@ fun ResetSUPathDialog(showDialog: MutableState<Boolean>) {
                             Toast.LENGTH_SHORT
                         ).show()
                         rootShellForResult("echo $suPath > ${APApplication.SU_PATH_FILE}")
-                    }) {
-                        Text(stringResource(id = android.R.string.ok))
-                    }
-                }
-            }
-            val dialogWindowProvider = LocalView.current.parent as DialogWindowProvider
-            APDialogBlurBehindUtils.setupWindowBlurListener(dialogWindowProvider.window)
-        }
-    }
-}
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun RandomizePkgNameDialog(showDialog: MutableState<Boolean>) {
-    val context = LocalContext.current
-    val scope = rememberCoroutineScope()
-
-    var newPackageName by remember { mutableStateOf("") }
-    var enable by remember { mutableStateOf(false) }
-    BasicAlertDialog(
-        onDismissRequest = { showDialog.value = false }, properties = DialogProperties(
-            decorFitsSystemWindows = true,
-            usePlatformDefaultWidth = false,
-
-            )
-    ) {
-        Surface(
-            modifier = Modifier
-                .width(310.dp)
-                .wrapContentHeight(),
-            shape = RoundedCornerShape(30.dp),
-            tonalElevation = AlertDialogDefaults.TonalElevation,
-            color = AlertDialogDefaults.containerColor,
-        ) {
-            Column(modifier = Modifier.padding(PaddingValues(all = 24.dp))) {
-
-                Box(
-                    Modifier
-                        .padding(PaddingValues(bottom = 16.dp))
-                        .align(Alignment.Start)
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.hide_apatch_manager),
-                        style = MaterialTheme.typography.headlineSmall
-                    )
-                }
-
-                Box(
-                    Modifier
-                        .weight(weight = 1f, fill = false)
-                        .padding(PaddingValues(bottom = 12.dp))
-                        .align(Alignment.Start)
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.hide_apatch_dialog_summary),
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
-
-                Box(
-                    Modifier
-                        .weight(weight = 1f, fill = false)
-                        .padding(PaddingValues(bottom = 12.dp))
-                        .align(Alignment.Start)
-                ) {
-                    OutlinedTextField(
-                        value = newPackageName,
-                        onValueChange = {
-                            newPackageName = it
-                            enable = newPackageName.isNotEmpty()
-                        },
-                        label = { Text(stringResource(id = R.string.hide_apatch_dialog_new_manager_name)) },
-                        visualTransformation = VisualTransformation.None,
-                    )
-                }
-
-                // Buttons
-                Row(
-                    modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End
-                ) {
-                    TextButton(onClick = { showDialog.value = false }) {
-                        Text(stringResource(id = android.R.string.cancel))
-                    }
-
-                    Button(onClick = {
-                        showDialog.value = false
-                        scope.launch { HideAPK.hide(context, newPackageName) }
                     }) {
                         Text(stringResource(id = android.R.string.ok))
                     }

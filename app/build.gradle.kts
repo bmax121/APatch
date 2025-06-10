@@ -276,6 +276,6 @@ dependencies {
 
     implementation(libs.timber)
     implementation(libs.ini4j)
-    implementation(libs.bcpkix)
+
     compileOnly(libs.cxx)
 }
