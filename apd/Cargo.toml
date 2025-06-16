@@ -10,7 +10,7 @@ anyhow = "1"
 csv = "1.3.1"
 clap = { version = "4", features = ["derive"] }
 const_format = "0.2"
-zip = { version = "4.0.0", default-features = false }
+zip = { version = "4.1.0", default-features = false }
 zip-extensions = { version = "0.8.3" , features = [
     "deflate",
     "lzma",
@@ -32,7 +32,7 @@ jwalk = "0.8"
 is_executable = "1"
 nom = "8"
 derive-new = "0.7.0"
-which = "7"
+which = "8"
 getopts = "0.2"
 sha256 = "1"
 tempdir = "0.3"
