@@ -1,29 +1,41 @@
 ---
-name: Feature request/新特性请求
-description: Suggest an idea for this project./提出建议
+name: Feature request | 新特性请求
+description: Suggest an idea for this project | 提出建议
 labels: [enhancement]
+
 body:
   - type: textarea
     attributes:
-      label: Is your feature request related to a problem?/你的请求是否与某个问题相关？
-      placeholder: A clear and concise description of what the problem is./请清晰准确表述该问题。
+      label: Is your request related to a specific issue? | 你的请求是否与某个问题相关？
+      description: |
+        Please enter a clear and concise description of the issue.  
+        请清晰准确表述该问题。
     validations:
       required: true
+
   - type: textarea
     attributes:
-      label: Describe the solution you'd like/描述你想要的解决方案
-      placeholder: A clear and concise description of what you want to happen./请清晰准确描述新特性的预期行为
+      label: Describe the solution you'd like | 描述你想要的解决方案
+      description: |
+        Please enter a clear and concise description of what you'd like.  
+        请清晰准确描述新特性的预期行为。
     validations:
       required: true
+
   - type: textarea
     attributes:
-      label: Describe alternatives you've considered/描述您考虑过的备选方案
-      placeholder: A clear and concise description of any alternative solutions or features you've considered./对您考虑过的任何替代解决方案或功能的清晰简洁的描述。
+      label: Describe the alternatives you've considered | 描述您考虑过的备选方案
+      description: |
+        Please enter a clear and concise description of any alternative solutions or features you've considered.  
+        对您考虑过的任何替代解决方案或功能的清晰简洁的描述。
     validations:
       required: true
+
   - type: textarea
     attributes:
-      label: Additional context/其他信息
-      placeholder: Add any other context or screenshots about the feature request here./其他关于新特性的信息或者截图。
+      label: Other information | 其他信息
+      description: |
+        Add any information or screenshots about the feature request.  
+        其他关于新特性的信息或者截图。
     validations:
       required: false
