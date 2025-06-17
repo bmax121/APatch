@@ -156,7 +156,7 @@ dependencies = [
  "tempdir",
  "walkdir",
  "which",
- "zip 4.0.0",
+ "zip",
  "zip-extensions",
 ]
 
@@ -1783,24 +1783,12 @@ dependencies = [
 ]
 
 [[package]]
-name = "zip"
-version = "4.0.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "153a6fff49d264c4babdcfa6b4d534747f520e56e8f0f384f3b808c4b64cc1fd"
-dependencies = [
- "arbitrary",
- "crc32fast",
- "indexmap",
- "memchr",
-]
-
-[[package]]
 name = "zip-extensions"
 version = "0.8.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9f105becb0a5da773e655775dd05fee454ca1475bcc980ec9d940a02f42cee40"
 dependencies = [
- "zip 3.0.0",
+ "zip",
 ]
 
 [[package]]

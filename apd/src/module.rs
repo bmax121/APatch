@@ -353,20 +353,7 @@ fn _install_module(zip: &str) -> Result<()> {
     // unzip the image and move it to modules_update/<id> dir
     let file = std::fs::File::open(zip)?;
     let mut archive = zip::ZipArchive::new(file)?;
-    if should_enable_overlay()? {
-        for i in 0..archive.len() {
-            let mut file = archive.by_index(i)?;
-            let file_name = file.name().to_string();
-
-            if file_name == "module.prop" {
-                let output_path = Path::new(&module_dir).join(&file_name);
-                let mut output_file = std::fs::File::create(&output_path)?;
-
-                std::io::copy(&mut file, &mut output_file)?;
-                println!("Extracted: {}", output_path.display());
-            }
-        }
-    }
+    archive.extract(&_module_update_dir)?;
 
     // set permission and selinux context for $MOD/system
     let module_system_dir = PathBuf::from(module_dir.clone()).join("system");
