@@ -34,6 +34,10 @@ fn get_git_version() -> Result<(u32, String), std::io::Error> {
 }
 
 fn main() {
+    // update VersionCode when git repository change
+    println!("cargo:rerun-if-changed=../.git/HEAD");
+    println!("cargo:rerun-if-changed=../.git/refs/");
+
     let (code, name) = match get_git_version() {
         Ok((code, name)) => (code, name),
         Err(_) => {
