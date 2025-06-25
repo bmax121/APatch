@@ -24,7 +24,7 @@
     <string name="apm_start_downloading">Download di %s avviato</string>
     <string name="su_selinux_via_hook">Aggira tramite hook</string>
     <string name="home_ap_cando_uninstall">Disinstalla</string>
-    <string name="apatch_version">Versione: %d.%d.%d</string>
+    <string name="apatch_version">Versione: %s</string>
     <string name="apm_overlay_fs_not_available">I moduli non sono disponibili poiché OverlayFS è disabilitato dal kernel.</string>
     <string name="kpm_version">Versione</string>
     <string name="su_refresh">Ricarica</string>
