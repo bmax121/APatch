@@ -114,7 +114,6 @@ fun DownloadListener(context: Context, onDownloaded: (Uri) -> Unit) {
                 }
             }
         }
-        // 使用 ContextCompat 注册广播接收器并添加 RECEIVER_NOT_EXPORTED 标志
         val intentFilter = IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
         ContextCompat.registerReceiver(
             context,
