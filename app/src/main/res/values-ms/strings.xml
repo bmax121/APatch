@@ -28,7 +28,7 @@
     <string name="home_install_unknown">Tidak diketahui</string>
     <string name="home_click_to_install">Tekan untuk pasang</string>
     <string name="home_need_update">Versi baharu tersedia</string>
-    <string name="kpatch_version">Versi: %d.%d.%d</string>
+    <string name="kpatch_version">Versi: %s</string>
     <string name="apatch_version">Versi: %s</string>
     <string name="home_install_unknown_summary">Tekan untuk pasang</string>
     <string name="success">Berjaya</string>

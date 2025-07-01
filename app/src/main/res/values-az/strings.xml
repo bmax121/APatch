@@ -30,7 +30,7 @@
     <string name="apatch_version_update">Versiya:
 \n%s -&gt; %s</string>
     <string name="home_su_path">su: %s</string>
-    <string name="kpatch_version">Versiya: %d.%d.%d</string>
+    <string name="kpatch_version">Versiya: %s</string>
     <string name="kernel_patch">NüvəYamağı</string>
     <string name="android_patch">AndroidYamağı</string>
     <string name="home_apatch_version">APatch: %s</string>

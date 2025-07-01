@@ -20,7 +20,7 @@
     <string name="home_working">Arbeider</string>
     <string name="home_installing">Installerer</string>
     <string name="home_need_update">Ny versjon tilgjengelig</string>
-    <string name="kpatch_version">Versjon: %d.%d.%d</string>
+    <string name="kpatch_version">Versjon: %s</string>
     <string name="apatch_version_update">Versjon: %s → %s</string>
     <string name="home_su_path">su: %s</string>
     <string name="home_auth_key_desc">Start kjøring etter sertifisering</string>

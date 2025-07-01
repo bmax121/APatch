@@ -12,6 +12,7 @@ import android.os.Environment
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import me.bmax.apatch.apApp
+import androidx.core.content.ContextCompat
 
 @SuppressLint("Range")
 fun download(
@@ -113,17 +114,13 @@ fun DownloadListener(context: Context, onDownloaded: (Uri) -> Unit) {
                 }
             }
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            context.registerReceiver(
-                receiver,
-                IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE),
-                Context.RECEIVER_EXPORTED
-            )
-        } else {
-            context.registerReceiver(
-                receiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
-            )
-        }
+        val intentFilter = IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
+        ContextCompat.registerReceiver(
+            context,
+            receiver,
+            intentFilter,
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
         onDispose {
             context.unregisterReceiver(receiver)
         }
