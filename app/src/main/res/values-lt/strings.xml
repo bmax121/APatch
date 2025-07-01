@@ -1,2 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="patch_warnning">Diegimas rizikingas. Patikrinkite, kad turite atsarginę duomenų kopiją.</string>
+    <string name="failure">Klaida</string>
+    <string name="reboot">Perkrauti</string>
+    <string name="home">Pagrindinis ekranas</string>
+    <string name="success">Pavyko</string>
+    <string name="settings">Nustatymai</string>
+</resources>

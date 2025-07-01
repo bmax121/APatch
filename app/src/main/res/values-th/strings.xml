@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="patch_warnning">การติดตั้งนี้มีความเสี่ยง โปรดสำรองข้อมูลก่อนติดตั้ง</string>
+    <string name="patch_warnning">APatch</string>
     <string name="home_learn_apatch">เรียนรู้เกี่ยวกับ APatch</string>
     <string name="reboot">รีบูต</string>
     <string name="settings">ตั้งค่า</string>
-    <string name="send_log">ส่ง บันทึก</string>
+    <string name="send_log">Send logs</string>
     <string name="home_auth_key_desc">เริ่มทำงานหลังจากได้รับการรับรอง</string>
     <string name="home_click_to_learn_apatch">เรียนรู้เกี่ยวกับคุณสมบัติ APatch และวิธีการใช้</string>
     <string name="home_installing">กำลังติดตั้ง</string>
@@ -34,24 +34,24 @@
     <string name="app_name" translatable="false">APatch</string>
     <string name="kpm">KPModule</string>
     <string name="apm_reboot_to_apply">รีบูตเพื่อให้มีผล</string>
-    <string name="apm_uninstall_success">ถอนการติดตั้ง %s แล้ว</string>
-    <string name="apm_install">ติดตั้ง</string>
+    <string name="apm_uninstall_success">กำลังดาวน์โหลดโมดูล: %s…</string>
+    <string name="apm_install">APModule</string>
     <string name="apm_remove">ถอนการติดตั้ง</string>
-    <string name="apm_uninstall_confirm">คุณแน่ใจหรือไม่ว่าต้องการถอนการติดตั้งโมดูล %s?</string>
-    <string name="apm_version">เวอร์ชัน</string>
+    <string name="apm_uninstall_confirm">กำลังดาวน์โหลดโมดูล: %s…</string>
+    <string name="apm_version">APModule</string>
     <string name="su_pkg_excluded_setting_summary">การเปิดใช้งานตัวเลือกนี้จะช่วยให้ APatch กู้คืนไฟล์ที่ถูกปรับเปลี่ยนโดยโมดูลสำหรับแอปพลิเคชันนี้</string>
     <string name="apm_start_downloading">เริ่มดาวน์โหลด: %s</string>
-    <string name="apm_overlay_fs_not_available">ไม่มี OverlayFS โมดูลไม่สามารถทำงานได้.</string>
+    <string name="apm_overlay_fs_not_available">0.0019ไม่มี OverlayFS โมดูลไม่สามารถทำงานได้.</string>
     <string name="su_show_system_apps">แสดงแอประบบ</string>
     <string name="apm_failed_to_disable">ไม่สามารถปิดการใช้งานโมดูล: %s</string>
-    <string name="apm_uninstall_failed">ไม่สามารถถอนการติดตั้ง: %s</string>
+    <string name="apm_uninstall_failed">กำลังดาวน์โหลดโมดูล: %s…</string>
     <string name="apm_failed_to_enable">ไม่สามารถเปิดใช้งานโมดูล: %s</string>
     <string name="su_hide_system_apps">ซ่อนแอประบบ</string>
     <string name="apm_magisk_conflict">โมดูลถูกปิดใช้งานเนื่องจากขัดแย้งกับ Magisk\'s.</string>
     <string name="apm_new_version_available">รุ่นใหม่: %s พร้อมใช้งาน</string>
     <string name="apm_empty">ไม่มีการติดตั้งโมดูล</string>
     <string name="apm_author">ผู้เขียน</string>
-    <string name="home">หน้าเเรก</string>
+    <string name="home">สำเร็จ</string>
     <string name="about">เกี่ยวกับ</string>
     <string name="safe_mode">โหมดปลอดภัย</string>
     <string name="reboot_recovery">รีบูตเข้าสู่โหมดการกู้คืน</string>
@@ -68,8 +68,8 @@
     <string name="home_install_unknown">ไม่ทราบ</string>
     <string name="home_fingerprint">ลายนิ้วมือ</string>
     <string name="super_key">SuperKey</string>
-    <string name="kernel_patch">เคอร์เนลแพทช์</string>
-    <string name="android_patch">แอนดรอยด์แพทช์</string>
+    <string name="kernel_patch">APatch</string>
+    <string name="android_patch">&lt;![CDATA[&lt;p&gt;View source code at %1$s&lt;br/&gt;Join our %2$s channel</string>
     <string name="reboot_bootloader">รีบูตเข้าสู่บูตโหลดเดอร์</string>
     <string name="reboot_download">รีบูตเข้าสู่โหมดดาวน์โหลด</string>
     <string name="reboot_edl">รีบูตเข้าสู่โหมด EDL</string>
@@ -90,12 +90,12 @@
     <string name="su_selinux_via_hook">bypass via hook</string>
     <string name="su_pkg_excluded_label">exclude</string>
     <string name="settings_app_language">ภาษา</string>
-    <string name="patch">แพทซ์</string>
+    <string name="patch">APatch</string>
     <string name="system_default">ค่าเริ่มต้นของระบบ</string>
     <string name="settings_global_namespace_mode">โหมดเนมสเปซทั่วโลก</string>
     <string name="settings_global_namespace_mode_summary">ทุกเซสชันรูทใช้เนมสเปซการเมานต์แบบทั่วโลก</string>
-    <string name="success">สำเร็จ</string>
-    <string name="failure">ล้มเหลว</string>
+    <string name="success">APatch</string>
+    <string name="failure">APatch</string>
     <string name="home_kpatch_info_title">รายละเอียด</string>
     <string name="home_ap_cando_reboot">รีบูต</string>
     <string name="patch_config_title">แพทช์</string>
@@ -122,7 +122,7 @@
     <string name="patch_item_kpimg_config">กำหนดค่า:</string>
     <string name="patch_item_kpimg_comile_time">เวลา:</string>
     <string name="save_log">บันทึกเหตุการณ์</string>
-    <string name="patch_item_set_skey_label">super key ควรมีความยาวอย่างต่ำ 8 ตัวอักษรและมีทั้งเลขและพยัญชนะ</string>
+    <string name="patch_item_set_skey_label">ความยาวของคีย์ควรอย่างน้อย 8 ตัวอักษรและรวมถึงตัวเลขและตัวอักษร</string>
     <string name="patch_item_extra_name">ชื่อ:</string>
     <string name="patch_item_extra_version">เวอร์ชั่น:</string>
     <string name="patch_item_extra_kpm_license">ใบอนุญาต:</string>

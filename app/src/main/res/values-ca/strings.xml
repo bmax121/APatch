@@ -23,7 +23,7 @@
     <string name="home_ap_cando_uninstall">Desinstal·lar</string>
     <string name="home_ap_cando_reboot">Reinicialitza</string>
     <string name="success">Èxit</string>
-    <string name="kernel_patch">Pegat del Kernel</string>
+    <string name="kernel_patch">Actualització del nucli</string>
     <string name="reboot_download">Reinicialitza al mode descàrrega</string>
     <string name="reboot">Reinicia</string>
     <string name="send_log">Envia els registres</string>
@@ -31,7 +31,7 @@
     <string name="settings_clear_super_key_dialog">Realment voleu continuar?</string>
     <string name="settings_check_update_summary">Comprova automàticament si hi ha actualitzacions en obrir l\'aplicació</string>
     <string name="about">Sobre</string>
-    <string name="about_source_code">&lt;p&gt;Veure el codi font a %1$s&lt;p/&gt; Uneix-te al nostre %2$s canal&lt;p/&gt;Uneix-te al nostre %3$s group</string>
+    <string name="about_source_code">&lt;p&gt;Veure el codi font a %1$s&lt;p/&gt; Uneix-te al nostre %2$s canal&lt;p/&gt;Uneix-te al nostre %3$s grup</string>
     <string name="save_log">Desa els registres</string>
     <string name="system_default">Opció per defecte del sistema</string>
     <string name="clear_super_key">Elimina SuperClau</string>
@@ -40,23 +40,23 @@
     <string name="safe_mode">Mode segur</string>
     <string name="patch_set_superkey">Estableix SuperClau</string>
     <string name="home_not_installed">No instal·lada</string>
-    <string name="home_click_to_install">Clic per instal·lar</string>
-    <string name="home_install_unknown_summary">Clic per instal·lar</string>
+    <string name="home_click_to_install">Clica per instal·lar</string>
+    <string name="home_install_unknown_summary">Clica per instal·lar</string>
     <string name="kpatch_version">Versió: %s</string>
     <string name="kpatch_version_update">Versió: %s -&gt; %s</string>
     <string name="home_kpatch_info_title">Informació</string>
     <string name="home_auth_key_desc">Comença després de la certificació</string>
     <string name="home_ap_cando_install">Instal·lar</string>
-    <string name="patch_title">»</string>
+    <string name="patch_title">Pegat</string>
     <string name="home_patch_set_key_desc">Només credencial per KernelPatch</string>
     <string name="apatch_version_update">Versió: %s -&gt; %s</string>
-    <string name="patch_config_title">Parxe</string>
-    <string name="patch_mode_bootimg_patch">Mode: Parxejat</string>
-    <string name="patch_mode_patch_and_install">Mode: Parxejar i instal·lar</string>
+    <string name="patch_config_title">Pegat</string>
+    <string name="patch_mode_bootimg_patch">Mode: Pegat</string>
+    <string name="patch_mode_patch_and_install">Mode: Aplicar pegat i instal·lar</string>
     <string name="home_installing">Instal·lant</string>
     <string name="home_need_update">Hi ha una nova versió disponible</string>
     <string name="log_saved">Registre desat</string>
-    <string name="patch_item_error">ERROR!</string>
+    <string name="patch_item_error">ERROR!!</string>
     <string name="patch_item_bootimg_slot">slot:</string>
     <string name="patch_item_bootimg_dev">dispositiu:</string>
     <string name="patch_item_kernel">Kernel</string>
@@ -107,4 +107,8 @@
     <string name="apm_desc">Descripció</string>
     <string name="apm_author">Autor</string>
     <string name="patch_item_skey">Super Key</string>
+    <string name="patch_select_bootimg_btn">Selecciona el mode d\'arrencada</string>
+    <string name="patch_start_unpatch_btn">Desfer pegat</string>
+    <string name="patch_mode_uninstall_patch">Mode: Desinstal·lar KPatch</string>
+    <string name="patch_mode_install_to_next_slot">Mode: Instal·lar a la ranura inactiva (després de l\'OTA)</string>
 </resources>

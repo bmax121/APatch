@@ -23,7 +23,7 @@
     <string name="home_click_to_install">点此安装</string>
     <string name="about">关于</string>
     <string name="reboot">重启</string>
-    <string name="home_need_update">可更新</string>
+    <string name="home_need_update">新版本可升级</string>
     <string name="home">主页</string>
     <string name="patch_set_superkey">设置超级密钥</string>
     <string name="settings">设置</string>
@@ -82,13 +82,13 @@
     <string name="apm_uninstall_confirm">确认要卸载“%s”模块吗？</string>
     <string name="apm_version">版本</string>
     <string name="apm_start_downloading">开始下载 %s</string>
-    <string name="apm_overlay_fs_not_available">模块功能不可用，因为内核不支持 OverlayFS。</string>
+    <string name="apm_overlay_fs_not_available">模块功能不可用，因为内核禁用了 OverlayFS！</string>
     <string name="apm_changelog">更新日志</string>
     <string name="apm_uninstall_failed">无法卸载 %s</string>
     <string name="apm_downloading">正在下载“%s”模块……</string>
-    <string name="apm_magisk_conflict">模块功能不可用，因为会与 Magisk 发生冲突。</string>
+    <string name="apm_magisk_conflict">模块功能不可用，因与 Magisk 存在冲突！</string>
     <string name="apm_desc">描述</string>
-    <string name="apm_new_version_available">点击安装新版本：%s</string>
+    <string name="apm_new_version_available">有新版本 %s 可用，单击升级。</string>
     <string name="apm_update">更新</string>
     <string name="apm_author">作者</string>
     <string name="clear_super_key">清除超级密钥</string>
@@ -128,7 +128,7 @@
     <string name="patch_item_extra_event">事件:</string>
     <string name="patch_item_skey">超级密钥</string>
     <string name="patch_item_existed_extra_kpm">已嵌入的</string>
-    <string name="patch_item_set_skey_label">超级密钥至少需要８个字符，并且同时包含数字和字母</string>
+    <string name="patch_item_set_skey_label">超级密钥长度应在 8-63 个字符，包含数字和字母，但不包含特殊字符。</string>
     <string name="patch_mode_uninstall_patch">还原初始内核镜像</string>
     <string name="patch_start_unpatch_btn">取消修补</string>
     <string name="hide_apatch_dialog_new_manager_name">新管理器名称</string>
@@ -139,32 +139,26 @@
     <string name="kpm_embed">嵌入</string>
     <string name="kpm_add_kpm">添加内核模块</string>
     <string name="kpm_install">安装</string>
-    <string name="setting_reset_su_path">自定义 SU 路径</string>
+    <string name="setting_reset_su_path">重设 SU 路径</string>
     <string name="setting_reset_su_new_path">新的完整路径</string>
     <string name="success">成功</string>
     <string name="failure">失败</string>
     <string name="mode_select_page_title">安装</string>
     <string name="mode_select_page_patch_and_install">直接安装（通常选择此项）</string>
-    <string name="mode_select_page_select_file">修补选定内核镜像（用于首次 Root）</string>
+    <string name="mode_select_page_select_file">选取内核镜像进行修补（用于首次 Root）</string>
     <string name="mode_select_page_install_inactive_slot">修补另一槽位内核（用于 OTA 之后）</string>
     <string name="mode_select_page_install_inactive_slot_warning">将在重启后强制切换到另一个槽位！
 \n注意只能在 OTA 更新完成后的重启之前使用。
 \n确定要继续吗？</string>
-    <string name="home_dialog_auth_fail_title">鉴权失败</string>
-    <string name="home_dialog_auth_fail_content">超级密钥验证失败，因此 APatch 不能正常工作。下面是一些可能的原因：
-\n⒈未使用 KernelPatch 修补内核镜像
-\n⒉KernelPatch 修补后的内核镜像未刷入
-\n⒊超级密钥输入错误
-\n⒋设备不支持 APatch 以及 KernelPatch
-\n
-\n请检查后重试，如果问题仍然存在，可随时前往 GitHub 仓库的 issues 页面提问。</string>
+    <string name="home_dialog_auth_fail_title">超级密钥鉴权失败</string>
+    <string name="home_dialog_auth_fail_content">超级密钥验证失败，因此 APatch 不能正常工作。\n下面是一些可能的原因： \n⒈ 未使用 KernelPatch 修补内核镜像 \n⒉ KernelPatch 修补后的内核镜像未刷入 \n⒊超级密钥输入错误或包含特殊字符\n⒋设备不支持 APatch 以及 KernelPatch \n\n请检查后重试，如果问题仍然存在，可随时前往 GitHub 仓库的 issues 页面提问。</string>
     <string name="home_more_menu_feedback_or_suggestion">反馈或建议</string>
     <string name="home_more_menu_about">关于</string>
     <string name="settings_check_update">检查更新</string>
     <string name="patch_mode_install_to_next_slot">修补另一槽位内核</string>
-    <string name="apm_webui_open">详情</string>
+    <string name="apm_webui_open">打开</string>
     <string name="enable_web_debugging">启用 WebView 调试</string>
-    <string name="home_new_apatch_found">发现新版本：%s，点击升级</string>
+    <string name="home_new_apatch_found">发现新版本：%s，单击升级。</string>
     <string name="settings_check_update_summary">应用启动时自动检测更新</string>
     <string name="enable_web_debugging_summary">可用于调试 WebUI，请仅在需要时启用。</string>
     <string name="settings_donot_store_superkey">不存储超级密钥</string>
@@ -212,9 +206,9 @@
     <string name="about_weblate" translatable="false">Weblate</string>
     <string name="about_telegram_channel">Telegram 频道</string>
     <string name="about_telegram_group">Telegram 群组</string>
-    <string name="about_powered_by">由 %1$s 驱动</string>
-    <string name="apm_action">激活</string>
-    <string name="crash_handle_title">应用崩溃了..</string>
+    <string name="about_powered_by">由 %1$s 强力驱动</string>
+    <string name="apm_action">执行</string>
+    <string name="crash_handle_title">应用崩溃了…</string>
     <string name="crash_handle_copy">复制崩溃日志</string>
     <string name="crash_handle_copied">崩溃日志已复制到剪贴板。</string>
 </resources>

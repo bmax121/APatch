@@ -17,7 +17,7 @@
     <string name="home_kernel">Kernel</string>
     <string name="home_fingerprint">Ujjlenyomat</string>
     <string name="home_selinux_status">SELinux állapot</string>
-    <string name="home_selinux_status_disabled">Ki</string>
+    <string name="home_selinux_status_disabled">kikapcsolva</string>
     <string name="home_selinux_status_unknown">Ismeretlen</string>
     <string name="kpm_load">Betöltés</string>
     <string name="kpm_load_toast_succ">Betöltés sikeres</string>
@@ -36,7 +36,7 @@
     <string name="home_patch_next_step">Következő Lépés</string>
     <string name="home_not_installed">Nincs telepítve</string>
     <string name="apatch_version">Verzió: %s</string>
-    <string name="su_pkg_excluded_setting_summary">moduloknak</string>
+    <string name="su_pkg_excluded_setting_summary">Ennek az opciónak a bekapcsolása engedélyezi az APatch számára, hogy visszaállítson más modulok álltal módosított fájlokat.</string>
     <string name="apm_uninstall_confirm">A(z) \"%s\" modul eltávolítása?</string>
     <string name="apm_uninstall_success">%s eltávolítva</string>
     <string name="apm_uninstall_failed">Nem sikerült eltávolítani a(z) %s-t</string>
@@ -55,13 +55,13 @@
     <string name="apm_update">Frissítés</string>
     <string name="apm_downloading">\"%s\" modul letöltés alatt…</string>
     <string name="apm_start_downloading">%s letöltésének elkezdése</string>
-    <string name="apm_new_version_available">Kattints az új verzió telepítéséhez, %s.</string>
+    <string name="apm_new_version_available">Új verzió (%s) érhető el. Kattints a telepítéshez!</string>
     <string name="patch_warnning">A telepítés kockázatokkal jár. Kérjük, készíts biztonsági másolatot az adataidról.</string>
     <string name="patch">Javítás</string>
     <string name="reboot_bootloader">Újraindítás a Bootloaderbe</string>
     <string name="settings_global_namespace_mode_summary">Minden gyökérmunka a globális hegyi neveket használja</string>
     <string name="home_learn_apatch">APatch tanulása</string>
-    <string name="apm_overlay_fs_not_available">A modulok elérhetetlenek, mert az OverlayFS ki van kapcsolva a kernel által.</string>
+    <string name="apm_overlay_fs_not_available">A modulok nem elérhetőek, mert az OverlayFS ki van kapcsolva a kernelben!</string>
     <string name="settings_clear_super_key_dialog">Biztos folytatni akarod?</string>
     <string name="home_click_to_learn_apatch">Ismerd meg az APatch funkcióit és használatát</string>
     <string name="about_source_code"><![CDATA[<p>Forráskód megtekintése %1$s-on<p/>Csatlakozz a %2$s csatornánkhoz<p/>Csatlakozz a %3$s csoportunkhoz]]></string>
@@ -102,9 +102,9 @@
     <string name="patch_item_extra_kpm_desciption">Leírás:</string>
     <string name="patch_item_extra_args">Argumentumok:</string>
     <string name="patch_item_extra_event">Események:</string>
-    <string name="patch_item_skey">szuperkulcs</string>
+    <string name="patch_item_skey">Szuper kulcs</string>
     <string name="patch_item_extra_author">Szerző:</string>
-    <string name="patch_item_set_skey_label">A szuperkulcs hossza legalább 8 karakter legyen, és tartalmazzon számokat és betűket egyaránt</string>
+    <string name="patch_item_set_skey_label">A szuperkulcs hossza legalább 8 karakter legyen, és tartalmazzon számokat és betűket egyaránt.</string>
     <string name="home_manager_version">Kezelő Verziója</string>
     <string name="home_selinux_status_enforcing">Kényszerített</string>
     <string name="home_selinux_status_permissive">Permisszív</string>
@@ -138,4 +138,19 @@
     <string name="home_kpatch_version">KernelPatch verzió</string>
     <string name="kpm_add_kpm">KPM hozzáadása</string>
     <string name="save_log">ddd</string>
+    <string name="hide_apatch_manager_summary">Új menedzser alk. telepítése véletlenszerű ID-vel és saját címkével</string>
+    <string name="hide_apatch_dialog_new_manager_name">Új menedzser neve</string>
+    <string name="hide_apatch_manager">APatch Menedzser elrejtése</string>
+    <string name="setting_reset_su_new_path">Új, teljes elérési út</string>
+    <string name="hide_apatch_manager_failure">Nem sikerült elrejteni. Kérlek jelentsd a hibát!</string>
+    <string name="setting_reset_su_path">a \'su\' elérési útjának visszaállítása</string>
+    <string name="apm_webui_open">Megnyitás</string>
+    <string name="enable_web_debugging">A WebView hibakeresés engedélyezése</string>
+    <string name="patch_mode_patch_and_install">Mód: Javítás és telepítés</string>
+    <string name="home_install_unknown_summary">Kattints a telepítéshez</string>
+    <string name="log_saved">Napló elmentve</string>
+    <string name="apm_action">Művelet</string>
+    <string name="patch_mode_install_to_next_slot">Mód:Telepítés inaktív helyre (OTA után)</string>
+    <string name="settings_donot_store_superkey">Ne mentse a Szuper kulcsot helyileg</string>
+    <string name="enable_web_debugging_summary">Nem használható a WebUI hibakereséséhez. Csak akkor engedélyezze ha szüksége van rá.</string>
 </resources>

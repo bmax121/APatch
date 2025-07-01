@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="su_pkg_excluded_setting_summary">\t</string>
+    <string name="about_app_version">%1$s</string>
+    <string name="about_app_desc">…\t\t…“”” </string>
+</resources>

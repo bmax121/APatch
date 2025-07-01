@@ -35,7 +35,7 @@
     <string name="kpm_args">引數</string>
     <string name="home_fingerprint">指紋</string>
     <string name="apatch_version">版本：%s</string>
-    <string name="apm_overlay_fs_not_available">裝置核心停用了 OverlayFS，你無法使用模組功能。</string>
+    <string name="apm_overlay_fs_not_available">裝置核心停用了 OverlayFS，你無法使用模組功能!</string>
     <string name="kpm_version">版本</string>
     <string name="su_refresh">重新整理</string>
     <string name="su_show_system_apps">顯示系統應用程式</string>
@@ -53,7 +53,7 @@
     <string name="apm_failed_to_enable">無法啟用「%s」模組</string>
     <string name="apm_downloading">正在下載「%s」模組……</string>
     <string name="su_hide_system_apps">隱藏系統應用程式</string>
-    <string name="apm_magisk_conflict">與 Magisk 發生衝突，你無法使用模組功能。</string>
+    <string name="apm_magisk_conflict">與 Magisk 發生衝突，你無法使用模組功能!</string>
     <string name="apm_desc">說明</string>
     <string name="home_ap_cando_update">更新</string>
     <string name="kpm_load_toast_failed">匯入失敗</string>
@@ -73,7 +73,7 @@
     <string name="kpm_load_toast_succ">匯入成功</string>
     <string name="apm_author">作者</string>
     <string name="patch_title">修補</string>
-    <string name="send_log">分享執行紀錄</string>
+    <string name="send_log">發送日誌</string>
     <string name="home_auth_key_desc">認證通過後開始執行</string>
     <string name="home_patch_set_key_desc">執行 KernelPatch 時所需的唯一憑證</string>
     <string name="apm">AP模組</string>
@@ -119,7 +119,7 @@
     <string name="patch_item_extra_kpm_desciption">描述：</string>
     <string name="patch_item_extra_event">事件：</string>
     <string name="patch_item_skey">超級密鑰</string>
-    <string name="patch_item_set_skey_label">超級密鑰至少需要８個字符，並且同時包含數字和字母</string>
+    <string name="patch_item_set_skey_label">超級密鑰至少需要８個字符，並且同時包含數字和字母。</string>
     <string name="patch_item_extra_args">參數：</string>
     <string name="patch_mode_uninstall_patch">模式：撤銷補丁</string>
     <string name="patch_mode_bootimg_patch">模式：修補</string>
@@ -154,17 +154,10 @@
     <string name="apm_webui_open">打開網頁介面</string>
     <string name="enable_web_debugging_summary">可用於偵錯WebUI，請僅在需要時啟用。</string>
     <string name="settings_donot_store_superkey">停用本機儲存密鑰</string>
-    <string name="home_dialog_auth_fail_content">無法驗證超級密鑰，因此 APatch 無法正常運作。
-\n以下是驗證失敗的一些可能原因：
-\n1. 您尚未使用 KernelPatch 程式修補啟動映像檔。
-\n2. 修補後的啟動映像檔未刷入裝置。
-\n3. 超級密鑰錯誤。
-\n4. 您的裝置不支援 APatch 和 KernelPatch。
-\n
-\n請檢查並再次嘗試。如果仍存在問題，您隨時可以在官方存放庫的議題頁面上提問。</string>
+    <string name="home_dialog_auth_fail_content">無法驗證超級密鑰，因此 APatch 無法正常運作。 \n以下是驗證失敗的一些可能原因： \n1. 您尚未使用 KernelPatch 程式修補啟動映像檔。 \n2. 修補後的啟動映像檔未刷入裝置。 \n3. 超級密鑰錯誤。 \n4. 您的裝置不支援 APatch 和 KernelPatch。 \n \n請檢查並再次嘗試。如果仍存在問題，您隨時可以在官方存放庫的議題頁面上提問。</string>
     <string name="home_install_unknown_summary">點擊以安裝</string>
     <string name="home_device_info">裝置</string>
-    <string name="home_new_apatch_found">新版本可用：%s，點選升級</string>
+    <string name="home_new_apatch_found">新版本可用：%s，點選升級。</string>
     <string name="mode_select_page_title">安裝</string>
     <string name="home_dialog_uninstall_title">解除安裝</string>
     <string name="home_dialog_uninstall_ap_only">僅刪除 AndroidPatch</string>
@@ -214,6 +207,6 @@
     <string name="log_saved">日誌已儲存</string>
     <string name="crash_handle_title">應用程式崩潰..</string>
     <string name="crash_handle_copy">複製崩潰日誌</string>
-    <string name="apm_action">Action</string>
+    <string name="apm_action">執行</string>
     <string name="crash_handle_copied">已將崩潰日誌複製到剪貼簿。</string>
 </resources>

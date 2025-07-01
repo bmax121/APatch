@@ -6,4 +6,23 @@
     <string name="success">Success</string>
     <string name="patch_warnning">Installation kommer med risici. Sørg for, at dine data er sikkerhedskopieret.</string>
     <string name="home_click_to_install">Klik for at installere</string>
+    <string name="home_installing">Installerer</string>
+    <string name="home_ap_cando_install">Installer</string>
+    <string name="save_log">Gem log</string>
+    <string name="settings_app_language">Sprog</string>
+    <string name="settings_check_update_summary">Check automatisk for opdateringer ved start af appen</string>
+    <string name="safe_mode">Sikker modus</string>
+    <string name="home_install_unknown_summary">Klik for at installere</string>
+    <string name="home_working">Arbejder 😋</string>
+    <string name="home_patch_next_step">Næste skridt</string>
+    <string name="send_log">Send logs</string>
+    <string name="log_saved">Log gemt</string>
+    <string name="home_need_update">Ny version tilgængelig</string>
+    <string name="settings_clear_super_key_dialog">Vil du virkelig fortsætte?</string>
+    <string name="home_not_installed">Ikke installeret</string>
+    <string name="home_ap_cando_reboot">Genstart</string>
+    <string name="settings">Indstillinger</string>
+    <string name="reboot">Genstart</string>
+    <string name="about">Om</string>
+    <string name="settings_check_update">Check opdatering</string>
 </resources>
