@@ -62,7 +62,7 @@
     <string name="apm_downloading">Modul %s sedang diunduh…</string>
     <string name="apm_new_version_available">Versi baru %s tersedia, klik untuk memperbarui.</string>
     <string name="apm_update">Membarui</string>
-    <string name="su_refresh">Segarkan</string>
+    <string name="su_refresh">Muat ulang</string>
     <string name="apm_failed_to_disable">Gagal menonaktifkan modul \"%s\"</string>
     <string name="apm_failed_to_enable">Gagal mengaktifkan modul \"%s\"</string>
     <string name="su_hide_system_apps">Sembunyikan aplikasi sistem</string>
