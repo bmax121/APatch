@@ -26,7 +26,7 @@
     <string name="settings_global_namespace_mode_summary">All root sessions use the global mount namespace</string>
     <string name="settings_clear_super_key_dialog">Do you really want to proceed?</string>
 
-    <string name="settings_check_update">Check update</string>
+    <string name="settings_check_update">Check for updates</string>
     <string name="settings_check_update_summary">Automatically check for updates when opening the app</string>
 
     <string name="home_learn_apatch">Learn APatch</string>
@@ -98,7 +98,7 @@
     <string name="patch_item_skey">SuperKey</string>
     <string name="patch_item_set_skey_label">The SuperKey should be 8-63 characters long and include numbers and letters, but no special characters.</string>
 
-    <string name="home_kernel">Kernel</string>
+    <string name="home_kernel">Kernel version</string>
     <string name="home_manager_version">Manager version</string>
     <string name="home_fingerprint">Fingerprint</string>
 
@@ -164,7 +164,7 @@
     <string name="apm_new_version_available">New version %s is available, click to upgrade.</string>
 
     <string name="hide_apatch_manager">Hide APatch Manager</string>
-    <string name="hide_apatch_manager_summary">Install a new manager app with a random ID and custom label</string>
+    <string name="hide_apatch_manager_summary">Install a proxy app with a random package ID and custom app label</string>
     <string name="hide_apatch_dialog_new_manager_name">New manager name</string>
     <string name="hide_apatch_dialog_summary">It will be used as the new app label shown in launcher</string>
     <string name="hide_apatch_manager_failure">Failed to hide. Please report the bug!</string>
@@ -184,7 +184,7 @@
 
     <string name="mode_select_page_title">Install</string>
     <string name="mode_select_page_patch_and_install">Patch and install</string>
-    <string name="mode_select_page_select_file">Select a boot image to Patch</string>
+    <string name="mode_select_page_select_file">Select a boot image to patch</string>
     <string name="mode_select_page_install_inactive_slot">Install to inactive slot (After OTA)</string>
     <string name="mode_select_page_install_inactive_slot_warning">Your device will be **FORCED** to boot to the current inactive slot after a reboot!\nOnly use this option after OTA is done.\nContinue?</string>
 
@@ -234,7 +234,6 @@
     <string name="sakura_theme">Sakura</string>
     <string name="teal_theme">Teal</string>
     <string name="yellow_theme">Yellow</string>
-
     <string name="about_app_version">Version %1$s</string>
     <string name="about_app_desc">Kernel root solution with only a stripped kernel image, providing the ability of mounting system module and hooking kernel function.</string>
     <string name="about_github" translatable="false">GitHub</string>
@@ -242,7 +241,6 @@
     <string name="about_telegram_channel">Telegram channel</string>
     <string name="about_telegram_group">Telegram group</string>
     <string name="about_powered_by">Powered by %1$s</string>
-
     <string name="crash_handle_title">App crashed…</string>
     <string name="crash_handle_copy">Copy crash log</string>
     <string name="crash_handle_copied">Crash log copied to clipboard.</string>
