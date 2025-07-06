@@ -7,15 +7,6 @@ plugins {
     alias(libs.plugins.agp.lib) apply false
     alias(libs.plugins.kotlin) apply false
     alias(libs.plugins.kotlin.compose.compiler) apply false
-    alias(libs.plugins.lsplugin.cmaker)
-}
-
-cmaker {
-    default {
-        arguments += "-DANDROID_STL=none"
-        arguments += "-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON"
-        abiFilters("arm64-v8a")
-    }
 }
 
 project.ext.set("kernelPatchVersion", "0.12.0")

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.28.0)
-project(apjni)
+project("apjni")
 
 find_program(CCACHE ccache)
 
@@ -19,7 +19,6 @@ set(CHERISH_POLLY_FLAGS "-mllvm -polly -mllvm -polly-run-dce -mllvm -polly-run-i
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${CHERISH_POLLY_FLAGS} -ffunction-sections -fdata-sections -fvisibility=hidden -fvisibility-inlines-hidden -O3 -flto -Wno-vla-cxx-extension")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CHERISH_POLLY_FLAGS} -ffunction-sections -fdata-sections -fvisibility=hidden -fvisibility-inlines-hidden -fno-rtti -fno-exceptions -O3 -flto -Wno-vla-cxx-extension")
 set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_library(${PROJECT_NAME} SHARED apjni.cpp)
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD

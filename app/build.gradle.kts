@@ -12,6 +12,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.lsplugin.apksign)
     alias(libs.plugins.lsplugin.resopt)
+    alias(libs.plugins.lsplugin.cmaker)
     id("kotlin-parcelize")
 }
 
@@ -278,4 +279,14 @@ dependencies {
     implementation(libs.ini4j)
 
     compileOnly(libs.cxx)
+}
+
+cmaker {
+    default {
+        arguments += "-DANDROID_STL=none"
+        arguments += "-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON"
+        abiFilters("arm64-v8a")
+        cppFlags += "-std=c++2b"
+        cFlags += "-std=c2x"
+    }
 }

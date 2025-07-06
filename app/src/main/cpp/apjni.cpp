@@ -5,399 +5,290 @@
  * Copyright (C) 2024 1f2003d5. All Rights Reserved.
  */
 
-#include <jni.h>
-#include <android/log.h>
 #include <cstring>
 #include <vector>
 
 #include "apjni.hpp"
 #include "supercall.h"
 
-extern "C" {
-    JNIEXPORT jboolean JNICALL
-    Java_me_bmax_apatch_Natives_nativeReady(JNIEnv *env, jobject /* this */, jstring superKey)
-    {
-        if (!superKey) [[unlikely]] {
-            LOGE("Super Key is null!");
-            return -EINVAL;
-        }
+jboolean nativeReady(JNIEnv *env, jobject /* this */, jstring super_key_jstr) {
+    ensureSuperKeyNonNull(super_key_jstr);
 
-        const char *skey = env->GetStringUTFChars(superKey, nullptr);
-        bool rc = sc_ready(skey);
-        env->ReleaseStringUTFChars(superKey, skey);
-        return rc;
+    const auto super_key = JUTFString(env, super_key_jstr);
+    return sc_ready(super_key.get());
+}
+
+jlong nativeKernelPatchVersion(JNIEnv *env, jobject /* this */, jstring super_key_jstr) {
+    ensureSuperKeyNonNull(super_key_jstr);
+
+    const auto super_key = JUTFString(env, super_key_jstr);
+
+    return sc_kp_ver(super_key.get());
+}
+
+jstring nativeKernelPatchBuildTime(JNIEnv *env, jobject /* this */, jstring super_key_jstr) {
+    ensureSuperKeyNonNull(super_key_jstr);
+
+    const auto super_key = JUTFString(env, super_key_jstr);
+    char buf[4096] = { '\0' };
+
+    sc_get_build_time(super_key.get(), buf, sizeof(buf));
+    return env->NewStringUTF(buf);
+}
+
+jlong nativeSu(JNIEnv *env, jobject /* this */, jstring super_key_jstr, jint to_uid, jstring selinux_context_jstr) {
+    ensureSuperKeyNonNull(super_key_jstr);
+
+    const auto super_key = JUTFString(env, super_key_jstr);
+    const char *selinux_context = nullptr;
+    if (selinux_context_jstr) selinux_context = JUTFString(env, selinux_context_jstr);
+    struct su_profile profile{};
+    profile.uid = getuid();
+    profile.to_uid = (uid_t)to_uid;
+    if (selinux_context) strncpy(profile.scontext, selinux_context, sizeof(profile.scontext) - 1);
+    long rc = sc_su(super_key.get(), &profile);
+    if (rc < 0) [[unlikely]] {
+        LOGE("nativeSu error: %ld", rc);
     }
 
-    JNIEXPORT jlong JNICALL Java_me_bmax_apatch_Natives_nativeKernelPatchVersion(JNIEnv *env, jobject /* this */,
-                                                                                jstring superKey)
-    {
-        if (!superKey) [[unlikely]] {
-            LOGE("Super Key is null!");
-            return -EINVAL;
-        }
-        const char *skey = env->GetStringUTFChars(superKey, nullptr);
-        uint32_t version = sc_kp_ver(skey);
-        env->ReleaseStringUTFChars(superKey, skey);
-        return version;
-    }
-    
-    JNIEXPORT jstring JNICALL Java_me_bmax_apatch_Natives_nativeKernelPatchBuildTime(JNIEnv *env, jobject /* this */,
-        jstring superKey)
-    {
-        if (!superKey) [[unlikely]] {
-            LOGE("Super Key is null!");
-            return env->NewStringUTF("");
-        }
-        const char *skey = env->GetStringUTFChars(superKey, nullptr);
-        char buf[4096] = { '\0' };
-        
-        sc_get_build_time(skey, buf, sizeof(buf));
-        env->ReleaseStringUTFChars(superKey, skey);
+    return rc;
+}
 
-        return env->NewStringUTF(buf);
-    }
+jint nativeSetUidExclude(JNIEnv *env, jobject /* this */, jstring super_key_jstr, jint uid, jint exclude) {
+    ensureSuperKeyNonNull(super_key_jstr);
 
-    JNIEXPORT jint JNICALL Java_me_bmax_apatch_Natives_nativeSu(JNIEnv *env, jobject /* this */, jstring superKey,
-                                                                 jint to_uid, jstring scontext)
-    {
-        if (!superKey) [[unlikely]] {
-            LOGE("Super Key is null!");
-            return -EINVAL;
-        }
-        const char *skey = env->GetStringUTFChars(superKey, nullptr);
-        const char *sctx = nullptr;
-        if (scontext) sctx = env->GetStringUTFChars(scontext, nullptr);
-        struct su_profile profile = { 0 };
-        profile.uid = getuid();
-        profile.to_uid = (uid_t)to_uid;
-        if (sctx) strncpy(profile.scontext, sctx, sizeof(profile.scontext) - 1);
-        long rc = sc_su(skey, &profile);
-        if (rc < 0) [[unlikely]] {
-            LOGE("nativeSu error: %ld\n", rc);
-        }
-        env->ReleaseStringUTFChars(superKey, skey);
-        if (sctx) env->ReleaseStringUTFChars(scontext, sctx);
-        return rc;
-    }
+    const auto super_key = JUTFString(env, super_key_jstr);
+    return static_cast<int>(sc_set_ap_mod_exclude(super_key.get(), (uid_t) uid, exclude));
+}
 
-    JNIEXPORT jlong JNICALL Java_me_bmax_apatch_Natives_nativeThreadSu(JNIEnv *env, jobject /* this */, jstring superKey,
-                                                                       jint tid, jstring scontext)
-    {
-        if (!superKey) [[unlikely]] {
-            LOGE("Super Key is null!");
-            return -EINVAL;
-        }
-        const char *skey = env->GetStringUTFChars(superKey, nullptr);
-        const char *sctx = nullptr;
-        if (scontext) sctx = env->GetStringUTFChars(scontext, nullptr);
-        struct su_profile profile = { 0 };
-        profile.uid = getuid();
-        profile.to_uid = 0;
-        if (sctx) strncpy(profile.scontext, sctx, sizeof(profile.scontext) - 1);
-        long rc = sc_su_task(skey, tid, &profile);
-        env->ReleaseStringUTFChars(superKey, skey);
-        env->ReleaseStringUTFChars(scontext, sctx);
-        return rc;
-    }
+jint nativeGetUidExclude(JNIEnv *env, jobject /* this */, jstring super_key_jstr, uid_t uid) {
+    ensureSuperKeyNonNull(super_key_jstr);
 
-    JNIEXPORT jint JNICALL Java_me_bmax_apatch_Natives_nativeSuNums(JNIEnv *env, jobject /* this */, jstring superKey)
-    {
-        if (!superKey) [[unlikely]] {
-            LOGE("Super Key is null!");
-            return -EINVAL;
-        }
-        const char *skey = env->GetStringUTFChars(superKey, nullptr);
-        long rc = sc_su_uid_nums(skey);
-        env->ReleaseStringUTFChars(superKey, skey);
-        return rc;
-    }
+    const auto super_key = JUTFString(env, super_key_jstr);
+    return static_cast<int>(sc_get_ap_mod_exclude(super_key.get(), uid));
+}
 
-    JNIEXPORT jint JNICALL Java_me_bmax_apatch_Natives_nativeSetUidExclude(JNIEnv *env, jobject /* this */, jstring superKey, jint uid, jint exclude)
-    {
-        if (!superKey) [[unlikely]] {
-            LOGE("Super Key is null!");
-            return -EINVAL;
-        }
-        const char *skey = env->GetStringUTFChars(superKey, nullptr);
-        long rc = sc_set_ap_mod_exclude(skey, (uid_t) uid, exclude);
-        env->ReleaseStringUTFChars(superKey, skey);
-        return rc;
-    }
+jintArray nativeSuUids(JNIEnv *env, jobject /* this */, jstring super_key_jstr) {
+    ensureSuperKeyNonNull(super_key_jstr);
 
-    JNIEXPORT jint JNICALL Java_me_bmax_apatch_Natives_nativeGetUidExclude(JNIEnv *env, jobject /* this */, jstring superKey, uid_t uid)
-    {
-        if (!superKey) [[unlikely]] {
-            LOGE("Super Key is null!");
-            return -EINVAL;
-        }
-        const char *skey = env->GetStringUTFChars(superKey, nullptr);
-        long rc = sc_get_ap_mod_exclude(skey, uid);
-        env->ReleaseStringUTFChars(superKey, skey);
-        return rc;
-    }
+    const auto super_key = JUTFString(env, super_key_jstr);
+    int num = static_cast<int>(sc_su_uid_nums(super_key.get()));
 
-    JNIEXPORT jintArray JNICALL Java_me_bmax_apatch_Natives_nativeSuUids(JNIEnv *env, jobject /* this */,
-                                                                         jstring superKey)
-    {
-        if (!superKey) [[unlikely]] {
-            LOGE("Super Key is null!");
-            return nullptr;
-        }
-        const char *skey = env->GetStringUTFChars(superKey, nullptr);
-        int num = sc_su_uid_nums(skey);
-
-        if (num <= 0) [[unlikely]] {
-            LOGW("SuperUser Count is null, skip allocating vector...");
-            return env->NewIntArray(0);
-        }
-
-        std::vector<int> uids(num);
-
-        long n = sc_su_allow_uids(skey, (uid_t *)uids.data(), num);
-        if (n > 0) [[unlikely]] {
-            jintArray array = env->NewIntArray(n);
-            env->SetIntArrayRegion(array, 0, n, uids.data());
-            env->ReleaseStringUTFChars(superKey, skey);
-            return array;
-        }
-
-        env->ReleaseStringUTFChars(superKey, skey);
+    if (num <= 0) [[unlikely]] {
+        LOGW("SuperUser Count less than 1, skip allocating vector...");
         return env->NewIntArray(0);
     }
 
-    JNIEXPORT jobject JNICALL Java_me_bmax_apatch_Natives_nativeSuProfile(JNIEnv *env, jobject /* this */,
-                                                                          jstring superKey, jint uid)
-    {
-        if (!superKey) [[unlikely]] {
-            LOGE("Super Key is null!");
-            return nullptr;
-        }
-        const char *skey = env->GetStringUTFChars(superKey, nullptr);
-        struct su_profile profile = { 0 };
-        long rc = sc_su_uid_profile(skey, (uid_t)uid, &profile);
-        if (rc < 0) [[unlikely]] {
-            LOGE("nativeSuProfile error: %ld\n", rc);
-            env->ReleaseStringUTFChars(superKey, skey);
-            return nullptr;
-        }
-        jclass cls = env->FindClass("me/bmax/apatch/Natives$Profile");
-        jmethodID constructor = env->GetMethodID(cls, "<init>", "()V");
-        jfieldID uidField = env->GetFieldID(cls, "uid", "I");
-        jfieldID toUidField = env->GetFieldID(cls, "toUid", "I");
-        jfieldID scontextFild = env->GetFieldID(cls, "scontext", "Ljava/lang/String;");
+    std::vector<int> uids(num);
 
-        jobject obj = env->NewObject(cls, constructor);
-        env->SetIntField(obj, uidField, (int) profile.uid);
-        env->SetIntField(obj, toUidField, (int) profile.to_uid);
-        env->SetObjectField(obj, scontextFild, env->NewStringUTF(profile.scontext));
-
-        return obj;
+    long n = sc_su_allow_uids(super_key.get(), (uid_t *) uids.data(), num);
+    if (n > 0) [[unlikely]] {
+        auto array = env->NewIntArray(n);
+        env->SetIntArrayRegion(array, 0, n, uids.data());
+        return array;
     }
 
-    JNIEXPORT jlong JNICALL Java_me_bmax_apatch_Natives_nativeLoadKernelPatchModule(JNIEnv *env, jobject /* this */,
-                                                                                    jstring superKey,
-                                                                                    jstring modulePath,
-                                                                                    jstring jargs)
-    {
-        if (!superKey) [[unlikely]] {
-            LOGE("Super Key is null!");
-            return -EINVAL;
-        }
-        const char *skey = env->GetStringUTFChars(superKey, nullptr);
-        const char *path = env->GetStringUTFChars(modulePath, nullptr);
-        const char *args = env->GetStringUTFChars(jargs, nullptr);
-        long rc = sc_kpm_load(skey, path, args, nullptr);
-        if (rc < 0) [[unlikely]] {
-            LOGE("nativeLoadKernelPatchModule error: %ld", rc);
-        }
-        env->ReleaseStringUTFChars(superKey, skey);
-        env->ReleaseStringUTFChars(modulePath, path);
-        env->ReleaseStringUTFChars(jargs, args);
-        return rc;
+    return env->NewIntArray(0);
+}
+
+jobject nativeSuProfile(JNIEnv *env, jobject /* this */, jstring super_key_jstr, jint uid) {
+    ensureSuperKeyNonNull(super_key_jstr);
+
+    const auto super_key = JUTFString(env, super_key_jstr);
+    struct su_profile profile{};
+    long rc = sc_su_uid_profile(super_key.get(), (uid_t) uid, &profile);
+    if (rc < 0) [[unlikely]] {
+        LOGE("nativeSuProfile error: %ld\n", rc);
+        return nullptr;
+    }
+    jclass cls = env->FindClass("me/bmax/apatch/Natives$Profile");
+    jmethodID constructor = env->GetMethodID(cls, "<init>", "()V");
+    jfieldID uidField = env->GetFieldID(cls, "uid", "I");
+    jfieldID toUidField = env->GetFieldID(cls, "toUid", "I");
+    jfieldID scontextFild = env->GetFieldID(cls, "scontext", "Ljava/lang/String;");
+
+    jobject obj = env->NewObject(cls, constructor);
+    env->SetIntField(obj, uidField, (int) profile.uid);
+    env->SetIntField(obj, toUidField, (int) profile.to_uid);
+    env->SetObjectField(obj, scontextFild, env->NewStringUTF(profile.scontext));
+
+    return obj;
+}
+
+jlong nativeLoadKernelPatchModule(JNIEnv *env, jobject /* this */, jstring super_key_jstr, jstring module_path_jstr, jstring args_jstr) {
+    ensureSuperKeyNonNull(super_key_jstr);
+
+    const auto super_key = JUTFString(env, super_key_jstr);
+    const auto module_path = JUTFString(env, module_path_jstr);
+    const auto args = JUTFString(env, args_jstr);
+    long rc = sc_kpm_load(super_key.get(), module_path.get(), args.get(), nullptr);
+    if (rc < 0) [[unlikely]] {
+        LOGE("nativeLoadKernelPatchModule error: %ld", rc);
     }
 
-    JNIEXPORT jobject JNICALL Java_me_bmax_apatch_Natives_nativeControlKernelPatchModule(JNIEnv *env, jobject /* this */,
-                                                                                         jstring superKey,
-                                                                                         jstring modName,
-                                                                                         jstring jctlargs)
-    {
-        if (!superKey) [[unlikely]] {
-            LOGE("Super Key is null!");
-            return nullptr;
-        }
-        const char *skey = env->GetStringUTFChars(superKey, nullptr);
-        const char *name = env->GetStringUTFChars(modName, nullptr);
-        const char *ctlargs = env->GetStringUTFChars(jctlargs, nullptr);
+    return rc;
+}
 
-        char buf[4096] = { '\0' };
-        long rc = sc_kpm_control(skey, name, ctlargs, buf, sizeof(buf));
-        if (rc < 0) [[unlikely]] {
-            LOGE("nativeControlKernelPatchModule error: %ld", rc);
-        }
+jobject nativeControlKernelPatchModule(JNIEnv *env, jobject /* this */, jstring super_key_jstr, jstring module_name_jstr, jstring control_args_jstr) {
+    ensureSuperKeyNonNull(super_key_jstr);
 
-        jclass cls = env->FindClass("me/bmax/apatch/Natives$KPMCtlRes");
-        jmethodID constructor = env->GetMethodID(cls, "<init>", "()V");
-        jfieldID rcField = env->GetFieldID(cls, "rc", "J");
-        jfieldID outMsg = env->GetFieldID(cls, "outMsg", "Ljava/lang/String;");
+    const auto super_key = JUTFString(env, super_key_jstr);
+    const auto module_name = JUTFString(env, module_name_jstr);
+    const auto control_args = JUTFString(env, control_args_jstr);
 
-        jobject obj = env->NewObject(cls, constructor);
-        env->SetLongField(obj, rcField, rc);
-        env->SetObjectField(obj, outMsg, env->NewStringUTF(buf));
-
-        env->ReleaseStringUTFChars(superKey, skey);
-        env->ReleaseStringUTFChars(modName, name);
-        env->ReleaseStringUTFChars(jctlargs, ctlargs);
-        return obj;
+    char buf[4096] = { '\0' };
+    long rc = sc_kpm_control(super_key.get(), module_name.get(), control_args.get(), buf, sizeof(buf));
+    if (rc < 0) [[unlikely]] {
+        LOGE("nativeControlKernelPatchModule error: %ld", rc);
     }
 
-    JNIEXPORT jlong JNICALL Java_me_bmax_apatch_Natives_nativeUnloadKernelPatchModule(JNIEnv *env, jobject /* this */,
-                                                                                      jstring superKey,
-                                                                                      jstring modName)
-    {
-        if (!superKey) [[unlikely]] {
-            LOGE("Super Key is null!");
-            return -EINVAL;
-        }
-        const char *skey = env->GetStringUTFChars(superKey, nullptr);
-        const char *name = env->GetStringUTFChars(modName, nullptr);
-        long rc = sc_kpm_unload(skey, name, nullptr);
-        if (rc < 0) [[unlikely]] {
-            LOGE("nativeUnloadKernelPatchModule error: %ld", rc);
-        }
+    jclass cls = env->FindClass("me/bmax/apatch/Natives$KPMCtlRes");
+    jmethodID constructor = env->GetMethodID(cls, "<init>", "()V");
+    jfieldID rcField = env->GetFieldID(cls, "rc", "J");
+    jfieldID outMsg = env->GetFieldID(cls, "outMsg", "Ljava/lang/String;");
 
-        env->ReleaseStringUTFChars(superKey, skey);
-        env->ReleaseStringUTFChars(modName, name);
-        return rc;
+    jobject obj = env->NewObject(cls, constructor);
+    env->SetLongField(obj, rcField, rc);
+    env->SetObjectField(obj, outMsg, env->NewStringUTF(buf));
+
+    return obj;
+}
+
+jlong nativeUnloadKernelPatchModule(JNIEnv *env, jobject /* this */, jstring super_key_jstr, jstring module_name_jstr) {
+    ensureSuperKeyNonNull(super_key_jstr);
+
+    const auto super_key = JUTFString(env, super_key_jstr);
+    const auto module_name = JUTFString(env, module_name_jstr);
+    long rc = sc_kpm_unload(super_key.get(), module_name.get(), nullptr);
+    if (rc < 0) [[unlikely]] {
+        LOGE("nativeUnloadKernelPatchModule error: %ld", rc);
     }
 
-    JNIEXPORT jlong JNICALL Java_me_bmax_apatch_Natives_nativeKernelPatchModuleNum(JNIEnv *env, jobject /* this */,
-                                                                                   jstring superKey)
-    {
-        if (!superKey) [[unlikely]] {
-            LOGE("Super Key is null!");
-            return -EINVAL;
-        }
-        const char *skey = env->GetStringUTFChars(superKey, nullptr);
-        long rc = sc_kpm_nums(skey);
-        if (rc < 0) [[unlikely]] {
-            LOGE("nativeKernelPatchModuleNum error: %ld", rc);
-        }
+    return rc;
+}
 
-        env->ReleaseStringUTFChars(superKey, skey);
-        return rc;
+jlong nativeKernelPatchModuleNum(JNIEnv *env, jobject /* this */, jstring super_key_jstr) {
+    ensureSuperKeyNonNull(super_key_jstr);
+
+    const auto super_key = JUTFString(env, super_key_jstr);
+    long rc = sc_kpm_nums(super_key.get());
+    if (rc < 0) [[unlikely]] {
+        LOGE("nativeKernelPatchModuleNum error: %ld", rc);
     }
 
-    JNIEXPORT jstring JNICALL Java_me_bmax_apatch_Natives_nativeKernelPatchModuleList(JNIEnv *env, jobject /* this */,
-                                                                                      jstring superKey)
-    {
-        if (!superKey) [[unlikely]] {
-            LOGE("Super Key is null!");
-            return nullptr;
-        }
-        const char *skey = env->GetStringUTFChars(superKey, nullptr);
-        char buf[4096] = { '\0' };
-        long rc = sc_kpm_list(skey, buf, sizeof(buf));
-        if (rc < 0) [[unlikely]] {
-            LOGE("nativeKernelPatchModuleList error: %ld", rc);
-        }
+    return rc;
+}
 
-        env->ReleaseStringUTFChars(superKey, skey);
-        return env->NewStringUTF(buf);
+jstring nativeKernelPatchModuleList(JNIEnv *env, jobject /* this */, jstring super_key_jstr) {
+    ensureSuperKeyNonNull(super_key_jstr);
+
+    const auto super_key = JUTFString(env, super_key_jstr);
+
+    char buf[4096] = { '\0' };
+    long rc = sc_kpm_list(super_key.get(), buf, sizeof(buf));
+    if (rc < 0) [[unlikely]] {
+        LOGE("nativeKernelPatchModuleList error: %ld", rc);
     }
 
-    JNIEXPORT jstring JNICALL Java_me_bmax_apatch_Natives_nativeKernelPatchModuleInfo(JNIEnv *env, jobject /* this */,
-                                                                                      jstring superKey,
-                                                                                      jstring modName)
-    {
-        if (!superKey) [[unlikely]] {
-            LOGE("Super Key is null!");
-            return nullptr;
-        }
-        const char *skey = env->GetStringUTFChars(superKey, nullptr);
-        const char *name = env->GetStringUTFChars(modName, nullptr);
-        char buf[1024] = { '\0' };
-        long rc = sc_kpm_info(skey, name, buf, sizeof(buf));
-        if (rc < 0) [[unlikely]] {
-            LOGE("nativeKernelPatchModuleInfo error: %ld", rc);
-        }
-        env->ReleaseStringUTFChars(superKey, skey);
-        env->ReleaseStringUTFChars(modName, name);
-        return env->NewStringUTF(buf);
+    return env->NewStringUTF(buf);
+}
+
+jstring nativeKernelPatchModuleInfo(JNIEnv *env, jobject /* this */, jstring super_key_jstr, jstring module_name_jstr) {
+    ensureSuperKeyNonNull(super_key_jstr);
+
+    const auto super_key = JUTFString(env, super_key_jstr);
+    const auto module_name = JUTFString(env, module_name_jstr);
+    char buf[1024] = { '\0' };
+    long rc = sc_kpm_info(super_key.get(), module_name.get(), buf, sizeof(buf));
+    if (rc < 0) [[unlikely]] {
+        LOGE("nativeKernelPatchModuleInfo error: %ld", rc);
     }
 
-    JNIEXPORT jlong JNICALL Java_me_bmax_apatch_Natives_nativeGrantSu(JNIEnv *env, jobject /* this */, jstring superKey,
-                                                                      jint uid, jint to_uid, jstring scontext)
-    {
-        if (!superKey) [[unlikely]] {
-            LOGE("Super Key is null!");
-            return -EINVAL;
-        }
-        const char *skey = env->GetStringUTFChars(superKey, nullptr);
-        const char *sctx = env->GetStringUTFChars(scontext, nullptr);
-        struct su_profile profile = { 0 };
-        profile.uid = uid;
-        profile.to_uid = to_uid;
-        if (sctx) strncpy(profile.scontext, sctx, sizeof(profile.scontext) - 1);
-        long rc = sc_su_grant_uid(skey, &profile);
-        env->ReleaseStringUTFChars(superKey, skey);
-        env->ReleaseStringUTFChars(scontext, sctx);
-        return rc;
+    return env->NewStringUTF(buf);
+}
+
+jlong nativeGrantSu(JNIEnv *env, jobject /* this */, jstring super_key_jstr, jint uid, jint to_uid, jstring selinux_context_jstr) {
+    ensureSuperKeyNonNull(super_key_jstr);
+
+    const auto super_key = JUTFString(env, super_key_jstr);
+    const auto selinux_context = JUTFString(env, selinux_context_jstr);
+    struct su_profile profile{};
+    profile.uid = uid;
+    profile.to_uid = to_uid;
+    if (selinux_context) strncpy(profile.scontext, selinux_context, sizeof(profile.scontext) - 1);
+    return sc_su_grant_uid(super_key.get(), &profile);
+}
+
+jlong nativeRevokeSu(JNIEnv *env, jobject /* this */, jstring super_key_jstr, jint uid) {
+    ensureSuperKeyNonNull(super_key_jstr);
+
+    const auto super_key = JUTFString(env, super_key_jstr);
+    return sc_su_revoke_uid(super_key.get(), (uid_t) uid);
+}
+
+jstring nativeSuPath(JNIEnv *env, jobject /* this */, jstring super_key_jstr) {
+    ensureSuperKeyNonNull(super_key_jstr);
+
+    const auto super_key = JUTFString(env, super_key_jstr);
+    char buf[SU_PATH_MAX_LEN] = { '\0' };
+    long rc = sc_su_get_path(super_key.get(), buf, sizeof(buf));
+    if (rc < 0) [[unlikely]] {
+        LOGE("nativeSuPath error: %ld", rc);
     }
 
-    JNIEXPORT jlong JNICALL Java_me_bmax_apatch_Natives_nativeRevokeSu(JNIEnv *env, jobject /* this */, jstring superKey,
-                                                                       jint uid)
-    {
-        if (!superKey) [[unlikely]] {
-            LOGE("Super Key is null!");
-            return -EINVAL;
-        }
-        const char *skey = env->GetStringUTFChars(superKey, nullptr);
-        long rc = sc_su_revoke_uid(skey, (uid_t)uid);
-        env->ReleaseStringUTFChars(superKey, skey);
-        return rc;
+    return env->NewStringUTF(buf);
+}
+
+jboolean nativeResetSuPath(JNIEnv *env, jobject /* this */, jstring super_key_jstr, jstring su_path_jstr) {
+    ensureSuperKeyNonNull(super_key_jstr);
+
+    const auto super_key = JUTFString(env, super_key_jstr);
+    const auto su_path = JUTFString(env, su_path_jstr);
+
+    return sc_su_reset_path(super_key.get(), su_path.get()) == 0;
+}
+
+JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void * /*reserved*/) {
+    LOGI("Enter OnLoad");
+
+    JNIEnv* env{};
+    if (vm->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6) != JNI_OK) [[unlikely]] {
+        LOGE("Get JNIEnv error!");
+        return JNI_FALSE;
     }
 
-    JNIEXPORT jstring JNICALL Java_me_bmax_apatch_Natives_nativeSuPath(JNIEnv *env, jobject /* this */, jstring superKey)
-    {
-        if (!superKey) [[unlikely]] {
-            LOGE("Super Key is null!");
-            return nullptr;
-        }
-        const char *skey = env->GetStringUTFChars(superKey, nullptr);
-        char buf[SU_PATH_MAX_LEN] = { '\0' };
-        long rc = sc_su_get_path(skey, buf, sizeof(buf));
-        if (rc < 0) [[unlikely]] {
-            LOGE("nativeSuPath error: %ld", rc);
-        }
-        env->ReleaseStringUTFChars(superKey, skey);
-        return env->NewStringUTF(buf);
+    auto clazz = JNI_FindClass(env, "me/bmax/apatch/Natives");
+    if (clazz.get() == nullptr) [[unlikely]] {
+        LOGE("Failed to find Natives class");
+        return JNI_FALSE;
     }
 
-    JNIEXPORT jboolean JNICALL Java_me_bmax_apatch_Natives_nativeResetSuPath(JNIEnv *env, jobject /* this */,
-                                                                             jstring superKey, jstring jpath)
-    {
-        if (!superKey) [[unlikely]] {
-            LOGE("Super Key is null!");
-            return -EINVAL;
-        }
-        const char *skey = env->GetStringUTFChars(superKey, nullptr);
-        const char *path = env->GetStringUTFChars(jpath, nullptr);
-        long rc = sc_su_reset_path(skey, path);
-        env->ReleaseStringUTFChars(superKey, skey);
-        env->ReleaseStringUTFChars(jpath, path);
-        return rc == 0;
-    }
+    const static JNINativeMethod gMethods[] = {
+        {"nativeReady", "(Ljava/lang/String;)Z", reinterpret_cast<void *>(&nativeReady)},
+        {"nativeKernelPatchVersion", "(Ljava/lang/String;)J", reinterpret_cast<void *>(&nativeKernelPatchVersion)},
+        {"nativeKernelPatchBuildTime", "(Ljava/lang/String;)Ljava/lang/String;", reinterpret_cast<void *>(&nativeKernelPatchBuildTime)},
+        {"nativeSu", "(Ljava/lang/String;ILjava/lang/String;)J", reinterpret_cast<void *>(&nativeSu)},
+        {"nativeSetUidExclude", "(Ljava/lang/String;II)I", reinterpret_cast<void *>(&nativeSetUidExclude)},
+        {"nativeGetUidExclude", "(Ljava/lang/String;I)I", reinterpret_cast<void *>(&nativeGetUidExclude)},
+        {"nativeSuUids", "(Ljava/lang/String;)[I", reinterpret_cast<void *>(&nativeSuUids)},
+        {"nativeSuProfile", "(Ljava/lang/String;I)Lme/bmax/apatch/Natives$Profile;", reinterpret_cast<void *>(&nativeSuProfile)},
+        {"nativeLoadKernelPatchModule", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)J", reinterpret_cast<void *>(&nativeLoadKernelPatchModule)},
+        {"nativeControlKernelPatchModule", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lme/bmax/apatch/Natives$KPMCtlRes;", reinterpret_cast<void *>(&nativeControlKernelPatchModule)},
+        {"nativeUnloadKernelPatchModule", "(Ljava/lang/String;Ljava/lang/String;)J", reinterpret_cast<void *>(&nativeUnloadKernelPatchModule)},
+        {"nativeKernelPatchModuleNum", "(Ljava/lang/String;)J", reinterpret_cast<void *>(&nativeKernelPatchModuleNum)},
+        {"nativeKernelPatchModuleList", "(Ljava/lang/String;)Ljava/lang/String;", reinterpret_cast<void *>(&nativeKernelPatchModuleList)},
+        {"nativeKernelPatchModuleInfo", "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;", reinterpret_cast<void *>(&nativeKernelPatchModuleInfo)},
+        {"nativeGrantSu", "(Ljava/lang/String;IILjava/lang/String;)J", reinterpret_cast<void *>(&nativeGrantSu)},
+        {"nativeRevokeSu", "(Ljava/lang/String;I)J", reinterpret_cast<void *>(&nativeRevokeSu)},
+        {"nativeSuPath", "(Ljava/lang/String;)Ljava/lang/String;", reinterpret_cast<void *>(&nativeSuPath)},
+        {"nativeResetSuPath", "(Ljava/lang/String;Ljava/lang/String;)Z", reinterpret_cast<void *>(&nativeResetSuPath)},
+    };
 
-JNIEXPORT jboolean JNICALL Java_me_bmax_apatch_Natives_nativeGetSafeMode(JNIEnv *env, jobject /* this */,
-                                                                         jstring superKey)
-    {
-        if (!superKey) [[unlikely]] {
-            LOGE("Super Key is null!");
-            return -EINVAL;
-        }
-        const char *skey = env->GetStringUTFChars(superKey, nullptr);
-        long rc = sc_su_get_safemode(skey);
-        env->ReleaseStringUTFChars(superKey, skey);
-        return rc == 1;
+    if (JNI_RegisterNatives(env, clazz, gMethods, sizeof(gMethods) / sizeof(gMethods[0])) < 0) [[unlikely]] {
+        LOGE("Failed to register native methods");
+        return JNI_FALSE;
     }
+    
+    LOGI("JNI_OnLoad Done!");
+    return JNI_VERSION_1_6;
 }
