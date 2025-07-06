@@ -129,7 +129,7 @@ fn create_transfer(ptmx: OwnedFd) -> Result<()> {
     }
 
     let ptmx_r = ptmx;
-    let ptmx_w = dup(&ptmx_r).unwrap();
+    let ptmx_w = dup(&ptmx_r)?;
 
     let ptmx_r = File::from(ptmx_r);
     let ptmx_w = File::from(ptmx_w);

@@ -25,12 +25,12 @@ pub fn ensure_clean_dir(dir: &str) -> Result<()> {
         log::debug!("ensure_clean_dir: {} exists, remove it", path.display());
         std::fs::remove_dir_all(path)?;
     }
-    Ok(std::fs::create_dir_all(path)?)
+    Ok(create_dir_all(path)?)
 }
 
 pub fn ensure_file_exists<T: AsRef<Path>>(file: T) -> Result<()> {
     match File::options().write(true).create_new(true).open(&file) {
-        std::result::Result::Ok(_) => Ok(()),
+        Result::Ok(_) => Ok(()),
         Err(err) => {
             if err.kind() == AlreadyExists && file.as_ref().is_file() {
                 Ok(())
@@ -72,7 +72,7 @@ pub fn run_command(
     command: &str,
     args: &[&str],
     stdout: Option<Stdio>,
-) -> anyhow::Result<std::process::Child> {
+) -> Result<std::process::Child> {
     let mut command_builder = Command::new(command);
     command_builder.args(args);
     if let Some(out) = stdout {
@@ -111,10 +111,10 @@ pub fn switch_mnt_ns(pid: i32) -> Result<()> {
     use anyhow::ensure;
     use std::os::fd::AsRawFd;
     let path = format!("/proc/{pid}/ns/mnt");
-    let fd = std::fs::File::open(path)?;
+    let fd = File::open(path)?;
     let current_dir = std::env::current_dir();
     let ret = unsafe { libc::setns(fd.as_raw_fd(), libc::CLONE_NEWNS) };
-    if let std::result::Result::Ok(current_dir) = current_dir {
+    if let Result::Ok(current_dir) = current_dir {
         let _ = std::env::set_current_dir(current_dir);
     }
     ensure!(ret == 0, "switch mnt ns failed");
@@ -127,7 +127,7 @@ pub fn is_overlayfs_supported() -> Result<bool> {
     let reader = BufReader::new(file);
 
     let overlay_supported = reader.lines().any(|line| {
-        if let std::result::Result::Ok(line) = line {
+        if let Result::Ok(line) = line {
             line.contains("overlay")
         } else {
             false
@@ -152,7 +152,7 @@ fn switch_cgroup(grp: &str, pid: u32) {
     }
 
     let fp = OpenOptions::new().append(true).open(path);
-    if let std::result::Result::Ok(mut fp) = fp {
+    if let Result::Ok(mut fp) = fp {
         let _ = writeln!(fp, "{pid}");
     }
 }

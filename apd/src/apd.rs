@@ -37,7 +37,7 @@ pub fn root_shell() -> Result<()> {
 #[cfg(unix)]
 pub fn root_shell() -> Result<()> {
     // we are root now, this was set in kernel!
-    let env_args: Vec<String> = std::env::args().collect();
+    let env_args: Vec<String> = env::args().collect();
     let args = env_args
         .iter()
         .position(|arg| arg == "-c")
@@ -96,7 +96,7 @@ pub fn root_shell() -> Result<()> {
         .collect::<Vec<String>>();
 
     let matches = match opts.parse(&args[1..]) {
-        std::result::Result::Ok(m) => m,
+        Result::Ok(m) => m,
         Err(f) => {
             println!("{f}");
             print_usage(opts);
@@ -124,7 +124,7 @@ pub fn root_shell() -> Result<()> {
     let preserve_env = matches.opt_present("p");
     let mount_master = matches.opt_present("M");
 
-    // we've make sure that -c is the last option and it already contains the whole command, no need to construct it again
+    // we've made sure that -c is the last option and it already contains the whole command, no need to construct it again
     let args = matches
         .opt_str("c")
         .map(|cmd| vec!["-c".to_string(), cmd])
@@ -143,7 +143,7 @@ pub fn root_shell() -> Result<()> {
         let name = &matches.free[free_idx];
         uid = unsafe {
             #[cfg(target_arch = "aarch64")]
-            let pw = libc::getpwnam(name.as_ptr() as *const u8).as_ref();
+            let pw = libc::getpwnam(name.as_ptr()).as_ref();
             #[cfg(target_arch = "x86_64")]
             let pw = libc::getpwnam(name.as_ptr() as *const i8).as_ref();
 
@@ -160,7 +160,7 @@ pub fn root_shell() -> Result<()> {
     let mut command = &mut Command::new(&shell);
 
     if !preserve_env {
-        // This is actually incorrect, i don't know why.
+        // This is actually incorrect, I don't know why.
         // command = command.env_clear();
 
         let pw = unsafe { libc::getpwuid(uid).as_ref() };
@@ -212,7 +212,7 @@ pub fn root_shell() -> Result<()> {
 
             set_identity(uid, gid);
 
-            std::result::Result::Ok(())
+            Result::Ok(())
         })
     };
 

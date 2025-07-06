@@ -1,6 +1,6 @@
 #[allow(clippy::wildcard_imports)]
 use crate::utils::*;
-use crate::{assets, defs, restorecon, utils};
+use crate::{assets, defs, restorecon};
 use anyhow::{Context, Result, anyhow, bail, ensure};
 use const_format::concatcp;
 use is_executable::is_executable;
@@ -40,8 +40,8 @@ const INSTALL_MODULE_SCRIPT_: &str = concatcp!(
 );
 
 fn exec_install_script(module_file: &str) -> Result<()> {
-    let realpath = std::fs::canonicalize(module_file)
-        .with_context(|| format!("realpath: {module_file} failed"))?;
+    let realpath =
+        fs::canonicalize(module_file).with_context(|| format!("realpath: {module_file} failed"))?;
 
     let content;
 
@@ -66,7 +66,7 @@ fn exec_install_script(module_file: &str) -> Result<()> {
         .env("APATCH_VER_CODE", defs::VERSION_CODE)
         .env(
             "APATCH_BIND_MOUNT",
-            format!("{}", !utils::should_enable_overlay()?),
+            format!("{}", !should_enable_overlay()?),
         )
         .env("OUTFD", "1")
         .env("ZIPFILE", realpath)
@@ -97,7 +97,7 @@ fn mark_module_state(module: &str, flag_file: &str, create_or_delete: bool) -> R
         ensure_file_exists(module_state_file)
     } else {
         if module_state_file.exists() {
-            std::fs::remove_file(module_state_file)?;
+            fs::remove_file(module_state_file)?;
         }
         Ok(())
     }
@@ -105,7 +105,7 @@ fn mark_module_state(module: &str, flag_file: &str, create_or_delete: bool) -> R
 
 fn foreach_module(active_only: bool, mut f: impl FnMut(&Path) -> Result<()>) -> Result<()> {
     let modules_dir = Path::new(defs::MODULE_DIR);
-    let dir = std::fs::read_dir(modules_dir)?;
+    let dir = fs::read_dir(modules_dir)?;
     for entry in dir.flatten() {
         let path = entry.path();
         if !path.is_dir() {
@@ -197,13 +197,13 @@ fn exec_script<T: AsRef<Path>>(path: T, wait: bool) -> Result<()> {
         .env("APATCH_VER_CODE", defs::VERSION_CODE)
         .env(
             "APATCH_BIND_MOUNT",
-            format!("{}", !utils::should_enable_overlay()?),
+            format!("{}", !should_enable_overlay()?),
         )
         .env(
             "PATH",
             format!(
                 "{}:{}",
-                env_var("PATH").unwrap(),
+                env_var("PATH")?,
                 defs::BINARY_DIR.trim_end_matches('/')
             ),
         );
@@ -236,7 +236,7 @@ pub fn exec_common_scripts(dir: &str, wait: bool) -> Result<()> {
         return Ok(());
     }
 
-    let dir = std::fs::read_dir(&script_dir)?;
+    let dir = fs::read_dir(&script_dir)?;
     for entry in dir.flatten() {
         let path = entry.path();
 
@@ -275,7 +275,7 @@ pub fn load_system_prop() -> Result<()> {
 
 pub fn prune_modules() -> Result<()> {
     foreach_module(false, |module| {
-        std::fs::remove_file(module.join(defs::UPDATE_FILE_NAME)).ok();
+        fs::remove_file(module.join(defs::UPDATE_FILE_NAME)).ok();
         if !module.join(defs::REMOVE_FILE_NAME).exists() {
             return Ok(());
         }
@@ -289,13 +289,13 @@ pub fn prune_modules() -> Result<()> {
             }
         }
 
-        if let Err(e) = std::fs::remove_dir_all(module) {
+        if let Err(e) = fs::remove_dir_all(module) {
             warn!("Failed to remove {}: {}", module.display(), e);
         }
         let module_path = module.display().to_string();
         let updated_path = module_path.replace(defs::MODULE_DIR, defs::MODULE_UPDATE_TMP_DIR);
 
-        if let Err(e) = std::fs::remove_dir_all(&updated_path) {
+        if let Err(e) = fs::remove_dir_all(&updated_path) {
             warn!("Failed to remove {}: {}", updated_path, e);
         }
         Ok(())
@@ -316,7 +316,7 @@ fn _install_module(zip: &str) -> Result<()> {
     ensure_dir_exists(defs::WORKING_DIR).with_context(|| "Failed to create working dir")?;
     ensure_dir_exists(defs::BINARY_DIR).with_context(|| "Failed to create bin dir")?;
 
-    // read the module_id from zip, if faild if will return early.
+    // read the module_id from zip
     let mut buffer: Vec<u8> = Vec::new();
     let entry_path = PathBuf::from_str("module.prop")?;
     let zip_path = PathBuf::from_str(zip)?;
@@ -351,7 +351,7 @@ fn _install_module(zip: &str) -> Result<()> {
         fs::set_permissions(module_dir.clone(), permissions).expect("Failed to set permissions");
     }
     // unzip the image and move it to modules_update/<id> dir
-    let file = std::fs::File::open(zip)?;
+    let file = fs::File::open(zip)?;
     let mut archive = zip::ZipArchive::new(file)?;
     archive.extract(&_module_update_dir)?;
 
@@ -359,7 +359,7 @@ fn _install_module(zip: &str) -> Result<()> {
     let module_system_dir = PathBuf::from(module_dir.clone()).join("system");
     if module_system_dir.exists() {
         #[cfg(unix)]
-        std::fs::set_permissions(&module_system_dir, std::fs::Permissions::from_mode(0o755))?;
+        fs::set_permissions(&module_system_dir, fs::Permissions::from_mode(0o755))?;
         restorecon::restore_syscon(&module_system_dir)?;
     }
     exec_install_script(zip)?;
@@ -377,14 +377,14 @@ pub fn _uninstall_module(id: &str, update_dir: &str) -> Result<()> {
     ensure!(dir.exists(), "No module installed");
 
     // iterate the modules_update dir, find the module to be removed
-    let dir = std::fs::read_dir(dir)?;
+    let dir = fs::read_dir(dir)?;
     for entry in dir.flatten() {
         let path = entry.path();
         let module_prop = path.join("module.prop");
         if !module_prop.exists() {
             continue;
         }
-        let content = std::fs::read(module_prop)?;
+        let content = fs::read(module_prop)?;
         let mut module_id: String = String::new();
         PropertiesIter::new_with_encoding(Cursor::new(content), encoding_rs::UTF_8).read_into(
             |k, v| {
@@ -432,7 +432,7 @@ fn _change_module_state(module_dir: &str, mid: &str, enable: bool) -> Result<()>
     let disable_path = src_module.join(defs::DISABLE_FILE_NAME);
     if enable {
         if disable_path.exists() {
-            std::fs::remove_file(&disable_path).with_context(|| {
+            fs::remove_file(&disable_path).with_context(|| {
                 format!("Failed to remove disable file: {}", &disable_path.display())
             })?;
         }
@@ -449,7 +449,7 @@ pub fn _enable_module(id: &str, update_dir: &Path) -> Result<()> {
     if let Some(module_dir_str) = update_dir.to_str() {
         _change_module_state(module_dir_str, id, true)
     } else {
-        log::info!("Enable module failed: Invalid path");
+        info!("Enable module failed: Invalid path");
         Err(anyhow::anyhow!("Invalid module directory"))
     }
 }
@@ -464,7 +464,7 @@ pub fn _disable_module(id: &str, update_dir: &Path) -> Result<()> {
     if let Some(module_dir_str) = update_dir.to_str() {
         _change_module_state(module_dir_str, id, false)
     } else {
-        log::info!("Disable module failed: Invalid path");
+        info!("Disable module failed: Invalid path");
         Err(anyhow::anyhow!("Invalid module directory"))
     }
 }
@@ -477,7 +477,7 @@ pub fn disable_module(id: &str) -> Result<()> {
 }
 
 pub fn _disable_all_modules(dir: &str) -> Result<()> {
-    let dir = std::fs::read_dir(dir)?;
+    let dir = fs::read_dir(dir)?;
     for entry in dir.flatten() {
         let path = entry.path();
         let disable_flag = path.join(defs::DISABLE_FILE_NAME);
@@ -501,7 +501,7 @@ pub fn disable_all_modules() -> Result<()> {
 
 fn _list_modules(path: &str) -> Vec<HashMap<String, String>> {
     // first check enabled modules
-    let dir = std::fs::read_dir(path);
+    let dir = fs::read_dir(path);
     let Ok(dir) = dir else {
         return Vec::new();
     };
@@ -515,7 +515,7 @@ fn _list_modules(path: &str) -> Vec<HashMap<String, String>> {
         if !module_prop.exists() {
             continue;
         }
-        let content = std::fs::read(&module_prop);
+        let content = fs::read(&module_prop);
         let Ok(content) = content else {
             warn!("Failed to read file: {}", module_prop.display());
             continue;

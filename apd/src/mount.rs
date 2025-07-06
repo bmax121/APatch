@@ -65,10 +65,9 @@ impl AutoMountExt4 {
 #[cfg(any(target_os = "linux", target_os = "android"))]
 impl Drop for AutoMountExt4 {
     fn drop(&mut self) {
-        log::info!(
+        info!(
             "AutoMountExt4 drop: {}, auto_umount: {}",
-            self.target,
-            self.auto_umount
+            self.target, self.auto_umount
         );
         if self.auto_umount {
             let _ = self.umount();
@@ -220,7 +219,7 @@ pub fn mount_tmpfs(dest: impl AsRef<Path>) -> Result<()> {
                 AP_OVERLAY_SOURCE,
                 dest.as_ref(),
                 "tmpfs",
-                rustix::fs::MountFlags::empty(),
+                MountFlags::empty(),
                 "",
             )?;
         }

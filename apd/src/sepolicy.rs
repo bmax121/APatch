@@ -398,8 +398,8 @@ impl TryFrom<&str> for PolicyObject {
 }
 
 /// atomic statement, such as: allow domain1 domain2:file1 read;
-/// normal statement would be expand to atomic statement, for example:
-/// allow domain1 domain2:file1 { read write }; would be expand to two atomic statement
+/// normal statement would be expanded to atomic statement, for example:
+/// allow domain1 domain2:file1 { read write }; would be expanded to two atomic statement
 /// allow domain1 domain2:file1 read;allow domain1 domain2:file1 write;
 #[allow(clippy::too_many_arguments)]
 #[derive(Debug, new)]

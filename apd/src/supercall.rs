@@ -104,7 +104,7 @@ fn sc_set_ap_mod_exclude(key: &CStr, uid: i64, exclude: i32) -> c_long {
         uid,
         &exclude as *const i32 as *mut c_void,
         0,
-        std::mem::size_of::<i32>() as i32,
+        size_of::<i32>() as i32,
     )
 }
 
