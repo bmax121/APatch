@@ -575,7 +575,7 @@ fun ThemeChooseDialog(showDialog: MutableState<Boolean>) {
 }
 
 private data class APColor(
-    val name: String, @StringRes val nameId: Int
+    val name: String, @param:StringRes val nameId: Int
 )
 
 private fun colorsList(): List<APColor> {

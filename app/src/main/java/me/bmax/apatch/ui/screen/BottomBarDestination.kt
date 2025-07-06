@@ -23,7 +23,7 @@ import me.bmax.apatch.R
 
 enum class BottomBarDestination(
     val direction: DirectionDestinationSpec,
-    @StringRes val label: Int,
+    @param:StringRes val label: Int,
     val iconSelected: ImageVector,
     val iconNotSelected: ImageVector,
     val kPatchRequired: Boolean,

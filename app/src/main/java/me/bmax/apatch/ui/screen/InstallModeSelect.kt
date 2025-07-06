@@ -69,7 +69,7 @@ fun InstallModeSelectScreen(navigator: DestinationsNavigator) {
 sealed class InstallMethod {
     data class SelectFile(
         val uri: Uri? = null,
-        @StringRes override val label: Int = R.string.mode_select_page_select_file,
+        @param:StringRes override val label: Int = R.string.mode_select_page_select_file,
     ) : InstallMethod()
 
     data object DirectInstall : InstallMethod() {
