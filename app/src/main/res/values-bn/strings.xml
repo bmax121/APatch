@@ -70,7 +70,7 @@
     <string name="apm_changelog">চেঞ্জলগ</string>
     <string name="apm_update">আপডেট</string>
     <string name="apm_downloading">\"%s\" মডিউল ডাউনলোড হচ্ছে…</string>
-    <string name="home_kernel">কার্নেল</string>
+    <string name="home_kernel">কার্নেল সংস্ককরণ</string>
     <string name="kpm_kp_not_installed">কার্নেল প্যাচ ইনস্টল করা নেই</string>
     <string name="kpm_load_toast_failed">লোড ব্যর্থ হয়েছে</string>
     <string name="kpm_load_toast_succ">লোড সফল</string>
@@ -131,7 +131,7 @@
     <string name="kpm_embed">বসান</string>
     <string name="kpm_control">নিয়ন্ত্রন</string>
     <string name="hide_apatch_manager">APatch ম্যানেজারকে লুকান</string>
-    <string name="hide_apatch_manager_summary">রেন্ডম প্যাকেজ আইডি এবং কাস্টম অ্যাপ লেবেল সহ নতুন ম্যানেজার অ্যাপ ইনস্টল করুন</string>
+    <string name="hide_apatch_manager_summary">রেন্ডম প্যাকেজ আইডি এবং কাস্টম অ্যাপ লেবেল সহ নতুন প্রক্সি অ্যাপ ইনস্টল করুন</string>
     <string name="hide_apatch_dialog_new_manager_name">নতুন ম্যানেজারের নাম</string>
     <string name="hide_apatch_dialog_summary">এটি লঞ্চারে দেখানো নতুন অ্যাপ লেবেল হিসেবে ব্যবহার করা হবে</string>
     <string name="hide_apatch_manager_failure">লুকাতে ব্যর্থ হয়েছে, দয়া করে এই সমস্যা অভিযোগ করুন!</string>
@@ -207,4 +207,6 @@
     <string name="deep_purple_theme">গাড় বেগুনি</string>
     <string name="crash_handle_copy">ক্রাশ এর লগ কপি করুন</string>
     <string name="sakura_theme">সাকুরা</string>
+    <string name="settings_lite_mode">লাইট মোড চালু করুন</string>
+    <string name="settings_lite_mode_mode_summary">এপিমডিউল ফাংশনগুলি সক্রিয় করার পরে ক্ষতির সম্মুখীন হতে পারে, কিন্তু মাঝে মধ্যে এটি কার্যকরভাবে সনাক্তকরণ এড়াতে পারে, রিবুট প্রয়োজন।</string>
 </resources>
