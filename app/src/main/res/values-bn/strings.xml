@@ -4,7 +4,7 @@
     <string name="home">হোম</string>
     <string name="kernel_patch">কার্নেলপ্যাচ</string>
     <string name="android_patch">অ্যান্ড্রয়েডপ্যাচ</string>
-    <string name="reboot">পুনরায় ফোন চালু করুন</string>
+    <string name="reboot">রিবুট করুন</string>
     <string name="reboot_bootloader">বুটলোডারে যান</string>
     <string name="reboot_download">ডাউনলোড মোডে রিবুট করুন</string>
     <string name="about">বিস্তারিত</string>
@@ -102,9 +102,9 @@
     <string name="patch_config_title">প্যাচসমূহ</string>
     <string name="save_log">লগ সেভ করুন</string>
     <string name="home_ap_cando_reboot">রিবুট করুন</string>
-    <string name="success">সফল হয়েছে</string>
+    <string name="success">সাফল্য</string>
     <string name="failure">ব্যর্থ হয়েছে</string>
-    <string name="patch">প্যাচ করুন</string>
+    <string name="patch">প্যাচ</string>
     <string name="patch_item_kpimg_comile_time">সময়:</string>
     <string name="patch_item_extra_kpm_license">লাইসেন্স:</string>
     <string name="patch_start_patch_btn">চালু করুন</string>
@@ -209,4 +209,6 @@
     <string name="sakura_theme">সাকুরা</string>
     <string name="settings_lite_mode">লাইট মোড চালু করুন</string>
     <string name="settings_lite_mode_mode_summary">এপিমডিউল ফাংশনগুলি সক্রিয় করার পরে ক্ষতির সম্মুখীন হতে পারে, কিন্তু মাঝে মধ্যে এটি কার্যকরভাবে সনাক্তকরণ এড়াতে পারে, রিবুট প্রয়োজন।</string>
+    <string name="settings_force_overlayfs_mode">জোর পুর্বক OverlayFS ব্যাবহার করুন</string>
+    <string name="settings_force_overlayfs_mode_summary">OverlayFS ব্যাবহার করে APModules মাউন্ট করুন ম্যাজিক মাউন্ট এর পরিবর্তে যদি কার্নেল এটা সাপোর্ট করে, রিবুট আবশ্যক।</string>
 </resources>

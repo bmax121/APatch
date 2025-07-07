@@ -134,7 +134,7 @@
     <string name="hide_apatch_dialog_new_manager_name">新管理器名称</string>
     <string name="hide_apatch_dialog_summary">将使用新的名称安装管理器</string>
     <string name="hide_apatch_manager_failure">隐藏失败，请提交反馈！</string>
-    <string name="hide_apatch_manager_summary">随机本应用包名及名称</string>
+    <string name="hide_apatch_manager_summary">安装代理应用，安装包 ID 随机且自定义应用标签</string>
     <string name="hide_apatch_manager">隐藏 APatch 管理器</string>
     <string name="kpm_embed">嵌入</string>
     <string name="kpm_add_kpm">添加内核模块</string>
@@ -145,7 +145,7 @@
     <string name="failure">失败</string>
     <string name="mode_select_page_title">安装</string>
     <string name="mode_select_page_patch_and_install">直接安装（通常选择此项）</string>
-    <string name="mode_select_page_select_file">选取内核镜像进行修补（用于首次 Root）</string>
+    <string name="mode_select_page_select_file">选取要修补的启动映像文件</string>
     <string name="mode_select_page_install_inactive_slot">修补另一槽位内核（用于 OTA 之后）</string>
     <string name="mode_select_page_install_inactive_slot_warning">将在重启后强制切换到另一个槽位！
 \n注意只能在 OTA 更新完成后的重启之前使用。
@@ -211,7 +211,7 @@
     <string name="crash_handle_title">应用崩溃了…</string>
     <string name="crash_handle_copy">复制崩溃日志</string>
     <string name="crash_handle_copied">崩溃日志已复制到剪贴板。</string>
-    <string name="settings_lite_mode">Lite 模式</string>
+    <string name="settings_lite_mode">启动 Lite 模式</string>
     <string name="settings_lite_mode_mode_summary">开启后会使系统模块功能接近破损，但有时可以有效地规避检测，重启生效。</string>
     <string name="settings_force_overlayfs_mode">强制使用 OverlayFS</string>
     <string name="settings_force_overlayfs_mode_summary">在内核支持的前提下使用 OverlayFS 挂载系统模块而非 Magic Mount，重启生效。</string>
