@@ -244,8 +244,8 @@
     <string name="crash_handle_title">App crashed…</string>
     <string name="crash_handle_copy">Copy crash log</string>
     <string name="crash_handle_copied">Crash log copied to clipboard.</string>
-    <string name="settings_lite_mode">Enable Lite Mode</string>
-    <string name="settings_lite_mode_mode_summary">APModule functions may approach damage after enabled, but sometimes it can effectively avoid detection, Reboot required.</string>
-    <string name="settings_force_overlayfs_mode">Force using OverlayFS</string>
-    <string name="settings_force_overlayfs_mode_summary">Use OverlayFS to mount APModules instead of Magic Mount while kernel supports it, Reboot required.</string>
+    <string name="settings_lite_mode">Enable Lite mode</string>
+    <string name="settings_lite_mode_mode_summary">APModule functions may exhibit failures after being enabled, but in some cases they can still effectively avoid detection. Reboot required.</string>
+    <string name="settings_force_overlayfs_mode">Force use of OverlayFS</string>
+    <string name="settings_force_overlayfs_mode_summary">Use OverlayFS to mount APModules instead of Magic Mount when kernel support is available. Reboot required.</string>
 </resources>
