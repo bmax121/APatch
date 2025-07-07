@@ -11,9 +11,9 @@
     <string name="about">Haqqında</string>
     <string name="settings_app_language">Dil</string>
     <string name="home_learn_apatch">APatch haqqında öyrənin</string>
-    <string name="about_source_code">Mənbə koduna %1$s ünvanında baxın<br/>%2$s kanalımıza qoşulun</string>
+    <string name="about_source_code">Mənbə koduna %1$s ünvanında baxın<br/>%2$s kanalımıza qoşulun.qrupumuza qoşulun.</string>
     <string name="system_default">Sistem defoltu</string>
-    <string name="send_log">Gündəliyi göndərin</string>
+    <string name="send_log">Günlükü göndərin</string>
     <string name="safe_mode">Təhlükəsiz rejim</string>
     <string name="clear_super_key">Açarı silin</string>
     <string name="super_key">SuperAçar</string>
@@ -60,7 +60,7 @@
     <string name="su_title">Superistifadəçi</string>
     <string name="su_selinux_via_hook">Çəngəl ilə yan keçin</string>
     <string name="su_pkg_excluded_label">istisna</string>
-    <string name="su_pkg_excluded_setting_title">Exclude Modifications</string>
+    <string name="su_pkg_excluded_setting_title">Dəyişiklikləri istisna edin</string>
     <string name="su_pkg_excluded_setting_summary">Bu seçimin aktivləşdirilməsi APatch-ə bu proqram üçün modullar tərəfindən hər hansı dəyişdirilmiş faylları bərpa etməyə imkan verəcək.</string>
     <string name="su_show_system_apps">Sistem proqramlarını göstərin</string>
     <string name="su_hide_system_apps">Sistem proqramlarını gizlədin</string>
@@ -76,7 +76,7 @@
     <string name="apm_version">Versiya</string>
     <string name="apm_author">Sahib</string>
     <string name="apm_desc">Açıqlama</string>
-    <string name="apm_magisk_conflict">Modullar Magisk ilə ziddiyyət səbəbindən əlçatan deyil.</string>
+    <string name="apm_magisk_conflict">Magisk ilə ziddiyyətə görə modullar əlçatan deyil!</string>
     <string name="home_ap_cando_update">Güncəllə</string>
     <string name="apm_reboot_to_apply">Effektiv olmağı üçün yenidən başladın</string>
     <string name="apm_changelog">Dəyişikliklər jurnalı</string>
@@ -94,7 +94,7 @@
     <string name="apm_install">Quraşdır</string>
     <string name="apm_not_installed">AndroidYamağı quraşdırılmayıb</string>
     <string name="apm_overlay_fs_not_available">OverlayFS nüvə tərəfindən deaktiv edildiyi üçün modullar əlçatan deyil.</string>
-    <string name="settings_global_namespace_mode">Qlobal Adməkanı rejimi</string>
+    <string name="settings_global_namespace_mode">Global namespace mode</string>
     <string name="settings_global_namespace_mode_summary">Bütün kök sessiyaları qlobal bağlama adməkanından istifadə edir</string>
     <string name="settings_clear_super_key_dialog">Həqiqətən davam etmək istəyirsən?</string>
     <string name="settings_check_update">Yeniləməni yoxlayın</string>
@@ -108,7 +108,7 @@
     <string name="patch_mode_patch_and_install">Mode: Yamala və quraşdır</string>
     <string name="patch_embed_kpm_btn">KPM-i göm</string>
     <string name="patch_start_patch_btn">Başla</string>
-    <string name="patch_start_unpatch_btn">Yamanı silin</string>
+    <string name="patch_start_unpatch_btn">"Yamanı Deaktiv edin "</string>
     <string name="patch_item_bootimg_slot">yuva:</string>
     <string name="patch_item_bootimg_dev">cihaz:</string>
     <string name="patch_item_kernel">Kernel</string>
@@ -117,7 +117,7 @@
     <string name="patch_item_kpimg_comile_time">zaman:</string>
     <string name="patch_item_kpimg_config">konfiqurasiya:</string>
     <string name="patch_item_new_extra_kpm">Yenisini göm</string>
-    <string name="patch_item_extra_event">event:</string>
+    <string name="patch_item_extra_event">Hadisə:</string>
     <string name="patch_item_skey">Super Açar</string>
     <string name="kpm_control">Kontrol</string>
     <string name="save_log">Qeydləri yaddaşda saxla</string>
@@ -125,7 +125,7 @@
     <string name="patch_mode_uninstall_patch">Mod: KPatch-i silin</string>
     <string name="patch_select_bootimg_btn">Boot-u seç</string>
     <string name="patch_item_error">!!XƏTA!!</string>
-    <string name="patch_item_bootimg">bootimg</string>
+    <string name="patch_item_bootimg">Önyüklənəbilir görüntü</string>
     <string name="patch_item_existed_extra_kpm">Mövcud</string>
     <string name="patch_item_extra_name">ad:</string>
     <string name="patch_item_extra_version">versiya:</string>
@@ -133,7 +133,7 @@
     <string name="patch_item_extra_kpm_license">lisans:</string>
     <string name="patch_item_extra_kpm_desciption">açıqlama:</string>
     <string name="patch_item_extra_args">arqumentlər:</string>
-    <string name="patch_item_set_skey_label">Super açarın uzunluğu ən azı 8 simvol olmalıdır və həm rəqəmlər, həm də hərflərdən ibarət olmalıdır</string>
+    <string name="patch_item_set_skey_label">Super açarın uzunluğu ən azı 8 vəya 63 uzunluğunda simvol olmalıdır və həm rəqəmlər, həm də hərflərdən ibarət olmalıdır özəl simvollar istifadə edilməməlidir</string>
     <string name="home_device_info">Cihaz</string>
     <string name="home_system_version">Sistem versiyası</string>
     <string name="home_kpatch_version">KernelYama versiyası</string>
@@ -148,7 +148,7 @@
     <string name="hide_apatch_manager_failure">Gizlətmək alınmadı, lütfən, proqram açığını bildirin!</string>
     <string name="enable_web_debugging_summary">WebUI-ni sazlamaq üçün istifadə edilə bilər, zəhmət olmasa, yalnız lazım olduqda aktivləşdirin.</string>
     <string name="setting_reset_su_new_path">yeni tam yol</string>
-    <string name="enable_web_debugging">WebView Debugging\'i aktivləşdirin</string>
+    <string name="enable_web_debugging">Webgörüntələmə Xəta Çeşidləməyi aktivləşdirin</string>
     <string name="settings_donot_store_superkey">Super açarı local cihazda saxlamayın</string>
     <string name="home_new_apatch_found">Yeni versiya mövcuddur: %s, Güncəlləmək üçün mənə klikləyin</string>
     <string name="settings_donot_store_superkey_summary">Menecer hər dəfə açılanda super açarı təsdiq edin</string>
@@ -165,7 +165,7 @@
     <string name="home_more_menu_feedback_or_suggestion">Geri bildirmə və ya təklif</string>
     <string name="home_more_menu_about">Haqqında</string>
     <string name="home_dialog_uninstall_title">Sil</string>
-    <string name="home_dialog_uninstall_ap_only">AndroidPatch-i silin</string>
+    <string name="home_dialog_uninstall_ap_only">AndroidYamasını silin</string>
     <string name="home_dialog_uninstall_all">Hamısını Silin</string>
     <string name="kpm_control_dialog_title">KPModulu kontrol et</string>
     <string name="kpm_control_failed">Əməliyyat uğursuz oldu!</string>
@@ -194,7 +194,7 @@
     <string name="yellow_theme">Sarı Tema</string>
     <string name="about_app_version">Versiya %1$s</string>
     <string name="apm_webui_open">Aç</string>
-    <string name="home_dialog_auth_fail_content">Super açarın doğrulanması mümkün deyil, buna görə də APAtch düzgün işləyə bilməz. \nDoğrulama uğursuzluğunun bəzi mümkün səbəbləri bunlardır: \n1. Siz boot ­image-i KernelPatch ilə yamalamamısınız. \n2. Yamalı boot image flashlanmadı. \n3. Super açar səhvdir. \n4. Cihazınız APatch və KernelPatch-i dəstəkləmir. \n \nZəhmət olmasa yoxlayın və yenidən cəhd edin. Hələ də problemlər varsa, siz həmişə rəsmi repozitoriyanın problem səhifəsində sual verə bilərsiniz.</string>
+    <string name="home_dialog_auth_fail_content">Super açarın doğrulanması mümkün deyil, buna görə də APAtch düzgün işləyə bilməz. \nDoğrulama uğursuzluğunun bəzi mümkün səbəbləri bunlardır: \n1. Siz boot ­görüntüsü KernelPatch ilə yamalamamısınız. \n2. Yamalı boot görüntüsü flashlanmadı. \n3. Super açar səhvdir. \n4. Cihazınız APatch və KernelPatch-i dəstəkləmir. \n \nZəhmət olmasa yoxlayın və yenidən cəhd edin. Hələ də problemlər varsa, siz həmişə rəsmi repozitoriyanın problem səhifəsində sual verə bilərsiniz.</string>
     <string name="kpm_control_outMsg">Mesajlar</string>
     <string name="kpm_control_paramters">Parametrlər</string>
     <string name="kpm_control_dialog_content">Giriş nəzarət parametrləri:</string>
@@ -204,5 +204,11 @@
     <string name="about_telegram_channel">Telegram Kanalı</string>
     <string name="about_telegram_group">Telegram Qrupu</string>
     <string name="about_powered_by">%1$s tərəfindən gücləndirildi</string>
-    <string name="hide_apatch_manager">Hide APatch Manager</string>
+    <string name="hide_apatch_manager">Gizli APatch Meneceri</string>
+    <string name="log_saved">Qeydlər yaddaşda saxlandı</string>
+    <string name="apm_action">Fəaliyyət</string>
+    <string name="about_app_desc">Yalnızca sadələşdirilmiş kernel təsviri ilə kernel root həlli – sistem modullarını qoşmaq və kernel funksiyalarını ələ keçirmək imkanını təmin edir.</string>
+    <string name="crash_handle_title">Program çöktü…</string>
+    <string name="crash_handle_copy">Çöküntü qeydini kopyala</string>
+    <string name="crash_handle_copied">Clipboarda çöküntü qeydi kopyalandı.</string>
 </resources>

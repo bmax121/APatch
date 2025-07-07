@@ -9,7 +9,7 @@
     <string name="reboot">재시작</string>
     <string name="settings">설정</string>
     <string name="reboot_bootloader">부트로더로 재시작</string>
-    <string name="reboot_download">다운로드로 재시작</string>
+    <string name="reboot_download">다운로드 모드로 재부팅</string>
     <string name="reboot_edl">EDL로 재시작</string>
     <string name="about">정보</string>
     <string name="settings_app_language">언어</string>
@@ -32,10 +32,10 @@
     <string name="home_ap_cando_update">업데이트</string>
     <string name="home_ap_cando_uninstall">제거</string>
     <string name="home_kernel">커널</string>
-    <string name="home_manager_version">관리자 버전</string>
+    <string name="home_manager_version">매니저 앱 버전</string>
     <string name="home_fingerprint">지문</string>
     <string name="home_selinux_status">SELinux 상태</string>
-    <string name="home_selinux_status_disabled">꺼짐</string>
+    <string name="home_selinux_status_disabled">끄기</string>
     <string name="home_selinux_status_enforcing">강제</string>
     <string name="home_selinux_status_permissive">허용</string>
     <string name="home_selinux_status_unknown">알 수 없음</string>
@@ -59,7 +59,7 @@
     <string name="apm_install">설치</string>
     <string name="apm_uninstall_confirm">\"%s\" 모듈을 제거하시겠습니까?</string>
     <string name="apm_uninstall_success">%s이 제거되었습니다</string>
-    <string name="apm_uninstall_failed">%s을 제거할 수 없습니다</string>
+    <string name="apm_uninstall_failed">%s 을 제거하지 못했습니다</string>
     <string name="apm_version">버전</string>
     <string name="apm_author">제작자</string>
     <string name="apm_overlay_fs_not_available">커널에 의해 OverlayFS가 비활성화되어 모듈을 사용할 수 없습니다.</string>
@@ -81,7 +81,7 @@
     <string name="su_pkg_excluded_label">제외</string>
     <string name="su_pkg_excluded_setting_title">변경 제외</string>
     <string name="apm_not_installed">AndroidPatch가 설치되지 않음</string>
-    <string name="apm_failed_to_enable">\"%s\" 모듈을 켤 수 없습니다</string>
+    <string name="apm_failed_to_enable">\"%s\" 모듈을 키지 못했습니다</string>
     <string name="apm_magisk_conflict">Magisk와 충돌이 발생해 모듈이 비활성화되었습니다.</string>
     <string name="apm_reboot_to_apply">적용하려면 재시작하세요</string>
     <string name="apm_changelog">변경 기록</string>
@@ -105,7 +105,7 @@
     <string name="patch_item_extra_name">이름:</string>
     <string name="patch_item_extra_kpm_license">라이선스:</string>
     <string name="patch_item_extra_author">제작자:</string>
-    <string name="patch_item_set_skey_label">SuperKey의 길이는 8자 이상이어야 하며 숫자와 문자를 모두 포함해야 합니다</string>
+    <string name="patch_item_set_skey_label">Super Key의 길이는 숫자와 문자를 포함하여 8자리 이상이여야 합니다</string>
     <string name="kpm_install">설치</string>
     <string name="kpm_embed">통합</string>
     <string name="hide_apatch_dialog_new_manager_name">새 관리자 이름</string>
@@ -137,12 +137,12 @@
     <string name="home_dialog_uninstall_ap_only">AndroidPatch 제거</string>
     <string name="home_ap_cando_reboot">재시작</string>
     <string name="patch_mode_bootimg_patch">모드: 패치</string>
-    <string name="patch_mode_install_to_next_slot">모드: 다음 슬롯에 설치 (OTA 이후)</string>
+    <string name="patch_mode_install_to_next_slot">모드: 다음 를롯에 설치 (OTA 이후)</string>
     <string name="patch_item_kpimg_config">설정:</string>
     <string name="patch_item_new_extra_kpm">새로 통합</string>
     <string name="patch_item_extra_version">버전:</string>
     <string name="patch_item_extra_event">이벤트:</string>
-    <string name="patch_item_skey">SuperKey</string>
+    <string name="patch_item_skey">관리자 키</string>
     <string name="home_system_version">시스템 버전</string>
     <string name="mode_select_page_title">설치</string>
     <string name="home_dialog_auth_fail_title">인증 실패</string>

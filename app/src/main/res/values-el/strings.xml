@@ -2,8 +2,8 @@
 <resources>
     <string name="app_name" translatable="false">APatch</string>
     <string name="patch_warnning">Η εγκατάσταση συνοδεύεται από κινδύνους. Βεβαιωθείτε ότι έχετε δημιουργήσει αντίγραφα ασφαλείας των δεδομένων σας.</string>
-    <string name="kernel_patch">KernelPatch</string>
-    <string name="android_patch">AndroidPatch</string>
+    <string name="kernel_patch">ΜπάλωμαKernel</string>
+    <string name="android_patch">ΜπάλωμαAndroid</string>
     <string name="reboot">Επανεκκίνηση</string>
     <string name="settings">Ρυθμίσεις</string>
     <string name="reboot_bootloader">Επανεκκίνηση στον Bootloader</string>
@@ -59,7 +59,7 @@
     <string name="home_patch_next_step">Επόμενο βήμα</string>
     <string name="home_not_installed">Δεν έχει εγκατασταθεί</string>
     <string name="home_install_unknown">Δεν έχει εγκατασταθεί ή πιστοποιηθεί</string>
-    <string name="home_installing">Εγκατάσταση</string>
+    <string name="home_installing">Γίνεται εγκατάσταση</string>
     <string name="apatch_version_update">Έκδοση: %s -&gt; %s</string>
     <string name="home_su_path">Εκτελέσιμο su</string>
     <string name="home_auth_key_desc">Έναρξη μετά την πιστοποίηση</string>
@@ -181,7 +181,7 @@
     <string name="settings_use_system_color_theme_summary">Χρήση έγχρωμου θέματος που δημιουργείται από το σύστημα με βάση την τρέχουσα ταπετσαρία</string>
     <string name="light_green_theme">Ανοιχτό Πράσινο</string>
     <string name="red_theme">Κόκκινο</string>
-    <string name="sakura_theme">Sakura</string>
+    <string name="sakura_theme">Σακούρα</string>
     <string name="teal_theme">Teal</string>
     <string name="yellow_theme">Κίτρινο</string>
     <string name="about_app_version">Έκδοση %1$s</string>

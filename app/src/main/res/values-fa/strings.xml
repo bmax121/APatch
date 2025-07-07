@@ -17,7 +17,7 @@
     <string name="save_log">ذخیره گزارشات</string>
     <string name="safe_mode">حالت امن</string>
     <string name="super_key">ابر کلید</string>
-    <string name="patch_warnning">نصب با خطر همراه است! لطفا مطمئن شوید که از اطلاعات شما نسخه پشتیبان تهیه شده است.</string>
+    <string name="patch_warnning">نصب با خطر همراه است! لطفاً مطمئن شوید که از اطلاعات شما نسخه پشتیبان تهیه شده است.</string>
     <string name="settings_app_language">زبان</string>
     <string name="reboot">راه اندازی مجدد</string>
     <string name="settings">تنظیمات</string>
@@ -201,7 +201,7 @@
     <string name="kpm_control_outMsg">پیام</string>
     <string name="settings_use_system_color_theme">تم رنگی سیستم</string>
     <string name="kpm_control_dialog_title">کنترل KPModule</string>
-    <string name="home_dialog_auth_fail_content">"اعتبار سنجی ابر کلید ناموفق بود، بنابراین APatch نمی تواند به درستی کار کند. \nدلایل احتمالی:\n1. شما boot.img را به KernelPatch وصله نکردید.\n2. وصله boot.img فلش نشده است.\n3. ابر کلید اشتباه است یا حاوی کاراکترهای خاص است.\n4. دستگاه شما از APatch و KernelPatch پشتیبانی نمی کند.\n\nلطفا بررسی کنید و دوباره امتحان کنید. اگر هنوز مشکلات وجود دارند، همیشه می توانید در صفحه مسائل مخزن رسمی سؤال بپرسید. "</string>
+    <string name="home_dialog_auth_fail_content">اعتبار سنجی ابر کلید ناموفق بود، بنابراین APatch نمی تواند به درستی کار کند. \nدلایل احتمالی:\n1. شما boot.img را به KernelPatch وصله نکردید.\n2. وصله boot.img فلش نشده است.\n3. ابر کلید اشتباه است یا حاوی کاراکترهای خاص است.\n4. دستگاه شما از APatch و KernelPatch پشتیبانی نمی کند.\n\nلطفا بررسی کنید و دوباره امتحان کنید. اگر هنوز مشکلات وجود دارند، همیشه می توانید در صفحه مسائل مخزن رسمی سؤال بپرسید..</string>
     <string name="settings_night_mode_follow_sys_summary">جابجایی خودکار به تم تاریک بر اساس تنظیمات سیستم</string>
     <string name="settings_use_system_color_theme_summary">استفاده از تم رنگی تولید شده بر اساس تصویر زمینه فعلی سیستم</string>
     <string name="about_app_desc">راه حل روت کرنل فقط با یک ایمیج جدا از کرنل،قابلیت نصب ماژول سیستم و قلاب کردن توابع کرنل را ارئه می دهد.</string>

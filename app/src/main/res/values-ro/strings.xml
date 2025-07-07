@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name" translatable="false">APatch</string>
     <string name="home">Acasă</string>
-    <string name="patch_warnning">Instalarea vine cu riscuri. Asigură-te ca ai făcut backup datelor.</string>
+    <string name="patch_warnning">Instalarea implică riscuri. Asigură-te că datele tale sunt salvate.</string>
     <string name="kernel_patch">KernelPatch</string>
     <string name="android_patch">AndroidPatch</string>
     <string name="reboot">Repornește</string>
@@ -207,4 +207,8 @@
     <string name="about_powered_by">Produs de %1$s</string>
     <string name="kpm_embed">Încorporează</string>
     <string name="patch_item_extra_name">Nume:</string>
+    <string name="log_saved">Jurnal salvat</string>
+    <string name="crash_handle_title">Aplicația s-a blocat…</string>
+    <string name="crash_handle_copy">Copiază jurnalul de eroare</string>
+    <string name="crash_handle_copied">Jurnal de eroare copiat în clipboard.</string>
 </resources>

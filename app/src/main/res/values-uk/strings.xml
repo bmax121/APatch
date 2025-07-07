@@ -2,8 +2,8 @@
 <resources>
     <string name="app_name" translatable="false">APatch</string>
     <string name="home">Головна</string>
-    <string name="kernel_patch">Патч ядра</string>
-    <string name="android_patch">Патч для Android</string>
+    <string name="kernel_patch">Заплатка ядра</string>
+    <string name="android_patch">Заплатка для Android</string>
     <string name="reboot">Перезавантаження</string>
     <string name="settings">Налаштування</string>
     <string name="reboot_recovery">Перезавантаження в режим відновлення</string>
@@ -27,7 +27,7 @@
     <string name="home_su_path">Виконуваний файл su</string>
     <string name="home_auth_key_title">Введіть SuperKey</string>
     <string name="home_ap_cando_update">Оновити</string>
-    <string name="patch_title">Патч</string>
+    <string name="patch_title">Залатати</string>
     <string name="home_manager_version">Версія менеджера</string>
     <string name="home_fingerprint">Відбиток</string>
     <string name="home_selinux_status">Статус SELinux</string>
@@ -91,21 +91,21 @@
     <string name="apm_failed_to_disable">Не вдалося вимкнути модуль \"%s\"</string>
     <string name="settings_app_language">Мова</string>
     <string name="system_default">За замовчуванням у системі</string>
-    <string name="patch">Пропатчити</string>
+    <string name="patch">Залатати</string>
     <string name="settings_global_namespace_mode">Режим глобального простору імен</string>
     <string name="settings_global_namespace_mode_summary">Усі сеанси root використовують монтування глобального простору імен</string>
     <string name="kpatch_shadow_path_title">Kpatch</string>
     <string name="home_ap_cando_reboot">Перезавантаження</string>
-    <string name="patch_config_title">Патчі</string>
-    <string name="patch_mode_bootimg_patch">Режим: Патч</string>
-    <string name="patch_mode_patch_and_install">Режим: Пропатчити та встановити</string>
-    <string name="patch_mode_uninstall_patch">Режим: Скасування патчу</string>
+    <string name="patch_config_title">Латки</string>
+    <string name="patch_mode_bootimg_patch">Режим: Латка</string>
+    <string name="patch_mode_patch_and_install">Режим: Залатати та встановити</string>
+    <string name="patch_mode_uninstall_patch">Режим: Скасування латки</string>
     <string name="patch_select_bootimg_btn">Виберіть boot</string>
     <string name="patch_embed_kpm_btn">Вбудований KPM</string>
     <string name="patch_start_patch_btn">Старт</string>
-    <string name="patch_start_unpatch_btn">Скасування патчу</string>
+    <string name="patch_start_unpatch_btn">Скасування латки</string>
     <string name="patch_item_error">!!ПОМИЛКА!!</string>
-    <string name="patch_item_bootimg">boot img</string>
+    <string name="patch_item_bootimg">bootimg</string>
     <string name="patch_item_bootimg_slot">слот:</string>
     <string name="patch_item_bootimg_dev">пристрій:</string>
     <string name="patch_item_kernel">Ядро</string>
@@ -159,7 +159,7 @@
     <string name="home_dialog_uninstall_title">Видалити</string>
     <string name="home_dialog_uninstall_ap_only">Видалити AndroidPatch</string>
     <string name="home_dialog_uninstall_all">Видалити все</string>
-    <string name="mode_select_page_select_file">Вибирати boot образ для патчу</string>
+    <string name="mode_select_page_select_file">Вибирати boot образ для заплатки</string>
     <string name="mode_select_page_install_inactive_slot_warning">Ваш пристрій буде **ПРИМУШЕНО** завантажитися в поточний неактивний слот після перезавантаження!
 \nВикористовуйте цей параметр лише після завершення OTA.
 \nПродовжити?</string>
