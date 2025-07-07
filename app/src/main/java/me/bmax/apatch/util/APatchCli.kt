@@ -259,7 +259,7 @@ fun reboot(reason: String = "") {
 
 fun overlayFsAvailable(): Boolean {
     val shell = getRootShell()
-    return ShellUtils.fastCmdResult(shell, "cat /proc/filesystems | grep overlay")
+    return ShellUtils.fastCmdResult(shell, "grep overlay /proc/filesystems")
 }
 
 fun hasMagisk(): Boolean {
