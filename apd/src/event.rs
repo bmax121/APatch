@@ -1,7 +1,7 @@
 use crate::magic_mount;
 use crate::module;
 use crate::supercall::fork_for_result;
-use crate::utils::{ensure_dir_exists, get_work_dir, switch_cgroups};
+use crate::utils::{ensure_dir_exists, get_work_dir, switch_cgroups, ensure_file_exists};
 use crate::{
     assets, defs, mount, restorecon, supercall,
     supercall::{init_load_package_uid_config, init_load_su_path, refresh_ap_package_list},
@@ -90,6 +90,11 @@ pub fn mount_systemlessly(module_dir: &str, is_img: bool) -> Result<()> {
         info!("- Preparing image");
 
         let module_update_flag = Path::new(defs::WORKING_DIR).join(defs::UPDATE_FILE_NAME);
+
+        if !tmp_module_path.exists(){
+            ensure_file_exists(&module_update_flag)?;
+        }
+        
         if module_update_flag.exists() {
             if tmp_module_path.exists() {
                 //if it has update, remove tmp file
