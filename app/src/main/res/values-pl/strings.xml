@@ -10,7 +10,7 @@
     <string name="home_click_to_learn_apatch">Dowiedz się o funkcjach APatcha i jak go używać</string>
     <string name="home_installing">Instalowanie</string>
     <string name="home_learn_apatch">Poznaj APatch</string>
-    <string name="home_click_to_install">Naciśnij żeby zainstalować</string>
+    <string name="home_click_to_install">Kliknij, aby zainstalować</string>
     <string name="about">Informacje</string>
     <string name="reboot">Uruchom ponownie</string>
     <string name="home_need_update">Dostępna nowa wersja</string>
@@ -24,17 +24,17 @@
     <string name="home_selinux_status">Status SELinux</string>
     <string name="home_su_path">Plik wykonywalny su</string>
     <string name="apatch_version_update">Wersja: %s -&gt; %s</string>
-    <string name="home_kernel">Jądro</string>
+    <string name="home_kernel">Wersja jądra</string>
     <string name="home_manager_version">Wersja menedżera</string>
     <string name="patch_title">Załataj</string>
     <string name="home_selinux_status_disabled">Wyłączony</string>
-    <string name="home_selinux_status_enforcing">Egzekwowanie</string>
+    <string name="home_selinux_status_enforcing">Wymuszony</string>
     <string name="su_pkg_excluded_setting_summary">Włączenie tej opcji umożliwi APatch przywrócenie wszystkich plików zmodyfikowanych przez moduły tej aplikacji.</string>
     <string name="su_title">Superuser</string>
     <string name="kpm_version">Wersja</string>
     <string name="su_refresh">Odśwież</string>
     <string name="su_show_system_apps">Pokaż aplikacje systemowe</string>
-    <string name="home_selinux_status_permissive">Dozwalający</string>
+    <string name="home_selinux_status_permissive">Pobłażliwy</string>
     <string name="kpm_author">Autor</string>
     <string name="su_hide_system_apps">Ukryj aplikacje systemowe</string>
     <string name="kpm_load_toast_failed">Załadowanie nie powiodło się</string>
@@ -77,7 +77,7 @@
     <string name="clear_super_key">Wyczyść SuperKey</string>
     <string name="patch_warnning">Instalacja wiąże się z ryzykiem. Upewnij się, że utworzono kopię zapasową danych.</string>
     <string name="safe_mode">Tryb bezpieczny</string>
-    <string name="home_install_unknown">Nieznany</string>
+    <string name="home_install_unknown">Nie zainstalowano lub nie uwierzytelniono</string>
     <string name="home_ap_cando_update">Aktualizacja</string>
     <string name="kpm_unload_confirm">Rozpakować \"%s\" moduł?</string>
     <string name="kpm_desc">Opis</string>
@@ -105,7 +105,7 @@
     <string name="patch_item_bootimg">obraz boot</string>
     <string name="patch_item_bootimg_slot">slot:</string>
     <string name="patch_item_bootimg_dev">urządzenie:</string>
-    <string name="patch_item_kernel">jądro</string>
+    <string name="patch_item_kernel">Jądro</string>
     <string name="patch_item_kpimg">kpimg</string>
     <string name="patch_item_kpimg_version">Wersja:</string>
     <string name="patch_item_kpimg_comile_time">Czas:</string>
@@ -122,7 +122,7 @@
     <string name="patch_item_skey">SuperKey</string>
     <string name="kpatch_shadow_path_title">kpatch</string>
     <string name="patch_item_set_skey_label">SuperKey powinien mieć od 8 do 63 znaków i zawierać zarówno cyfry, jak i litery, ale bez znaków specjalnych.</string>
-    <string name="home_ap_cando_reboot">Zrestartuj</string>
+    <string name="home_ap_cando_reboot">Uruchom ponownie</string>
     <string name="patch_config_title">Łatki</string>
     <string name="patch_mode_bootimg_patch">Tryb: Łatka</string>
     <string name="patch_mode_patch_and_install">Tryb: Aktualizacja</string>
@@ -130,22 +130,20 @@
     <string name="teal_theme">Morski</string>
     <string name="hide_apatch_dialog_new_manager_name">Nowa nazwa menedżera</string>
     <string name="hide_apatch_dialog_summary">Będzie używana jako nowa nazwa aplikacji pokazana w Launcherze</string>
-    <string name="setting_reset_su_path">Resetuj ścieżkę do programu su</string>
+    <string name="setting_reset_su_path">Zresetuj ścieżkę su</string>
     <string name="enable_web_debugging">Włącz debugowanie WebView</string>
-    <string name="mode_select_page_select_file">Wybierz obraz boot do Załatania</string>
+    <string name="mode_select_page_select_file">Wybierz obraz boot do załatania</string>
     <string name="mode_select_page_patch_and_install">Załataj i zainstaluj</string>
     <string name="settings_check_update">Sprawdź dostępność aktualizacji</string>
-    <string name="settings_check_update_summary">Automatycznie sprawdzaj dostępność aktualizacji przy otworzeniu aplikacji</string>
-    <string name="home_install_unknown_summary">Dotknij aby zainstalować</string>
+    <string name="settings_check_update_summary">Automatycznie sprawdzaj dostępność aktualizacji podczas otwierania aplikacji</string>
+    <string name="home_install_unknown_summary">Kliknij, aby zainstalować</string>
     <string name="patch_mode_install_to_next_slot">Tryb: Instaluj do nieaktywnego slotu (po aktualizacji OTA)</string>
     <string name="kpm_add_kpm">Dodaj KPM</string>
-    <string name="kpm_embed">Wbuduj</string>
+    <string name="kpm_embed">Osadź</string>
     <string name="kpm_control">Kontrola</string>
-    <string name="hide_apatch_manager">Ukryj Menedżera APatch</string>
-    <string name="hide_apatch_manager_summary">Zainstaluj nową aplikację menedżera z losowym identyfikatorem i niestandardową etykietą</string>
-    <string name="mode_select_page_install_inactive_slot_warning">Twoje urządzenie będzie **ZMUSZONE** aby uruchomić się z nieaktywnego slotu po uruchomieniu ponownie.
-\nUżyj tej opcji tylko po skończonej aktualizacji OTA.
-\nKontynuować?</string>
+    <string name="hide_apatch_manager">Ukryj menedżer APatch</string>
+    <string name="hide_apatch_manager_summary">Zainstaluj aplikację proxy z losowym ID pakietu i niestandardową etykietą</string>
+    <string name="mode_select_page_install_inactive_slot_warning">Twoje urządzenie będzie **ZMUSZONE** do uruchomienia się w bieżącym nieaktywnym slocie po ponownym uruchomieniu!\nUżywaj tej opcji tylko po zakończeniu aktualizacji OTA.\nKontynuować?</string>
     <string name="about_telegram_channel">Kanał na Telegramie</string>
     <string name="about_app_version">Wersja %1$s</string>
     <string name="about_telegram_group">Grupa na Telegramie</string>
@@ -184,7 +182,7 @@
     <string name="amber_theme">Bursztynowy</string>
     <string name="lime_theme">Limonkowy</string>
     <string name="orange_theme">Pomarańczowy</string>
-    <string name="hide_apatch_manager_failure">Nie udało się ukryć. Prosimy o zgłoszenie błędu!</string>
+    <string name="hide_apatch_manager_failure">Nie udało się ukryć. Zgłoś błąd!</string>
     <string name="enable_web_debugging_summary">Może być używane do debugowania WebUI. Włącz tylko w razie potrzeby.</string>
     <string name="settings_donot_store_superkey">Nie przechowuj SuperKey lokalnie</string>
     <string name="settings_donot_store_superkey_summary">Uwierzytelniaj SuperKey przy każdym uruchomieniu menadżera</string>
@@ -207,6 +205,10 @@
     <string name="apm_action">Akcja</string>
     <string name="log_saved">Zapisano logi</string>
     <string name="crash_handle_title">Aplikacja się wysypała…</string>
-    <string name="crash_handle_copy">Kopiuj logi crasha</string>
+    <string name="crash_handle_copy">Kopiuj logi awarii</string>
     <string name="crash_handle_copied">Logi awarii skopiowano do schowka.</string>
+    <string name="settings_lite_mode">Włącz tryb uproszczony</string>
+    <string name="settings_lite_mode_mode_summary">Funkcje modułu AP mogą ulec uszkodzeniu po włączeniu, ale czasami mogą skutecznie uniknąć wykrycia. Wymagany jest restart.</string>
+    <string name="settings_force_overlayfs_mode">Wymuś użycie OverlayFS</string>
+    <string name="settings_force_overlayfs_mode_summary">Użyj OverlayFS do montowania modułów AP zamiast Magic Mount, dopóki jądro to obsługuje. Wymagane jest ponowne uruchomienie.</string>
 </resources>

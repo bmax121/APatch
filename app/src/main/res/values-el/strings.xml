@@ -64,7 +64,7 @@
     <string name="home_su_path">Εκτελέσιμο su</string>
     <string name="home_auth_key_desc">Έναρξη μετά την πιστοποίηση</string>
     <string name="home_ap_cando_update">Ενημέρωση</string>
-    <string name="home_kernel">Πυρήνας</string>
+    <string name="home_kernel">Έκδοση Πυρήνα</string>
     <string name="home_manager_version">Έκδοση διαχειριστή</string>
     <string name="home_selinux_status_enforcing">Επιβολή</string>
     <string name="home_selinux_status_permissive">Επιτρεπτικό</string>
@@ -94,7 +94,7 @@
     <string name="success">Επιτυχία</string>
     <string name="failure">Αποτυχία</string>
     <string name="settings_clear_super_key_dialog">Θέλετε πραγματικά να προχωρήσετε?</string>
-    <string name="settings_check_update">Έλεγχος ενημέρωσης</string>
+    <string name="settings_check_update">Έλεγχος για ενημερώσεις</string>
     <string name="settings_check_update_summary">Αυτόματος έλεγχος για ενημερώσεις κατά το άνοιγμα της εφαρμογής</string>
     <string name="save_log">Αποθήκευση αρχείων καταγραφής</string>
     <string name="deep_purple_theme">Βαθύ μώβ</string>
@@ -114,7 +114,7 @@
     <string name="settings_custom_color_theme">Έγχρωμο θέμα</string>
     <string name="blue_grey_theme">Μπλέ γκρί</string>
     <string name="enable_web_debugging_summary">Μπορεί να χρησιμοποιηθεί για εντοπισμό σφαλμάτων WebUI, Παρακαλώ ενεργοποιήσει μόνο όταν χρειάζεται.</string>
-    <string name="hide_apatch_manager_summary">Εγκατάσταση μιας νέας εφαρμογής διαχειριστή με τυχαίο αναγνωριστικό και προσαρμοσμένη ετικέτα</string>
+    <string name="hide_apatch_manager_summary">Εγκατάσταση μιας εφαρμογής proxy με τυχαίο αναγνωριστικό πακέτου και προσαρμοσμένη ετικέτα εφαρμογής</string>
     <string name="home_dialog_auth_fail_content">Δεν είναι δυνατός ο έλεγχος ταυτότητας του ΥπέρΚλειδιού, επομένως το APatch δεν μπορεί να λειτουργήσει σωστά.\nΑκολουθούν ορισμένοι πιθανοί λόγοι για την αποτυχία του ελέγχου ταυτότητας:\n1. Δεν επιδιορθώσατε το boot.img με το KernelPatch.\n2. Το διορθωμένο boot.img δεν περάστηκε.\n3. Το ΥπέρΚλειδί είναι λάθος ή περιέχει ειδικούς χαρακτήρες.\n4. Η συσκευή σας δεν υποστηρίζει το APatch και KernelPatch.\n\nΕλέγξτε και δοκιμάστε ξανά. Εάν εξακολουθούν να υπάρχουν προβλήματα, μπορείτε πάντα να κάνετε ερωτήσεις στη σελίδα ζητημάτων του επίσημου αποθετηρίου.</string>
     <string name="crash_handle_copied">Το αρχείο καταγραφής σφαλμάτων αντιγράφηκε στο πρόχειρο.</string>
     <string name="settings_global_namespace_mode">Λειτουργία καθολικού χώρου ονομάτων</string>
@@ -142,7 +142,7 @@
     <string name="settings_donot_store_superkey">Μη αποθήκευση ΥπέρΚλειδιού τοπικά</string>
     <string name="enable_web_debugging">Ενεργοποίηση εντοπισμού σφαλμάτων WebView</string>
     <string name="mode_select_page_patch_and_install">Επιδιόρθωση και Εγκατάσταση</string>
-    <string name="mode_select_page_select_file">Επιλογή εικόνας boot για Επιδιόρθωση</string>
+    <string name="mode_select_page_select_file">Επιλογή εικόνας boot για επιδιόρθωση</string>
     <string name="home_new_apatch_found">Νέα έκδοση %s είναι διαθέσιμη, κλικ για αναβάθμιση.</string>
     <string name="mode_select_page_title">Εγκατάσταση</string>
     <string name="home_dialog_auth_fail_title">Ο έλεγχος ταυτότητας απέτυχε</string>
@@ -207,4 +207,8 @@
     <string name="patch_item_bootimg">bootimg</string>
     <string name="patch_item_extra_author">Δημιουργός</string>
     <string name="patch_item_extra_args">Επιχειρήματα:</string>
+    <string name="settings_lite_mode">Ενεργοποίηση Λειτουργίας Lite</string>
+    <string name="settings_lite_mode_mode_summary">Οι λειτουργίες του APModule ενδέχεται να προκαλέσουν ζημιά μετά την ενεργοποίηση τους, αλλά μερικές φορές μπορούν να αποφύγουν αποτελεσματικά την ανίχνευση, Απαιτείται επανεκκίνηση.</string>
+    <string name="settings_force_overlayfs_mode">Επιβολή χρήσης OverlayFS</string>
+    <string name="settings_force_overlayfs_mode_summary">Χρήση του OverlayFS για προσάρτηση του APModules αντί για το Magic Mount εφόσον το υποστηρίζει ο πυρήνας, Απαιτείται επανεκκίνηση.</string>
 </resources>

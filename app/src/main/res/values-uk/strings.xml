@@ -65,7 +65,7 @@
     <string name="home_auth_key_desc">Почати після сертифікації</string>
     <string name="home_ap_cando_uninstall">Видалити</string>
     <string name="home_ap_cando_install">Встановити</string>
-    <string name="home_kernel">Ядро</string>
+    <string name="home_kernel">Версія ядра</string>
     <string name="kpm_load_toast_succ">Встановленно успішно</string>
     <string name="home_selinux_status_unknown">Невідомо</string>
     <string name="kpm_unload">Видалити</string>
@@ -130,10 +130,10 @@
     <string name="settings_check_update_summary">Автоматично перевіряти оновлення при відкритті застосунку</string>
     <string name="success">Успішно</string>
     <string name="failure">Помилка</string>
-    <string name="settings_check_update">Перевірити оновлення</string>
+    <string name="settings_check_update">Перевірити наявність оновлень</string>
     <string name="settings_donot_store_superkey">Не зберігайте SuperKey локально</string>
     <string name="patch_mode_install_to_next_slot">Режим: встановлення в неактивний слот (після OTA)</string>
-    <string name="hide_apatch_manager_summary">Установіть нову програму менеджера з випадковим ідентифікатором і спеціальною міткою</string>
+    <string name="hide_apatch_manager_summary">Встановіть проксі-додаток із випадковим ідентифікатором пакета та власною міткою додатка</string>
     <string name="enable_web_debugging_summary">Можна використовувати для налагодження WebUI. Увімкніть лише за потреби.</string>
     <string name="home_new_apatch_found">Доступна нова версія %s, натисніть, щоб оновити.</string>
     <string name="home_install_unknown_summary">Натисніть щоб встановити</string>
@@ -159,7 +159,7 @@
     <string name="home_dialog_uninstall_title">Видалити</string>
     <string name="home_dialog_uninstall_ap_only">Видалити AndroidPatch</string>
     <string name="home_dialog_uninstall_all">Видалити все</string>
-    <string name="mode_select_page_select_file">Вибирати boot образ для заплатки</string>
+    <string name="mode_select_page_select_file">Виберіть образ завантаження для патчу</string>
     <string name="mode_select_page_install_inactive_slot_warning">Ваш пристрій буде **ПРИМУШЕНО** завантажитися в поточний неактивний слот після перезавантаження!
 \nВикористовуйте цей параметр лише після завершення OTA.
 \nПродовжити?</string>
@@ -209,4 +209,8 @@
     <string name="crash_handle_title">Збій програми…</string>
     <string name="crash_handle_copied">Журнал збоїв скопійовано в буфер обміну.</string>
     <string name="crash_handle_copy">Копіювати журнал збоїв</string>
+    <string name="settings_lite_mode">Увімкнути спрощений режим</string>
+    <string name="settings_lite_mode_mode_summary">Функції APModule можуть бути пошкоджені після ввімкнення, але іноді це може ефективно уникнути виявлення. Потрібне перезавантаження.</string>
+    <string name="settings_force_overlayfs_mode">Примусове використання OverlayFS</string>
+    <string name="settings_force_overlayfs_mode_summary">Використовуйте OverlayFS для монтування APModules замість Magic Mount, якщо ядро підтримує цю функцію. Потрібне перезавантаження.</string>
 </resources>
