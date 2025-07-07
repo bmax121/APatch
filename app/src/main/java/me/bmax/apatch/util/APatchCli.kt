@@ -13,6 +13,7 @@ import android.util.Log
 import com.topjohnwu.superuser.CallbackList
 import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.ShellUtils
+import com.topjohnwu.superuser.io.SuFile
 import me.bmax.apatch.APApplication
 import me.bmax.apatch.APApplication.Companion.SUPERCMD
 import me.bmax.apatch.BuildConfig
@@ -278,6 +279,32 @@ fun setGlobalNamespaceEnabled(value: String) {
     getRootShell().newJob().add("echo $value > ${APApplication.GLOBAL_NAMESPACE_FILE}")
         .submit { result ->
             Log.i(TAG, "setGlobalNamespaceEnabled result: ${result.isSuccess} [${result.out}]")
+        }
+}
+
+fun isLiteModeEnabled(): Boolean {
+    val liteMode = SuFile(APApplication.LITE_MOTE_FILE)
+    liteMode.shell = getRootShell()
+    return liteMode.exists()
+}
+
+fun setLiteMode(enable: Boolean) {
+    getRootShell().newJob().add("${if (enable) "touch" else "rm -rf"} ${APApplication.LITE_MOTE_FILE}")
+        .submit { result ->
+            Log.i(TAG, "setLiteMode result: ${result.isSuccess} [${result.out}]")
+        }
+}
+
+fun isForceUsingOverlayFS(): Boolean {
+    val forceOverlayFS = SuFile(APApplication.FORCE_OVERLAYFS_FILE)
+    forceOverlayFS.shell = getRootShell()
+    return forceOverlayFS.exists()
+}
+
+fun setForceUsingOverlayFS(enable: Boolean) {
+    getRootShell().newJob().add("${if (enable) "touch" else "rm -rf"} ${APApplication.FORCE_OVERLAYFS_FILE}")
+        .submit { result ->
+            Log.i(TAG, "setForceUsingOverlayFS result: ${result.isSuccess} [${result.out}]")
         }
 }
 

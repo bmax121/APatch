@@ -137,12 +137,11 @@ pub fn is_overlayfs_supported() -> Result<bool> {
     Ok(overlay_supported)
 }
 
-pub fn should_enable_overlay() -> Result<bool> {
-    //let bind_mount_exists = Path::new(defs::BIND_MOUNT_FILE).exists();
-    let overlay_exists = Path::new(defs::OVERLAY_FILE).exists();
-    let overlay_supported = is_overlayfs_supported()?;
+pub fn should_use_overlayfs() -> Result<bool> {
+    let force_using_overlayfs = Path::new(defs::FORCE_OVERLAYFS_FILE).exists();
+    let overlayfs_supported = is_overlayfs_supported()?;
 
-    Ok(overlay_exists && overlay_supported)
+    Ok(force_using_overlayfs && overlayfs_supported)
 }
 
 fn switch_cgroup(grp: &str, pid: u32) {

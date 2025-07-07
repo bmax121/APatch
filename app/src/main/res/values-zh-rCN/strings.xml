@@ -217,4 +217,8 @@
     <string name="crash_handle_title">应用崩溃了..</string>
     <string name="crash_handle_copy">复制崩溃日志</string>
     <string name="crash_handle_copied">崩溃日志已复制到剪贴板。</string>
+    <string name="settings_lite_mode">Lite 模式</string>
+    <string name="settings_lite_mode_mode_summary">开启后会使系统模块功能接近破损，但有时可以有效地规避检测，重启生效。</string>
+    <string name="settings_force_overlayfs_mode">强制使用 OverlayFS</string>
+    <string name="settings_force_overlayfs_mode_summary">在内核支持的前提下使用 OverlayFS 挂载系统模块而非 Magic Mount，重启生效。</string>
 </resources>

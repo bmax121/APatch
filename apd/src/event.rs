@@ -356,7 +356,7 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     ensure_dir_exists(defs::MODULE_UPDATE_TMP_DIR)?;
 
     move_file(module_update_dir, module_dir)?;
-    let lite_file = Path::new(defs::LITEMODE_FILE);
+    let is_lite_mode_enabled = Path::new(defs::LITEMODE_FILE).exists();
 
     if safe_mode {
         warn!("safe mode, skip post-fs-data scripts and disable all modules!");
@@ -378,7 +378,7 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     if module::load_sepolicy_rule().is_err() {
         warn!("load sepolicy.rule failed");
     }
-    if lite_file.exists() {
+    if is_lite_mode_enabled {
         info!("litemode runing skip mount tempfs")
     } else {
         if let Err(e) = mount::mount_tmpfs(utils::get_tmp_path()) {
@@ -397,10 +397,10 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
         warn!("load system.prop failed: {}", e);
     }
 
-    if lite_file.exists() {
+    if is_lite_mode_enabled {
         info!("litemode runing skip mount state")
     } else {
-        if utils::should_enable_overlay()? {
+        if utils::should_use_overlayfs()? {
             // mount module systemlessly by overlay
             let work_dir = get_work_dir();
             let tmp_dir = PathBuf::from(work_dir.clone());

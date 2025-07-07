@@ -45,7 +45,7 @@ fn exec_install_script(module_file: &str) -> Result<()> {
 
     let content;
 
-    if !should_enable_overlay()? {
+    if !should_use_overlayfs()? {
         content = INSTALL_MODULE_SCRIPT_.to_string();
     } else {
         content = INSTALL_MODULE_SCRIPT.to_string();
@@ -64,10 +64,7 @@ fn exec_install_script(module_file: &str) -> Result<()> {
         .env("APATCH", "true")
         .env("APATCH_VER", defs::VERSION_NAME)
         .env("APATCH_VER_CODE", defs::VERSION_CODE)
-        .env(
-            "APATCH_BIND_MOUNT",
-            format!("{}", !should_enable_overlay()?),
-        )
+        .env("APATCH_BIND_MOUNT", format!("{}", !should_use_overlayfs()?))
         .env("OUTFD", "1")
         .env("ZIPFILE", realpath)
         .status()?;
@@ -195,10 +192,7 @@ fn exec_script<T: AsRef<Path>>(path: T, wait: bool) -> Result<()> {
         .env("APATCH", "true")
         .env("APATCH_VER", defs::VERSION_NAME)
         .env("APATCH_VER_CODE", defs::VERSION_CODE)
-        .env(
-            "APATCH_BIND_MOUNT",
-            format!("{}", !should_enable_overlay()?),
-        )
+        .env("APATCH_BIND_MOUNT", format!("{}", !should_use_overlayfs()?))
         .env(
             "PATH",
             format!(

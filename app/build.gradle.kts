@@ -81,12 +81,6 @@ android {
         jvmToolchain(JavaVersion.VERSION_22.majorVersion.toInt())
     }
 
-    composeCompiler {
-        featureFlags = setOf(
-            ComposeFeatureFlag.OptimizeNonSkippingGroups
-        )
-    }
-
     packaging {
         jniLibs {
             useLegacyPackaging = true

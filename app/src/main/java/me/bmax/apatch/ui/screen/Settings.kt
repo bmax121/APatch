@@ -32,9 +32,11 @@ import androidx.compose.material.icons.filled.Commit
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.DeveloperMode
 import androidx.compose.material.icons.filled.Engineering
+import androidx.compose.material.icons.filled.FilePresent
 import androidx.compose.material.icons.filled.FormatColorFill
 import androidx.compose.material.icons.filled.InvertColors
 import androidx.compose.material.icons.filled.Key
+import androidx.compose.material.icons.filled.RemoveFromQueue
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Translate
@@ -76,6 +78,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.window.DialogWindowProvider
 import androidx.core.content.FileProvider
+import androidx.core.content.edit
 import androidx.core.os.LocaleListCompat
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
@@ -92,17 +95,20 @@ import me.bmax.apatch.ui.component.rememberLoadingDialog
 import me.bmax.apatch.ui.theme.refreshTheme
 import me.bmax.apatch.util.APatchKeyHelper
 import me.bmax.apatch.util.getBugreportFile
+import me.bmax.apatch.util.isForceUsingOverlayFS
 import me.bmax.apatch.util.isGlobalNamespaceEnabled
+import me.bmax.apatch.util.isLiteModeEnabled
 import me.bmax.apatch.util.outputStream
 import me.bmax.apatch.util.rootShellForResult
+import me.bmax.apatch.util.setForceUsingOverlayFS
 import me.bmax.apatch.util.setGlobalNamespaceEnabled
+import me.bmax.apatch.util.setLiteMode
 import me.bmax.apatch.util.ui.APDialogBlurBehindUtils
 import me.bmax.apatch.util.ui.LocalSnackbarHost
 import me.bmax.apatch.util.ui.NavigationBarsSpacer
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
-import androidx.core.content.edit
 
 @Destination<RootGraph>
 @Composable
@@ -112,8 +118,13 @@ fun SettingScreen() {
     val kPatchReady = state != APApplication.State.UNKNOWN_STATE
     val aPatchReady =
         (state == APApplication.State.ANDROIDPATCH_INSTALLING || state == APApplication.State.ANDROIDPATCH_INSTALLED || state == APApplication.State.ANDROIDPATCH_NEED_UPDATE)
-    //val bIsManagerHide = AppUtils.getPackageName() != APPLICATION_ID
     var isGlobalNamespaceEnabled by rememberSaveable {
+        mutableStateOf(false)
+    }
+    var isLiteModeEnabled by rememberSaveable {
+        mutableStateOf(false)
+    }
+    var forceUsingOverlayFS by rememberSaveable {
         mutableStateOf(false)
     }
     var bSkipStoreSuperKey by rememberSaveable {
@@ -121,6 +132,8 @@ fun SettingScreen() {
     }
     if (kPatchReady && aPatchReady) {
         isGlobalNamespaceEnabled = isGlobalNamespaceEnabled()
+        isLiteModeEnabled = isLiteModeEnabled()
+        forceUsingOverlayFS = isForceUsingOverlayFS()
     }
 
     val snackBarHost = LocalSnackbarHost.current
@@ -237,6 +250,32 @@ fun SettingScreen() {
                             }
                         )
                         isGlobalNamespaceEnabled = it
+                    })
+            }
+
+            // Lite Mode
+            if (kPatchReady && aPatchReady) {
+                SwitchItem(
+                    icon = Icons.Filled.RemoveFromQueue,
+                    title = stringResource(id = R.string.settings_lite_mode),
+                    summary = stringResource(id = R.string.settings_lite_mode_mode_summary),
+                    checked = isLiteModeEnabled,
+                    onCheckedChange = {
+                        setLiteMode(it)
+                        isLiteModeEnabled = it
+                    })
+            }
+
+            // Force OverlayFS
+            if (kPatchReady && aPatchReady) {
+                SwitchItem(
+                    icon = Icons.Filled.FilePresent,
+                    title = stringResource(id = R.string.settings_force_overlayfs_mode),
+                    summary = stringResource(id = R.string.settings_force_overlayfs_mode_summary),
+                    checked = forceUsingOverlayFS,
+                    onCheckedChange = {
+                        setForceUsingOverlayFS(it)
+                        forceUsingOverlayFS = it
                     })
             }
 
@@ -360,32 +399,6 @@ fun SettingScreen() {
                     )
                 }, leadingContent = { Icon(Icons.Filled.FormatColorFill, null) })
             }
-
-            /*
-            // hide manager
-            if (kPatchReady && !bIsManagerHide) {
-                ListItem(
-                    leadingContent = {
-                        Icon(
-                            Icons.Filled.Masks,
-                            stringResource(id = R.string.hide_apatch_manager)
-                        )
-                    },
-                    supportingContent = {
-                        Text(text = stringResource(id = R.string.hide_apatch_manager_summary))
-                    },
-                    headlineContent = {
-                        Text(
-                            stringResource(id = R.string.hide_apatch_manager),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.outline
-                        )
-                    },
-                    modifier = Modifier.clickable {
-                        showRandomizePkgNameDialog.value = true
-                    }
-                )
-            }*/
 
             // su path
             if (kPatchReady) {
