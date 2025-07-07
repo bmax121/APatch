@@ -284,13 +284,13 @@ fun setGlobalNamespaceEnabled(value: String) {
 }
 
 fun isLiteModeEnabled(): Boolean {
-    val liteMode = SuFile(APApplication.LITE_MOTE_FILE)
+    val liteMode = SuFile(APApplication.LITE_MODE_FILE)
     liteMode.shell = getRootShell()
     return liteMode.exists()
 }
 
 fun setLiteMode(enable: Boolean) {
-    getRootShell().newJob().add("${if (enable) "touch" else "rm -rf"} ${APApplication.LITE_MOTE_FILE}")
+    getRootShell().newJob().add("${if (enable) "touch" else "rm -rf"} ${APApplication.LITE_MODE_FILE}")
         .submit { result ->
             Log.i(TAG, "setLiteMode result: ${result.isSuccess} [${result.out}]")
         }
