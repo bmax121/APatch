@@ -12,7 +12,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.bmax.apatch.apApp
 import me.bmax.apatch.util.listModules
-import me.bmax.apatch.util.overlayFsAvailable
 import org.json.JSONArray
 import org.json.JSONObject
 import java.text.Collator
@@ -49,9 +48,6 @@ class APModuleViewModel : ViewModel() {
     var isRefreshing by mutableStateOf(false)
         private set
 
-    var isOverlayAvailable by mutableStateOf(overlayFsAvailable())
-        private set
-
     val moduleList by derivedStateOf {
         val comparator = compareBy(Collator.getInstance(Locale.getDefault()), ModuleInfo::id)
         modules.sortedWith(comparator).also {
@@ -75,7 +71,6 @@ class APModuleViewModel : ViewModel() {
             val start = SystemClock.elapsedRealtime()
 
             kotlin.runCatching {
-                isOverlayAvailable = overlayFsAvailable()
 
                 val result = listModules()
 

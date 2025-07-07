@@ -99,6 +99,7 @@ import me.bmax.apatch.util.isForceUsingOverlayFS
 import me.bmax.apatch.util.isGlobalNamespaceEnabled
 import me.bmax.apatch.util.isLiteModeEnabled
 import me.bmax.apatch.util.outputStream
+import me.bmax.apatch.util.overlayFsAvailable
 import me.bmax.apatch.util.rootShellForResult
 import me.bmax.apatch.util.setForceUsingOverlayFS
 import me.bmax.apatch.util.setGlobalNamespaceEnabled
@@ -129,6 +130,9 @@ fun SettingScreen() {
     }
     var bSkipStoreSuperKey by rememberSaveable {
         mutableStateOf(APatchKeyHelper.shouldSkipStoreSuperKey())
+    }
+    val isOverlayFSAvailable by rememberSaveable {
+        mutableStateOf(overlayFsAvailable())
     }
     if (kPatchReady && aPatchReady) {
         isGlobalNamespaceEnabled = isGlobalNamespaceEnabled()
@@ -267,7 +271,7 @@ fun SettingScreen() {
             }
 
             // Force OverlayFS
-            if (kPatchReady && aPatchReady) {
+            if (kPatchReady && aPatchReady && isOverlayFSAvailable) {
                 SwitchItem(
                     icon = Icons.Filled.FilePresent,
                     title = stringResource(id = R.string.settings_force_overlayfs_mode),

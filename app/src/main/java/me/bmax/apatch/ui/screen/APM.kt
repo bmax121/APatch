@@ -132,7 +132,7 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
     //TODO: FIXME -> val isSafeMode = Natives.getSafeMode()
     val isSafeMode = false
     val hasMagisk = hasMagisk()
-    val hideInstallButton = isSafeMode || hasMagisk || !viewModel.isOverlayAvailable
+    val hideInstallButton = isSafeMode || hasMagisk
 
     val moduleListState = rememberLazyListState()
 
@@ -361,20 +361,6 @@ private fun ModuleList(
             },
         ) {
             when {
-                !viewModel.isOverlayAvailable -> {
-                    item {
-                        Box(
-                            modifier = Modifier.fillParentMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                stringResource(R.string.apm_overlay_fs_not_available),
-                                textAlign = TextAlign.Center
-                            )
-                        }
-                    }
-                }
-
                 viewModel.moduleList.isEmpty() -> {
                     item {
                         Box(
