@@ -3,6 +3,8 @@ use serde::{Deserialize, Serialize};
 use std::fs::File;
 use std::io::{self, BufRead};
 use std::path::Path;
+use std::thread;
+use std::time::Duration;
 
 #[derive(Deserialize, Serialize)]
 pub struct PackageConfig {
@@ -15,42 +17,76 @@ pub struct PackageConfig {
 }
 
 pub fn read_ap_package_config() -> Vec<PackageConfig> {
-    let file = match File::open("/data/adb/ap/package_config") {
-        Ok(file) => file,
-        Err(e) => {
-            warn!("Error opening file: {}", e);
-            return Vec::new();
-        }
-    };
-
-    let mut reader = csv::Reader::from_reader(file);
-    let mut package_configs = Vec::new();
-    for record in reader.deserialize() {
-        match record {
-            Ok(config) => package_configs.push(config),
+    let mut retries = 0;
+    loop {
+        let file = match File::open("/data/adb/ap/package_config") {
+            Ok(file) => file,
             Err(e) => {
-                warn!("Error deserializing record: {}", e);
+                warn!("Error opening file (attempt {}): {}", retries + 1, e);
+                if retries >= 2 {
+                    return Vec::new();
+                }
+                retries += 1;
+                thread::sleep(Duration::from_millis(100));
+                continue;
+            }
+        };
+
+        let mut reader = csv::Reader::from_reader(file);
+        let mut package_configs = Vec::new();
+        let mut success = true;
+        
+        for record in reader.deserialize() {
+            match record {
+                Ok(config) => package_configs.push(config),
+                Err(e) => {
+                    warn!("Error deserializing record: {}", e);
+                    success = false;
+                }
             }
         }
-    }
 
-    package_configs
+        if success || retries >= 2 {
+            return package_configs;
+        }
+        
+        retries += 1;
+        thread::sleep(Duration::from_millis(100));
+    }
 }
 
 fn write_ap_package_config(package_configs: &[PackageConfig]) {
-    let file = match File::create("/data/adb/ap/package_config") {
-        Ok(file) => file,
-        Err(e) => {
-            warn!("Error creating file: {}", e);
+    let mut retries = 0;
+    loop {
+        let file = match File::create("/data/adb/ap/package_config") {
+            Ok(file) => file,
+            Err(e) => {
+                warn!("Error creating file (attempt {}): {}", retries + 1, e);
+                if retries >= 2 {
+                    return;
+                }
+                retries += 1;
+                thread::sleep(Duration::from_millis(100));
+                continue;
+            }
+        };
+
+        let mut writer = csv::Writer::from_writer(file);
+        let mut success = true;
+        
+        for config in package_configs {
+            if let Err(e) = writer.serialize(config) {
+                warn!("Error serializing record: {}", e);
+                success = false;
+            }
+        }
+
+        if success || retries >= 2 {
             return;
         }
-    };
-
-    let mut writer = csv::Writer::from_writer(file);
-    for config in package_configs {
-        if let Err(e) = writer.serialize(config) {
-            warn!("Error serializing record: {}", e);
-        }
+        
+        retries += 1;
+        thread::sleep(Duration::from_millis(100));
     }
 }
 
