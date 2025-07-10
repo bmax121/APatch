@@ -28,7 +28,7 @@ apksign {
 }
 
 android {
-    namespace = "me.bmax.apatch"
+    namespace = "weedu.custom.tool"
 
     buildTypes {
         debug {
