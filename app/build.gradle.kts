@@ -68,6 +68,7 @@ android {
     }
 
     defaultConfig {
+        applicationId = "weedu.custom.tool"
         buildConfigField("String", "buildKPV", "\"$kernelPatchVersion\"")
     }
 
