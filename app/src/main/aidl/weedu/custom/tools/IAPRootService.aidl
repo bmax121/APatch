@@ -1,5 +1,5 @@
 // IAPRootService.aidl
-package me.bmax.apatch;
+package weedu.custom.tool;
 
 import android.content.pm.PackageInfo;
 import rikka.parcelablelist.ParcelableListSlice;
