@@ -54,8 +54,8 @@
     <string name="home_need_update">New version available</string>
     <string name="kpatch_version">Version: %s</string>
     <string name="apatch_version">Version: %s</string>
-    <string name="apatch_version_update">Version: %s -&gt; %s</string>
-    <string name="kpatch_version_update">Version: %s -&gt; %s</string>
+    <string name="apatch_version_update">Version: %1$s -&gt; %2$s</string>
+    <string name="kpatch_version_update">Version: %1$s -&gt; %2$s</string>
     <string name="kpatch_shadow_path_title">kpatch</string>
     <string name="home_auth_key_title">Enter SuperKey</string>
     <string name="home_auth_key_desc">Start after certification</string>

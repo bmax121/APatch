@@ -51,14 +51,14 @@
     <string name="patch_item_extra_version">نسخه:</string>
     <string name="patch_item_extra_author">نویسنده:</string>
     <string name="home_auth_key_title">واردکردن ابر کلید</string>
-    <string name="apatch_version_update">نسخه: %s -&gt; %s</string>
+    <string name="apatch_version_update">نسخه: %1$s -&gt; %2$s</string>
     <string name="home_install_unknown_summary">برای نصب کلیک کنید</string>
     <string name="home_click_to_install">برای نصب کلیک کنید</string>
     <string name="home_working">در‌حال‌کار 😋</string>
     <string name="home_installing">نصب کردن</string>
     <string name="kpatch_version">نسخه: %s</string>
     <string name="apatch_version">نسخه: %s</string>
-    <string name="kpatch_version_update">نسخه: %s -&gt; %s</string>
+    <string name="kpatch_version_update">نسخه: %1$s -&gt; %2$s</string>
     <string name="kpatch_shadow_path_title">پچk</string>
     <string name="home_ap_cando_update">به روز رسانی</string>
     <string name="patch_config_title">پچ ها</string>

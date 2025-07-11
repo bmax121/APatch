@@ -48,7 +48,7 @@
     <string name="home_installing">Instaluje se</string>
     <string name="home_click_to_install">Kliknutím nainstalovat</string>
     <string name="apatch_version">Verze: %s</string>
-    <string name="apatch_version_update">Verze: %s -&gt; %s</string>
+    <string name="apatch_version_update">Verze: %1$s -&gt; %2$s</string>
     <string name="patch_item_bootimg_dev">zařízení:</string>
     <string name="settings_check_update_summary">Automaticky kontrolovat aktualizace při otevření aplikace</string>
     <string name="save_log">Uložit protokoly</string>
@@ -56,7 +56,7 @@
     <string name="super_key">SuperKlíč</string>
     <string name="home_patch_next_step">Další krok</string>
     <string name="kpatch_version">Verze: %s</string>
-    <string name="kpatch_version_update">Verze: %s -&gt; %s</string>
+    <string name="kpatch_version_update">Verze: %1$s -&gt; %2$s</string>
     <string name="home_install_unknown_summary">Kliknutím nainstalovat</string>
     <string name="about_source_code"><![CDATA[<p>Zobrazit zdrojový kód na %1$s<p/> Připojit se k našemu kanálu %2$s<p/> Připojit se k naší skupině %3$s]]></string>
     <string name="home_learn_apatch">Prozkoumat APatch</string>

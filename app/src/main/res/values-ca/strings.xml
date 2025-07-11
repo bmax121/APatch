@@ -43,13 +43,13 @@
     <string name="home_click_to_install">Clica per instal·lar</string>
     <string name="home_install_unknown_summary">Clica per instal·lar</string>
     <string name="kpatch_version">Versió: %s</string>
-    <string name="kpatch_version_update">Versió: %s -&gt; %s</string>
+    <string name="kpatch_version_update">Versió: %1$s -&gt; %2$s</string>
     <string name="home_kpatch_info_title">Informació</string>
     <string name="home_auth_key_desc">Comença després de la certificació</string>
     <string name="home_ap_cando_install">Instal·lar</string>
     <string name="patch_title">Pegat</string>
     <string name="home_patch_set_key_desc">Només credencial per KernelPatch</string>
-    <string name="apatch_version_update">Versió: %s -&gt; %s</string>
+    <string name="apatch_version_update">Versió: %1$s -&gt; %2$s</string>
     <string name="patch_config_title">Pegat</string>
     <string name="patch_mode_bootimg_patch">Mode: Pegat</string>
     <string name="patch_mode_patch_and_install">Mode: Aplicar pegat i instal·lar</string>

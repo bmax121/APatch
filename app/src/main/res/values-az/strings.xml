@@ -27,8 +27,7 @@
     <string name="home_need_update">Yeni versiya mövcuddur</string>
     <string name="apatch_version">Versiya:
 \n%s</string>
-    <string name="apatch_version_update">Versiya:
-\n%s -&gt; %s</string>
+    <string name="apatch_version_update">Versiya: %1$s -&gt; %2$s</string>
     <string name="home_su_path">su: %s</string>
     <string name="kpatch_version">Versiya: %s</string>
     <string name="kernel_patch">NüvəYamağı</string>
@@ -100,7 +99,7 @@
     <string name="settings_check_update">Yeniləməni yoxlayın</string>
     <string name="settings_check_update_summary">Proqramı açarkən avtomatik olaraq yeniləmələri yoxlayın</string>
     <string name="home_install_unknown_summary">Quraşdırmaq üçün kliklə</string>
-    <string name="kpatch_version_update">Versiya: %s -&gt; %s</string>
+    <string name="kpatch_version_update">Versiya: %1$s -&gt; %2$s</string>
     <string name="kpatch_shadow_path_title">kpatch</string>
     <string name="home_kpatch_info_title">Məlumat</string>
     <string name="patch_config_title">Yamalar</string>

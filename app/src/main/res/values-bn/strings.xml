@@ -15,7 +15,7 @@
     <string name="home_install_unknown">ইনস্টল করা বা অনুমদিত করা নেই</string>
     <string name="home_working">কাজ করতেছে 🤭</string>
     <string name="apatch_version">সংস্করণ %s</string>
-    <string name="apatch_version_update">সংস্করণ %s → %s</string>
+    <string name="apatch_version_update">সংস্করণ %1$s → %2$s</string>
     <string name="home_su_path">এক্সিকিউটেবল su</string>
     <string name="home_apatch_version">APatch সংস্করণ</string>
     <string name="home_auth_key_title">সুপারকি প্রবেশ করুন</string>
@@ -95,7 +95,7 @@
     <string name="settings_check_update">হালনাগাদ চেক করুন</string>
     <string name="settings_check_update_summary">অ্যাপ খোলার সময় স্বয়ংক্রিয়ভাবে হালনাগাদ চেক করুন</string>
     <string name="kpatch_shadow_path_title">কেপ্যাচ</string>
-    <string name="kpatch_version_update">সংস্করণ %s → %s</string>
+    <string name="kpatch_version_update">সংস্করণ %1$s → %2$s</string>
     <string name="clear_super_key">সুপার_কি মুছুন</string>
     <string name="home_install_unknown_summary">ইন্সটল করতে ক্লিক করুন</string>
     <string name="home_kpatch_info_title">তথ্য</string>

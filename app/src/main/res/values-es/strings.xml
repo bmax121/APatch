@@ -26,7 +26,7 @@
     <string name="home_need_update">Hay una nueva versión disponible</string>
     <string name="patch_set_superkey">Definir superclave</string>
     <string name="home_su_path">Ejecutable «su»</string>
-    <string name="apatch_version_update">Versión: %s → %s</string>
+    <string name="apatch_version_update">Versión: %1$s → %2$s</string>
     <string name="home_working">Funcionando 😋</string>
     <string name="home_patch_next_step">Siguiente paso</string>
     <string name="home_not_installed">Sin instalar</string>
@@ -95,7 +95,7 @@
     <string name="settings_global_namespace_mode">Modo del espacio de los nombres globales</string>
     <string name="settings_global_namespace_mode_summary">Todas las sesiones «root» utilizan el espacio de nombres de montaje global</string>
     <string name="settings_clear_super_key_dialog">¿Seguro que quieres continuar?</string>
-    <string name="kpatch_version_update">Versión: %s → %s</string>
+    <string name="kpatch_version_update">Versión: %1$s → %2$s</string>
     <string name="kpatch_shadow_path_title">kpatch</string>
     <string name="home_kpatch_info_title">Info</string>
     <string name="home_ap_cando_reboot">Reiniciar</string>

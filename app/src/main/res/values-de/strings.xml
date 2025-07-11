@@ -23,7 +23,7 @@
     <string name="home_patch_set_key_desc">Nur Anmeldedaten für KernelPatch</string>
     <string name="home_patch_next_step">Nächster Schritt</string>
     <string name="kpatch_version">Version: %s</string>
-    <string name="apatch_version_update">Version: %s -&gt; %s</string>
+    <string name="apatch_version_update">Version: %1$s -&gt; %2$s</string>
     <string name="home_auth_key_desc">Start nach Zertifizierung</string>
     <string name="home_manager_version">Manager-Version</string>
     <string name="su_pkg_excluded_setting_summary">Wenn Sie diese Option aktivieren, kann APatch alle von den Modulen dieser Anwendung geänderten Dateien wiederherstellen.</string>
@@ -97,7 +97,7 @@
     <string name="kpatch_shadow_path_title">kpatch</string>
     <string name="home_kpatch_info_title">Info</string>
     <string name="settings_clear_super_key_dialog">Wollen Sie wirklich fortfahren?</string>
-    <string name="kpatch_version_update">Version: %s -&gt; %s</string>
+    <string name="kpatch_version_update">Version: %1$s -&gt; %2$s</string>
     <string name="patch_config_title">Korrekturen</string>
     <string name="patch_mode_bootimg_patch">Modus: Korrektur</string>
     <string name="patch_mode_uninstall_patch">Modus: EntKorrektur</string>

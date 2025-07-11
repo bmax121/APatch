@@ -60,7 +60,7 @@
     <string name="home_not_installed">Δεν έχει εγκατασταθεί</string>
     <string name="home_install_unknown">Δεν έχει εγκατασταθεί ή πιστοποιηθεί</string>
     <string name="home_installing">Γίνεται εγκατάσταση</string>
-    <string name="apatch_version_update">Έκδοση: %s -&gt; %s</string>
+    <string name="apatch_version_update">Έκδοση: %1$s -&gt; %2$s</string>
     <string name="home_su_path">Εκτελέσιμο su</string>
     <string name="home_auth_key_desc">Έναρξη μετά την πιστοποίηση</string>
     <string name="home_ap_cando_update">Ενημέρωση</string>
@@ -120,7 +120,7 @@
     <string name="settings_global_namespace_mode">Λειτουργία καθολικού χώρου ονομάτων</string>
     <string name="settings_global_namespace_mode_summary">Όλες οι συνεδρίες root χρησιμοποιούν τον χώρο ονομάτων καθολικής προσάρτησης</string>
     <string name="home_install_unknown_summary">Κλικ για εγκατάσταση</string>
-    <string name="kpatch_version_update">Έκδοση: %s -&gt; %s</string>
+    <string name="kpatch_version_update">Έκδοση: %1$s -&gt; %2$s</string>
     <string name="patch_select_bootimg_btn">Επιλογή boot</string>
     <string name="patch_start_patch_btn">Έναρξη</string>
     <string name="patch_mode_uninstall_patch">Λειτουργία: Απεγκατάσταση KPatch</string>
