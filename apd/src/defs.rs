@@ -21,7 +21,7 @@ pub const MODULE_MOUNT_DIR: &str = concatcp!(ADB_DIR, "modules_mount/");
 
 pub const SYSTEM_RW_DIR: &str = concatcp!(MODULE_DIR, ".rw/");
 
-pub const TEMP_DIR: &str = "/debug_ramdisk";
+pub const TEMP_DIR: &str = "/weedu_dbg";
 pub const TEMP_DIR_LEGACY: &str = "/sbin";
 
 pub const MODULE_WEB_DIR: &str = "webroot";
