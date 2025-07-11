@@ -23,7 +23,7 @@
     <string name="home_ap_cando_install">Instaluj</string>
     <string name="home_selinux_status">Status SELinux</string>
     <string name="home_su_path">Plik wykonywalny su</string>
-    <string name="apatch_version_update">Wersja: %s -&gt; %s</string>
+    <string name="apatch_version_update">Wersja: %1$s -&gt; %2$s</string>
     <string name="home_kernel">Wersja jądra</string>
     <string name="home_manager_version">Wersja menedżera</string>
     <string name="patch_title">Załataj</string>
@@ -95,7 +95,7 @@
     <string name="settings_global_namespace_mode">Tryb globalnej przestrzeni nazw</string>
     <string name="settings_global_namespace_mode_summary">Wszystkie sesje root korzystają z globalnej przestrzeni montowania nazw</string>
     <string name="settings_clear_super_key_dialog">Czy na pewno chcesz kontynuować?</string>
-    <string name="kpatch_version_update">Wersja: %s -&gt; %s</string>
+    <string name="kpatch_version_update">Wersja: %1$s -&gt; %2$s</string>
     <string name="home_kpatch_info_title">Informacje</string>
     <string name="patch_select_bootimg_btn">Wybierz rozruch</string>
     <string name="patch_embed_kpm_btn">Osadź KPM</string>

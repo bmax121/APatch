@@ -68,7 +68,8 @@
     <string name="home_selinux_status_disabled">Devredışı</string>
     <string name="settings">Ayarlar</string>
     <string name="apm_new_version_available">Yeni sürüm: %s mevcut, güncellemek için tıklayın</string>
-    <string name="apatch_version_update">Sürüm: %s -&gt; %s</string>
+    <string name="apatch_version_update">Sürüm: %1$s -&gt; %2$s</string>
+    <string name="kpatch_version_update">Sürüm: %1$s -&gt; %2$s</string>
     <string name="home_working">Çalışıyor 😋</string>
     <string name="apm_empty">Hiç modül kurulmadı</string>
     <string name="kpm_load">Yükle</string>
@@ -95,7 +96,7 @@
     <string name="settings_global_namespace_mode">Küresel ad alanı modu</string>
     <string name="settings_global_namespace_mode_summary">Tüm root oturumları global bağlama ad alanını kullanır</string>
     <string name="settings_clear_super_key_dialog">Gerçekten devam etmek istiyor musunuz?</string>
-    <string name="kpatch_version_update">Sürüm: %s -&gt; %s</string>
+    <string name="kpatch_version_update">Sürüm: %1$s -&gt; %2$s</string>
     <string name="kpatch_shadow_path_title">kpatch</string>
     <string name="home_ap_cando_reboot">Yeniden başlat</string>
     <string name="patch_config_title">Yamalar</string>

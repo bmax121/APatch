@@ -36,7 +36,7 @@
     <string name="kpatch_version">Versão: %s</string>
     <string name="home_working">Funcionado</string>
     <string name="home_installing">Instalando</string>
-    <string name="apatch_version_update">Versão: %s -&gt; %s</string>
+    <string name="apatch_version_update">Versão: %1$s -&gt; %2$s</string>
     <string name="home_ap_cando_install">Instalar</string>
     <string name="home_selinux_status_unknown">Desconhecido</string>
     <string name="kpm_load">Carregar</string>
@@ -100,7 +100,7 @@
     <string name="settings_clear_super_key_dialog">Você realmente quer prosseguir?</string>
     <string name="settings_check_update_summary">Verifique automaticamente as atualizações ao abrir o aplicativo</string>
     <string name="home_install_unknown_summary">Clique para instalar</string>
-    <string name="kpatch_version_update">Versão: %s -&gt; %s</string>
+    <string name="kpatch_version_update">Versão: %1$s -&gt; %2$s</string>
     <string name="home_kpatch_info_title">Informação</string>
     <string name="patch_select_bootimg_btn">Selecione a inicialização</string>
     <string name="patch_start_patch_btn">Início</string>

@@ -30,7 +30,7 @@
     <string name="home_installing">Menginstal</string>
     <string name="apatch_version">Versi: %s</string>
     <string name="home_need_update">Versi terbaru tersedia</string>
-    <string name="apatch_version_update">Versi: %s -&gt; %s</string>
+    <string name="apatch_version_update">Versi: %1$s -&gt; %2$s</string>
     <string name="home_auth_key_title">Masukkan SuperKey</string>
     <string name="reboot_download">Reboot ke Download</string>
     <string name="home_auth_key_desc">Mulai setelah sertifikasi</string>
@@ -95,7 +95,7 @@
     <string name="settings_global_namespace_mode_summary">Mount namespace ke semua root sesi</string>
     <string name="settings_global_namespace_mode">Mode namespace global</string>
     <string name="settings_clear_super_key_dialog">Anda yakin untuk melanjutkan?</string>
-    <string name="kpatch_version_update">Versi: %s -&gt; %s</string>
+    <string name="kpatch_version_update">Versi: %1$s -&gt; %2$s</string>
     <string name="home_kpatch_info_title">Info</string>
     <string name="home_ap_cando_reboot">Reboot</string>
     <string name="patch_config_title">Patch</string>

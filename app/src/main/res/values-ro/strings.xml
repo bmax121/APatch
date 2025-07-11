@@ -28,8 +28,7 @@
     <string name="kpatch_version">Versiune: %s</string>
     <string name="apatch_version">Versiune:
 \n%s</string>
-    <string name="apatch_version_update">Versiune:
-\n%s -&gt; %s</string>
+    <string name="apatch_version_update">Versiune: %1$s -&gt; %2$s</string>
     <string name="home_su_path">Executable su</string>
     <string name="home_apatch_version">Versiune APatch</string>
     <string name="home_auth_key_title">Introdu Superkey</string>
@@ -102,7 +101,7 @@
     <string name="settings_check_update">Verifică actualizare</string>
     <string name="settings_check_update_summary">Verificare automată a actualizarilor la deschiderea aplicației</string>
     <string name="home_install_unknown_summary">Click pentru instalare</string>
-    <string name="kpatch_version_update">Versiune: %s -&gt; %s</string>
+    <string name="kpatch_version_update">Versiune: %1$s -&gt; %2$s</string>
     <string name="home_kpatch_info_title">Informații</string>
     <string name="kpatch_shadow_path_title">kpatch</string>
     <string name="home_ap_cando_reboot">Restart</string>

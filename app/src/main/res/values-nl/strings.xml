@@ -55,7 +55,7 @@
     <string name="home_su_path">su: %s</string>
     <string name="home_auth_key_desc">Start na certificering</string>
     <string name="home_ap_cando_update">Werk bij</string>
-    <string name="apatch_version_update">Versie: %s -&gt; %s</string>
+    <string name="apatch_version_update">Versie: %1$s -&gt; %2$s</string>
     <string name="home_apatch_version">APatch: %s</string>
     <string name="home_ap_cando_install">Installeer</string>
     <string name="home_manager_version">Managerversie</string>
@@ -110,7 +110,7 @@
     <string name="pink_theme">Pink Theem</string>
     <string name="save_log">Logboek opslaan</string>
     <string name="log_saved">Logboek opgeslagen</string>
-    <string name="kpatch_version_update">Versie: %s -&gt; %s</string>
+    <string name="kpatch_version_update">Versie: %1$s -&gt; %2$s</string>
     <string name="clear_super_key">SuperKey verwijderen</string>
     <string name="kpatch_shadow_path_title">kpatch</string>
     <string name="home_kpatch_info_title">Info</string>

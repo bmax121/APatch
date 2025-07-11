@@ -52,7 +52,7 @@
     <string name="reboot_bootloader">Fastboot mode එකට</string>
     <string name="reboot_download">Download mode එකට</string>
     <string name="kpatch_version">අනුවාදය: %s</string>
-    <string name="apatch_version_update">අනුවාදය: %s -&gt; %s</string>
+    <string name="apatch_version_update">අනුවාදය: %1$s -&gt; %2$s</string>
     <string name="android_patch">AndroidPatch</string>
     <string name="home_su_path">රූට්:%s</string>
     <string name="home_ap_cando_update">යාවත්කාලීන කරන්න</string>
@@ -137,7 +137,7 @@
     <string name="teal_theme">Teal Theme</string>
     <string name="yellow_theme">කහ Theme</string>
     <string name="save_log">Logs සටහන් සුරකින්න</string>
-    <string name="kpatch_version_update">අනුවාදය: %s -&gt; %s</string>
+    <string name="kpatch_version_update">අනුවාදය: %1$s -&gt; %2$s</string>
     <string name="kpatch_shadow_path_title">kpatch</string>
     <string name="home_kpatch_info_title">තොරතුරු</string>
     <string name="home_ap_cando_reboot">රී බුට් කරන්න</string>

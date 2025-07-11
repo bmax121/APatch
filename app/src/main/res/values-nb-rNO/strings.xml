@@ -21,7 +21,7 @@
     <string name="home_installing">Installerer</string>
     <string name="home_need_update">Ny versjon tilgjengelig</string>
     <string name="kpatch_version">Versjon: %s</string>
-    <string name="apatch_version_update">Versjon: %s → %s</string>
+    <string name="apatch_version_update">Versjon: %1$s → %2$s</string>
     <string name="home_su_path">su: %s</string>
     <string name="home_auth_key_desc">Start kjøring etter sertifisering</string>
     <string name="home_ap_cando_install">Installer</string>
@@ -72,7 +72,7 @@
     <string name="apm_overlay_fs_not_available">OverlayFS er ikke tilgjengelig. Modulen kan ikke fungere.</string>
     <string name="clear_super_key">Fjern tast</string>
     <string name="home_kpatch_info_title">Info</string>
-    <string name="kpatch_version_update">Versjon: %s → %s</string>
+    <string name="kpatch_version_update">Versjon: %1$s → %2$s</string>
     <string name="success">Vellykket</string>
     <string name="home_device_info">Enhet</string>
     <string name="home_system_version">Systemversjon</string>

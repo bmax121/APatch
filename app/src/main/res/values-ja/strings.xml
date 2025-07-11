@@ -63,7 +63,7 @@
     <string name="apm_changelog">変更履歴</string>
     <string name="kpatch_version">バージョン: %s</string>
     <string name="apatch_version">バージョン: %s</string>
-    <string name="apatch_version_update">バージョン: %s → %s</string>
+    <string name="apatch_version_update">バージョン: %1$s → %2$s</string>
     <string name="home_su_path">su</string>
     <string name="home_selinux_status_disabled">無効</string>
     <string name="clear_super_key">SuperKey を消去</string>
@@ -83,7 +83,7 @@
     <string name="kpm_unload">アンロード</string>
     <string name="apm_empty">インストールされたモジュールはありません</string>
     <string name="settings_clear_super_key_dialog">本当に続行しますか？</string>
-    <string name="kpatch_version_update">バージョン: %s → %s</string>
+    <string name="kpatch_version_update">バージョン: %1$s → %2$s</string>
     <string name="kpatch_shadow_path_title">kpatch</string>
     <string name="home_ap_cando_reboot">再起動</string>
     <string name="patch_config_title">パッチ</string>
