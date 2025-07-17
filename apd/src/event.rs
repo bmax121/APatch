@@ -141,7 +141,7 @@ pub fn mount_systemlessly(module_dir: &str, is_img: bool) -> Result<()> {
         mount_systemlessly(module_dir, true)?;
         return Ok(());
     }
-    let module_dir_origin = defs::MODULE_DIR;
+    let module_dir_origin = Path::new(defs::MODULE_DIR);
     let dir = fs::read_dir(module_dir);
     let Ok(dir) = dir else {
         bail!("open {} failed", defs::MODULE_DIR);
@@ -160,13 +160,19 @@ pub fn mount_systemlessly(module_dir: &str, is_img: bool) -> Result<()> {
         if !module.is_dir() {
             continue;
         }
-        let disabled = Path::new(module_dir_origin)
-            .join(defs::DISABLE_FILE_NAME)
-            .exists();
-        if disabled {
-            info!("module: {} is disabled, ignore!", module.display());
-            continue;
+        if let Some(module_name) = module.file_name() {
+
+            let real_module_path = module_dir_origin.join(module_name);
+
+            let disabled = real_module_path.join(defs::DISABLE_FILE_NAME).exists();
+
+            if disabled {
+                info!("module: {} is disabled, ignore!", module.display());
+                continue;
+            }
+
         }
+
         let skip_mount = module.join(defs::SKIP_MOUNT_FILE_NAME).exists();
         if skip_mount {
             info!("module: {} skip_mount exist, skip!", module.display());
