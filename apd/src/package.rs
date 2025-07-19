@@ -23,7 +23,7 @@ pub fn read_ap_package_config() -> Vec<PackageConfig> {
             Ok(file) => file,
             Err(e) => {
                 warn!("Error opening file (attempt {}): {}", i + 1, e);
-                thread::sleep(Duration::from_millis(100));
+                thread::sleep(Duration::from_secs(1));
                 continue;
             }
         };
@@ -53,7 +53,7 @@ fn write_ap_package_config(package_configs: &[PackageConfig]) {
             Ok(file) => file,
             Err(e) => {
                 warn!("Error creating file (attempt {}): {}", i + 1, e);
-                thread::sleep(Duration::from_millis(200));
+                thread::sleep(Duration::from_secs(1));
                 continue;
             }
         };
