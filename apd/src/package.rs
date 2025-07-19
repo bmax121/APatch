@@ -30,17 +30,24 @@ pub fn read_ap_package_config() -> Vec<PackageConfig> {
 
         let mut reader = csv::Reader::from_reader(file);
         let mut package_configs = Vec::new();
+        let mut success = true;
         
         for record in reader.deserialize() {
             match record {
                 Ok(config) => package_configs.push(config),
                 Err(e) => {
                     warn!("Error deserializing record: {}", e);
+                    success = false;
                     break;
                 }
             }
         }
-        return package_configs;
+        
+        if success {
+            return package_configs;
+        }
+        
+        thread::sleep(Duration::from_secs(1));
     }
     return Vec::new();
 }
@@ -57,16 +64,24 @@ fn write_ap_package_config(package_configs: &[PackageConfig]) {
                 continue;
             }
         };
+        
         let mut writer = csv::Writer::from_writer(file);
+        let mut success = true;
         
         for config in package_configs {
             if let Err(e) = writer.serialize(config) {
                 warn!("Error serializing record: {}", e);
+                success = false;
                 break;
             }
         }
+        
+        if success {
+            return;
+        }
+        
+        thread::sleep(Duration::from_secs(1));
     }
-
 }
 
 fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
