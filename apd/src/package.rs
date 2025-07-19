@@ -17,7 +17,7 @@ pub struct PackageConfig {
 }
 
 pub fn read_ap_package_config() -> Vec<PackageConfig> {
-    let mut max_retry = 3;
+    let max_retry = 3;
     for i in 0..max_retry {
         let file = match File::open("/data/adb/ap/package_config") {
             Ok(file) => file,
@@ -46,7 +46,7 @@ pub fn read_ap_package_config() -> Vec<PackageConfig> {
 }
 
 fn write_ap_package_config(package_configs: &[PackageConfig]) {
-    let mut max_retry = 3;
+    let max_retry = 3;
 
     for i in 0..max_retry {
         let file = match File::create("/data/adb/ap/package_config") {
