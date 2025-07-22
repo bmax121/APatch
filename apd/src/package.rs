@@ -3,8 +3,6 @@ use serde::{Deserialize, Serialize};
 use std::fs::File;
 use std::io::{self, BufRead};
 use std::path::Path;
-use std::thread;
-use std::time::Duration;
 
 #[derive(Deserialize, Serialize)]
 pub struct PackageConfig {
@@ -17,13 +15,11 @@ pub struct PackageConfig {
 }
 
 pub fn read_ap_package_config() -> Vec<PackageConfig> {
-    let max_retry = 5;
-    for i in 0..max_retry {
+    loop {
         let file = match File::open("/data/adb/ap/package_config") {
             Ok(file) => file,
             Err(e) => {
-                warn!("Error opening file (attempt {}): {}", i + 1, e);
-                thread::sleep(Duration::from_secs(1));
+                warn!("Error opening file: {}", e);
                 continue;
             }
         };
@@ -47,20 +43,15 @@ pub fn read_ap_package_config() -> Vec<PackageConfig> {
             return package_configs;
         }
         
-        thread::sleep(Duration::from_secs(1));
     }
-    return Vec::new();
 }
 
 fn write_ap_package_config(package_configs: &[PackageConfig]) {
-    let max_retry = 5;
-
-    for i in 0..max_retry {
+    loop {
         let file = match File::create("/data/adb/ap/package_config") {
             Ok(file) => file,
             Err(e) => {
-                warn!("Error creating file (attempt {}): {}", i + 1, e);
-                thread::sleep(Duration::from_secs(1));
+                warn!("Error creating file: {}", e);
                 continue;
             }
         };
@@ -80,7 +71,6 @@ fn write_ap_package_config(package_configs: &[PackageConfig]) {
             return;
         }
         
-        thread::sleep(Duration::from_secs(1));
     }
 }
 
