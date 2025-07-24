@@ -27,7 +27,7 @@ pub fn read_ap_package_config() -> Vec<PackageConfig> {
         let mut reader = csv::Reader::from_reader(file);
         let mut package_configs = Vec::new();
         let mut success = true;
-        
+
         for record in reader.deserialize() {
             match record {
                 Ok(config) => package_configs.push(config),
@@ -38,27 +38,27 @@ pub fn read_ap_package_config() -> Vec<PackageConfig> {
                 }
             }
         }
-        
+
         if success {
             return package_configs;
         }
-        
     }
 }
 
 fn write_ap_package_config(package_configs: &[PackageConfig]) {
     loop {
-        let file = match File::create("/data/adb/ap/package_config") {
+        let temp_path = "/data/adb/ap/package_config.tmp";
+        let file = match File::create(temp_path) {
             Ok(file) => file,
             Err(e) => {
-                warn!("Error creating file: {}", e);
+                warn!("Error creating temp file: {}", e);
                 continue;
             }
         };
-        
+
         let mut writer = csv::Writer::from_writer(file);
         let mut success = true;
-        
+
         for config in package_configs {
             if let Err(e) = writer.serialize(config) {
                 warn!("Error serializing record: {}", e);
@@ -66,11 +66,19 @@ fn write_ap_package_config(package_configs: &[PackageConfig]) {
                 break;
             }
         }
-        
+
         if success {
+            if let Err(e) = writer.flush() {
+                warn!("Error flushing writer: {}", e);
+                continue;
+            }
+
+            if let Err(e) = std::fs::rename(temp_path, "/data/adb/ap/package_config") {
+                warn!("Error renaming temp file: {}", e);
+                continue;
+            }
             return;
         }
-        
     }
 }
 
