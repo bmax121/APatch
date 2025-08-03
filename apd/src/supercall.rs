@@ -276,7 +276,9 @@ pub fn refresh_ap_package_list(skey: &CStr, mutex: &Arc<Mutex<()>>) {
         }
     }
 
-    synchronize_package_uid();
+    if let Err(e) = synchronize_package_uid() {
+        error!("Failed to synchronize package UIDs: {}", e);
+    }
 
     let package_configs = read_ap_package_config();
     for config in package_configs {

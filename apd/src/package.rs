@@ -51,7 +51,7 @@ pub fn read_ap_package_config() -> Vec<PackageConfig> {
     Vec::new()
 }
 
-fn write_ap_package_config(package_configs: &[PackageConfig]) {
+pub fn write_ap_package_config(package_configs: &[PackageConfig]) -> io::Result<()> {
     let max_retry = 5;
     for _ in 0..max_retry {
         let temp_path = "/data/adb/ap/package_config.tmp";
@@ -91,8 +91,9 @@ fn write_ap_package_config(package_configs: &[PackageConfig]) {
             thread::sleep(Duration::from_secs(1));
             continue;
         }
-        return;
+        return Ok(());
     }
+    Err(io::Error::new(io::ErrorKind::Other, "Failed after max retries"))
 }
 
 fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
@@ -102,7 +103,7 @@ where
     File::open(filename).map(|file| io::BufReader::new(file).lines())
 }
 
-pub fn synchronize_package_uid() {
+pub fn synchronize_package_uid() -> io::Result<()> {
     info!("[synchronize_package_uid] Start synchronizing root list with system packages...");
 
     let max_retry = 5;
@@ -110,6 +111,7 @@ pub fn synchronize_package_uid() {
         match read_lines("/data/system/packages.list") {
             Ok(lines) => {
                 let mut package_configs = read_ap_package_config();
+                let mut updated = false;
 
                 for line in lines.filter_map(|line| line.ok()) {
                     let words: Vec<&str> = line.split_whitespace().collect();
@@ -119,7 +121,10 @@ pub fn synchronize_package_uid() {
                                 .iter_mut()
                                 .find(|config| config.pkg == words[0])
                             {
-                                config.uid = uid;
+                                if config.uid != uid {
+                                    config.uid = uid;
+                                    updated = true;
+                                }
                             }
                         } else {
                             warn!("Error parsing uid: {}", words[1]);
@@ -127,8 +132,10 @@ pub fn synchronize_package_uid() {
                     }
                 }
 
-                write_ap_package_config(&package_configs);
-                break;
+                if updated {
+                    write_ap_package_config(&package_configs)?;
+                }
+                return Ok(());
             }
             Err(e) => {
                 warn!("Error reading packages.list: {}", e);
@@ -136,4 +143,5 @@ pub fn synchronize_package_uid() {
             }
         }
     }
+    Err(io::Error::new(io::ErrorKind::Other, "Failed after max retries"))
 }
