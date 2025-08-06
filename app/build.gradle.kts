@@ -226,6 +226,10 @@ tasks.clean {
     dependsOn("apdClean")
 }
 
+ksp {
+    arg("compose-destinations.defaultTransitions", "none")
+}
+
 dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity.compose)
