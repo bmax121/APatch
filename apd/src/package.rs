@@ -93,7 +93,10 @@ pub fn write_ap_package_config(package_configs: &[PackageConfig]) -> io::Result<
         }
         return Ok(());
     }
-    Err(io::Error::new(io::ErrorKind::Other, "Failed after max retries"))
+    Err(io::Error::new(
+        io::ErrorKind::Other,
+        "Failed after max retries",
+    ))
 }
 
 fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
@@ -143,5 +146,8 @@ pub fn synchronize_package_uid() -> io::Result<()> {
             }
         }
     }
-    Err(io::Error::new(io::ErrorKind::Other, "Failed after max retries"))
+    Err(io::Error::new(
+        io::ErrorKind::Other,
+        "Failed after max retries",
+    ))
 }

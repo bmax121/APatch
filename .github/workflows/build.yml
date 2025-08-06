@@ -85,9 +85,10 @@ jobs:
       - name: Sign Release
         env:
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+          BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
         if: ${{ env.SIGNING_KEY != '' }}
         continue-on-error: true
-        uses: noriban/sign-android-release@v5.1
+        uses: kevin-david/zipalign-sign-android-release@v2
         id: sign_app
         with:
           releaseDirectory: app/build/outputs/apk/release
@@ -95,6 +96,7 @@ jobs:
           alias: ${{ secrets.ALIAS }}
           keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
           keyPassword: ${{ secrets.KEY_PASSWORD }}
+          zipAlign: true
 
       - name: Upload build artifact
         env:
