@@ -114,6 +114,13 @@ pub fn synchronize_package_uid() -> io::Result<()> {
         match read_lines("/data/system/packages.list") {
             Ok(lines) => {
                 let mut package_configs = read_ap_package_config();
+                let system_packages: Vec<String> = lines
+                    .filter_map(|line| line.ok())
+                    .filter_map(|line| line.split_whitespace().next().map(|s| s.to_string()))
+                    .collect();
+
+                package_configs.retain(|config| system_packages.contains(&config.pkg));
+
                 let mut updated = false;
 
                 for line in lines.filter_map(|line| line.ok()) {
