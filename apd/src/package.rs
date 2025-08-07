@@ -1,6 +1,5 @@
 use log::{info, warn};
 use serde::{Deserialize, Serialize};
-use std::collections::HashSet;
 use std::fs::File;
 use std::io::{self, BufRead};
 use std::path::Path;
@@ -114,10 +113,12 @@ pub fn synchronize_package_uid() -> io::Result<()> {
     for _ in 0..max_retry {
         match read_lines("/data/system/packages.list") {
             Ok(lines) => {
+                let lines: Vec<_> = lines.filter_map(|line| line.ok()).collect();
+                
                 let mut package_configs = read_ap_package_config();
                 
-                let system_packages: HashSet<String> = lines
-                    .filter_map(|line| line.ok())
+                let system_packages: Vec<String> = lines
+                    .iter()
                     .filter_map(|line| line.split_whitespace().next().map(|s| s.to_string()))
                     .collect();
 
@@ -125,23 +126,21 @@ pub fn synchronize_package_uid() -> io::Result<()> {
 
                 let mut updated = false;
 
-                if let Ok(lines) = read_lines("/data/system/packages.list") {
-                    for line in lines.filter_map(|line| line.ok()) {
-                        let words: Vec<&str> = line.split_whitespace().collect();
-                        if words.len() >= 2 {
-                            if let Ok(uid) = words[1].parse::<i32>() {
-                                if let Some(config) = package_configs
-                                    .iter_mut()
-                                    .find(|config| config.pkg == words[0])
-                                {
-                                    if config.uid != uid {
-                                        config.uid = uid;
-                                        updated = true;
-                                    }
+                for line in &lines {
+                    let words: Vec<&str> = line.split_whitespace().collect();
+                    if words.len() >= 2 {
+                        if let Ok(uid) = words[1].parse::<i32>() {
+                            if let Some(config) = package_configs
+                                .iter_mut()
+                                .find(|config| config.pkg == words[0])
+                            {
+                                if config.uid != uid {
+                                    config.uid = uid;
+                                    updated = true;
                                 }
-                            } else {
-                                warn!("Error parsing uid: {}", words[1]);
                             }
+                        } else {
+                            warn!("Error parsing uid: {}", words[1]);
                         }
                     }
                 }
