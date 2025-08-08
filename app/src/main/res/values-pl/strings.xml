@@ -208,7 +208,7 @@
     <string name="crash_handle_copy">Kopiuj logi awarii</string>
     <string name="crash_handle_copied">Logi awarii skopiowano do schowka.</string>
     <string name="settings_lite_mode">Włącz tryb uproszczony</string>
-    <string name="settings_lite_mode_mode_summary">Funkcje modułu AP mogą ulec uszkodzeniu po włączeniu, ale czasami mogą skutecznie uniknąć wykrycia. Wymagany jest restart.</string>
+    <string name="settings_lite_mode_mode_summary">Moduły AP mogą wykazywać awarie po włączeniu tej funkcji, ale w niektórych przypadkach mogą nadal skutecznie unikać wykrycia. Wymagane ponowne uruchomienie.</string>
     <string name="settings_force_overlayfs_mode">Wymuś użycie OverlayFS</string>
-    <string name="settings_force_overlayfs_mode_summary">Użyj OverlayFS do montowania modułów AP zamiast Magic Mount, dopóki jądro to obsługuje. Wymagane jest ponowne uruchomienie.</string>
+    <string name="settings_force_overlayfs_mode_summary">Użyj OverlayFS zamiast Magic Mount do montowania modułów AP, gdy jądro to obsługuje. Wymagane jest ponowne uruchomienie.</string>
 </resources>

@@ -210,7 +210,7 @@
     <string name="crash_handle_copied">Журнал збоїв скопійовано в буфер обміну.</string>
     <string name="crash_handle_copy">Копіювати журнал збоїв</string>
     <string name="settings_lite_mode">Увімкнути спрощений режим</string>
-    <string name="settings_lite_mode_mode_summary">Функції APModule можуть бути пошкоджені після ввімкнення, але іноді це може ефективно уникнути виявлення. Потрібне перезавантаження.</string>
+    <string name="settings_lite_mode_mode_summary">Функції APModule можуть демонструвати збої після ввімкнення, але в деяких випадках вони все ще можуть ефективно уникати виявлення. Потрібне перезавантаження.</string>
     <string name="settings_force_overlayfs_mode">Примусове використання OverlayFS</string>
-    <string name="settings_force_overlayfs_mode_summary">Використовуйте OverlayFS для монтування APModules замість Magic Mount, якщо ядро підтримує цю функцію. Потрібне перезавантаження.</string>
+    <string name="settings_force_overlayfs_mode_summary">Використовуйте OverlayFS для монтування APModules замість Magic Mount, коли доступна підтримка ядра. Потрібне перезавантаження.</string>
 </resources>

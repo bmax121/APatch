@@ -6,15 +6,15 @@
     <string name="kernel_patch">KernelPatch</string>
     <string name="android_patch">AndroidPatch</string>
     <string name="reboot">Reiniciar</string>
-    <string name="settings">Definições</string>
-    <string name="reboot_recovery">Reiniciar para o modo de recuperação</string>
-    <string name="about">Acerca</string>
+    <string name="settings">Configurações</string>
+    <string name="reboot_recovery">Reiniciar em modo de recuperação</string>
+    <string name="about">Sobre</string>
     <string name="home_learn_apatch">Aprender APatch</string>
     <string name="home_click_to_learn_apatch">Aprenda sobre as características de APatch e como usar</string>
     <string name="super_key">Chave de Segurança</string>
     <string name="patch_set_superkey">Definir Chave de Segurança</string>
     <string name="home_patch_next_step">Próximo passo</string>
-    <string name="home_install_unknown">Desconhecido</string>
+    <string name="home_install_unknown">"Não foi instalado ou autenticado "</string>
     <string name="home_click_to_install">Clique para instalar</string>
     <string name="home_need_update">Nova versão Disponível</string>
     <string name="apatch_version">Versão: %s</string>
@@ -22,7 +22,7 @@
     <string name="home_ap_cando_update">Atualizar</string>
     <string name="home_ap_cando_uninstall">Desinstalar</string>
     <string name="patch_title">Patch</string>
-    <string name="home_kernel">Kernel</string>
+    <string name="home_kernel">Versão do Kernel</string>
     <string name="home_manager_version">Versão do gestor</string>
     <string name="home_selinux_status_disabled">Desativado</string>
     <string name="kpm">KPModulo</string>
@@ -41,8 +41,8 @@
     <string name="home_selinux_status_unknown">Desconhecido</string>
     <string name="kpm_load">Carregar</string>
     <string name="reboot_bootloader">Reiniciar em modo Bootloader</string>
-    <string name="reboot_download">Reiniciar no modo Download</string>
-    <string name="reboot_edl">Reiniciar no modo EDL</string>
+    <string name="reboot_download">Reiniciar em modo Download</string>
+    <string name="reboot_edl">Reiniciar em modo EDL</string>
     <string name="home_su_path">su executável</string>
     <string name="home_auth_key_desc">Comece trabalho após a certificação</string>
     <string name="home_fingerprint">Impressão digital</string>
@@ -94,7 +94,7 @@
     <string name="patch">Patch</string>
     <string name="settings_global_namespace_mode">Modo de namespace global</string>
     <string name="settings_global_namespace_mode_summary">Todas as sessões root usam o Global Mount Namespace</string>
-    <string name="settings_check_update">Verificar atualização</string>
+    <string name="settings_check_update">Verificar atualizações</string>
     <string name="success">Sucesso</string>
     <string name="failure">Falha</string>
     <string name="settings_clear_super_key_dialog">Você realmente quer prosseguir?</string>
@@ -154,7 +154,7 @@
     <string name="patch_item_set_skey_label">O comprimento da Chave Mestra deve ter pelo menos 8 caracteres e incluir números e letras.</string>
     <string name="home_kpatch_version">Versão do KernelPatch</string>
     <string name="hide_apatch_manager">Ocultar o gerenciador do Apatch</string>
-    <string name="hide_apatch_manager_summary">Instala o app oculto com ID aleatório e nome personalizado</string>
+    <string name="hide_apatch_manager_summary">Instalar um app de proxy com ID aleatório e nome personalizado</string>
     <string name="hide_apatch_dialog_new_manager_name">Nome do novo gestor</string>
     <string name="hide_apatch_dialog_summary">Ele será usado como a nova tag do aplicativo mostrado ao iniciar</string>
     <string name="hide_apatch_manager_failure">Falha ao ocultar. Por favor, reporte o bug!</string>
@@ -209,4 +209,8 @@
     <string name="crash_handle_title">A app travou…</string>
     <string name="crash_handle_copy">Copiar registro de falha</string>
     <string name="crash_handle_copied">Registo de falhas copiado.</string>
+    <string name="settings_lite_mode">Habilitar modo leve</string>
+    <string name="settings_lite_mode_mode_summary">Funções APModule podem exibir falhas após serem habilitadas, mas em alguns casos elas conseguem evitar detecção eficientemente. Necessário reinicialização.</string>
+    <string name="settings_force_overlayfs_mode">Forçar o uso de OverlayFS</string>
+    <string name="settings_force_overlayfs_mode_summary">Usar OverlayFS para montar APModules ao invés de Magic Mount quando o suporte ao kernel estiver disponível. Necessário reinicialização.</string>
 </resources>

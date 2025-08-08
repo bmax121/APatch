@@ -76,7 +76,7 @@
     <string name="home_fingerprint">Impronta digitale</string>
     <string name="apm_desc">Descrizione</string>
     <string name="kpm_unload">Rimuovi</string>
-    <string name="home_kernel">Kernel</string>
+    <string name="home_kernel">Versione Kernel</string>
     <string name="home_selinux_status_enforcing">Rinforzo</string>
     <string name="patch_title">Applica una patch</string>
     <string name="home_apatch_version">Versione di APatch</string>
@@ -209,4 +209,8 @@
     <string name="crash_handle_title">App chiusa in modo anomalo..</string>
     <string name="crash_handle_copy">Copia registro di arresto anomalo</string>
     <string name="apm_action">Azione</string>
+    <string name="settings_lite_mode">Abilita la modalità Lite</string>
+    <string name="settings_lite_mode_mode_summary">Le funzioni APModule potrebbero presentare errori dopo essere state abilitate, ma in alcuni casi possono comunque eludere efficacemente il rilevamento. Riavvio richiesto.</string>
+    <string name="settings_force_overlayfs_mode">Forza l\'uso di OverlayFS</string>
+    <string name="settings_force_overlayfs_mode_summary">Utilizzare OverlayFS per montare gli APModuli invece di Magic Mount quando il supporto del kernel è disponibile. Riavviare il sistema.</string>
 </resources>

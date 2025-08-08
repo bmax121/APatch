@@ -99,7 +99,7 @@
     <string name="apm_uninstall_confirm">\"%s\" モジュールをアンインストールしますか？</string>
     <string name="apm_uninstall_failed">%s をアンインストールできませんでした</string>
     <string name="apm_failed_to_disable">\"%s\" モジュールをオフにできませんでした</string>
-    <string name="apm_new_version_available">タップして最新バージョン %s をインストール</string>
+    <string name="apm_new_version_available">新しいバージョン %s が利用可能です。クリックしてアップグレードしてください。</string>
     <string name="su_selinux_via_hook">フックによるバイパス</string>
     <string name="home_kpatch_info_title">情報</string>
     <string name="patch_item_error">!!エラー!!</string>
@@ -128,7 +128,7 @@
     <string name="patch_item_kpimg_config">構成:</string>
     <string name="patch_item_extra_kpm_license">ライセンス:</string>
     <string name="settings_check_update">アップデートを確認</string>
-    <string name="hide_apatch_manager_summary">ランダムなパッケージ ID とカスタムアプリ名を使用して新しいマネージャーアプリをインストールする</string>
+    <string name="hide_apatch_manager_summary">ランダムなパッケージIDとカスタムアプリラベルでプロキシアプリをインストールする</string>
     <string name="hide_apatch_manager">APatchマネージャーを隠す</string>
     <string name="settings_check_update_summary">アプリを開いたときに自動でアップデートを確認する</string>
     <string name="kpm_install">インストール</string>
@@ -209,4 +209,8 @@
     <string name="crash_handle_copy">クラッシュログをコピー</string>
     <string name="crash_handle_copied">クラッシュ ログをクリップボードにコピーしました。</string>
     <string name="crash_handle_title">アプリがクラッシュしました。</string>
+    <string name="settings_lite_mode">Liteモードを有効にする</string>
+    <string name="settings_lite_mode_mode_summary">APModuleの機能は、有効化された後に障害を示すことがあるが、場合によっては検出を効果的に回避することができる。再起動が必要です。</string>
+    <string name="settings_force_overlayfs_mode">OverlayFSの使用を強制する</string>
+    <string name="settings_force_overlayfs_mode_summary">カーネルのサポートが利用可能な場合、Magic Mountの代わりにOverlayFSを使用してAPModuleをマウントする。再起動が必要です。</string>
 </resources>

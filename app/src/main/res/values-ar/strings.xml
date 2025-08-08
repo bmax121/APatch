@@ -139,7 +139,7 @@
     <string name="success">ناجحة</string>
     <string name="failure">فشل</string>
     <string name="mode_select_page_title">تثبيت</string>
-    <string name="settings_check_update">البحث عن تحديث</string>
+    <string name="settings_check_update">تحقق للحصول على التحديثات</string>
     <string name="settings_check_update_summary">التحقق تلقائيًا من وجود تحديثات عند فتح التطبيق</string>
     <string name="home_install_unknown_summary">اضغط للتثبيت</string>
     <string name="home_device_info">الجهاز</string>
