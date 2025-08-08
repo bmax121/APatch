@@ -34,7 +34,7 @@
     <string name="settings_clear_super_key_dialog">Opravdu chcete pokračovat?</string>
     <string name="patch_item_new_extra_kpm">Vložit nový</string>
     <string name="purple_theme">Fialové</string>
-    <string name="settings_check_update">Zkontrolovat aktualizaci</string>
+    <string name="settings_check_update">Zkontrolovat aktualizace</string>
     <string name="patch_item_kpimg_version">Verze:</string>
     <string name="patch_item_kpimg_comile_time">Čas:</string>
     <string name="patch_item_kpimg_config">Konfigurace:</string>

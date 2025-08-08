@@ -3,7 +3,7 @@
     <string name="app_name" translatable="false">APatch</string>
     <string name="apm_reboot_to_apply">Değişikleri uygulamak için yeniden başlatın</string>
     <string name="android_patch">AndroidPatch</string>
-    <string name="kpm_unload_confirm">\"%s\" modülünü kaldır?</string>
+    <string name="kpm_unload_confirm">\"%s\" modülü boşaltılsın mı?</string>
     <string name="apm_uninstall_success">\"%s\" kaldırıldı</string>
     <string name="send_log">Günlükleri gönder</string>
     <string name="apm_install">Kur</string>
@@ -14,7 +14,7 @@
     <string name="kpm_kp_not_installed">KernelPatch kurulu değil</string>
     <string name="home_patch_set_key_desc">KernelPatch için tek gerekli veri</string>
     <string name="home_install_unknown">Kurulmadı veya kimliği doğrulanmadı</string>
-    <string name="apm_uninstall_confirm">\"%s\" modülünü kaldır?</string>
+    <string name="apm_uninstall_confirm">\"%s\" modülü kaldırılsın mı?</string>
     <string name="su_pkg_excluded_setting_title">Değişiklikleri hariç tut</string>
     <string name="reboot_download">İndirme modunda yeniden başlat</string>
     <string name="home_click_to_learn_apatch">APatch\'in özelliklerini ve nasıl kullanılacağını öğrenin</string>
@@ -67,7 +67,7 @@
     <string name="kpm_unload">Yüklemeyi kaldır</string>
     <string name="home_selinux_status_disabled">Devredışı</string>
     <string name="settings">Ayarlar</string>
-    <string name="apm_new_version_available">Yeni sürüm: %s mevcut, güncellemek için tıklayın</string>
+    <string name="apm_new_version_available">Yeni %s sürümü mevcut, yükseltmek için tıklayın.</string>
     <string name="apatch_version_update">Sürüm: %s -&gt; %s</string>
     <string name="home_working">Çalışıyor 😋</string>
     <string name="apm_empty">Hiç modül kurulmadı</string>
@@ -75,7 +75,7 @@
     <string name="home_patch_next_step">Sonraki adım</string>
     <string name="home_auth_key_title">Süper Anahtarı girin</string>
     <string name="apm_update">Güncelle</string>
-    <string name="home_kernel">Çekirdek</string>
+    <string name="home_kernel">Kernel versiyon</string>
     <string name="home_not_installed">Kurulu değil</string>
     <string name="kpm">KP Modül</string>
     <string name="home_selinux_status_enforcing">Enforcing</string>
@@ -134,7 +134,7 @@
     <string name="hide_apatch_dialog_new_manager_name">Yeni yönetici adı</string>
     <string name="hide_apatch_manager_failure">Gizlenemedi. Lütfen hatayı bildirin!</string>
     <string name="kpm_install">Kur</string>
-    <string name="hide_apatch_manager_summary">Rastgele bir kimlik ve özel etikete sahip yeni bir yönetici uygulaması yükleyin</string>
+    <string name="hide_apatch_manager_summary">Rastgele bir paket kimliği ve özel bir uygulama etiketiyle bir proxy uygulaması yükle.</string>
     <string name="setting_reset_su_path">\"su\" programı yolunu sıfırla</string>
     <string name="setting_reset_su_new_path">Yeni tam yol</string>
     <string name="success">Başarılı</string>
@@ -143,7 +143,7 @@
     <string name="settings_check_update">Güncellemeleri denetle</string>
     <string name="patch_mode_install_to_next_slot">Mod: Aktif olmayan yuvaya kur (OTA\'dan sonra)</string>
     <string name="mode_select_page_patch_and_install">Yama ve Kur</string>
-    <string name="mode_select_page_select_file">Yama için bir önyükleme kalıbı seçin</string>
+    <string name="mode_select_page_select_file">Yama yapılacak bir boot (önyükleme) imajı seçin.</string>
     <string name="home_dialog_auth_fail_title">Kimlik doğrulama başarısız</string>
     <string name="home_more_menu_feedback_or_suggestion">Geri bildirim veya öneri</string>
     <string name="home_more_menu_about">Hakkında</string>
@@ -209,4 +209,8 @@
     <string name="crash_handle_title">Uygulama çöktü…</string>
     <string name="crash_handle_copy">Çökme raporunu kopyala</string>
     <string name="crash_handle_copied">Çökme raporu panoya kopyalandı.</string>
+    <string name="settings_lite_mode">Lite modunu etkinleştir.</string>
+    <string name="settings_lite_mode_mode_summary">APModule işlevleri etkinleştirildikten sonra hatalar gösterebilir, ancak bazı durumlarda tespiti etkili bir şekilde engelleyebilir. Yeniden başlatma gereklidir.</string>
+    <string name="settings_force_overlayfs_mode">OverlayFS kullanımını zorla</string>
+    <string name="settings_force_overlayfs_mode_summary">Kernel desteği mevcut olduğunda, Magic Mount yerine APModule’leri bağlamak için OverlayFS kullan. Yeniden başlatma gereklidir.</string>
 </resources>

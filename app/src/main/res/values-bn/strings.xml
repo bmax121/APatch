@@ -208,7 +208,7 @@
     <string name="crash_handle_copy">ক্রাশ এর লগ কপি করুন</string>
     <string name="sakura_theme">সাকুরা</string>
     <string name="settings_lite_mode">লাইট মোড চালু করুন</string>
-    <string name="settings_lite_mode_mode_summary">এপিমডিউল ফাংশনগুলি সক্রিয় করার পরে ক্ষতির সম্মুখীন হতে পারে, কিন্তু মাঝে মধ্যে এটি কার্যকরভাবে সনাক্তকরণ এড়াতে পারে, রিবুট প্রয়োজন।</string>
+    <string name="settings_lite_mode_mode_summary">APModule ফাংশনগুলি সক্রিয় করার পরে ক্ষতির সম্মুখীন হতে পারে, কিন্তু মাঝে মধ্যে এটি কার্যকরভাবে সনাক্তকরণ এড়াতে পারে, রিবুট প্রয়োজন।</string>
     <string name="settings_force_overlayfs_mode">জোর পুর্বক OverlayFS ব্যাবহার করুন</string>
     <string name="settings_force_overlayfs_mode_summary">OverlayFS ব্যাবহার করে APModules মাউন্ট করুন ম্যাজিক মাউন্ট এর পরিবর্তে যদি কার্নেল এটা সাপোর্ট করে, রিবুট আবশ্যক।</string>
 </resources>

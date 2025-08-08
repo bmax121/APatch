@@ -41,14 +41,14 @@
     <string name="home_selinux_status">Estado de SELinux</string>
     <string name="home_selinux_status_disabled">Desactivado</string>
     <string name="kpm_load">Cargar</string>
-    <string name="home_kernel">Kernel</string>
+    <string name="home_kernel">Versión del kernel</string>
     <string name="home_selinux_status_enforcing">Obligatorio</string>
     <string name="home_manager_version">Versión de la aplicación</string>
     <string name="patch_title">Parchear</string>
     <string name="kpm_load_toast_succ">Cargado correctamente</string>
     <string name="kpm_unload_confirm">¿Desactivar el módulo «%s»?</string>
-    <string name="su_pkg_excluded_setting_title">Excluir, evitar modificaciones</string>
-    <string name="su_pkg_excluded_setting_summary">Al activar la opción APatch hará que esta aplicación no vea los archivos cambiados por los módulos.</string>
+    <string name="su_pkg_excluded_setting_title">Excluir y evitar modificaciones</string>
+    <string name="su_pkg_excluded_setting_summary">Los archivos cambiados por los módulos serán invisibles para la aplicación al activar esta opción.</string>
     <string name="su_pkg_excluded_label">excluido</string>
     <string name="su_title">Superusuario</string>
     <string name="kpm_desc">Desc</string>
@@ -92,7 +92,7 @@
     <string name="settings_app_language">Idioma</string>
     <string name="system_default">Predeterminado del sistema</string>
     <string name="patch">Parchear</string>
-    <string name="settings_global_namespace_mode">Modo del espacio de los nombres globales</string>
+    <string name="settings_global_namespace_mode">Modo de espacio de nombres global</string>
     <string name="settings_global_namespace_mode_summary">Todas las sesiones «root» utilizan el espacio de nombres de montaje global</string>
     <string name="settings_clear_super_key_dialog">¿Seguro que quieres continuar?</string>
     <string name="kpatch_version_update">Versión: %s → %s</string>
@@ -115,7 +115,7 @@
     <string name="patch_item_kpimg_comile_time">Hora:</string>
     <string name="patch_item_kpimg_config">Config:</string>
     <string name="patch_item_new_extra_kpm">Insertar nuevo</string>
-    <string name="patch_item_existed_extra_kpm">"Ya incluido, "</string>
+    <string name="patch_item_existed_extra_kpm">Ya incluido:</string>
     <string name="patch_item_extra_version">Versión:</string>
     <string name="patch_item_extra_author">Autor:</string>
     <string name="patch_item_extra_kpm_license">Licencia:</string>
@@ -136,7 +136,7 @@
     <string name="hide_apatch_dialog_summary">Será la nueva etiqueta que aparezca en el lanzador de aplicaciones</string>
     <string name="hide_apatch_manager_failure">No se pudo ocultar, informa a los desarrolladores del error.</string>
     <string name="setting_reset_su_path">Restablecer la ruta a «su»</string>
-    <string name="setting_reset_su_new_path">Nueva ruta absoluta</string>
+    <string name="setting_reset_su_new_path">Nueva ruta completa</string>
     <string name="failure">Fallido</string>
     <string name="kpm_add_kpm">Añadir KPM</string>
     <string name="settings_check_update_summary">Buscar actualizaciones automáticamente al abrir la aplicación</string>
@@ -148,7 +148,7 @@
     <string name="home_dialog_auth_fail_title">La autenticación ha fallado</string>
     <string name="mode_select_page_title">Instalar</string>
     <string name="mode_select_page_patch_and_install">Parchear e instalar</string>
-    <string name="mode_select_page_install_inactive_slot_warning">Se FORZARÁ a que, tras el reinicio, tu dispositivo arranque desde la partición («slot») que ahora está inactiva. \nUtiliza esta opción solo cuando una actualización del sistema (OTA) haya terminado de instalarse, antes de reiniciar. \n¿Quieres continuar?</string>
+    <string name="mode_select_page_install_inactive_slot_warning">Tu dispositivo se verá **OBLIGADO** a arrancar desde la partición («slot») que ahora está inactiva. \nUtiliza esta opción solo cuando una actualización del sistema (OTA) haya terminado de instalarse, justo antes de tener que reiniciar. \n¿Quieres continuar?</string>
     <string name="enable_web_debugging">Habilitar depuración de WebView</string>
     <string name="home_install_unknown_summary">Haz clic para instalar</string>
     <string name="home_device_info">Dispositivo</string>
@@ -159,15 +159,15 @@
     <string name="home_dialog_uninstall_all">Desinstalarlo todo</string>
     <string name="home_dialog_auth_fail_content">Parece que la superclave no da resultado, por lo que APatch no funcionará correctamente. \nA continuación se muestran algunas posibles causas de este error de autenticación: \n1. No has parcheado el «boot.img» original con KernelPatch. \n2. No has flasheado (vía «fastboot flash») dicho «boot.img» ya parcheado. \n3. La superclave que has elegido no es correcta o contiene caracteres especiales.\n4. Tu dispositivo no es compatible con APatch o KernelPatch. \n \nRepásalo todo e inténtalo de nuevo. Si sigue habiendo problemas siempre puedes hacer preguntas en inglés en la pestaña «issues» del repositorio oficial.</string>
     <string name="apm_webui_open">Abrir</string>
-    <string name="enable_web_debugging_summary">Se puede utilizar para depurar WebUI. Solo actívalo cuando sea necesario.</string>
+    <string name="enable_web_debugging_summary">Se puede utilizar para depurar WebUI, actívalo solo si se necesita de verdad.</string>
     <string name="settings_donot_store_superkey">No guardar la superclave de forma local</string>
     <string name="patch_mode_install_to_next_slot">Modo: Instalar en el «slot» inactivo (tras OTA)</string>
     <string name="settings_donot_store_superkey_summary">Pedir que se escriba la superclave al abrir APatch Manager</string>
-    <string name="home_new_apatch_found">Nueva versión disponible: %s, toca para actualizar</string>
+    <string name="home_new_apatch_found">Nueva versión disponible: %s, toca para actualizar.</string>
     <string name="settings_use_system_color_theme">Utilizar colores del sistema</string>
     <string name="kpm_control_dialog_title">Control de KPModule</string>
-    <string name="settings_use_system_color_theme_summary">Utiliza un tema de color generado por el sistema basado en el fondo de pantalla actual</string>
-    <string name="settings_custom_color_theme">Color</string>
+    <string name="settings_use_system_color_theme_summary">Utiliza un esquema de colores generado por el sistema basado en el fondo de pantalla actual</string>
+    <string name="settings_custom_color_theme">Esquema de colores</string>
     <string name="deep_orange_theme">Naranja oscuro</string>
     <string name="deep_purple_theme">Morado oscuro</string>
     <string name="green_theme">Verde</string>
@@ -207,4 +207,8 @@
     <string name="crash_handle_copy">Copiar registro de fallos</string>
     <string name="crash_handle_title">La aplicación ha fallado…</string>
     <string name="crash_handle_copied">Se copió el registro de fallos al portapapeles.</string>
+    <string name="settings_lite_mode">Activar el modo ligero</string>
+    <string name="settings_lite_mode_mode_summary">Puede que no todas las funciones de los APModules funcionen en este modo, pero se evitan posibles detecciones. Es necesario reiniciar para que surta efecto.</string>
+    <string name="settings_force_overlayfs_mode">Forzar el uso de OverlayFS</string>
+    <string name="settings_force_overlayfs_mode_summary">Si el kernel lo admite, se utilizará OverlayFS para montar las carpetas de los APModules en vez de Magic Mount. Es necesario reiniciar para que surta efecto.</string>
 </resources>

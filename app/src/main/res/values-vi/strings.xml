@@ -84,7 +84,7 @@
     <string name="apm_magisk_conflict">Modules không khả dụng do xung đột với Magisk!</string>
     <string name="about_source_code"><![CDATA[<p>Xem mã nguồn tại %1$s<p/>Tham gia kênh %2$s của chúng tôi<p/>Tham gia nhóm %3$s của chúng tôi]]></string>
     <string name="home_su_path">Thực thi Su</string>
-    <string name="home_kernel">Kernel</string>
+    <string name="home_kernel">Phiên bản Kernel</string>
     <string name="kpm">KPModule</string>
     <string name="su_title">Superuser</string>
     <string name="apm">APModule</string>
@@ -96,10 +96,10 @@
     <string name="settings_global_namespace_mode_summary">Tất cả các phiên Root sử dụng Namespace Mount Global</string>
     <string name="patch_embed_kpm_btn">Nhúng KPM</string>
     <string name="patch_item_extra_event">Sự kiện:</string>
-    <string name="mode_select_page_select_file">Chọn boot image để Vá</string>
+    <string name="mode_select_page_select_file">Chọn một boot image để vá</string>
     <string name="home_dialog_auth_fail_title">Xác thực thất bại</string>
     <string name="mode_select_page_install_inactive_slot">Cài đặt vào khe không hoạt động (Sau OTA)</string>
-    <string name="home_dialog_auth_fail_content">Không thể xác thực SuperKey, do đó APatch không thể hoạt động bình thường. \nDưới đây là một số lý do có thể dẫn đến lỗi xác thực: \n1. Bạn chưa vá boot image bằng KernelPatch. \n2. Hình ảnh khởi động được vá không được flash. \n3. Super key sai. \n4. Thiết bị của bạn không hỗ trợ APatch và KernelPatch. \n \nVui lòng kiểm tra và thử lại. Nếu vẫn còn vấn đề, bạn luôn có thể đặt câu hỏi trên trang vấn đề của kho lưu trữ chính thức.</string>
+    <string name="home_dialog_auth_fail_content">Không thể xác thực SuperKey, do đó APatch không thể hoạt động bình thường.\n \nDưới đây là một số lý do có thể dẫn đến lỗi xác thực: \n1. Bạn chưa vá boot image bằng KernelPatch. \n2. Hình ảnh khởi động được vá không được flash. \n3. Super key sai. \n4. Thiết bị của bạn không hỗ trợ APatch và KernelPatch. \n \nVui lòng kiểm tra và thử lại. Nếu vẫn còn vấn đề, bạn luôn có thể đặt câu hỏi trên trang vấn đề của kho lưu trữ chính thức.</string>
     <string name="home_dialog_uninstall_all">Gỡ cài đặt tất cả</string>
     <string name="kpm_control_dialog_title">Kiểm soát KP Mô-đun</string>
     <string name="kpm_control_dialog_content">Các thông số điều khiển đầu vào:</string>
@@ -169,11 +169,11 @@
 \nTiếp tục?</string>
     <string name="deep_orange_theme">Chủ đề màu cam đậm</string>
     <string name="home_more_menu_feedback_or_suggestion">Góp ý hoặc báo lỗi</string>
-    <string name="patch_item_set_skey_label">Độ dài của SuperKey phải có ít nhất 8 ký tự và bao gồm cả số và chữ cái</string>
+    <string name="patch_item_set_skey_label">Độ dài của SuperKey phải có ít nhất 8 ký tự và bao gồm cả số và chữ cái.</string>
     <string name="home_device_info">Thiết bị</string>
     <string name="home_kpatch_version">Phiên bản KernelPatch</string>
     <string name="kpm_add_kpm">Thêm KPM</string>
-    <string name="hide_apatch_manager_summary">Cài đặt quản lý ứng dụng mới với ID gói ngẫu nhiên và nhãn ứng dụng tùy chỉnh</string>
+    <string name="hide_apatch_manager_summary">Cài đặt proxy mới với ID gói ngẫu nhiên và nhãn ứng dụng tùy chỉnh</string>
     <string name="enable_web_debugging">Bật gỡ lỗi WebView</string>
     <string name="enable_web_debugging_summary">Có thể được sử dụng để gỡ lỗi WebUI, Vui lòng chỉ bật khi cần.</string>
     <string name="settings_donot_store_superkey">Đừng lưu trữ Super Key</string>
@@ -205,8 +205,12 @@
     <string name="home_dialog_uninstall_title">Gỡ cài đặt</string>
     <string name="save_log">Lưu nhật ký</string>
     <string name="log_saved">Đã lưu nhật ký</string>
-    <string name="crash_handle_title">Ứng dụng bị sập..</string>
+    <string name="crash_handle_title">Ứng dụng bị sập…</string>
     <string name="crash_handle_copy">Sao chép nhật ký sự cố</string>
     <string name="crash_handle_copied">Nhật ký sự cố đã được sao chép vào bảng tạm.</string>
     <string name="apm_action">Hoạt động</string>
+    <string name="settings_lite_mode">"Bật chế độ Lite "</string>
+    <string name="settings_lite_mode_mode_summary">Các hàm APModule có thể gặp lỗi sau khi được bật, nhưng trong một số trường hợp, chúng vẫn có thể tránh bị phát hiện. Cần khởi động lại.</string>
+    <string name="settings_force_overlayfs_mode">Buộc sử dụng OverlayFS</string>
+    <string name="settings_force_overlayfs_mode_summary">Sử dụng OverlayFS để gắn APModules thay vì Magic Mount khi có hỗ trợ kernel. Cần khởi động lại.</string>
 </resources>

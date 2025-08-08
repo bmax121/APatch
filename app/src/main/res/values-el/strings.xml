@@ -2,8 +2,8 @@
 <resources>
     <string name="app_name" translatable="false">APatch</string>
     <string name="patch_warnning">Η εγκατάσταση συνοδεύεται από κινδύνους. Βεβαιωθείτε ότι έχετε δημιουργήσει αντίγραφα ασφαλείας των δεδομένων σας.</string>
-    <string name="kernel_patch">ΜπάλωμαKernel</string>
-    <string name="android_patch">ΜπάλωμαAndroid</string>
+    <string name="kernel_patch">KernelPatch</string>
+    <string name="android_patch">AndroidPatch</string>
     <string name="reboot">Επανεκκίνηση</string>
     <string name="settings">Ρυθμίσεις</string>
     <string name="reboot_bootloader">Επανεκκίνηση στον Bootloader</string>
@@ -111,7 +111,7 @@
     <string name="crash_handle_title">Η εφαρμογή κατέρρευσε…</string>
     <string name="crash_handle_copy">Αντιγραφή αρχείου καταγραφής σφαλμάτων</string>
     <string name="su_pkg_excluded_setting_summary">Η ενεργοποίηση αυτής της επιλογής θα επιτρέψει στο APatch να επαναφέρει τυχόν αρχεία που έχουν τροποποιηθεί από τις λειτουργικές μονάδες αυτής της εφαρμογής.</string>
-    <string name="settings_custom_color_theme">Έγχρωμο θέμα</string>
+    <string name="settings_custom_color_theme">Χρώμα θέματος</string>
     <string name="blue_grey_theme">Μπλέ γκρί</string>
     <string name="enable_web_debugging_summary">Μπορεί να χρησιμοποιηθεί για εντοπισμό σφαλμάτων WebUI, Παρακαλώ ενεργοποιήσει μόνο όταν χρειάζεται.</string>
     <string name="hide_apatch_manager_summary">Εγκατάσταση μιας εφαρμογής proxy με τυχαίο αναγνωριστικό πακέτου και προσαρμοσμένη ετικέτα εφαρμογής</string>
@@ -177,12 +177,12 @@
     <string name="kpm_control_ok">Η λειτουργία πέτυχε!</string>
     <string name="kpm_control_failed">Η λειτουργία απέτυχε!</string>
     <string name="settings_night_mode_follow_sys">Ακολουθώντας το σκούρο θέμα συστήματος</string>
-    <string name="settings_use_system_color_theme">Έγχρωμο θέμα συστήματος</string>
-    <string name="settings_use_system_color_theme_summary">Χρήση έγχρωμου θέματος που δημιουργείται από το σύστημα με βάση την τρέχουσα ταπετσαρία</string>
+    <string name="settings_use_system_color_theme">Χρωματικό θέμα συστήματος</string>
+    <string name="settings_use_system_color_theme_summary">Χρήση χρωματικού θέματος που δημιουργείται από το σύστημα με βάση την τρέχουσα ταπετσαρία</string>
     <string name="light_green_theme">Ανοιχτό Πράσινο</string>
     <string name="red_theme">Κόκκινο</string>
-    <string name="sakura_theme">Σακούρα</string>
-    <string name="teal_theme">Teal</string>
+    <string name="sakura_theme">Σάκουρα</string>
+    <string name="teal_theme">Γαλαζοπράσινο</string>
     <string name="yellow_theme">Κίτρινο</string>
     <string name="about_app_version">Έκδοση %1$s</string>
     <string name="home_more_menu_feedback_or_suggestion">Ανατροφοδότηση ή πρόταση</string>
@@ -207,8 +207,8 @@
     <string name="patch_item_bootimg">bootimg</string>
     <string name="patch_item_extra_author">Δημιουργός</string>
     <string name="patch_item_extra_args">Επιχειρήματα:</string>
-    <string name="settings_lite_mode">Ενεργοποίηση Λειτουργίας Lite</string>
-    <string name="settings_lite_mode_mode_summary">Οι λειτουργίες του APModule ενδέχεται να προκαλέσουν ζημιά μετά την ενεργοποίηση τους, αλλά μερικές φορές μπορούν να αποφύγουν αποτελεσματικά την ανίχνευση, Απαιτείται επανεκκίνηση.</string>
+    <string name="settings_lite_mode">Ενεργοποίηση λειτουργίας Lite</string>
+    <string name="settings_lite_mode_mode_summary">Οι λειτουργίες του APModule ενδέχεται να παρουσιάσουν σφάλματα μετά την ενεργοποίηση τους, αλλά σε ορισμένες περιπτώσεις μπορούν να αποφύγουν αποτελεσματικά τον εντοπισμό. Απαιτείται επανεκκίνηση.</string>
     <string name="settings_force_overlayfs_mode">Επιβολή χρήσης OverlayFS</string>
-    <string name="settings_force_overlayfs_mode_summary">Χρήση του OverlayFS για προσάρτηση του APModules αντί για το Magic Mount εφόσον το υποστηρίζει ο πυρήνας, Απαιτείται επανεκκίνηση.</string>
+    <string name="settings_force_overlayfs_mode_summary">Χρήση του OverlayFS για προσάρτηση του APModules αντί για το Magic Mount όταν είναι διαθέσιμη η υποστήριξη από τον πυρήνα. Απαιτείται επανεκκίνηση.</string>
 </resources>

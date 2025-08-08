@@ -52,17 +52,17 @@
     <string name="reboot_download">Start opnieuw op naar Download</string>
     <string name="reboot_recovery">Start opnieuw op naar herstel</string>
     <string name="apatch_version">Versie: %s</string>
-    <string name="home_su_path">su: %s</string>
+    <string name="home_su_path">Uitvoerbare su</string>
     <string name="home_auth_key_desc">Start na certificering</string>
     <string name="home_ap_cando_update">Werk bij</string>
     <string name="apatch_version_update">Versie: %s -&gt; %s</string>
-    <string name="home_apatch_version">APatch: %s</string>
+    <string name="home_apatch_version">APatch versie</string>
     <string name="home_ap_cando_install">Installeer</string>
     <string name="home_manager_version">Managerversie</string>
     <string name="kpm_kp_not_installed">KernelPatch niet geïnstalleerd</string>
     <string name="home_ap_cando_uninstall">Verwijder</string>
     <string name="patch_title">Patch</string>
-    <string name="home_kernel">Kernel</string>
+    <string name="home_kernel">Kernel versie</string>
     <string name="kpm_load">Laden</string>
     <string name="kpm_load_toast_failed">Laden mislukt</string>
     <string name="kpm_load_toast_succ">Laden gelukt</string>
@@ -84,14 +84,14 @@
     <string name="apm_desc">Beschr.</string>
     <string name="apm_author">Auteur</string>
     <string name="apm_downloading">Downloaden \"%s\" module…</string>
-    <string name="apm_start_downloading">Begin met downloaden</string>
-    <string name="apm_new_version_available">Nieuwe versie is beschikbaar, klik naar upgrade.</string>
+    <string name="apm_start_downloading">Begin met downloaden %s</string>
+    <string name="apm_new_version_available">Een nieuwe versie %s is beschikbaar, klik om te upgraden.</string>
     <string name="apm_overlay_fs_not_available">Modules zijn onbereikbaar als OverlayFS wordt uitgeschakeld door de kern!</string>
     <string name="apm_magisk_conflict">Modules zijn niet beschikbaar door een conflict met Magisk!</string>
     <string name="settings_clear_super_key_dialog">Wil je zeker verder gaan?</string>
     <string name="success">Succes</string>
     <string name="failure">Mislukking</string>
-    <string name="settings_check_update">Controleer op update</string>
+    <string name="settings_check_update">Naar updates zoeken</string>
     <string name="settings_check_update_summary">Automatisch controleren op updates als je de app opent</string>
     <string name="blue_theme">Blauw Theme</string>
     <string name="brown_theme">Brown Theme</string>
@@ -159,7 +159,7 @@
     <string name="home_device_info">Apparaat</string>
     <string name="kpm_add_kpm">Voeg KPM toe</string>
     <string name="hide_apatch_manager">Verberg APatch Beheerder</string>
-    <string name="hide_apatch_manager_summary">Installeer een nieuwe beheerder applicatie met een willekeurige package ID en een op maat applicatie label</string>
+    <string name="hide_apatch_manager_summary">Installeer een proxy applicatie met een willekeurige package ID en een custom applicatie label</string>
     <string name="hide_apatch_dialog_new_manager_name">Nieuwe Beheerder Naam</string>
     <string name="hide_apatch_dialog_summary">Het zal gebruikt worden als de nieuwe applicatie label weergegeven in de launcher</string>
     <string name="setting_reset_su_new_path">Nieuwe volle pad</string>
@@ -189,7 +189,7 @@
     <string name="settings_donot_store_superkey_summary">Verifieer de super sleutel elke keer dat de beheerder begint</string>
     <string name="home_dialog_uninstall_all">Verwijder Alles</string>
     <string name="kpm_control_outMsg">Bericht</string>
-    <string name="mode_select_page_select_file">Kies een opstart afbeelding om op te lappen</string>
+    <string name="mode_select_page_select_file">Selecteer een opstartimage om te patchen</string>
     <string name="kpm_control_dialog_title">KPModule Controleren</string>
     <string name="settings_night_mode_follow_sys">Volg Systeems Donkere Thema</string>
     <string name="settings_night_mode_follow_sys_summary">Verander automatisch naar donkere thema met systeems instelling</string>
@@ -207,4 +207,8 @@
     <string name="kpm_control">Controle</string>
     <string name="home_dialog_auth_fail_content">Niet in staat om de super sleutel te verifieren, daarom kan APatch niet correct werken.\nHier zijn een paar mogelijke redenen voor het falen van de verificatie:\n1. U heeft de opstart afbeelding niet opgelapt met KernLap.\n2. De opgelapte opstart afbeelding was niet geflashed.\n3. Super sleutel fout.\n4. Uw apparaat ondersteunt APatch en KernLap niet.\n\nGelieve te checken en opnieuwe te proberen. Indien er nog steeds problemen zijn, kan je steeds vragen stellen op de officiele respository\'s problemen pagina.</string>
     <string name="patch_start_unpatch_btn">Ontsnipperen</string>
+    <string name="settings_lite_mode">Lite-modus inschakelen</string>
+    <string name="settings_lite_mode_mode_summary">APModule-functies kunnen fouten vertonen nadat ze zijn ingeschakeld, maar in sommige gevallen kunnen ze detectie nog steeds effectief vermijden. Opnieuw opstarten is vereist.</string>
+    <string name="settings_force_overlayfs_mode">Forceer het gebruik van OverlayFS</string>
+    <string name="settings_force_overlayfs_mode_summary">Gebruik OverlayFS om APModules te mounten in plaats van Magic Mount wanneer kernelondersteuning beschikbaar is. Herstarten is vereist.</string>
 </resources>
