@@ -117,16 +117,26 @@ pub fn synchronize_package_uid() -> io::Result<()> {
                 
                 let mut package_configs = read_ap_package_config();
                 
-                let system_packages: Vec<String> = lines
+                let config_packages: Vec<String> = package_configs
                     .iter()
-                    .filter_map(|line| line.split_whitespace().next().map(|s| s.to_string()))
+                    .map(|config| config.pkg.clone())
                     .collect();
 
-                package_configs.retain(|config| system_packages.contains(&config.pkg));
+                let filtered_lines: Vec<String> = lines
+                    .iter()
+                    .filter(|line| {
+                        if let Some(pkg) = line.split_whitespace().next() {
+                            config_packages.contains(&pkg.to_string())
+                        } else {
+                            false
+                        }
+                    })
+                    .map(|line| line.to_string())
+                    .collect();
 
                 let mut updated = false;
 
-                for line in &lines {
+                for line in &filtered_lines {
                     let words: Vec<&str> = line.split_whitespace().collect();
                     if words.len() >= 2 {
                         if let Ok(uid) = words[1].parse::<i32>() {
