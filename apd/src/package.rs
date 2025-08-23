@@ -6,7 +6,7 @@ use std::path::Path;
 use std::thread;
 use std::time::Duration;
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Clone)]
 pub struct PackageConfig {
     pub pkg: String,
     pub exclude: i32,
@@ -178,10 +178,11 @@ pub fn synchronize_package_uid() -> io::Result<()> {
 /// 添加新包配置时进行权限验证
 pub fn add_package_config(new_config: PackageConfig) -> io::Result<bool> {
     let mut package_configs = read_ap_package_config();
+    let pkg_name = new_config.pkg.clone();
     
     // 检查是否已存在
-    if package_configs.iter().any(|c| c.pkg == new_config.pkg) {
-        warn!("Package {} already exists in configuration", new_config.pkg);
+    if package_configs.iter().any(|c| c.pkg == pkg_name) {
+        warn!("Package {} already exists in configuration", pkg_name);
         return Ok(false);
     }
     
@@ -190,10 +191,10 @@ pub fn add_package_config(new_config: PackageConfig) -> io::Result<bool> {
         Ok(lines) => {
             let exists = lines
                 .filter_map(|line| line.ok())
-                .any(|line| line.starts_with(&format!("{} ", new_config.pkg)));
+                .any(|line| line.starts_with(&format!("{} ", pkg_name)));
             
             if !exists {
-                warn!("Package {} not found in system", new_config.pkg);
+                warn!("Package {} not found in system", pkg_name);
                 return Ok(false);
             }
         }
@@ -206,7 +207,7 @@ pub fn add_package_config(new_config: PackageConfig) -> io::Result<bool> {
     // 添加到配置
     package_configs.push(new_config);
     write_ap_package_config(&package_configs)?;
-    info!("Added new package configuration for {}", new_config.pkg);
+    info!("Added new package configuration for {}", pkg_name);
     Ok(true)
 }
 
