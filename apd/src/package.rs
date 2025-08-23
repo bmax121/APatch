@@ -6,7 +6,7 @@ use std::path::Path;
 use std::thread;
 use std::time::Duration;
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Clone)]
 pub struct PackageConfig {
     pub pkg: String,
     pub exclude: i32,
@@ -119,22 +119,31 @@ pub fn synchronize_package_uid() -> io::Result<()> {
                 
                 let system_packages: Vec<String> = lines
                     .iter()
-                    .filter_map(|line| line.split_whitespace().next().map(|s| s.to_string()))
+                    .filter_map(|line| line.split_whitespace().next())
+                    .map(|pkg| pkg.to_string())
                     .collect();
 
+                let original_len = package_configs.len();
                 package_configs.retain(|config| system_packages.contains(&config.pkg));
+                let removed_count = original_len - package_configs.len();
+                
+                if removed_count > 0 {
+                    info!("Removed {} uninstalled package configurations", removed_count);
+                }
 
                 let mut updated = false;
 
                 for line in &lines {
                     let words: Vec<&str> = line.split_whitespace().collect();
                     if words.len() >= 2 {
+                        let pkg_name = words[0];
                         if let Ok(uid) = words[1].parse::<i32>() {
                             if let Some(config) = package_configs
                                 .iter_mut()
-                                .find(|config| config.pkg == words[0])
+                                .find(|config| config.pkg == pkg_name)
                             {
                                 if config.uid != uid {
+                                    info!("Updating uid for package {}: {} -> {}", pkg_name, config.uid, uid);
                                     config.uid = uid;
                                     updated = true;
                                 }
@@ -145,7 +154,7 @@ pub fn synchronize_package_uid() -> io::Result<()> {
                     }
                 }
 
-                if updated {
+                if updated || removed_count > 0 {
                     write_ap_package_config(&package_configs)?;
                 }
                 return Ok(());
@@ -160,4 +169,52 @@ pub fn synchronize_package_uid() -> io::Result<()> {
         io::ErrorKind::Other,
         "Failed after max retries",
     ))
+}
+
+pub fn add_package_config(new_config: PackageConfig) -> io::Result<bool> {
+    let mut package_configs = read_ap_package_config();
+    let pkg_name = new_config.pkg.clone();
+    
+    if package_configs.iter().any(|c| c.pkg == pkg_name) {
+        warn!("Package {} already exists in configuration", pkg_name);
+        return Ok(false);
+    }
+    
+    match read_lines("/data/system/packages.list") {
+        Ok(lines) => {
+            let exists = lines
+                .filter_map(|line| line.ok())
+                .any(|line| line.starts_with(&format!("{} ", pkg_name)));
+            
+            if !exists {
+                warn!("Package {} not found in system", pkg_name);
+                return Ok(false);
+            }
+        }
+        Err(e) => {
+            warn!("Error checking package existence: {}", e);
+            return Err(e);
+        }
+    }
+    
+    package_configs.push(new_config);
+    write_ap_package_config(&package_configs)?;
+    info!("Added new package configuration for {}", pkg_name);
+    Ok(true)
+}
+
+pub fn remove_package_config(pkg_name: &str) -> io::Result<bool> {
+    let mut package_configs = read_ap_package_config();
+    
+    let original_len = package_configs.len();
+    package_configs.retain(|config| config.pkg != pkg_name);
+    
+    if package_configs.len() < original_len {
+        write_ap_package_config(&package_configs)?;
+        info!("Removed package configuration for {}", pkg_name);
+        Ok(true)
+    } else {
+        warn!("Package {} not found in configuration", pkg_name);
+        Ok(false)
+    }
 }
