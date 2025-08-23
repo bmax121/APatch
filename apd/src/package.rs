@@ -117,14 +117,12 @@ pub fn synchronize_package_uid() -> io::Result<()> {
                 
                 let mut package_configs = read_ap_package_config();
                 
-                // 获取当前系统中的所有包名
                 let system_packages: Vec<String> = lines
                     .iter()
                     .filter_map(|line| line.split_whitespace().next())
                     .map(|pkg| pkg.to_string())
                     .collect();
 
-                // 清理已卸载的软件配置（防止残留）
                 let original_len = package_configs.len();
                 package_configs.retain(|config| system_packages.contains(&config.pkg));
                 let removed_count = original_len - package_configs.len();
@@ -133,7 +131,6 @@ pub fn synchronize_package_uid() -> io::Result<()> {
                     info!("Removed {} uninstalled package configurations", removed_count);
                 }
 
-                // 只更新已存在的配置，不添加新配置（防止未授权权限获取）
                 let mut updated = false;
 
                 for line in &lines {
@@ -145,7 +142,6 @@ pub fn synchronize_package_uid() -> io::Result<()> {
                                 .iter_mut()
                                 .find(|config| config.pkg == pkg_name)
                             {
-                                // 只更新已授权配置的uid，不添加新配置
                                 if config.uid != uid {
                                     info!("Updating uid for package {}: {} -> {}", pkg_name, config.uid, uid);
                                     config.uid = uid;
@@ -175,18 +171,15 @@ pub fn synchronize_package_uid() -> io::Result<()> {
     ))
 }
 
-/// 添加新包配置时进行权限验证
 pub fn add_package_config(new_config: PackageConfig) -> io::Result<bool> {
     let mut package_configs = read_ap_package_config();
     let pkg_name = new_config.pkg.clone();
     
-    // 检查是否已存在
     if package_configs.iter().any(|c| c.pkg == pkg_name) {
         warn!("Package {} already exists in configuration", pkg_name);
         return Ok(false);
     }
     
-    // 验证包是否存在于系统中
     match read_lines("/data/system/packages.list") {
         Ok(lines) => {
             let exists = lines
@@ -204,14 +197,12 @@ pub fn add_package_config(new_config: PackageConfig) -> io::Result<bool> {
         }
     }
     
-    // 添加到配置
     package_configs.push(new_config);
     write_ap_package_config(&package_configs)?;
     info!("Added new package configuration for {}", pkg_name);
     Ok(true)
 }
 
-/// 删除指定包的配置
 pub fn remove_package_config(pkg_name: &str) -> io::Result<bool> {
     let mut package_configs = read_ap_package_config();
     
