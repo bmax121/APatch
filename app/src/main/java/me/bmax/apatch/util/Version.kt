@@ -129,7 +129,7 @@ object Version {
         installedApdVString = if (resultShell.isSuccess) {
             val result = resultShell.out.toString()
             Log.i("APatch", "[installedApdVString@Version] resultFromShell: $result")
-            Regex("\\d+").find(result)!!.value
+            Regex("\\d+").find(result)?.value ?: "0"
         } else {
             "0"
         }
