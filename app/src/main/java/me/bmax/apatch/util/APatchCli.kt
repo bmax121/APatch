@@ -202,9 +202,9 @@ fun overlayFsAvailable(): Boolean {
 }
 
 fun hasMagisk(): Boolean {
-    val result = Shell.cmd("nsenter --mount=/proc/1/ns/mnt which magisk").exec()
-    Log.i(TAG, "has magisk: ${result.isSuccess}")
-    return result.isSuccess
+    val result = ShellUtils.fastCmdResult("which magisk")
+    Log.i(TAG, "has magisk: $result")
+    return result
 }
 
 fun isGlobalNamespaceEnabled(): Boolean {
