@@ -1,7 +1,6 @@
 package me.bmax.apatch
 
 import android.app.Application
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
@@ -13,16 +12,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.topjohnwu.superuser.CallbackList
 import me.bmax.apatch.ui.CrashHandleActivity
-import me.bmax.apatch.util.APatchCli
-import me.bmax.apatch.util.APatchKeyHelper
-import me.bmax.apatch.util.Version
-import me.bmax.apatch.util.getRootShell
-import me.bmax.apatch.util.rootShellForResult
-import me.bmax.apatch.util.verifyAppSignature
+import me.bmax.apatch.util.*
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import java.io.File
-import java.util.Locale
+import java.util.*
 import kotlin.concurrent.thread
 import kotlin.system.exitProcess
 
@@ -270,7 +264,7 @@ class APApplication : Application(), Thread.UncaughtExceptionHandler {
         // TODO: We can't totally protect superkey from be stolen by root or LSPosed-like injection tools in user space, the only way is don't use superkey,
         // TODO: 1. make me root by kernel
         // TODO: 2. remove all usage of superkey
-        sharedPreferences = getSharedPreferences(SP_NAME, Context.MODE_PRIVATE)
+        sharedPreferences = getSharedPreferences(SP_NAME, MODE_PRIVATE)
         APatchKeyHelper.setSharedPreferences(sharedPreferences)
         superKey = APatchKeyHelper.readSPSuperKey()
 

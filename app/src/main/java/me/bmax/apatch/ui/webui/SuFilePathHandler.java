@@ -3,21 +3,18 @@ package me.bmax.apatch.ui.webui;
 import android.content.Context;
 import android.util.Log;
 import android.webkit.WebResourceResponse;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.WorkerThread;
 import androidx.webkit.WebViewAssetLoader;
-
 import com.topjohnwu.superuser.Shell;
 import com.topjohnwu.superuser.io.SuFile;
 import com.topjohnwu.superuser.io.SuFileInputStream;
+import me.bmax.apatch.util.APatchCliKt;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.GZIPInputStream;
-
-import me.bmax.apatch.util.APatchCliKt;
 
 /**
  * Handler class to open files from file system by root access

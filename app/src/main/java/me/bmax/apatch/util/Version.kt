@@ -1,20 +1,19 @@
 package me.bmax.apatch.util
 
+import android.system.Os
 import android.util.Log
 import androidx.core.content.pm.PackageInfoCompat
+import com.topjohnwu.superuser.Shell
+import com.topjohnwu.superuser.nio.ExtendedFile
+import com.topjohnwu.superuser.nio.FileSystemManager
 import me.bmax.apatch.APApplication
 import me.bmax.apatch.BuildConfig
 import me.bmax.apatch.Natives
 import me.bmax.apatch.apApp
-import org.ini4j.Ini
-import java.io.StringReader
 import me.bmax.apatch.ui.viewmodel.KPModel
-import com.topjohnwu.superuser.nio.ExtendedFile
-import com.topjohnwu.superuser.nio.FileSystemManager
-import com.topjohnwu.superuser.Shell
-import androidx.compose.runtime.mutableStateOf
+import org.ini4j.Ini
 import java.io.File
-import android.system.Os
+import java.io.StringReader
 
 
 /**

@@ -15,7 +15,7 @@ import me.bmax.apatch.util.listModules
 import org.json.JSONArray
 import org.json.JSONObject
 import java.text.Collator
-import java.util.Locale
+import java.util.*
 
 class APModuleViewModel : ViewModel() {
     companion object {

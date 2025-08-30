@@ -99,10 +99,7 @@ inline fun <T> withNewRootShell(
     return createRootShell(globalMnt).use(block)
 }
 
-fun rootAvailable(): Boolean {
-    val shell = getRootShell()
-    return shell.isRoot
-}
+fun rootAvailable() = Shell.isAppGrantedRoot() == true
 
 fun tryGetRootShell(): Shell {
     Shell.enableVerboseLogging = BuildConfig.DEBUG

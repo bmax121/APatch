@@ -12,7 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.bmax.apatch.Natives
 import java.text.Collator
-import java.util.Locale
+import java.util.*
 
 class KPModuleViewModel : ViewModel() {
     companion object {

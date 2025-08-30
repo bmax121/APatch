@@ -25,7 +25,7 @@ import me.bmax.apatch.util.APatchCli
 import me.bmax.apatch.util.HanziToPinyin
 import me.bmax.apatch.util.PkgConfig
 import java.text.Collator
-import java.util.Locale
+import java.util.*
 import kotlin.concurrent.thread
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine

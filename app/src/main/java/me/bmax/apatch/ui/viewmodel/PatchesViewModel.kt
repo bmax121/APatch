@@ -26,20 +26,9 @@ import me.bmax.apatch.APApplication
 import me.bmax.apatch.BuildConfig
 import me.bmax.apatch.R
 import me.bmax.apatch.apApp
-import me.bmax.apatch.util.Version
-import me.bmax.apatch.util.copyAndClose
-import me.bmax.apatch.util.copyAndCloseOut
-import me.bmax.apatch.util.createRootShell
-import me.bmax.apatch.util.inputStream
-import me.bmax.apatch.util.shellForResult
-import me.bmax.apatch.util.writeTo
+import me.bmax.apatch.util.*
 import org.ini4j.Ini
-import java.io.BufferedReader
-import java.io.File
-import java.io.FileNotFoundException
-import java.io.IOException
-import java.io.InputStreamReader
-import java.io.StringReader
+import java.io.*
 
 private const val TAG = "PatchViewModel"
 
