@@ -11,6 +11,8 @@ import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.topjohnwu.superuser.CallbackList
+import com.topjohnwu.superuser.Shell
+import com.topjohnwu.superuser.ShellUtils
 import me.bmax.apatch.ui.CrashHandleActivity
 import me.bmax.apatch.util.*
 import okhttp3.Cache
@@ -102,8 +104,7 @@ class APApplication : Application(), Thread.UncaughtExceptionHandler {
                 "rm -rf $APATCH_VERSION_PATH",
             )
 
-            val shell = getRootShell()
-            shell.newJob().add(*cmds).to(logCallback, logCallback).exec()
+            Shell.cmd(*cmds).to(logCallback, logCallback).exec()
 
             Log.d(TAG, "APatch uninstalled...")
             if (_kpStateLiveData.value == State.UNKNOWN_STATE) {
@@ -152,11 +153,10 @@ class APApplication : Application(), Thread.UncaughtExceptionHandler {
                 "${nativeDir}/libmagiskpolicy.so --magisk --live",
             )
 
-            val shell = getRootShell()
-            shell.newJob().add(*cmds).to(logCallback, logCallback).exec()
+            Shell.cmd(*cmds).to(logCallback, logCallback).exec()
 
             // clear shell cache
-            APatchCli.refresh()
+            ShellUtils.fastCmdResult(getCreateRootShellCommand(true))
 
             Log.d(TAG, "APatch installed...")
             _apStateLiveData.postValue(State.ANDROIDPATCH_INSTALLED)
@@ -241,6 +241,8 @@ class APApplication : Application(), Thread.UncaughtExceptionHandler {
     override fun onCreate() {
         super.onCreate()
         apApp = this
+        Shell.setDefaultBuilder(createRootShellBuilder(true))
+        Shell.enableVerboseLogging = BuildConfig.DEBUG
 
         val isArm64 = Build.SUPPORTED_ABIS.any { it == "arm64-v8a" }
         if (!isArm64) {

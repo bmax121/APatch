@@ -3,6 +3,7 @@ package me.bmax.apatch.util
 import android.content.Context
 import android.os.Build
 import android.system.Os
+import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.ShellUtils
 import java.io.File
 import java.io.FileWriter
@@ -29,24 +30,22 @@ fun getBugreportFile(context: Context): File {
     val propFile = File(bugreportDir, "props.txt")
     val packageConfigFile = File(bugreportDir, "package_config")
 
-    val shell = tryGetRootShell()
+    Shell.cmd("dmesg > ${dmesgFile.absolutePath}").exec()
+    Shell.cmd("logcat -d > ${logcatFile.absolutePath}").exec()
+    Shell.cmd("tar -czf ${tombstonesFile.absolutePath} -C /data/tombstones .").exec()
+    Shell.cmd("tar -czf ${dropboxFile.absolutePath} -C /data/system/dropbox .").exec()
+    Shell.cmd("tar -czf ${pstoreFile.absolutePath} -C /sys/fs/pstore .").exec()
+    Shell.cmd("tar -czf ${diagFile.absolutePath} -C /data/vendor/diag .").exec()
+    Shell.cmd("tar -czf ${bootlogFile.absolutePath} -C /data/adb/ap/log .").exec()
 
-    shell.newJob().add("dmesg > ${dmesgFile.absolutePath}").exec()
-    shell.newJob().add("logcat -d > ${logcatFile.absolutePath}").exec()
-    shell.newJob().add("tar -czf ${tombstonesFile.absolutePath} -C /data/tombstones .").exec()
-    shell.newJob().add("tar -czf ${dropboxFile.absolutePath} -C /data/system/dropbox .").exec()
-    shell.newJob().add("tar -czf ${pstoreFile.absolutePath} -C /sys/fs/pstore .").exec()
-    shell.newJob().add("tar -czf ${diagFile.absolutePath} -C /data/vendor/diag .").exec()
-    shell.newJob().add("tar -czf ${bootlogFile.absolutePath} -C /data/adb/ap/log .").exec()
+    Shell.cmd("cat /proc/1/mountinfo > ${mountsFile.absolutePath}").exec()
+    Shell.cmd("cat /proc/filesystems > ${fileSystemsFile.absolutePath}").exec()
+    Shell.cmd("ls -alRZ /data/adb > ${apFileTree.absolutePath}").exec()
+    Shell.cmd("cp /data/system/packages.list ${appListFile.absolutePath}").exec()
+    Shell.cmd("getprop > ${propFile.absolutePath}").exec()
+    Shell.cmd("cp /data/adb/ap/package_config ${packageConfigFile.absolutePath}").exec()
 
-    shell.newJob().add("cat /proc/1/mountinfo > ${mountsFile.absolutePath}").exec()
-    shell.newJob().add("cat /proc/filesystems > ${fileSystemsFile.absolutePath}").exec()
-    shell.newJob().add("ls -alRZ /data/adb > ${apFileTree.absolutePath}").exec()
-    shell.newJob().add("cp /data/system/packages.list ${appListFile.absolutePath}").exec()
-    shell.newJob().add("getprop > ${propFile.absolutePath}").exec()
-    shell.newJob().add("cp /data/adb/ap/package_config ${packageConfigFile.absolutePath}").exec()
-
-    val selinux = ShellUtils.fastCmd(shell, "getenforce")
+    val selinux = ShellUtils.fastCmd("getenforce")
 
     // basic information
     val buildInfo = File(bugreportDir, "basic.txt")
@@ -85,10 +84,10 @@ fun getBugreportFile(context: Context): File {
 
     val targetFile = File(context.cacheDir, "APatch_bugreport_${current}.tar.gz")
 
-    shell.newJob().add("tar czf ${targetFile.absolutePath} -C ${bugreportDir.absolutePath} .")
+    Shell.cmd("tar czf ${targetFile.absolutePath} -C ${bugreportDir.absolutePath} .")
         .exec()
-    shell.newJob().add("rm -rf ${bugreportDir.absolutePath}").exec()
-    shell.newJob().add("chmod 0644 ${targetFile.absolutePath}").exec()
+    Shell.cmd("rm -rf ${bugreportDir.absolutePath}").exec()
+    Shell.cmd("chmod 0644 ${targetFile.absolutePath}").exec()
 
     return targetFile
 }

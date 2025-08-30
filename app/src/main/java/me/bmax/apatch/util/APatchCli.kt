@@ -16,7 +16,6 @@ import com.topjohnwu.superuser.ShellUtils
 import com.topjohnwu.superuser.io.SuFile
 import me.bmax.apatch.APApplication
 import me.bmax.apatch.APApplication.Companion.SUPERCMD
-import me.bmax.apatch.BuildConfig
 import me.bmax.apatch.apApp
 import me.bmax.apatch.ui.screen.MODULE_TYPE
 import java.io.File
@@ -27,8 +26,8 @@ import java.util.zip.ZipFile
 
 private const val TAG = "APatchCli"
 
-private fun getKPatchPath(): String {
-    return "${apApp.applicationInfo.nativeLibraryDir}${File.separator}libkpatch.so"
+private val kPatchPath by lazy {
+    "${apApp.applicationInfo.nativeLibraryDir}${File.separator}libkpatch.so"
 }
 
 class RootShellInitializer : Shell.Initializer() {
@@ -38,57 +37,32 @@ class RootShellInitializer : Shell.Initializer() {
     }
 }
 
+fun getCreateRootShellCommand(globalMnt: Boolean = false) = buildString {
+    append("$SUPERCMD ${APApplication.superKey} -Z ${APApplication.MAGISK_SCONTEXT}")
+    append(" || ")
+    append("$kPatchPath ${APApplication.superKey} su -Z ${APApplication.MAGISK_SCONTEXT}")
+    if (globalMnt) append(" --mount-master")
+    append(" || ")
+    append("su")
+    if (globalMnt) append(" --mount-master")
+    append(" || ")
+    append("sh")
+}
+
+fun createRootShellBuilder(globalMnt: Boolean = false): Shell.Builder {
+    return Shell.Builder.create().setInitializers(RootShellInitializer::class.java).run {
+        setCommands("sh", "-c", getCreateRootShellCommand(globalMnt))
+    }
+}
+
 fun createRootShell(globalMnt: Boolean = false): Shell {
-    Shell.enableVerboseLogging = BuildConfig.DEBUG
-    val builder = Shell.Builder.create().setInitializers(RootShellInitializer::class.java)
-    return try {
-        builder.build(
-            SUPERCMD, APApplication.superKey, "-Z", APApplication.MAGISK_SCONTEXT
-        )
-    } catch (e: Throwable) {
-        Log.e(TAG, "su failed: ", e)
-        return try {
-            Log.e(TAG, "retry compat kpatch su")
-            if (globalMnt) {
-                builder.build(
-                    getKPatchPath(), APApplication.superKey, "su", "-Z", APApplication.MAGISK_SCONTEXT, "--mount-master"
-                )
-            }else{
-                builder.build(
-                    getKPatchPath(), APApplication.superKey, "su", "-Z", APApplication.MAGISK_SCONTEXT
-                )
-            }
-        } catch (e: Throwable) {
-            Log.e(TAG, "retry kpatch su failed: ", e)
-            return try {
-                Log.e(TAG, "retry su: ", e)
-                if (globalMnt) {
-                    builder.build("su","-mm")
-                }else{
-                    builder.build("su")
-                }
-            } catch (e: Throwable) {
-                Log.e(TAG, "retry su failed: ", e)
-                return builder.build("sh")
-            }
-        }
-    }
-}
-
-object APatchCli {
-    var SHELL: Shell = createRootShell()
-    val GLOBAL_MNT_SHELL: Shell = createRootShell(true)
-    fun refresh() {
-        val tmp = SHELL
-        SHELL = createRootShell()
-        tmp.close()
-    }
-}
-
-fun getRootShell(globalMnt: Boolean = false): Shell {
-
-    return if (globalMnt) APatchCli.GLOBAL_MNT_SHELL else {
-        APatchCli.SHELL
+    return runCatching {
+        createRootShellBuilder(globalMnt).build()
+    }.getOrElse { e ->
+        Log.w(TAG, "su failed: ", e)
+        Shell.Builder.create().setInitializers(RootShellInitializer::class.java).apply {
+            if (globalMnt) setFlags(Shell.FLAG_MOUNT_MASTER)
+        }.build()
     }
 }
 
@@ -101,33 +75,6 @@ inline fun <T> withNewRootShell(
 
 fun rootAvailable() = Shell.isAppGrantedRoot() == true
 
-fun tryGetRootShell(): Shell {
-    Shell.enableVerboseLogging = BuildConfig.DEBUG
-    val builder = Shell.Builder.create()
-    return try {
-        builder.build(
-            SUPERCMD, APApplication.superKey, "-Z", APApplication.MAGISK_SCONTEXT
-        )
-    } catch (e: Throwable) {
-        Log.e(TAG, "su failed: ", e)
-        return try {
-            Log.e(TAG, "retry compat kpatch su")
-            builder.build(
-                getKPatchPath(), APApplication.superKey, "su", "-Z", APApplication.MAGISK_SCONTEXT
-            )
-        } catch (e: Throwable) {
-            Log.e(TAG, "retry kpatch su failed: ", e)
-            return try {
-                Log.e(TAG, "retry su: ", e)
-                builder.build("su")
-            } catch (e: Throwable) {
-                Log.e(TAG, "retry su failed: ", e)
-                builder.build("sh")
-            }
-        }
-    }
-}
-
 fun shellForResult(shell: Shell, vararg cmds: String): Shell.Result {
     val out = ArrayList<String>()
     val err = ArrayList<String>()
@@ -137,7 +84,7 @@ fun shellForResult(shell: Shell, vararg cmds: String): Shell.Result {
 fun rootShellForResult(vararg cmds: String): Shell.Result {
     val out = ArrayList<String>()
     val err = ArrayList<String>()
-    return getRootShell().newJob().add(*cmds).to(out, err).exec()
+    return Shell.cmd(*cmds).to(out, err).exec()
 }
 
 fun execApd(args: String, newShell: Boolean = false): Boolean {
@@ -146,14 +93,13 @@ fun execApd(args: String, newShell: Boolean = false): Boolean {
             ShellUtils.fastCmdResult(this, "${APApplication.APD_PATH} $args")
         }
     } else {
-        ShellUtils.fastCmdResult(getRootShell(), "${APApplication.APD_PATH} $args")
+        ShellUtils.fastCmdResult("${APApplication.APD_PATH} $args")
     }
 }
 
 fun listModules(): String {
-    val shell = getRootShell()
     val out =
-        shell.newJob().add("${APApplication.APD_PATH} module list").to(ArrayList(), null).exec().out
+        Shell.cmd("${APApplication.APD_PATH} module list").to(ArrayList(), null).exec().out
     withNewRootShell{
        newJob().add("cp /data/user/*/me.bmax.apatch/patch/ori.img /data/adb/ap/ && rm /data/user/*/me.bmax.apatch/patch/ori.img")
        .to(ArrayList(),null).exec()
@@ -201,12 +147,10 @@ fun installModule(
             }
         }
 
-        val shell = getRootShell()
-
         var result = false
         if(type == MODULE_TYPE.APM) {
             val cmd = "${APApplication.APD_PATH} module install ${file.absolutePath}"
-            result = shell.newJob().add(cmd).to(stdoutCallback, stderrCallback)
+            result = Shell.cmd(cmd).to(stdoutCallback, stderrCallback)
                     .exec().isSuccess
         } else {
 //            ZipUtils.
@@ -248,59 +192,51 @@ fun runAPModuleAction(
 fun reboot(reason: String = "") {
     if (reason == "recovery") {
         // KEYCODE_POWER = 26, hide incorrect "Factory data reset" message
-        getRootShell().newJob().add("/system/bin/input keyevent 26").exec()
+        ShellUtils.fastCmdResult("/system/bin/input keyevent 26")
     }
-    getRootShell().newJob()
-        .add("/system/bin/svc power reboot $reason || /system/bin/reboot $reason").exec()
+    ShellUtils.fastCmdResult("/system/bin/svc power reboot $reason || /system/bin/reboot $reason")
 }
 
 fun overlayFsAvailable(): Boolean {
-    val shell = getRootShell()
-    return ShellUtils.fastCmdResult(shell, "grep overlay /proc/filesystems")
+    return ShellUtils.fastCmdResult("grep overlay /proc/filesystems")
 }
 
 fun hasMagisk(): Boolean {
-    val shell = getRootShell()
-    val result = shell.newJob().add("nsenter --mount=/proc/1/ns/mnt which magisk").exec()
+    val result = Shell.cmd("nsenter --mount=/proc/1/ns/mnt which magisk").exec()
     Log.i(TAG, "has magisk: ${result.isSuccess}")
     return result.isSuccess
 }
 
 fun isGlobalNamespaceEnabled(): Boolean {
-    val shell = getRootShell()
-    val result = ShellUtils.fastCmd(shell, "cat ${APApplication.GLOBAL_NAMESPACE_FILE}")
+    val result = ShellUtils.fastCmd("cat ${APApplication.GLOBAL_NAMESPACE_FILE}")
     Log.i(TAG, "is global namespace enabled: $result")
     return result == "1"
 }
 
 fun setGlobalNamespaceEnabled(value: String) {
-    getRootShell().newJob().add("echo $value > ${APApplication.GLOBAL_NAMESPACE_FILE}")
+    Shell.cmd("echo $value > ${APApplication.GLOBAL_NAMESPACE_FILE}")
         .submit { result ->
             Log.i(TAG, "setGlobalNamespaceEnabled result: ${result.isSuccess} [${result.out}]")
         }
 }
 
 fun isLiteModeEnabled(): Boolean {
-    val liteMode = SuFile(APApplication.LITE_MODE_FILE)
-    liteMode.shell = getRootShell()
-    return liteMode.exists()
+    return SuFile(APApplication.LITE_MODE_FILE).exists()
 }
 
 fun setLiteMode(enable: Boolean) {
-    getRootShell().newJob().add("${if (enable) "touch" else "rm -rf"} ${APApplication.LITE_MODE_FILE}")
+    Shell.cmd("${if (enable) "touch" else "rm -rf"} ${APApplication.LITE_MODE_FILE}")
         .submit { result ->
             Log.i(TAG, "setLiteMode result: ${result.isSuccess} [${result.out}]")
         }
 }
 
 fun isForceUsingOverlayFS(): Boolean {
-    val forceOverlayFS = SuFile(APApplication.FORCE_OVERLAYFS_FILE)
-    forceOverlayFS.shell = getRootShell()
-    return forceOverlayFS.exists()
+    return SuFile(APApplication.FORCE_OVERLAYFS_FILE).exists()
 }
 
 fun setForceUsingOverlayFS(enable: Boolean) {
-    getRootShell().newJob().add("${if (enable) "touch" else "rm -rf"} ${APApplication.FORCE_OVERLAYFS_FILE}")
+    Shell.cmd("${if (enable) "touch" else "rm -rf"} ${APApplication.FORCE_OVERLAYFS_FILE}")
         .submit { result ->
             Log.i(TAG, "setForceUsingOverlayFS result: ${result.isSuccess} [${result.out}]")
         }
