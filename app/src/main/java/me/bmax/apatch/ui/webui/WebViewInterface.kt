@@ -62,13 +62,13 @@ class WebViewInterface(val context: Context, private val webView: WebView) {
         val stdout = result.out.joinToString(separator = "\n")
         val stderr = result.err.joinToString(separator = "\n")
 
-        val jsCode = "javascript: (function() { try { ${callbackFunc}(${result.code}, ${
+        val jsCode = "(function() { try { ${callbackFunc}(${result.code}, ${
             JSONObject.quote(
                 stdout
             )
         }, ${JSONObject.quote(stderr)}); } catch(e) { console.error(e); } })();"
         webView.post {
-            webView.loadUrl(jsCode)
+            webView.evaluateJavascript(jsCode, null)
         }
     }
 
@@ -93,13 +93,13 @@ class WebViewInterface(val context: Context, private val webView: WebView) {
         val shell = createRootShell()
 
         val emitData = fun(name: String, data: String) {
-            val jsCode = "javascript: (function() { try { ${callbackFunc}.${name}.emit('data', ${
+            val jsCode = "(function() { try { ${callbackFunc}.${name}.emit('data', ${
                 JSONObject.quote(
                     data
                 )
             }); } catch(e) { console.error('emitData', e); } })();"
             webView.post {
-                webView.loadUrl(jsCode)
+                webView.evaluateJavascript(jsCode, null)
             }
         }
 
@@ -122,14 +122,14 @@ class WebViewInterface(val context: Context, private val webView: WebView) {
 
         completableFuture.thenAccept { result ->
             val emitExitCode =
-                $$"javascript: (function() { try { $${callbackFunc}.emit('exit', $${result.code}); } catch(e) { console.error(`emitExit error: ${e}`); } })();"
+                $$"(function() { try { $${callbackFunc}.emit('exit', $${result.code}); } catch(e) { console.error(`emitExit error: ${e}`); } })();"
             webView.post {
-                webView.loadUrl(emitExitCode)
+                webView.evaluateJavascript(emitExitCode, null)
             }
 
             if (result.code != 0) {
                 val emitErrCode =
-                    "javascript: (function() { try { var err = new Error(); err.exitCode = ${result.code}; err.message = ${
+                    "(function() { try { var err = new Error(); err.exitCode = ${result.code}; err.message = ${
                         JSONObject.quote(
                             result.err.joinToString(
                                 "\n"
@@ -137,7 +137,7 @@ class WebViewInterface(val context: Context, private val webView: WebView) {
                         )
                     };${callbackFunc}.emit('error', err); } catch(e) { console.error('emitErr', e); } })();"
                 webView.post {
-                    webView.loadUrl(emitErrCode)
+                    webView.evaluateJavascript(emitErrCode,null)
                 }
             }
         }
