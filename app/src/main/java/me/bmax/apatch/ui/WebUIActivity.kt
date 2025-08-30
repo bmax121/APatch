@@ -35,8 +35,8 @@ class WebUIActivity : ComponentActivity() {
 
         super.onCreate(savedInstanceState)
 
-        val moduleId = intent.getStringExtra("id") ?: run { finishAndRemoveTask(); return }
-        val name = intent.getStringExtra("name") ?: run { finishAndRemoveTask(); return }
+        val moduleId = intent.getStringExtra("id") ?: finishAndRemoveTask().let { return }
+        val name = intent.getStringExtra("name") ?: finishAndRemoveTask().let { return }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
             @Suppress("DEPRECATION")
             setTaskDescription(ActivityManager.TaskDescription("APatch - $name"))
@@ -92,10 +92,11 @@ class WebUIActivity : ComponentActivity() {
 
     override fun onDestroy() {
         rootShell.runCatching { close() }
-        webView = webView?.apply {
+        webView?.apply {
             stopLoading()
             removeAllViews()
             destroy()
+            webView = null
         }
         super.onDestroy()
     }
