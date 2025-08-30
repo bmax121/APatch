@@ -225,10 +225,10 @@ fun isLiteModeEnabled(): Boolean {
 }
 
 fun setLiteMode(enable: Boolean) {
-    Shell.cmd("${if (enable) "touch" else "rm -rf"} ${APApplication.LITE_MODE_FILE}")
-        .submit { result ->
-            Log.i(TAG, "setLiteMode result: ${result.isSuccess} [${result.out}]")
-        }
+    SuFile(APApplication.LITE_MODE_FILE).apply {
+        if (enable) createNewFile()
+        else deleteRecursive()
+    }
 }
 
 fun isForceUsingOverlayFS(): Boolean {
@@ -236,10 +236,10 @@ fun isForceUsingOverlayFS(): Boolean {
 }
 
 fun setForceUsingOverlayFS(enable: Boolean) {
-    Shell.cmd("${if (enable) "touch" else "rm -rf"} ${APApplication.FORCE_OVERLAYFS_FILE}")
-        .submit { result ->
-            Log.i(TAG, "setForceUsingOverlayFS result: ${result.isSuccess} [${result.out}]")
-        }
+    SuFile(APApplication.FORCE_OVERLAYFS_FILE).apply {
+        if (enable) createNewFile()
+        else deleteRecursive()
+    }
 }
 
 fun getFileNameFromUri(context: Context, uri: Uri): String? {
