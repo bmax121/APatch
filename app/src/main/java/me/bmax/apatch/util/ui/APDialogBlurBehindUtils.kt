@@ -64,14 +64,14 @@ open class APDialogBlurBehindUtils {
                             } catch (t: Throwable) {
                                 Log.e(
                                     "APatchUI",
-                                    "[APDialogBlurBehindUtils] Blur behind dialog builder: " + t.toString()
+                                    "[APDialogBlurBehindUtils] Blur behind dialog builder: $t"
                                 )
                             }
                         }
                     } catch (t: Throwable) {
                         Log.e(
                             "APatchUI",
-                            "[APDialogBlurBehindUtils] Blur behind dialog builder: " + t.toString()
+                            "[APDialogBlurBehindUtils] Blur behind dialog builder: $t"
                         )
                     }
                     view.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {

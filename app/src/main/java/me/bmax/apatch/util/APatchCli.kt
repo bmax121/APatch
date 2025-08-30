@@ -28,12 +28,12 @@ import java.util.zip.ZipFile
 private const val TAG = "APatchCli"
 
 private fun getKPatchPath(): String {
-    return apApp.applicationInfo.nativeLibraryDir + File.separator + "libkpatch.so"
+    return "${apApp.applicationInfo.nativeLibraryDir}${File.separator}libkpatch.so"
 }
 
 class RootShellInitializer : Shell.Initializer() {
     override fun onInit(context: Context, shell: Shell): Boolean {
-        shell.newJob().add("export PATH=\$PATH:/system_ext/bin:/vendor/bin").exec()
+        shell.newJob().add($$"export PATH=$PATH:/system_ext/bin:/vendor/bin").exec()
         return true
     }
 }

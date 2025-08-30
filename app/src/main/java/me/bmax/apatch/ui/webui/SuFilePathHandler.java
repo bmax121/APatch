@@ -13,7 +13,6 @@ import com.topjohnwu.superuser.io.SuFile;
 import com.topjohnwu.superuser.io.SuFileInputStream;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.GZIPInputStream;
@@ -172,8 +171,7 @@ public final class SuFilePathHandler implements WebViewAssetLoader.PathHandler {
         return path.endsWith(".svgz") ? new GZIPInputStream(stream) : stream;
     }
 
-    public static InputStream openFile(@NonNull File file, @NonNull Shell shell) throws FileNotFoundException,
-            IOException {
+    public static InputStream openFile(@NonNull File file, @NonNull Shell shell) throws IOException {
         SuFile suFile = new SuFile(file.getAbsolutePath());
         suFile.setShell(shell);
         InputStream fis = SuFileInputStream.open(suFile);

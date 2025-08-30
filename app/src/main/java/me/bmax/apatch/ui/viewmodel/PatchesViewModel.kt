@@ -428,7 +428,7 @@ class PatchesViewModel : ViewModel() {
                 ).to(logs, logs).exec()
                 succ = result.isSuccess
             } else {
-                builder.environment().put("ASH_STANDALONE", "1")
+                builder.environment()["ASH_STANDALONE"] = "1"
                 builder.directory(patchDir)
                 builder.redirectErrorStream(true)
 

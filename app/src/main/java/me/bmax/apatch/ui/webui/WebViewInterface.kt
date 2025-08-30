@@ -19,6 +19,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.util.concurrent.CompletableFuture
 
+@Suppress("unused")
 class WebViewInterface(val context: Context, private val webView: WebView) {
     @JavascriptInterface
     fun exec(cmd: String): String {
@@ -121,7 +122,7 @@ class WebViewInterface(val context: Context, private val webView: WebView) {
 
         completableFuture.thenAccept { result ->
             val emitExitCode =
-                "javascript: (function() { try { ${callbackFunc}.emit('exit', ${result.code}); } catch(e) { console.error(`emitExit error: \${e}`); } })();"
+                $$"javascript: (function() { try { $${callbackFunc}.emit('exit', $${result.code}); } catch(e) { console.error(`emitExit error: ${e}`); } })();"
             webView.post {
                 webView.loadUrl(emitExitCode)
             }

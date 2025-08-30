@@ -64,9 +64,9 @@ fun LinkifyText(
 }
 
 private val urlPattern: Pattern = Pattern.compile(
-    "(?:^|[\\W])((ht|f)tp(s?):\\/\\/|www\\.)"
-            + "(([\\w\\-]+\\.){1,}?([\\w\\-.~]+\\/?)*"
-            + "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*$~@!:/{};']*)",
+    "(?:^|\\W)((ht|f)tp(s?)://|www\\.)"
+            + "(([\\w\\-]+\\.)+([\\w\\-.~]+/?)*"
+            + "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]*$~@!:/{};']*)",
     Pattern.CASE_INSENSITIVE or Pattern.MULTILINE or Pattern.DOTALL
 )
 
@@ -76,6 +76,7 @@ private data class LinkInfo(
     val end: Int
 )
 
+@Suppress("HttpUrlsUsage")
 private fun extractUrls(text: String): List<LinkInfo> = buildList {
     val matcher = urlPattern.matcher(text)
     while (matcher.find()) {
