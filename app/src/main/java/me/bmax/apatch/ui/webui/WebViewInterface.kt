@@ -53,12 +53,13 @@ class WebViewInterface(val context: Context, private val webView: WebView) {
     fun exec(
         cmd: String, options: String?, callbackFunc: String
     ) {
-        val finalCommand = StringBuilder()
-        processOptions(finalCommand, options)
-        finalCommand.append(cmd)
+        val finalCommand = buildString {
+            processOptions(this, options)
+            append(cmd)
+        }
 
         val shell = createRootShell()
-        val result = shell.newJob().add(finalCommand.toString()).to(ArrayList(), ArrayList()).exec()
+        val result = shell.newJob().add(finalCommand).to(ArrayList(), ArrayList()).exec()
         val stdout = result.out.joinToString(separator = "\n")
         val stderr = result.err.joinToString(separator = "\n")
 
@@ -74,20 +75,20 @@ class WebViewInterface(val context: Context, private val webView: WebView) {
 
     @JavascriptInterface
     fun spawn(command: String, args: String, options: String?, callbackFunc: String) {
-        val finalCommand = StringBuilder()
+        val finalCommand = buildString {
+            processOptions(this, options)
 
-        processOptions(finalCommand, options)
-
-        if (!TextUtils.isEmpty(args)) {
-            finalCommand.append(command).append(" ")
-            JSONArray(args).let { argsArray ->
-                for (i in 0 until argsArray.length()) {
-                    finalCommand.append(argsArray.getString(i))
-                    finalCommand.append(" ")
+            if (!TextUtils.isEmpty(args)) {
+                append(command).append(" ")
+                JSONArray(args).let { argsArray ->
+                    for (i in 0 until argsArray.length()) {
+                        append(argsArray.getString(i))
+                        append(" ")
+                    }
                 }
+            } else {
+                append(command)
             }
-        } else {
-            finalCommand.append(command)
         }
 
         val shell = createRootShell()
@@ -115,7 +116,7 @@ class WebViewInterface(val context: Context, private val webView: WebView) {
             }
         }
 
-        val future = shell.newJob().add(finalCommand.toString()).to(stdout, stderr).enqueue()
+        val future = shell.newJob().add(finalCommand).to(stdout, stderr).enqueue()
         val completableFuture = CompletableFuture.supplyAsync {
             future.get()
         }

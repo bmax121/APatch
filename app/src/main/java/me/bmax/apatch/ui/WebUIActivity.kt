@@ -22,8 +22,6 @@ import java.io.File
 
 @SuppressLint("SetJavaScriptEnabled")
 class WebUIActivity : ComponentActivity() {
-    private lateinit var webViewInterface: WebViewInterface
-
     override fun onCreate(savedInstanceState: Bundle?) {
 
         enableEdgeToEdge()
@@ -78,8 +76,7 @@ class WebUIActivity : ComponentActivity() {
             settings.javaScriptEnabled = true
             settings.domStorageEnabled = true
             settings.allowFileAccess = false
-            webViewInterface = WebViewInterface(this@WebUIActivity, this)
-            addJavascriptInterface(webViewInterface, "ksu")
+            addJavascriptInterface(WebViewInterface(this@WebUIActivity, this), "ksu")
             setWebViewClient(webViewClient)
             loadUrl("https://mui.kernelsu.org/index.html")
         }
