@@ -21,6 +21,8 @@
     <string name="reboot_edl">Reboot to EDL</string>
     <string name="about">About</string>
     <string name="settings_app_language">Language</string>
+    <string name="upload_background_image">upload_background_image</string>
+    <string name="upload_background_image_summary">upload_your_background_image</string>
     <string name="system_default">System default</string>
     <string name="settings_global_namespace_mode">Global namespace mode</string>
     <string name="settings_global_namespace_mode_summary">All root sessions use the global mount namespace</string>

@@ -69,6 +69,7 @@ android {
 
     defaultConfig {
         buildConfigField("String", "buildKPV", "\"$kernelPatchVersion\"")
+        applicationId = "com.example.apatch"
     }
 
     java {

@@ -3,9 +3,12 @@ package me.bmax.apatch.ui.screen
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.content.Context
+
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.ComponentActivity
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.clickable
@@ -25,6 +28,10 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.Image
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.ViewModel
+
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.ColorLens
@@ -41,6 +48,7 @@ import androidx.compose.material.icons.filled.Save
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Translate
 import androidx.compose.material.icons.filled.Update
+import androidx.compose.material.icons.filled.Image
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
@@ -51,6 +59,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Slider
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -90,6 +99,8 @@ import me.bmax.apatch.BuildConfig
 import me.bmax.apatch.Natives
 import me.bmax.apatch.R
 import me.bmax.apatch.ui.component.SwitchItem
+import me.bmax.apatch.ui.MainActivity
+import me.bmax.apatch.ui.MainViewModel
 import me.bmax.apatch.ui.component.rememberConfirmDialog
 import me.bmax.apatch.ui.component.rememberLoadingDialog
 import me.bmax.apatch.ui.theme.refreshTheme
@@ -110,6 +121,7 @@ import me.bmax.apatch.util.ui.NavigationBarsSpacer
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import java.io.File
 
 @Destination<RootGraph>
 @Composable
@@ -119,6 +131,7 @@ fun SettingScreen() {
     val kPatchReady = state != APApplication.State.UNKNOWN_STATE
     val aPatchReady =
         (state == APApplication.State.ANDROIDPATCH_INSTALLING || state == APApplication.State.ANDROIDPATCH_INSTALLED || state == APApplication.State.ANDROIDPATCH_NEED_UPDATE)
+    //val bIsManagerHide = AppUtils.getPackageName() != APPLICATION_ID
     var isGlobalNamespaceEnabled by rememberSaveable {
         mutableStateOf(false)
     }
@@ -162,6 +175,11 @@ fun SettingScreen() {
         val showLanguageDialog = rememberSaveable { mutableStateOf(false) }
         LanguageDialog(showLanguageDialog)
 
+        /*val showRandomizePkgNameDialog = rememberSaveable { mutableStateOf(false) }
+        if (showRandomizePkgNameDialog.value) {
+            RandomizePkgNameDialog(showDialog = showRandomizePkgNameDialog)
+        }*/
+
         val showResetSuPathDialog = remember { mutableStateOf(false) }
         if (showResetSuPathDialog.value) {
             ResetSUPathDialog(showResetSuPathDialog)
@@ -200,7 +218,6 @@ fun SettingScreen() {
                 .fillMaxWidth()
                 .verticalScroll(rememberScrollState()),
         ) {
-
             val context = LocalContext.current
             val scope = rememberCoroutineScope()
             val prefs = APApplication.sharedPreferences
@@ -257,6 +274,7 @@ fun SettingScreen() {
                     })
             }
 
+
             // Lite Mode
             if (kPatchReady && aPatchReady) {
                 SwitchItem(
@@ -267,6 +285,19 @@ fun SettingScreen() {
                     onCheckedChange = {
                         setLiteMode(it)
                         isLiteModeEnabled = it
+                    })
+            }
+
+            // Force OverlayFS
+            if (kPatchReady && aPatchReady && isOverlayFSAvailable) {
+                SwitchItem(
+                    icon = Icons.Filled.FilePresent,
+                    title = stringResource(id = R.string.settings_force_overlayfs_mode),
+                    summary = stringResource(id = R.string.settings_force_overlayfs_mode_summary),
+                    checked = forceUsingOverlayFS,
+                    onCheckedChange = {
+                        setForceUsingOverlayFS(it)
+                        forceUsingOverlayFS = it
                     })
             }
 
@@ -434,6 +465,79 @@ fun SettingScreen() {
                     color = MaterialTheme.colorScheme.outline)
             }, leadingContent = { Icon(Icons.Filled.Translate, null) })
 
+            //background_image
+            val activity = LocalContext.current as ComponentActivity
+            val viewModel: MainViewModel = viewModel(viewModelStoreOwner = activity)
+            val contentAlpha by viewModel.contentAlpha
+            val sliderValue = remember { mutableStateOf(contentAlpha) }
+            val savedImagePathState = viewModel.savedImagePath
+
+            val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+                uri?.let {
+                    val inputStream = context.contentResolver.openInputStream(it)
+                    val file = File(context.filesDir, "background_image.jpg")
+                    inputStream.use { input ->
+                        file.outputStream().use { output ->
+                            input?.copyTo(output)
+                        }
+                    }
+                    context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE).edit()
+                        .putString("background_image_path", file.absolutePath)
+                        .apply()
+                    viewModel.updateImagePath(file.absolutePath)
+                }
+            }
+            var back_img = !savedImagePathState.value.isNullOrEmpty()
+
+            SwitchItem(
+                icon = Icons.Filled.Image,
+                title = stringResource(id = R.string.upload_background_image),  // 资源ID
+                summary = stringResource(id = R.string.upload_background_image_summary), // 资源ID
+                checked = back_img,
+                onCheckedChange = { checked ->
+                    if (checked) {
+                        // 用户开启开关，弹出图片选择器
+                        launcher.launch("image/*")
+                        viewModel.updateAlpha(0.4f)
+                    } else {
+                        // 用户关闭开关，清空已保存的图片路径
+                        context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE).edit()
+                            .putString("background_image_path", "")
+                            .apply()
+                        viewModel.updateImagePath("") 
+                    }
+                    refreshTheme.value = true
+                    back_img = checked
+                }
+            )
+            
+            //slider
+            Column {
+                Text(
+                    text = "背景透明度: %.2f".format(sliderValue.value),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+
+                Slider(
+                    value = sliderValue.value,
+                    onValueChange = {
+                        sliderValue.value = it
+                        viewModel.updateAlpha(it)  // 更新 ViewModel 中的透明度值
+                        refreshTheme.value = true
+                    },
+                    valueRange = 0f..1f,
+                    steps = 50,  // 可选：将滑块分成更平滑的段
+                    modifier = Modifier.fillMaxWidth()
+                )
+        }
+                    
+
+
+            
+
+            
+
+
             // log
             ListItem(
                 leadingContent = {
@@ -577,7 +681,7 @@ fun ThemeChooseDialog(showDialog: MutableState<Boolean>) {
                         headlineContent = { Text(text = stringResource(it.nameId)) },
                         modifier = Modifier.clickable {
                             showDialog.value = false
-                            prefs.edit { putString("custom_color", it.name) }
+                           prefs.edit { putString("custom_color", it.name) }
                             refreshTheme.value = true
                         })
                 }
