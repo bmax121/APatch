@@ -38,6 +38,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import coil.Coil
 import coil.ImageLoader
 import com.ramcosta.composedestinations.DestinationsNavHost
@@ -162,10 +163,12 @@ private fun BottomBar(navController: NavHostController) {
     val aPatchReady =
         (state == APApplication.State.ANDROIDPATCH_INSTALLING || state == APApplication.State.ANDROIDPATCH_INSTALLED || state == APApplication.State.ANDROIDPATCH_NEED_UPDATE)
     val navigator = navController.rememberDestinationsNavigator()
+    val currentBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = currentBackStackEntry?.destination?.route
 
     NavigationBar(tonalElevation = 8.dp) {
         BottomBarDestination.entries.forEach { destination ->
-            val isCurrentDestOnBackStack by navController.isRouteOnBackStackAsState(destination.direction)
+            val isCurrentDestOnBackStack = currentRoute == destination.direction.route
 
             val hideDestination = (destination.kPatchRequired && !kPatchReady) || (destination.aPatchRequired && !aPatchReady)
             if (hideDestination) return@forEach
