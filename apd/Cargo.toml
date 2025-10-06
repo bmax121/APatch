@@ -39,7 +39,7 @@ notify = "8.2"
 rustix = { git = "https://github.com/AndroidPatch/rustix", branch = "main", features = ["all-apis"] }
 # some android specific dependencies which compiles under unix are also listed here for convenience of coding
 android-properties = { version = "0.2.2", features = ["bionic-deprecated"] }
-procfs = "0.17"
+procfs = "0.18"
 loopdev = { git = "https://github.com/AndroidPatch/loopdev" }
 
 [target.'cfg(target_os = "android")'.dependencies]
