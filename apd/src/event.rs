@@ -239,16 +239,20 @@ pub fn move_file(module_update_dir: &str, module_dir: &str) -> Result<()> {
         if entry.path().is_dir() {
             let source_path = Path::new(module_update_dir).join(file_name_str.as_ref());
             let target_path = Path::new(module_dir).join(file_name_str.as_ref());
-            if target_path.exists() {
-                info!(
-                    "Removing existing folder in target directory: {}",
-                    file_name_str
-                );
-                remove_dir_all(&target_path)?;
-            }
+            let update = target_path.join(defs::UPDATE_FILE_NAME).exists();
+            if update {
+                if target_path.exists() {
+                    info!(
+                        "Removing existing folder in target directory: {}",
+                        file_name_str
+                    );
+                    remove_dir_all(&target_path)?;
+                }
 
-            info!("Moving {} to target directory", file_name_str);
-            rename(&source_path, &target_path)?;
+                info!("Moving {} to target directory", file_name_str);
+                rename(&source_path, &target_path)?;
+            }
+            
         }
     }
     Ok(())
@@ -362,9 +366,10 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     let module_update_flag = Path::new(defs::WORKING_DIR).join(defs::UPDATE_FILE_NAME); // if update ,there will be renewed modules file
     assets::ensure_binaries().with_context(|| "binary missing")?;
 
-    ensure_dir_exists(defs::MODULE_UPDATE_TMP_DIR)?;
-
-    move_file(module_update_dir, module_dir)?;
+    if Path::new(defs::MODULE_UPDATE_TMP_DIR).exists() {
+        move_file(module_update_dir, module_dir)?;
+        fs::remove_dir_all(module_update_dir)?;
+    }
     let is_lite_mode_enabled = Path::new(defs::LITEMODE_FILE).exists();
 
     if safe_mode {
