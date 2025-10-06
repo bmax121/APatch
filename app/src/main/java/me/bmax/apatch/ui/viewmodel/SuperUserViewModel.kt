@@ -21,11 +21,10 @@ import me.bmax.apatch.IAPRootService
 import me.bmax.apatch.Natives
 import me.bmax.apatch.apApp
 import me.bmax.apatch.services.RootServices
-import me.bmax.apatch.util.APatchCli
 import me.bmax.apatch.util.HanziToPinyin
 import me.bmax.apatch.util.PkgConfig
 import java.text.Collator
-import java.util.Locale
+import java.util.*
 import kotlin.concurrent.thread
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -94,8 +93,7 @@ class SuperUserViewModel : ViewModel() {
             Shell.EXECUTOR,
             connection,
         )
-        val shell = APatchCli.SHELL
-        task?.let { it1 -> shell.execTask(it1) }
+        task?.let { it1 -> Shell.getShell().execTask(it1) }
     }
 
     private fun stopRootService() {

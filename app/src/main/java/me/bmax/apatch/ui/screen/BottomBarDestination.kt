@@ -2,22 +2,10 @@ package me.bmax.apatch.ui.screen
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Apps
-import androidx.compose.material.icons.filled.Build
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Security
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.outlined.Apps
-import androidx.compose.material.icons.outlined.Build
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Security
-import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.ramcosta.composedestinations.generated.destinations.APModuleScreenDestination
-import com.ramcosta.composedestinations.generated.destinations.HomeScreenDestination
-import com.ramcosta.composedestinations.generated.destinations.KPModuleScreenDestination
-import com.ramcosta.composedestinations.generated.destinations.SettingScreenDestination
-import com.ramcosta.composedestinations.generated.destinations.SuperUserScreenDestination
+import com.ramcosta.composedestinations.generated.destinations.*
 import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
 import me.bmax.apatch.R
 

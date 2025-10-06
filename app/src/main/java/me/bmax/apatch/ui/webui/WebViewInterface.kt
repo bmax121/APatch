@@ -19,6 +19,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.util.concurrent.CompletableFuture
 
+@Suppress("unused")
 class WebViewInterface(val context: Context, private val webView: WebView) {
     @JavascriptInterface
     fun exec(cmd: String): String {
@@ -52,53 +53,54 @@ class WebViewInterface(val context: Context, private val webView: WebView) {
     fun exec(
         cmd: String, options: String?, callbackFunc: String
     ) {
-        val finalCommand = StringBuilder()
-        processOptions(finalCommand, options)
-        finalCommand.append(cmd)
+        val finalCommand = buildString {
+            processOptions(this, options)
+            append(cmd)
+        }
 
         val shell = createRootShell()
-        val result = shell.newJob().add(finalCommand.toString()).to(ArrayList(), ArrayList()).exec()
+        val result = shell.newJob().add(finalCommand).to(ArrayList(), ArrayList()).exec()
         val stdout = result.out.joinToString(separator = "\n")
         val stderr = result.err.joinToString(separator = "\n")
 
-        val jsCode = "javascript: (function() { try { ${callbackFunc}(${result.code}, ${
+        val jsCode = "(function() { try { ${callbackFunc}(${result.code}, ${
             JSONObject.quote(
                 stdout
             )
         }, ${JSONObject.quote(stderr)}); } catch(e) { console.error(e); } })();"
         webView.post {
-            webView.loadUrl(jsCode)
+            webView.evaluateJavascript(jsCode, null)
         }
     }
 
     @JavascriptInterface
     fun spawn(command: String, args: String, options: String?, callbackFunc: String) {
-        val finalCommand = StringBuilder()
+        val finalCommand = buildString {
+            processOptions(this, options)
 
-        processOptions(finalCommand, options)
-
-        if (!TextUtils.isEmpty(args)) {
-            finalCommand.append(command).append(" ")
-            JSONArray(args).let { argsArray ->
-                for (i in 0 until argsArray.length()) {
-                    finalCommand.append(argsArray.getString(i))
-                    finalCommand.append(" ")
+            if (!TextUtils.isEmpty(args)) {
+                append(command).append(" ")
+                JSONArray(args).let { argsArray ->
+                    for (i in 0 until argsArray.length()) {
+                        append(argsArray.getString(i))
+                        append(" ")
+                    }
                 }
+            } else {
+                append(command)
             }
-        } else {
-            finalCommand.append(command)
         }
 
         val shell = createRootShell()
 
         val emitData = fun(name: String, data: String) {
-            val jsCode = "javascript: (function() { try { ${callbackFunc}.${name}.emit('data', ${
+            val jsCode = "(function() { try { ${callbackFunc}.${name}.emit('data', ${
                 JSONObject.quote(
                     data
                 )
             }); } catch(e) { console.error('emitData', e); } })();"
             webView.post {
-                webView.loadUrl(jsCode)
+                webView.evaluateJavascript(jsCode, null)
             }
         }
 
@@ -114,21 +116,21 @@ class WebViewInterface(val context: Context, private val webView: WebView) {
             }
         }
 
-        val future = shell.newJob().add(finalCommand.toString()).to(stdout, stderr).enqueue()
+        val future = shell.newJob().add(finalCommand).to(stdout, stderr).enqueue()
         val completableFuture = CompletableFuture.supplyAsync {
             future.get()
         }
 
         completableFuture.thenAccept { result ->
             val emitExitCode =
-                "javascript: (function() { try { ${callbackFunc}.emit('exit', ${result.code}); } catch(e) { console.error(`emitExit error: \${e}`); } })();"
+                $$"(function() { try { $${callbackFunc}.emit('exit', $${result.code}); } catch(e) { console.error(`emitExit error: ${e}`); } })();"
             webView.post {
-                webView.loadUrl(emitExitCode)
+                webView.evaluateJavascript(emitExitCode, null)
             }
 
             if (result.code != 0) {
                 val emitErrCode =
-                    "javascript: (function() { try { var err = new Error(); err.exitCode = ${result.code}; err.message = ${
+                    "(function() { try { var err = new Error(); err.exitCode = ${result.code}; err.message = ${
                         JSONObject.quote(
                             result.err.joinToString(
                                 "\n"
@@ -136,7 +138,7 @@ class WebViewInterface(val context: Context, private val webView: WebView) {
                         )
                     };${callbackFunc}.emit('error', err); } catch(e) { console.error('emitErr', e); } })();"
                 webView.post {
-                    webView.loadUrl(emitErrCode)
+                    webView.evaluateJavascript(emitErrCode,null)
                 }
             }
         }
