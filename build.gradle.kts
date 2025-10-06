@@ -12,8 +12,8 @@ plugins {
 project.ext.set("kernelPatchVersion", "0.12.0")
 
 val androidMinSdkVersion = 26
-val androidTargetSdkVersion = 35
-val androidCompileSdkVersion = 35
+val androidTargetSdkVersion = 36
+val androidCompileSdkVersion = 36
 
 val androidCompileNdkVersion = "28.1.13356709"
 val managerVersionCode by extra(getVersionCode())

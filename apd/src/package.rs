@@ -114,9 +114,9 @@ pub fn synchronize_package_uid() -> io::Result<()> {
         match read_lines("/data/system/packages.list") {
             Ok(lines) => {
                 let lines: Vec<_> = lines.filter_map(|line| line.ok()).collect();
-                
+
                 let mut package_configs = read_ap_package_config();
-                
+
                 let system_packages: Vec<String> = lines
                     .iter()
                     .filter_map(|line| line.split_whitespace().next())
@@ -126,9 +126,12 @@ pub fn synchronize_package_uid() -> io::Result<()> {
                 let original_len = package_configs.len();
                 package_configs.retain(|config| system_packages.contains(&config.pkg));
                 let removed_count = original_len - package_configs.len();
-                
+
                 if removed_count > 0 {
-                    info!("Removed {} uninstalled package configurations", removed_count);
+                    info!(
+                        "Removed {} uninstalled package configurations",
+                        removed_count
+                    );
                 }
 
                 let mut updated = false;
@@ -143,7 +146,10 @@ pub fn synchronize_package_uid() -> io::Result<()> {
                                 .find(|config| config.pkg == pkg_name)
                             {
                                 if config.uid != uid {
-                                    info!("Updating uid for package {}: {} -> {}", pkg_name, config.uid, uid);
+                                    info!(
+                                        "Updating uid for package {}: {} -> {}",
+                                        pkg_name, config.uid, uid
+                                    );
                                     config.uid = uid;
                                     updated = true;
                                 }
@@ -174,18 +180,18 @@ pub fn synchronize_package_uid() -> io::Result<()> {
 pub fn add_package_config(new_config: PackageConfig) -> io::Result<bool> {
     let mut package_configs = read_ap_package_config();
     let pkg_name = new_config.pkg.clone();
-    
+
     if package_configs.iter().any(|c| c.pkg == pkg_name) {
         warn!("Package {} already exists in configuration", pkg_name);
         return Ok(false);
     }
-    
+
     match read_lines("/data/system/packages.list") {
         Ok(lines) => {
             let exists = lines
                 .filter_map(|line| line.ok())
                 .any(|line| line.starts_with(&format!("{} ", pkg_name)));
-            
+
             if !exists {
                 warn!("Package {} not found in system", pkg_name);
                 return Ok(false);
@@ -196,7 +202,7 @@ pub fn add_package_config(new_config: PackageConfig) -> io::Result<bool> {
             return Err(e);
         }
     }
-    
+
     package_configs.push(new_config);
     write_ap_package_config(&package_configs)?;
     info!("Added new package configuration for {}", pkg_name);
@@ -205,10 +211,10 @@ pub fn add_package_config(new_config: PackageConfig) -> io::Result<bool> {
 
 pub fn remove_package_config(pkg_name: &str) -> io::Result<bool> {
     let mut package_configs = read_ap_package_config();
-    
+
     let original_len = package_configs.len();
     package_configs.retain(|config| config.pkg != pkg_name);
-    
+
     if package_configs.len() < original_len {
         write_ap_package_config(&package_configs)?;
         info!("Removed package configuration for {}", pkg_name);
