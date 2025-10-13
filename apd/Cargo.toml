@@ -53,7 +53,8 @@ android_logger = { version = "0.15", default-features = false }
 
 [profile.release]
 strip = true
+overflow-checks = false
 opt-level = 3
 codegen-units = 1
 panic = "abort"
-lto = true
+lto = "fat"

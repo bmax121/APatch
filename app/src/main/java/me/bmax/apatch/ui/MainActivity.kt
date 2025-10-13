@@ -159,15 +159,13 @@ class MainActivity : AppCompatActivity() {
 private fun BottomBar(navController: NavHostController) {
     val state by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
     val kPatchReady = state != APApplication.State.UNKNOWN_STATE
-    val aPatchReady =
-        (state == APApplication.State.ANDROIDPATCH_INSTALLING || state == APApplication.State.ANDROIDPATCH_INSTALLED || state == APApplication.State.ANDROIDPATCH_NEED_UPDATE)
     val navigator = navController.rememberDestinationsNavigator()
 
     NavigationBar(tonalElevation = 8.dp) {
         BottomBarDestination.entries.forEach { destination ->
             val isCurrentDestOnBackStack by navController.isRouteOnBackStackAsState(destination.direction)
 
-            val hideDestination = (destination.kPatchRequired && !kPatchReady) || (destination.aPatchRequired && !aPatchReady)
+            val hideDestination = (destination.kPatchRequired && !kPatchReady) || (destination.aPatchRequired && state != APApplication.State.ANDROIDPATCH_INSTALLED)
             if (hideDestination) return@forEach
             NavigationBarItem(selected = isCurrentDestOnBackStack, onClick = {
                 if (isCurrentDestOnBackStack) {
