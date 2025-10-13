@@ -2,7 +2,7 @@
 
 import com.android.build.gradle.internal.api.BaseVariantOutputImpl
 import com.android.build.gradle.tasks.PackageAndroidArtifact
-import org.jetbrains.kotlin.compose.compiler.gradle.ComposeFeatureFlag
+
 import java.net.URI
 
 plugins {
@@ -73,12 +73,12 @@ android {
 
     java {
         toolchain {
-            languageVersion = JavaLanguageVersion.of(JavaVersion.VERSION_22.majorVersion)
+            languageVersion = JavaLanguageVersion.of(JavaVersion.VERSION_21.majorVersion)
         }
     }
 
     kotlin {
-        jvmToolchain(JavaVersion.VERSION_22.majorVersion.toInt())
+        jvmToolchain(21)
     }
 
     packaging {

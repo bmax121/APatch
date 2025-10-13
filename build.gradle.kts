@@ -15,7 +15,7 @@ val androidMinSdkVersion = 26
 val androidTargetSdkVersion = 36
 val androidCompileSdkVersion = 36
 
-val androidCompileNdkVersion = "28.1.13356709"
+val androidCompileNdkVersion = "29.0.14206865"
 val managerVersionCode by extra(getVersionCode())
 val managerVersionName by extra(getVersionName())
 
