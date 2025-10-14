@@ -1,21 +1,19 @@
 package me.bmax.apatch.util
 
+import android.system.Os
 import android.util.Log
 import androidx.core.content.pm.PackageInfoCompat
+import com.topjohnwu.superuser.Shell
+import com.topjohnwu.superuser.nio.ExtendedFile
+import com.topjohnwu.superuser.nio.FileSystemManager
 import me.bmax.apatch.APApplication
 import me.bmax.apatch.BuildConfig
 import me.bmax.apatch.Natives
 import me.bmax.apatch.apApp
-import me.bmax.apatch.util.shellForResult
-import org.ini4j.Ini
-import java.io.StringReader
 import me.bmax.apatch.ui.viewmodel.KPModel
-import com.topjohnwu.superuser.nio.ExtendedFile
-import com.topjohnwu.superuser.nio.FileSystemManager
-import com.topjohnwu.superuser.Shell
-import androidx.compose.runtime.mutableStateOf
+import org.ini4j.Ini
 import java.io.File
-import android.system.Os
+import java.io.StringReader
 
 
 /**
@@ -32,9 +30,9 @@ object Version {
     }
 
     fun getKpImg(): String {
-        var shell: Shell = createRootShell()
-        var kimgInfo = mutableStateOf(KPModel.KImgInfo("", false))
-        var kpimgInfo = mutableStateOf(KPModel.KPImgInfo("", "", "", "", ""))
+        val shell: Shell = createRootShell()
+        var kimgInfo = KPModel.KImgInfo("", false)
+        var kpimgInfo = KPModel.KPImgInfo("", "", "", "", "")
         val patchDir: ExtendedFile = FileSystemManager.getLocal().getFile(apApp.filesDir.parent, "check")
         patchDir.deleteRecursively()
         patchDir.mkdirs()
@@ -66,7 +64,7 @@ object Version {
             val ini = Ini(StringReader(result.out.joinToString("\n")))
             val kpimg = ini["kpimg"]
             if (kpimg != null) {
-                kpimgInfo.value = KPModel.KPImgInfo(
+                kpimgInfo = KPModel.KPImgInfo(
                     kpimg["version"].toString(),
                     kpimg["compile_time"].toString(),
                     kpimg["config"].toString(),
