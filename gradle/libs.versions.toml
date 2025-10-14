@@ -4,7 +4,7 @@ kotlin = "2.2.20"
 ksp = "2.2.20-2.0.4"
 compose-bom = "2025.10.00"
 lifecycle = "2.9.4"
-compose-destination = "2.1.0"
+compose-destination = "2.3.0"
 libsu = "6.0.0"
 sheets-compose-dialogs = "1.3.0"
 
