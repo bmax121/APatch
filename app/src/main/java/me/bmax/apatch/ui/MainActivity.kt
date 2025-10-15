@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
@@ -26,9 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -55,7 +54,7 @@ import me.zhanghai.android.appiconloader.coil.AppIconKeyer
 
 class MainActivity : AppCompatActivity() {
 
-    private var isLoading by mutableStateOf(true)
+    private var isLoading = true
 
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -140,13 +139,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Initialize Coil
-        val context = this
         val iconSize = resources.getDimensionPixelSize(android.R.dimen.app_icon_size)
         Coil.setImageLoader(
-            ImageLoader.Builder(context)
+            ImageLoader.Builder(this)
                 .components {
                     add(AppIconKeyer())
-                    add(AppIconFetcher.Factory(iconSize, false, context))
+                    add(AppIconFetcher.Factory(iconSize, false, this@MainActivity))
                 }
                 .build()
         )
@@ -158,44 +156,54 @@ class MainActivity : AppCompatActivity() {
 @Composable
 private fun BottomBar(navController: NavHostController) {
     val state by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
-    val kPatchReady = state != APApplication.State.UNKNOWN_STATE
     val navigator = navController.rememberDestinationsNavigator()
 
-    NavigationBar(tonalElevation = 8.dp) {
-        BottomBarDestination.entries.forEach { destination ->
-            val isCurrentDestOnBackStack by navController.isRouteOnBackStackAsState(destination.direction)
+    Crossfade(
+        targetState = state,
+        label = "BottomBarStateCrossfade"
+    ) { state ->
+        val kPatchReady = state != APApplication.State.UNKNOWN_STATE
+        val aPatchReady = state == APApplication.State.ANDROIDPATCH_INSTALLED
 
-            val hideDestination = (destination.kPatchRequired && !kPatchReady) || (destination.aPatchRequired && state != APApplication.State.ANDROIDPATCH_INSTALLED)
-            if (hideDestination) return@forEach
-            NavigationBarItem(selected = isCurrentDestOnBackStack, onClick = {
-                if (isCurrentDestOnBackStack) {
-                    navigator.popBackStack(destination.direction, false)
-                }
+        NavigationBar(tonalElevation = 8.dp) {
+            BottomBarDestination.entries.forEach { destination ->
+                val isCurrentDestOnBackStack by navController.isRouteOnBackStackAsState(destination.direction)
 
-                navigator.navigate(destination.direction) {
-                    popUpTo(NavGraphs.root) {
-                        saveState = true
-                    }
-                    launchSingleTop = true
-                    restoreState = true
-                }
-            }, icon = {
-                if (isCurrentDestOnBackStack) {
-                    Icon(destination.iconSelected, stringResource(destination.label))
-                } else {
-                    Icon(destination.iconNotSelected, stringResource(destination.label))
-                }
-            },
+                val hideDestination = (destination.kPatchRequired && !kPatchReady) || (destination.aPatchRequired && !aPatchReady)
+                if (hideDestination) return@forEach
 
-                label = {
-                    Text(
-                        stringResource(destination.label),
-                        overflow = TextOverflow.Visible,
-                        maxLines = 1,
-                        softWrap = false
-                    )
-                }, alwaysShowLabel = false
-            )
+                NavigationBarItem(
+                    selected = isCurrentDestOnBackStack,
+                    onClick = {
+                        if (isCurrentDestOnBackStack) {
+                            navigator.popBackStack(destination.direction, false)
+                        }
+                        navigator.navigate(destination.direction) {
+                            popUpTo(NavGraphs.root) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    },
+                    icon = {
+                        if (isCurrentDestOnBackStack) {
+                            Icon(destination.iconSelected, stringResource(destination.label))
+                        } else {
+                            Icon(destination.iconNotSelected, stringResource(destination.label))
+                        }
+                    },
+                    label = {
+                        Text(
+                            text = stringResource(destination.label),
+                            overflow = TextOverflow.Visible,
+                            maxLines = 1,
+                            softWrap = false
+                        )
+                    },
+                    alwaysShowLabel = false
+                )
+            }
         }
     }
 }
