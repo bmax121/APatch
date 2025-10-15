@@ -14,7 +14,7 @@ project.ext.set("kernelPatchVersion", "0.12.0")
 val androidMinSdkVersion = 26
 val androidTargetSdkVersion = 36
 val androidCompileSdkVersion = 36
-
+val androidBuildToolsVersion = "36.0.0"
 val androidCompileNdkVersion = "29.0.14206865"
 val managerVersionCode by extra(getVersionCode())
 val managerVersionName by extra(getVersionName())
@@ -52,7 +52,7 @@ subprojects {
     plugins.withType(AndroidBasePlugin::class.java) {
         extensions.configure(CommonExtension::class.java) {
             compileSdk = androidCompileSdkVersion
-            buildToolsVersion = "36.0.0"
+            buildToolsVersion = androidBuildToolsVersion
             ndkVersion = androidCompileNdkVersion
 
             defaultConfig {
