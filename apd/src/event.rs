@@ -466,6 +466,10 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     }
     info!("remove update flag");
     let _ = fs::remove_file(module_update_flag);
+    
+    // start uid monitor on post-fs-data
+    run_uid_monitor();
+
     run_stage("post-mount", superkey, true);
 
     env::set_current_dir("/").with_context(|| "failed to chdir to /")?;
@@ -529,7 +533,6 @@ fn run_uid_monitor() {
 pub fn on_boot_completed(superkey: Option<String>) -> Result<()> {
     info!("on_boot_completed triggered!");
 
-    run_uid_monitor();
     run_stage("boot-completed", superkey, false);
 
     Ok(())
