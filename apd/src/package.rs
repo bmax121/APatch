@@ -145,14 +145,10 @@ pub fn synchronize_package_uid() -> io::Result<()> {
                                 .iter_mut()
                                 .find(|config| config.pkg == pkg_name)
                             {
-                                if config.uid != uid {
-                                    info!(
-                                        "Updating uid for package {}: {} -> {}",
-                                        pkg_name, config.uid, uid
-                                    );
-                                    config.uid = uid;
-                                    updated = true;
-                                }
+                                   if config.uid % 100000 != uid {  
+                                        config.uid = (config.uid / 100000) * 100000 + uid;
+                                        updated = true;
+                                    }
                             }
                         } else {
                             warn!("Error parsing uid: {}", words[1]);
