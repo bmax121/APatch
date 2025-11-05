@@ -101,10 +101,11 @@ class MainActivity : AppCompatActivity() {
 
                 val currentBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = currentBackStackEntry?.destination?.route
+                val showBottomBar = currentRoute != InstallScreenDestination.route
 
                 Scaffold(
                     bottomBar = {
-                        if (currentRoute != InstallScreenDestination.route) {
+                        if (showBottomBar) {
                             BottomBar(navController)
                         }
                     }
@@ -113,7 +114,9 @@ class MainActivity : AppCompatActivity() {
                         LocalSnackbarHost provides snackBarHostState,
                     ) {
                         DestinationsNavHost(
-                            modifier = Modifier.padding(bottom = 80.dp),
+                            modifier = Modifier.padding(
+                                bottom = if (showBottomBar) 80.dp else 0.dp
+                            ),
                             navGraph = NavGraphs.root,
                             navController = navController,
                             engine = rememberNavHostEngine(navHostContentAlignment = Alignment.TopCenter),
