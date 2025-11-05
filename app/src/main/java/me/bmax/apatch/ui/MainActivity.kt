@@ -38,7 +38,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
-import me.bmax.apatch.ui.screen.APModuleScreen
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.ramcosta.composedestinations.generated.destinations.InstallScreenDestination
@@ -73,7 +72,7 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
 
-        val Uri: Uri? = intent.data ?: run {
+        val uri: Uri? = intent.data ?: run {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 intent.getParcelableArrayListExtra("uris", Uri::class.java)?.firstOrNull()
             } else {
@@ -92,8 +91,11 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 LaunchedEffect(isLoading) {
-                    if (!isLoading && Uri != null) {
-                        navigator.navigate(InstallScreenDestination(Uri, MODULE_TYPE.APM))
+                    if (!isLoading && uri != null) {
+                        navigator.navigate(InstallScreenDestination(uri, MODULE_TYPE.APM)) {
+                            popUpTo(NavGraphs.root) { inclusive = true }
+                            launchSingleTop = true
+                        }
                     }
                 }
 
