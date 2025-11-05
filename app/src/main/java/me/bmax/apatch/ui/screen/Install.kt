@@ -142,6 +142,7 @@ fun InstallScreen(navigator: DestinationsNavigator, uri: Uri, type: MODULE_TYPE)
                 },
                 icon = { Icon(Icons.Filled.Refresh, reboot) },
                 text = { Text(text = reboot) },
+                modifier = Modifier.padding(bottom = 32.dp)
             )
         }
 
