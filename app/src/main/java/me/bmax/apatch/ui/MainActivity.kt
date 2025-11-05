@@ -99,9 +99,16 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
 
+                val currentBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentRoute = currentBackStackEntry?.destination?.route
+
                 Scaffold(
-                    bottomBar = { BottomBar(navController) }
-                ) { _ ->
+                    bottomBar = {
+                        if (currentRoute != InstallScreenDestination.route) {
+                            BottomBar(navController)
+                        }
+                    }
+                ) { innerPadding ->
                     CompositionLocalProvider(
                         LocalSnackbarHost provides snackBarHostState,
                     ) {
