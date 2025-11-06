@@ -18,7 +18,7 @@ val androidBuildToolsVersion = "36.0.0"
 val androidCompileNdkVersion = "29.0.14206865"
 val managerVersionCode by extra(getVersionCode())
 val managerVersionName by extra(getVersionName())
-
+val branchname by extra(getbranch())
 fun Project.exec(command: String) = providers.exec {
     commandLine(command.split(" "))
 }.standardOutput.asText.get().trim()
@@ -35,6 +35,10 @@ fun getVersionCode(): Int {
     val commitCount = getGitCommitCount()
     val major = 1
     return major * 10000 + commitCount + 200
+}
+
+fun getbranch(): String {
+    return exec("git rev-parse --abbrev-ref HEAD").trim()
 }
 
 fun getVersionName(): String {
