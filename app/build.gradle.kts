@@ -69,7 +69,7 @@ android {
     defaultConfig {
         buildConfigField("String", "buildKPV", "\"$kernelPatchVersion\"")
 
-        base.archivesName = "APatch_${managerVersionName}_$managerVersionCode"
+        base.archivesName = "APatch_$managerVersionCode_${managerVersionName}"
     }
 
     compileOptions {
