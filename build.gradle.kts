@@ -9,7 +9,7 @@ plugins {
     alias(libs.plugins.kotlin.compose.compiler) apply false
 }
 
-project.ext.set("kernelPatchVersion", "0.12.0")
+project.ext.set("kernelPatchVersion", "0.12.1")
 
 val androidMinSdkVersion = 26
 val androidTargetSdkVersion = 36
@@ -18,7 +18,7 @@ val androidBuildToolsVersion = "36.0.0"
 val androidCompileNdkVersion = "29.0.14206865"
 val managerVersionCode by extra(getVersionCode())
 val managerVersionName by extra(getVersionName())
-
+val branchname by extra(getbranch())
 fun Project.exec(command: String) = providers.exec {
     commandLine(command.split(" "))
 }.standardOutput.asText.get().trim()
@@ -28,13 +28,17 @@ fun getGitCommitCount(): Int {
 }
 
 fun getGitDescribe(): String {
-    return exec("git describe --tags --always").trim()
+    return exec("git rev-parse --verify --short HEAD").trim()
 }
 
 fun getVersionCode(): Int {
     val commitCount = getGitCommitCount()
     val major = 1
     return major * 10000 + commitCount + 200
+}
+
+fun getbranch(): String {
+    return exec("git rev-parse --abbrev-ref HEAD").trim()
 }
 
 fun getVersionName(): String {

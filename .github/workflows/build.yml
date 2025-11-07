@@ -49,11 +49,6 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v5
 
-      - name: Setup ninja
-        uses: seanmiddleditch/gha-setup-ninja@v6
-        with:
-          version: 1.12.1
-
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
         with:

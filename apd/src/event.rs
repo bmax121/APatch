@@ -9,10 +9,13 @@ use crate::{
 };
 use anyhow::{Context, Result, bail, ensure};
 use extattr::{Flags as XattrFlags, lgetxattr, lsetxattr};
+use libc::SIGPWR;
 use log::{info, warn};
 use notify::event::{ModifyKind, RenameMode};
 use notify::{Config, Event, EventKind, INotifyWatcher, RecursiveMode, Watcher};
 use rustix::mount::*;
+use signal_hook::consts::signal::*;
+use signal_hook::iterator::Signals;
 use std::ffi::CStr;
 use std::fs::{remove_dir_all, rename};
 use std::os::unix::fs::PermissionsExt;
@@ -24,9 +27,6 @@ use std::time::Duration;
 use std::{collections::HashMap, thread};
 use std::{env, fs, io};
 use walkdir::WalkDir;
-use signal_hook::consts::signal::*;
-use signal_hook::iterator::Signals;
-use libc::SIGPWR;
 
 fn copy_with_xattr(src: &Path, dest: &Path) -> io::Result<()> {
     fs::copy(src, dest)?;
@@ -255,7 +255,6 @@ pub fn move_file(module_update_dir: &str, module_dir: &str) -> Result<()> {
                 info!("Moving {} to target directory", file_name_str);
                 rename(&source_path, &target_path)?;
             }
-            
         }
     }
     Ok(())
@@ -467,10 +466,10 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
             info!("litemode runing skip magic mount");
         }
     }
-    
+
     info!("remove update flag");
     let _ = fs::remove_file(module_update_flag);
-    
+
     // start uid monitor on post-fs-data
     run_uid_monitor();
 
@@ -568,7 +567,6 @@ pub fn start_uid_listener() -> Result<()> {
             }
         });
     }
-
 
     let mut watcher = INotifyWatcher::new(
         move |ev: notify::Result<Event>| match ev {

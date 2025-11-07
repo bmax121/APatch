@@ -409,6 +409,7 @@ pub fn _uninstall_module(id: &str, update_dir: &str) -> Result<()> {
 }
 pub fn uninstall_module(id: &str) -> Result<()> {
     _uninstall_module(id, defs::MODULE_DIR)?;
+    mark_update()?;
     Ok(())
 }
 

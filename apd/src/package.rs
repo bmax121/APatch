@@ -176,4 +176,3 @@ pub fn synchronize_package_uid() -> io::Result<()> {
         "Failed after max retries",
     ))
 }
-
