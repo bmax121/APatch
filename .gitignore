@@ -12,3 +12,4 @@ key.jks.base64.txt
 .kotlin
 app/src/main/resources/
 private
+build.sh
