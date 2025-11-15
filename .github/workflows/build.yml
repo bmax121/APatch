@@ -54,18 +54,10 @@ jobs:
         with:
           packages: ''
 
-      - name: Install toolchain
-        run: |
-          rustup default stable
-          rustup update stable
-          cargo install cargo-ndk
-          rustup target install aarch64-linux-android
-
-      - name: Cache Rust
-        uses: Swatinem/rust-cache@v2
+      - name: Set up Go
+        uses: actions/setup-go@v5
         with:
-          workspaces: apd
-          cache-targets: false
+          go-version: '1.24'
 
       - name: Build with Gradle
         run: |

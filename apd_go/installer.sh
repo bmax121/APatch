@@ -443,3 +443,8 @@ SERVICED=$NVBASE/service.d
 # Some modules dependents on this
 export MAGISK_VER=27.0
 export MAGISK_VER_CODE=27000
+
+
+install_module
+
+exit 0
