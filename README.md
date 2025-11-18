@@ -28,7 +28,7 @@ Or download the latest APK from the [Releases Section](https://github.com/bmax12
 ## Supported Versions
 
 - Only supports the ARM64 architecture.
-- Only supports Android kernel versions 3.18 - 6.1
+- Only supports Android kernel versions 3.18 - 6.12
 
 Support for Samsung devices with security protection: Planned
 

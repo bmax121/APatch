@@ -17,6 +17,7 @@ plugins {
 
 val managerVersionCode: Int by rootProject.extra
 val managerVersionName: String by rootProject.extra
+val branchname: String by rootProject.extra
 val kernelPatchVersion: String by rootProject.extra
 
 apksign {
@@ -69,7 +70,7 @@ android {
     defaultConfig {
         buildConfigField("String", "buildKPV", "\"$kernelPatchVersion\"")
 
-        base.archivesName = "APatch_${managerVersionName}_$managerVersionCode"
+        base.archivesName = "APatch_${managerVersionCode}_${managerVersionName}_on_${branchname}"
     }
 
     compileOptions {

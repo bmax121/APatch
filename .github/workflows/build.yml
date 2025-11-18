@@ -49,11 +49,6 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v5
 
-      - name: Setup ninja
-        uses: seanmiddleditch/gha-setup-ninja@v6
-        with:
-          version: 1.12.1
-
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
         with:
@@ -102,7 +97,7 @@ jobs:
         env:
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
         if: ${{ env.SIGNING_KEY != '' }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: APatch
           path: ${{steps.sign_app.outputs.signedReleaseFile}}
