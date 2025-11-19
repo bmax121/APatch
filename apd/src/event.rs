@@ -470,8 +470,7 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     info!("remove update flag");
     let _ = fs::remove_file(module_update_flag);
 
-    // start uid monitor on post-fs-data
-    run_uid_monitor();
+    
 
     run_stage("post-mount", superkey, true);
 
@@ -538,6 +537,7 @@ pub fn on_boot_completed(superkey: Option<String>) -> Result<()> {
 
     run_stage("boot-completed", superkey, false);
 
+    run_uid_monitor();
     Ok(())
 }
 
