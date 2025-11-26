@@ -2,6 +2,7 @@
 
 import com.android.build.gradle.tasks.PackageAndroidArtifact
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.apache.tools.ant.taskdefs.condition.Os
 import java.net.URI
 
 plugins {
@@ -155,6 +156,12 @@ fun downloadFile(url: String, destFile: File) {
     }
 }
 
+// Check if WSL is available on this Windows system
+fun isWSLAvailable(): Boolean {
+    return Os.isFamily(Os.FAMILY_WINDOWS) &&
+            File(System.getenv("SystemRoot") + "\\System32\\wsl.exe").exists()
+}
+
 registerDownloadTask(
     taskName = "downloadKpimg",
     srcUrl = "https://github.com/bmax121/KernelPatch/releases/download/$kernelPatchVersion/kpimg-android",
@@ -198,9 +205,25 @@ tasks.getByName("preBuild").dependsOn(
 // https://github.com/bbqsrc/cargo-ndk
 // cargo ndk -t arm64-v8a build --release
 tasks.register<Exec>("cargoBuild") {
-    executable("cargo")
-    args("ndk", "-t", "arm64-v8a", "build", "--release")
-    workingDir("${project.rootDir}/apd")
+    val useWSL = isWSLAvailable()
+    val apdPath = System.getenv("APATCH_APD_PATH")
+        ?: error("Please set APATCH_APD_PATH environment variable pointing to the apd folder")
+
+    if (useWSL) {
+        println("Using WSL for Rust build")
+        executable("wsl")
+        args("bash", "-lc", "cd $apdPath && cargo ndk -t arm64-v8a build --release")
+    } else {
+        println("Using local Rust for build")
+        executable("cargo")
+        args("ndk", "-t", "arm64-v8a", "build", "--release")
+        workingDir("${project.rootDir}/apd")
+    }
+
+    // Redirect cargo build output to console
+    standardOutput = System.out
+    errorOutput = System.out
+    isIgnoreExitValue = false
 }
 
 tasks.register<Copy>("buildApd") {
