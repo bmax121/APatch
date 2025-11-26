@@ -500,6 +500,7 @@ private fun KPModuleItem(
     modifier: Modifier = Modifier,
     alpha: Float = 1f,
 ) {
+    val moduleVersion = stringResource(id = R.string.kpm_version)
     val moduleAuthor = stringResource(id = R.string.kpm_author)
     val moduleArgs = stringResource(id = R.string.kpm_args)
     val decoration = TextDecoration.None
@@ -536,7 +537,7 @@ private fun KPModuleItem(
                         )
 
                         Text(
-                            text = "${module.version}, $moduleAuthor ${module.author}",
+                            text = "$moduleVersion: ${module.version}\n$moduleAuthor: ${module.author}",
                             style = MaterialTheme.typography.bodySmall,
                             textDecoration = decoration,
                             color = MaterialTheme.colorScheme.onSurfaceVariant

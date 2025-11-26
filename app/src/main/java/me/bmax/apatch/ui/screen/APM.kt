@@ -461,6 +461,7 @@ private fun ModuleItem(
     alpha: Float = 1f,
 ) {
     val decoration = if (!module.remove) TextDecoration.None else TextDecoration.LineThrough
+    val moduleVersion = stringResource(id = R.string.apm_version)
     val moduleAuthor = stringResource(id = R.string.apm_author)
     val viewModel = viewModel<APModuleViewModel>()
     Surface(
@@ -498,7 +499,7 @@ private fun ModuleItem(
                         )
 
                         Text(
-                            text = "${module.version}, $moduleAuthor ${module.author}",
+                            text = "$moduleVersion: ${module.version}\n$moduleAuthor: ${module.author}",
                             style = MaterialTheme.typography.bodySmall,
                             textDecoration = decoration,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
