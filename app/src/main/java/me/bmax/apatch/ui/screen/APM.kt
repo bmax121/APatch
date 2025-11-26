@@ -27,7 +27,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FloatingActionButton
@@ -42,7 +41,6 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -83,6 +81,7 @@ import me.bmax.apatch.ui.component.ConfirmResult
 import me.bmax.apatch.ui.component.ModuleRemoveButton
 import me.bmax.apatch.ui.component.ModuleStateIndicator
 import me.bmax.apatch.ui.component.ModuleUpdateButton
+import me.bmax.apatch.ui.component.SearchAppBar
 import me.bmax.apatch.ui.component.rememberConfirmDialog
 import me.bmax.apatch.ui.component.rememberLoadingDialog
 import me.bmax.apatch.ui.viewmodel.APModuleViewModel
@@ -138,43 +137,47 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
 
     Scaffold(
         topBar = {
-        TopBar()
-    }, floatingActionButton = if (hideInstallButton) {
-        { /* Empty */ }
-    } else {
-        {
-            val selectZipLauncher = rememberLauncherForActivityResult(
-                contract = ActivityResultContracts.StartActivityForResult()
-            ) {
-                if (it.resultCode != RESULT_OK) {
-                    return@rememberLauncherForActivityResult
+            SearchAppBar(
+                title = { Text(stringResource(R.string.apm)) },
+                searchText = viewModel.search,
+                onSearchTextChange = { viewModel.search = it.trim() },
+                onClearClick = { viewModel.search = "" })
+        }, floatingActionButton = if (hideInstallButton) {
+            { /* Empty */ }
+        } else {
+            {
+                val selectZipLauncher = rememberLauncherForActivityResult(
+                    contract = ActivityResultContracts.StartActivityForResult()
+                ) {
+                    if (it.resultCode != RESULT_OK) {
+                        return@rememberLauncherForActivityResult
+                    }
+                    val data = it.data ?: return@rememberLauncherForActivityResult
+                    val uri = data.data ?: return@rememberLauncherForActivityResult
+
+                    Log.i("ModuleScreen", "select zip result: $uri")
+
+                    navigator.navigate(InstallScreenDestination(uri, MODULE_TYPE.APM))
+
+                    viewModel.markNeedRefresh()
                 }
-                val data = it.data ?: return@rememberLauncherForActivityResult
-                val uri = data.data ?: return@rememberLauncherForActivityResult
 
-                Log.i("ModuleScreen", "select zip result: $uri")
-
-                navigator.navigate(InstallScreenDestination(uri, MODULE_TYPE.APM))
-
-                viewModel.markNeedRefresh()
+                FloatingActionButton(
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    onClick = {
+                        // select the zip file to install
+                        val intent = Intent(Intent.ACTION_GET_CONTENT)
+                        intent.type = "application/zip"
+                        selectZipLauncher.launch(intent)
+                    }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.package_import),
+                        contentDescription = null
+                    )
+                }
             }
-
-            FloatingActionButton(
-                contentColor = MaterialTheme.colorScheme.onPrimary,
-                containerColor = MaterialTheme.colorScheme.primary,
-                onClick = {
-                    // select the zip file to install
-                    val intent = Intent(Intent.ACTION_GET_CONTENT)
-                    intent.type = "application/zip"
-                    selectZipLauncher.launch(intent)
-                }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.package_import),
-                    contentDescription = null
-                )
-            }
-        }
-    }, snackbarHost = { SnackbarHost(snackBarHost) }) { innerPadding ->
+        }, snackbarHost = { SnackbarHost(snackBarHost) }) { innerPadding ->
         when {
             hasMagisk -> {
                 Box(
@@ -376,7 +379,6 @@ private fun ModuleList(
 
                 else -> {
                     items(viewModel.moduleList) { module ->
-                        var isChecked by rememberSaveable(module) { mutableStateOf(module.enabled) }
                         val scope = rememberCoroutineScope()
                         val updatedModule by produceState(initialValue = Triple("", "", "")) {
                             scope.launch(Dispatchers.IO) {
@@ -387,7 +389,6 @@ private fun ModuleList(
                         ModuleItem(
                             navigator,
                             module,
-                            isChecked,
                             updatedModule.first,
                             onUninstall = {
                                 scope.launch { onModuleUninstall(module) }
@@ -396,11 +397,10 @@ private fun ModuleList(
                                 scope.launch {
                                     val success = loadingDialog.withLoading {
                                         withContext(Dispatchers.IO) {
-                                            toggleModule(module.id, !isChecked)
+                                            toggleModule(module.id, !module.enabled)
                                         }
                                     }
                                     if (success) {
-                                        isChecked = it
                                         viewModel.fetchModuleList()
 
                                         val result = snackBarHost.showSnackbar(
@@ -412,7 +412,7 @@ private fun ModuleList(
                                             reboot()
                                         }
                                     } else {
-                                        val message = if (isChecked) failedDisable else failedEnable
+                                        val message = if (module.enabled) failedDisable else failedEnable
                                         snackBarHost.showSnackbar(message.format(module.name))
                                     }
                                 }
@@ -441,17 +441,10 @@ private fun ModuleList(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun TopBar() {
-    TopAppBar(title = { Text(stringResource(R.string.apm)) })
-}
-
 @Composable
 private fun ModuleItem(
     navigator: DestinationsNavigator,
     module: APModuleViewModel.ModuleInfo,
-    isChecked: Boolean,
     updateUrl: String,
     onUninstall: (APModuleViewModel.ModuleInfo) -> Unit,
     onCheckChanged: (Boolean) -> Unit,
@@ -508,7 +501,7 @@ private fun ModuleItem(
 
                     Switch(
                         enabled = !module.update,
-                        checked = isChecked,
+                        checked = module.enabled,
                         onCheckedChange = onCheckChanged
                     )
                 }
