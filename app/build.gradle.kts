@@ -206,10 +206,11 @@ tasks.getByName("preBuild").dependsOn(
 // cargo ndk -t arm64-v8a build --release
 tasks.register<Exec>("cargoBuild") {
     val useWSL = isWSLAvailable()
-    val apdPath = System.getenv("APATCH_APD_PATH")
-        ?: error("Please set APATCH_APD_PATH environment variable pointing to the apd folder")
 
     if (useWSL) {
+    val apdPath = System.getenv("APATCH_APD_PATH")
+        ?: error("Please set APATCH_APD_PATH environment variable pointing to the apd folder")
+        
         println("Using WSL for Rust build")
         executable("wsl")
         args("bash", "-lc", "cd $apdPath && cargo ndk -t arm64-v8a build --release")
