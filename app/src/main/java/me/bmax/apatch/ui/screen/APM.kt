@@ -78,6 +78,7 @@ import me.bmax.apatch.R
 import me.bmax.apatch.apApp
 import me.bmax.apatch.ui.WebUIActivity
 import me.bmax.apatch.ui.component.ConfirmResult
+import me.bmax.apatch.ui.component.IconTextButton
 import me.bmax.apatch.ui.component.ModuleRemoveButton
 import me.bmax.apatch.ui.component.ModuleStateIndicator
 import me.bmax.apatch.ui.component.ModuleUpdateButton
@@ -522,13 +523,19 @@ private fun ModuleItem(
                     modifier = Modifier.padding(top = 8.dp)
                 )
 
+                val buttonsCount = listOf(
+                    module.hasWebUi,
+                    module.hasActionScript,
+                    module.update,
+                    !module.remove
+                ).count { it }
+
                 Row(
                     modifier = Modifier
                         .padding(horizontal = 16.dp, vertical = 8.dp)
                         .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Spacer(modifier = Modifier.weight(1f))
                     if (updateUrl.isNotEmpty()) {
                         ModuleUpdateButton(onClick = { onUpdate(module) })
 
@@ -536,62 +543,42 @@ private fun ModuleItem(
                     }
 
                     if (module.hasWebUi) {
-                        FilledTonalButton(
-                            onClick = { onClick(module) },
-                            enabled = true,
-                            contentPadding = PaddingValues(horizontal = 12.dp)
-                        ) {
-                            Icon(
-                                modifier = Modifier.size(20.dp),
-                                painter = painterResource(id = R.drawable.settings),
-                                contentDescription = null
-                            )
-
-                            Spacer(modifier = Modifier.width(6.dp))
-                            Text(
-                                text = stringResource(id = R.string.apm_webui_open),
-                                maxLines = 1,
-                                overflow = TextOverflow.Visible,
-                                softWrap = false
-                            )
-                        }
-
+                        IconTextButton(
+                            iconRes = R.drawable.web,
+                            textRes = R.string.apm_webui_open,
+                            showText = buttonsCount < 3,
+                            onClick = { onClick(module) }
+                        )
                         Spacer(modifier = Modifier.width(12.dp))
                     }
 
+                    Spacer(modifier = Modifier.weight(1f))
+
                     if (module.hasActionScript) {
-                        FilledTonalButton(
+                        IconTextButton(
+                            iconRes = R.drawable.settings,
+                            textRes = R.string.apm_action,
+                            showText = buttonsCount < 3,
                             onClick = {
                                 navigator.navigate(ExecuteAPMActionScreenDestination(module.id))
                                 viewModel.markNeedRefresh()
-                            }, enabled = true, contentPadding = PaddingValues(horizontal = 12.dp)
-                        ) {
-                            Icon(
-                                modifier = Modifier.size(20.dp),
-                                painter = painterResource(id = R.drawable.settings),
-                                contentDescription = null
-                            )
-
-                            Spacer(modifier = Modifier.width(6.dp))
-                            Text(
-                                text = stringResource(id = R.string.apm_action),
-                                maxLines = 1,
-                                overflow = TextOverflow.Visible,
-                                softWrap = false
-                            )
-                        }
-
+                            }
+                        )
                         Spacer(modifier = Modifier.width(12.dp))
                     }
-                    ModuleRemoveButton(enabled = !module.remove, onClick = { onUninstall(module) })
-                }
-            }
 
-            if (module.remove) {
-                ModuleStateIndicator(R.drawable.trash)
-            }
-            if (module.update) {
-                ModuleStateIndicator(R.drawable.device_mobile_down)
+                    if (!module.remove) {
+                        IconTextButton(
+                            iconRes = R.drawable.trash,
+                            textRes = R.string.apm_remove,
+                            showText = buttonsCount < 3,
+                            onClick = { onUninstall(module) }
+                        )
+                    }
+                }
+                if (module.update) {
+                    ModuleStateIndicator(R.drawable.device_mobile_down)
+                }
             }
         }
     }
