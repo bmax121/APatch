@@ -106,7 +106,7 @@
     <string name="module_error_invalid_zip">无效的 zip 文件</string>
     <string name="module_error_prop_too_large">module.prop 文件过大 (&gt; 1MiB)</string>
     <string name="module_error_missing_id">module.prop 缺少字段 \'id\'</string>
-    <string name="module_error_invalid_id">模块 ID \'%s\' 无效</string
+    <string name="module_error_invalid_id">模块 ID \'%s\' 无效</string>
     <string name="clear_super_key">清除超级密钥</string>
     <string name="apm_not_installed">尚未注入系统补丁</string>
     <string name="system_default">系统默认</string>
@@ -144,7 +144,7 @@
     <string name="patch_item_extra_event">事件:</string>
     <string name="patch_item_skey">超级密钥</string>
     <string name="patch_item_existed_extra_kpm">已嵌入的</string>
-    <string name="patch_item_set_skey_label">超级密钥长度应在 8-63 个字符，包含数字和字母，但不包含特殊字符。</string>
+    <string name="patch_item_set_skey_label">超级密钥长度应在 8–63 个字符，包含数字和字母，但不包含特殊字符。</string>
     <string name="patch_mode_uninstall_patch">还原初始内核镜像</string>
     <string name="patch_start_unpatch_btn">取消修补</string>
     <string name="hide_apatch_dialog_new_manager_name">新管理器名称</string>
