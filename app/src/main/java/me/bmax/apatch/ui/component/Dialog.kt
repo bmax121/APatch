@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -21,6 +22,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.BasicAlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalContentColor
@@ -445,11 +447,13 @@ private fun LoadingDialog() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ConfirmDialog(visuals: ConfirmDialogVisuals, confirm: () -> Unit, dismiss: () -> Unit) {
+private fun ConfirmDialog(
+    visuals: ConfirmDialogVisuals,
+    confirm: () -> Unit,
+    dismiss: () -> Unit
+) {
     BasicAlertDialog(
-        onDismissRequest = {
-            dismiss()
-        },
+        onDismissRequest = dismiss,
         properties = DialogProperties(
             decorFitsSystemWindows = true,
             usePlatformDefaultWidth = false,
@@ -462,47 +466,52 @@ private fun ConfirmDialog(visuals: ConfirmDialogVisuals, confirm: () -> Unit, di
                 .wrapContentHeight(),
             shape = RoundedCornerShape(20.dp),
             tonalElevation = AlertDialogDefaults.TonalElevation,
-            color = AlertDialogDefaults.containerColor,
+            color = AlertDialogDefaults.containerColor
         ) {
-            Column(modifier = Modifier.padding(PaddingValues(all = 24.dp))) {
-                Box(
-                    Modifier
-                        .padding(PaddingValues(bottom = 16.dp))
-                        .align(Alignment.Start)
-                ) {
-                    Text(text = visuals.title, style = MaterialTheme.typography.headlineSmall)
-                }
-                Box(
-                    Modifier
-                        .weight(weight = 1f, fill = false)
-                        .padding(PaddingValues(bottom = 24.dp))
-                        .align(Alignment.Start)
-                ) {
+            Column(modifier = Modifier.padding(24.dp)) {
+                Text(
+                    text = visuals.title,
+                    style = MaterialTheme.typography.headlineSmall,
+                )
 
+                Spacer(modifier = Modifier.size(16.dp))
+
+                Box(
+                    modifier = Modifier
+                        .weight(1f, fill = false)
+                        .align(Alignment.Start)
+                        .padding(bottom = 24.dp)
+                        .fillMaxWidth()
+                ) {
                     if (visuals.isMarkdown) {
                         MarkdownContent(content = visuals.content)
                     } else {
-                        Text(text = visuals.content, style = MaterialTheme.typography.bodyMedium)
+                        Text(
+                            text = visuals.content,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
                     }
                 }
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End
                 ) {
                     TextButton(onClick = dismiss) {
-                        Text(text = visuals.dismiss ?: stringResource(id = android.R.string.cancel))
+                        Text(text = visuals.dismiss ?: stringResource(android.R.string.cancel))
                     }
-
-                    TextButton(onClick = confirm) {
-                        Text(text = visuals.confirm ?: stringResource(id = android.R.string.ok))
+                    Spacer(modifier = Modifier.size(8.dp))
+                    Button(onClick = confirm) {
+                        Text(text = visuals.confirm ?: stringResource(android.R.string.ok))
                     }
                 }
             }
+
+            // blur
             val dialogWindowProvider = LocalView.current.parent as DialogWindowProvider
             setupWindowBlurListener(dialogWindowProvider.window)
         }
     }
-
 }
 
 @Composable
