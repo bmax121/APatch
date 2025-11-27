@@ -13,6 +13,9 @@
     <string name="kernel_patch">KernelPatch</string>
     <string name="android_patch">AndroidPatch</string>
 
+    <string name="unofficial_warning_title">Unofficial Version</string>
+    <string name="unofficial_warning_summary">Do not submit issues to the official repository.</string>
+
     <string name="reboot">Reboot</string>
     <string name="settings">Settings</string>
     <string name="reboot_recovery">Reboot to Recovery</string>

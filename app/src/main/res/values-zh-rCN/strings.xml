@@ -5,6 +5,8 @@
     <string name="app_name" translatable="false">APatch</string>
     <string name="kpm">内核模块</string>
     <string name="android_patch">系统补丁</string>
+    <string name="unofficial_warning_title">非官方版本</string>
+    <string name="unofficial_warning_summary">请勿向官方仓库提交任何问题。</string>
     <string name="save_log">保存日志</string>
     <string name="log_saved">日志已保存</string>
     <string name="send_log">发送日志</string>

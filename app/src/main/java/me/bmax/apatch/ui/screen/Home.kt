@@ -72,6 +72,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -135,6 +136,7 @@ fun HomeScreen(navigator: DestinationsNavigator) {
             if (kpState != APApplication.State.UNKNOWN_STATE && apState != APApplication.State.ANDROIDPATCH_INSTALLED) {
                 AStatusCard(apState)
             }
+            UnofficialVersionCard()
             val checkUpdate = APApplication.sharedPreferences.getBoolean("check_update", true)
             if (checkUpdate) {
                 UpdateCard()
@@ -836,6 +838,43 @@ fun WarningCard() {
                         )
                     }
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun UnofficialVersionCard() {
+    ElevatedCard {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(24.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Warning,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(20.dp)
+            )
+
+            Spacer(Modifier.width(16.dp))
+
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(
+                    text = (stringResource(R.string.unofficial_warning_title)),
+                    style = MaterialTheme.typography.titleSmall.copy(
+                        fontWeight = FontWeight.SemiBold
+                    )
+                )
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    text = (stringResource(R.string.unofficial_warning_summary)),
+                    style = MaterialTheme.typography.bodyMedium
+                )
             }
         }
     }
