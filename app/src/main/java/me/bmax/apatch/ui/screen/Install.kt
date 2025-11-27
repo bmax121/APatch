@@ -2,7 +2,6 @@ package me.bmax.apatch.ui.screen
 
 import android.net.Uri
 import android.os.Environment
-import android.content.Intent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -37,12 +36,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.dropUnlessResumed
-import androidx.activity.ComponentActivity
-import androidx.compose.ui.platform.LocalContext
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
-import com.ramcosta.composedestinations.generated.destinations.InstallScreenDestination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -62,7 +57,7 @@ enum class MODULE_TYPE {
 
 @Composable
 @Destination<RootGraph>
-fun InstallScreen(navigator: DestinationsNavigator, uri: Uri, type: MODULE_TYPE) {
+fun InstallScreen(uri: Uri, type: MODULE_TYPE) {
     var text by remember { mutableStateOf("") }
     var tempText: String
     val logContent = remember { StringBuilder() }
@@ -71,15 +66,6 @@ fun InstallScreen(navigator: DestinationsNavigator, uri: Uri, type: MODULE_TYPE)
     val snackBarHost = LocalSnackbarHost.current
     val scope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
-
-    val context = LocalContext.current
-    val activity = context as? ComponentActivity
-
-    val isExternalInstall = remember(activity) {
-        activity?.intent?.let { intent ->
-            intent.action == Intent.ACTION_VIEW || intent.action == Intent.ACTION_SEND
-        } ?: false
-    }
 
     LaunchedEffect(Unit) {
         if (text.isNotEmpty()) {
@@ -112,11 +98,6 @@ fun InstallScreen(navigator: DestinationsNavigator, uri: Uri, type: MODULE_TYPE)
 
     Scaffold(topBar = {
         TopBar(onBack = dropUnlessResumed {
-            if (isExternalInstall) {
-                activity?.finish()
-            } else {
-                navigator.popBackStack()
-            }
         }, onSave = {
             scope.launch {
                 val format = SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", Locale.getDefault())

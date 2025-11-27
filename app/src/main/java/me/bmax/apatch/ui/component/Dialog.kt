@@ -112,7 +112,8 @@ interface ConfirmDialogHandle : DialogHandle {
         content: String,
         markdown: Boolean = false,
         confirm: String? = null,
-        dismiss: String? = null
+        dismiss: String? = null,
+        onConfirm: () -> Unit = {}
     )
 
     suspend fun awaitConfirm(
@@ -278,7 +279,8 @@ private class ConfirmDialogHandleImpl(
         content: String,
         markdown: Boolean,
         confirm: String?,
-        dismiss: String?
+        dismiss: String?,
+        onConfirm: () -> Unit
     ) {
         coroutineScope.launch {
             updateVisuals(ConfirmDialogVisualsImpl(title, content, markdown, confirm, dismiss))

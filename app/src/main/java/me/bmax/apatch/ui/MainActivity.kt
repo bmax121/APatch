@@ -30,12 +30,15 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -48,10 +51,18 @@ import com.ramcosta.composedestinations.animations.NavHostAnimatedDestinationSty
 import com.ramcosta.composedestinations.generated.NavGraphs
 import com.ramcosta.composedestinations.rememberNavHostEngine
 import com.ramcosta.composedestinations.utils.rememberDestinationsNavigator
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import me.bmax.apatch.APApplication
+import me.bmax.apatch.R
+import me.bmax.apatch.ui.component.rememberConfirmCallback
+import me.bmax.apatch.ui.component.rememberConfirmDialog
+import me.bmax.apatch.ui.component.rememberLoadingDialog
 import me.bmax.apatch.ui.screen.BottomBarDestination
 import me.bmax.apatch.ui.screen.MODULE_TYPE
 import me.bmax.apatch.ui.theme.APatchTheme
+import me.bmax.apatch.ui.viewmodel.APModuleViewModel
+import me.bmax.apatch.util.ModuleParser
 import me.bmax.apatch.util.ui.LocalSnackbarHost
 import me.zhanghai.android.appiconloader.coil.AppIconFetcher
 import me.zhanghai.android.appiconloader.coil.AppIconKeyer
@@ -90,12 +101,39 @@ class MainActivity : AppCompatActivity() {
                     BottomBarDestination.entries.map { it.direction.route }.toSet()
                 }
 
+                val loadingDialog = rememberLoadingDialog()
+                val viewModel = viewModel<APModuleViewModel>()
+                val context = LocalContext.current
+                val currentUri by rememberUpdatedState(uri)
+
+                val confirmDialog = rememberConfirmDialog(
+                    callback = rememberConfirmCallback(
+                        onConfirm = {
+                            currentUri?.let { uri ->
+                                navigator.navigate(InstallScreenDestination(uri, MODULE_TYPE.APM)) }
+                        }, onDismiss = null
+                    )
+                )
+
+
                 LaunchedEffect(isLoading) {
                     if (!isLoading && uri != null) {
-                        navigator.navigate(InstallScreenDestination(uri, MODULE_TYPE.APM)) {
-                            popUpTo(NavGraphs.root) { inclusive = true }
-                            launchSingleTop = true
+                        viewModel.fetchModuleList()
+
+                        val moduleInstallDesc = loadingDialog.withLoading {
+                            withContext(Dispatchers.IO) {
+                                ModuleParser.getModuleInstallDesc(
+                                    context,
+                                    uri,
+                                    viewModel.moduleList
+                                )
+                            }
                         }
+
+                        confirmDialog.showConfirm(
+                            title = context.getString(R.string.apm),
+                            content = moduleInstallDesc
+                        )
                     }
                 }
 
