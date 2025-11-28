@@ -576,9 +576,9 @@ private fun ModuleItem(
                         )
                     }
                 }
-                if (module.update) {
-                    ModuleStateIndicator(R.drawable.device_mobile_down)
-                }
+            }
+            if (module.update) {
+                ModuleStateIndicator(R.drawable.device_mobile_down)
             }
         }
     }
