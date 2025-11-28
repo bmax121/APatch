@@ -30,6 +30,9 @@ apksign {
 
 android {
     namespace = "me.bmax.apatch"
+        defaultConfig {
+        applicationId = "me.bmax.apatch"
+    }
 
     buildTypes {
         debug {
