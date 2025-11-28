@@ -534,7 +534,6 @@ private fun ModuleItem(
                         .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Spacer(modifier = Modifier.weight(1f))
                     if (updateUrl.isNotEmpty()) {
                         ModuleUpdateButton(onClick = { onUpdate(module) })
 
@@ -549,7 +548,7 @@ private fun ModuleItem(
                         ) {
                             Icon(
                                 modifier = Modifier.size(20.dp),
-                                painter = painterResource(id = R.drawable.settings),
+                                painter = painterResource(id = R.drawable.webui),
                                 contentDescription = null
                             )
 
@@ -564,6 +563,8 @@ private fun ModuleItem(
 
                         Spacer(modifier = Modifier.width(12.dp))
                     }
+
+                    Spacer(modifier = Modifier.weight(1f))
 
                     if (module.hasActionScript) {
                         FilledTonalButton(
