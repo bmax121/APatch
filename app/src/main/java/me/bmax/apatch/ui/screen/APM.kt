@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -28,7 +27,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -46,12 +44,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -79,7 +74,6 @@ import me.bmax.apatch.apApp
 import me.bmax.apatch.ui.WebUIActivity
 import me.bmax.apatch.ui.component.ConfirmResult
 import me.bmax.apatch.ui.component.IconTextButton
-import me.bmax.apatch.ui.component.ModuleRemoveButton
 import me.bmax.apatch.ui.component.ModuleStateIndicator
 import me.bmax.apatch.ui.component.ModuleUpdateButton
 import me.bmax.apatch.ui.component.SearchAppBar
@@ -523,13 +517,6 @@ private fun ModuleItem(
                     modifier = Modifier.padding(top = 8.dp)
                 )
 
-                val buttonsCount = listOf(
-                    module.hasWebUi,
-                    module.hasActionScript,
-                    module.update,
-                    !module.remove
-                ).count { it }
-
                 Row(
                     modifier = Modifier
                         .padding(horizontal = 16.dp, vertical = 8.dp)
@@ -542,23 +529,24 @@ private fun ModuleItem(
                         Spacer(modifier = Modifier.width(12.dp))
                     }
 
+                    val hideText = module.hasWebUi && module.hasActionScript
+
                     if (module.hasWebUi) {
                         IconTextButton(
                             iconRes = R.drawable.web,
                             textRes = R.string.apm_webui_open,
-                            showText = buttonsCount < 3,
+                            showText = !hideText,
                             onClick = { onClick(module) }
                         )
                         Spacer(modifier = Modifier.width(12.dp))
                     }
 
-                    Spacer(modifier = Modifier.weight(1f))
 
                     if (module.hasActionScript) {
                         IconTextButton(
                             iconRes = R.drawable.settings,
                             textRes = R.string.apm_action,
-                            showText = buttonsCount < 3,
+                            showText = !hideText,
                             onClick = {
                                 navigator.navigate(ExecuteAPMActionScreenDestination(module.id))
                                 viewModel.markNeedRefresh()
@@ -567,11 +555,13 @@ private fun ModuleItem(
                         Spacer(modifier = Modifier.width(12.dp))
                     }
 
+                    Spacer(modifier = Modifier.weight(1f))
+
                     if (!module.remove) {
                         IconTextButton(
                             iconRes = R.drawable.trash,
                             textRes = R.string.apm_remove,
-                            showText = buttonsCount < 3,
+                            showText = !hideText,
                             onClick = { onUninstall(module) }
                         )
                     }

@@ -49,9 +49,11 @@ fun ModuleUpdateButton(
 fun IconTextButton(
     iconRes: Int,
     textRes: Int,
-    showText: Boolean,
+    showText: Boolean? = null,
     onClick: () -> Unit
 ) {
+    val finalShowText = showText ?: true
+
     FilledTonalButton(
         onClick = onClick,
         enabled = true,
@@ -66,7 +68,7 @@ fun IconTextButton(
                 painter = painterResource(id = iconRes),
                 contentDescription = null
             )
-            if (showText) {
+            if (finalShowText) {
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
                     text = stringResource(id = textRes),
