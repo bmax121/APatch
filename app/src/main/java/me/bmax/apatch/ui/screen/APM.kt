@@ -75,7 +75,6 @@ import me.bmax.apatch.ui.WebUIActivity
 import me.bmax.apatch.ui.component.ConfirmResult
 import me.bmax.apatch.ui.component.IconTextButton
 import me.bmax.apatch.ui.component.ModuleStateIndicator
-import me.bmax.apatch.ui.component.ModuleUpdateButton
 import me.bmax.apatch.ui.component.SearchAppBar
 import me.bmax.apatch.ui.component.rememberConfirmDialog
 import me.bmax.apatch.ui.component.rememberLoadingDialog
@@ -523,13 +522,8 @@ private fun ModuleItem(
                         .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    if (updateUrl.isNotEmpty()) {
-                        ModuleUpdateButton(onClick = { onUpdate(module) })
 
-                        Spacer(modifier = Modifier.width(12.dp))
-                    }
-
-                    val hideText = module.hasWebUi && module.hasActionScript
+                    val hideText = listOf(module.hasWebUi, updateUrl.isNotEmpty(), module.hasActionScript).count { it } >= 2
 
                     if (module.hasWebUi) {
                         IconTextButton(
@@ -556,6 +550,16 @@ private fun ModuleItem(
                     }
 
                     Spacer(modifier = Modifier.weight(1f))
+
+                    if (updateUrl.isNotEmpty()) {
+                        IconTextButton(
+                            iconRes = R.drawable.device_mobile_down,
+                            textRes = R.string.apm_update,
+                            showText = !hideText,
+                            onClick = { onUpdate(module) }
+                        )
+                        Spacer(modifier = Modifier.width(12.dp))
+                    }
 
                     if (!module.remove) {
                         IconTextButton(
