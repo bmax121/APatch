@@ -152,9 +152,10 @@ fun HomeScreen(navigator: DestinationsNavigator) {
 @Composable
 fun UninstallDialog(showDialog: MutableState<Boolean>, navigator: DestinationsNavigator) {
     BasicAlertDialog(
-        onDismissRequest = { showDialog.value = false }, properties = DialogProperties(
+        onDismissRequest = { showDialog.value = false },
+        properties = DialogProperties(
             decorFitsSystemWindows = true,
-            usePlatformDefaultWidth = false,
+            usePlatformDefaultWidth = false
         )
     ) {
         Surface(
@@ -163,43 +164,65 @@ fun UninstallDialog(showDialog: MutableState<Boolean>, navigator: DestinationsNa
                 .wrapContentHeight(),
             shape = RoundedCornerShape(20.dp),
             tonalElevation = AlertDialogDefaults.TonalElevation,
-            color = AlertDialogDefaults.containerColor,
+            color = AlertDialogDefaults.containerColor
         ) {
-            Column(modifier = Modifier.padding(PaddingValues(all = 24.dp))) {
+            Column(modifier = Modifier.padding(24.dp)) {
                 Box(
                     Modifier
-                        .padding(PaddingValues(bottom = 16.dp))
+                        .padding(bottom = 16.dp)
                         .align(Alignment.CenterHorizontally)
                 ) {
                     Text(
-                        text = stringResource(id = R.string.home_dialog_uninstall_title),
+                        text = stringResource(R.string.home_dialog_uninstall_title),
                         style = MaterialTheme.typography.headlineSmall
                     )
                 }
-                Row(
-                    modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center
+
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    TextButton(onClick = {
-                        showDialog.value = false
-                        APApplication.uninstallApatch()
-                    }) {
-                        Text(text = stringResource(id = R.string.home_dialog_uninstall_ap_only))
+                    Button(
+                        onClick = {
+                            showDialog.value = false
+                            APApplication.uninstallApatch()
+                        },
+                        modifier = Modifier.fillMaxWidth().height(48.dp),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Text(stringResource(R.string.home_dialog_uninstall_ap_only))
                     }
 
-                    TextButton(onClick = {
-                        showDialog.value = false
-                        APApplication.uninstallApatch()
-                        navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.UNPATCH))
-                    }) {
-                        Text(text = stringResource(id = R.string.home_dialog_uninstall_all))
+                    Button(
+                        onClick = {
+                            showDialog.value = false
+                            navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.UNPATCH))
+                        },
+                        modifier = Modifier.fillMaxWidth().height(48.dp),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Text(stringResource(R.string.home_dialog_restore_image))
+                    }
+
+                    Button(
+                        onClick = {
+                            showDialog.value = false
+                            APApplication.uninstallApatch()
+                            navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.UNPATCH))
+                        },
+                        modifier = Modifier.fillMaxWidth().height(48.dp),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Text(stringResource(R.string.home_dialog_uninstall_all))
                     }
                 }
             }
+
             val dialogWindowProvider = LocalView.current.parent as DialogWindowProvider
             APDialogBlurBehindUtils.setupWindowBlurListener(dialogWindowProvider.window)
         }
     }
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

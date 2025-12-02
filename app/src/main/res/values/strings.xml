@@ -218,6 +218,7 @@
 
     <string name="home_dialog_uninstall_ap_only">Remove AndroidPatch</string>
     <string name="home_dialog_uninstall_all">Uninstall all</string>
+    <string name="home_dialog_restore_image">Restore Images</string>
 
     <string name="kpm_control_dialog_title">Control KPModule</string>
     <string name="kpm_control_dialog_content">Input control parameters:</string>

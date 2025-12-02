@@ -187,6 +187,7 @@
     <string name="home_dialog_uninstall_title">卸载</string>
     <string name="home_dialog_uninstall_ap_only">仅卸载系统补丁</string>
     <string name="home_dialog_uninstall_all">完全卸载</string>
+    <string name="home_dialog_restore_image">还原原厂镜像</string>
     <string name="kpm_control_dialog_title">调节内核模块</string>
     <string name="kpm_control_dialog_content">请输入调控参数：</string>
     <string name="kpm_control_paramters">控制参数</string>
