@@ -14,11 +14,11 @@ project.ext.set("kernelPatchVersion", "0.12.2")
 val androidMinSdkVersion = 26
 val androidTargetSdkVersion = 36
 val androidCompileSdkVersion = 36
-val androidBuildToolsVersion = "36.0.0"
+val androidBuildToolsVersion = "36.1.0"
 val androidCompileNdkVersion = "29.0.14206865"
 val managerVersionCode by extra(getVersionCode())
 val managerVersionName by extra(getVersionName())
-val branchname by extra(getbranch())
+val branchName by extra(getBranchName())
 fun Project.exec(command: String) = providers.exec {
     commandLine(command.split(" "))
 }.standardOutput.asText.get().trim()
@@ -37,7 +37,7 @@ fun getVersionCode(): Int {
     return major * 10000 + commitCount + 200
 }
 
-fun getbranch(): String {
+fun getBranchName(): String {
     return exec("git rev-parse --abbrev-ref HEAD").trim()
 }
 
