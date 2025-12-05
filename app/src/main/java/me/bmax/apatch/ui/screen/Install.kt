@@ -59,7 +59,7 @@ enum class MODULE_TYPE {
 @Composable
 @Destination<RootGraph>
 fun InstallScreen(navigator: DestinationsNavigator, uri: Uri, type: MODULE_TYPE) {
-    var text by remember { mutableStateOf("") }
+    var text by rememberSaveable { mutableStateOf("") }
     var tempText: String
     val logContent = remember { StringBuilder() }
     var showFloatAction by rememberSaveable { mutableStateOf(false) }
