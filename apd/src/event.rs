@@ -472,8 +472,6 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     info!("remove update flag");
     let _ = fs::remove_file(module_update_flag);
 
-    
-
     run_stage("post-mount", superkey, true);
 
     env::set_current_dir("/").with_context(|| "failed to chdir to /")?;

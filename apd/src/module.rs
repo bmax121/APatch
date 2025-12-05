@@ -6,6 +6,7 @@ use const_format::concatcp;
 use is_executable::is_executable;
 use java_properties::PropertiesIter;
 use log::{info, warn};
+use mlua::{Function, Lua, Result as LuaResult, Table, Value};
 use std::{
     collections::HashMap,
     env::var as env_var,
@@ -16,7 +17,6 @@ use std::{
     str::FromStr,
 };
 use zip_extensions::zip_extract_file_to_memory;
-use mlua::{Lua,Result as LuaResult,Function, Value, Table};
 
 #[cfg(unix)]
 use std::os::unix::{prelude::PermissionsExt, process::CommandExt};
@@ -225,8 +225,7 @@ pub fn exec_stage_script(stage: &str, block: bool) -> Result<()> {
 
 pub fn exec_stage_lua(stage: &str) -> Result<()> {
     let stage_safe = stage.replace('-', "_");
-    run_lua("on_stage", &stage_safe, true)
-        .map_err(|e| anyhow::anyhow!("{}", e))?;
+    run_lua("on_stage", &stage_safe, true).map_err(|e| anyhow::anyhow!("{}", e))?;
     Ok(())
 }
 pub fn exec_common_scripts(dir: &str, wait: bool) -> Result<()> {
@@ -445,7 +444,9 @@ pub fn load_all_lua_modules(lua: &Lua) -> LuaResult<()> {
     };
 
     if modules_dir.exists() {
-        for entry in fs::read_dir(modules_dir).unwrap_or_else(|_| fs::read_dir("/dev/null").unwrap()) {
+        for entry in
+            fs::read_dir(modules_dir).unwrap_or_else(|_| fs::read_dir("/dev/null").unwrap())
+        {
             if let Ok(entry) = entry {
                 let path = entry.path();
                 if path.is_dir() {
@@ -454,18 +455,26 @@ pub fn load_all_lua_modules(lua: &Lua) -> LuaResult<()> {
                     let old_cpath: String = package.get("cpath")?;
                     let new_cpath = format!("{}/?.so;{}", path.to_string_lossy(), old_cpath);
                     package.set("cpath", new_cpath)?;
-                    
+
                     let lua_file = path.join(format!("{}.lua", id));
 
                     if lua_file.exists() {
                         match fs::read_to_string(&lua_file) {
                             Ok(code) => {
-                                match lua.load(&code).set_name(&*lua_file.to_string_lossy()).eval::<Table>() {
+                                match lua
+                                    .load(&code)
+                                    .set_name(&*lua_file.to_string_lossy())
+                                    .eval::<Table>()
+                                {
                                     Ok(module) => {
                                         modules.set(id.clone(), module.clone())?;
                                     }
                                     Err(e) => {
-                                        eprintln!("Failed to eval Lua {}: {}", lua_file.display(), e);
+                                        eprintln!(
+                                            "Failed to eval Lua {}: {}",
+                                            lua_file.display(),
+                                            e
+                                        );
                                     }
                                 }
                             }
@@ -520,11 +529,12 @@ pub fn read_text_lua(lua: &Lua) -> LuaResult<Function> {
     })
 }
 pub fn should_use_overlayfs_lua(lua: &Lua) -> LuaResult<Function> {
-    lua.create_function(|_, ()| {
-        match should_use_overlayfs() {
-            Ok(value) => Ok(value),
-            Err(e) => Err(mlua::Error::external(format!("check overlayfs failed: {}", e))),
-        }
+    lua.create_function(|_, ()| match should_use_overlayfs() {
+        Ok(value) => Ok(value),
+        Err(e) => Err(mlua::Error::external(format!(
+            "check overlayfs failed: {}",
+            e
+        ))),
     })
 }
 pub fn is_lite_mode_enabled_lua(lua: &Lua) -> LuaResult<Function> {
@@ -534,23 +544,23 @@ pub fn is_lite_mode_enabled_lua(lua: &Lua) -> LuaResult<Function> {
     })
 }
 
-pub fn run_lua(id: &str, function: &str,on_each_module: bool) -> mlua::Result<()> {
-
+pub fn run_lua(id: &str, function: &str, on_each_module: bool) -> mlua::Result<()> {
     let lua = unsafe { Lua::unsafe_new() };
 
-    let lua_script_path = format!("/data/adb/modules/{}/{}.lua", id,id);
+    let lua_script_path = format!("/data/adb/modules/{}/{}.lua", id, id);
     let func = install_module_lua(&lua)?;
     lua.globals().set("install_module", func)?;
     lua.globals().set("info", info_lua(&lua)?)?;
     lua.globals().set("warn", warn_lua(&lua)?)?;
     lua.globals().set("setConfig", save_text_lua(&lua)?)?;
     lua.globals().set("getConfig", read_text_lua(&lua)?)?;
-    lua.globals().set("should_use_overlayfs", should_use_overlayfs_lua(&lua)?)?;
-    lua.globals().set("is_lite_mode_enabled", is_lite_mode_enabled_lua(&lua)?)?;
+    lua.globals()
+        .set("should_use_overlayfs", should_use_overlayfs_lua(&lua)?)?;
+    lua.globals()
+        .set("is_lite_mode_enabled", is_lite_mode_enabled_lua(&lua)?)?;
 
     load_all_lua_modules(&lua)?;
 
-    
     let modules: mlua::Table = lua.globals().get("modules")?;
     if on_each_module {
         for pair in modules.pairs::<String, mlua::Table>() {
@@ -560,12 +570,10 @@ pub fn run_lua(id: &str, function: &str,on_each_module: bool) -> mlua::Result<()
             }
         }
     } else {
-
         let module_table: mlua::Table = modules.get(id)?;
         let func_obj: mlua::Function = module_table.get(function)?;
         func_obj.call::<()>(())?;
     }
-
 
     Ok(())
 }

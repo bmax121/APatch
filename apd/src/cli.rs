@@ -148,7 +148,9 @@ pub fn run() -> Result<()> {
                 Module::Install { zip } => module::install_module(&zip),
                 Module::Uninstall { id } => module::uninstall_module(&id),
                 Module::Action { id } => module::run_action(&id),
-                Module::Lua {id,function}=>  module::run_lua(&id, &function, false).map_err(|e| anyhow::anyhow!("{}", e)),
+                Module::Lua { id, function } => {
+                    module::run_lua(&id, &function, false).map_err(|e| anyhow::anyhow!("{}", e))
+                }
                 Module::Enable { id } => module::enable_module(&id),
                 Module::Disable { id } => module::disable_module(&id),
                 Module::List => module::list_modules(),
