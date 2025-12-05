@@ -88,4 +88,28 @@ object PkgConfig {
             }
         }
     }
+
+    fun batchChangeConfigs(newConfigs: List<Config>) {
+        thread {
+            synchronized(PkgConfig.javaClass) {
+                Natives.su()
+                val configs = readConfigs()
+
+                newConfigs.forEach { config ->
+                    val uid = config.profile.uid
+                    // Root App should not be excluded
+                    if (config.allow == 1) {
+                        config.exclude = 0
+                    }
+
+                    if (config.isDefault() && configs[uid] != null) {
+                        configs.remove(uid)
+                    } else {
+                        configs[uid] = config
+                    }
+                }
+                writeConfigs(configs)
+            }
+        }
+    }
 }

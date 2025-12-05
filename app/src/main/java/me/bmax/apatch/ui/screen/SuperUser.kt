@@ -18,7 +18,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.PlaylistAddCheck
 import androidx.compose.material.icons.filled.Security
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,6 +30,7 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -66,6 +69,31 @@ import me.bmax.apatch.util.PkgConfig
 fun SuperUserScreen() {
     val viewModel = viewModel<SuperUserViewModel>()
     val scope = rememberCoroutineScope()
+    var showBatchExcludeDialog by remember { mutableStateOf(false) }
+
+    if (showBatchExcludeDialog) {
+        AlertDialog(
+            onDismissRequest = { showBatchExcludeDialog = false },
+            title = { Text(stringResource(R.string.su_batch_exclude_title)) },
+            text = { Text(stringResource(R.string.su_batch_exclude_content)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    viewModel.excludeAll()
+                    showBatchExcludeDialog = false
+                }) {
+                    Text(stringResource(R.string.su_exclude_btn))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    viewModel.reverseExcludeAll()
+                    showBatchExcludeDialog = false
+                }) {
+                    Text(stringResource(R.string.su_exclude_reverse_btn))
+                }
+            }
+        )
+    }
 
     LaunchedEffect(Unit) {
         if (viewModel.appList.isEmpty()) {
@@ -80,6 +108,11 @@ fun SuperUserScreen() {
                 searchText = viewModel.search,
                 onSearchTextChange = { viewModel.search = it },
                 onClearClick = { viewModel.search = "" },
+                leadingActions = {
+                    IconButton(onClick = { showBatchExcludeDialog = true }) {
+                        Icon(Icons.Filled.PlaylistAddCheck, null)
+                    }
+                },
                 dropdownContent = {
                     var showDropdown by remember { mutableStateOf(false) }
 
