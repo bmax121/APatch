@@ -140,6 +140,10 @@
     <string name="su_show_system_apps">Show system apps</string>
     <string name="su_hide_system_apps">Hide system apps</string>
     <string name="su_refresh">Refresh</string>
+    <string name="su_batch_exclude_title">Batch Exclude</string>
+    <string name="su_batch_exclude_content">Exclude injection for all non-ROOT apps, please select an action</string>
+    <string name="su_exclude_btn">Exclude</string>
+    <string name="su_exclude_reverse_btn">Reverse</string>
 
     <string name="apm">APModule</string>
     <string name="apm_not_installed">AndroidPatch not installed</string>

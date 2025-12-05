@@ -17,6 +17,7 @@ import com.topjohnwu.superuser.Shell
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
+import me.bmax.apatch.APApplication
 import me.bmax.apatch.IAPRootService
 import me.bmax.apatch.Natives
 import me.bmax.apatch.apApp
@@ -96,6 +97,49 @@ class SuperUserViewModel : ViewModel() {
         )
         val shell = APatchCli.SHELL
         task?.let { it1 -> shell.execTask(it1) }
+    }
+
+    fun excludeAll() {
+        val modifiedConfigs = mutableListOf<PkgConfig.Config>()
+        val currentApps = apps
+
+        currentApps.forEach { app ->
+            if (app.config.allow == 0 && app.config.exclude == 0) {
+                app.config.exclude = 1
+                app.config.profile.scontext = APApplication.DEFAULT_SCONTEXT
+                Natives.setUidExclude(app.uid, 1)
+                modifiedConfigs.add(app.config)
+            }
+        }
+
+        if (modifiedConfigs.isNotEmpty()) {
+            PkgConfig.batchChangeConfigs(modifiedConfigs)
+            // Force UI update
+            apps = ArrayList(currentApps)
+        }
+    }
+
+    fun reverseExcludeAll() {
+        val modifiedConfigs = mutableListOf<PkgConfig.Config>()
+        val currentApps = apps
+
+        currentApps.forEach { app ->
+            if (app.config.allow == 0) {
+                val newExclude = if (app.config.exclude == 1) 0 else 1
+                app.config.exclude = newExclude
+                if (newExclude == 1) {
+                    app.config.profile.scontext = APApplication.DEFAULT_SCONTEXT
+                }
+                Natives.setUidExclude(app.uid, newExclude)
+                modifiedConfigs.add(app.config)
+            }
+        }
+
+        if (modifiedConfigs.isNotEmpty()) {
+            PkgConfig.batchChangeConfigs(modifiedConfigs)
+            // Force UI update
+            apps = ArrayList(currentApps)
+        }
     }
 
     private fun stopRootService() {
