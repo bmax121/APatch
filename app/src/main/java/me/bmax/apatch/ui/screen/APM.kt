@@ -527,7 +527,7 @@ private fun ModuleItem(
 
                     if (module.hasWebUi) {
                         IconTextButton(
-                            iconRes = R.drawable.web,
+                            iconRes = R.drawable.webui,
                             textRes = R.string.apm_webui_open,
                             showText = !hideText,
                             onClick = { onClick(module) }
