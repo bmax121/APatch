@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.SelectionContainer
@@ -31,19 +30,6 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.Button
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
@@ -74,6 +60,17 @@ import me.bmax.apatch.ui.viewmodel.KPModel
 import me.bmax.apatch.ui.viewmodel.PatchesViewModel
 import me.bmax.apatch.util.Version
 import me.bmax.apatch.util.reboot
+import top.yukonga.miuix.kmp.basic.Button
+import top.yukonga.miuix.kmp.basic.Card
+import top.yukonga.miuix.kmp.basic.CircularProgressIndicator
+import top.yukonga.miuix.kmp.basic.FloatingActionButton
+import top.yukonga.miuix.kmp.basic.Icon
+import top.yukonga.miuix.kmp.basic.IconButton
+import top.yukonga.miuix.kmp.basic.Scaffold
+import top.yukonga.miuix.kmp.basic.Text
+import top.yukonga.miuix.kmp.basic.TextField
+import top.yukonga.miuix.kmp.basic.TopAppBar
+import top.yukonga.miuix.kmp.theme.MiuixTheme
 
 private const val TAG = "Patches"
 
@@ -93,16 +90,16 @@ fun Patches(mode: PatchesViewModel.PatchMode) {
     }, floatingActionButton = {
         if (viewModel.needReboot) {
             val reboot = stringResource(id = R.string.reboot)
-            ExtendedFloatingActionButton(
+            FloatingActionButton(
                 onClick = {
-                    scope.launch {
-                        withContext(Dispatchers.IO) {
-                            reboot()
-                        }
-                    }
+                    scope.launch { withContext(Dispatchers.IO) { reboot() } }
                 },
-                icon = { Icon(Icons.Filled.Refresh, reboot) },
-                text = { Text(text = reboot) },
+                content = {
+                    Icon(
+                        imageVector = Icons.Filled.Refresh,
+                        contentDescription = reboot
+                    )
+                },
             )
         }
     }) { innerPadding ->
@@ -220,9 +217,9 @@ fun Patches(mode: PatchesViewModel.PatchMode) {
                     Text(
                         modifier = Modifier.padding(8.dp),
                         text = viewModel.patchLog,
-                        fontSize = MaterialTheme.typography.bodySmall.fontSize,
-                        fontFamily = MaterialTheme.typography.bodySmall.fontFamily,
-                        lineHeight = MaterialTheme.typography.bodySmall.lineHeight,
+//                        fontSize = MiuixTheme.typography.bodySmall.fontSize,
+//                        fontFamily = MiuixTheme.typography.bodySmall.fontFamily,
+//                        lineHeight = MiuixTheme.typography.bodySmall.lineHeight,
                     )
                 }
                 LaunchedEffect(viewModel.patchLog) {
@@ -270,11 +267,7 @@ private fun StartButton(text: String, onClick: () -> Unit) {
 
 @Composable
 private fun ExtraItem(extra: KPModel.IExtraInfo, existed: Boolean, onDelete: () -> Unit) {
-    ElevatedCard(
-        colors = CardDefaults.elevatedCardColors(containerColor = run {
-            MaterialTheme.colorScheme.secondaryContainer
-        }),
-    ) {
+    Card {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -287,7 +280,7 @@ private fun ExtraItem(extra: KPModel.IExtraInfo, existed: Boolean, onDelete: () 
                             if (existed) R.string.patch_item_existed_extra_kpm else R.string.patch_item_new_extra_kpm
                     ) +
                             " " + extra.type.toString().uppercase(),
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = MiuixTheme.textStyles.body2,
                     modifier = Modifier
                         .weight(1f)
                         .wrapContentWidth(Alignment.CenterHorizontally)
@@ -303,23 +296,23 @@ private fun ExtraItem(extra: KPModel.IExtraInfo, existed: Boolean, onDelete: () 
                 val kpmInfo: KPModel.KPMInfo = extra as KPModel.KPMInfo
                 Text(
                     text = "${stringResource(id = R.string.patch_item_extra_name) + " "} ${kpmInfo.name}",
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MiuixTheme.textStyles.body2
                 )
                 Text(
                     text = "${stringResource(id = R.string.patch_item_extra_version) + " "} ${kpmInfo.version}",
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MiuixTheme.textStyles.body2
                 )
                 Text(
                     text = "${stringResource(id = R.string.patch_item_extra_kpm_license) + " "} ${kpmInfo.license}",
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MiuixTheme.textStyles.body2
                 )
                 Text(
                     text = "${stringResource(id = R.string.patch_item_extra_author) + " "} ${kpmInfo.author}",
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MiuixTheme.textStyles.body2
                 )
                 Text(
                     text = "${stringResource(id = R.string.patch_item_extra_kpm_desciption) + " "} ${kpmInfo.description}",
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MiuixTheme.textStyles.body2
                 )
                 var event by remember { mutableStateOf(kpmInfo.event) }
                 Row(
@@ -329,12 +322,12 @@ private fun ExtraItem(extra: KPModel.IExtraInfo, existed: Boolean, onDelete: () 
                 ) {
                     Text(
                         text = stringResource(id = R.string.patch_item_extra_event) + " ",
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MiuixTheme.textStyles.body2
                     )
                     BasicTextField(
                         modifier = Modifier.fillMaxWidth(),
                         value = event,
-                        textStyle = MaterialTheme.typography.bodyMedium,
+                        textStyle = MiuixTheme.textStyles.body2,
                         onValueChange = {
                             event = it
                             kpmInfo.event = it
@@ -349,12 +342,12 @@ private fun ExtraItem(extra: KPModel.IExtraInfo, existed: Boolean, onDelete: () 
                 ) {
                     Text(
                         text = stringResource(id = R.string.patch_item_extra_args) + " ",
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MiuixTheme.textStyles.body2
                     )
                     BasicTextField(
                         modifier = Modifier.fillMaxWidth(),
                         value = args,
-                        textStyle = MaterialTheme.typography.bodyMedium,
+                        textStyle = MiuixTheme.textStyles.body2,
                         onValueChange = {
                             args = it
                             kpmInfo.args = it
@@ -372,11 +365,7 @@ private fun SetSuperKeyView(viewModel: PatchesViewModel) {
     var skey by remember { mutableStateOf(viewModel.superkey) }
     var showWarn by remember { mutableStateOf(!viewModel.checkSuperKeyValidation(skey)) }
     var keyVisible by remember { mutableStateOf(false) }
-    ElevatedCard(
-        colors = CardDefaults.elevatedCardColors(containerColor = run {
-            MaterialTheme.colorScheme.secondaryContainer
-        })
-    ) {
+    Card {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -389,7 +378,7 @@ private fun SetSuperKeyView(viewModel: PatchesViewModel) {
             ) {
                 Text(
                     text = stringResource(id = R.string.patch_item_skey),
-                    style = MaterialTheme.typography.bodyLarge
+                    style = MiuixTheme.textStyles.body1
                 )
             }
             if (showWarn) {
@@ -397,7 +386,7 @@ private fun SetSuperKeyView(viewModel: PatchesViewModel) {
                 Text(
                     color = Color.Red,
                     text = stringResource(id = R.string.patch_item_set_skey_label),
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MiuixTheme.textStyles.body2
                 )
             }
             Column {
@@ -405,15 +394,15 @@ private fun SetSuperKeyView(viewModel: PatchesViewModel) {
                 Box(
                     contentAlignment = Alignment.CenterEnd,
                 ) {
-                    OutlinedTextField(
+                    TextField(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 6.dp),
                         value = skey,
-                        label = { Text(stringResource(id = R.string.patch_set_superkey)) },
+                        label = stringResource(id = R.string.patch_set_superkey),
                         visualTransformation = if (keyVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                        shape = RoundedCornerShape(50.0f),
+                        cornerRadius = 50.dp,
                         onValueChange = {
                             skey = it
                             if (viewModel.checkSuperKeyValidation(it)) {
@@ -446,11 +435,7 @@ private fun SetSuperKeyView(viewModel: PatchesViewModel) {
 @Composable
 private fun KernelPatchImageView(kpImgInfo: KPModel.KPImgInfo) {
     if (kpImgInfo.version.isEmpty()) return
-    ElevatedCard(
-        colors = CardDefaults.elevatedCardColors(containerColor = run {
-            MaterialTheme.colorScheme.secondaryContainer
-        })
-    ) {
+    Card {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -463,21 +448,21 @@ private fun KernelPatchImageView(kpImgInfo: KPModel.KPImgInfo) {
             ) {
                 Text(
                     text = stringResource(id = R.string.patch_item_kpimg),
-                    style = MaterialTheme.typography.bodyLarge
+                    style = MiuixTheme.textStyles.body1
                 )
             }
             Text(
                 text = stringResource(id = R.string.patch_item_kpimg_version) + " " + Version.uInt2String(
                     kpImgInfo.version.substring(2).toUInt(16)
-                ), style = MaterialTheme.typography.bodyMedium
+                ), style = MiuixTheme.textStyles.body2
             )
             Text(
                 text = stringResource(id = R.string.patch_item_kpimg_comile_time) + " " + kpImgInfo.compileTime,
-                style = MaterialTheme.typography.bodyMedium
+                style = MiuixTheme.textStyles.body2
             )
             Text(
                 text = stringResource(id = R.string.patch_item_kpimg_config) + " " + kpImgInfo.config,
-                style = MaterialTheme.typography.bodyMedium
+                style = MiuixTheme.textStyles.body2
             )
         }
     }
@@ -485,11 +470,7 @@ private fun KernelPatchImageView(kpImgInfo: KPModel.KPImgInfo) {
 
 @Composable
 private fun BootimgView(slot: String, boot: String) {
-    ElevatedCard(
-        colors = CardDefaults.elevatedCardColors(containerColor = run {
-            MaterialTheme.colorScheme.secondaryContainer
-        })
-    ) {
+    Card {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -502,18 +483,18 @@ private fun BootimgView(slot: String, boot: String) {
             ) {
                 Text(
                     text = stringResource(id = R.string.patch_item_bootimg),
-                    style = MaterialTheme.typography.bodyLarge
+                    style = MiuixTheme.textStyles.body1
                 )
             }
             if (slot.isNotEmpty()) {
                 Text(
                     text = stringResource(id = R.string.patch_item_bootimg_slot) + " " + slot,
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MiuixTheme.textStyles.body2
                 )
             }
             Text(
                 text = stringResource(id = R.string.patch_item_bootimg_dev) + " " + boot,
-                style = MaterialTheme.typography.bodyMedium
+                style = MiuixTheme.textStyles.body2
             )
         }
     }
@@ -521,11 +502,7 @@ private fun BootimgView(slot: String, boot: String) {
 
 @Composable
 private fun KernelImageView(kImgInfo: KPModel.KImgInfo) {
-    ElevatedCard(
-        colors = CardDefaults.elevatedCardColors(containerColor = run {
-            MaterialTheme.colorScheme.secondaryContainer
-        })
-    ) {
+    Card {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -538,10 +515,10 @@ private fun KernelImageView(kImgInfo: KPModel.KImgInfo) {
             ) {
                 Text(
                     text = stringResource(id = R.string.patch_item_kernel),
-                    style = MaterialTheme.typography.bodyLarge
+                    style = MiuixTheme.textStyles.body2
                 )
             }
-            Text(text = kImgInfo.banner, style = MaterialTheme.typography.bodyMedium)
+            Text(text = kImgInfo.banner, style = MiuixTheme.textStyles.body2)
         }
     }
 }
@@ -579,11 +556,7 @@ private fun SelectFileButton(text: String, onSelected: (data: Intent, uri: Uri) 
 @Composable
 private fun ErrorView(error: String) {
     if (error.isEmpty()) return
-    ElevatedCard(
-        colors = CardDefaults.elevatedCardColors(containerColor = run {
-            MaterialTheme.colorScheme.error
-        })
-    ) {
+    Card {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -592,33 +565,30 @@ private fun ErrorView(error: String) {
         ) {
             Text(
                 text = stringResource(id = R.string.patch_item_error),
-                style = MaterialTheme.typography.bodyLarge
+                style = MiuixTheme.textStyles.body2
             )
-            Text(text = error, style = MaterialTheme.typography.bodyMedium)
+            Text(text = error, style = MiuixTheme.textStyles.body2)
         }
     }
 }
 
 @Composable
 private fun PatchMode(mode: PatchesViewModel.PatchMode) {
-    ElevatedCard(
-        colors = CardDefaults.elevatedCardColors(containerColor = run {
-            MaterialTheme.colorScheme.secondaryContainer
-        })
-    ) {
+    Card {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = stringResource(id = mode.sId), style = MaterialTheme.typography.bodyLarge)
+            Text(text = stringResource(id = mode.sId), style = MiuixTheme.textStyles.body2)
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TopBar() {
-    TopAppBar(title = { Text(stringResource(R.string.patch_config_title)) })
+    TopAppBar(
+        title = stringResource(R.string.patch_config_title)
+    )
 }
