@@ -11,7 +11,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,11 +18,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.filled.CheckCircle
@@ -39,9 +35,6 @@ import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material.icons.outlined.InstallMobile
 import androidx.compose.material.icons.outlined.SystemUpdate
-import androidx.compose.material3.AlertDialogDefaults
-import androidx.compose.material3.BasicAlertDialog
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -56,16 +49,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.DialogProperties
-import androidx.compose.ui.window.DialogWindowProvider
-import androidx.compose.ui.window.SecureFlagPolicy
 import androidx.lifecycle.compose.dropUnlessResumed
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
@@ -88,7 +77,6 @@ import me.bmax.apatch.util.Version.getManagerVersion
 import me.bmax.apatch.util.checkNewVersion
 import me.bmax.apatch.util.getSELinuxStatus
 import me.bmax.apatch.util.reboot
-import me.bmax.apatch.util.ui.APDialogBlurBehindUtils
 import top.yukonga.miuix.kmp.basic.Button
 import top.yukonga.miuix.kmp.basic.Card
 import top.yukonga.miuix.kmp.basic.CardDefaults
@@ -100,13 +88,15 @@ import top.yukonga.miuix.kmp.basic.MiuixScrollBehavior
 import top.yukonga.miuix.kmp.basic.PopupPositionProvider
 import top.yukonga.miuix.kmp.basic.Scaffold
 import top.yukonga.miuix.kmp.basic.ScrollBehavior
-import top.yukonga.miuix.kmp.basic.Surface
 import top.yukonga.miuix.kmp.basic.Text
 import top.yukonga.miuix.kmp.basic.TextButton
+import top.yukonga.miuix.kmp.basic.TextField
 import top.yukonga.miuix.kmp.basic.TopAppBar
 import top.yukonga.miuix.kmp.extra.SuperArrow
 import top.yukonga.miuix.kmp.extra.SuperBottomSheet
+import top.yukonga.miuix.kmp.extra.SuperDialog
 import top.yukonga.miuix.kmp.theme.MiuixTheme
+import top.yukonga.miuix.kmp.basic.ButtonDefaults
 import top.yukonga.miuix.kmp.utils.overScrollVertical
 
 private val managerVersion = getManagerVersion()
@@ -211,179 +201,108 @@ fun UninstallDialog(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AuthFailedTipDialog(showDialog: MutableState<Boolean>) {
-    BasicAlertDialog(
-        onDismissRequest = { showDialog.value = false }, properties = DialogProperties(
-            decorFitsSystemWindows = true,
-            usePlatformDefaultWidth = false,
-            securePolicy = SecureFlagPolicy.SecureOff
-        )
+    SuperDialog(
+        show = showDialog,
+        onDismissRequest = { showDialog.value = false },
+        title = stringResource(R.string.home_dialog_auth_fail_title)
     ) {
-        Surface(
-            modifier = Modifier
-                .width(320.dp)
-                .wrapContentHeight(),
-            shape = RoundedCornerShape(20.dp),
-            color = AlertDialogDefaults.containerColor,
-        ) {
-            Column(modifier = Modifier.padding(PaddingValues(all = 24.dp))) {
-                // Title
-                Box(
-                    Modifier
-                        .padding(PaddingValues(bottom = 16.dp))
-                        .align(Alignment.Start)
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.home_dialog_auth_fail_title),
-                        style = MiuixTheme.textStyles.headline1
-                    )
-                }
+        Text(
+            text = stringResource(id = R.string.home_dialog_auth_fail_content),
+            style = MiuixTheme.textStyles.body1
+        )
 
-                // Content
-                Box(
-                    Modifier
-                        .weight(weight = 1f, fill = false)
-                        .padding(PaddingValues(bottom = 24.dp))
-                        .align(Alignment.Start)
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.home_dialog_auth_fail_content),
-                        style = MiuixTheme.textStyles.body1
-                    )
-                }
+        Spacer(Modifier.height(12.dp))
 
-                // Buttons
-                Row(
-                    modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End
-                ) {
-                    TextButton(
-                        stringResource(id = android.R.string.ok),
-                        { showDialog.value = false }
-                    )
-                }
-            }
-            val dialogWindowProvider = LocalView.current.parent as DialogWindowProvider
-            APDialogBlurBehindUtils.setupWindowBlurListener(dialogWindowProvider.window)
+        Row {
+            TextButton(
+                stringResource(android.R.string.ok),
+                onClick = { showDialog.value = false },
+                modifier = Modifier.weight(1f),
+                colors = ButtonDefaults.textButtonColorsPrimary()
+            )
         }
     }
-
 }
 
 val checkSuperKeyValidation: (superKey: String) -> Boolean = { superKey ->
     superKey.length in 8..63 && superKey.any { it.isDigit() } && superKey.any { it.isLetter() }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AuthSuperKey(showDialog: MutableState<Boolean>, showFailedDialog: MutableState<Boolean>) {
     var key by remember { mutableStateOf("") }
     var keyVisible by remember { mutableStateOf(false) }
     var enable by remember { mutableStateOf(false) }
 
-    BasicAlertDialog(
-        onDismissRequest = { showDialog.value = false }, properties = DialogProperties(
-            decorFitsSystemWindows = true,
-            usePlatformDefaultWidth = false,
-            securePolicy = SecureFlagPolicy.SecureOff
-        )
+    SuperDialog(
+        show = showDialog,
+        title = stringResource(R.string.home_auth_key_title),
+        summary = stringResource(R.string.home_auth_key_desc),
+        onDismissRequest = { showDialog.value = false }
     ) {
-        Surface(
-            modifier = Modifier
-                .width(310.dp)
-                .wrapContentHeight(),
-            shape = RoundedCornerShape(30.dp),
-            color = AlertDialogDefaults.containerColor,
-        ) {
-            Column(modifier = Modifier.padding(PaddingValues(all = 24.dp))) {
-                // Title
-                Box(
-                    Modifier
-                        .padding(PaddingValues(bottom = 16.dp))
-                        .align(Alignment.Start)
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.home_auth_key_title),
-                        style = MiuixTheme.textStyles.headline1
-                    )
-                }
 
-                // Content
-                Box(
-                    Modifier
-                        .weight(weight = 1f, fill = false)
-                        .align(Alignment.Start)
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.home_auth_key_desc),
-                        style = MiuixTheme.textStyles.body1
-                    )
-                }
+        Box(contentAlignment = Alignment.CenterEnd) {
 
-                // Content2
-                Box(
-                    contentAlignment = Alignment.CenterEnd,
-                ) {
-                    OutlinedTextField(
-                        value = key,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 6.dp),
-                        onValueChange = {
-                            key = it
-                            enable = checkSuperKeyValidation(key)
-                        },
-                        shape = RoundedCornerShape(50.0f),
-                        label = { Text(stringResource(id = R.string.super_key)) },
-                        visualTransformation = if (keyVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
-                    )
-                    IconButton(
-                        modifier = Modifier
-                            .size(40.dp)
-                            .padding(top = 15.dp, end = 5.dp),
-                        onClick = { keyVisible = !keyVisible }) {
-                        Icon(
-                            imageVector = if (keyVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
-                            contentDescription = null,
-                            tint = Color.Gray
-                        )
-                    }
-                }
+            TextField(
+                value = key,
+                onValueChange = {
+                    key = it
+                    enable = checkSuperKeyValidation(key)
+                },
+                label = stringResource(R.string.super_key),
+                visualTransformation =
+                    if (keyVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                modifier = Modifier.fillMaxWidth()
+            )
 
-                Spacer(modifier = Modifier.height(12.dp))
-                // Buttons
-                Row(
-                    modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End
-                ) {
-                    TextButton(
-                        stringResource(id = android.R.string.cancel),
-                        onClick = { showDialog.value = false }
-                    )
-                }
-
-                Button(onClick = {
-                    showDialog.value = false
-
-                    val preVerifyKey = Natives.nativeReady(key)
-                    if (preVerifyKey) {
-                        APApplication.superKey = key
-                    } else {
-                        showFailedDialog.value = true
-                    }
-
-                }, enabled = enable) {
-                    Text(stringResource(id = android.R.string.ok))
-                }
+            IconButton(
+                modifier = Modifier
+                    .size(40.dp)
+                    .padding(end = 8.dp),
+                onClick = { keyVisible = !keyVisible }
+            ) {
+                Icon(
+                    imageVector = if (keyVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                    contentDescription = null,
+                    tint = Color.Gray
+                )
             }
         }
+
+        Spacer(Modifier.height(12.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.End
+        ) {
+
+            TextButton(
+                stringResource(id = android.R.string.cancel),
+                onClick = { showDialog.value = false },
+                modifier = Modifier.weight(1f),
+            )
+
+            Spacer(Modifier.width(20.dp))
+
+            TextButton(
+                stringResource(id = android.R.string.ok),
+                onClick = {
+                    showDialog.value = false
+                    val ok = Natives.nativeReady(key)
+                    if (ok) APApplication.superKey = key
+                    else showFailedDialog.value = true
+                },
+                enabled = enable,
+                modifier = Modifier.weight(1f),
+                colors = ButtonDefaults.textButtonColorsPrimary()
+            )
+        }
     }
-    val dialogWindowProvider = LocalView.current.parent as DialogWindowProvider
-    APDialogBlurBehindUtils.setupWindowBlurListener(dialogWindowProvider.window)
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TopBar(
     onInstallClick: () -> Unit,
@@ -493,7 +412,10 @@ private fun TopBar(
 
 @Composable
 private fun KStatusCard(
-    kpState: APApplication.State, apState: APApplication.State, navigator: DestinationsNavigator, onUninstallClick: () -> Unit = {}
+    kpState: APApplication.State,
+    apState: APApplication.State,
+    navigator: DestinationsNavigator,
+    onUninstallClick: () -> Unit = {}
 ) {
 
     val showAuthFailedTipDialog = remember { mutableStateOf(false) }
@@ -528,7 +450,7 @@ private fun KStatusCard(
                 Row {
                     Text(
                         text = stringResource(R.string.kernel_patch),
-                        style = MiuixTheme.textStyles.title1
+                        style = MiuixTheme.textStyles.body2
                     )
                 }
             }
@@ -583,11 +505,11 @@ private fun KStatusCard(
                         else -> {
                             Text(
                                 text = stringResource(R.string.home_install_unknown),
-                                style = MiuixTheme.textStyles.title1
+                                style = MiuixTheme.textStyles.body2
                             )
                             Text(
                                 text = stringResource(R.string.home_install_unknown_summary),
-                                style = MiuixTheme.textStyles.title1
+                                style = MiuixTheme.textStyles.body1
                             )
                         }
                     }
@@ -679,7 +601,8 @@ private fun AStatusCard(apState: APApplication.State) {
             Row {
                 Text(
                     text = stringResource(R.string.android_patch),
-                    style = MiuixTheme.textStyles.title1
+                    style = MiuixTheme.textStyles.body1,
+                    fontWeight = FontWeight.SemiBold
                 )
             }
             Row(
@@ -722,21 +645,21 @@ private fun AStatusCard(apState: APApplication.State) {
                         APApplication.State.ANDROIDPATCH_NOT_INSTALLED -> {
                             Text(
                                 text = stringResource(R.string.home_not_installed),
-                                style = MiuixTheme.textStyles.title1
+                                style = MiuixTheme.textStyles.body2
                             )
                         }
 
                         APApplication.State.ANDROIDPATCH_INSTALLING -> {
                             Text(
                                 text = stringResource(R.string.home_installing),
-                                style = MiuixTheme.textStyles.title1
+                                style = MiuixTheme.textStyles.body2
                             )
                         }
 
                         APApplication.State.ANDROIDPATCH_INSTALLED -> {
                             Text(
                                 text = stringResource(R.string.home_working),
-                                style = MiuixTheme.textStyles.title1
+                                style = MiuixTheme.textStyles.body2
                             )
                         }
 
@@ -767,7 +690,9 @@ private fun AStatusCard(apState: APApplication.State) {
                     Column(
                         modifier = Modifier.align(Alignment.CenterVertically)
                     ) {
-                        Button(onClick = {
+                        Button(
+                            colors = ButtonDefaults.buttonColorsPrimary(),
+                            onClick = {
                             when (apState) {
                                 APApplication.State.ANDROIDPATCH_NOT_INSTALLED, APApplication.State.ANDROIDPATCH_NEED_UPDATE -> {
                                     APApplication.installApatch()
@@ -810,8 +735,8 @@ private fun AStatusCard(apState: APApplication.State) {
 
 @Composable
 fun WarningCard() {
-    var show by rememberSaveable { mutableStateOf(apApp.getBackupWarningState()) }
-    if (show) {
+    val show = rememberSaveable { mutableStateOf(apApp.getBackupWarningState()) }
+    if (show.value) {
         Card(
             colors = CardDefaults.defaultColors(run {
                 MiuixTheme.colorScheme.error
@@ -851,6 +776,7 @@ fun WarningCard() {
                             contentDescription = "",
                             modifier = Modifier.clickable {
                                 apApp.updateBackupWarningState(false)
+                                show.value = false
                             },
                         )
                     }
