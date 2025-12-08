@@ -17,25 +17,23 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -52,6 +50,7 @@ import com.ramcosta.composedestinations.generated.NavGraphs
 import com.ramcosta.composedestinations.rememberNavHostEngine
 import com.ramcosta.composedestinations.utils.rememberDestinationsNavigator
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.bmax.apatch.APApplication
 import me.bmax.apatch.R
@@ -63,9 +62,12 @@ import me.bmax.apatch.ui.screen.MODULE_TYPE
 import me.bmax.apatch.ui.theme.APatchTheme
 import me.bmax.apatch.ui.viewmodel.APModuleViewModel
 import me.bmax.apatch.util.ModuleParser
-import me.bmax.apatch.util.ui.LocalSnackbarHost
 import me.zhanghai.android.appiconloader.coil.AppIconFetcher
 import me.zhanghai.android.appiconloader.coil.AppIconKeyer
+import top.yukonga.miuix.kmp.basic.NavigationBar
+import top.yukonga.miuix.kmp.basic.NavigationItem
+import top.yukonga.miuix.kmp.basic.Scaffold
+import top.yukonga.miuix.kmp.theme.MiuixTheme
 
 class MainActivity : AppCompatActivity() {
 
@@ -96,7 +98,7 @@ class MainActivity : AppCompatActivity() {
             APatchTheme {
                 val navController = rememberNavController()
                 val navigator = navController.rememberDestinationsNavigator()
-                val snackBarHostState = remember { SnackbarHostState() }
+
                 val bottomBarRoutes = remember {
                     BottomBarDestination.entries.map { it.direction.route }.toSet()
                 }
@@ -110,7 +112,8 @@ class MainActivity : AppCompatActivity() {
                     callback = rememberConfirmCallback(
                         onConfirm = {
                             currentUri?.let { uri ->
-                                navigator.navigate(InstallScreenDestination(uri, MODULE_TYPE.APM)) }
+                                navigator.navigate(InstallScreenDestination(uri, MODULE_TYPE.APM))
+                            }
                         }, onDismiss = null
                     )
                 )
@@ -141,20 +144,34 @@ class MainActivity : AppCompatActivity() {
                 val currentRoute = currentBackStackEntry?.destination?.route
                 val showBottomBar = currentRoute != InstallScreenDestination.route
 
+                val coroutineScope = rememberCoroutineScope()
+                val LocalPagerState = compositionLocalOf<PagerState> { error("No pager state") }
+                val LocalHandlePageChange = compositionLocalOf<(Int) -> Unit> { error("No handle page change") }
+
+                val pagerState = rememberPagerState(initialPage = 1, pageCount = { 5 })
+
+                val handlePageChange: (Int) -> Unit = remember(pagerState, coroutineScope) {
+                    { page ->
+                        coroutineScope.launch { pagerState.animateScrollToPage(page) }
+                    }
+                }
+
                 Scaffold(
+                    modifier = Modifier.background(MiuixTheme.colorScheme.surface),
                     bottomBar = {
                         if (showBottomBar) {
                             BottomBar(navController)
                         }
                     }
-                ) { innerPadding ->
-                    CompositionLocalProvider(
-                        LocalSnackbarHost provides snackBarHostState,
+                ) {
+                    CompositionLocalProvider (
+                        LocalPagerState provides pagerState,
+                        LocalHandlePageChange provides handlePageChange
                     ) {
                         DestinationsNavHost(
-                            modifier = Modifier.padding(
-                                bottom = if (showBottomBar) 80.dp else 0.dp
-                            ),
+                            modifier = Modifier
+                                .background(MiuixTheme.colorScheme.background)
+                                .padding(bottom = if (showBottomBar) 65.dp else 0.dp),
                             navGraph = NavGraphs.root,
                             navController = navController,
                             engine = rememberNavHostEngine(navHostContentAlignment = Alignment.TopCenter),
@@ -231,52 +248,51 @@ private fun BottomBar(navController: NavHostController) {
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry?.destination?.route
 
-    Crossfade(
-        targetState = state,
-        label = "BottomBarStateCrossfade"
-    ) { state ->
+    Crossfade(targetState = state, label = "BottomBarStateCrossfade") { state ->
+
         val kPatchReady = state != APApplication.State.UNKNOWN_STATE
         val aPatchReady = state == APApplication.State.ANDROIDPATCH_INSTALLED
-
-        NavigationBar(tonalElevation = 8.dp) {
-            BottomBarDestination.entries.forEach { destination ->
-                val isCurrentDestOnBackStack = currentRoute == destination.direction.route
-
-                val hideDestination = (destination.kPatchRequired && !kPatchReady) || (destination.aPatchRequired && !aPatchReady)
-                if (hideDestination) return@forEach
-
-                NavigationBarItem(
-                    selected = isCurrentDestOnBackStack,
-                    onClick = {
-                        if (isCurrentDestOnBackStack) {
-                            navigator.popBackStack(destination.direction, false)
-                        }
-                        navigator.navigate(destination.direction) {
-                            popUpTo(NavGraphs.root) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                    },
-                    icon = {
-                        if (isCurrentDestOnBackStack) {
-                            Icon(destination.iconSelected, stringResource(destination.label))
-                        } else {
-                            Icon(destination.iconNotSelected, stringResource(destination.label))
-                        }
-                    },
-                    label = {
-                        Text(
-                            text = stringResource(destination.label),
-                            overflow = TextOverflow.Visible,
-                            maxLines = 1,
-                            softWrap = false
-                        )
-                    },
-                    alwaysShowLabel = false
+        
+        val items = BottomBarDestination.entries
+            .filter { d ->
+                !(d.kPatchRequired && !kPatchReady) &&
+                        !(d.aPatchRequired && !aPatchReady)
+            }
+            .map { d ->
+                NavigationItem(
+                    label = stringResource(d.label),
+                    icon = if (currentRoute == d.direction.route) {
+                        d.iconSelected
+                    } else {
+                        d.iconNotSelected
+                    }
                 )
             }
-        }
+
+        val selectedIndex = items.indexOfFirst { item ->
+            val dest = BottomBarDestination.entries.find { d ->
+                stringResource(d.label) == item.label
+            }
+            dest?.direction?.route == currentRoute
+        }.coerceAtLeast(0)
+
+        NavigationBar(
+            items = items,
+            selected = selectedIndex,
+            onClick = { index ->
+                val dest = BottomBarDestination.entries[index]
+
+                val isCurrent = currentRoute == dest.direction.route
+                if (isCurrent) {
+                    navigator.popBackStack(dest.direction, false)
+                }
+
+                navigator.navigate(dest.direction) {
+                    popUpTo(NavGraphs.root) { saveState = true }
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            }
+        )
     }
 }

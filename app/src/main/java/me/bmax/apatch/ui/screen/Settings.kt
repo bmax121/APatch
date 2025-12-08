@@ -92,7 +92,6 @@ import me.bmax.apatch.R
 import me.bmax.apatch.ui.component.SwitchItem
 import me.bmax.apatch.ui.component.rememberConfirmDialog
 import me.bmax.apatch.ui.component.rememberLoadingDialog
-import me.bmax.apatch.ui.theme.refreshTheme
 import me.bmax.apatch.util.APatchKeyHelper
 import me.bmax.apatch.util.getBugreportFile
 import me.bmax.apatch.util.isForceUsingOverlayFS
@@ -334,7 +333,6 @@ fun SettingScreen() {
             ) {
                 prefs.edit { putBoolean("night_mode_follow_sys", it) }
                 nightFollowSystem = it
-                refreshTheme.value = true
             }
 
             // Custom Night Theme Switch
@@ -351,7 +349,6 @@ fun SettingScreen() {
                 ) {
                     prefs.edit { putBoolean("night_mode_enabled", it) }
                     nightThemeEnabled = it
-                    refreshTheme.value = true
                 }
             }
 
@@ -371,7 +368,6 @@ fun SettingScreen() {
                 ) {
                     prefs.edit { putBoolean("use_system_color_theme", it) }
                     useSystemDynamicColor = it
-                    refreshTheme.value = true
                 }
 
                 if (!useSystemDynamicColor) {
@@ -578,7 +574,6 @@ fun ThemeChooseDialog(showDialog: MutableState<Boolean>) {
                         modifier = Modifier.clickable {
                             showDialog.value = false
                             prefs.edit { putString("custom_color", it.name) }
-                            refreshTheme.value = true
                         })
                 }
 
