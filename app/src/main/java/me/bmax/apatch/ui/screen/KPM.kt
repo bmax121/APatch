@@ -533,7 +533,7 @@ private fun KPModuleItem(
                     Spacer(modifier = Modifier.width(12.dp))
 
                     IconTextButton(
-                        iconRes = R.drawable.settings,
+                        iconRes = R.drawable.trash,
                         onClick = { onUninstall(module) },
                     )
                 }
