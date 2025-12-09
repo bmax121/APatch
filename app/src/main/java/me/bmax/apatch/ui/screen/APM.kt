@@ -26,20 +26,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Switch
-import androidx.compose.material3.Text
-import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -82,15 +68,23 @@ import me.bmax.apatch.ui.viewmodel.APModuleViewModel
 import me.bmax.apatch.util.DownloadListener
 import me.bmax.apatch.util.download
 import me.bmax.apatch.util.hasMagisk
-import me.bmax.apatch.util.reboot
 import me.bmax.apatch.util.toggleModule
-import me.bmax.apatch.util.ui.LocalSnackbarHost
 import me.bmax.apatch.util.uninstallModule
+import top.yukonga.miuix.kmp.basic.Card
+import top.yukonga.miuix.kmp.basic.Icon
+import top.yukonga.miuix.kmp.basic.Scaffold
+import top.yukonga.miuix.kmp.basic.Text
+import top.yukonga.miuix.kmp.theme.MiuixTheme
+import top.yukonga.miuix.kmp.basic.FloatingActionButton
+import top.yukonga.miuix.kmp.basic.HorizontalDivider
+import top.yukonga.miuix.kmp.basic.PullToRefresh
+import top.yukonga.miuix.kmp.basic.Surface
+import top.yukonga.miuix.kmp.basic.Switch
+import top.yukonga.miuix.kmp.basic.TopAppBar
 
 @Destination<RootGraph>
 @Composable
 fun APModuleScreen(navigator: DestinationsNavigator) {
-    val snackBarHost = LocalSnackbarHost.current
     val context = LocalContext.current
 
     val state by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
@@ -105,7 +99,7 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
             Row {
                 Text(
                     text = stringResource(id = R.string.apm_not_installed),
-                    style = MaterialTheme.typography.titleMedium
+                    style = MiuixTheme.textStyles.body2
                 )
             }
         }
@@ -131,11 +125,9 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
 
     Scaffold(
         topBar = {
-            SearchAppBar(
-                title = { Text(stringResource(R.string.apm)) },
-                searchText = viewModel.search,
-                onSearchTextChange = { viewModel.search = it.trim() },
-                onClearClick = { viewModel.search = "" })
+            TopAppBar(
+                title = stringResource(R.string.apm)
+            )
         }, floatingActionButton = if (hideInstallButton) {
             { /* Empty */ }
         } else {
@@ -157,8 +149,7 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
                 }
 
                 FloatingActionButton(
-                    contentColor = MaterialTheme.colorScheme.onPrimary,
-                    containerColor = MaterialTheme.colorScheme.primary,
+                    containerColor = MiuixTheme.colorScheme.primary,
                     onClick = {
                         // select the zip file to install
                         val intent = Intent(Intent.ACTION_GET_CONTENT)
@@ -171,7 +162,7 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
                     )
                 }
             }
-        }, snackbarHost = { SnackbarHost(snackBarHost) }) { innerPadding ->
+        }, ){ innerPadding ->
         when {
             hasMagisk -> {
                 Box(
@@ -208,7 +199,6 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
                             )
                         }
                     },
-                    snackBarHost = snackBarHost,
                     context = context
                 )
             }
@@ -216,7 +206,6 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ModuleList(
     navigator: DestinationsNavigator,
@@ -225,14 +214,12 @@ private fun ModuleList(
     state: LazyListState,
     onInstallModule: (Uri) -> Unit,
     onClickModule: (id: String, name: String, hasWebUi: Boolean) -> Unit,
-    snackBarHost: SnackbarHostState,
     context: Context
 ) {
     val failedEnable = stringResource(R.string.apm_failed_to_enable)
     val failedDisable = stringResource(R.string.apm_failed_to_disable)
     val failedUninstall = stringResource(R.string.apm_uninstall_failed)
     val successUninstall = stringResource(R.string.apm_uninstall_success)
-    val reboot = stringResource(id = R.string.reboot)
     val rebootToApply = stringResource(id = R.string.apm_reboot_to_apply)
     val moduleStr = stringResource(id = R.string.apm)
     val uninstall = stringResource(id = R.string.apm_remove)
@@ -326,20 +313,11 @@ private fun ModuleList(
         } else {
             failedUninstall.format(module.name)
         }
-        val actionLabel = if (success) {
-            reboot
-        } else {
-            null
-        }
-        val result = snackBarHost.showSnackbar(
-            message = message, actionLabel = actionLabel, duration = SnackbarDuration.Long
-        )
-        if (result == SnackbarResult.ActionPerformed) {
-            reboot()
-        }
+
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
 
-    PullToRefreshBox(
+    PullToRefresh(
         modifier = modifier,
         onRefresh = { viewModel.fetchModuleList() },
         isRefreshing = viewModel.isRefreshing
@@ -397,17 +375,11 @@ private fun ModuleList(
                                     if (success) {
                                         viewModel.fetchModuleList()
 
-                                        val result = snackBarHost.showSnackbar(
-                                            message = rebootToApply,
-                                            actionLabel = reboot,
-                                            duration = SnackbarDuration.Long
-                                        )
-                                        if (result == SnackbarResult.ActionPerformed) {
-                                            reboot()
-                                        }
+                                        Toast.makeText(context, rebootToApply, Toast.LENGTH_LONG).show()
+
                                     } else {
                                         val message = if (module.enabled) failedDisable else failedEnable
-                                        snackBarHost.showSnackbar(message.format(module.name))
+                                        Toast.makeText(context, message.format(module.name), Toast.LENGTH_LONG).show()
                                     }
                                 }
                             },
@@ -451,13 +423,8 @@ private fun ModuleItem(
     val moduleVersion = stringResource(id = R.string.apm_version)
     val moduleAuthor = stringResource(id = R.string.apm_author)
     val viewModel = viewModel<APModuleViewModel>()
-    Surface(
-        modifier = modifier,
-        color = MaterialTheme.colorScheme.surface,
-        tonalElevation = 1.dp,
-        shape = RoundedCornerShape(20.dp)
-    ) {
-
+    Card(modifier = modifier)
+    {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -479,7 +446,7 @@ private fun ModuleItem(
                     ) {
                         Text(
                             text = module.name,
-                            style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
+                            style = MiuixTheme.textStyles.title4.copy(fontWeight = FontWeight.Bold),
                             maxLines = 2,
                             textDecoration = decoration,
                             overflow = TextOverflow.Ellipsis
@@ -487,9 +454,8 @@ private fun ModuleItem(
 
                         Text(
                             text = "$moduleVersion: ${module.version}\n$moduleAuthor: ${module.author}",
-                            style = MaterialTheme.typography.bodySmall,
+                            style = MiuixTheme.textStyles.body2,
                             textDecoration = decoration,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
 
@@ -505,14 +471,13 @@ private fun ModuleItem(
                         .alpha(alpha = alpha)
                         .padding(horizontal = 16.dp),
                     text = module.description,
-                    style = MaterialTheme.typography.bodySmall,
-                    textDecoration = decoration,
-                    color = MaterialTheme.colorScheme.outline
+                    style = MiuixTheme.textStyles.body2,
+                    textDecoration = decoration
                 )
 
                 HorizontalDivider(
                     thickness = 1.5.dp,
-                    color = MaterialTheme.colorScheme.surface,
+                    color = MiuixTheme.colorScheme.surface,
                     modifier = Modifier.padding(top = 8.dp)
                 )
 

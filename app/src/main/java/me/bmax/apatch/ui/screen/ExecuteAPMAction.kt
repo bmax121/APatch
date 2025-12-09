@@ -52,7 +52,6 @@ fun ExecuteAPMActionScreen(navigator: DestinationsNavigator, moduleId: String) {
     var text by rememberSaveable { mutableStateOf("") }
     var tempText: String
     val logContent = rememberSaveable { StringBuilder() }
-    val snackBarHost = LocalSnackbarHost.current
     val scope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
     var actionResult: Boolean
@@ -100,12 +99,10 @@ fun ExecuteAPMActionScreen(navigator: DestinationsNavigator, moduleId: String) {
                             "APatch_apm_action_log_${date}.log"
                         )
                         file.writeText(logContent.toString())
-                        snackBarHost.showSnackbar("Log saved to ${file.absolutePath}")
                     }
                 }
             )
         },
-        snackbarHost = { SnackbarHost(snackBarHost) }
     ) { innerPadding ->
         KeyEventBlocker {
             it.key == Key.VolumeDown || it.key == Key.VolumeUp
