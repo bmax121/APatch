@@ -2,6 +2,7 @@ package me.bmax.apatch.ui.screen
 
 import android.net.Uri
 import android.os.Environment
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -22,6 +23,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,13 +38,12 @@ import me.bmax.apatch.R
 import me.bmax.apatch.ui.component.KeyEventBlocker
 import me.bmax.apatch.util.installModule
 import me.bmax.apatch.util.reboot
-import me.bmax.apatch.util.ui.LocalSnackbarHost
 import top.yukonga.miuix.kmp.basic.FloatingActionButton
 import top.yukonga.miuix.kmp.basic.Icon
 import top.yukonga.miuix.kmp.basic.IconButton
 import top.yukonga.miuix.kmp.basic.Scaffold
+import top.yukonga.miuix.kmp.basic.SmallTopAppBar
 import top.yukonga.miuix.kmp.basic.Text
-import top.yukonga.miuix.kmp.basic.TopAppBar
 import top.yukonga.miuix.kmp.theme.MiuixTheme
 import java.io.File
 import java.text.SimpleDateFormat
@@ -61,9 +62,10 @@ fun InstallScreen(uri: Uri, type: MODULE_TYPE) {
     val logContent = remember { StringBuilder() }
     var showFloatAction by rememberSaveable { mutableStateOf(false) }
 
-    val snackBarHost = LocalSnackbarHost.current
     val scope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
+
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         if (text.isNotEmpty()) {
@@ -106,7 +108,7 @@ fun InstallScreen(uri: Uri, type: MODULE_TYPE) {
                         "APatch_install_${type}_log_${date}.log"
                     )
                     file.writeText(logContent.toString())
-                    snackBarHost.showSnackbar("Log saved to ${file.absolutePath}")
+                    Toast.makeText(context, "Log saved to ${file.absolutePath}", Toast.LENGTH_SHORT).show()
                 }
             })
         },
@@ -114,6 +116,7 @@ fun InstallScreen(uri: Uri, type: MODULE_TYPE) {
             if (showFloatAction) {
                 val reboot = stringResource(id = R.string.reboot)
                 FloatingActionButton(
+                    modifier = Modifier.padding(bottom = 30.dp),
                     onClick = {
                         scope.launch {
                             withContext(Dispatchers.IO) {
@@ -135,6 +138,7 @@ fun InstallScreen(uri: Uri, type: MODULE_TYPE) {
             modifier = Modifier
                 .fillMaxSize(1f)
                 .padding(innerPadding)
+                .padding(10.dp)
                 .verticalScroll(scrollState),
         ) {
             LaunchedEffect(text) {
@@ -153,7 +157,7 @@ fun InstallScreen(uri: Uri, type: MODULE_TYPE) {
 
 @Composable
 private fun TopBar(onBack: () -> Unit = {}, onSave: () -> Unit = {}) {
-    TopAppBar(
+    SmallTopAppBar (
         title = stringResource(R.string.apm_install),
         navigationIcon = {
             IconButton(

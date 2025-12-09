@@ -8,9 +8,19 @@ import android.text.method.LinkMovementMethod
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.LocalContentColor
@@ -26,7 +36,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
@@ -46,8 +58,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.parcelize.Parcelize
 import me.bmax.apatch.util.ui.APDialogBlurBehindUtils.Companion.setupWindowBlurListener
+import top.yukonga.miuix.kmp.basic.ButtonDefaults
 import top.yukonga.miuix.kmp.basic.CircularProgressIndicator
 import top.yukonga.miuix.kmp.basic.Surface
+import top.yukonga.miuix.kmp.basic.Text
+import top.yukonga.miuix.kmp.basic.TextButton
+import top.yukonga.miuix.kmp.extra.SuperDialog
+import top.yukonga.miuix.kmp.theme.MiuixTheme
 import kotlin.coroutines.resume
 
 private const val TAG = "DialogComponent"
@@ -355,13 +372,14 @@ private fun rememberConfirmDialog(
         }
     )
 
-//    if (visible.value) {
-//        ConfirmDialog(
-//            handle.visuals,
-//            confirm = { coroutineScope.launch { resultChannel.send(ConfirmResult.Confirmed) } },
-//            dismiss = { coroutineScope.launch { resultChannel.send(ConfirmResult.Canceled) } }
-//        )
-//    }
+    if (visible.value) {
+        ConfirmDialog(
+            handle.visuals,
+            confirm = { coroutineScope.launch { resultChannel.send(ConfirmResult.Confirmed) } },
+            dismiss = { coroutineScope.launch { resultChannel.send(ConfirmResult.Canceled) } },
+            showDialog = visible
+        )
+    }
 
     return handle
 }
@@ -429,68 +447,77 @@ private fun LoadingDialog() {
     }
 }
 
-//@Composable
-//private fun ConfirmDialog(
-//    visuals: ConfirmDialogVisuals,
-//    confirm: () -> Unit,
-//    dismiss: () -> Unit
-//) {
-//    SuperDialog(onDismissRequest = dismiss)
-//    {
-//        Surface(
-//            modifier = Modifier
-//                .width(320.dp)
-//                .wrapContentHeight(),
-//            shape = RoundedCornerShape(20.dp),
-//            tonalElevation = AlertDialogDefaults.TonalElevation,
-//            color = AlertDialogDefaults.containerColor
-//        ) {
-//            Column(modifier = Modifier.padding(24.dp)) {
-//                Text(
-//                    text = visuals.title,
-//                    style = MaterialTheme.typography.headlineSmall,
-//                )
-//
-//                Spacer(modifier = Modifier.size(16.dp))
-//
-//                Box(
-//                    modifier = Modifier
-//                        .weight(1f, fill = false)
-//                        .align(Alignment.Start)
-//                        .padding(bottom = 24.dp)
-//                        .fillMaxWidth()
-//                ) {
-//                    if (visuals.isMarkdown) {
-//                        MarkdownContent(content = visuals.content)
-//                    } else {
-//                        Text(
-//                            text = visuals.content,
-//                            style = MaterialTheme.typography.bodyMedium
-//                        )
-//                    }
-//                }
-//
-//                Row(
-//                    modifier = Modifier.fillMaxWidth(),
-//                    horizontalArrangement = Arrangement.End
-//                ) {
-//                    TextButton(onClick = dismiss) {
-//                        Text(text = visuals.dismiss ?: stringResource(android.R.string.cancel))
-//                    }
-//                    Spacer(modifier = Modifier.size(8.dp))
-//                    Button(onClick = confirm) {
-//                        Text(text = visuals.confirm ?: stringResource(android.R.string.ok))
-//                    }
-//                }
-//            }
-//
-//            // blur
-//            val dialogWindowProvider = LocalView.current.parent as DialogWindowProvider
-//            setupWindowBlurListener(dialogWindowProvider.window)
-//        }
-//    }
-//}
-//
+@Composable
+private fun ConfirmDialog(
+    visuals: ConfirmDialogVisuals,
+    confirm: () -> Unit,
+    dismiss: () -> Unit,
+    showDialog: MutableState<Boolean>
+) {
+    SuperDialog(
+        modifier = Modifier.windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.Top)),
+        show = showDialog,
+        title = visuals.title,
+        onDismissRequest = {
+            dismiss()
+            showDialog.value = false
+        },
+        content = {
+            Layout(
+                content = {
+                    visuals.content?.let { content ->
+                        if (visuals.isMarkdown) {
+                            MarkdownContent(content = visuals.content)
+                        } else {
+                            Text(
+                                text = visuals.content,
+                                style = MiuixTheme.textStyles.body2
+                            )
+                        }
+                    }
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.padding(top = 12.dp)
+                    ) {
+                        TextButton(
+                            text = visuals.dismiss ?: stringResource(id = android.R.string.cancel),
+                            onClick = {
+                                dismiss()
+                                showDialog.value = false
+                            },
+                            modifier = Modifier.weight(1f)
+                        )
+                        Spacer(Modifier.width(20.dp))
+                        TextButton(
+                            text = visuals.confirm ?: stringResource(id = android.R.string.ok),
+                            onClick = {
+                                confirm()
+                                showDialog.value = false
+                            },
+                            modifier = Modifier.weight(1f),
+                            colors = ButtonDefaults.textButtonColorsPrimary()
+                        )
+                    }
+                }
+            ) { measurables, constraints ->
+                if (measurables.size != 2) {
+                    val button = measurables[0].measure(constraints)
+                    layout(constraints.maxWidth, button.height) {
+                        button.place(0, 0)
+                    }
+                } else {
+                    val button = measurables[1].measure(constraints)
+                    val lazyList = measurables[0].measure(constraints.copy(maxHeight = constraints.maxHeight - button.height))
+                    layout(constraints.maxWidth, lazyList.height + button.height) {
+                        lazyList.place(0, 0)
+                        button.place(0, lazyList.height)
+                    }
+                }
+            }
+        }
+    )
+}
+
 @Composable
 private fun MarkdownContent(content: String) {
     val contentColor = LocalContentColor.current
