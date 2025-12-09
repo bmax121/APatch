@@ -158,52 +158,49 @@ private fun BottomBar(navController: NavHostController) {
     val state by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
     val navigator = navController.rememberDestinationsNavigator()
 
-    Crossfade(
-        targetState = state,
-        label = "BottomBarStateCrossfade"
-    ) { state ->
-        val kPatchReady = state != APApplication.State.UNKNOWN_STATE
-        val aPatchReady = state == APApplication.State.ANDROIDPATCH_INSTALLED
+    // Use a more responsive approach for theme changes
+    val currentState = state
+    val kPatchReady = currentState != APApplication.State.UNKNOWN_STATE
+    val aPatchReady = currentState == APApplication.State.ANDROIDPATCH_INSTALLED
 
-        NavigationBar(tonalElevation = 8.dp) {
-            BottomBarDestination.entries.forEach { destination ->
-                val isCurrentDestOnBackStack by navController.isRouteOnBackStackAsState(destination.direction)
+    NavigationBar(tonalElevation = 8.dp) {
+        BottomBarDestination.entries.forEach { destination ->
+            val isCurrentDestOnBackStack by navController.isRouteOnBackStackAsState(destination.direction)
 
-                val hideDestination = (destination.kPatchRequired && !kPatchReady) || (destination.aPatchRequired && !aPatchReady)
-                if (hideDestination) return@forEach
+            val hideDestination = (destination.kPatchRequired && !kPatchReady) || (destination.aPatchRequired && !aPatchReady)
+            if (hideDestination) return@forEach
 
-                NavigationBarItem(
-                    selected = isCurrentDestOnBackStack,
-                    onClick = {
-                        if (isCurrentDestOnBackStack) {
-                            navigator.popBackStack(destination.direction, false)
+            NavigationBarItem(
+                selected = isCurrentDestOnBackStack,
+                onClick = {
+                    if (isCurrentDestOnBackStack) {
+                        navigator.popBackStack(destination.direction, false)
+                    }
+                    navigator.navigate(destination.direction) {
+                        popUpTo(NavGraphs.root) {
+                            saveState = true
                         }
-                        navigator.navigate(destination.direction) {
-                            popUpTo(NavGraphs.root) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                    },
-                    icon = {
-                        if (isCurrentDestOnBackStack) {
-                            Icon(destination.iconSelected, stringResource(destination.label))
-                        } else {
-                            Icon(destination.iconNotSelected, stringResource(destination.label))
-                        }
-                    },
-                    label = {
-                        Text(
-                            text = stringResource(destination.label),
-                            overflow = TextOverflow.Visible,
-                            maxLines = 1,
-                            softWrap = false
-                        )
-                    },
-                    alwaysShowLabel = false
-                )
-            }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
+                icon = {
+                    if (isCurrentDestOnBackStack) {
+                        Icon(destination.iconSelected, stringResource(destination.label))
+                    } else {
+                        Icon(destination.iconNotSelected, stringResource(destination.label))
+                    }
+                },
+                label = {
+                    Text(
+                        text = stringResource(destination.label),
+                        overflow = TextOverflow.Visible,
+                        maxLines = 1,
+                        softWrap = false
+                    )
+                },
+                alwaysShowLabel = false
+            )
         }
     }
 }

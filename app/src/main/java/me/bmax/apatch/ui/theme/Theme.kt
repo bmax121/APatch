@@ -30,7 +30,8 @@ private fun SystemBarStyle(
     val context = LocalContext.current
     val activity = context as ComponentActivity
 
-    SideEffect {
+    // Use LaunchedEffect to ensure synchronous updates
+    LaunchedEffect(darkMode) {
         activity.enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.auto(
                 statusBarScrim.toArgb(),
@@ -87,16 +88,20 @@ fun APatchTheme(
     var forceRefresh by remember { mutableStateOf(0) }
 
     val refreshThemeObserver by refreshTheme.observeAsState(false)
-    if (refreshThemeObserver == true) {
-        darkThemeFollowSys = prefs.getBoolean("night_mode_follow_sys", true)
-        nightModeEnabled = prefs.getBoolean("night_mode_enabled", false)
-        dynamicColor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) prefs.getBoolean(
-            "use_system_color_theme",
-            true
-        ) else false
-        customColorScheme = prefs.getString("custom_color", "blue")
-        refreshTheme.postValue(false)
-        forceRefresh++
+    
+    // Use LaunchedEffect to ensure immediate and synchronous theme updates
+    LaunchedEffect(refreshThemeObserver, forceRefresh) {
+        if (refreshThemeObserver) {
+            darkThemeFollowSys = prefs.getBoolean("night_mode_follow_sys", true)
+            nightModeEnabled = prefs.getBoolean("night_mode_enabled", false)
+            dynamicColor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) prefs.getBoolean(
+                "use_system_color_theme",
+                true
+            ) else false
+            customColorScheme = prefs.getString("custom_color", "blue")
+            refreshTheme.postValue(false)
+            forceRefresh++
+        }
     }
 
     val darkTheme = if (darkThemeFollowSys) {
@@ -164,6 +169,7 @@ fun APatchTheme(
         }
     }
 
+    // Ensure SystemBarStyle updates synchronously with theme changes
     SystemBarStyle(
         darkMode = darkTheme
     )
