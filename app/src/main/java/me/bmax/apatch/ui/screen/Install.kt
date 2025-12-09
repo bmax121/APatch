@@ -11,15 +11,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Save
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -46,6 +37,13 @@ import me.bmax.apatch.ui.component.KeyEventBlocker
 import me.bmax.apatch.util.installModule
 import me.bmax.apatch.util.reboot
 import me.bmax.apatch.util.ui.LocalSnackbarHost
+import top.yukonga.miuix.kmp.basic.FloatingActionButton
+import top.yukonga.miuix.kmp.basic.Icon
+import top.yukonga.miuix.kmp.basic.IconButton
+import top.yukonga.miuix.kmp.basic.Scaffold
+import top.yukonga.miuix.kmp.basic.Text
+import top.yukonga.miuix.kmp.basic.TopAppBar
+import top.yukonga.miuix.kmp.theme.MiuixTheme
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -96,38 +94,40 @@ fun InstallScreen(uri: Uri, type: MODULE_TYPE) {
         }
     }
 
-    Scaffold(topBar = {
-        TopBar(onBack = dropUnlessResumed {
-        }, onSave = {
-            scope.launch {
-                val format = SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", Locale.getDefault())
-                val date = format.format(Date())
-                val file = File(
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-                    "APatch_install_${type}_log_${date}.log"
-                )
-                file.writeText(logContent.toString())
-                snackBarHost.showSnackbar("Log saved to ${file.absolutePath}")
-            }
-        })
-    }, floatingActionButton = {
-        if (showFloatAction) {
-            val reboot = stringResource(id = R.string.reboot)
-            ExtendedFloatingActionButton(
-                onClick = {
-                    scope.launch {
-                        withContext(Dispatchers.IO) {
-                            reboot()
+    Scaffold(
+        topBar = {
+            TopBar(onBack = dropUnlessResumed {
+            }, onSave = {
+                scope.launch {
+                    val format = SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", Locale.getDefault())
+                    val date = format.format(Date())
+                    val file = File(
+                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                        "APatch_install_${type}_log_${date}.log"
+                    )
+                    file.writeText(logContent.toString())
+                    snackBarHost.showSnackbar("Log saved to ${file.absolutePath}")
+                }
+            })
+        },
+        floatingActionButton = {
+            if (showFloatAction) {
+                val reboot = stringResource(id = R.string.reboot)
+                FloatingActionButton(
+                    onClick = {
+                        scope.launch {
+                            withContext(Dispatchers.IO) {
+                                reboot()
+                            }
                         }
-                    }
-                },
-                icon = { Icon(Icons.Filled.Refresh, reboot) },
-                text = { Text(text = reboot) },
-                modifier = Modifier.padding(bottom = 32.dp)
-            )
-        }
+                    },
+                ) {
+                    Icon(Icons.Filled.Refresh, reboot)
+                }
+            }
 
-    }, snackbarHost = { SnackbarHost(snackBarHost) }) { innerPadding ->
+        },
+    ) { innerPadding ->
         KeyEventBlocker {
             it.key == Key.VolumeDown || it.key == Key.VolumeUp
         }
@@ -143,28 +143,29 @@ fun InstallScreen(uri: Uri, type: MODULE_TYPE) {
             Text(
                 modifier = Modifier.padding(8.dp),
                 text = text,
-                fontSize = MaterialTheme.typography.bodySmall.fontSize,
+                fontSize = MiuixTheme.textStyles.body2.fontSize,
                 fontFamily = FontFamily.Monospace,
-                lineHeight = MaterialTheme.typography.bodySmall.lineHeight,
+                lineHeight = MiuixTheme.textStyles.body2.lineHeight,
             )
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TopBar(onBack: () -> Unit = {}, onSave: () -> Unit = {}) {
-    TopAppBar(title = { Text(stringResource(R.string.apm_install)) }, navigationIcon = {
-        IconButton(
-            onClick = onBack
-        ) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null) }
-    }, actions = {
-        IconButton(onClick = onSave) {
-            Icon(
-                imageVector = Icons.Filled.Save, contentDescription = "Localized description"
-            )
-        }
-    })
+    TopAppBar(
+        title = stringResource(R.string.apm_install),
+        navigationIcon = {
+            IconButton(
+                onClick = onBack
+            ) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null) }
+        }, actions = {
+            IconButton(onClick = onSave) {
+                Icon(
+                    imageVector = Icons.Filled.Save, contentDescription = "Localized description"
+                )
+            }
+        })
 }
 
 @Preview
