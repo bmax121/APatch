@@ -25,17 +25,19 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -61,7 +63,6 @@ import me.bmax.apatch.ui.WebUIActivity
 import me.bmax.apatch.ui.component.ConfirmResult
 import me.bmax.apatch.ui.component.IconTextButton
 import me.bmax.apatch.ui.component.ModuleStateIndicator
-import me.bmax.apatch.ui.component.SearchAppBar
 import me.bmax.apatch.ui.component.rememberConfirmDialog
 import me.bmax.apatch.ui.component.rememberLoadingDialog
 import me.bmax.apatch.ui.viewmodel.APModuleViewModel
@@ -77,15 +78,20 @@ import top.yukonga.miuix.kmp.basic.Text
 import top.yukonga.miuix.kmp.theme.MiuixTheme
 import top.yukonga.miuix.kmp.basic.FloatingActionButton
 import top.yukonga.miuix.kmp.basic.HorizontalDivider
+import top.yukonga.miuix.kmp.basic.InputField
+import top.yukonga.miuix.kmp.basic.MiuixScrollBehavior
+import top.yukonga.miuix.kmp.basic.ScrollBehavior
 import top.yukonga.miuix.kmp.basic.PullToRefresh
-import top.yukonga.miuix.kmp.basic.Surface
+import top.yukonga.miuix.kmp.basic.SearchBar
 import top.yukonga.miuix.kmp.basic.Switch
 import top.yukonga.miuix.kmp.basic.TopAppBar
+import top.yukonga.miuix.kmp.utils.overScrollVertical
 
 @Destination<RootGraph>
 @Composable
 fun APModuleScreen(navigator: DestinationsNavigator) {
     val context = LocalContext.current
+    val scrollBehavior = MiuixScrollBehavior()
 
     val state by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
     if (state != APApplication.State.ANDROIDPATCH_INSTALLED && state != APApplication.State.ANDROIDPATCH_NEED_UPDATE) {
@@ -126,7 +132,8 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = stringResource(R.string.apm)
+                title = stringResource(R.string.apm),
+                scrollBehavior = scrollBehavior
             )
         }, floatingActionButton = if (hideInstallButton) {
             { /* Empty */ }
@@ -150,6 +157,7 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
 
                 FloatingActionButton(
                     containerColor = MiuixTheme.colorScheme.primary,
+                    modifier = Modifier.padding(bottom = 30.dp),
                     onClick = {
                         // select the zip file to install
                         val intent = Intent(Intent.ACTION_GET_CONTENT)
@@ -199,7 +207,8 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
                             )
                         }
                     },
-                    context = context
+                    context = context,
+                    scrollBehavior = scrollBehavior
                 )
             }
         }
@@ -214,7 +223,8 @@ private fun ModuleList(
     state: LazyListState,
     onInstallModule: (Uri) -> Unit,
     onClickModule: (id: String, name: String, hasWebUi: Boolean) -> Unit,
-    context: Context
+    context: Context,
+    scrollBehavior: ScrollBehavior
 ) {
     val failedEnable = stringResource(R.string.apm_failed_to_enable)
     val failedDisable = stringResource(R.string.apm_failed_to_disable)
@@ -232,6 +242,8 @@ private fun ModuleList(
 
     val loadingDialog = rememberLoadingDialog()
     val confirmDialog = rememberConfirmDialog()
+
+    var expanded by remember { mutableStateOf(false) }
 
     suspend fun onModuleUpdate(
         module: APModuleViewModel.ModuleInfo,
@@ -322,8 +334,33 @@ private fun ModuleList(
         onRefresh = { viewModel.fetchModuleList() },
         isRefreshing = viewModel.isRefreshing
     ) {
+        SearchBar(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp),
+            inputField = {
+                InputField(
+                    query = viewModel.search,
+                    onQueryChange = { viewModel.search = it },
+                    onSearch = {
+                        expanded = false
+                    },
+                    expanded = expanded,
+                    onExpandedChange = {
+                        expanded = it
+                        if (!it) viewModel.search = ""
+                    }
+                )
+            },
+            expanded = expanded,
+            onExpandedChange = { expanded = it },
+            content = {}
+        )
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .overScrollVertical()
+                .nestedScroll(scrollBehavior.nestedScrollConnection),
             state = state,
             verticalArrangement = Arrangement.spacedBy(16.dp),
             contentPadding = remember {
@@ -331,7 +368,7 @@ private fun ModuleList(
                     start = 16.dp,
                     top = 16.dp,
                     end = 16.dp,
-                    bottom = 16.dp + 16.dp + 56.dp /*  Scaffold Fab Spacing + Fab container height */
+                    bottom = 16.dp /*  Scaffold Fab Spacing + Fab container height */
                 )
             },
         ) {
@@ -488,13 +525,9 @@ private fun ModuleItem(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
 
-                    val hideText = listOf(module.hasWebUi, updateUrl.isNotEmpty(), module.hasActionScript).count { it } >= 2
-
                     if (module.hasWebUi) {
                         IconTextButton(
                             iconRes = R.drawable.webui,
-                            textRes = R.string.apm_webui_open,
-                            showText = !hideText,
                             onClick = { onClick(module) }
                         )
                         Spacer(modifier = Modifier.width(12.dp))
@@ -504,8 +537,6 @@ private fun ModuleItem(
                     if (module.hasActionScript) {
                         IconTextButton(
                             iconRes = R.drawable.settings,
-                            textRes = R.string.apm_action,
-                            showText = !hideText,
                             onClick = {
                                 navigator.navigate(ExecuteAPMActionScreenDestination(module.id))
                                 viewModel.markNeedRefresh()
@@ -519,8 +550,6 @@ private fun ModuleItem(
                     if (updateUrl.isNotEmpty()) {
                         IconTextButton(
                             iconRes = R.drawable.device_mobile_down,
-                            textRes = R.string.apm_update,
-                            showText = !hideText,
                             onClick = { onUpdate(module) }
                         )
                         Spacer(modifier = Modifier.width(12.dp))
@@ -529,8 +558,6 @@ private fun ModuleItem(
                     if (!module.remove) {
                         IconTextButton(
                             iconRes = R.drawable.trash,
-                            textRes = R.string.apm_remove,
-                            showText = !hideText,
                             onClick = { onUninstall(module) }
                         )
                     }

@@ -62,7 +62,6 @@ import me.bmax.apatch.apApp
 import me.bmax.apatch.ui.component.ConfirmResult
 import me.bmax.apatch.ui.component.DropdownItem
 import me.bmax.apatch.ui.component.IconTextButton
-import me.bmax.apatch.ui.component.KPModuleRemoveButton
 import me.bmax.apatch.ui.component.LoadingDialogHandle
 import me.bmax.apatch.ui.component.rememberConfirmDialog
 import me.bmax.apatch.ui.component.rememberLoadingDialog
@@ -528,13 +527,15 @@ private fun KPModuleItem(
 
                     IconTextButton(
                         iconRes = R.drawable.settings,
-                        textRes = R.string.kpm_control,
                         onClick = { onControl(module) },
                     )
 
                     Spacer(modifier = Modifier.width(12.dp))
 
-                    KPModuleRemoveButton(enabled = true, onClick = { onUninstall(module) })
+                    IconTextButton(
+                        iconRes = R.drawable.settings,
+                        onClick = { onUninstall(module) },
+                    )
                 }
             }
 
