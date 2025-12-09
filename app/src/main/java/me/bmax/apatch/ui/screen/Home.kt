@@ -204,15 +204,11 @@ fun UninstallDialog(
 @Composable
 fun AuthFailedTipDialog(showDialog: MutableState<Boolean>) {
     SuperDialog(
+        title = stringResource(R.string.home_dialog_auth_fail_title),
+        summary = stringResource(R.string.home_dialog_auth_fail_content),
         show = showDialog,
         onDismissRequest = { showDialog.value = false },
-        title = stringResource(R.string.home_dialog_auth_fail_title)
     ) {
-        Text(
-            text = stringResource(id = R.string.home_dialog_auth_fail_content),
-            style = MiuixTheme.textStyles.body1
-        )
-
         Spacer(Modifier.height(12.dp))
 
         Row {
@@ -295,9 +291,9 @@ fun AuthSuperKey(showDialog: MutableState<Boolean>, showFailedDialog: MutableSta
                     if (ok) APApplication.superKey = key
                     else showFailedDialog.value = true
                 },
-                enabled = enable,
                 modifier = Modifier.weight(1f),
-                colors = ButtonDefaults.textButtonColorsPrimary()
+                colors = ButtonDefaults.textButtonColorsPrimary(),
+                enabled = enable
             )
         }
     }
@@ -419,19 +415,10 @@ private fun KStatusCard(
 ) {
 
     val showAuthFailedTipDialog = remember { mutableStateOf(false) }
-    if (showAuthFailedTipDialog.value) {
-        AuthFailedTipDialog(showDialog = showAuthFailedTipDialog)
-    }
+    AuthFailedTipDialog(showAuthFailedTipDialog)
 
     val showAuthKeyDialog = remember { mutableStateOf(false) }
-    if (showAuthKeyDialog.value) {
-        AuthSuperKey(showDialog = showAuthKeyDialog, showFailedDialog = showAuthFailedTipDialog)
-    }
-
-    val showUninstallDialog = remember { mutableStateOf(false) }
-    if (showUninstallDialog.value) {
-        onUninstallClick()
-    }
+    AuthSuperKey(showAuthKeyDialog, showAuthFailedTipDialog)
 
     Card(
         onClick = {

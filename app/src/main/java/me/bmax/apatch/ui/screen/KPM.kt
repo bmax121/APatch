@@ -71,6 +71,7 @@ import me.bmax.apatch.ui.viewmodel.KPModuleViewModel
 import me.bmax.apatch.ui.viewmodel.PatchesViewModel
 import me.bmax.apatch.util.inputStream
 import me.bmax.apatch.util.writeTo
+import top.yukonga.miuix.kmp.basic.ButtonDefaults
 import top.yukonga.miuix.kmp.basic.Card
 import top.yukonga.miuix.kmp.basic.FloatingActionButton
 import top.yukonga.miuix.kmp.basic.HorizontalDivider
@@ -95,6 +96,8 @@ private lateinit var targetKPMToControl: KPModel.KPMInfo
 @Destination<RootGraph>
 @Composable
 fun KPModuleScreen(navigator: DestinationsNavigator) {
+    val showControlDialog = remember { mutableStateOf(false) }
+
     val state by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
     if (state == APApplication.State.UNKNOWN_STATE) {
         Column(
@@ -222,6 +225,9 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
                     }
                 }
             }
+        },
+        popupHost = {
+            KPMControlDialog(showDialog = showControlDialog)
         }
     ) { innerPadding ->
         KPModuleList(
@@ -231,8 +237,9 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
                 start = 16.dp,
                 top = innerPadding.calculateTopPadding() + 16.dp,
                 end = 16.dp,
-                bottom = innerPadding.calculateBottomPadding() + 16.dp + 56.dp
-        ))
+                bottom = innerPadding.calculateBottomPadding() + 16.dp + 56.dp),
+            showControlDialog = showControlDialog
+        )
     }
 }
 
@@ -316,14 +323,18 @@ fun KPMControlDialog(showDialog: MutableState<Boolean>) {
         Spacer(modifier = Modifier.height(12.dp))
 
         Row(
-            modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.End
         ) {
             TextButton(
                 text = stringResource(android.R.string.cancel),
                 onClick = {
                     showDialog.value = false
-                }
+                },
+                modifier = Modifier.weight(1f),
             )
+
+            Spacer(Modifier.width(20.dp))
 
             TextButton(
                 text = stringResource(android.R.string.ok),
@@ -331,6 +342,8 @@ fun KPMControlDialog(showDialog: MutableState<Boolean>) {
                     showDialog.value = false
                     scope.launch { onModuleControl(targetKPMToControl) }
                 },
+                modifier = Modifier.weight(1f),
+                colors = ButtonDefaults.textButtonColorsPrimary(),
                 enabled = enable
             )
         }
@@ -341,7 +354,8 @@ fun KPMControlDialog(showDialog: MutableState<Boolean>) {
 private fun KPModuleList(
     viewModel: KPModuleViewModel,
     state: LazyListState,
-    scaffoldPadding: PaddingValues = PaddingValues()
+    scaffoldPadding: PaddingValues = PaddingValues(),
+    showControlDialog: MutableState<Boolean>
 ) {
     val moduleStr = stringResource(id = R.string.kpm)
     val moduleUninstallConfirm = stringResource(id = R.string.kpm_unload_confirm)
@@ -360,11 +374,6 @@ private fun KPModuleList(
             viewModel.fetchModuleList()
             isRefreshing = false
         }
-    }
-
-    val showKPMControlDialog = remember { mutableStateOf(false) }
-    if (showKPMControlDialog.value) {
-        KPMControlDialog(showDialog = showKPMControlDialog)
     }
 
     suspend fun onModuleUninstall(module: KPModel.KPMInfo) {
@@ -424,7 +433,7 @@ private fun KPModuleList(
                             },
                             onControl = {
                                 targetKPMToControl = module
-                                showKPMControlDialog.value = true
+                                showControlDialog.value = true
                             },
                         )
 
