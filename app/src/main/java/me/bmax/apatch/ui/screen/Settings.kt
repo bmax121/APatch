@@ -1,5 +1,6 @@
 package me.bmax.apatch.ui.screen
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -335,6 +336,7 @@ fun SettingScreen() {
                 prefs.edit { putBoolean("night_mode_follow_sys", it) }
                 nightFollowSystem = it
                 refreshTheme.value = true
+                (context as? Activity)?.recreate()
             }
 
             // Custom Night Theme Switch
@@ -352,6 +354,7 @@ fun SettingScreen() {
                     prefs.edit { putBoolean("night_mode_enabled", it) }
                     nightThemeEnabled = it
                     refreshTheme.value = true
+                    (context as? Activity)?.recreate()
                 }
             }
 
@@ -372,6 +375,7 @@ fun SettingScreen() {
                     prefs.edit { putBoolean("use_system_color_theme", it) }
                     useSystemDynamicColor = it
                     refreshTheme.value = true
+                    (context as? Activity)?.recreate()
                 }
 
                 if (!useSystemDynamicColor) {
@@ -555,6 +559,7 @@ fun SettingScreen() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ThemeChooseDialog(showDialog: MutableState<Boolean>) {
+    val context = LocalContext.current
     val prefs = APApplication.sharedPreferences
 
     BasicAlertDialog(
@@ -579,6 +584,7 @@ fun ThemeChooseDialog(showDialog: MutableState<Boolean>) {
                             showDialog.value = false
                             prefs.edit { putString("custom_color", it.name) }
                             refreshTheme.value = true
+                            (context as? Activity)?.recreate()
                         })
                 }
 

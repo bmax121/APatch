@@ -84,6 +84,7 @@ fun APatchTheme(
         )
     }
     var customColorScheme by remember { mutableStateOf(prefs.getString("custom_color", "blue")) }
+    var forceRefresh by remember { mutableStateOf(0) }
 
     val refreshThemeObserver by refreshTheme.observeAsState(false)
     if (refreshThemeObserver == true) {
@@ -95,6 +96,7 @@ fun APatchTheme(
         ) else false
         customColorScheme = prefs.getString("custom_color", "blue")
         refreshTheme.postValue(false)
+        forceRefresh++
     }
 
     val darkTheme = if (darkThemeFollowSys) {
