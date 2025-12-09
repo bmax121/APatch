@@ -477,7 +477,7 @@ private fun KStatusCard(
                         APApplication.State.KERNELPATCH_NEED_UPDATE, APApplication.State.KERNELPATCH_NEED_REBOOT -> {
                             Text(
                                 text = stringResource(R.string.home_need_update),
-                                style = MiuixTheme.textStyles.title4
+                                style = MiuixTheme.textStyles.body2,
                             )
                             Spacer(Modifier.height(6.dp))
                             Text(
@@ -485,7 +485,7 @@ private fun KStatusCard(
                                     R.string.kpatch_version_update,
                                     Version.installedKPVString(),
                                     Version.buildKPVString()
-                                ), style = MiuixTheme.textStyles.body1
+                                ), style = MiuixTheme.textStyles.body2
                             )
                         }
 
@@ -574,11 +574,7 @@ private fun KStatusCard(
 
 @Composable
 private fun AStatusCard(apState: APApplication.State) {
-    Card(
-        colors = CardDefaults.defaultColors(run {
-            MiuixTheme.colorScheme.secondaryContainer
-        })
-    ) {
+    Card {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -653,7 +649,7 @@ private fun AStatusCard(apState: APApplication.State) {
                         APApplication.State.ANDROIDPATCH_NEED_UPDATE -> {
                             Text(
                                 text = stringResource(R.string.home_need_update),
-                                style = MiuixTheme.textStyles.title2
+                                style = MiuixTheme.textStyles.body2
                             )
                             Spacer(Modifier.height(6.dp))
                             Text(
@@ -668,7 +664,7 @@ private fun AStatusCard(apState: APApplication.State) {
                         else -> {
                             Text(
                                 text = stringResource(R.string.home_install_unknown),
-                                style = MiuixTheme.textStyles.title2
+                                style = MiuixTheme.textStyles.body2
                             )
                         }
                     }

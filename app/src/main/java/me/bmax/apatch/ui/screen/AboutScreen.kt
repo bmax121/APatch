@@ -12,21 +12,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedCard
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,6 +31,15 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import me.bmax.apatch.BuildConfig
 import me.bmax.apatch.R
 import me.bmax.apatch.util.Version
+import top.yukonga.miuix.kmp.basic.Button
+import top.yukonga.miuix.kmp.basic.Card
+import top.yukonga.miuix.kmp.basic.Icon
+import top.yukonga.miuix.kmp.basic.IconButton
+import top.yukonga.miuix.kmp.basic.Scaffold
+import top.yukonga.miuix.kmp.basic.Surface
+import top.yukonga.miuix.kmp.basic.Text
+import top.yukonga.miuix.kmp.basic.TopAppBar
+import top.yukonga.miuix.kmp.theme.MiuixTheme
 
 @Destination<RootGraph>
 @Composable
@@ -62,6 +59,7 @@ fun AboutScreen(navigator: DestinationsNavigator) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(20.dp))
+
             Surface(
                 modifier = Modifier.size(95.dp),
                 color = colorResource(id = R.color.ic_launcher_background),
@@ -77,90 +75,103 @@ fun AboutScreen(navigator: DestinationsNavigator) {
             Spacer(modifier = Modifier.height(20.dp))
             Text(
                 text = stringResource(id = R.string.app_name),
-                style = MaterialTheme.typography.titleLarge
+                style = MiuixTheme.textStyles.title4
             )
             Text(
                 text = stringResource(
                     id = R.string.about_app_version,
                     if (BuildConfig.VERSION_NAME.contains(BuildConfig.VERSION_CODE.toString())) "${BuildConfig.VERSION_CODE}" else "${BuildConfig.VERSION_CODE} (${BuildConfig.VERSION_NAME})"
                 ),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MiuixTheme.textStyles.body2,
+                color = MiuixTheme.colorScheme.onSurfaceVariantActions,
                 modifier = Modifier.padding(top = 5.dp)
             )
             Text(
-
                 text = stringResource(
                     id = R.string.about_powered_by,
                     "KernelPatch (${Version.buildKPVString()})"
                 ),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MiuixTheme.textStyles.body2,
+                color = MiuixTheme.colorScheme.onSurfaceVariantActions,
                 modifier = Modifier.padding(top = 5.dp)
             )
 
             Spacer(modifier = Modifier.height(20.dp))
 
             Row(
-                modifier = Modifier.padding(top = 8.dp),
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .padding(top = 8.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                FilledTonalButton(
-                    onClick = { uriHandler.openUri("https://github.com/bmax121/APatch") }
+                Button(
+                    onClick = { uriHandler.openUri("https://github.com/bmax121/APatch") },
+                    modifier = Modifier
+                        .weight(1f)
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.github),
-                        contentDescription = null
+                        contentDescription = null,
+                        modifier = Modifier.size(20.dp)
                     )
-                    Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
+                    Spacer(modifier = Modifier.width(5.dp))
                     Text(text = stringResource(id = R.string.about_github))
                 }
 
-                FilledTonalButton(
-                    onClick = { uriHandler.openUri("https://t.me/APatchChannel") }
+                Button(
+                    onClick = { uriHandler.openUri("https://t.me/APatchChannel") },
+                    modifier = Modifier
+                        .weight(1f)
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.telegram),
-                        contentDescription = null
+                        contentDescription = null,
+                        modifier = Modifier.size(20.dp)
                     )
-                    Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
+                    Spacer(modifier = Modifier.width(5.dp))
                     Text(text = stringResource(id = R.string.about_telegram_channel))
                 }
             }
 
             Row(
-                modifier = Modifier.padding(top = 8.dp),
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .padding(top = 8.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                FilledTonalButton(
-                    onClick = { uriHandler.openUri("https://hosted.weblate.org/engage/APatch") }
+                Button(
+                    onClick = { uriHandler.openUri("https://hosted.weblate.org/engage/APatch") },
+                    modifier = Modifier
+                        .weight(1f)
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.weblate),
                         contentDescription = null,
-                        modifier = Modifier.size(ButtonDefaults.IconSize)
+                        modifier = Modifier.size(20.dp)
                     )
-                    Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
+                    Spacer(modifier = Modifier.width(5.dp))
                     Text(text = stringResource(id = R.string.about_weblate))
                 }
 
-                FilledTonalButton(
-                    onClick = { uriHandler.openUri("https://t.me/apatch_discuss") }
+                Button(
+                    onClick = { uriHandler.openUri("https://t.me/apatch_discuss") },
+                    modifier = Modifier
+                        .weight(1f)
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.telegram),
-                        contentDescription = null
+                        contentDescription = null,
+                        modifier = Modifier.size(20.dp)
                     )
-                    Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
+                    Spacer(modifier = Modifier.width(5.dp))
                     Text(text = stringResource(id = R.string.about_telegram_group))
                 }
             }
 
-            OutlinedCard(
-                modifier = Modifier.padding(vertical = 30.dp, horizontal = 20.dp),
-                shape = RoundedCornerShape(15.dp)
+            Card(
+                modifier = Modifier.padding(vertical = 30.dp, horizontal = 16.dp),
             ) {
                 Column(
                     modifier = Modifier
@@ -169,21 +180,19 @@ fun AboutScreen(navigator: DestinationsNavigator) {
                 ) {
                     Text(
                         text = stringResource(id = R.string.about_app_desc),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        style = MiuixTheme.textStyles.body2,
+                        color = MiuixTheme.colorScheme.onSurfaceVariantActions,
                     )
                 }
             }
-
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TopBar(onBack: () -> Unit = {}) {
     TopAppBar(
-        title = { Text(stringResource(R.string.about)) },
+        title = stringResource(R.string.about),
         navigationIcon = {
             IconButton(
                 onClick = onBack

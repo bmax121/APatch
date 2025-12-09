@@ -8,28 +8,12 @@ import android.text.method.LinkMovementMethod
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.AlertDialogDefaults
-import androidx.compose.material3.BasicAlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -43,13 +27,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.window.DialogWindowProvider
-import androidx.compose.ui.window.SecureFlagPolicy
 import io.noties.markwon.Markwon
 import io.noties.markwon.utils.NoCopySpannableFactory
 import kotlinx.coroutines.CancellableContinuation
@@ -64,6 +46,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.parcelize.Parcelize
 import me.bmax.apatch.util.ui.APDialogBlurBehindUtils.Companion.setupWindowBlurListener
+import top.yukonga.miuix.kmp.basic.CircularProgressIndicator
+import top.yukonga.miuix.kmp.basic.Surface
 import kotlin.coroutines.resume
 
 private const val TAG = "DialogComponent"
@@ -371,13 +355,13 @@ private fun rememberConfirmDialog(
         }
     )
 
-    if (visible.value) {
-        ConfirmDialog(
-            handle.visuals,
-            confirm = { coroutineScope.launch { resultChannel.send(ConfirmResult.Confirmed) } },
-            dismiss = { coroutineScope.launch { resultChannel.send(ConfirmResult.Canceled) } }
-        )
-    }
+//    if (visible.value) {
+//        ConfirmDialog(
+//            handle.visuals,
+//            confirm = { coroutineScope.launch { resultChannel.send(ConfirmResult.Confirmed) } },
+//            dismiss = { coroutineScope.launch { resultChannel.send(ConfirmResult.Canceled) } }
+//        )
+//    }
 
     return handle
 }
@@ -445,75 +429,68 @@ private fun LoadingDialog() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun ConfirmDialog(
-    visuals: ConfirmDialogVisuals,
-    confirm: () -> Unit,
-    dismiss: () -> Unit
-) {
-    BasicAlertDialog(
-        onDismissRequest = dismiss,
-        properties = DialogProperties(
-            decorFitsSystemWindows = true,
-            usePlatformDefaultWidth = false,
-            securePolicy = SecureFlagPolicy.SecureOff
-        )
-    ) {
-        Surface(
-            modifier = Modifier
-                .width(320.dp)
-                .wrapContentHeight(),
-            shape = RoundedCornerShape(20.dp),
-            tonalElevation = AlertDialogDefaults.TonalElevation,
-            color = AlertDialogDefaults.containerColor
-        ) {
-            Column(modifier = Modifier.padding(24.dp)) {
-                Text(
-                    text = visuals.title,
-                    style = MaterialTheme.typography.headlineSmall,
-                )
-
-                Spacer(modifier = Modifier.size(16.dp))
-
-                Box(
-                    modifier = Modifier
-                        .weight(1f, fill = false)
-                        .align(Alignment.Start)
-                        .padding(bottom = 24.dp)
-                        .fillMaxWidth()
-                ) {
-                    if (visuals.isMarkdown) {
-                        MarkdownContent(content = visuals.content)
-                    } else {
-                        Text(
-                            text = visuals.content,
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                    }
-                }
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    TextButton(onClick = dismiss) {
-                        Text(text = visuals.dismiss ?: stringResource(android.R.string.cancel))
-                    }
-                    Spacer(modifier = Modifier.size(8.dp))
-                    Button(onClick = confirm) {
-                        Text(text = visuals.confirm ?: stringResource(android.R.string.ok))
-                    }
-                }
-            }
-
-            // blur
-            val dialogWindowProvider = LocalView.current.parent as DialogWindowProvider
-            setupWindowBlurListener(dialogWindowProvider.window)
-        }
-    }
-}
-
+//@Composable
+//private fun ConfirmDialog(
+//    visuals: ConfirmDialogVisuals,
+//    confirm: () -> Unit,
+//    dismiss: () -> Unit
+//) {
+//    SuperDialog(onDismissRequest = dismiss)
+//    {
+//        Surface(
+//            modifier = Modifier
+//                .width(320.dp)
+//                .wrapContentHeight(),
+//            shape = RoundedCornerShape(20.dp),
+//            tonalElevation = AlertDialogDefaults.TonalElevation,
+//            color = AlertDialogDefaults.containerColor
+//        ) {
+//            Column(modifier = Modifier.padding(24.dp)) {
+//                Text(
+//                    text = visuals.title,
+//                    style = MaterialTheme.typography.headlineSmall,
+//                )
+//
+//                Spacer(modifier = Modifier.size(16.dp))
+//
+//                Box(
+//                    modifier = Modifier
+//                        .weight(1f, fill = false)
+//                        .align(Alignment.Start)
+//                        .padding(bottom = 24.dp)
+//                        .fillMaxWidth()
+//                ) {
+//                    if (visuals.isMarkdown) {
+//                        MarkdownContent(content = visuals.content)
+//                    } else {
+//                        Text(
+//                            text = visuals.content,
+//                            style = MaterialTheme.typography.bodyMedium
+//                        )
+//                    }
+//                }
+//
+//                Row(
+//                    modifier = Modifier.fillMaxWidth(),
+//                    horizontalArrangement = Arrangement.End
+//                ) {
+//                    TextButton(onClick = dismiss) {
+//                        Text(text = visuals.dismiss ?: stringResource(android.R.string.cancel))
+//                    }
+//                    Spacer(modifier = Modifier.size(8.dp))
+//                    Button(onClick = confirm) {
+//                        Text(text = visuals.confirm ?: stringResource(android.R.string.ok))
+//                    }
+//                }
+//            }
+//
+//            // blur
+//            val dialogWindowProvider = LocalView.current.parent as DialogWindowProvider
+//            setupWindowBlurListener(dialogWindowProvider.window)
+//        }
+//    }
+//}
+//
 @Composable
 private fun MarkdownContent(content: String) {
     val contentColor = LocalContentColor.current

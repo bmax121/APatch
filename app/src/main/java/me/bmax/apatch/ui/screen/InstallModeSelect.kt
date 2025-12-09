@@ -6,22 +6,19 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.dropUnlessResumed
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
@@ -39,6 +37,14 @@ import me.bmax.apatch.ui.component.rememberConfirmDialog
 import me.bmax.apatch.ui.viewmodel.PatchesViewModel
 import me.bmax.apatch.util.isABDevice
 import me.bmax.apatch.util.rootAvailable
+import top.yukonga.miuix.kmp.basic.Icon
+import top.yukonga.miuix.kmp.basic.IconButton
+import top.yukonga.miuix.kmp.basic.Scaffold
+import top.yukonga.miuix.kmp.basic.TextButton
+import top.yukonga.miuix.kmp.basic.TopAppBar
+import top.yukonga.miuix.kmp.extra.SuperArrow
+import top.yukonga.miuix.kmp.extra.SuperDialog
+import top.yukonga.miuix.kmp.basic.ButtonDefaults
 
 var selectedBootImage: Uri? = null
 
@@ -49,17 +55,26 @@ fun InstallModeSelectScreen(navigator: DestinationsNavigator) {
         mutableStateOf<InstallMethod?>(null)
     }
 
+    val showDialog = remember { mutableStateOf(false) }
+
     Scaffold(topBar = {
         TopBar(
             onBack = dropUnlessResumed { navigator.popBackStack() },
         )
-    }) {
-        Column(modifier = Modifier.padding(it)) {
+    }, popupHost = {
+        InstallSlotWarningDialog(showDialog)
+    }) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .padding(paddingValues)
+                .padding(start = 10.dp, end = 10.dp),
+        ) {
             SelectInstallMethod(
                 onSelected = { method ->
                     installMethod = method
                 },
-                navigator = navigator
+                navigator = navigator,
+                showDialog = showDialog
             )
 
         }
@@ -89,7 +104,8 @@ sealed class InstallMethod {
 @Composable
 private fun SelectInstallMethod(
     onSelected: (InstallMethod) -> Unit = {},
-    navigator: DestinationsNavigator
+    navigator: DestinationsNavigator,
+    showDialog: MutableState<Boolean>
 ) {
     val rootAvailable = rootAvailable()
     val isAbDevice = isABDevice()
@@ -123,8 +139,6 @@ private fun SelectInstallMethod(
         onSelected(InstallMethod.DirectInstallToInactiveSlot)
         navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.INSTALL_TO_NEXT_SLOT))
     }, onDismiss = null)
-    val dialogTitle = stringResource(id = android.R.string.dialog_alert_title)
-    val dialogContent = stringResource(id = R.string.mode_select_page_install_inactive_slot_warning)
 
     val onClick = { option: InstallMethod ->
         when (option) {
@@ -145,7 +159,7 @@ private fun SelectInstallMethod(
             }
 
             is InstallMethod.DirectInstallToInactiveSlot -> {
-                confirmDialog.showConfirm(dialogTitle, dialogContent)
+                showDialog.value = true
             }
         }
     }
@@ -155,43 +169,71 @@ private fun SelectInstallMethod(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable {
+                    .fillMaxWidth())
+            {
+                SuperArrow(
+                    title = stringResource(id = option.label),
+                    onClick = {
                         onClick(option)
-                    }) {
-                RadioButton(selected = option.javaClass == selectedOption?.javaClass, onClick = {
-                    onClick(option)
-                })
-                Column {
-                    Text(
-                        text = stringResource(id = option.label),
-                        fontSize = MaterialTheme.typography.titleMedium.fontSize,
-                        fontFamily = MaterialTheme.typography.titleMedium.fontFamily,
-                        fontStyle = MaterialTheme.typography.titleMedium.fontStyle
-                    )
-                    option.summary?.let {
-                        Text(
-                            text = it,
-                            fontSize = MaterialTheme.typography.bodySmall.fontSize,
-                            fontFamily = MaterialTheme.typography.bodySmall.fontFamily,
-                            fontStyle = MaterialTheme.typography.bodySmall.fontStyle
-                        )
                     }
-                }
+                )
             }
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TopBar(onBack: () -> Unit = {}) {
     TopAppBar(
-        title = { Text(stringResource(R.string.mode_select_page_title)) },
+        title = stringResource(R.string.mode_select_page_title),
         navigationIcon = {
             IconButton(
                 onClick = onBack
             ) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null) }
         },
     )
+}
+
+@Composable
+fun InstallSlotWarningDialog(
+    showDialog: MutableState<Boolean>
+) {
+    SuperDialog(
+        show = showDialog,
+        title = stringResource(android.R.string.dialog_alert_title),
+        summary = stringResource(R.string.mode_select_page_install_inactive_slot_warning),
+        onDismissRequest = { showDialog.value = false }
+    ) {
+
+        Box(contentAlignment = Alignment.CenterEnd) {
+
+            Spacer(Modifier.height(12.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
+
+                TextButton(
+                    stringResource(id = android.R.string.cancel),
+                    onClick = { showDialog.value = false },
+                    modifier = Modifier.weight(1f),
+                )
+
+                Spacer(Modifier.width(20.dp))
+
+                val enable = true
+
+                TextButton(
+                    stringResource(id = android.R.string.ok),
+                    onClick = {
+
+                    },
+                    modifier = Modifier.weight(1f),
+                    colors = ButtonDefaults.textButtonColorsPrimary(),
+                    enabled = enable
+                )
+            }
+        }
+    }
 }
