@@ -146,14 +146,14 @@ pub fn synchronize_package_uid() -> io::Result<()> {
                                 .find(|config| config.pkg == pkg_name)
                             {
                                    if config.uid % 100000 != uid {  
-                                        let uid_prefix = config.uid / 100000 * 100000
-                                        let pre_uid = config.uid
-                                        let new_uid = uid_prefix + uid
+                                        let uid_prefix = config.uid / 100000 * 100000;
+                                        let pre_uid = config.uid;
+                                        let new_uid = uid_prefix + uid;
                                         info!(
                                             "Updating uid for package {}: {} -> {}",
                                             pkg_name, pre_uid, new_uid
                                         );
-                                        config.uid = new_uid
+                                        config.uid = new_uid;
                                         updated = true;
                                     }
                             }
