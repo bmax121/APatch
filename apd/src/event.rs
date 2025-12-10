@@ -407,7 +407,9 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     if let Err(e) = module::exec_stage_script("post-fs-data", true) {
         warn!("exec post-fs-data scripts failed: {}", e);
     }
-
+    if let Err(e) = module::exec_stage_lua("post-fs-data",true, superkey.as_deref().unwrap_or("")) {
+        warn!("Failed to exec post-fs-data lua: {}", e);
+    }
     // load system.prop
     if let Err(e) = module::load_system_prop() {
         warn!("load system.prop failed: {}", e);
@@ -470,8 +472,6 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     info!("remove update flag");
     let _ = fs::remove_file(module_update_flag);
 
-    
-
     run_stage("post-mount", superkey, true);
 
     env::set_current_dir("/").with_context(|| "failed to chdir to /")?;
@@ -487,7 +487,7 @@ fn run_stage(stage: &str, superkey: Option<String>, block: bool) {
         return;
     }
 
-    if utils::is_safe_mode(superkey) {
+    if utils::is_safe_mode(superkey.clone()) {
         warn!("safe mode, skip {stage} scripts");
         if let Err(e) = module::disable_all_modules() {
             warn!("disable all modules failed: {}", e);
@@ -500,6 +500,9 @@ fn run_stage(stage: &str, superkey: Option<String>, block: bool) {
     }
     if let Err(e) = module::exec_stage_script(stage, block) {
         warn!("Failed to exec {stage} scripts: {e}");
+    }
+    if let Err(e) = module::exec_stage_lua(stage,block,superkey.as_deref().unwrap_or("")) {
+        warn!("Failed to exec {stage} lua: {e}");
     }
 }
 
