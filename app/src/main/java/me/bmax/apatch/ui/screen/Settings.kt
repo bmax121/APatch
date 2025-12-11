@@ -124,7 +124,9 @@ fun SettingScreen() {
                     }
                 }
                 loadingDialog.hide()
-                Toast.makeText(context, logSavedMessage, Toast.LENGTH_LONG).show()
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(context, logSavedMessage, Toast.LENGTH_LONG).show()
+                }
             }
         }
     }

@@ -97,6 +97,7 @@ private fun CrashHandleScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
+                modifier = Modifier.padding(bottom = 30.dp),
                 onClick = {
                     scope.launch {
                         clipboard.setClipEntry(

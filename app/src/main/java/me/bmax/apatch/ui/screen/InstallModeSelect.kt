@@ -45,6 +45,8 @@ import top.yukonga.miuix.kmp.basic.TopAppBar
 import top.yukonga.miuix.kmp.extra.SuperArrow
 import top.yukonga.miuix.kmp.extra.SuperDialog
 import top.yukonga.miuix.kmp.basic.ButtonDefaults
+import top.yukonga.miuix.kmp.icon.MiuixIcons
+import top.yukonga.miuix.kmp.icon.icons.useful.Back
 
 var selectedBootImage: Uri? = null
 
@@ -188,8 +190,9 @@ private fun TopBar(onBack: () -> Unit = {}) {
         title = stringResource(R.string.mode_select_page_title),
         navigationIcon = {
             IconButton(
-                onClick = onBack
-            ) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null) }
+                onClick = onBack,
+                Modifier.padding(start = 16.dp)
+            ) { Icon(MiuixIcons.Useful.Back, contentDescription = null) }
         },
     )
 }

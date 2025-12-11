@@ -128,6 +128,8 @@ fun Patches(mode: PatchesViewModel.PatchMode) {
                 )
             }
 
+            Spacer(modifier = Modifier.height(5.dp))
+
             PatchMode(mode)
             ErrorView(viewModel.error)
             KernelPatchImageView(viewModel.kpimgInfo)
