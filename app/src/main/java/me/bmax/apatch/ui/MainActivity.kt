@@ -15,21 +15,15 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.pager.PagerState
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,7 +45,6 @@ import com.ramcosta.composedestinations.generated.NavGraphs
 import com.ramcosta.composedestinations.rememberNavHostEngine
 import com.ramcosta.composedestinations.utils.rememberDestinationsNavigator
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.bmax.apatch.APApplication
 import me.bmax.apatch.R
@@ -145,18 +138,6 @@ class MainActivity : AppCompatActivity() {
                 val currentRoute = currentBackStackEntry?.destination?.route
                 val showBottomBar = currentRoute != InstallScreenDestination.route
 
-                val coroutineScope = rememberCoroutineScope()
-                val LocalPagerState = compositionLocalOf<PagerState> { error("No pager state") }
-                val LocalHandlePageChange = compositionLocalOf<(Int) -> Unit> { error("No handle page change") }
-
-                val pagerState = rememberPagerState(initialPage = 1, pageCount = { 5 })
-
-                val handlePageChange: (Int) -> Unit = remember(pagerState, coroutineScope) {
-                    { page ->
-                        coroutineScope.launch { pagerState.animateScrollToPage(page) }
-                    }
-                }
-
                 Scaffold(
                     bottomBar = {
                         if (showBottomBar) {
@@ -164,10 +145,7 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                 ) {
-                    CompositionLocalProvider (
-                        LocalPagerState provides pagerState,
-                        LocalHandlePageChange provides handlePageChange
-                    ) {
+                    CompositionLocalProvider {
                         DestinationsNavHost(
                             modifier = Modifier
                                 .padding(bottom = if (showBottomBar) 65.dp else 0.dp),
@@ -177,16 +155,19 @@ class MainActivity : AppCompatActivity() {
                             defaultTransitions = object : NavHostAnimatedDestinationStyle() {
                                 override val enterTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition =
                                     {
-                                        val isBottomBarTransition = initialState.destination.route in bottomBarRoutes &&
-                                                targetState.destination.route in bottomBarRoutes
+                                        val isBottomBarTransition =
+                                            initialState.destination.route in bottomBarRoutes &&
+                                                    targetState.destination.route in bottomBarRoutes
 
                                         if (isBottomBarTransition) {
-                                            val initialIndex = BottomBarDestination.entries.indexOfFirst {
-                                                it.direction.route == initialState.destination.route
-                                            }
-                                            val targetIndex = BottomBarDestination.entries.indexOfFirst {
-                                                it.direction.route == targetState.destination.route
-                                            }
+                                            val initialIndex =
+                                                BottomBarDestination.entries.indexOfFirst {
+                                                    it.direction.route == initialState.destination.route
+                                                }
+                                            val targetIndex =
+                                                BottomBarDestination.entries.indexOfFirst {
+                                                    it.direction.route == targetState.destination.route
+                                                }
 
                                             if (targetIndex > initialIndex) {
                                                 slideInHorizontally(
@@ -211,16 +192,19 @@ class MainActivity : AppCompatActivity() {
 
                                 override val exitTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition =
                                     {
-                                        val isBottomBarTransition = initialState.destination.route in bottomBarRoutes &&
-                                                targetState.destination.route in bottomBarRoutes
+                                        val isBottomBarTransition =
+                                            initialState.destination.route in bottomBarRoutes &&
+                                                    targetState.destination.route in bottomBarRoutes
 
                                         if (isBottomBarTransition) {
-                                            val initialIndex = BottomBarDestination.entries.indexOfFirst {
-                                                it.direction.route == initialState.destination.route
-                                            }
-                                            val targetIndex = BottomBarDestination.entries.indexOfFirst {
-                                                it.direction.route == targetState.destination.route
-                                            }
+                                            val initialIndex =
+                                                BottomBarDestination.entries.indexOfFirst {
+                                                    it.direction.route == initialState.destination.route
+                                                }
+                                            val targetIndex =
+                                                BottomBarDestination.entries.indexOfFirst {
+                                                    it.direction.route == targetState.destination.route
+                                                }
 
                                             if (targetIndex > initialIndex) {
                                                 slideOutHorizontally(
@@ -234,7 +218,8 @@ class MainActivity : AppCompatActivity() {
                                                 ) + fadeOut(animationSpec = tween(300))
                                             }
                                         } else if (initialState.destination.route in bottomBarRoutes &&
-                                            targetState.destination.route !in bottomBarRoutes) {
+                                            targetState.destination.route !in bottomBarRoutes
+                                        ) {
                                             slideOutHorizontally(
                                                 targetOffsetX = { -it / 4 },
                                                 animationSpec = tween(300)
@@ -296,40 +281,35 @@ private fun BottomBar(navController: NavHostController) {
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry?.destination?.route
 
+    Crossfade(
+        targetState = state,
+        label = "BottomBarStateCrossfade"
+    ) { state ->
         val kPatchReady = state != APApplication.State.UNKNOWN_STATE
         val aPatchReady = state == APApplication.State.ANDROIDPATCH_INSTALLED
-        
-        val items = BottomBarDestination.entries
+
+
+        val navItems = BottomBarDestination.entries
             .filter { d ->
                 !(d.kPatchRequired && !kPatchReady) &&
                         !(d.aPatchRequired && !aPatchReady)
             }
             .map { d ->
-                NavigationItem(
+                d to NavigationItem(
                     label = stringResource(d.label),
-                    icon = if (currentRoute == d.direction.route) {
-                        d.iconSelected
-                    } else {
-                        d.iconNotSelected
-                    }
+                    icon = if (currentRoute == d.direction.route) d.iconSelected else d.iconNotSelected
                 )
             }
 
-        val selectedIndex = items.indexOfFirst { item ->
-            val dest = BottomBarDestination.entries.find { d ->
-                stringResource(d.label) == item.label
-            }
-            dest?.direction?.route == currentRoute
-        }.coerceAtLeast(0)
+        val selectedIndex =
+            navItems.indexOfFirst { it.first.direction.route == currentRoute }.coerceAtLeast(0)
 
         NavigationBar(
-            items = items,
+            items = navItems.map { it.second },
             selected = selectedIndex,
             onClick = { index ->
-                val dest = BottomBarDestination.entries[index]
-
-                val isCurrent = currentRoute == dest.direction.route
-                if (isCurrent) {
+                val dest = navItems[index].first
+                if (currentRoute == dest.direction.route) {
                     navigator.popBackStack(dest.direction, false)
                 }
 
@@ -340,4 +320,5 @@ private fun BottomBar(navController: NavHostController) {
                 }
             }
         )
+    }
 }
