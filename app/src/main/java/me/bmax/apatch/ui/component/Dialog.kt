@@ -520,7 +520,7 @@ private fun ConfirmDialog(
 
 @Composable
 private fun MarkdownContent(content: String) {
-    val contentColor = LocalContentColor.current
+    val contentColor = MiuixTheme.colorScheme.onBackground.toArgb()
 
     AndroidView(
         factory = { context ->
@@ -542,7 +542,7 @@ private fun MarkdownContent(content: String) {
             .wrapContentHeight(),
         update = {
             Markwon.create(it.context).setMarkdown(it, content)
-            it.setTextColor(contentColor.toArgb())
+            it.setTextColor(contentColor)
         }
     )
 }

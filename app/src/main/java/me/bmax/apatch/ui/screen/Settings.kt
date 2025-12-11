@@ -69,6 +69,7 @@ import top.yukonga.miuix.kmp.extra.SuperArrow
 import top.yukonga.miuix.kmp.extra.SuperBottomSheet
 import top.yukonga.miuix.kmp.extra.SuperDialog
 import top.yukonga.miuix.kmp.basic.ButtonDefaults
+import top.yukonga.miuix.kmp.basic.Card
 import top.yukonga.miuix.kmp.extra.SuperDropdown
 import top.yukonga.miuix.kmp.extra.SuperSwitch
 import top.yukonga.miuix.kmp.utils.overScrollVertical
@@ -164,242 +165,243 @@ fun SettingScreen() {
         ) {
             item {
                 val prefs = APApplication.sharedPreferences
-
-                // clear key
-                if (kPatchReady) {
-                    val clearKeyDialogTitle = stringResource(id = R.string.clear_super_key)
-                    val clearKeyDialogContent =
-                        stringResource(id = R.string.settings_clear_super_key_dialog)
-                    SuperArrow(
-                        title = stringResource(R.string.clear_super_key),
-                        onClick = { showClearKeyDialog.value = true }
-                    )
-                    if (showClearKeyDialog.value) {
-                        SuperDialog(
-                            show = showClearKeyDialog,
-                            title = clearKeyDialogTitle,
-                            summary = clearKeyDialogContent
-                        ) {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.End
+                Card {
+                    // clear key
+                    if (kPatchReady) {
+                        val clearKeyDialogTitle = stringResource(id = R.string.clear_super_key)
+                        val clearKeyDialogContent =
+                            stringResource(id = R.string.settings_clear_super_key_dialog)
+                        SuperArrow(
+                            title = stringResource(R.string.clear_super_key),
+                            onClick = { showClearKeyDialog.value = true }
+                        )
+                        if (showClearKeyDialog.value) {
+                            SuperDialog(
+                                show = showClearKeyDialog,
+                                title = clearKeyDialogTitle,
+                                summary = clearKeyDialogContent
                             ) {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.End
+                                ) {
 
-                                TextButton(
-                                    stringResource(id = android.R.string.cancel),
-                                    onClick = { showClearKeyDialog.value = false },
-                                    modifier = Modifier.weight(1f),
-                                )
+                                    TextButton(
+                                        stringResource(id = android.R.string.cancel),
+                                        onClick = { showClearKeyDialog.value = false },
+                                        modifier = Modifier.weight(1f),
+                                    )
 
-                                Spacer(Modifier.width(20.dp))
+                                    Spacer(Modifier.width(20.dp))
 
-                                TextButton(
-                                    stringResource(id = android.R.string.ok),
-                                    onClick = {
-                                        APatchKeyHelper.clearConfigKey()
-                                        APApplication.superKey = ""
-                                        showClearKeyDialog.value = false
-                                    },
-                                    modifier = Modifier.weight(1f),
-                                    colors = ButtonDefaults.textButtonColorsPrimary(),
-                                )
-                            }
-                        }
-                    }
-                }
-
-                // store key local?
-                SuperSwitch(
-                    title = stringResource(id = R.string.settings_donot_store_superkey),
-                    summary = stringResource(id = R.string.settings_donot_store_superkey_summary),
-                    checked = bSkipStoreSuperKey,
-                    onCheckedChange = {
-                        bSkipStoreSuperKey = it
-                        APatchKeyHelper.setShouldSkipStoreSuperKey(bSkipStoreSuperKey)
-                    })
-
-                // Global mount
-                if (kPatchReady && aPatchReady) {
-                    SuperSwitch(
-                        title = stringResource(id = R.string.settings_global_namespace_mode),
-                        summary = stringResource(id = R.string.settings_global_namespace_mode_summary),
-                        checked = isGlobalNamespaceEnabled,
-                        onCheckedChange = {
-                            setGlobalNamespaceEnabled(
-                                if (isGlobalNamespaceEnabled) {
-                                    "0"
-                                } else {
-                                    "1"
+                                    TextButton(
+                                        stringResource(id = android.R.string.ok),
+                                        onClick = {
+                                            APatchKeyHelper.clearConfigKey()
+                                            APApplication.superKey = ""
+                                            showClearKeyDialog.value = false
+                                        },
+                                        modifier = Modifier.weight(1f),
+                                        colors = ButtonDefaults.textButtonColorsPrimary(),
+                                    )
                                 }
-                            )
-                            isGlobalNamespaceEnabled = it
-                        })
-                }
-
-                // Lite Mode
-                if (kPatchReady && aPatchReady) {
-                    SuperSwitch(
-                        title = stringResource(id = R.string.settings_lite_mode),
-                        summary = stringResource(id = R.string.settings_lite_mode_mode_summary),
-                        checked = isLiteModeEnabled,
-                        onCheckedChange = {
-                            setLiteMode(it)
-                            isLiteModeEnabled = it
-                        })
-                }
-
-                // Force OverlayFS
-                if (kPatchReady && aPatchReady && isOverlayFSAvailable) {
-                    SuperSwitch(
-                        title = stringResource(id = R.string.settings_force_overlayfs_mode),
-                        summary = stringResource(id = R.string.settings_force_overlayfs_mode_summary),
-                        checked = forceUsingOverlayFS,
-                        onCheckedChange = {
-                            setForceUsingOverlayFS(it)
-                            forceUsingOverlayFS = it
-                        })
-                }
-
-                // WebView Debug
-                if (aPatchReady) {
-                    var enableWebDebugging by rememberSaveable {
-                        mutableStateOf(prefs.getBoolean("enable_web_debugging", false))
-                    }
-
-                    SuperSwitch(
-                        title = stringResource(id = R.string.enable_web_debugging),
-                        summary = stringResource(id = R.string.enable_web_debugging_summary),
-                        checked = enableWebDebugging,
-                        onCheckedChange = { isChecked ->
-                            enableWebDebugging = isChecked
-                            APApplication.sharedPreferences.edit {
-                                putBoolean("enable_web_debugging", isChecked)
-                            }
-                        }
-                    )
-                }
-
-                // Check Update
-                var checkUpdate by rememberSaveable {
-                    mutableStateOf(
-                        prefs.getBoolean("check_update", true)
-                    )
-                }
-
-                SuperSwitch(
-                    title = stringResource(id = R.string.settings_check_update),
-                    summary = stringResource(id = R.string.settings_check_update_summary),
-                    checked = checkUpdate,
-                    onCheckedChange = { isChecked ->
-                        checkUpdate = isChecked
-                        prefs.edit { putBoolean("check_update", isChecked) }
-                    })
-
-                // Night Mode Follow System
-                var nightFollowSystem by rememberSaveable {
-                    mutableStateOf(
-                        prefs.getBoolean("night_mode_follow_sys", true)
-                    )
-                }
-                SuperSwitch(
-                    title = stringResource(id = R.string.settings_night_mode_follow_sys),
-                    summary = stringResource(id = R.string.settings_night_mode_follow_sys_summary),
-                    checked = nightFollowSystem,
-                    onCheckedChange = { isChecked ->
-                        nightFollowSystem = isChecked
-                        prefs.edit {
-                            putBoolean("night_mode_follow_sys", isChecked)
-                        }
-                        scope.launch {
-                            kotlinx.coroutines.delay(100)
-                            if (isChecked) {
-                                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
                             }
                         }
                     }
-                )
 
-                // Custom Night Theme Switch
-                if (!nightFollowSystem) {
-                    var nightThemeEnabled by rememberSaveable {
+                    // store key local?
+                    SuperSwitch(
+                        title = stringResource(id = R.string.settings_donot_store_superkey),
+                        summary = stringResource(id = R.string.settings_donot_store_superkey_summary),
+                        checked = bSkipStoreSuperKey,
+                        onCheckedChange = {
+                            bSkipStoreSuperKey = it
+                            APatchKeyHelper.setShouldSkipStoreSuperKey(bSkipStoreSuperKey)
+                        })
+
+                    // Global mount
+                    if (kPatchReady && aPatchReady) {
+                        SuperSwitch(
+                            title = stringResource(id = R.string.settings_global_namespace_mode),
+                            summary = stringResource(id = R.string.settings_global_namespace_mode_summary),
+                            checked = isGlobalNamespaceEnabled,
+                            onCheckedChange = {
+                                setGlobalNamespaceEnabled(
+                                    if (isGlobalNamespaceEnabled) {
+                                        "0"
+                                    } else {
+                                        "1"
+                                    }
+                                )
+                                isGlobalNamespaceEnabled = it
+                            })
+                    }
+
+                    // Lite Mode
+                    if (kPatchReady && aPatchReady) {
+                        SuperSwitch(
+                            title = stringResource(id = R.string.settings_lite_mode),
+                            summary = stringResource(id = R.string.settings_lite_mode_mode_summary),
+                            checked = isLiteModeEnabled,
+                            onCheckedChange = {
+                                setLiteMode(it)
+                                isLiteModeEnabled = it
+                            })
+                    }
+
+                    // Force OverlayFS
+                    if (kPatchReady && aPatchReady && isOverlayFSAvailable) {
+                        SuperSwitch(
+                            title = stringResource(id = R.string.settings_force_overlayfs_mode),
+                            summary = stringResource(id = R.string.settings_force_overlayfs_mode_summary),
+                            checked = forceUsingOverlayFS,
+                            onCheckedChange = {
+                                setForceUsingOverlayFS(it)
+                                forceUsingOverlayFS = it
+                            })
+                    }
+
+                    // WebView Debug
+                    if (aPatchReady) {
+                        var enableWebDebugging by rememberSaveable {
+                            mutableStateOf(prefs.getBoolean("enable_web_debugging", false))
+                        }
+
+                        SuperSwitch(
+                            title = stringResource(id = R.string.enable_web_debugging),
+                            summary = stringResource(id = R.string.enable_web_debugging_summary),
+                            checked = enableWebDebugging,
+                            onCheckedChange = { isChecked ->
+                                enableWebDebugging = isChecked
+                                APApplication.sharedPreferences.edit {
+                                    putBoolean("enable_web_debugging", isChecked)
+                                }
+                            }
+                        )
+                    }
+
+                    // Check Update
+                    var checkUpdate by rememberSaveable {
                         mutableStateOf(
-                            prefs.getBoolean("night_mode_enabled", false)
+                            prefs.getBoolean("check_update", true)
+                        )
+                    }
+
+                    SuperSwitch(
+                        title = stringResource(id = R.string.settings_check_update),
+                        summary = stringResource(id = R.string.settings_check_update_summary),
+                        checked = checkUpdate,
+                        onCheckedChange = { isChecked ->
+                            checkUpdate = isChecked
+                            prefs.edit { putBoolean("check_update", isChecked) }
+                        })
+
+                    // Night Mode Follow System
+                    var nightFollowSystem by rememberSaveable {
+                        mutableStateOf(
+                            prefs.getBoolean("night_mode_follow_sys", true)
                         )
                     }
                     SuperSwitch(
-                        title = stringResource(id = R.string.settings_night_theme_enabled),
-                        checked = nightThemeEnabled,
+                        title = stringResource(id = R.string.settings_night_mode_follow_sys),
+                        summary = stringResource(id = R.string.settings_night_mode_follow_sys_summary),
+                        checked = nightFollowSystem,
                         onCheckedChange = { isChecked ->
-                            nightThemeEnabled = isChecked
+                            nightFollowSystem = isChecked
                             prefs.edit {
-                                putBoolean("night_mode_enabled", isChecked)
+                                putBoolean("night_mode_follow_sys", isChecked)
                             }
                             scope.launch {
                                 kotlinx.coroutines.delay(100)
-                                AppCompatDelegate.setDefaultNightMode(
-                                    if (isChecked) AppCompatDelegate.MODE_NIGHT_YES
-                                    else AppCompatDelegate.MODE_NIGHT_NO
+                                if (isChecked) {
+                                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+                                }
+                            }
+                        }
+                    )
+
+                    // Custom Night Theme Switch
+                    if (!nightFollowSystem) {
+                        var nightThemeEnabled by rememberSaveable {
+                            mutableStateOf(
+                                prefs.getBoolean("night_mode_enabled", false)
+                            )
+                        }
+                        SuperSwitch(
+                            title = stringResource(id = R.string.settings_night_theme_enabled),
+                            checked = nightThemeEnabled,
+                            onCheckedChange = { isChecked ->
+                                nightThemeEnabled = isChecked
+                                prefs.edit {
+                                    putBoolean("night_mode_enabled", isChecked)
+                                }
+                                scope.launch {
+                                    kotlinx.coroutines.delay(100)
+                                    AppCompatDelegate.setDefaultNightMode(
+                                        if (isChecked) AppCompatDelegate.MODE_NIGHT_YES
+                                        else AppCompatDelegate.MODE_NIGHT_NO
+                                    )
+                                }
+                            }
+                        )
+                    }
+
+                    // su path
+                    if (kPatchReady) {
+                        SuperArrow(
+                            title = stringResource(R.string.setting_reset_su_path),
+                            onClick = { showResetSuPathDialog.value = true }
+                        )
+                    }
+
+                    // language
+                    val languages = stringArrayResource(id = R.array.languages)
+                    val languagesValues = stringArrayResource(id = R.array.languages_values)
+
+                    val currentLocales = AppCompatDelegate.getApplicationLocales()
+                    val currentLanguageTag = if (currentLocales.isEmpty) {
+                        null
+                    } else {
+                        currentLocales.get(0)?.toLanguageTag()
+                    }
+
+                    val initialIndex = if (currentLanguageTag == null) {
+                        0
+                    } else {
+                        val index = languagesValues.indexOf(currentLanguageTag)
+                        if (index >= 0) index else 0
+                    }
+
+                    var selectedIndex by remember { mutableStateOf(initialIndex) }
+
+                    SuperDropdown(
+                        title = stringResource(R.string.settings_app_language),
+                        items = languages.toList(),
+                        selectedIndex = selectedIndex,
+                        onSelectedIndexChange = { newIndex ->
+                            selectedIndex = newIndex
+                            if (newIndex == 0) {
+                                AppCompatDelegate.setApplicationLocales(
+                                    LocaleListCompat.getEmptyLocaleList()
+                                )
+                            } else {
+                                AppCompatDelegate.setApplicationLocales(
+                                    LocaleListCompat.forLanguageTags(
+                                        languagesValues[newIndex]
+                                    )
                                 )
                             }
                         }
                     )
-                }
 
-                // su path
-                if (kPatchReady) {
+                    // log
                     SuperArrow(
-                        title = stringResource(R.string.setting_reset_su_path),
-                        onClick = { showResetSuPathDialog.value = true }
+                        title = stringResource(R.string.send_log),
+                        onClick = {
+                            showLogBottomSheet.value = true
+                        }
                     )
                 }
-
-                // language
-                val languages = stringArrayResource(id = R.array.languages)
-                val languagesValues = stringArrayResource(id = R.array.languages_values)
-
-                val currentLocales = AppCompatDelegate.getApplicationLocales()
-                val currentLanguageTag = if (currentLocales.isEmpty) {
-                    null
-                } else {
-                    currentLocales.get(0)?.toLanguageTag()
-                }
-
-                val initialIndex = if (currentLanguageTag == null) {
-                    0
-                } else {
-                    val index = languagesValues.indexOf(currentLanguageTag)
-                    if (index >= 0) index else 0
-                }
-
-                var selectedIndex by remember { mutableStateOf(initialIndex) }
-
-                SuperDropdown(
-                    title = stringResource(R.string.settings_app_language),
-                    items = languages.toList(),
-                    selectedIndex = selectedIndex,
-                    onSelectedIndexChange = { newIndex ->
-                        selectedIndex = newIndex
-                        if (newIndex == 0) {
-                            AppCompatDelegate.setApplicationLocales(
-                                LocaleListCompat.getEmptyLocaleList()
-                            )
-                        } else {
-                            AppCompatDelegate.setApplicationLocales(
-                                LocaleListCompat.forLanguageTags(
-                                    languagesValues[newIndex]
-                                )
-                            )
-                        }
-                    }
-                )
-
-                // log
-                SuperArrow(
-                    title = stringResource(R.string.send_log),
-                    onClick = {
-                        showLogBottomSheet.value = true
-                    }
-                )
             }
         }
     }

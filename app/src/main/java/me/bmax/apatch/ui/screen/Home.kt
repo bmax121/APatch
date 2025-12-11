@@ -141,7 +141,7 @@ fun HomeScreen(navigator: DestinationsNavigator) {
                     modifier = Modifier.padding(vertical = 12.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    WarningCard()
+                    BackupWarningCard()
                     KStatusCard(
                         kpState = kpState,
                         apState = apState,
@@ -178,25 +178,29 @@ fun UninstallDialog(
             title = stringResource(R.string.home_dialog_uninstall_title),
             onDismissRequest = onDismissRequest
         ) {
-            SuperArrow(
-                title = stringResource(R.string.home_dialog_uninstall_all),
-                onClick = {
-                    APApplication.uninstallApatch()
-                    navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.UNPATCH))
-                }
-            )
-            SuperArrow(
-                title = stringResource(R.string.home_dialog_restore_image),
-                onClick = {
-                    navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.UNPATCH))
-                }
-            )
-            SuperArrow(
-                title = stringResource(R.string.home_dialog_uninstall_ap_only),
-                onClick = {
-                    APApplication.uninstallApatch()
-                }
-            )
+            Card(
+                colors = CardDefaults.defaultColors(MiuixTheme.colorScheme.secondary)
+            ) {
+                SuperArrow(
+                    title = stringResource(R.string.home_dialog_uninstall_all),
+                    onClick = {
+                        APApplication.uninstallApatch()
+                        navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.UNPATCH))
+                    }
+                )
+                SuperArrow(
+                    title = stringResource(R.string.home_dialog_restore_image),
+                    onClick = {
+                        navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.UNPATCH))
+                    }
+                )
+                SuperArrow(
+                    title = stringResource(R.string.home_dialog_uninstall_ap_only),
+                    onClick = {
+                        APApplication.uninstallApatch()
+                    }
+                )
+            }
         }
     }
 }
@@ -717,7 +721,7 @@ private fun AStatusCard(apState: APApplication.State) {
 
 
 @Composable
-fun WarningCard() {
+fun BackupWarningCard() {
     val show = rememberSaveable { mutableStateOf(apApp.getBackupWarningState()) }
     if (show.value) {
         Card(

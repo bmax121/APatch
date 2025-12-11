@@ -137,7 +137,7 @@ private fun SelectInstallMethod(
             }
 
             is InstallMethod.DirectInstallToInactiveSlot -> {
-                confirmDialog.showConfirm(dialogTitle, dialogContent)
+                confirmDialog.showConfirm(dialogTitle, dialogContent, true)
             }
         }
     }
