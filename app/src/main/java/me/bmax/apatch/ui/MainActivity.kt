@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Build
 import android.net.Uri
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -67,7 +68,6 @@ import me.zhanghai.android.appiconloader.coil.AppIconKeyer
 import top.yukonga.miuix.kmp.basic.NavigationBar
 import top.yukonga.miuix.kmp.basic.NavigationItem
 import top.yukonga.miuix.kmp.basic.Scaffold
-import top.yukonga.miuix.kmp.theme.MiuixTheme
 
 class MainActivity : AppCompatActivity() {
 
@@ -84,6 +84,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         super.onCreate(savedInstanceState)
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)   // temporary solution
 
         val uri: Uri? = intent.data ?: run {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

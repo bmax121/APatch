@@ -201,9 +201,9 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
                                         )
 
                                         moduleInstall -> {
-                                            val intent = Intent(Intent.ACTION_GET_CONTENT)
-                                            intent.type = "application/zip"
-                                            selectZipLauncher.launch(intent)
+//                                            val intent = Intent(Intent.ACTION_GET_CONTENT)
+//                                            intent.type = "application/zip"
+//                                            selectZipLauncher.launch(intent)
                                             Toast.makeText(
                                                 context,
                                                 "Under development",
