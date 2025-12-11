@@ -223,9 +223,9 @@ pub fn exec_stage_script(stage: &str, block: bool) -> Result<()> {
     Ok(())
 }
 
-pub fn exec_stage_lua(stage: &str) -> Result<()> {
+pub fn exec_stage_lua(stage: &str,wait: bool,superkey: &str) -> Result<()> {
     let stage_safe = stage.replace('-', "_");
-    run_lua("on_stage", &stage_safe, true).map_err(|e| anyhow::anyhow!("{}", e))?;
+    run_lua(&superkey, &stage_safe, true, wait).map_err(|e| anyhow::anyhow!("{}", e))?;
     Ok(())
 }
 pub fn exec_common_scripts(dir: &str, wait: bool) -> Result<()> {
@@ -544,10 +544,9 @@ pub fn is_lite_mode_enabled_lua(lua: &Lua) -> LuaResult<Function> {
     })
 }
 
-pub fn run_lua(id: &str, function: &str, on_each_module: bool) -> mlua::Result<()> {
+pub fn run_lua(id: &str, function: &str, on_each_module: bool, _wait: bool) -> mlua::Result<()> {
     let lua = unsafe { Lua::unsafe_new() };
 
-    let lua_script_path = format!("/data/adb/modules/{}/{}.lua", id, id);
     let func = install_module_lua(&lua)?;
     lua.globals().set("install_module", func)?;
     lua.globals().set("info", info_lua(&lua)?)?;
@@ -566,7 +565,7 @@ pub fn run_lua(id: &str, function: &str, on_each_module: bool) -> mlua::Result<(
         for pair in modules.pairs::<String, mlua::Table>() {
             let (_, module_table) = pair?;
             if let Ok(func_obj) = module_table.get::<mlua::Function>(function) {
-                func_obj.call::<()>(())?;
+                func_obj.call::<()>(id)?;
             }
         }
     } else {
@@ -579,7 +578,12 @@ pub fn run_lua(id: &str, function: &str, on_each_module: bool) -> mlua::Result<(
 }
 pub fn run_action(id: &str) -> Result<()> {
     let action_script_path = format!("/data/adb/modules/{}/action.sh", id);
-    let _ = exec_script(&action_script_path, true);
+    if Path::new(&action_script_path).exists() {
+        let _ = exec_script(&action_script_path, true);
+    } else {
+        //if no action.sh, try to run lua action
+        run_lua(&id, "action", false, true).map_err(|e| anyhow::anyhow!("{}", e))?;
+    }
     Ok(())
 }
 
@@ -704,7 +708,10 @@ fn _list_modules(path: &str) -> Vec<HashMap<String, String>> {
         let update = path.join(defs::UPDATE_FILE_NAME).exists();
         let remove = path.join(defs::REMOVE_FILE_NAME).exists();
         let web = path.join(defs::MODULE_WEB_DIR).exists();
-        let action = path.join(defs::MODULE_ACTION_SH).exists();
+        let id = module_prop_map.get("id").map(|s| s.as_str()).unwrap_or("");
+        let id_lua_file = format!("{}.lua", id);
+        let action = path.join(defs::MODULE_ACTION_SH).exists()
+                || path.join(&id_lua_file).exists();
 
         module_prop_map.insert("enabled".to_owned(), enabled.to_string());
         module_prop_map.insert("update".to_owned(), update.to_string());
