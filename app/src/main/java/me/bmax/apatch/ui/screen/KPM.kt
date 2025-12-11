@@ -512,9 +512,9 @@ private fun KPModuleItem(
                 )
 
                 HorizontalDivider(
-                    thickness = 1.5.dp,
-                    color = MiuixTheme.colorScheme.surface,
-                    modifier = Modifier.padding(top = 8.dp)
+                    modifier = Modifier.padding(vertical = 8.dp),
+                    thickness = 0.5.dp,
+                    color = colorScheme.outline.copy(alpha = 0.5f)
                 )
 
                 Row(
