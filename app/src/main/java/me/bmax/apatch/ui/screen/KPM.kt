@@ -93,7 +93,6 @@ private lateinit var targetKPMToControl: KPModel.KPMInfo
 @Destination<RootGraph>
 @Composable
 fun KPModuleScreen(navigator: DestinationsNavigator) {
-    val showControlDialog = remember { mutableStateOf(false) }
 
     val state by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
     if (state == APApplication.State.UNKNOWN_STATE) {
@@ -126,6 +125,7 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
 
     Scaffold(
         topBar = { TopBar() },
+        popupHost = { },
         floatingActionButton = {
             val scope = rememberCoroutineScope()
             val context = LocalContext.current
@@ -222,9 +222,6 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
                     }
                 }
             }
-        },
-        popupHost = {
-            KPMControlDialog(showDialog = showControlDialog)
         }
     ) { innerPadding ->
         KPModuleList(
@@ -234,8 +231,7 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
                 start = 16.dp,
                 top = innerPadding.calculateTopPadding() + 16.dp,
                 end = 16.dp,
-                bottom = innerPadding.calculateBottomPadding() + 16.dp),
-            showControlDialog = showControlDialog
+                bottom = innerPadding.calculateBottomPadding() + 16.dp)
         )
     }
 }
@@ -268,7 +264,7 @@ suspend fun loadModule(loadingDialog: LoadingDialogHandle, uri: Uri, args: Strin
 }
 
 @Composable
-fun KPMControlDialog(showDialog: MutableState<Boolean>) {
+fun KPMControlDialog(ControlDialog: MutableState<Boolean>) {
     var controlParam by remember { mutableStateOf("") }
     var enable by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
@@ -305,8 +301,8 @@ fun KPMControlDialog(showDialog: MutableState<Boolean>) {
     SuperDialog(
         title = stringResource(R.string.kpm_control_dialog_title),
         summary = stringResource(R.string.kpm_control_dialog_content),
-        show = showDialog,
-        onDismissRequest = { showDialog.value = false }
+        show = ControlDialog,
+        onDismissRequest = { ControlDialog.value = false }
     ) {
         TextField(
             value = controlParam,
@@ -326,7 +322,7 @@ fun KPMControlDialog(showDialog: MutableState<Boolean>) {
             TextButton(
                 text = stringResource(android.R.string.cancel),
                 onClick = {
-                    showDialog.value = false
+                    ControlDialog.value = false
                 },
                 modifier = Modifier.weight(1f),
             )
@@ -336,7 +332,7 @@ fun KPMControlDialog(showDialog: MutableState<Boolean>) {
             TextButton(
                 text = stringResource(android.R.string.ok),
                 onClick = {
-                    showDialog.value = false
+                    ControlDialog.value = false
                     scope.launch { onModuleControl(targetKPMToControl) }
                 },
                 modifier = Modifier.weight(1f),
@@ -352,7 +348,6 @@ private fun KPModuleList(
     viewModel: KPModuleViewModel,
     state: LazyListState,
     scaffoldPadding: PaddingValues = PaddingValues(),
-    showControlDialog: MutableState<Boolean>
 ) {
     val moduleStr = stringResource(id = R.string.kpm)
     val moduleUninstallConfirm = stringResource(id = R.string.kpm_unload_confirm)
@@ -361,6 +356,7 @@ private fun KPModuleList(
 
     val confirmDialog = rememberConfirmDialog()
     val loadingDialog = rememberLoadingDialog()
+    val ControlDialog = remember { mutableStateOf(false) }
 
     val pullToRefreshState = rememberPullToRefreshState()
 
@@ -421,7 +417,7 @@ private fun KPModuleList(
                                 },
                                 onControl = {
                                     targetKPMToControl = module
-                                    showControlDialog.value = true
+                                    ControlDialog.value = true
                                 },
                             )
 
@@ -432,6 +428,9 @@ private fun KPModuleList(
                 }
             }
         }
+    }
+    if (ControlDialog.value) {
+        KPMControlDialog(ControlDialog = ControlDialog)
     }
 }
 

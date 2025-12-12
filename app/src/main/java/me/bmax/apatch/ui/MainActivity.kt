@@ -23,8 +23,10 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -77,7 +79,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         super.onCreate(savedInstanceState)
-        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)   // temporary solution
+
+        // Disables automatic window adjustment when the soft keyboard appears
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
 
         val uri: Uri? = intent.data ?: run {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -108,24 +112,21 @@ class MainActivity : AppCompatActivity() {
                             currentUri?.let { uri ->
                                 navigator.navigate(InstallScreenDestination(uri, MODULE_TYPE.APM))
                             }
-                        }, onDismiss = null
+                        }, onDismiss = { }
                     )
                 )
 
+                var moduleInstallDesc by remember { mutableStateOf("") }
 
-                LaunchedEffect(isLoading) {
-                    if (!isLoading && uri != null) {
+                LaunchedEffect(currentUri) {
+                    currentUri?.let { uri ->
                         viewModel.fetchModuleList()
-
-                        val moduleInstallDesc = loadingDialog.withLoading {
+                        val desc = loadingDialog.withLoading {
                             withContext(Dispatchers.IO) {
-                                ModuleParser.getModuleInstallDesc(
-                                    context,
-                                    uri,
-                                    viewModel.moduleList
-                                )
+                                ModuleParser.getModuleInstallDesc(context, uri, viewModel.moduleList)
                             }
                         }
+                        moduleInstallDesc = desc
 
                         confirmDialog.showConfirm(
                             title = context.getString(R.string.apm),

@@ -118,7 +118,9 @@ fun HomeScreen(navigator: DestinationsNavigator) {
                 kpState,
                 scrollBehavior = scrollBehavior
             )
-        }) { innerPadding ->
+        },
+        popupHost = { },
+    ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
                 .padding(innerPadding)
