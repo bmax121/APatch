@@ -25,9 +25,11 @@ import me.bmax.apatch.ui.component.rememberConfirmDialog
 import me.bmax.apatch.ui.viewmodel.PatchesViewModel
 import me.bmax.apatch.util.isABDevice
 import me.bmax.apatch.util.rootAvailable
+import top.yukonga.miuix.kmp.basic.Card
 import top.yukonga.miuix.kmp.basic.Icon
 import top.yukonga.miuix.kmp.basic.IconButton
 import top.yukonga.miuix.kmp.basic.Scaffold
+import top.yukonga.miuix.kmp.basic.SmallTopAppBar
 import top.yukonga.miuix.kmp.basic.TopAppBar
 import top.yukonga.miuix.kmp.extra.SuperArrow
 import top.yukonga.miuix.kmp.icon.MiuixIcons
@@ -39,20 +41,21 @@ var selectedBootImage: Uri? = null
 @Composable
 fun InstallModeSelectScreen(navigator: DestinationsNavigator) {
 
-    Scaffold(topBar = {
-        TopBar(
-            onBack = dropUnlessResumed { navigator.popBackStack() },
-        )
+    Scaffold(
+        modifier = Modifier.padding(16.dp),
+        topBar = {
+            TopBar(
+                onBack = dropUnlessResumed { navigator.popBackStack() },
+            )
     }) { paddingValues ->
         Column(
-            modifier = Modifier
-                .padding(paddingValues)
-                .padding(start = 10.dp, end = 10.dp),
+            modifier = Modifier.padding(paddingValues)
         ) {
-            SelectInstallMethod(
-                navigator = navigator
-            )
-
+            Card {
+                SelectInstallMethod(
+                    navigator = navigator
+                )
+            }
         }
     }
 }
@@ -143,8 +146,8 @@ private fun SelectInstallMethod(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .fillMaxWidth())
-            {
+                    .fillMaxWidth()
+            ) {
                 SuperArrow(
                     title = stringResource(id = option.label),
                     onClick = {
@@ -158,12 +161,11 @@ private fun SelectInstallMethod(
 
 @Composable
 private fun TopBar(onBack: () -> Unit = {}) {
-    TopAppBar(
+    SmallTopAppBar(
         title = stringResource(R.string.mode_select_page_title),
         navigationIcon = {
             IconButton(
                 onClick = onBack,
-                Modifier.padding(start = 16.dp)
             ) { Icon(MiuixIcons.Useful.Back, contentDescription = null) }
         },
     )
