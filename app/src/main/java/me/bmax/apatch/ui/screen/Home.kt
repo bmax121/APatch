@@ -61,6 +61,7 @@ import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.AboutScreenDestination
 import com.ramcosta.composedestinations.generated.destinations.InstallModeSelectScreenDestination
 import com.ramcosta.composedestinations.generated.destinations.PatchesDestination
+import com.ramcosta.composedestinations.generated.destinations.UninstallModeSelectScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -92,8 +93,6 @@ import top.yukonga.miuix.kmp.basic.Text
 import top.yukonga.miuix.kmp.basic.TextButton
 import top.yukonga.miuix.kmp.basic.TextField
 import top.yukonga.miuix.kmp.basic.TopAppBar
-import top.yukonga.miuix.kmp.extra.SuperArrow
-import top.yukonga.miuix.kmp.extra.SuperBottomSheet
 import top.yukonga.miuix.kmp.extra.SuperDialog
 import top.yukonga.miuix.kmp.theme.MiuixTheme
 import top.yukonga.miuix.kmp.basic.ButtonDefaults
@@ -109,8 +108,6 @@ fun HomeScreen(navigator: DestinationsNavigator) {
     val kpState by APApplication.kpStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
     val apState by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
 
-    val showUninstallDialog = remember { mutableStateOf(false) }
-
     Scaffold(
         topBar = {
             TopBar(
@@ -121,14 +118,7 @@ fun HomeScreen(navigator: DestinationsNavigator) {
                 kpState,
                 scrollBehavior = scrollBehavior
             )
-        },
-        popupHost = {
-            UninstallDialog(
-                show = showUninstallDialog,
-                navigator = navigator
-            )
-        }
-    ) { innerPadding ->
+        }) { innerPadding ->
         LazyColumn(
             modifier = Modifier
                 .padding(innerPadding)
@@ -145,8 +135,7 @@ fun HomeScreen(navigator: DestinationsNavigator) {
                     KStatusCard(
                         kpState = kpState,
                         apState = apState,
-                        navigator = navigator,
-                        onUninstallClick = { showUninstallDialog.value = true }
+                        navigator = navigator
                     )
                     if (kpState != APApplication.State.UNKNOWN_STATE && apState != APApplication.State.ANDROIDPATCH_INSTALLED) {
                         AStatusCard(apState)
@@ -161,45 +150,6 @@ fun HomeScreen(navigator: DestinationsNavigator) {
                     LearnMoreCard()
                     Spacer(Modifier)
                 }
-            }
-        }
-    }
-}
-
-@Composable
-fun UninstallDialog(
-    show: MutableState<Boolean>,
-    navigator: DestinationsNavigator,
-    onDismissRequest: () -> Unit = { show.value = false }
-) {
-    if (show.value) {
-        SuperBottomSheet(
-            show = show,
-            title = stringResource(R.string.home_dialog_uninstall_title),
-            onDismissRequest = onDismissRequest
-        ) {
-            Card(
-                colors = CardDefaults.defaultColors(MiuixTheme.colorScheme.secondary)
-            ) {
-                SuperArrow(
-                    title = stringResource(R.string.home_dialog_uninstall_all),
-                    onClick = {
-                        APApplication.uninstallApatch()
-                        navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.UNPATCH))
-                    }
-                )
-                SuperArrow(
-                    title = stringResource(R.string.home_dialog_restore_image),
-                    onClick = {
-                        navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.UNPATCH))
-                    }
-                )
-                SuperArrow(
-                    title = stringResource(R.string.home_dialog_uninstall_ap_only),
-                    onClick = {
-                        APApplication.uninstallApatch()
-                    }
-                )
             }
         }
     }
@@ -414,8 +364,7 @@ private fun TopBar(
 private fun KStatusCard(
     kpState: APApplication.State,
     apState: APApplication.State,
-    navigator: DestinationsNavigator,
-    onUninstallClick: () -> Unit = {}
+    navigator: DestinationsNavigator
 ) {
 
     val showAuthFailedTipDialog = remember { mutableStateOf(false) }
@@ -541,7 +490,7 @@ private fun KStatusCard(
 
                             else -> {
                                 if (apState == APApplication.State.ANDROIDPATCH_INSTALLED || apState == APApplication.State.ANDROIDPATCH_NEED_UPDATE) {
-                                    onUninstallClick()
+                                    navigator.navigate(UninstallModeSelectScreenDestination)
                                 } else {
                                     navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.UNPATCH))
                                 }
@@ -680,38 +629,38 @@ private fun AStatusCard(apState: APApplication.State) {
                         Button(
                             colors = ButtonDefaults.buttonColorsPrimary(),
                             onClick = {
-                            when (apState) {
-                                APApplication.State.ANDROIDPATCH_NOT_INSTALLED, APApplication.State.ANDROIDPATCH_NEED_UPDATE -> {
-                                    APApplication.installApatch()
-                                }
+                                when (apState) {
+                                    APApplication.State.ANDROIDPATCH_NOT_INSTALLED, APApplication.State.ANDROIDPATCH_NEED_UPDATE -> {
+                                        APApplication.installApatch()
+                                    }
 
-                                APApplication.State.ANDROIDPATCH_UNINSTALLING -> {
-                                    // Do nothing
-                                }
+                                    APApplication.State.ANDROIDPATCH_UNINSTALLING -> {
+                                        // Do nothing
+                                    }
 
-                                else -> {
-                                    APApplication.uninstallApatch()
+                                    else -> {
+                                        APApplication.uninstallApatch()
+                                    }
                                 }
-                            }
-                        }, content = {
-                            when (apState) {
-                                APApplication.State.ANDROIDPATCH_NOT_INSTALLED -> {
-                                    Text(text = stringResource(id = R.string.home_ap_cando_install))
-                                }
+                            }, content = {
+                                when (apState) {
+                                    APApplication.State.ANDROIDPATCH_NOT_INSTALLED -> {
+                                        Text(text = stringResource(id = R.string.home_ap_cando_install))
+                                    }
 
-                                APApplication.State.ANDROIDPATCH_NEED_UPDATE -> {
-                                    Text(text = stringResource(id = R.string.home_ap_cando_update))
-                                }
+                                    APApplication.State.ANDROIDPATCH_NEED_UPDATE -> {
+                                        Text(text = stringResource(id = R.string.home_ap_cando_update))
+                                    }
 
-                                APApplication.State.ANDROIDPATCH_UNINSTALLING -> {
-                                    Icon(Icons.Outlined.Cached, contentDescription = "busy")
-                                }
+                                    APApplication.State.ANDROIDPATCH_UNINSTALLING -> {
+                                        Icon(Icons.Outlined.Cached, contentDescription = "busy")
+                                    }
 
-                                else -> {
-                                    Text(text = stringResource(id = R.string.home_ap_cando_uninstall))
+                                    else -> {
+                                        Text(text = stringResource(id = R.string.home_ap_cando_uninstall))
+                                    }
                                 }
-                            }
-                        })
+                            })
                     }
                 }
             }
