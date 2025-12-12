@@ -87,7 +87,6 @@ import top.yukonga.miuix.kmp.theme.MiuixTheme
 import top.yukonga.miuix.kmp.basic.TextField
 import top.yukonga.miuix.kmp.basic.TopAppBar
 import top.yukonga.miuix.kmp.basic.rememberPullToRefreshState
-import top.yukonga.miuix.kmp.theme.MiuixTheme.colorScheme
 import java.io.IOException
 
 private const val TAG = "KernelPatchModule"
@@ -197,12 +196,9 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
                                 index = index,
                                 onSelectedIndexChange = {
                                     when (label) {
-                                        moduleEmbed -> {
-                                            navigator.navigate(
-                                                PatchesDestination(PatchesViewModel.PatchMode.PATCH_AND_INSTALL)
-                                            )
-                                            expanded.value = false
-                                        }
+                                        moduleEmbed -> navigator.navigate(
+                                            PatchesDestination(PatchesViewModel.PatchMode.PATCH_AND_INSTALL)
+                                        )
 
                                         moduleInstall -> {
 //                                            val intent = Intent(Intent.ACTION_GET_CONTENT)
@@ -213,14 +209,12 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
                                                 "Under development",
                                                 Toast.LENGTH_SHORT
                                             ).show()
-                                            expanded.value = false
                                         }
 
                                         moduleLoad -> {
                                             val intent = Intent(Intent.ACTION_GET_CONTENT)
                                             intent.type = "*/*"
                                             selectKpmLauncher.launch(intent)
-                                            expanded.value = false
                                         }
                                     }
                                     expanded.value = true
