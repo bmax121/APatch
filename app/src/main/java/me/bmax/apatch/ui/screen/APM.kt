@@ -332,8 +332,8 @@ private fun ModuleList(
 
     PullToRefresh(
         modifier = modifier,
+        isRefreshing = viewModel.isRefreshing,
         onRefresh = { viewModel.fetchModuleList() },
-        isRefreshing = viewModel.isRefreshing
     ) {
         SearchBar(
             modifier = Modifier

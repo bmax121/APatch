@@ -9,6 +9,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.bmax.apatch.util.HanziToPinyin
 import me.bmax.apatch.apApp
@@ -72,6 +73,8 @@ class APModuleViewModel : ViewModel() {
     fun fetchModuleList() {
         viewModelScope.launch(Dispatchers.IO) {
             isRefreshing = true
+
+            delay(350)
 
             val oldModuleList = modules
 

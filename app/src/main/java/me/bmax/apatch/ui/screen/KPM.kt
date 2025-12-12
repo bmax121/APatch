@@ -30,7 +30,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -235,7 +234,7 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
                 start = 16.dp,
                 top = innerPadding.calculateTopPadding() + 16.dp,
                 end = 16.dp,
-                bottom = innerPadding.calculateBottomPadding() + 16.dp + 56.dp),
+                bottom = innerPadding.calculateBottomPadding() + 16.dp),
             showControlDialog = showControlDialog
         )
     }
@@ -363,7 +362,6 @@ private fun KPModuleList(
     val confirmDialog = rememberConfirmDialog()
     val loadingDialog = rememberLoadingDialog()
 
-    var isRefreshing by rememberSaveable { mutableStateOf(false) }
     val pullToRefreshState = rememberPullToRefreshState()
 
     suspend fun onModuleUninstall(module: KPModel.KPMInfo) {
@@ -389,9 +387,9 @@ private fun KPModuleList(
     }
     Box(modifier = Modifier.padding(scaffoldPadding)) {
         PullToRefresh(
-            isRefreshing = isRefreshing,
+            isRefreshing = viewModel.isRefreshing,
             pullToRefreshState = pullToRefreshState,
-            onRefresh = { isRefreshing = true }
+            onRefresh = { viewModel.fetchModuleList() }
         ) {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
