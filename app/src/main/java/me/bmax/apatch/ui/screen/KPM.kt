@@ -87,6 +87,7 @@ import top.yukonga.miuix.kmp.theme.MiuixTheme
 import top.yukonga.miuix.kmp.basic.TextField
 import top.yukonga.miuix.kmp.basic.TopAppBar
 import top.yukonga.miuix.kmp.basic.rememberPullToRefreshState
+import top.yukonga.miuix.kmp.theme.MiuixTheme.colorScheme
 import java.io.IOException
 
 private const val TAG = "KernelPatchModule"
@@ -217,7 +218,7 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
                                             selectKpmLauncher.launch(intent)
                                         }
                                     }
-                                    expanded.value = true
+                                    expanded.value = false
                                 },
                             )
                         }
