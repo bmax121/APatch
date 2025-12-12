@@ -52,7 +52,6 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.topjohnwu.superuser.nio.ExtendedFile
 import com.topjohnwu.superuser.nio.FileSystemManager
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.bmax.apatch.APApplication
@@ -87,7 +86,6 @@ import top.yukonga.miuix.kmp.theme.MiuixTheme
 import top.yukonga.miuix.kmp.basic.TextField
 import top.yukonga.miuix.kmp.basic.TopAppBar
 import top.yukonga.miuix.kmp.basic.rememberPullToRefreshState
-import top.yukonga.miuix.kmp.theme.MiuixTheme.colorScheme
 import java.io.IOException
 
 private const val TAG = "KernelPatchModule"
@@ -368,14 +366,6 @@ private fun KPModuleList(
     var isRefreshing by rememberSaveable { mutableStateOf(false) }
     val pullToRefreshState = rememberPullToRefreshState()
 
-    LaunchedEffect(isRefreshing) {
-        if (isRefreshing) {
-            delay(350)
-            viewModel.fetchModuleList()
-            isRefreshing = false
-        }
-    }
-
     suspend fun onModuleUninstall(module: KPModel.KPMInfo) {
         val confirmResult = confirmDialog.awaitConfirm(
             moduleStr,
@@ -397,48 +387,49 @@ private fun KPModuleList(
             viewModel.fetchModuleList()
         }
     }
-
-    PullToRefresh(
-        isRefreshing = isRefreshing,
-        pullToRefreshState = pullToRefreshState,
-        onRefresh = { isRefreshing = true }
-    ) {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            state = state,
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            contentPadding = scaffoldPadding,
+    Box(modifier = Modifier.padding(scaffoldPadding)) {
+        PullToRefresh(
+            isRefreshing = isRefreshing,
+            pullToRefreshState = pullToRefreshState,
+            onRefresh = { isRefreshing = true }
         ) {
-            when {
-                viewModel.moduleList.isEmpty() -> {
-                    item {
-                        Box(
-                            modifier = Modifier.fillParentMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                stringResource(R.string.kpm_apm_empty), textAlign = TextAlign.Center
-                            )
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                state = state,
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                when {
+                    viewModel.moduleList.isEmpty() -> {
+                        item {
+                            Box(
+                                modifier = Modifier.fillParentMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    stringResource(R.string.kpm_apm_empty),
+                                    textAlign = TextAlign.Center
+                                )
+                            }
                         }
                     }
-                }
 
-                else -> {
-                    items(viewModel.moduleList) { module ->
-                        val scope = rememberCoroutineScope()
-                        KPModuleItem(
-                            module,
-                            onUninstall = {
-                                scope.launch { onModuleUninstall(module) }
-                            },
-                            onControl = {
-                                targetKPMToControl = module
-                                showControlDialog.value = true
-                            },
-                        )
+                    else -> {
+                        items(viewModel.moduleList) { module ->
+                            val scope = rememberCoroutineScope()
+                            KPModuleItem(
+                                module,
+                                onUninstall = {
+                                    scope.launch { onModuleUninstall(module) }
+                                },
+                                onControl = {
+                                    targetKPMToControl = module
+                                    showControlDialog.value = true
+                                },
+                            )
 
-                        // fix last item shadow incomplete in LazyColumn
-                        Spacer(Modifier.height(1.dp))
+                            // fix last item shadow incomplete in LazyColumn
+                            Spacer(Modifier.height(1.dp))
+                        }
                     }
                 }
             }
@@ -515,7 +506,7 @@ private fun KPModuleItem(
                 HorizontalDivider(
                     modifier = Modifier.padding(vertical = 8.dp),
                     thickness = 0.5.dp,
-                    color = colorScheme.outline.copy(alpha = 0.5f)
+                    color = MiuixTheme.colorScheme.outline.copy(alpha = 0.5f)
                 )
 
                 Row(
