@@ -1,61 +1,22 @@
 package me.bmax.apatch.ui.screen
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.BugReport
-import androidx.compose.material.icons.filled.ColorLens
-import androidx.compose.material.icons.filled.Commit
-import androidx.compose.material.icons.filled.DarkMode
-import androidx.compose.material.icons.filled.DeveloperMode
-import androidx.compose.material.icons.filled.Engineering
-import androidx.compose.material.icons.filled.FilePresent
-import androidx.compose.material.icons.filled.FormatColorFill
-import androidx.compose.material.icons.filled.InvertColors
-import androidx.compose.material.icons.filled.Key
-import androidx.compose.material.icons.filled.RemoveFromQueue
-import androidx.compose.material.icons.filled.Save
-import androidx.compose.material.icons.filled.Share
-import androidx.compose.material.icons.filled.Translate
-import androidx.compose.material.icons.filled.Update
-import androidx.compose.material3.AlertDialogDefaults
-import androidx.compose.material3.BasicAlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -65,23 +26,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.LineHeightStyle
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.DialogProperties
-import androidx.compose.ui.window.DialogWindowProvider
 import androidx.core.content.FileProvider
 import androidx.core.content.edit
 import androidx.core.os.LocaleListCompat
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -89,10 +45,8 @@ import me.bmax.apatch.APApplication
 import me.bmax.apatch.BuildConfig
 import me.bmax.apatch.Natives
 import me.bmax.apatch.R
-import me.bmax.apatch.ui.component.SwitchItem
-import me.bmax.apatch.ui.component.rememberConfirmDialog
+import me.bmax.apatch.ui.component.LoadingDialogHandle
 import me.bmax.apatch.ui.component.rememberLoadingDialog
-import me.bmax.apatch.ui.theme.refreshTheme
 import me.bmax.apatch.util.APatchKeyHelper
 import me.bmax.apatch.util.getBugreportFile
 import me.bmax.apatch.util.isForceUsingOverlayFS
@@ -104,17 +58,27 @@ import me.bmax.apatch.util.rootShellForResult
 import me.bmax.apatch.util.setForceUsingOverlayFS
 import me.bmax.apatch.util.setGlobalNamespaceEnabled
 import me.bmax.apatch.util.setLiteMode
-import me.bmax.apatch.util.ui.APDialogBlurBehindUtils
-import me.bmax.apatch.util.ui.LocalSnackbarHost
-import me.bmax.apatch.util.ui.NavigationBarsSpacer
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.Locale
+import top.yukonga.miuix.kmp.basic.MiuixScrollBehavior
+import top.yukonga.miuix.kmp.basic.Scaffold
+import top.yukonga.miuix.kmp.basic.TextButton
+import top.yukonga.miuix.kmp.basic.TextField
+import top.yukonga.miuix.kmp.basic.TopAppBar
+import top.yukonga.miuix.kmp.extra.SuperArrow
+import top.yukonga.miuix.kmp.extra.SuperBottomSheet
+import top.yukonga.miuix.kmp.extra.SuperDialog
+import top.yukonga.miuix.kmp.basic.ButtonDefaults
+import top.yukonga.miuix.kmp.basic.Card
+import top.yukonga.miuix.kmp.extra.SuperDropdown
+import top.yukonga.miuix.kmp.extra.SuperSwitch
+import top.yukonga.miuix.kmp.utils.overScrollVertical
 
 @Destination<RootGraph>
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 fun SettingScreen() {
+    val scrollBehavior = MiuixScrollBehavior()
+
     val state by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
     val kPatchReady = state != APApplication.State.UNKNOWN_STATE
     val aPatchReady =
@@ -140,612 +104,420 @@ fun SettingScreen() {
         forceUsingOverlayFS = isForceUsingOverlayFS()
     }
 
-    val snackBarHost = LocalSnackbarHost.current
+    val showResetSuPathDialog = remember { mutableStateOf(false) }
+    val showLogBottomSheet = remember { mutableStateOf(false) }
+    val showClearKeyDialog = rememberSaveable { mutableStateOf(false) }
+
+    val loadingDialog = rememberLoadingDialog()
+
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val logSavedMessage = stringResource(R.string.log_saved)
+    val exportBugreportLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.CreateDocument("application/gzip")
+    ) { uri: Uri? ->
+        if (uri != null) {
+            scope.launch(Dispatchers.IO) {
+                loadingDialog.show()
+                uri.outputStream().use { output ->
+                    getBugreportFile(context).inputStream().use {
+                        it.copyTo(output)
+                    }
+                }
+                loadingDialog.hide()
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(context, logSavedMessage, Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(R.string.settings)) },
+                title = stringResource(R.string.settings),
+                scrollBehavior = scrollBehavior
             )
         },
-        snackbarHost = { SnackbarHost(snackBarHost) }
-    ) { paddingValues ->
-
-        val loadingDialog = rememberLoadingDialog()
-        val clearKeyDialog = rememberConfirmDialog(
-            onConfirm = {
-                APatchKeyHelper.clearConfigKey()
-                APApplication.superKey = ""
-            }
-        )
-
-        val showLanguageDialog = rememberSaveable { mutableStateOf(false) }
-        LanguageDialog(showLanguageDialog)
-
-        val showResetSuPathDialog = remember { mutableStateOf(false) }
-        if (showResetSuPathDialog.value) {
+        popupHost = {
             ResetSUPathDialog(showResetSuPathDialog)
+            LogBottomSheet(
+                showLogBottomSheet,
+                scope,
+                exportBugreportLauncher,
+                loadingDialog,
+                context
+            )
         }
-
-        val showThemeChooseDialog = remember { mutableStateOf(false) }
-        if (showThemeChooseDialog.value) {
-            ThemeChooseDialog(showThemeChooseDialog)
-        }
-
-        var showLogBottomSheet by remember { mutableStateOf(false) }
-
-        val scope = rememberCoroutineScope()
-        val context = LocalContext.current
-        val logSavedMessage = stringResource(R.string.log_saved)
-        val exportBugreportLauncher = rememberLauncherForActivityResult(
-            ActivityResultContracts.CreateDocument("application/gzip")
-        ) { uri: Uri? ->
-            if (uri != null) {
-                scope.launch(Dispatchers.IO) {
-                    loadingDialog.show()
-                    uri.outputStream().use { output ->
-                        getBugreportFile(context).inputStream().use {
-                            it.copyTo(output)
-                        }
-                    }
-                    loadingDialog.hide()
-                    snackBarHost.showSnackbar(message = logSavedMessage)
-                }
-            }
-        }
-
-        Column(
-            modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxWidth()
-                .verticalScroll(rememberScrollState()),
-        ) {
-
-            val context = LocalContext.current
-            val scope = rememberCoroutineScope()
-            val prefs = APApplication.sharedPreferences
-
-            // clear key
-            if (kPatchReady) {
-                val clearKeyDialogTitle = stringResource(id = R.string.clear_super_key)
-                val clearKeyDialogContent =
-                    stringResource(id = R.string.settings_clear_super_key_dialog)
-                ListItem(
-                    leadingContent = {
-                        Icon(
-                            Icons.Filled.Key, stringResource(id = R.string.super_key)
-                        )
-                    },
-                    headlineContent = { Text(stringResource(id = R.string.clear_super_key)) },
-                    modifier = Modifier.clickable {
-                        clearKeyDialog.showConfirm(
-                            title = clearKeyDialogTitle,
-                            content = clearKeyDialogContent,
-                            markdown = false,
-                        )
-
-                    })
-            }
-
-            // store key local?
-            SwitchItem(
-                icon = Icons.Filled.Key,
-                title = stringResource(id = R.string.settings_donot_store_superkey),
-                summary = stringResource(id = R.string.settings_donot_store_superkey_summary),
-                checked = bSkipStoreSuperKey,
-                onCheckedChange = {
-                    bSkipStoreSuperKey = it
-                    APatchKeyHelper.setShouldSkipStoreSuperKey(bSkipStoreSuperKey)
-                })
-
-            // Global mount
-            if (kPatchReady && aPatchReady) {
-                SwitchItem(
-                    icon = Icons.Filled.Engineering,
-                    title = stringResource(id = R.string.settings_global_namespace_mode),
-                    summary = stringResource(id = R.string.settings_global_namespace_mode_summary),
-                    checked = isGlobalNamespaceEnabled,
-                    onCheckedChange = {
-                        setGlobalNamespaceEnabled(
-                            if (isGlobalNamespaceEnabled) {
-                                "0"
-                            } else {
-                                "1"
-                            }
-                        )
-                        isGlobalNamespaceEnabled = it
-                    })
-            }
-
-            // Lite Mode
-            if (kPatchReady && aPatchReady) {
-                SwitchItem(
-                    icon = Icons.Filled.RemoveFromQueue,
-                    title = stringResource(id = R.string.settings_lite_mode),
-                    summary = stringResource(id = R.string.settings_lite_mode_mode_summary),
-                    checked = isLiteModeEnabled,
-                    onCheckedChange = {
-                        setLiteMode(it)
-                        isLiteModeEnabled = it
-                    })
-            }
-
-            // Force OverlayFS
-            if (kPatchReady && aPatchReady && isOverlayFSAvailable) {
-                SwitchItem(
-                    icon = Icons.Filled.FilePresent,
-                    title = stringResource(id = R.string.settings_force_overlayfs_mode),
-                    summary = stringResource(id = R.string.settings_force_overlayfs_mode_summary),
-                    checked = forceUsingOverlayFS,
-                    onCheckedChange = {
-                        setForceUsingOverlayFS(it)
-                        forceUsingOverlayFS = it
-                    })
-            }
-
-            // WebView Debug
-            if (aPatchReady) {
-                var enableWebDebugging by rememberSaveable {
-                    mutableStateOf(
-                        prefs.getBoolean("enable_web_debugging", false)
-                    )
-                }
-                SwitchItem(
-                    icon = Icons.Filled.DeveloperMode,
-                    title = stringResource(id = R.string.enable_web_debugging),
-                    summary = stringResource(id = R.string.enable_web_debugging_summary),
-                    checked = enableWebDebugging
-                ) {
-                    APApplication.sharedPreferences.edit {
-                        putBoolean("enable_web_debugging", it)
-                    }
-                    enableWebDebugging = it
-                }
-            }
-
-            // Check Update
-            var checkUpdate by rememberSaveable {
-                mutableStateOf(
-                    prefs.getBoolean("check_update", true)
-                )
-            }
-
-            SwitchItem(
-                icon = Icons.Filled.Update,
-                title = stringResource(id = R.string.settings_check_update),
-                summary = stringResource(id = R.string.settings_check_update_summary),
-                checked = checkUpdate
-            ) {
-                prefs.edit { putBoolean("check_update", it) }
-                checkUpdate = it
-            }
-
-            // Night Mode Follow System
-            var nightFollowSystem by rememberSaveable {
-                mutableStateOf(
-                    prefs.getBoolean("night_mode_follow_sys", true)
-                )
-            }
-            SwitchItem(
-                icon = Icons.Filled.InvertColors,
-                title = stringResource(id = R.string.settings_night_mode_follow_sys),
-                summary = stringResource(id = R.string.settings_night_mode_follow_sys_summary),
-                checked = nightFollowSystem
-            ) {
-                prefs.edit { putBoolean("night_mode_follow_sys", it) }
-                nightFollowSystem = it
-                refreshTheme.value = true
-            }
-
-            // Custom Night Theme Switch
-            if (!nightFollowSystem) {
-                var nightThemeEnabled by rememberSaveable {
-                    mutableStateOf(
-                        prefs.getBoolean("night_mode_enabled", false)
-                    )
-                }
-                SwitchItem(
-                    icon = Icons.Filled.DarkMode,
-                    title = stringResource(id = R.string.settings_night_theme_enabled),
-                    checked = nightThemeEnabled
-                ) {
-                    prefs.edit { putBoolean("night_mode_enabled", it) }
-                    nightThemeEnabled = it
-                    refreshTheme.value = true
-                }
-            }
-
-            // System dynamic color theme
-            val isDynamicColorSupport = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
-            if (isDynamicColorSupport) {
-                var useSystemDynamicColor by rememberSaveable {
-                    mutableStateOf(
-                        prefs.getBoolean("use_system_color_theme", true)
-                    )
-                }
-                SwitchItem(
-                    icon = Icons.Filled.ColorLens,
-                    title = stringResource(id = R.string.settings_use_system_color_theme),
-                    summary = stringResource(id = R.string.settings_use_system_color_theme_summary),
-                    checked = useSystemDynamicColor
-                ) {
-                    prefs.edit { putBoolean("use_system_color_theme", it) }
-                    useSystemDynamicColor = it
-                    refreshTheme.value = true
-                }
-
-                if (!useSystemDynamicColor) {
-                    ListItem(headlineContent = {
-                        Text(text = stringResource(id = R.string.settings_custom_color_theme))
-                    }, modifier = Modifier.clickable {
-                        showThemeChooseDialog.value = true
-                    }, supportingContent = {
-                        val colorMode = prefs.getString("custom_color", "blue")
-                        Text(
-                            text = stringResource(colorNameToString(colorMode.toString())),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.outline
-                        )
-                    }, leadingContent = { Icon(Icons.Filled.FormatColorFill, null) })
-
-                }
-            } else {
-                ListItem(headlineContent = {
-                    Text(text = stringResource(id = R.string.settings_custom_color_theme))
-                }, modifier = Modifier.clickable {
-                    showThemeChooseDialog.value = true
-                }, supportingContent = {
-                    val colorMode = prefs.getString("custom_color", "blue")
-                    Text(
-                        text = stringResource(colorNameToString(colorMode.toString())),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.outline
-                    )
-                }, leadingContent = { Icon(Icons.Filled.FormatColorFill, null) })
-            }
-
-            // su path
-            if (kPatchReady) {
-                ListItem(
-                    leadingContent = {
-                        Icon(
-                            Icons.Filled.Commit, stringResource(id = R.string.setting_reset_su_path)
-                        )
-                    },
-                    supportingContent = {},
-                    headlineContent = { Text(stringResource(id = R.string.setting_reset_su_path)) },
-                    modifier = Modifier.clickable {
-                        showResetSuPathDialog.value = true
-                    })
-            }
-
-            // language
-            ListItem(headlineContent = {
-                Text(text = stringResource(id = R.string.settings_app_language))
-            }, modifier = Modifier.clickable {
-                showLanguageDialog.value = true
-            }, supportingContent = {
-                Text(text = AppCompatDelegate.getApplicationLocales()[0]?.displayLanguage?.replaceFirstChar {
-                    if (it.isLowerCase()) it.titlecase(
-                        Locale.getDefault()
-                    ) else it.toString()
-                } ?: stringResource(id = R.string.system_default),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.outline)
-            }, leadingContent = { Icon(Icons.Filled.Translate, null) })
-
-            // log
-            ListItem(
-                leadingContent = {
-                    Icon(
-                        Icons.Filled.BugReport, stringResource(id = R.string.send_log)
-                    )
-                },
-                headlineContent = { Text(stringResource(id = R.string.send_log)) },
-                modifier = Modifier.clickable {
-                    showLogBottomSheet = true
-                })
-            if (showLogBottomSheet) {
-                ModalBottomSheet(
-                    onDismissRequest = { showLogBottomSheet = false },
-                    contentWindowInsets = { WindowInsets(0, 0, 0, 0) },
-                    content = {
-                        Row(
-                            modifier = Modifier
-                                .padding(10.dp)
-                                .align(Alignment.CenterHorizontally)
-
-                        ) {
-                            Box {
-                                Column(
-                                    modifier = Modifier
-                                        .padding(16.dp)
-                                        .clickable {
-                                            scope.launch {
-                                                val formatter =
-                                                    DateTimeFormatter.ofPattern("yyyy-MM-dd_HH_mm")
-                                                val current = LocalDateTime.now().format(formatter)
-                                                exportBugreportLauncher.launch("APatch_bugreport_${current}.tar.gz")
-                                                showLogBottomSheet = false
-                                            }
-                                        }
-                                ) {
-                                    Icon(
-                                        Icons.Filled.Save,
-                                        contentDescription = null,
-                                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                                    )
-                                    Text(
-                                        text = stringResource(id = R.string.save_log),
-                                        modifier = Modifier.padding(top = 16.dp),
-                                        textAlign = TextAlign.Center.also {
-                                            LineHeightStyle(
-                                                alignment = LineHeightStyle.Alignment.Center,
-                                                trim = LineHeightStyle.Trim.None
-                                            )
-                                        }
-
-                                    )
-                                }
-
-                            }
-                            Box {
-                                Column(
-                                    modifier = Modifier
-                                        .padding(16.dp)
-                                        .clickable {
-                                            scope.launch {
-                                                val bugreport = loadingDialog.withLoading {
-                                                    withContext(Dispatchers.IO) {
-                                                        getBugreportFile(context)
-                                                    }
-                                                }
-
-                                                val uri: Uri = FileProvider.getUriForFile(
-                                                    context,
-                                                    "${BuildConfig.APPLICATION_ID}.fileprovider",
-                                                    bugreport
-                                                )
-
-                                                val shareIntent = Intent(Intent.ACTION_SEND).apply {
-                                                    putExtra(Intent.EXTRA_STREAM, uri)
-                                                    setDataAndType(uri, "application/gzip")
-                                                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                                                }
-
-                                                context.startActivity(
-                                                    Intent.createChooser(
-                                                        shareIntent,
-                                                        context.getString(R.string.send_log)
-                                                    )
-                                                )
-                                                showLogBottomSheet = false
-                                            }
-                                        }) {
-                                    Icon(
-                                        Icons.Filled.Share,
-                                        contentDescription = null,
-                                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                                    )
-                                    Text(
-                                        text = stringResource(id = R.string.send_log),
-                                        modifier = Modifier.padding(top = 16.dp),
-                                        textAlign = TextAlign.Center.also {
-                                            LineHeightStyle(
-                                                alignment = LineHeightStyle.Alignment.Center,
-                                                trim = LineHeightStyle.Trim.None
-                                            )
-                                        }
-
-                                    )
-                                }
-
-                            }
-                        }
-                        NavigationBarsSpacer()
-                    })
-            }
-
-
-        }
-
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ThemeChooseDialog(showDialog: MutableState<Boolean>) {
-    val prefs = APApplication.sharedPreferences
-
-    BasicAlertDialog(
-        onDismissRequest = { showDialog.value = false }, properties = DialogProperties(
-            decorFitsSystemWindows = true,
-            usePlatformDefaultWidth = false,
-        )
-    ) {
-        Surface(
-            modifier = Modifier
-                .width(310.dp)
-                .wrapContentHeight(),
-            shape = RoundedCornerShape(30.dp),
-            tonalElevation = AlertDialogDefaults.TonalElevation,
-            color = AlertDialogDefaults.containerColor,
-        ) {
-            LazyColumn {
-                items(colorsList()) {
-                    ListItem(
-                        headlineContent = { Text(text = stringResource(it.nameId)) },
-                        modifier = Modifier.clickable {
-                            showDialog.value = false
-                            prefs.edit { putString("custom_color", it.name) }
-                            refreshTheme.value = true
-                        })
-                }
-
-            }
-
-            val dialogWindowProvider = LocalView.current.parent as DialogWindowProvider
-            APDialogBlurBehindUtils.setupWindowBlurListener(dialogWindowProvider.window)
-        }
-    }
-
-}
-
-private data class APColor(
-    val name: String, @param:StringRes val nameId: Int
-)
-
-private fun colorsList(): List<APColor> {
-    return listOf(
-        APColor("amber", R.string.amber_theme),
-        APColor("blue_grey", R.string.blue_grey_theme),
-        APColor("blue", R.string.blue_theme),
-        APColor("brown", R.string.brown_theme),
-        APColor("cyan", R.string.cyan_theme),
-        APColor("deep_orange", R.string.deep_orange_theme),
-        APColor("deep_purple", R.string.deep_purple_theme),
-        APColor("green", R.string.green_theme),
-        APColor("indigo", R.string.indigo_theme),
-        APColor("light_blue", R.string.light_blue_theme),
-        APColor("light_green", R.string.light_green_theme),
-        APColor("lime", R.string.lime_theme),
-        APColor("orange", R.string.orange_theme),
-        APColor("pink", R.string.pink_theme),
-        APColor("purple", R.string.purple_theme),
-        APColor("red", R.string.red_theme),
-        APColor("sakura", R.string.sakura_theme),
-        APColor("teal", R.string.teal_theme),
-        APColor("yellow", R.string.yellow_theme),
     )
+    { paddingValues ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .overScrollVertical()
+                .nestedScroll(scrollBehavior.nestedScrollConnection),
+            contentPadding = PaddingValues(
+                start = 10.dp,
+                top = paddingValues.calculateTopPadding() + 16.dp,
+                end = 10.dp,
+                bottom = paddingValues.calculateBottomPadding() + 16.dp
+            )
+        ) {
+            item {
+                val prefs = APApplication.sharedPreferences
+                Card {
+                    // clear key
+                    if (kPatchReady) {
+                        val clearKeyDialogTitle = stringResource(id = R.string.clear_super_key)
+                        val clearKeyDialogContent =
+                            stringResource(id = R.string.settings_clear_super_key_dialog)
+                        SuperArrow(
+                            title = stringResource(R.string.clear_super_key),
+                            onClick = { showClearKeyDialog.value = true }
+                        )
+                        if (showClearKeyDialog.value) {
+                            SuperDialog(
+                                show = showClearKeyDialog,
+                                title = clearKeyDialogTitle,
+                                summary = clearKeyDialogContent
+                            ) {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.End
+                                ) {
+
+                                    TextButton(
+                                        stringResource(id = android.R.string.cancel),
+                                        onClick = { showClearKeyDialog.value = false },
+                                        modifier = Modifier.weight(1f),
+                                    )
+
+                                    Spacer(Modifier.width(20.dp))
+
+                                    TextButton(
+                                        stringResource(id = android.R.string.ok),
+                                        onClick = {
+                                            APatchKeyHelper.clearConfigKey()
+                                            APApplication.superKey = ""
+                                            showClearKeyDialog.value = false
+                                        },
+                                        modifier = Modifier.weight(1f),
+                                        colors = ButtonDefaults.textButtonColorsPrimary(),
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+                    // store key local?
+                    SuperSwitch(
+                        title = stringResource(id = R.string.settings_donot_store_superkey),
+                        summary = stringResource(id = R.string.settings_donot_store_superkey_summary),
+                        checked = bSkipStoreSuperKey,
+                        onCheckedChange = {
+                            bSkipStoreSuperKey = it
+                            APatchKeyHelper.setShouldSkipStoreSuperKey(bSkipStoreSuperKey)
+                        })
+
+                    // Global mount
+                    if (kPatchReady && aPatchReady) {
+                        SuperSwitch(
+                            title = stringResource(id = R.string.settings_global_namespace_mode),
+                            summary = stringResource(id = R.string.settings_global_namespace_mode_summary),
+                            checked = isGlobalNamespaceEnabled,
+                            onCheckedChange = {
+                                setGlobalNamespaceEnabled(
+                                    if (isGlobalNamespaceEnabled) {
+                                        "0"
+                                    } else {
+                                        "1"
+                                    }
+                                )
+                                isGlobalNamespaceEnabled = it
+                            })
+                    }
+
+                    // Lite Mode
+                    if (kPatchReady && aPatchReady) {
+                        SuperSwitch(
+                            title = stringResource(id = R.string.settings_lite_mode),
+                            summary = stringResource(id = R.string.settings_lite_mode_mode_summary),
+                            checked = isLiteModeEnabled,
+                            onCheckedChange = {
+                                setLiteMode(it)
+                                isLiteModeEnabled = it
+                            })
+                    }
+
+                    // Force OverlayFS
+                    if (kPatchReady && aPatchReady && isOverlayFSAvailable) {
+                        SuperSwitch(
+                            title = stringResource(id = R.string.settings_force_overlayfs_mode),
+                            summary = stringResource(id = R.string.settings_force_overlayfs_mode_summary),
+                            checked = forceUsingOverlayFS,
+                            onCheckedChange = {
+                                setForceUsingOverlayFS(it)
+                                forceUsingOverlayFS = it
+                            })
+                    }
+
+                    // WebView Debug
+                    if (aPatchReady) {
+                        var enableWebDebugging by rememberSaveable {
+                            mutableStateOf(prefs.getBoolean("enable_web_debugging", false))
+                        }
+
+                        SuperSwitch(
+                            title = stringResource(id = R.string.enable_web_debugging),
+                            summary = stringResource(id = R.string.enable_web_debugging_summary),
+                            checked = enableWebDebugging,
+                            onCheckedChange = { isChecked ->
+                                enableWebDebugging = isChecked
+                                APApplication.sharedPreferences.edit {
+                                    putBoolean("enable_web_debugging", isChecked)
+                                }
+                            }
+                        )
+                    }
+
+                    // Check Update
+                    var checkUpdate by rememberSaveable {
+                        mutableStateOf(
+                            prefs.getBoolean("check_update", true)
+                        )
+                    }
+
+                    SuperSwitch(
+                        title = stringResource(id = R.string.settings_check_update),
+                        summary = stringResource(id = R.string.settings_check_update_summary),
+                        checked = checkUpdate,
+                        onCheckedChange = { isChecked ->
+                            checkUpdate = isChecked
+                            prefs.edit { putBoolean("check_update", isChecked) }
+                        })
+
+                    // Night Mode Follow System
+                    var nightFollowSystem by rememberSaveable {
+                        mutableStateOf(
+                            prefs.getBoolean("night_mode_follow_sys", true)
+                        )
+                    }
+                    SuperSwitch(
+                        title = stringResource(id = R.string.settings_night_mode_follow_sys),
+                        summary = stringResource(id = R.string.settings_night_mode_follow_sys_summary),
+                        checked = nightFollowSystem,
+                        onCheckedChange = { isChecked ->
+                            nightFollowSystem = isChecked
+                            prefs.edit {
+                                putBoolean("night_mode_follow_sys", isChecked)
+                            }
+                            scope.launch {
+                                kotlinx.coroutines.delay(100)
+                                if (isChecked) {
+                                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+                                }
+                            }
+                        }
+                    )
+
+                    // Custom Night Theme Switch
+                    if (!nightFollowSystem) {
+                        var nightThemeEnabled by rememberSaveable {
+                            mutableStateOf(
+                                prefs.getBoolean("night_mode_enabled", false)
+                            )
+                        }
+                        SuperSwitch(
+                            title = stringResource(id = R.string.settings_night_theme_enabled),
+                            checked = nightThemeEnabled,
+                            onCheckedChange = { isChecked ->
+                                nightThemeEnabled = isChecked
+                                prefs.edit {
+                                    putBoolean("night_mode_enabled", isChecked)
+                                }
+                                scope.launch {
+                                    kotlinx.coroutines.delay(100)
+                                    AppCompatDelegate.setDefaultNightMode(
+                                        if (isChecked) AppCompatDelegate.MODE_NIGHT_YES
+                                        else AppCompatDelegate.MODE_NIGHT_NO
+                                    )
+                                }
+                            }
+                        )
+                    }
+
+                    // su path
+                    if (kPatchReady) {
+                        SuperArrow(
+                            title = stringResource(R.string.setting_reset_su_path),
+                            onClick = { showResetSuPathDialog.value = true }
+                        )
+                    }
+
+                    // language
+                    val languages = stringArrayResource(id = R.array.languages)
+                    val languagesValues = stringArrayResource(id = R.array.languages_values)
+
+                    val currentLocales = AppCompatDelegate.getApplicationLocales()
+                    val currentLanguageTag = if (currentLocales.isEmpty) {
+                        null
+                    } else {
+                        currentLocales.get(0)?.toLanguageTag()
+                    }
+
+                    val initialIndex = if (currentLanguageTag == null) {
+                        0
+                    } else {
+                        val index = languagesValues.indexOf(currentLanguageTag)
+                        if (index >= 0) index else 0
+                    }
+
+                    var selectedIndex by remember { mutableStateOf(initialIndex) }
+
+                    SuperDropdown(
+                        title = stringResource(R.string.settings_app_language),
+                        items = languages.toList(),
+                        selectedIndex = selectedIndex,
+                        onSelectedIndexChange = { newIndex ->
+                            selectedIndex = newIndex
+                            if (newIndex == 0) {
+                                AppCompatDelegate.setApplicationLocales(
+                                    LocaleListCompat.getEmptyLocaleList()
+                                )
+                            } else {
+                                AppCompatDelegate.setApplicationLocales(
+                                    LocaleListCompat.forLanguageTags(
+                                        languagesValues[newIndex]
+                                    )
+                                )
+                            }
+                        }
+                    )
+
+                    // log
+                    SuperArrow(
+                        title = stringResource(R.string.send_log),
+                        onClick = {
+                            showLogBottomSheet.value = true
+                        }
+                    )
+                }
+            }
+        }
+    }
 }
 
 @Composable
-private fun colorNameToString(colorName: String): Int {
-    return colorsList().find { it.name == colorName }?.nameId ?: R.string.blue_theme
+fun LogBottomSheet(
+    showLogBottomSheet: MutableState<Boolean>,
+    scope: CoroutineScope,
+    exportBugreportLauncher: ActivityResultLauncher<String>,
+    loadingDialog: LoadingDialogHandle,
+    context: Context
+) {
+    SuperBottomSheet(
+        show = showLogBottomSheet,
+        title = "Save Log", // tmp hard code strings
+        onDismissRequest = { showLogBottomSheet.value = false }
+    ) {
+        SuperArrow(
+            title = stringResource(R.string.save_log),
+            onClick = {
+                scope.launch {
+                    val formatter =
+                        DateTimeFormatter.ofPattern("yyyy-MM-dd_HH_mm")
+                    val current = LocalDateTime.now().format(formatter)
+                    exportBugreportLauncher.launch("APatch_bugreport_${current}.tar.gz")
+                    showLogBottomSheet.value = false
+                }
+            }
+        )
+        SuperArrow(
+            title = stringResource(R.string.send_log),
+            onClick = {
+                scope.launch {
+                    val bugreport = loadingDialog.withLoading {
+                        withContext(Dispatchers.IO) {
+                            getBugreportFile(context)
+                        }
+                    }
+
+                    val uri: Uri = FileProvider.getUriForFile(
+                        context,
+                        "${BuildConfig.APPLICATION_ID}.fileprovider",
+                        bugreport
+                    )
+
+                    val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                        putExtra(Intent.EXTRA_STREAM, uri)
+                        setDataAndType(uri, "application/gzip")
+                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    }
+
+                    context.startActivity(
+                        Intent.createChooser(
+                            shareIntent,
+                            context.getString(R.string.send_log)
+                        )
+                    )
+                    showLogBottomSheet.value = false
+                }
+            }
+        )
+    }
 }
 
-val suPathChecked: (path: String) -> Boolean = {
-    it.startsWith("/") && it.trim().length > 1
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ResetSUPathDialog(showDialog: MutableState<Boolean>) {
     val context = LocalContext.current
     var suPath by remember { mutableStateOf(Natives.suPath()) }
-    BasicAlertDialog(
-        onDismissRequest = { showDialog.value = false }, properties = DialogProperties(
-            decorFitsSystemWindows = true,
-            usePlatformDefaultWidth = false,
-        )
-    ) {
-        Surface(
-            modifier = Modifier
-                .width(310.dp)
-                .wrapContentHeight(),
-            shape = RoundedCornerShape(30.dp),
-            tonalElevation = AlertDialogDefaults.TonalElevation,
-            color = AlertDialogDefaults.containerColor,
-        ) {
-            Column(modifier = Modifier.padding(PaddingValues(all = 24.dp))) {
-                Box(
-                    Modifier
-                        .padding(PaddingValues(bottom = 16.dp))
-                        .align(Alignment.Start)
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.setting_reset_su_path),
-                        style = MaterialTheme.typography.headlineSmall
-                    )
-                }
-                Box(
-                    Modifier
-                        .weight(weight = 1f, fill = false)
-                        .padding(PaddingValues(bottom = 12.dp))
-                        .align(Alignment.Start)
-                ) {
-                    OutlinedTextField(
-                        value = suPath,
-                        onValueChange = {
-                            suPath = it
-                        },
-                        label = { Text(stringResource(id = R.string.setting_reset_su_new_path)) },
-                        visualTransformation = VisualTransformation.None,
-                    )
-                }
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End
-                ) {
-                    TextButton(onClick = { showDialog.value = false }) {
-
-                        Text(stringResource(id = android.R.string.cancel))
-                    }
-
-                    Button(enabled = suPathChecked(suPath), onClick = {
-                        showDialog.value = false
-                        val success = Natives.resetSuPath(suPath)
-                        Toast.makeText(
-                            context,
-                            if (success) R.string.success else R.string.failure,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        rootShellForResult("echo $suPath > ${APApplication.SU_PATH_FILE}")
-                    }) {
-                        Text(stringResource(id = android.R.string.ok))
-                    }
-                }
-            }
-            val dialogWindowProvider = LocalView.current.parent as DialogWindowProvider
-            APDialogBlurBehindUtils.setupWindowBlurListener(dialogWindowProvider.window)
-        }
+    val suPathChecked: (path: String) -> Boolean = {
+        it.startsWith("/") && it.trim().length > 1
     }
-}
 
+    SuperDialog(
+        show = showDialog,
+        title = stringResource(R.string.setting_reset_su_path),
+        onDismissRequest = { showDialog.value = false }
+    ) {
+        TextField(
+            value = suPath,
+            onValueChange = { suPath = it },
+            label = stringResource(R.string.setting_reset_su_new_path),
+        )
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun LanguageDialog(showLanguageDialog: MutableState<Boolean>) {
+        Spacer(Modifier.height(12.dp))
 
-    val languages = stringArrayResource(id = R.array.languages)
-    val languagesValues = stringArrayResource(id = R.array.languages_values)
-
-    if (showLanguageDialog.value) {
-        BasicAlertDialog(
-            onDismissRequest = { showLanguageDialog.value = false }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.End
         ) {
-            Surface(
-                modifier = Modifier
-                    .width(150.dp)
-                    .wrapContentHeight(),
-                shape = RoundedCornerShape(28.dp),
-                tonalElevation = AlertDialogDefaults.TonalElevation,
-                color = AlertDialogDefaults.containerColor,
-            ) {
-                LazyColumn {
-                    itemsIndexed(languages) { index, item ->
-                        ListItem(
-                            headlineContent = { Text(item) },
-                            modifier = Modifier.clickable {
-                                showLanguageDialog.value = false
-                                if (index == 0) {
-                                    AppCompatDelegate.setApplicationLocales(
-                                        LocaleListCompat.getEmptyLocaleList()
-                                    )
-                                } else {
-                                    AppCompatDelegate.setApplicationLocales(
-                                        LocaleListCompat.forLanguageTags(
-                                            languagesValues[index]
-                                        )
-                                    )
-                                }
-                            }
-                        )
-                    }
-                }
-            }
-            val dialogWindowProvider = LocalView.current.parent as DialogWindowProvider
-            APDialogBlurBehindUtils.setupWindowBlurListener(dialogWindowProvider.window)
+
+            TextButton(
+                stringResource(id = android.R.string.cancel),
+                onClick = { showDialog.value = false },
+                modifier = Modifier.weight(1f),
+            )
+
+            Spacer(Modifier.width(20.dp))
+
+            TextButton(
+                stringResource(id = android.R.string.ok),
+                onClick = {
+                    showDialog.value = false
+                    val success = Natives.resetSuPath(suPath)
+                    Toast.makeText(
+                        context,
+                        if (success) R.string.success else R.string.failure,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    rootShellForResult("echo $suPath > ${APApplication.SU_PATH_FILE}")
+                },
+                modifier = Modifier.weight(1f),
+                colors = ButtonDefaults.textButtonColorsPrimary(),
+                enabled = suPathChecked(suPath)
+            )
         }
     }
 }

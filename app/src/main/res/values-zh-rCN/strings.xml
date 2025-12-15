@@ -5,6 +5,8 @@
     <string name="app_name" translatable="false">APatch</string>
     <string name="kpm">内核模块</string>
     <string name="android_patch">系统补丁</string>
+    <string name="unofficial_warning_title">非官方版本</string>
+    <string name="unofficial_warning_summary">请勿向官方仓库提交任何问题。</string>
     <string name="save_log">保存日志</string>
     <string name="log_saved">日志已保存</string>
     <string name="send_log">发送日志</string>
@@ -91,6 +93,22 @@
     <string name="apm_new_version_available">有新版本 %s 可用，单击升级。</string>
     <string name="apm_update">更新</string>
     <string name="apm_author">作者</string>
+    <string name="module_update_prompt_with_name">将会更新下面的模块: %1$s</string>
+    <string name="module_parse_failed">处理模块信息失败，模块可能损坏: %s</string>
+    <string name="module_parse_reason">原因: %s</string>
+    <string name="module_install_confirm_extra">你确定还要安装这个模块吗？</string>
+    <string name="module_info_id">模块ID: %s</string>
+    <string name="module_info_name">模块名称: %s</string>
+    <string name="module_info_version">版本: %s</string>
+    <string name="module_info_version_code">版本号: %s</string>
+    <string name="module_info_author">作者: %s</string>
+    <string name="module_info_description">模块描述: %s</string>
+    <string name="module_error_no_prop">没有在zip文件根目录中找到 module.prop 文件</string>
+    <string name="module_error_open_zip">从 URI 中打开 zip 文件失败</string>
+    <string name="module_error_invalid_zip">无效的 zip 文件</string>
+    <string name="module_error_prop_too_large">module.prop 文件过大 (&gt; 1MiB)</string>
+    <string name="module_error_missing_id">module.prop 缺少字段 \'id\'</string>
+    <string name="module_error_invalid_id">模块 ID \'%s\' 无效</string>
     <string name="clear_super_key">清除超级密钥</string>
     <string name="apm_not_installed">尚未注入系统补丁</string>
     <string name="system_default">系统默认</string>
@@ -128,7 +146,7 @@
     <string name="patch_item_extra_event">事件:</string>
     <string name="patch_item_skey">超级密钥</string>
     <string name="patch_item_existed_extra_kpm">已嵌入的</string>
-    <string name="patch_item_set_skey_label">超级密钥长度应在 8-63 个字符，包含数字和字母，但不包含特殊字符。</string>
+    <string name="patch_item_set_skey_label">超级密钥长度应在 8–63 个字符，包含数字和字母，但不包含特殊字符。</string>
     <string name="patch_mode_uninstall_patch">还原初始内核镜像</string>
     <string name="patch_start_unpatch_btn">取消修补</string>
     <string name="hide_apatch_dialog_new_manager_name">新管理器名称</string>
@@ -169,6 +187,7 @@
     <string name="home_dialog_uninstall_title">卸载</string>
     <string name="home_dialog_uninstall_ap_only">仅卸载系统补丁</string>
     <string name="home_dialog_uninstall_all">完全卸载</string>
+    <string name="home_dialog_restore_image">还原原厂镜像</string>
     <string name="kpm_control_dialog_title">调节内核模块</string>
     <string name="kpm_control_dialog_content">请输入调控参数：</string>
     <string name="kpm_control_paramters">控制参数</string>

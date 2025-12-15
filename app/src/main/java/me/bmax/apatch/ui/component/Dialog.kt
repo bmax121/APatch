@@ -10,24 +10,20 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.AlertDialogDefaults
-import androidx.compose.material3.BasicAlertDialog
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -40,6 +36,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -47,7 +44,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.window.DialogWindowProvider
-import androidx.compose.ui.window.SecureFlagPolicy
 import io.noties.markwon.Markwon
 import io.noties.markwon.utils.NoCopySpannableFactory
 import kotlinx.coroutines.CancellableContinuation
@@ -62,6 +58,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.parcelize.Parcelize
 import me.bmax.apatch.util.ui.APDialogBlurBehindUtils.Companion.setupWindowBlurListener
+import top.yukonga.miuix.kmp.basic.ButtonDefaults
+import top.yukonga.miuix.kmp.basic.CircularProgressIndicator
+import top.yukonga.miuix.kmp.basic.Surface
+import top.yukonga.miuix.kmp.basic.Text
+import top.yukonga.miuix.kmp.basic.TextButton
+import top.yukonga.miuix.kmp.extra.SuperDialog
+import top.yukonga.miuix.kmp.theme.MiuixTheme
 import kotlin.coroutines.resume
 
 private const val TAG = "DialogComponent"
@@ -112,7 +115,8 @@ interface ConfirmDialogHandle : DialogHandle {
         content: String,
         markdown: Boolean = false,
         confirm: String? = null,
-        dismiss: String? = null
+        dismiss: String? = null,
+        onConfirm: () -> Unit = {}
     )
 
     suspend fun awaitConfirm(
@@ -278,7 +282,8 @@ private class ConfirmDialogHandleImpl(
         content: String,
         markdown: Boolean,
         confirm: String?,
-        dismiss: String?
+        dismiss: String?,
+        onConfirm: () -> Unit
     ) {
         coroutineScope.launch {
             updateVisuals(ConfirmDialogVisualsImpl(title, content, markdown, confirm, dismiss))
@@ -371,7 +376,8 @@ private fun rememberConfirmDialog(
         ConfirmDialog(
             handle.visuals,
             confirm = { coroutineScope.launch { resultChannel.send(ConfirmResult.Confirmed) } },
-            dismiss = { coroutineScope.launch { resultChannel.send(ConfirmResult.Canceled) } }
+            dismiss = { coroutineScope.launch { resultChannel.send(ConfirmResult.Canceled) } },
+            showDialog = visible
         )
     }
 
@@ -441,71 +447,80 @@ private fun LoadingDialog() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ConfirmDialog(visuals: ConfirmDialogVisuals, confirm: () -> Unit, dismiss: () -> Unit) {
-    BasicAlertDialog(
+private fun ConfirmDialog(
+    visuals: ConfirmDialogVisuals,
+    confirm: () -> Unit,
+    dismiss: () -> Unit,
+    showDialog: MutableState<Boolean>
+) {
+    SuperDialog(
+        modifier = Modifier.windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.Top)),
+        show = showDialog,
+        title = visuals.title,
         onDismissRequest = {
             dismiss()
+            showDialog.value = false
         },
-        properties = DialogProperties(
-            decorFitsSystemWindows = true,
-            usePlatformDefaultWidth = false,
-            securePolicy = SecureFlagPolicy.SecureOff
-        )
-    ) {
-        Surface(
-            modifier = Modifier
-                .width(320.dp)
-                .wrapContentHeight(),
-            shape = RoundedCornerShape(20.dp),
-            tonalElevation = AlertDialogDefaults.TonalElevation,
-            color = AlertDialogDefaults.containerColor,
-        ) {
-            Column(modifier = Modifier.padding(PaddingValues(all = 24.dp))) {
-                Box(
-                    Modifier
-                        .padding(PaddingValues(bottom = 16.dp))
-                        .align(Alignment.Start)
-                ) {
-                    Text(text = visuals.title, style = MaterialTheme.typography.headlineSmall)
-                }
-                Box(
-                    Modifier
-                        .weight(weight = 1f, fill = false)
-                        .padding(PaddingValues(bottom = 24.dp))
-                        .align(Alignment.Start)
-                ) {
-
-                    if (visuals.isMarkdown) {
-                        MarkdownContent(content = visuals.content)
-                    } else {
-                        Text(text = visuals.content, style = MaterialTheme.typography.bodyMedium)
+        content = {
+            Layout(
+                content = {
+                    visuals.content?.let { content ->
+                        if (visuals.isMarkdown) {
+                            MarkdownContent(content = visuals.content)
+                        } else {
+                            Text(
+                                text = visuals.content,
+                                style = MiuixTheme.textStyles.body2
+                            )
+                        }
+                    }
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.padding(top = 12.dp)
+                    ) {
+                        TextButton(
+                            text = visuals.dismiss ?: stringResource(id = android.R.string.cancel),
+                            onClick = {
+                                dismiss()
+                                showDialog.value = false
+                            },
+                            modifier = Modifier.weight(1f)
+                        )
+                        Spacer(Modifier.width(20.dp))
+                        TextButton(
+                            text = visuals.confirm ?: stringResource(id = android.R.string.ok),
+                            onClick = {
+                                confirm()
+                                showDialog.value = false
+                            },
+                            modifier = Modifier.weight(1f),
+                            colors = ButtonDefaults.textButtonColorsPrimary()
+                        )
                     }
                 }
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    TextButton(onClick = dismiss) {
-                        Text(text = visuals.dismiss ?: stringResource(id = android.R.string.cancel))
+            ) { measurables, constraints ->
+                if (measurables.size != 2) {
+                    val button = measurables[0].measure(constraints)
+                    layout(constraints.maxWidth, button.height) {
+                        button.place(0, 0)
                     }
-
-                    TextButton(onClick = confirm) {
-                        Text(text = visuals.confirm ?: stringResource(id = android.R.string.ok))
+                } else {
+                    val button = measurables[1].measure(constraints)
+                    val lazyList = measurables[0].measure(constraints.copy(maxHeight = constraints.maxHeight - button.height))
+                    layout(constraints.maxWidth, lazyList.height + button.height) {
+                        lazyList.place(0, 0)
+                        button.place(0, lazyList.height)
                     }
                 }
             }
-            val dialogWindowProvider = LocalView.current.parent as DialogWindowProvider
-            setupWindowBlurListener(dialogWindowProvider.window)
         }
-    }
-
+    )
 }
 
 @Composable
 private fun MarkdownContent(content: String) {
-    val contentColor = LocalContentColor.current
+    val contentColor = MiuixTheme.colorScheme.onBackground.toArgb()
 
     AndroidView(
         factory = { context ->
@@ -527,7 +542,7 @@ private fun MarkdownContent(content: String) {
             .wrapContentHeight(),
         update = {
             Markwon.create(it.context).setMarkdown(it, content)
-            it.setTextColor(contentColor.toArgb())
+            it.setTextColor(contentColor)
         }
     )
 }

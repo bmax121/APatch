@@ -2,7 +2,9 @@ package me.bmax.apatch.ui
 
 import android.annotation.SuppressLint
 import android.os.Build
+import android.net.Uri
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -13,44 +15,54 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import com.ramcosta.composedestinations.generated.destinations.InstallScreenDestination
 import coil.Coil
 import coil.ImageLoader
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.animations.NavHostAnimatedDestinationStyle
 import com.ramcosta.composedestinations.generated.NavGraphs
 import com.ramcosta.composedestinations.rememberNavHostEngine
-import com.ramcosta.composedestinations.utils.isRouteOnBackStackAsState
 import com.ramcosta.composedestinations.utils.rememberDestinationsNavigator
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import me.bmax.apatch.APApplication
+import me.bmax.apatch.R
+import me.bmax.apatch.ui.component.rememberConfirmCallback
+import me.bmax.apatch.ui.component.rememberConfirmDialog
+import me.bmax.apatch.ui.component.rememberLoadingDialog
 import me.bmax.apatch.ui.screen.BottomBarDestination
+import me.bmax.apatch.ui.screen.MODULE_TYPE
 import me.bmax.apatch.ui.theme.APatchTheme
-import me.bmax.apatch.util.ui.LocalSnackbarHost
+import me.bmax.apatch.ui.viewmodel.APModuleViewModel
+import me.bmax.apatch.util.ModuleParser
 import me.zhanghai.android.appiconloader.coil.AppIconFetcher
 import me.zhanghai.android.appiconloader.coil.AppIconKeyer
+import top.yukonga.miuix.kmp.basic.NavigationBar
+import top.yukonga.miuix.kmp.basic.NavigationItem
+import top.yukonga.miuix.kmp.basic.Scaffold
 
 class MainActivity : AppCompatActivity() {
 
@@ -68,67 +80,177 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
 
+        // Disables automatic window adjustment when the soft keyboard appears
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
+
+        val uri: Uri? = intent.data ?: run {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                intent.getParcelableArrayListExtra("uris", Uri::class.java)?.firstOrNull()
+            } else {
+                @Suppress("DEPRECATION")
+                intent.getParcelableArrayListExtra<Uri>("uris")?.firstOrNull()
+            }
+        }
+
         setContent {
             APatchTheme {
                 val navController = rememberNavController()
-                val snackBarHostState = remember { SnackbarHostState() }
+                val navigator = navController.rememberDestinationsNavigator()
+
                 val bottomBarRoutes = remember {
                     BottomBarDestination.entries.map { it.direction.route }.toSet()
                 }
 
+                val loadingDialog = rememberLoadingDialog()
+                val viewModel = viewModel<APModuleViewModel>()
+                val context = LocalContext.current
+                val currentUri by rememberUpdatedState(uri)
+
+                val confirmDialog = rememberConfirmDialog(
+                    callback = rememberConfirmCallback(
+                        onConfirm = {
+                            currentUri?.let { uri ->
+                                navigator.navigate(InstallScreenDestination(uri, MODULE_TYPE.APM))
+                            }
+                        }, onDismiss = { }
+                    )
+                )
+
+                var moduleInstallDesc by remember { mutableStateOf("") }
+
+                LaunchedEffect(currentUri) {
+                    currentUri?.let { uri ->
+                        viewModel.fetchModuleList()
+                        val desc = loadingDialog.withLoading {
+                            withContext(Dispatchers.IO) {
+                                ModuleParser.getModuleInstallDesc(context, uri, viewModel.moduleList)
+                            }
+                        }
+                        moduleInstallDesc = desc
+
+                        confirmDialog.showConfirm(
+                            title = context.getString(R.string.apm),
+                            content = moduleInstallDesc
+                        )
+                    }
+                }
+
+                val currentBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentRoute = currentBackStackEntry?.destination?.route
+                val showBottomBar = currentRoute != InstallScreenDestination.route
+
                 Scaffold(
-                    bottomBar = { BottomBar(navController) }
-                ) { _ ->
-                    CompositionLocalProvider(
-                        LocalSnackbarHost provides snackBarHostState,
-                    ) {
+                    bottomBar = {
+                        if (showBottomBar) {
+                            BottomBar(navController)
+                        }
+                    }
+                ) {
+                    CompositionLocalProvider {
                         DestinationsNavHost(
-                            modifier = Modifier.padding(bottom = 80.dp),
+                            modifier = Modifier
+                                .padding(bottom = if (showBottomBar) 65.dp else 0.dp),
                             navGraph = NavGraphs.root,
                             navController = navController,
                             engine = rememberNavHostEngine(navHostContentAlignment = Alignment.TopCenter),
                             defaultTransitions = object : NavHostAnimatedDestinationStyle() {
                                 override val enterTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition =
                                     {
-                                        // If the target is a detail page (not a bottom navigation page), slide in from the right
-                                        if (targetState.destination.route !in bottomBarRoutes) {
-                                            slideInHorizontally(initialOffsetX = { it })
+                                        val isBottomBarTransition =
+                                            initialState.destination.route in bottomBarRoutes &&
+                                                    targetState.destination.route in bottomBarRoutes
+
+                                        if (isBottomBarTransition) {
+                                            val initialIndex =
+                                                BottomBarDestination.entries.indexOfFirst {
+                                                    it.direction.route == initialState.destination.route
+                                                }
+                                            val targetIndex =
+                                                BottomBarDestination.entries.indexOfFirst {
+                                                    it.direction.route == targetState.destination.route
+                                                }
+
+                                            if (targetIndex > initialIndex) {
+                                                slideInHorizontally(
+                                                    initialOffsetX = { it },
+                                                    animationSpec = tween(300)
+                                                ) + fadeIn(animationSpec = tween(300))
+                                            } else {
+                                                slideInHorizontally(
+                                                    initialOffsetX = { -it },
+                                                    animationSpec = tween(300)
+                                                ) + fadeIn(animationSpec = tween(300))
+                                            }
+                                        } else if (targetState.destination.route !in bottomBarRoutes) {
+                                            slideInHorizontally(
+                                                initialOffsetX = { it },
+                                                animationSpec = tween(300)
+                                            )
                                         } else {
-                                            // Otherwise (switching between bottom navigation pages), use fade in
-                                            fadeIn(animationSpec = tween(340))
+                                            fadeIn(animationSpec = tween(300))
                                         }
                                     }
 
                                 override val exitTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition =
                                     {
-                                        // If navigating from the home page (bottom navigation page) to a detail page, slide out to the left
-                                        if (initialState.destination.route in bottomBarRoutes && targetState.destination.route !in bottomBarRoutes) {
-                                            slideOutHorizontally(targetOffsetX = { -it / 4 }) + fadeOut()
+                                        val isBottomBarTransition =
+                                            initialState.destination.route in bottomBarRoutes &&
+                                                    targetState.destination.route in bottomBarRoutes
+
+                                        if (isBottomBarTransition) {
+                                            val initialIndex =
+                                                BottomBarDestination.entries.indexOfFirst {
+                                                    it.direction.route == initialState.destination.route
+                                                }
+                                            val targetIndex =
+                                                BottomBarDestination.entries.indexOfFirst {
+                                                    it.direction.route == targetState.destination.route
+                                                }
+
+                                            if (targetIndex > initialIndex) {
+                                                slideOutHorizontally(
+                                                    targetOffsetX = { -it },
+                                                    animationSpec = tween(300)
+                                                ) + fadeOut(animationSpec = tween(300))
+                                            } else {
+                                                slideOutHorizontally(
+                                                    targetOffsetX = { it },
+                                                    animationSpec = tween(300)
+                                                ) + fadeOut(animationSpec = tween(300))
+                                            }
+                                        } else if (initialState.destination.route in bottomBarRoutes &&
+                                            targetState.destination.route !in bottomBarRoutes
+                                        ) {
+                                            slideOutHorizontally(
+                                                targetOffsetX = { -it / 4 },
+                                                animationSpec = tween(300)
+                                            ) + fadeOut(animationSpec = tween(300))
                                         } else {
-                                            // Otherwise (switching between bottom navigation pages), use fade out
-                                            fadeOut(animationSpec = tween(340))
+                                            fadeOut(animationSpec = tween(300))
                                         }
                                     }
 
                                 override val popEnterTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition =
                                     {
-                                        // If returning to the home page (bottom navigation page), slide in from the left
                                         if (targetState.destination.route in bottomBarRoutes) {
-                                            slideInHorizontally(initialOffsetX = { -it / 4 }) + fadeIn()
+                                            slideInHorizontally(
+                                                initialOffsetX = { -it / 4 },
+                                                animationSpec = tween(300)
+                                            ) + fadeIn(animationSpec = tween(300))
                                         } else {
-                                            // Otherwise (e.g., returning between multiple detail pages), use default fade in
-                                            fadeIn(animationSpec = tween(340))
+                                            fadeIn(animationSpec = tween(300))
                                         }
                                     }
 
                                 override val popExitTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition =
                                     {
-                                        // If returning from a detail page (not a bottom navigation page), scale down and fade out
                                         if (initialState.destination.route !in bottomBarRoutes) {
-                                            scaleOut(targetScale = 0.9f) + fadeOut()
+                                            slideOutHorizontally(
+                                                targetOffsetX = { it },
+                                                animationSpec = tween(300)
+                                            ) + fadeOut(animationSpec = tween(300))
                                         } else {
-                                            // Otherwise, use default fade out
-                                            fadeOut(animationSpec = tween(340))
+                                            fadeOut(animationSpec = tween(300))
                                         }
                                     }
                             }
@@ -157,6 +279,8 @@ class MainActivity : AppCompatActivity() {
 private fun BottomBar(navController: NavHostController) {
     val state by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
     val navigator = navController.rememberDestinationsNavigator()
+    val currentBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = currentBackStackEntry?.destination?.route
 
     Crossfade(
         targetState = state,
@@ -165,45 +289,37 @@ private fun BottomBar(navController: NavHostController) {
         val kPatchReady = state != APApplication.State.UNKNOWN_STATE
         val aPatchReady = state == APApplication.State.ANDROIDPATCH_INSTALLED
 
-        NavigationBar(tonalElevation = 8.dp) {
-            BottomBarDestination.entries.forEach { destination ->
-                val isCurrentDestOnBackStack by navController.isRouteOnBackStackAsState(destination.direction)
 
-                val hideDestination = (destination.kPatchRequired && !kPatchReady) || (destination.aPatchRequired && !aPatchReady)
-                if (hideDestination) return@forEach
-
-                NavigationBarItem(
-                    selected = isCurrentDestOnBackStack,
-                    onClick = {
-                        if (isCurrentDestOnBackStack) {
-                            navigator.popBackStack(destination.direction, false)
-                        }
-                        navigator.navigate(destination.direction) {
-                            popUpTo(NavGraphs.root) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                    },
-                    icon = {
-                        if (isCurrentDestOnBackStack) {
-                            Icon(destination.iconSelected, stringResource(destination.label))
-                        } else {
-                            Icon(destination.iconNotSelected, stringResource(destination.label))
-                        }
-                    },
-                    label = {
-                        Text(
-                            text = stringResource(destination.label),
-                            overflow = TextOverflow.Visible,
-                            maxLines = 1,
-                            softWrap = false
-                        )
-                    },
-                    alwaysShowLabel = false
+        val navItems = BottomBarDestination.entries
+            .filter { d ->
+                !(d.kPatchRequired && !kPatchReady) &&
+                        !(d.aPatchRequired && !aPatchReady)
+            }
+            .map { d ->
+                d to NavigationItem(
+                    label = stringResource(d.label),
+                    icon = if (currentRoute == d.direction.route) d.iconSelected else d.iconNotSelected
                 )
             }
-        }
+
+        val selectedIndex =
+            navItems.indexOfFirst { it.first.direction.route == currentRoute }.coerceAtLeast(0)
+
+        NavigationBar(
+            items = navItems.map { it.second },
+            selected = selectedIndex,
+            onClick = { index ->
+                val dest = navItems[index].first
+                if (currentRoute == dest.direction.route) {
+                    navigator.popBackStack(dest.direction, false)
+                }
+
+                navigator.navigate(dest.direction) {
+                    popUpTo(NavGraphs.root) { saveState = true }
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            }
+        )
     }
 }

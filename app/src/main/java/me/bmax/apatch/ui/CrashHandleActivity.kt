@@ -7,29 +7,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ContentCopy
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.LargeTopAppBar
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.ClipEntry
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.res.stringResource
@@ -42,6 +26,13 @@ import kotlinx.coroutines.launch
 import me.bmax.apatch.BuildConfig
 import me.bmax.apatch.R
 import me.bmax.apatch.ui.theme.APatchTheme
+import top.yukonga.miuix.kmp.basic.FloatingActionButton
+import top.yukonga.miuix.kmp.basic.Icon
+import top.yukonga.miuix.kmp.basic.Scaffold
+import top.yukonga.miuix.kmp.basic.SmallTopAppBar
+import top.yukonga.miuix.kmp.basic.Text
+import top.yukonga.miuix.kmp.icon.MiuixIcons
+import top.yukonga.miuix.kmp.icon.icons.useful.Save
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -90,52 +81,46 @@ class CrashHandleActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CrashHandleScreen(
     message: String
 ) {
-    val scrollBehavior =
-        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val clipboard = LocalClipboard.current
     val scope = rememberCoroutineScope()
 
-    Scaffold(contentWindowInsets = WindowInsets.safeDrawing, topBar = {
-        LargeTopAppBar(
-            title = { Text(text = stringResource(R.string.crash_handle_title)) },
-            scrollBehavior = scrollBehavior,
-            windowInsets = WindowInsets.safeDrawing.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal)
-        )
-    }, floatingActionButton = {
-        ExtendedFloatingActionButton(
-            onClick = {
-            scope.launch {
-                clipboard.setClipEntry(
-                    ClipEntry(ClipData.newPlainText("CrashLog", message)),
-                )
-            }
-        }, text = { Text(text = stringResource(R.string.crash_handle_copy)) }, icon = {
-            Icon(
-                imageVector = Icons.Outlined.ContentCopy, contentDescription = null
+    Scaffold(
+        contentWindowInsets = WindowInsets.safeDrawing,
+        topBar = {
+            SmallTopAppBar(
+                title = stringResource(R.string.crash_handle_title)
             )
-        }, modifier = Modifier.windowInsetsPadding(
-            WindowInsets.safeDrawing.only(WindowInsetsSides.End)
-        )
-        )
-    }) {
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                modifier = Modifier.padding(bottom = 30.dp),
+                onClick = {
+                    scope.launch {
+                        clipboard.setClipEntry(
+                            ClipEntry(ClipData.newPlainText("CrashLog", message))
+                        )
+                    }
+                }
+            ) {
+                Icon(imageVector = MiuixIcons.Useful.Save, contentDescription = "save")
+            }
+        }
+    ) { paddingValues ->
         SelectionContainer(
             modifier = Modifier
                 .fillMaxSize()
-                .nestedScroll(scrollBehavior.nestedScrollConnection)
-                .verticalScroll(rememberScrollState())
-                .padding(it)
-                .padding(
-                    start = 16.dp, top = 16.dp, end = 16.dp, bottom = 16.dp + 56.dp + 16.dp
-                )
+                .padding(paddingValues)
+                .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 16.dp)
         ) {
             Text(
-                text = message, style = TextStyle(
-                    fontFamily = FontFamily.Monospace, fontSize = 11.sp
+                text = message,
+                style = TextStyle(
+                    fontFamily = FontFamily.Monospace,
+                    fontSize = 11.sp
                 )
             )
         }

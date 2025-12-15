@@ -7,6 +7,7 @@ lifecycle = "2.10.0"
 compose-destination = "2.3.0"
 libsu = "6.0.0"
 sheets-compose-dialogs = "1.3.0"
+miuix = "0.7.1"
 
 [plugins]
 agp-app = { id = "com.android.application", version.ref = "agp" }
@@ -33,6 +34,8 @@ androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-compose-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata" }
+
+miuix = { group = "top.yukonga.miuix.kmp", name= "miuix", version.ref = "miuix"}
 
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
 androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycle" }

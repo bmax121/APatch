@@ -9,14 +9,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Save
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -40,7 +32,12 @@ import kotlinx.coroutines.withContext
 import me.bmax.apatch.R
 import me.bmax.apatch.ui.component.KeyEventBlocker
 import me.bmax.apatch.util.runAPModuleAction
-import me.bmax.apatch.util.ui.LocalSnackbarHost
+import top.yukonga.miuix.kmp.basic.Icon
+import top.yukonga.miuix.kmp.basic.IconButton
+import top.yukonga.miuix.kmp.basic.Scaffold
+import top.yukonga.miuix.kmp.basic.Text
+import top.yukonga.miuix.kmp.basic.TopAppBar
+import top.yukonga.miuix.kmp.theme.MiuixTheme
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -52,7 +49,6 @@ fun ExecuteAPMActionScreen(navigator: DestinationsNavigator, moduleId: String) {
     var text by rememberSaveable { mutableStateOf("") }
     var tempText: String
     val logContent = rememberSaveable { StringBuilder() }
-    val snackBarHost = LocalSnackbarHost.current
     val scope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
     var actionResult: Boolean
@@ -100,12 +96,10 @@ fun ExecuteAPMActionScreen(navigator: DestinationsNavigator, moduleId: String) {
                             "APatch_apm_action_log_${date}.log"
                         )
                         file.writeText(logContent.toString())
-                        snackBarHost.showSnackbar("Log saved to ${file.absolutePath}")
                     }
                 }
             )
         },
-        snackbarHost = { SnackbarHost(snackBarHost) }
     ) { innerPadding ->
         KeyEventBlocker {
             it.key == Key.VolumeDown || it.key == Key.VolumeUp
@@ -122,19 +116,18 @@ fun ExecuteAPMActionScreen(navigator: DestinationsNavigator, moduleId: String) {
             Text(
                 modifier = Modifier.padding(8.dp),
                 text = text,
-                fontSize = MaterialTheme.typography.bodySmall.fontSize,
+                fontSize = MiuixTheme.textStyles.body2.fontSize,
                 fontFamily = FontFamily.Monospace,
-                lineHeight = MaterialTheme.typography.bodySmall.lineHeight,
+                lineHeight = MiuixTheme.textStyles.body2.lineHeight,
             )
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TopBar(onBack: () -> Unit = {}, onSave: () -> Unit = {}) {
     TopAppBar(
-        title = { Text(stringResource(R.string.apm_action)) },
+        title = stringResource(R.string.apm_action),
         navigationIcon = {
             IconButton(
                 onClick = onBack

@@ -9,6 +9,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.bmax.apatch.Natives
 import java.text.Collator
@@ -40,6 +41,7 @@ class KPModuleViewModel : ViewModel() {
     fun fetchModuleList() {
         viewModelScope.launch(Dispatchers.IO) {
             isRefreshing = true
+            delay(350)
             val oldModuleList = modules
             val start = SystemClock.elapsedRealtime()
 
