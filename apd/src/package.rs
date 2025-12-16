@@ -141,17 +141,17 @@ pub fn synchronize_package_uid() -> io::Result<()> {
                     if words.len() >= 2 {
                         let pkg_name = words[0];
                         if let Ok(uid) = words[1].parse::<i32>() {
-                            if let Some(config) = package_configs
+                            for config in package_configs
                                 .iter_mut()
-                                .find(|config| config.pkg == pkg_name)
+                                .filter(|config| config.pkg == pkg_name)
                             {
                                 if config.uid % 100000 != uid % 100000 {  
-                                    let uid = config.uid / 100000 * 100000 + uid % 100000;
+                                    let new_uid = config.uid / 100000 * 100000 + uid % 100000;
                                     info!(
                                         "Updating uid for package {}: {} -> {}",
-                                        pkg_name, config.uid, uid
+                                        pkg_name, config.uid, new_uid
                                     );
-                                    config.uid = uid;
+                                    config.uid = new_uid;
                                     updated = true;
                                 }
                             }
