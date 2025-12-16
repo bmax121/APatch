@@ -52,6 +52,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -85,6 +86,7 @@ import me.bmax.apatch.Natives
 import me.bmax.apatch.R
 import me.bmax.apatch.apApp
 import me.bmax.apatch.ui.component.ConfirmResult
+import me.bmax.apatch.ui.component.SearchAppBar
 import me.bmax.apatch.ui.component.KPModuleRemoveButton
 import me.bmax.apatch.ui.component.LoadingDialogHandle
 import me.bmax.apatch.ui.component.ProvideMenuShape
@@ -133,8 +135,24 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
 
     val kpModuleListState = rememberLazyListState()
 
+    var searchText by rememberSaveable { mutableStateOf("") }
+    val modules = if (searchText.isEmpty()) {
+        viewModel.moduleList
+    } else {
+        viewModel.moduleList.filter {
+            it.name.contains(searchText, ignoreCase = true) ||
+                    it.description.contains(searchText, ignoreCase = true) ||
+                    it.author.contains(searchText, ignoreCase = true)
+        }
+    }
+
     Scaffold(topBar = {
-        TopBar()
+        SearchAppBar(
+            title = { Text(stringResource(R.string.kpm)) },
+            searchText = searchText,
+            onSearchTextChange = { searchText = it },
+            onClearClick = { searchText = "" }
+        )
     }, floatingActionButton = run {
         {
             val scope = rememberCoroutineScope()
@@ -242,6 +260,7 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
 
         KPModuleList(
             viewModel = viewModel,
+            modules = modules,
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize(),
@@ -394,7 +413,7 @@ fun KPMControlDialog(showDialog: MutableState<Boolean>) {
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
 private fun KPModuleList(
-    viewModel: KPModuleViewModel, modifier: Modifier = Modifier, state: LazyListState
+    viewModel: KPModuleViewModel, modules: List<KPModel.KPMInfo>, modifier: Modifier = Modifier, state: LazyListState
 ) {
     val moduleStr = stringResource(id = R.string.kpm)
     val moduleUninstallConfirm = stringResource(id = R.string.kpm_unload_confirm)
@@ -450,7 +469,7 @@ private fun KPModuleList(
             },
         ) {
             when {
-                viewModel.moduleList.isEmpty() -> {
+                modules.isEmpty() -> {
                     item {
                         Box(
                             modifier = Modifier.fillParentMaxSize(),
@@ -464,7 +483,7 @@ private fun KPModuleList(
                 }
 
                 else -> {
-                    items(viewModel.moduleList) { module ->
+                    items(modules) { module ->
                         val scope = rememberCoroutineScope()
                         KPModuleItem(
                             module,
@@ -484,12 +503,6 @@ private fun KPModuleList(
             }
         }
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun TopBar() {
-    TopAppBar(title = { Text(stringResource(R.string.kpm)) })
 }
 
 @Composable
