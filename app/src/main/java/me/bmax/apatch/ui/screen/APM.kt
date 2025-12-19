@@ -276,13 +276,15 @@ private fun ModuleList(
     ) {
         val changelog = loadingDialog.withLoading {
             withContext(Dispatchers.IO) {
-                if (Patterns.WEB_URL.matcher(changelogUrl).matches()) {
-                    apApp.okhttpClient.newCall(
-                        okhttp3.Request.Builder().url(changelogUrl).build()
-                    ).execute().body!!.string()
-                } else {
-                    changelogUrl
-                }
+                runCatching {
+                    if (Patterns.WEB_URL.matcher(changelogUrl).matches()) {
+                        apApp.okhttpClient.newCall(
+                                okhttp3.Request.Builder().url(changelogUrl).build()
+                            ).execute().use { it.body?.string().orEmpty() }
+                    } else {
+                        changelogUrl
+                    }
+                }.getOrDefault("")
             }
         }
 
