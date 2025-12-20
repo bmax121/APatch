@@ -592,20 +592,12 @@ private fun KPModuleItem(
                     FilledTonalButton(
                         onClick = { onControl(module) },
                         enabled = true,
-                        contentPadding = PaddingValues(horizontal = 12.dp)
+                        contentPadding = PaddingValues(12.dp)
                     ) {
                         Icon(
                             modifier = Modifier.size(20.dp),
                             painter = painterResource(id = R.drawable.settings),
-                            contentDescription = null
-                        )
-
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text(
-                            text = stringResource(id = R.string.kpm_control),
-                            maxLines = 1,
-                            overflow = TextOverflow.Visible,
-                            softWrap = false
+                            contentDescription = stringResource(id = R.string.kpm_control)
                         )
                     }
 
