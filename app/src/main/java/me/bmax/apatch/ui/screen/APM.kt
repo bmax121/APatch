@@ -580,7 +580,7 @@ private fun ModuleItem(
                         ) {
                             Icon(
                                 modifier = Modifier.size(20.dp),
-                                painter = painterResource(id = R.drawable.settings),
+                                painter = painterResource(id = R.drawable.play_circle),
                                 contentDescription = stringResource(id = R.string.apm_action)
                             )
                         }
