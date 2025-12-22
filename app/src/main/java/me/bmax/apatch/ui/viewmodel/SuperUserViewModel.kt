@@ -156,7 +156,7 @@ class SuperUserViewModel : ViewModel() {
                     packageInfo = it,
                     config = config
                 )
-            }.filter { it.packageName != apApp.packageName }
+            }
 
             synchronized(appsLock) {
                 apps = newApps
