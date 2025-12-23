@@ -31,6 +31,18 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.material3.AlertDialogDefaults
+import androidx.compose.material3.BasicAlertDialog
+import androidx.compose.material3.Surface
+import androidx.compose.material3.TextButton
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.window.DialogProperties
+import androidx.compose.ui.window.DialogWindowProvider
+import me.bmax.apatch.util.ui.APDialogBlurBehindUtils
 import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -268,11 +280,84 @@ private fun StartButton(text: String, onClick: () -> Unit) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ExtraConfigDialog(kpmInfo: KPModel.KPMInfo, onDismiss: () -> Unit) {
+    var event by remember { mutableStateOf(kpmInfo.event) }
+    var args by remember { mutableStateOf(kpmInfo.args) }
+
+    BasicAlertDialog(
+        onDismissRequest = onDismiss,
+        properties = DialogProperties(
+            decorFitsSystemWindows = true,
+            usePlatformDefaultWidth = false,
+        )
+    ) {
+        Surface(
+            modifier = Modifier
+                .width(310.dp)
+                .wrapContentHeight(),
+            shape = RoundedCornerShape(30.dp),
+            tonalElevation = AlertDialogDefaults.TonalElevation,
+            color = AlertDialogDefaults.containerColor,
+        ) {
+            Column(modifier = Modifier.padding(PaddingValues(all = 24.dp))) {
+                Text(
+                    text = stringResource(id = R.string.kpm_control_dialog_title),
+                    style = MaterialTheme.typography.headlineSmall,
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+
+                OutlinedTextField(
+                    value = event,
+                    onValueChange = {
+                        event = it
+                        kpmInfo.event = it
+                    },
+                    label = { Text(stringResource(id = R.string.patch_item_extra_event)) },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                OutlinedTextField(
+                    value = args,
+                    onValueChange = {
+                        args = it
+                        kpmInfo.args = it
+                    },
+                    label = { Text(stringResource(id = R.string.patch_item_extra_args)) },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    TextButton(onClick = onDismiss) {
+                        Text(stringResource(id = android.R.string.ok))
+                    }
+                }
+            }
+        }
+        val dialogWindowProvider = LocalView.current.parent as DialogWindowProvider
+        APDialogBlurBehindUtils.setupWindowBlurListener(dialogWindowProvider.window)
+    }
+}
+
 @Composable
 private fun ExtraItem(extra: KPModel.IExtraInfo, existed: Boolean, onDelete: () -> Unit) {
+    var showConfigDialog by remember { mutableStateOf(false) }
+
+    if (showConfigDialog && extra is KPModel.KPMInfo) {
+        ExtraConfigDialog(extra, onDismiss = { showConfigDialog = false })
+    }
+
     ElevatedCard(
         colors = CardDefaults.elevatedCardColors(containerColor = run {
-            MaterialTheme.colorScheme.secondaryContainer
+            MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 1f)
         }),
     ) {
         Column(
@@ -292,6 +377,15 @@ private fun ExtraItem(extra: KPModel.IExtraInfo, existed: Boolean, onDelete: () 
                         .weight(1f)
                         .wrapContentWidth(Alignment.CenterHorizontally)
                 )
+                if (extra.type == KPModel.ExtraType.KPM) {
+                    Icon(
+                        imageVector = Icons.Default.Settings,
+                        contentDescription = "Config",
+                        modifier = Modifier
+                            .padding(end = 8.dp)
+                            .clickable { showConfigDialog = true }
+                    )
+                }
                 Icon(
                     imageVector = Icons.Default.Delete,
                     contentDescription = "Delete",
@@ -321,46 +415,6 @@ private fun ExtraItem(extra: KPModel.IExtraInfo, existed: Boolean, onDelete: () 
                     text = "${stringResource(id = R.string.patch_item_extra_kpm_desciption) + " "} ${kpmInfo.description}",
                     style = MaterialTheme.typography.bodyMedium
                 )
-                var event by remember { mutableStateOf(kpmInfo.event) }
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(Color.LightGray)
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.patch_item_extra_event) + " ",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                    BasicTextField(
-                        modifier = Modifier.fillMaxWidth(),
-                        value = event,
-                        textStyle = MaterialTheme.typography.bodyMedium,
-                        onValueChange = {
-                            event = it
-                            kpmInfo.event = it
-                        },
-                    )
-                }
-                var args by remember { mutableStateOf(kpmInfo.args) }
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(Color.LightGray)
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.patch_item_extra_args) + " ",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                    BasicTextField(
-                        modifier = Modifier.fillMaxWidth(),
-                        value = args,
-                        textStyle = MaterialTheme.typography.bodyMedium,
-                        onValueChange = {
-                            args = it
-                            kpmInfo.args = it
-                        },
-                    )
-                }
             }
         }
     }
