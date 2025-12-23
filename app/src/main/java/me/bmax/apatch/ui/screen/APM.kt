@@ -276,13 +276,15 @@ private fun ModuleList(
     ) {
         val changelog = loadingDialog.withLoading {
             withContext(Dispatchers.IO) {
-                if (Patterns.WEB_URL.matcher(changelogUrl).matches()) {
-                    apApp.okhttpClient.newCall(
-                        okhttp3.Request.Builder().url(changelogUrl).build()
-                    ).execute().body!!.string()
-                } else {
-                    changelogUrl
-                }
+                runCatching {
+                    if (Patterns.WEB_URL.matcher(changelogUrl).matches()) {
+                        apApp.okhttpClient.newCall(
+                                okhttp3.Request.Builder().url(changelogUrl).build()
+                            ).execute().use { it.body?.string().orEmpty() }
+                    } else {
+                        changelogUrl
+                    }
+                }.getOrDefault("")
             }
         }
 
@@ -557,20 +559,12 @@ private fun ModuleItem(
                         FilledTonalButton(
                             onClick = { onClick(module) },
                             enabled = true,
-                            contentPadding = PaddingValues(horizontal = 12.dp)
+                            contentPadding = PaddingValues(12.dp)
                         ) {
                             Icon(
                                 modifier = Modifier.size(20.dp),
                                 painter = painterResource(id = R.drawable.webui),
-                                contentDescription = null
-                            )
-
-                            Spacer(modifier = Modifier.width(6.dp))
-                            Text(
-                                text = stringResource(id = R.string.apm_webui_open),
-                                maxLines = 1,
-                                overflow = TextOverflow.Visible,
-                                softWrap = false
+                                contentDescription = stringResource(id = R.string.apm_webui_open)
                             )
                         }
 
@@ -584,20 +578,12 @@ private fun ModuleItem(
                             onClick = {
                                 navigator.navigate(ExecuteAPMActionScreenDestination(module.id))
                                 viewModel.markNeedRefresh()
-                            }, enabled = true, contentPadding = PaddingValues(horizontal = 12.dp)
+                            }, enabled = true, contentPadding = PaddingValues(12.dp)
                         ) {
                             Icon(
                                 modifier = Modifier.size(20.dp),
-                                painter = painterResource(id = R.drawable.settings),
-                                contentDescription = null
-                            )
-
-                            Spacer(modifier = Modifier.width(6.dp))
-                            Text(
-                                text = stringResource(id = R.string.apm_action),
-                                maxLines = 1,
-                                overflow = TextOverflow.Visible,
-                                softWrap = false
+                                painter = painterResource(id = R.drawable.play_circle),
+                                contentDescription = stringResource(id = R.string.apm_action)
                             )
                         }
 
