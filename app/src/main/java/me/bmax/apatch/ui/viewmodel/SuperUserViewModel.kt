@@ -1,10 +1,12 @@
 package me.bmax.apatch.ui.viewmodel
 
 import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
+import android.graphics.drawable.Drawable
 import android.os.IBinder
 import android.os.Parcelable
 import android.util.Log
@@ -34,7 +36,14 @@ import kotlin.coroutines.suspendCoroutine
 class SuperUserViewModel : ViewModel() {
     companion object {
         private const val TAG = "SuperUserViewModel"
-        private var apps by mutableStateOf<List<AppInfo>>(emptyList())
+        private val appsLock = Any()
+        var apps by mutableStateOf<List<AppInfo>>(emptyList())
+
+        fun getAppIconDrawable(context: Context, packageName: String): Drawable? {
+            val appList = synchronized(appsLock) { apps }
+            val appDetail = appList.find { it.packageName == packageName }
+            return appDetail?.packageInfo?.applicationInfo?.loadIcon(context.packageManager)
+        }
     }
 
     @Parcelize
@@ -128,7 +137,7 @@ class SuperUserViewModel : ViewModel() {
 
             Log.d(TAG, "all configs: $configs")
 
-            apps = allPackages.list.map {
+            val newApps = allPackages.list.map {
                 val appInfo = it.applicationInfo
                 val uid = appInfo!!.uid
                 val actProfile = if (uids.contains(uid)) Natives.suProfile(uid) else null
@@ -147,7 +156,11 @@ class SuperUserViewModel : ViewModel() {
                     packageInfo = it,
                     config = config
                 )
-            }.filter { it.packageName != apApp.packageName }
+            }
+
+            synchronized(appsLock) {
+                apps = newApps
+            }
         }
     }
 }
