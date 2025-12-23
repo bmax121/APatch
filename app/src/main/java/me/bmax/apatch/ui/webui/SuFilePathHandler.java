@@ -12,10 +12,12 @@ import com.topjohnwu.superuser.Shell;
 import com.topjohnwu.superuser.io.SuFile;
 import com.topjohnwu.superuser.io.SuFileInputStream;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.zip.GZIPInputStream;
 
 import me.bmax.apatch.util.APatchCliKt;
@@ -61,6 +63,17 @@ public final class SuFilePathHandler implements WebViewAssetLoader.PathHandler {
     private final File mDirectory;
 
     private final Shell mShell;
+    private final InsetsSupplier mInsetsSupplier;
+    private final OnInsetsRequestedListener mOnInsetsRequestedListener;
+
+    public interface InsetsSupplier {
+        @NonNull
+        Insets get();
+    }
+
+    public interface OnInsetsRequestedListener {
+        void onInsetsRequested(boolean enable);
+    }
 
     /**
      * Creates PathHandler for app's internal storage.
@@ -82,10 +95,14 @@ public final class SuFilePathHandler implements WebViewAssetLoader.PathHandler {
      * @param context {@link Context} that is used to access app's internal storage.
      * @param directory the absolute path of the exposed app internal storage directory from
      *                  which files can be loaded.
+     * @param insetsSupplier {@link InsetsSupplier} to provide window insets for styling web content.
+     * @param onInsetsRequestedListener {@link OnInsetsRequestedListener} to notify when insets are requested.
      * @throws IllegalArgumentException if the directory is not allowed.
      */
-    public SuFilePathHandler(@NonNull Context context, @NonNull File directory) {
+    public SuFilePathHandler(@NonNull Context context, @NonNull File directory, @NonNull InsetsSupplier insetsSupplier, OnInsetsRequestedListener onInsetsRequestedListener) {
         try {
+            mInsetsSupplier = insetsSupplier;
+            mOnInsetsRequestedListener = onInsetsRequestedListener;
             mDirectory = new File(getCanonicalDirPath(directory));
             if (!isAllowedInternalStorageDir(context)) {
                 throw new IllegalArgumentException("The given directory \"" + directory
@@ -133,6 +150,17 @@ public final class SuFilePathHandler implements WebViewAssetLoader.PathHandler {
     @WorkerThread
     @NonNull
     public WebResourceResponse handle(@NonNull String path) {
+        if ("internal/insets.css".equals(path)) {
+            if (mOnInsetsRequestedListener != null) {
+                mOnInsetsRequestedListener.onInsetsRequested(true);
+            }
+            String css = mInsetsSupplier.get().getCss();
+            return new WebResourceResponse(
+                    "text/css",
+                    "utf-8",
+                    new ByteArrayInputStream(css.getBytes(StandardCharsets.UTF_8))
+            );
+        }
         try {
             File file = getCanonicalFileIfChild(mDirectory, path);
             if (file != null) {

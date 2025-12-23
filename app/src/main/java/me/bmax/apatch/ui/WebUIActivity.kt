@@ -2,13 +2,15 @@ package me.bmax.apatch.ui
 
 import android.annotation.SuppressLint
 import android.app.ActivityManager
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.view.ViewGroup.MarginLayoutParams
+import android.view.ViewGroup
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -21,14 +23,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.webkit.WebViewAssetLoader
+import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import me.bmax.apatch.APApplication
 import me.bmax.apatch.ui.theme.APatchTheme
 import me.bmax.apatch.ui.viewmodel.SuperUserViewModel
 import me.bmax.apatch.ui.webui.AppIconUtil
+import me.bmax.apatch.ui.webui.Insets
 import me.bmax.apatch.ui.webui.SuFilePathHandler
 import me.bmax.apatch.ui.webui.WebViewInterface
 import java.io.File
@@ -36,6 +40,11 @@ import java.io.File
 @SuppressLint("SetJavaScriptEnabled")
 class WebUIActivity : ComponentActivity() {
     private lateinit var webViewInterface: WebViewInterface
+    private var webView: WebView? = null
+    private lateinit var container: FrameLayout
+    private lateinit var insets: Insets
+    private var insetsContinuation: CancellableContinuation<Unit>? = null
+    private var isInsetsEnabled = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -65,7 +74,7 @@ class WebUIActivity : ComponentActivity() {
         }
     }
 
-    private fun setupWebView() {
+    private suspend fun setupWebView() {
         val moduleId = intent.getStringExtra("id")!!
         val name = intent.getStringExtra("name")!!
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
@@ -80,11 +89,51 @@ class WebUIActivity : ComponentActivity() {
         WebView.setWebContentsDebuggingEnabled(prefs.getBoolean("enable_web_debugging", false))
 
         val webRoot = File("/data/adb/modules/${moduleId}/webroot")
+        insets = Insets(0, 0, 0, 0)
+
+        container = FrameLayout(this).apply {
+            layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        }
+
+        this.webView = WebView(this).apply {
+            setBackgroundColor(Color.TRANSPARENT)
+            val density = resources.displayMetrics.density
+
+            ViewCompat.setOnApplyWindowInsetsListener(container) { view, windowInsets ->
+                val inset = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout())
+                insets = Insets(
+                    top = (inset.top / density).toInt(),
+                    bottom = (inset.bottom / density).toInt(),
+                    left = (inset.left / density).toInt(),
+                    right = (inset.right / density).toInt()
+                )
+                if (isInsetsEnabled) {
+                    view.setPadding(0, 0, 0, 0)
+                } else {
+                    view.setPadding(inset.left, inset.top, inset.right, inset.bottom)
+                }
+                insetsContinuation?.resumeWith(Result.success(Unit))
+                insetsContinuation = null
+                WindowInsetsCompat.CONSUMED
+            }
+        }
+        container.addView(this.webView)
+        setContentView(container)
+
+        if (insets == Insets(0, 0, 0, 0)) {
+            suspendCancellableCoroutine { cont ->
+                insetsContinuation = cont
+                cont.invokeOnCancellation {
+                    insetsContinuation = null
+                }
+            }
+        }
+
         val webViewAssetLoader = WebViewAssetLoader.Builder()
             .setDomain("mui.kernelsu.org")
             .addPathHandler(
                 "/",
-                SuFilePathHandler(this, webRoot)
+                SuFilePathHandler(this, webRoot, { insets }, { enable -> enableInsets(enable) })
             )
             .build()
 
@@ -113,17 +162,7 @@ class WebUIActivity : ComponentActivity() {
             }
         }
 
-        val webView = WebView(this).apply {
-            ViewCompat.setOnApplyWindowInsetsListener(this) { view, insets ->
-                val inset = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-                view.updateLayoutParams<MarginLayoutParams> {
-                    leftMargin = inset.left
-                    rightMargin = inset.right
-                    topMargin = inset.top
-                    bottomMargin = inset.bottom
-                }
-                return@setOnApplyWindowInsetsListener insets
-            }
+        webView?.apply {
             settings.javaScriptEnabled = true
             settings.domStorageEnabled = true
             settings.allowFileAccess = false
@@ -132,7 +171,14 @@ class WebUIActivity : ComponentActivity() {
             setWebViewClient(webViewClient)
             loadUrl("https://mui.kernelsu.org/index.html")
         }
+    }
 
-        setContentView(webView)
+    fun enableInsets(enable: Boolean = true) {
+        runOnUiThread {
+            if (isInsetsEnabled != enable) {
+                isInsetsEnabled = enable
+                ViewCompat.requestApplyInsets(container)
+            }
+        }
     }
 }
