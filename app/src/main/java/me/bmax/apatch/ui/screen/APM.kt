@@ -461,9 +461,13 @@ private fun ModuleList(
                     items(modules) { module ->
                         var isChecked by rememberSaveable(module) { mutableStateOf(module.enabled) }
                         val scope = rememberCoroutineScope()
+                        val updateCheckDone = rememberSaveable(module.id) { mutableStateOf(false) }
                         val updatedModule by produceState(initialValue = Triple("", "", "")) {
-                            scope.launch(Dispatchers.IO) {
-                                value = viewModel.checkUpdate(module)
+                            if (!updateCheckDone.value) {
+                                scope.launch(Dispatchers.IO) {
+                                    value = viewModel.checkUpdate(module)
+                                    updateCheckDone.value = true
+                                }
                             }
                         }
 
