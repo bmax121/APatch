@@ -138,16 +138,24 @@ jobs:
           COMMIT_ID: ${{ github.event.head_commit.id }}
         run: |
           if [ ! -z "${{ secrets.BOT_TOKEN }}" ]; then
-            for APK_FILE in "${{ steps.sign_release_app.outputs.signedReleaseFile }}" "${{ steps.sign_debug_app.outputs.signedReleaseFile }}"
-            do
-              if [ -f "$APK_FILE" ]; then
-                FILENAME=$(basename "$APK_FILE")
-                for GROUP_ID in "-1002058433411" "-1001910818234"
-                do
-                  URL=$(python3 .github/scripts/telegram_url.py $GROUP_ID)
-                  curl -v "$URL" -F document=@"$APK_FILE" -F caption="$FILENAME"
-                done
-              fi
+            OUTPUT_DIRS=(
+                "app/build/outputs/apk/release"
+                "app/build/outputs/apk/debug"
+            )
+            for OUTPUT_DIR in "${OUTPUT_DIRS[@]}"; do
+                if [ -d "$OUTPUT_DIR" ]; then
+                    # 查找APK文件
+                    APK_FILE=$(find "$OUTPUT_DIR" -name "*.apk" | head -n 1)
+                    
+                    if [ ! -z "$APK_FILE" ] && [ -f "$APK_FILE" ]; then
+                        echo "Found APK: $APK_FILE"
+                        
+                        for GROUP_ID in "-1002058433411" "-1001910818234"; do
+                            URL=$(python3 .github/scripts/telegram_url.py $GROUP_ID)
+                            curl -v "$URL" -F Release=@"$APK_FILE"
+                        done
+                    fi
+                fi
             done
           fi
 
