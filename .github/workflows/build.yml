@@ -147,6 +147,7 @@ jobs:
                   URL=$(python3 .github/scripts/telegram_url.py $GROUP_ID)
                   curl -v "$URL" -F document=@"$APK_FILE" -F caption="$FILENAME"
                 done
+              fi
             done
           fi
 
