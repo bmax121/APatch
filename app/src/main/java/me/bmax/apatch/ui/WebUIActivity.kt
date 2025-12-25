@@ -97,35 +97,38 @@ class WebUIActivity : ComponentActivity() {
 
         this.webView = WebView(this).apply {
             setBackgroundColor(Color.TRANSPARENT)
-            val density = resources.displayMetrics.density
+        }
 
-            ViewCompat.setOnApplyWindowInsetsListener(container) { view, windowInsets ->
-                val inset = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout())
-                insets = Insets(
-                    top = (inset.top / density).toInt(),
-                    bottom = (inset.bottom / density).toInt(),
-                    left = (inset.left / density).toInt(),
-                    right = (inset.right / density).toInt()
-                )
-                if (isInsetsEnabled) {
-                    view.setPadding(0, 0, 0, 0)
-                } else {
-                    view.setPadding(inset.left, inset.top, inset.right, inset.bottom)
-                }
-                insetsContinuation?.resumeWith(Result.success(Unit))
-                insetsContinuation = null
-                WindowInsetsCompat.CONSUMED
+        val density = resources.displayMetrics.density
+        ViewCompat.setOnApplyWindowInsetsListener(container) { view, windowInsets ->
+            val inset = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout())
+            insets = Insets(
+                top = (inset.top / density).toInt(),
+                bottom = (inset.bottom / density).toInt(),
+                left = (inset.left / density).toInt(),
+                right = (inset.right / density).toInt()
+            )
+            if (isInsetsEnabled) {
+                view.setPadding(0, 0, 0, 0)
+            } else {
+                view.setPadding(inset.left, inset.top, inset.right, inset.bottom)
             }
+            insetsContinuation?.resumeWith(Result.success(Unit))
+            insetsContinuation = null
+            WindowInsetsCompat.CONSUMED
         }
         container.addView(this.webView)
-        setContentView(container)
 
-        if (insets == Insets(0, 0, 0, 0)) {
-            suspendCancellableCoroutine { cont ->
-                insetsContinuation = cont
-                cont.invokeOnCancellation {
-                    insetsContinuation = null
-                }
+        suspendCancellableCoroutine { cont ->
+            insetsContinuation = cont
+            cont.invokeOnCancellation {
+                insetsContinuation = null
+            }
+            setContentView(container)
+
+            if (insets != Insets(0, 0, 0, 0)) {
+                cont.resumeWith(Result.success(Unit))
+                insetsContinuation = null
             }
         }
 

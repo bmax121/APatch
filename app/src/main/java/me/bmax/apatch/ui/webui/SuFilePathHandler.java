@@ -64,6 +64,7 @@ public final class SuFilePathHandler implements WebViewAssetLoader.PathHandler {
 
     private final Shell mShell;
     private final InsetsSupplier mInsetsSupplier;
+    @NonNull
     private final OnInsetsRequestedListener mOnInsetsRequestedListener;
 
     public interface InsetsSupplier {
@@ -99,7 +100,7 @@ public final class SuFilePathHandler implements WebViewAssetLoader.PathHandler {
      * @param onInsetsRequestedListener {@link OnInsetsRequestedListener} to notify when insets are requested.
      * @throws IllegalArgumentException if the directory is not allowed.
      */
-    public SuFilePathHandler(@NonNull Context context, @NonNull File directory, @NonNull InsetsSupplier insetsSupplier, OnInsetsRequestedListener onInsetsRequestedListener) {
+    public SuFilePathHandler(@NonNull Context context, @NonNull File directory, @NonNull InsetsSupplier insetsSupplier, @NonNull OnInsetsRequestedListener onInsetsRequestedListener) {
         try {
             mInsetsSupplier = insetsSupplier;
             mOnInsetsRequestedListener = onInsetsRequestedListener;
@@ -151,9 +152,7 @@ public final class SuFilePathHandler implements WebViewAssetLoader.PathHandler {
     @NonNull
     public WebResourceResponse handle(@NonNull String path) {
         if ("internal/insets.css".equals(path)) {
-            if (mOnInsetsRequestedListener != null) {
-                mOnInsetsRequestedListener.onInsetsRequested(true);
-            }
+            mOnInsetsRequestedListener.onInsetsRequested(true);
             String css = mInsetsSupplier.get().getCss();
             return new WebResourceResponse(
                     "text/css",
