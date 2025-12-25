@@ -109,53 +109,41 @@ jobs:
           keyPassword: ${{ secrets.KEY_PASSWORD }}
           zipAlign: true
 
+      - name: Upload mappings
+        uses: actions/upload-artifact@v5
+        with:
+          name: "mappings"
+          path: "app/build/outputs/mapping/release/"
 
-
-      - name: Upload release build artifact
+      - name: Upload build artifact
         env:
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
         if: ${{ env.SIGNING_KEY != '' }}
         uses: actions/upload-artifact@v6
         with:
-          name: APatch_Release
-          path: ${{steps.sign_app.outputs.signedReleaseFile}}
-
-      - name: Upload debug build artifact
-        env:
-          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
-        if: ${{ env.SIGNING_KEY != '' }}
-        uses: actions/upload-artifact@v6
-        with:
-          name: APatch_Debug
-          path: ${{steps.sign_debug_app.outputs.signedReleaseFile}}
+          name: APatch
+          path: |
+            ${{ steps.sign_app.outputs.signedReleaseFile }}
+            ${{ steps.sign_debug_app.outputs.signedReleaseFile }}
 
       - name: Post to channel
-        if: ${{github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && github.ref_type != 'tag'}}
+        if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && github.ref_type != 'tag' }}
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
           COMMIT_URL: ${{ github.event.head_commit.url }}
           COMMIT_ID: ${{ github.event.head_commit.id }}
         run: |
-          if [ ! -z "${{ secrets.BOT_TOKEN }}" ]; then
-            OUTPUT_DIRS=(
-                "app/build/outputs/apk/release"
-                "app/build/outputs/apk/debug"
-            )
-            for OUTPUT_DIR in "${OUTPUT_DIRS[@]}"; do
-                if [ -d "$OUTPUT_DIR" ]; then
-                    # 查找APK文件
-                    APK_FILE=$(find "$OUTPUT_DIR" -name "*.apk" | head -n 1)
-                    
-                    if [ ! -z "$APK_FILE" ] && [ -f "$APK_FILE" ]; then
-                        echo "Found APK: $APK_FILE"
-                        
-                        for GROUP_ID in "-1002058433411" "-1001910818234"; do
-                            URL=$(python3 .github/scripts/telegram_url.py $GROUP_ID)
-                            curl -v "$URL" -F Release=@"$APK_FILE"
-                        done
-                    fi
-                fi
+          if [ -n "${BOT_TOKEN}" ]; then
+            CHANNELS=(-1002058433411 -1001910818234)
+            RELEASE_APK="${{ steps.sign_app.outputs.signedReleaseFile }}"
+            DEBUG_APK="${{ steps.sign_debug_app.outputs.signedReleaseFile }}"
+          
+            for CHANNEL in "${CHANNELS[@]}"; do
+              URL=$(python3 .github/scripts/telegram_url.py $CHANNEL)
+              if [ -f "$RELEASE_APK" ] && [ -f "$DEBUG_APK" ]; then
+                curl -v "$URL" -F "Release1=@$RELEASE_APK" -F "Release2=@$DEBUG_APK"
+              fi
             done
           fi
 

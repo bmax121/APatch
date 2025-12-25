@@ -3,7 +3,6 @@ import os
 import sys
 import urllib.parse
 
-
 url = f'https://api.telegram.org/bot{os.environ["BOT_TOKEN"]}'
 url += f'/sendMediaGroup?chat_id={urllib.parse.quote(sys.argv[1])}&media='
 
@@ -17,8 +16,9 @@ commit_id = os.environ["COMMIT_ID"][:7]
 caption = f"[{commit_id}]({commit_url})\n{msg}"[:1024]
 
 data = json.dumps([
-    {"type": "document", "media": "attach://Release","caption": caption,"parse_mode":"MarkdownV2"}
-    ])
+    {"type": "document", "media": "attach://Release1"},
+    {"type": "document", "media": "attach://Release2", "caption": caption, "parse_mode": "MarkdownV2"}
+])
 
 url += urllib.parse.quote(data)
 print(url)
