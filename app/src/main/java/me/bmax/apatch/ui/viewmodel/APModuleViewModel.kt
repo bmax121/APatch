@@ -23,7 +23,7 @@ class APModuleViewModel : ViewModel() {
         private var modules by mutableStateOf<List<ModuleInfo>>(emptyList())
     }
 
-    class ModuleInfo(
+    data class ModuleInfo(
         val id: String,
         val name: String,
         val author: String,
@@ -37,6 +37,7 @@ class APModuleViewModel : ViewModel() {
         val hasWebUi: Boolean,
         val hasActionScript: Boolean,
         val metamodule: Boolean,
+        val updateInfo: ModuleUpdateInfo? = null,
     )
 
     data class ModuleUpdateInfo(
@@ -103,6 +104,14 @@ class APModuleViewModel : ViewModel() {
                             obj.getBooleanCompat("metamodule")
                         )
                     }.toList()
+                viewModelScope.launch(Dispatchers.IO) {
+                    val updatedModules = modules.map { module ->
+                        if (module.enabled && module.updateJson.isNotEmpty() && !module.update && !module.remove) {
+                            module.copy(updateInfo = runCatching { checkUpdate(module) }.getOrNull())
+                        } else module
+                    }
+                    modules = updatedModules
+                }
                 isNeedRefresh = false
             }.onFailure { e ->
                 Log.e(TAG, "fetchModuleList: ", e)
@@ -123,10 +132,9 @@ class APModuleViewModel : ViewModel() {
         return version.replace(Regex("[^a-zA-Z0-9.\\-_]"), "_")
     }
 
-    fun checkUpdate(m: ModuleInfo): Triple<String, String, String> {
-        val empty = Triple("", "", "")
+    fun checkUpdate(m: ModuleInfo): ModuleUpdateInfo? {
         if (m.updateJson.isEmpty() || m.remove || m.update || !m.enabled) {
-            return empty
+            return null
         }
         // download updateJson
         val result = kotlin.runCatching {
@@ -148,22 +156,22 @@ class APModuleViewModel : ViewModel() {
         Log.i(TAG, "checkUpdate result: $result")
 
         if (result.isEmpty()) {
-            return empty
+            return null
         }
 
         val updateJson = kotlin.runCatching {
             JSONObject(result)
-        }.getOrNull() ?: return empty
+        }.getOrNull() ?: return null
 
         val version = sanitizeVersionString(updateJson.optString("version", ""))
         val versionCode = updateJson.optInt("versionCode", 0)
         val zipUrl = updateJson.optString("zipUrl", "")
         val changelog = updateJson.optString("changelog", "")
         if (versionCode <= m.versionCode || zipUrl.isEmpty()) {
-            return empty
+            return null
         }
 
-        return Triple(zipUrl, version, changelog)
+        return ModuleUpdateInfo(version, versionCode, zipUrl, changelog)
     }
 }
 

@@ -461,21 +461,13 @@ private fun ModuleList(
                     items(modules) { module ->
                         var isChecked by rememberSaveable(module) { mutableStateOf(module.enabled) }
                         val scope = rememberCoroutineScope()
-                        val updateCheckDone = rememberSaveable(module.id) { mutableStateOf(false) }
-                        val updatedModule by produceState(initialValue = Triple("", "", "")) {
-                            if (!updateCheckDone.value) {
-                                scope.launch(Dispatchers.IO) {
-                                    value = viewModel.checkUpdate(module)
-                                    updateCheckDone.value = true
-                                }
-                            }
-                        }
+                        val updateInfo = module.updateInfo
 
                         ModuleItem(
                             navigator,
                             module,
                             isChecked,
-                            updatedModule.first,
+                            updateInfo?.zipUrl ?: "",
                             onUninstall = {
                                 scope.launch { onModuleUninstall(module) }
                             },
@@ -506,12 +498,14 @@ private fun ModuleList(
                             },
                             onUpdate = {
                                 scope.launch {
-                                    onModuleUpdate(
-                                        module,
-                                        updatedModule.third,
-                                        updatedModule.first,
-                                        "${module.name}-${updatedModule.second}.zip"
-                                    )
+                                    updateInfo?.let { info ->
+                                        onModuleUpdate(
+                                            module,
+                                            info.changelog,
+                                            info.zipUrl,
+                                            "${module.name}-${info.version}.zip"
+                                        )
+                                    }
                                 }
                             },
                             onClick = {
