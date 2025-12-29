@@ -69,9 +69,7 @@ class SuperUserViewModel : ViewModel() {
                 else -> 2
             }
         }.then(compareBy(Collator.getInstance(Locale.getDefault()), AppInfo::label))
-        apps.sortedWith(comparator).also {
-            isRefreshing = false
-        }
+        apps.sortedWith(comparator)
     }
 
     val appList by derivedStateOf {
@@ -115,52 +113,60 @@ class SuperUserViewModel : ViewModel() {
     suspend fun fetchAppList() {
         isRefreshing = true
 
-        val result = connectRootService {
-            Log.w(TAG, "RootService disconnected")
-        }
-
-        withContext(Dispatchers.IO) {
-            val binder = result.first
-            val allPackages = IAPRootService.Stub.asInterface(binder).getPackages(0)
-
-            withContext(Dispatchers.Main) {
-                stopRootService()
+        try {
+            val result = connectRootService {
+                Log.w(TAG, "RootService disconnected")
             }
-            val uids = Natives.suUids().toList()
-            Log.d(TAG, "all allows: $uids")
 
-            var configs: HashMap<Int, PkgConfig.Config> = HashMap()
-            thread {
-                Natives.su()
-                configs = PkgConfig.readConfigs()
-            }.join()
+            withContext(Dispatchers.IO) {
+                val binder = result.first
+                val allPackages = IAPRootService.Stub.asInterface(binder).getPackages(0)
 
-            Log.d(TAG, "all configs: $configs")
-
-            val newApps = allPackages.list.map {
-                val appInfo = it.applicationInfo
-                val uid = appInfo!!.uid
-                val actProfile = if (uids.contains(uid)) Natives.suProfile(uid) else null
-                val config = configs.getOrDefault(
-                    uid, PkgConfig.Config(appInfo.packageName, Natives.isUidExcluded(uid), 0, Natives.Profile(uid = uid))
-                )
-                config.allow = 0
-
-                // from kernel
-                if (actProfile != null) {
-                    config.allow = 1
-                    config.profile = actProfile
+                withContext(Dispatchers.Main) {
+                    stopRootService()
                 }
-                AppInfo(
-                    label = appInfo.loadLabel(apApp.packageManager).toString(),
-                    packageInfo = it,
-                    config = config
-                )
-            }
+                val uids = Natives.suUids().toList()
+                Log.d(TAG, "all allows: $uids")
 
-            synchronized(appsLock) {
-                apps = newApps
+                var configs: HashMap<Int, PkgConfig.Config> = HashMap()
+                thread {
+                    Natives.su()
+                    configs = PkgConfig.readConfigs()
+                }.join()
+
+                Log.d(TAG, "all configs: $configs")
+
+                val newApps = allPackages.list.map {
+                    val appInfo = it.applicationInfo
+                    val uid = appInfo!!.uid
+                    val actProfile = if (uids.contains(uid)) Natives.suProfile(uid) else null
+                    val config = configs.getOrDefault(
+                        uid, PkgConfig.Config(appInfo.packageName, Natives.isUidExcluded(uid), 0, Natives.Profile(uid = uid))
+                    )
+                    config.allow = 0
+
+                    // from kernel
+                    if (actProfile != null) {
+                        config.allow = 1
+                        config.profile = actProfile
+                    }
+                    AppInfo(
+                        label = appInfo.loadLabel(apApp.packageManager).toString(),
+                        packageInfo = it,
+                        config = config
+                    )
+                }
+
+                withContext(Dispatchers.Main) {
+                    synchronized(appsLock) {
+                        apps = newApps
+                    }
+                }
             }
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to fetch app list", e)
+        } finally {
+            isRefreshing = false
         }
     }
 }
