@@ -164,6 +164,7 @@ class WebViewInterface(val context: Context, private val webView: WebView) {
                 }
             }
         }
+        enableInsets(enable)
     }
 
     @JavascriptInterface
