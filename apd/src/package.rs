@@ -1,10 +1,13 @@
+use std::{
+    fs::File,
+    io::{self, BufRead},
+    path::Path,
+    thread,
+    time::Duration,
+};
+
 use log::{info, warn};
 use serde::{Deserialize, Serialize};
-use std::fs::File;
-use std::io::{self, BufRead};
-use std::path::Path;
-use std::thread;
-use std::time::Duration;
 
 #[derive(Deserialize, Serialize, Clone)]
 pub struct PackageConfig {
