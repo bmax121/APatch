@@ -142,7 +142,6 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
         module::handle_updated_modules()?;
         fs::remove_dir_all(module_update_dir)?;
     }
-    let is_lite_mode_enabled = Path::new(defs::LITEMODE_FILE).exists();
 
     if safe_mode {
         warn!("safe mode, skip post-fs-data scripts and disable all modules!");
@@ -163,9 +162,6 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     // load sepolicy.rule
     if module::load_sepolicy_rule().is_err() {
         warn!("load sepolicy.rule failed");
-    }
-    if is_lite_mode_enabled {
-        info!("litemode runing skip mount tempfs")
     }
 
     if let Err(e) = metamodule::exec_mount_script(module_dir) {

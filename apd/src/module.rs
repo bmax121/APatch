@@ -671,12 +671,6 @@ pub fn should_use_overlayfs_lua(lua: &Lua) -> LuaResult<Function> {
         ))),
     })
 }
-pub fn is_lite_mode_enabled_lua(lua: &Lua) -> LuaResult<Function> {
-    lua.create_function(|_, ()| {
-        let is_enabled = Path::new(defs::LITEMODE_FILE).exists();
-        Ok(is_enabled)
-    })
-}
 
 pub fn run_lua(id: &str, function: &str, on_each_module: bool, _wait: bool) -> mlua::Result<()> {
     let lua = unsafe { Lua::unsafe_new() };
@@ -689,8 +683,6 @@ pub fn run_lua(id: &str, function: &str, on_each_module: bool, _wait: bool) -> m
     lua.globals().set("getConfig", read_text_lua(&lua)?)?;
     lua.globals()
         .set("should_use_overlayfs", should_use_overlayfs_lua(&lua)?)?;
-    lua.globals()
-        .set("is_lite_mode_enabled", is_lite_mode_enabled_lua(&lua)?)?;
 
     load_all_lua_modules(&lua)?;
 
