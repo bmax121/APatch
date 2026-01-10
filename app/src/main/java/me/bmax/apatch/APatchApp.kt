@@ -61,8 +61,6 @@ class APApplication : Application(), Thread.UncaughtExceptionHandler {
         const val SAFEMODE_FILE = "/dev/.safemode"
         private const val NEED_REBOOT_FILE = "/dev/.need_reboot"
         const val GLOBAL_NAMESPACE_FILE = "/data/adb/.global_namespace_enable"
-        const val LITE_MODE_FILE = "/data/adb/.litemode_enable"
-        const val FORCE_OVERLAYFS_FILE = "/data/adb/.overlayfs_enable"
         const val KPMS_DIR = APATCH_FOLDER + "kpms/"
 
         @Deprecated("Use 'apd -V'")
