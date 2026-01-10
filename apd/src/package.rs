@@ -148,7 +148,7 @@ pub fn synchronize_package_uid() -> io::Result<()> {
                                 .iter_mut()
                                 .filter(|config| config.pkg == pkg_name)
                             {
-                                if config.uid % 100000 != uid % 100000 {  
+                                if config.uid % 100000 != uid % 100000 {
                                     let new_uid = config.uid / 100000 * 100000 + uid % 100000;
                                     info!(
                                         "Updating uid for package {}: {} -> {}",
