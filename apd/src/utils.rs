@@ -5,7 +5,7 @@ use std::os::unix::prelude::PermissionsExt;
 use std::{
     ffi::CString,
     fs::{File, OpenOptions, create_dir_all, metadata},
-    io::{BufRead, BufReader, ErrorKind::AlreadyExists, Write},
+    io::{ErrorKind::AlreadyExists, Write},
     path::Path,
     process::{Command, Stdio},
 };
@@ -107,29 +107,6 @@ pub fn switch_mnt_ns(pid: i32) -> Result<()> {
     }
     ensure!(ret == 0, "switch mnt ns failed");
     Ok(())
-}
-
-pub fn is_overlayfs_supported() -> Result<bool> {
-    let file =
-        File::open("/proc/filesystems").with_context(|| "Failed to open /proc/filesystems")?;
-    let reader = BufReader::new(file);
-
-    let overlay_supported = reader.lines().any(|line| {
-        if let Result::Ok(line) = line {
-            line.contains("overlay")
-        } else {
-            false
-        }
-    });
-
-    Ok(overlay_supported)
-}
-
-pub fn should_use_overlayfs() -> Result<bool> {
-    let force_using_overlayfs = Path::new(defs::FORCE_OVERLAYFS_FILE).exists();
-    let overlayfs_supported = is_overlayfs_supported()?;
-
-    Ok(force_using_overlayfs && overlayfs_supported)
 }
 
 fn switch_cgroup(grp: &str, pid: u32) {

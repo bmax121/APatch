@@ -219,7 +219,6 @@ pub fn exec_script<T: AsRef<Path>>(path: T, wait: bool) -> Result<()> {
         .env("APATCH", "true")
         .env("APATCH_VER", defs::VERSION_NAME)
         .env("APATCH_VER_CODE", defs::VERSION_CODE)
-        .env("APATCH_BIND_MOUNT", format!("{}", !should_use_overlayfs()?))
         .env(
             "PATH",
             format!(
@@ -662,15 +661,6 @@ pub fn read_text_lua(lua: &Lua) -> LuaResult<Function> {
         Ok(content)
     })
 }
-pub fn should_use_overlayfs_lua(lua: &Lua) -> LuaResult<Function> {
-    lua.create_function(|_, ()| match should_use_overlayfs() {
-        Ok(value) => Ok(value),
-        Err(e) => Err(mlua::Error::external(format!(
-            "check overlayfs failed: {}",
-            e
-        ))),
-    })
-}
 
 pub fn run_lua(id: &str, function: &str, on_each_module: bool, _wait: bool) -> mlua::Result<()> {
     let lua = unsafe { Lua::unsafe_new() };
@@ -681,8 +671,6 @@ pub fn run_lua(id: &str, function: &str, on_each_module: bool, _wait: bool) -> m
     lua.globals().set("warn", warn_lua(&lua)?)?;
     lua.globals().set("setConfig", save_text_lua(&lua)?)?;
     lua.globals().set("getConfig", read_text_lua(&lua)?)?;
-    lua.globals()
-        .set("should_use_overlayfs", should_use_overlayfs_lua(&lua)?)?;
 
     load_all_lua_modules(&lua)?;
 
