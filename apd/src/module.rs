@@ -472,7 +472,6 @@ fn _install_module(zip: &str) -> Result<()> {
         metamodule::ensure_symlink(&module_dir)?;
     }
 
-    exec_install_script(zip, is_metamodule)?;
     mark_update()?;
     Ok(())
 }
