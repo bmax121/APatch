@@ -399,17 +399,13 @@ private fun ModuleList(
                     items(modules) { module ->
                         var isChecked by rememberSaveable(module) { mutableStateOf(module.enabled) }
                         val scope = rememberCoroutineScope()
-                        val updatedModule by produceState(initialValue = Triple("", "", "")) {
-                            scope.launch(Dispatchers.IO) {
-                                value = viewModel.checkUpdate(module)
-                            }
-                        }
+                        val updateInfo = module.updateInfo
 
                         ModuleItem(
                             navigator,
                             module,
                             isChecked,
-                            updatedModule.first,
+                            updateInfo?.zipUrl ?: "",
                             onUninstall = {
                                 scope.launch { onModuleUninstall(module) }
                             },
@@ -440,12 +436,14 @@ private fun ModuleList(
                             },
                             onUpdate = {
                                 scope.launch {
-                                    onModuleUpdate(
-                                        module,
-                                        updatedModule.third,
-                                        updatedModule.first,
-                                        "${module.name}-${updatedModule.second}.zip"
-                                    )
+                                    updateInfo?.let { info ->
+                                        onModuleUpdate(
+                                            module,
+                                            info.changelog,
+                                            info.zipUrl,
+                                            "${module.name}-${info.version}.zip"
+                                        )
+                                    }
                                 }
                             },
                             onClick = {
