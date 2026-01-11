@@ -160,6 +160,14 @@ public final class SuFilePathHandler implements WebViewAssetLoader.PathHandler {
                     new ByteArrayInputStream(css.getBytes(StandardCharsets.UTF_8))
             );
         }
+        if ("internal/colors.css".equals(path)) {
+            String css = MonetColorsProvider.INSTANCE.getColorsCss();
+            return new WebResourceResponse(
+                    "text/css",
+                    "utf-8",
+                    new ByteArrayInputStream(css.getBytes(StandardCharsets.UTF_8))
+            );
+        }
         try {
             File file = getCanonicalFileIfChild(mDirectory, path);
             if (file != null) {
