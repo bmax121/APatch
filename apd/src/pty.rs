@@ -1,27 +1,31 @@
-use std::ffi::c_int;
-use std::fs::File;
-use std::io::{Read, Write, stderr, stdin, stdout};
-use std::mem::MaybeUninit;
-use std::os::fd::{AsFd, AsRawFd, OwnedFd, RawFd};
-use std::process::exit;
-use std::ptr::null_mut;
-use std::thread;
+use std::{
+    ffi::c_int,
+    fs::File,
+    io::{Read, Write, stderr, stdin, stdout},
+    mem::MaybeUninit,
+    os::fd::{AsFd, AsRawFd, OwnedFd, RawFd},
+    process::exit,
+    ptr::null_mut,
+    sync::Mutex,
+    thread,
+};
 
-use crate::defs::PTS_NAME;
-use crate::utils::get_tmp_path;
 use anyhow::{Ok, Result, bail};
 use libc::{
     __errno, EINTR, SIG_BLOCK, SIG_UNBLOCK, SIGWINCH, TIOCGWINSZ, TIOCSWINSZ, fork,
     pthread_sigmask, sigaddset, sigemptyset, sigset_t, sigwait, waitpid, winsize,
 };
-use rustix::fs::{Mode, OFlags, open};
-use rustix::io::dup;
-use rustix::ioctl::{Getter, ReadOpcode, ioctl};
-use rustix::process::setsid;
-use rustix::pty::{grantpt, unlockpt};
-use rustix::stdio::{dup2_stderr, dup2_stdin, dup2_stdout};
-use rustix::termios::{OptionalActions, Termios, isatty, tcgetattr, tcsetattr};
-use std::sync::Mutex;
+use rustix::{
+    fs::{Mode, OFlags, open},
+    io::dup,
+    ioctl::{Getter, ReadOpcode, ioctl},
+    process::setsid,
+    pty::{grantpt, unlockpt},
+    stdio::{dup2_stderr, dup2_stdin, dup2_stdout},
+    termios::{OptionalActions, Termios, isatty, tcgetattr, tcsetattr},
+};
+
+use crate::{defs::PTS_NAME, utils::get_tmp_path};
 
 // https://github.com/topjohnwu/Magisk/blob/5627053b7481618adfdf8fa3569b48275589915b/native/src/core/su/pts.cpp
 

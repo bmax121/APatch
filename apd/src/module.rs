@@ -1,28 +1,32 @@
-#[allow(clippy::wildcard_imports)]
-use crate::utils::*;
-use crate::{assets, defs, restorecon};
+#[cfg(unix)]
+use std::os::unix::{prelude::PermissionsExt, process::CommandExt};
+use std::{
+    collections::HashMap,
+    env::var as env_var,
+    fs::{self, remove_dir_all},
+    io::Cursor,
+    path::{Path, PathBuf},
+    process::Command,
+    str::FromStr,
+};
+
 use anyhow::{Context, Result, anyhow, bail, ensure};
 use const_format::concatcp;
 use is_executable::is_executable;
 use java_properties::PropertiesIter;
 use log::{info, warn};
-use mlua::{Function, Lua, Result as LuaResult, Table, Value};
-use std::{
-    collections::HashMap,
-    env::var as env_var,
-    fs,
-    io::Cursor,
-    path::{Path, PathBuf},
-    process::{Command, Stdio},
-    str::FromStr,
-};
+use mlua::{Function, Lua, Result as LuaResult, Table};
 use zip_extensions::zip_extract_file_to_memory;
 
-#[cfg(unix)]
-use std::os::unix::{prelude::PermissionsExt, process::CommandExt};
+#[allow(clippy::wildcard_imports)]
+use crate::utils::*;
+use crate::{
+    assets,
+    defs::{self, MODULE_DIR, MODULE_UPDATE_DIR},
+    metamodule, restorecon,
+};
 
 const INSTALLER_CONTENT: &str = include_str!("./installer.sh");
-const INSTALLER_CONTENT_: &str = include_str!("./installer_bind.sh");
 const INSTALL_MODULE_SCRIPT: &str = concatcp!(
     INSTALLER_CONTENT,
     "\n",
@@ -31,41 +35,25 @@ const INSTALL_MODULE_SCRIPT: &str = concatcp!(
     "exit 0",
     "\n"
 );
-const INSTALL_MODULE_SCRIPT_: &str = concatcp!(
-    INSTALLER_CONTENT_,
-    "\n",
-    "install_module",
-    "\n",
-    "exit 0",
-    "\n"
-);
 
-fn exec_install_script(module_file: &str) -> Result<()> {
-    let realpath =
-        fs::canonicalize(module_file).with_context(|| format!("realpath: {module_file} failed"))?;
+#[derive(PartialEq, Eq)]
+pub enum ModuleType {
+    All,
+    Active,
+    Updated,
+}
 
-    let content;
+fn exec_install_script(module_file: &str, is_metamodule: bool) -> Result<()> {
+    let realpath = std::fs::canonicalize(module_file)
+        .with_context(|| format!("realpath: {module_file} failed"))?;
 
-    if !should_use_overlayfs()? {
-        content = INSTALL_MODULE_SCRIPT_.to_string();
-    } else {
-        content = INSTALL_MODULE_SCRIPT.to_string();
-    }
+    // Get install script from metamodule module
+    let install_script =
+        metamodule::get_install_script(is_metamodule, INSTALLER_CONTENT, INSTALL_MODULE_SCRIPT)?;
+
     let result = Command::new(assets::BUSYBOX_PATH)
-        .args(["sh", "-c", &content])
-        .env("ASH_STANDALONE", "1")
-        .env(
-            "PATH",
-            format!(
-                "{}:{}",
-                env_var("PATH").unwrap(),
-                defs::BINARY_DIR.trim_end_matches('/')
-            ),
-        )
-        .env("APATCH", "true")
-        .env("APATCH_VER", defs::VERSION_NAME)
-        .env("APATCH_VER_CODE", defs::VERSION_CODE)
-        .env("APATCH_BIND_MOUNT", format!("{}", !should_use_overlayfs()?))
+        .args(["sh", "-c", &install_script])
+        .envs(get_common_script_envs())
         .env("OUTFD", "1")
         .env("ZIPFILE", realpath)
         .status()?;
@@ -73,7 +61,60 @@ fn exec_install_script(module_file: &str) -> Result<()> {
     Ok(())
 }
 
-// becuase we use something like A-B update
+pub fn handle_updated_modules() -> Result<()> {
+    let modules_root = Path::new(MODULE_DIR);
+    foreach_module(ModuleType::Updated, |updated_module| {
+        if !updated_module.is_dir() {
+            return Ok(());
+        }
+
+        if let Some(name) = updated_module.file_name() {
+            let module_dir = modules_root.join(name);
+            let mut disabled = false;
+            let mut removed = false;
+            if module_dir.exists() {
+                // If the old module is disabled, we need to also disable the new one
+                disabled = module_dir.join(defs::DISABLE_FILE_NAME).exists();
+                removed = module_dir.join(defs::REMOVE_FILE_NAME).exists();
+                remove_dir_all(&module_dir)?;
+            }
+            std::fs::rename(updated_module, &module_dir)?;
+            if removed {
+                let path = module_dir.join(defs::REMOVE_FILE_NAME);
+                if let Err(e) = ensure_file_exists(&path) {
+                    warn!("Failed to create {}: {e}", path.display());
+                }
+            } else if disabled {
+                let path = module_dir.join(defs::DISABLE_FILE_NAME);
+                if let Err(e) = ensure_file_exists(&path) {
+                    warn!("Failed to create {}: {e}", path.display());
+                }
+            }
+        }
+        Ok(())
+    })?;
+    Ok(())
+}
+
+/// Get common environment variables for script execution
+pub fn get_common_script_envs() -> Vec<(&'static str, String)> {
+    vec![
+        ("ASH_STANDALONE", "1".to_string()),
+        ("APATCH", "true".to_string()),
+        ("APATCH_VER", defs::VERSION_NAME.to_string()),
+        ("APATCH_VER_CODE", defs::VERSION_CODE.to_string()),
+        (
+            "PATH",
+            format!(
+                "{}:{}",
+                env_var("PATH").unwrap_or_default(),
+                defs::BINARY_DIR.trim_end_matches('/')
+            ),
+        ),
+    ]
+}
+
+// because we use something like A-B update
 // we need to update the module state after the boot_completed
 // if someone(such as the module) install a module before the boot_completed
 // then it may cause some problems, just forbid it
@@ -100,10 +141,15 @@ fn mark_module_state(module: &str, flag_file: &str, create_or_delete: bool) -> R
         Ok(())
     }
 }
-
-fn foreach_module(active_only: bool, mut f: impl FnMut(&Path) -> Result<()>) -> Result<()> {
-    let modules_dir = Path::new(defs::MODULE_DIR);
-    let dir = fs::read_dir(modules_dir)?;
+pub fn foreach_module(
+    module_type: ModuleType,
+    mut f: impl FnMut(&Path) -> Result<()>,
+) -> Result<()> {
+    let modules_dir = Path::new(match module_type {
+        ModuleType::Updated => MODULE_UPDATE_DIR,
+        _ => defs::MODULE_DIR,
+    });
+    let dir = std::fs::read_dir(modules_dir)?;
     for entry in dir.flatten() {
         let path = entry.path();
         if !path.is_dir() {
@@ -111,11 +157,11 @@ fn foreach_module(active_only: bool, mut f: impl FnMut(&Path) -> Result<()>) -> 
             continue;
         }
 
-        if active_only && path.join(defs::DISABLE_FILE_NAME).exists() {
+        if module_type == ModuleType::Active && path.join(defs::DISABLE_FILE_NAME).exists() {
             info!("{} is disabled, skip", path.display());
             continue;
         }
-        if active_only && path.join(defs::REMOVE_FILE_NAME).exists() {
+        if module_type == ModuleType::Active && path.join(defs::REMOVE_FILE_NAME).exists() {
             warn!("{} is removed, skip", path.display());
             continue;
         }
@@ -127,27 +173,7 @@ fn foreach_module(active_only: bool, mut f: impl FnMut(&Path) -> Result<()>) -> 
 }
 
 fn foreach_active_module(f: impl FnMut(&Path) -> Result<()>) -> Result<()> {
-    foreach_module(true, f)
-}
-
-pub fn check_image(img: &str) -> Result<()> {
-    let result = Command::new("e2fsck")
-        .args(["-yf", img])
-        .stdout(Stdio::piped())
-        .status()
-        .with_context(|| format!("Failed to exec e2fsck {img}"))?;
-    let code = result.code();
-    // 0 or 1 is ok
-    // 0: no error
-    // 1: file system errors corrected
-    // https://man7.org/linux/man-pages/man8/e2fsck.8.html
-    // ensure!(
-    //     code == Some(0) || code == Some(1),
-    //     "Failed to check image, e2fsck exit code: {}",
-    //     code.unwrap_or(-1)
-    // );
-    info!("e2fsck exit code: {}", code.unwrap_or(-1));
-    Ok(())
+    foreach_module(ModuleType::Active, f)
 }
 
 pub fn load_sepolicy_rule() -> Result<()> {
@@ -170,7 +196,7 @@ pub fn load_sepolicy_rule() -> Result<()> {
     Ok(())
 }
 
-fn exec_script<T: AsRef<Path>>(path: T, wait: bool) -> Result<()> {
+pub fn exec_script<T: AsRef<Path>>(path: T, wait: bool) -> Result<()> {
     info!("exec {}", path.as_ref().display());
 
     let mut command = &mut Command::new(assets::BUSYBOX_PATH);
@@ -193,7 +219,6 @@ fn exec_script<T: AsRef<Path>>(path: T, wait: bool) -> Result<()> {
         .env("APATCH", "true")
         .env("APATCH_VER", defs::VERSION_NAME)
         .env("APATCH_VER_CODE", defs::VERSION_CODE)
-        .env("APATCH_BIND_MOUNT", format!("{}", !should_use_overlayfs()?))
         .env(
             "PATH",
             format!(
@@ -223,11 +248,12 @@ pub fn exec_stage_script(stage: &str, block: bool) -> Result<()> {
     Ok(())
 }
 
-pub fn exec_stage_lua(stage: &str,wait: bool,superkey: &str) -> Result<()> {
+pub fn exec_stage_lua(stage: &str, wait: bool, superkey: &str) -> Result<()> {
     let stage_safe = stage.replace('-', "_");
     run_lua(&superkey, &stage_safe, true, wait).map_err(|e| anyhow::anyhow!("{}", e))?;
     Ok(())
 }
+
 pub fn exec_common_scripts(dir: &str, wait: bool) -> Result<()> {
     let script_dir = Path::new(defs::ADB_DIR).join(dir);
     if !script_dir.exists() {
@@ -273,7 +299,7 @@ pub fn load_system_prop() -> Result<()> {
 }
 
 pub fn prune_modules() -> Result<()> {
-    foreach_module(false, |module| {
+    foreach_module(ModuleType::All, |module| {
         fs::remove_file(module.join(defs::UPDATE_FILE_NAME)).ok();
         if !module.join(defs::REMOVE_FILE_NAME).exists() {
             return Ok(());
@@ -281,24 +307,48 @@ pub fn prune_modules() -> Result<()> {
 
         info!("remove module: {}", module.display());
 
-        let uninstaller = module.join("uninstall.sh");
-        if uninstaller.exists() {
-            if let Err(e) = exec_script(uninstaller, true) {
-                warn!("Failed to exec uninstaller: {}", e);
+        // Execute metamodule's metauninstall.sh first
+        let module_id = module.file_name().and_then(|n| n.to_str()).unwrap_or("");
+
+        // Check if this is a metamodule
+        let is_metamodule = read_module_prop(module)
+            .map(|props| metamodule::is_metamodule(&props))
+            .unwrap_or(false);
+
+        if is_metamodule {
+            info!("Removing metamodule symlink");
+            if let Err(e) = metamodule::remove_symlink() {
+                warn!("Failed to remove metamodule symlink: {e}");
             }
+        } else if let Err(e) = metamodule::exec_metauninstall_script(module_id) {
+            warn!("Failed to exec metamodule uninstall for {module_id}: {e}",);
         }
 
-        if let Err(e) = fs::remove_dir_all(module) {
-            warn!("Failed to remove {}: {}", module.display(), e);
+        // Then execute module's own uninstall.sh
+        let uninstaller = module.join("uninstall.sh");
+        if uninstaller.exists()
+            && let Err(e) = exec_script(uninstaller, true)
+        {
+            warn!("Failed to exec uninstaller: {e}");
         }
-        let module_path = module.display().to_string();
-        let updated_path = module_path.replace(defs::MODULE_DIR, defs::MODULE_UPDATE_TMP_DIR);
 
-        if let Err(e) = fs::remove_dir_all(&updated_path) {
-            warn!("Failed to remove {}: {}", updated_path, e);
+        // Finally remove the module directory
+        if let Err(e) = remove_dir_all(module) {
+            warn!("Failed to remove {}: {e}", module.display());
         }
+
         Ok(())
     })?;
+
+    // collect remaining modules, if none, clean up metamodule record
+    let remaining_modules: Vec<_> = std::fs::read_dir(defs::MODULE_DIR)?
+        .filter_map(std::result::Result::ok)
+        .filter(|entry| entry.path().join("module.prop").exists())
+        .collect();
+
+    if remaining_modules.is_empty() {
+        info!("no remaining modules.");
+    }
 
     Ok(())
 }
@@ -332,17 +382,68 @@ fn _install_module(zip: &str) -> Result<()> {
     let Some(module_id) = module_prop.get("id") else {
         bail!("module id not found in module.prop!");
     };
+    let module_id = module_id.trim();
+
+    // Check if this module is a metamodule
+    let is_metamodule = metamodule::is_metamodule(&module_prop);
+
+    // Check if it's safe to install regular module
+    if !is_metamodule && let Err(is_disabled) = metamodule::check_install_safety() {
+        println!("\n❌ Installation Blocked");
+        println!("┌────────────────────────────────");
+        println!("│ A metamodule with custom installer is active");
+        println!("│");
+        if is_disabled {
+            println!("│ Current state: Disabled");
+            println!("│ Action required: Re-enable or uninstall it, then reboot");
+        } else {
+            println!("│ Current state: Pending changes");
+            println!("│ Action required: Reboot to apply changes first");
+        }
+        println!("└─────────────────────────────────\n");
+        bail!("Metamodule installation blocked");
+    }
 
     let modules_dir = Path::new(defs::MODULE_DIR);
-    let modules_update_dir = Path::new(defs::MODULE_UPDATE_TMP_DIR);
+    let modules_update_dir = Path::new(defs::MODULE_UPDATE_DIR);
     if !Path::new(modules_dir).exists() {
         fs::create_dir(modules_dir).expect("Failed to create modules folder");
         let permissions = fs::Permissions::from_mode(0o700);
         fs::set_permissions(modules_dir, permissions).expect("Failed to set permissions");
     }
 
-    let module_dir = format!("{}{}", modules_dir.display(), module_id.clone());
-    let _module_update_dir = format!("{}{}", modules_update_dir.display(), module_id.clone());
+    if is_metamodule {
+        info!("Installing metamodule: {module_id}");
+
+        // Check if there's already a metamodule installed
+        if metamodule::has_metamodule()
+            && let Some(existing_path) = metamodule::get_metamodule_path()
+        {
+            let existing_id = read_module_prop(&existing_path)
+                .ok()
+                .and_then(|m| m.get("id").cloned())
+                .unwrap_or_else(|| "unknown".to_string());
+
+            if existing_id != module_id {
+                println!("\n❌ Installation Failed");
+                println!("┌────────────────────────────────");
+                println!("│ A metamodule is already installed");
+                println!("│   Current metamodule: {existing_id}");
+                println!("│");
+                println!("│ Only one metamodule can be active at a time.");
+                println!("│");
+                println!("│ To install this metamodule:");
+                println!("│   1. Uninstall the current metamodule");
+                println!("│   2. Reboot your device");
+                println!("│   3. Install the new metamodule");
+                println!("└─────────────────────────────────\n");
+                bail!("Cannot install multiple metamodules");
+            }
+        }
+    }
+
+    let module_dir = format!("{}{}", modules_dir.display(), module_id);
+    let _module_update_dir = format!("{}{}", modules_update_dir.display(), module_id);
     info!("module dir: {}", module_dir);
     if !Path::new(&module_dir.clone()).exists() {
         fs::create_dir(&module_dir.clone()).expect("Failed to create module folder");
@@ -354,6 +455,9 @@ fn _install_module(zip: &str) -> Result<()> {
     let mut archive = zip::ZipArchive::new(file)?;
     archive.extract(&_module_update_dir)?;
 
+    println!("- Running module installer");
+    exec_install_script(zip, is_metamodule)?;
+
     // set permission and selinux context for $MOD/system
     let module_system_dir = PathBuf::from(module_dir.clone()).join("system");
     if module_system_dir.exists() {
@@ -361,7 +465,13 @@ fn _install_module(zip: &str) -> Result<()> {
         fs::set_permissions(&module_system_dir, fs::Permissions::from_mode(0o755))?;
         restorecon::restore_syscon(&module_system_dir)?;
     }
-    exec_install_script(zip)?;
+
+    // Create symlink for metamodule
+    if is_metamodule {
+        println!("- Creating metamodule symlink");
+        metamodule::ensure_symlink(&module_dir)?;
+    }
+
     mark_update()?;
     Ok(())
 }
@@ -416,6 +526,28 @@ pub fn uninstall_module(id: &str) -> Result<()> {
     _uninstall_module(id, defs::MODULE_DIR)?;
     mark_update()?;
     Ok(())
+}
+
+/// Read module.prop from the given module path and return as a HashMap
+pub fn read_module_prop(module_path: &Path) -> Result<HashMap<String, String>> {
+    let module_prop = module_path.join("module.prop");
+    ensure!(
+        module_prop.exists(),
+        "module.prop not found in {}",
+        module_path.display()
+    );
+
+    let content = std::fs::read(&module_prop)
+        .with_context(|| format!("Failed to read module.prop: {}", module_prop.display()))?;
+
+    let mut prop_map: HashMap<String, String> = HashMap::new();
+    PropertiesIter::new_with_encoding(Cursor::new(content), encoding_rs::UTF_8)
+        .read_into(|k, v| {
+            prop_map.insert(k, v);
+        })
+        .with_context(|| format!("Failed to parse module.prop: {}", module_prop.display()))?;
+
+    Ok(prop_map)
 }
 
 pub fn save_text<P: AsRef<Path>>(filename: P, content: &str) -> std::io::Result<()> {
@@ -528,21 +660,6 @@ pub fn read_text_lua(lua: &Lua) -> LuaResult<Function> {
         Ok(content)
     })
 }
-pub fn should_use_overlayfs_lua(lua: &Lua) -> LuaResult<Function> {
-    lua.create_function(|_, ()| match should_use_overlayfs() {
-        Ok(value) => Ok(value),
-        Err(e) => Err(mlua::Error::external(format!(
-            "check overlayfs failed: {}",
-            e
-        ))),
-    })
-}
-pub fn is_lite_mode_enabled_lua(lua: &Lua) -> LuaResult<Function> {
-    lua.create_function(|_, ()| {
-        let is_enabled = Path::new(defs::LITEMODE_FILE).exists();
-        Ok(is_enabled)
-    })
-}
 
 pub fn run_lua(id: &str, function: &str, on_each_module: bool, _wait: bool) -> mlua::Result<()> {
     let lua = unsafe { Lua::unsafe_new() };
@@ -553,10 +670,6 @@ pub fn run_lua(id: &str, function: &str, on_each_module: bool, _wait: bool) -> m
     lua.globals().set("warn", warn_lua(&lua)?)?;
     lua.globals().set("setConfig", save_text_lua(&lua)?)?;
     lua.globals().set("getConfig", read_text_lua(&lua)?)?;
-    lua.globals()
-        .set("should_use_overlayfs", should_use_overlayfs_lua(&lua)?)?;
-    lua.globals()
-        .set("is_lite_mode_enabled", is_lite_mode_enabled_lua(&lua)?)?;
 
     load_all_lua_modules(&lua)?;
 
@@ -710,8 +823,7 @@ fn _list_modules(path: &str) -> Vec<HashMap<String, String>> {
         let web = path.join(defs::MODULE_WEB_DIR).exists();
         let id = module_prop_map.get("id").map(|s| s.as_str()).unwrap_or("");
         let id_lua_file = format!("{}.lua", id);
-        let action = path.join(defs::MODULE_ACTION_SH).exists()
-                || path.join(&id_lua_file).exists();
+        let action = path.join(defs::MODULE_ACTION_SH).exists() || path.join(&id_lua_file).exists();
 
         module_prop_map.insert("enabled".to_owned(), enabled.to_string());
         module_prop_map.insert("update".to_owned(), update.to_string());

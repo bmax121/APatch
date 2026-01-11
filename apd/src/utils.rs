@@ -1,32 +1,19 @@
-use anyhow::{Context, Error, Ok, Result, bail};
-use log::{info, warn};
-use std::ffi::CString;
-use std::{
-    fs::{File, OpenOptions, create_dir_all},
-    io::{BufRead, BufReader, ErrorKind::AlreadyExists, Write},
-    path::Path,
-    process::Stdio,
-};
-
-use crate::defs;
-use std::fs::metadata;
 #[allow(unused_imports)]
 use std::fs::{Permissions, set_permissions};
 #[cfg(unix)]
 use std::os::unix::prelude::PermissionsExt;
-use std::process::Command;
+use std::{
+    ffi::CString,
+    fs::{File, OpenOptions, create_dir_all, metadata},
+    io::{ErrorKind::AlreadyExists, Write},
+    path::Path,
+    process::{Command, Stdio},
+};
 
-use crate::supercall::sc_su_get_safemode;
+use anyhow::{Context, Error, Ok, Result, bail};
+use log::{info, warn};
 
-pub fn ensure_clean_dir(dir: &str) -> Result<()> {
-    let path = Path::new(dir);
-    log::debug!("ensure_clean_dir: {}", path.display());
-    if path.exists() {
-        log::debug!("ensure_clean_dir: {} exists, remove it", path.display());
-        std::fs::remove_dir_all(path)?;
-    }
-    Ok(create_dir_all(path)?)
-}
+use crate::{defs, supercall::sc_su_get_safemode};
 
 pub fn ensure_file_exists<T: AsRef<Path>>(file: T) -> Result<()> {
     match File::options().write(true).create_new(true).open(&file) {
@@ -108,8 +95,9 @@ pub fn is_safe_mode(superkey: Option<String>) -> bool {
 
 #[cfg(any(target_os = "linux", target_os = "android"))]
 pub fn switch_mnt_ns(pid: i32) -> Result<()> {
-    use anyhow::ensure;
     use std::os::fd::AsRawFd;
+
+    use anyhow::ensure;
     let path = format!("/proc/{pid}/ns/mnt");
     let fd = File::open(path)?;
     let current_dir = std::env::current_dir();
@@ -119,29 +107,6 @@ pub fn switch_mnt_ns(pid: i32) -> Result<()> {
     }
     ensure!(ret == 0, "switch mnt ns failed");
     Ok(())
-}
-
-pub fn is_overlayfs_supported() -> Result<bool> {
-    let file =
-        File::open("/proc/filesystems").with_context(|| "Failed to open /proc/filesystems")?;
-    let reader = BufReader::new(file);
-
-    let overlay_supported = reader.lines().any(|line| {
-        if let Result::Ok(line) = line {
-            line.contains("overlay")
-        } else {
-            false
-        }
-    });
-
-    Ok(overlay_supported)
-}
-
-pub fn should_use_overlayfs() -> Result<bool> {
-    let force_using_overlayfs = Path::new(defs::FORCE_OVERLAYFS_FILE).exists();
-    let overlayfs_supported = is_overlayfs_supported()?;
-
-    Ok(force_using_overlayfs && overlayfs_supported)
 }
 
 fn switch_cgroup(grp: &str, pid: u32) {
@@ -191,8 +156,4 @@ pub fn get_tmp_path() -> &'static str {
         return defs::TEMP_DIR;
     }
     ""
-}
-pub fn get_work_dir() -> String {
-    let tmp_path = get_tmp_path();
-    format!("{}/workdir/", tmp_path)
 }

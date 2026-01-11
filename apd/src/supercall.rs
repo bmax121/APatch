@@ -1,16 +1,19 @@
-use crate::package::{read_ap_package_config, synchronize_package_uid};
+use std::{
+    ffi::{CStr, CString},
+    fmt::Write,
+    fs::File,
+    io::{self, Read},
+    process,
+    process::exit,
+    ptr,
+    sync::{Arc, Mutex},
+};
+
 use errno::errno;
 use libc::{EINVAL, c_int, c_long, c_void, execv, fork, pid_t, setenv, syscall, uid_t, wait};
 use log::{error, info, warn};
-use std::ffi::{CStr, CString};
-use std::fmt::Write;
-use std::fs::File;
-use std::io::{self, Read};
 
-use std::process::exit;
-use std::sync::{Arc, Mutex};
-
-use std::{process, ptr};
+use crate::package::{read_ap_package_config, synchronize_package_uid};
 
 const MAJOR: c_long = 0;
 const MINOR: c_long = 11;

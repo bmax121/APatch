@@ -32,11 +32,9 @@ import androidx.compose.material.icons.filled.Commit
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.DeveloperMode
 import androidx.compose.material.icons.filled.Engineering
-import androidx.compose.material.icons.filled.FilePresent
 import androidx.compose.material.icons.filled.FormatColorFill
 import androidx.compose.material.icons.filled.InvertColors
 import androidx.compose.material.icons.filled.Key
-import androidx.compose.material.icons.filled.RemoveFromQueue
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Translate
@@ -95,15 +93,10 @@ import me.bmax.apatch.ui.component.rememberLoadingDialog
 import me.bmax.apatch.ui.theme.refreshTheme
 import me.bmax.apatch.util.APatchKeyHelper
 import me.bmax.apatch.util.getBugreportFile
-import me.bmax.apatch.util.isForceUsingOverlayFS
 import me.bmax.apatch.util.isGlobalNamespaceEnabled
-import me.bmax.apatch.util.isLiteModeEnabled
 import me.bmax.apatch.util.outputStream
-import me.bmax.apatch.util.overlayFsAvailable
 import me.bmax.apatch.util.rootShellForResult
-import me.bmax.apatch.util.setForceUsingOverlayFS
 import me.bmax.apatch.util.setGlobalNamespaceEnabled
-import me.bmax.apatch.util.setLiteMode
 import me.bmax.apatch.util.ui.APDialogBlurBehindUtils
 import me.bmax.apatch.util.ui.LocalSnackbarHost
 import me.bmax.apatch.util.ui.NavigationBarsSpacer
@@ -122,22 +115,11 @@ fun SettingScreen() {
     var isGlobalNamespaceEnabled by rememberSaveable {
         mutableStateOf(false)
     }
-    var isLiteModeEnabled by rememberSaveable {
-        mutableStateOf(false)
-    }
-    var forceUsingOverlayFS by rememberSaveable {
-        mutableStateOf(false)
-    }
     var bSkipStoreSuperKey by rememberSaveable {
         mutableStateOf(APatchKeyHelper.shouldSkipStoreSuperKey())
     }
-    val isOverlayFSAvailable by rememberSaveable {
-        mutableStateOf(overlayFsAvailable())
-    }
     if (kPatchReady && aPatchReady) {
         isGlobalNamespaceEnabled = isGlobalNamespaceEnabled()
-        isLiteModeEnabled = isLiteModeEnabled()
-        forceUsingOverlayFS = isForceUsingOverlayFS()
     }
 
     val snackBarHost = LocalSnackbarHost.current
@@ -254,32 +236,6 @@ fun SettingScreen() {
                             }
                         )
                         isGlobalNamespaceEnabled = it
-                    })
-            }
-
-            // Lite Mode
-            if (kPatchReady && aPatchReady) {
-                SwitchItem(
-                    icon = Icons.Filled.RemoveFromQueue,
-                    title = stringResource(id = R.string.settings_lite_mode),
-                    summary = stringResource(id = R.string.settings_lite_mode_mode_summary),
-                    checked = isLiteModeEnabled,
-                    onCheckedChange = {
-                        setLiteMode(it)
-                        isLiteModeEnabled = it
-                    })
-            }
-
-            // Force OverlayFS
-            if (kPatchReady && aPatchReady && isOverlayFSAvailable) {
-                SwitchItem(
-                    icon = Icons.Filled.FilePresent,
-                    title = stringResource(id = R.string.settings_force_overlayfs_mode),
-                    summary = stringResource(id = R.string.settings_force_overlayfs_mode_summary),
-                    checked = forceUsingOverlayFS,
-                    onCheckedChange = {
-                        setForceUsingOverlayFS(it)
-                        forceUsingOverlayFS = it
                     })
             }
 

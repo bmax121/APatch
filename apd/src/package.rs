@@ -1,10 +1,13 @@
+use std::{
+    fs::File,
+    io::{self, BufRead},
+    path::Path,
+    thread,
+    time::Duration,
+};
+
 use log::{info, warn};
 use serde::{Deserialize, Serialize};
-use std::fs::File;
-use std::io::{self, BufRead};
-use std::path::Path;
-use std::thread;
-use std::time::Duration;
 
 #[derive(Deserialize, Serialize, Clone)]
 pub struct PackageConfig {
@@ -145,7 +148,7 @@ pub fn synchronize_package_uid() -> io::Result<()> {
                                 .iter_mut()
                                 .filter(|config| config.pkg == pkg_name)
                             {
-                                if config.uid % 100000 != uid % 100000 {  
+                                if config.uid % 100000 != uid % 100000 {
                                     let new_uid = config.uid / 100000 * 100000 + uid % 100000;
                                     info!(
                                         "Updating uid for package {}: {} -> {}",

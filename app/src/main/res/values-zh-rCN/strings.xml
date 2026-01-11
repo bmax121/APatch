@@ -25,6 +25,7 @@
     <string name="reboot">重启</string>
     <string name="home_need_update">新版本可升级</string>
     <string name="home">主页</string>
+    <string name="learn_more">了解更多</string>
     <string name="patch_set_superkey">设置超级密钥</string>
     <string name="settings">设置</string>
     <string name="home_working">工作中 😋</string>
@@ -80,6 +81,12 @@
     <string name="apm_install">安装</string>
     <string name="apm_remove">卸载</string>
     <string name="apm_uninstall_confirm">确认要卸载“%s”模块吗？</string>
+    <string name="metamodule_uninstall_confirm">"您确定要卸载模块 %s 吗？此操作将影响所有模块，并且元模块提供的某些功能（如挂载）将不再工作。  "</string>
+    <string name="warning_of_meta_module_title">需要元模块</string>
+    <string name="warning_of_meta_module_summary">这个模块需要挂载一些文件。需要安装元模块，使它正常工作</string>
+    <string name="meta_module_disabled">模块未挂载，因为元模块已禁用</string>
+    <string name="meta_module_removed">模块未挂载，因为元模块即将删除</string>
+    <string name="no_meta_module_installed">模块未挂载，因为未安装元模块</string>
     <string name="apm_version">版本</string>
     <string name="apm_start_downloading">开始下载 %s</string>
     <string name="apm_overlay_fs_not_available">模块功能不可用，因为内核禁用了 OverlayFS！</string>
@@ -211,8 +218,4 @@
     <string name="crash_handle_title">应用崩溃了…</string>
     <string name="crash_handle_copy">复制崩溃日志</string>
     <string name="crash_handle_copied">崩溃日志已复制到剪贴板。</string>
-    <string name="settings_lite_mode">启动 Lite 模式</string>
-    <string name="settings_lite_mode_mode_summary">开启后系统模块功能可能会展现失败，但某些情形下仍能有效地规避检测，重启生效。</string>
-    <string name="settings_force_overlayfs_mode">强制使用 OverlayFS</string>
-    <string name="settings_force_overlayfs_mode_summary">在内核支持可用时用 OverlayFS 而非 Magic Mount 来挂载系统模块，需要重启生效。</string>
 </resources>

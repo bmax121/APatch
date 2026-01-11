@@ -9,6 +9,11 @@ import android.util.Patterns
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,7 +32,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FloatingActionButton
@@ -42,7 +46,6 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -57,14 +60,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
@@ -72,6 +79,7 @@ import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.ExecuteAPMActionScreenDestination
 import com.ramcosta.composedestinations.generated.destinations.InstallScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.topjohnwu.superuser.io.SuFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -79,11 +87,12 @@ import me.bmax.apatch.APApplication
 import me.bmax.apatch.R
 import me.bmax.apatch.apApp
 import me.bmax.apatch.ui.WebUIActivity
-import me.bmax.apatch.ui.component.SearchAppBar
 import me.bmax.apatch.ui.component.ConfirmResult
 import me.bmax.apatch.ui.component.ModuleRemoveButton
 import me.bmax.apatch.ui.component.ModuleStateIndicator
 import me.bmax.apatch.ui.component.ModuleUpdateButton
+import me.bmax.apatch.ui.component.SearchAppBar
+import me.bmax.apatch.ui.component.WarningCard
 import me.bmax.apatch.ui.component.rememberConfirmDialog
 import me.bmax.apatch.ui.component.rememberLoadingDialog
 import me.bmax.apatch.ui.viewmodel.APModuleViewModel
@@ -239,6 +248,54 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+private fun MetaModuleWarningCard(
+    viewModel: APModuleViewModel
+) {
+    val hasSystemModule = viewModel.moduleList.any { module ->
+        SuFile.open("/data/adb/modules/${module.id}/system").exists()
+    }
+
+
+    if (!hasSystemModule) return
+
+    val metaProp = SuFile.open("/data/adb/metamodule/module.prop").exists()
+    val metaRemoved = SuFile.open("/data/adb/metamodule/remove").exists()
+    val metaDisabled = SuFile.open("/data/adb/metamodule/disable").exists()
+
+    val warningText = when {
+        !metaProp ->
+            stringResource(R.string.no_meta_module_installed)
+
+        metaProp && metaRemoved ->
+            stringResource(R.string.meta_module_removed)
+
+        metaProp && metaDisabled ->
+            stringResource(R.string.meta_module_disabled)
+
+        else -> null
+    }
+
+    if (warningText == null) return
+    var show by remember { mutableStateOf(true) }
+
+    AnimatedVisibility(
+        visible = show,
+        enter = fadeIn() + expandVertically(),
+        exit = fadeOut() + shrinkVertically()
+    ) {
+        WarningCard(
+            message = warningText,
+            onClose = {
+                show = false
+            }
+        )
+
+        Spacer(Modifier.height(8.dp))
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
 private fun ModuleList(
     navigator: DestinationsNavigator,
     viewModel: APModuleViewModel,
@@ -260,6 +317,7 @@ private fun ModuleList(
     val uninstall = stringResource(id = R.string.apm_remove)
     val cancel = stringResource(id = android.R.string.cancel)
     val moduleUninstallConfirm = stringResource(id = R.string.apm_uninstall_confirm)
+    val metaModuleUninstallConfirm = stringResource(R.string.metamodule_uninstall_confirm)
     val updateText = stringResource(R.string.apm_update)
     val changelogText = stringResource(R.string.apm_changelog)
     val downloadingText = stringResource(R.string.apm_downloading)
@@ -326,9 +384,10 @@ private fun ModuleList(
     }
 
     suspend fun onModuleUninstall(module: APModuleViewModel.ModuleInfo) {
+        val formatter = if (module.metamodule) metaModuleUninstallConfirm else moduleUninstallConfirm
         val confirmResult = confirmDialog.awaitConfirm(
             moduleStr,
-            content = moduleUninstallConfirm.format(module.name),
+            content = formatter.format(module.name),
             confirm = uninstall,
             dismiss = cancel
         )
@@ -381,6 +440,9 @@ private fun ModuleList(
                 )
             },
         ) {
+            item {
+                MetaModuleWarningCard(viewModel)
+            }
             when {
                 modules.isEmpty() -> {
                     item {
@@ -504,13 +566,54 @@ private fun ModuleItem(
                             .weight(1f),
                         verticalArrangement = Arrangement.spacedBy(2.dp)
                     ) {
-                        Text(
-                            text = module.name,
-                            style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                            maxLines = 2,
-                            textDecoration = decoration,
-                            overflow = TextOverflow.Ellipsis
-                        )
+                        SubcomposeLayout { constraints ->
+                            val spacingPx = 6.dp.roundToPx()
+                            var nameTextLayout: TextLayoutResult? = null
+                            val metaPlaceable = if (module.metamodule) {
+                                subcompose("meta") {
+                                    Surface(
+                                        shape = RoundedCornerShape(4.dp),
+                                        color = MaterialTheme.colorScheme.tertiary
+                                    ) {
+                                        Text(
+                                            text = "META",
+                                            style = MaterialTheme.typography.labelSmall.copy(
+                                                fontSize = 10.sp
+                                            ),
+                                            modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp),
+                                            color = MaterialTheme.colorScheme.onTertiary,
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis
+                                        )
+                                    }
+                                }.first().measure(Constraints(0, constraints.maxWidth, 0, constraints.maxHeight))
+                            } else null
+
+                            val reserved = (metaPlaceable?.width ?: 0) + if (metaPlaceable != null) spacingPx else 0
+                            val nameMax = (constraints.maxWidth - reserved).coerceAtLeast(0)
+                            val namePlaceable = subcompose("name") {
+                                Text(
+                                    text = module.name,
+                                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
+                                    maxLines = 2,
+                                    textDecoration = decoration,
+                                    overflow = TextOverflow.Ellipsis,
+                                    onTextLayout = { nameTextLayout = it }
+                                )
+                            }.first().measure(Constraints(constraints.minWidth, nameMax, constraints.minHeight, constraints.maxHeight))
+
+                            val width = (namePlaceable.width + reserved).coerceIn(constraints.minWidth, constraints.maxWidth)
+                            val height = maxOf(namePlaceable.height, metaPlaceable?.height ?: 0)
+
+                            layout(width, height) {
+                                namePlaceable.placeRelative(0, 0)
+                                val endX = nameTextLayout?.let { layoutRes ->
+                                    val last = (layoutRes.lineCount - 1).coerceAtLeast(0)
+                                    layoutRes.getLineRight(last).toInt()
+                                } ?: namePlaceable.width
+                                metaPlaceable?.placeRelative(endX + spacingPx, (height - (metaPlaceable.height)) / 2)
+                            }
+                        }
 
                         Text(
                             text = "${module.version}, $moduleAuthor ${module.author}",

@@ -93,6 +93,7 @@ import me.bmax.apatch.Natives
 import me.bmax.apatch.R
 import me.bmax.apatch.apApp
 import me.bmax.apatch.ui.component.ProvideMenuShape
+import me.bmax.apatch.ui.component.WarningCard
 import me.bmax.apatch.ui.component.rememberConfirmDialog
 import me.bmax.apatch.ui.viewmodel.PatchesViewModel
 import me.bmax.apatch.util.LatestVersionInfo
@@ -905,27 +906,6 @@ private fun InfoCard(kpState: APApplication.State, apState: APApplication.State)
             Spacer(Modifier.height(16.dp))
             InfoCardItem(stringResource(R.string.home_selinux_status), getSELinuxStatus())
 
-        }
-    }
-}
-
-@Composable
-fun WarningCard(
-    message: String, color: Color = MaterialTheme.colorScheme.error, onClick: (() -> Unit)? = null
-) {
-    ElevatedCard(
-        colors = CardDefaults.elevatedCardColors(
-            containerColor = color
-        )
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .then(onClick?.let { Modifier.clickable { it() } } ?: Modifier)
-                .padding(24.dp)) {
-            Text(
-                text = message, style = MaterialTheme.typography.bodyMedium
-            )
         }
     }
 }

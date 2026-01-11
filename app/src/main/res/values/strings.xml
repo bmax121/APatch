@@ -3,6 +3,7 @@
     <string name="app_name" translatable="false">APatch</string>
 
     <string name="home">Home</string>
+    <string name="learn_more">Learn more</string>
 
     <string name="success">Success</string>
     <string name="failure">Failure</string>
@@ -149,6 +150,7 @@
     <string name="apm_remove">Remove</string>
     <string name="apm_install">Install</string>
     <string name="apm_uninstall_confirm">Uninstall the %s module?</string>
+    <string name="metamodule_uninstall_confirm">"Are you sure you want to uninstall module %s? This action will affect all modules, and certain features provided by the metamodule (such as mounting) will no longer work.  "</string>
     <string name="apm_uninstall_success">%s uninstalled</string>
     <string name="apm_uninstall_failed">Failed to uninstall: %s</string>
     <string name="apm_version">Version</string>
@@ -162,6 +164,12 @@
     <string name="apm_downloading">Downloading module: %s</string>
     <string name="apm_start_downloading">Start downloading: %s</string>
     <string name="apm_new_version_available">New version %s is available, click to upgrade.</string>
+
+    <string name="warning_of_meta_module_title">Require Meta module</string>
+    <string name="warning_of_meta_module_summary">This module want to mount /system, meta module will handle that. Otherwise, it might not work.</string>
+    <string name="meta_module_disabled">module not mounted, because metamodule disabled</string>
+    <string name="meta_module_removed">module not mounted, because metamodule being delete</string>
+    <string name="no_meta_module_installed">module not mounted, because metamodule not installed</string>
 
     <string name="hide_apatch_manager">Hide APatch Manager</string>
     <string name="hide_apatch_manager_summary">Install a proxy app with a random package ID and custom app label</string>
@@ -244,8 +252,4 @@
     <string name="crash_handle_title">App crashed…</string>
     <string name="crash_handle_copy">Copy crash log</string>
     <string name="crash_handle_copied">Crash log copied to clipboard.</string>
-    <string name="settings_lite_mode">Enable Lite mode</string>
-    <string name="settings_lite_mode_mode_summary">APModule functions may exhibit failures after being enabled, but in some cases they can still effectively avoid detection. Reboot required.</string>
-    <string name="settings_force_overlayfs_mode">Force use of OverlayFS</string>
-    <string name="settings_force_overlayfs_mode_summary">Use OverlayFS to mount APModules instead of Magic Mount when kernel support is available. Reboot required.</string>
 </resources>
