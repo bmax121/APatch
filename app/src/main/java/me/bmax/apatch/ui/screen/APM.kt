@@ -39,6 +39,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SearchBarScrollBehavior
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -60,6 +61,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -93,6 +95,7 @@ import me.bmax.apatch.ui.component.ModuleStateIndicator
 import me.bmax.apatch.ui.component.ModuleUpdateButton
 import me.bmax.apatch.ui.component.SearchAppBar
 import me.bmax.apatch.ui.component.WarningCard
+import me.bmax.apatch.ui.component.pinnedScrollBehavior
 import me.bmax.apatch.ui.component.rememberConfirmDialog
 import me.bmax.apatch.ui.component.rememberLoadingDialog
 import me.bmax.apatch.ui.viewmodel.APModuleViewModel
@@ -103,7 +106,9 @@ import me.bmax.apatch.util.reboot
 import me.bmax.apatch.util.toggleModule
 import me.bmax.apatch.util.ui.LocalSnackbarHost
 import me.bmax.apatch.util.uninstallModule
+import okhttp3.Request
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Destination<RootGraph>
 @Composable
 fun APModuleScreen(navigator: DestinationsNavigator) {
@@ -139,6 +144,8 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
     val webUILauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { viewModel.fetchModuleList() }
+    val scrollBehavior = pinnedScrollBehavior()
+
     //TODO: FIXME -> val isSafeMode = Natives.getSafeMode()
     val isSafeMode = false
     val hasMagisk = hasMagisk()
@@ -146,29 +153,17 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
 
     val moduleListState = rememberLazyListState()
 
-    var searchText by rememberSaveable { mutableStateOf("") }
-    val modules = if (searchText.isEmpty()) {
-        viewModel.moduleList
-    } else {
-        viewModel.moduleList.filter {
-            it.name.contains(searchText, ignoreCase = true) ||
-                    it.description.contains(searchText, ignoreCase = true) ||
-                    it.author.contains(searchText, ignoreCase = true)
-        }
-    }
-
     Scaffold(
         topBar = {
             SearchAppBar(
-                title = { Text(stringResource(R.string.apm)) },
-                searchText = searchText,
-                onSearchTextChange = { searchText = it },
-                onClearClick = { searchText = "" }
+                searchText = viewModel.search,
+                onSearchTextChange = { viewModel.search = it },
+                scrollBehavior = scrollBehavior,
+                searchBarPlaceHolderText = stringResource(R.string.search_modules)
             )
-    }, floatingActionButton = if (hideInstallButton) {
-        { /* Empty */ }
-    } else {
-        {
+        },
+        floatingActionButton = {
+            if (hideInstallButton) return@Scaffold
             val selectZipLauncher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.StartActivityForResult()
             ) {
@@ -199,8 +194,9 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
                     contentDescription = null
                 )
             }
-        }
-    }, snackbarHost = { SnackbarHost(snackBarHost) }) { innerPadding ->
+        },
+        snackbarHost = { SnackbarHost(snackBarHost) }
+    ) { innerPadding ->
         when {
             hasMagisk -> {
                 Box(
@@ -218,9 +214,9 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
 
             else -> {
                 ModuleList(
-                    navigator,
+                    navigator = navigator,
                     viewModel = viewModel,
-                    modules = modules,
+                    modules = viewModel.moduleList,
                     modifier = Modifier
                         .padding(innerPadding)
                         .fillMaxSize(),
@@ -239,43 +235,46 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
                         }
                     },
                     snackBarHost = snackBarHost,
-                    context = context
+                    scrollBehavior = scrollBehavior
                 )
             }
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun MetaModuleWarningCard(
-    viewModel: APModuleViewModel
-) {
+private fun getMetaModuleWarningText(
+    viewModel: APModuleViewModel,
+    context: Context
+) : String? {
     val hasSystemModule = viewModel.moduleList.any { module ->
         SuFile.open("/data/adb/modules/${module.id}/system").exists()
     }
 
-
-    if (!hasSystemModule) return
+    if (!hasSystemModule) return null
 
     val metaProp = SuFile.open("/data/adb/metamodule/module.prop").exists()
     val metaRemoved = SuFile.open("/data/adb/metamodule/remove").exists()
     val metaDisabled = SuFile.open("/data/adb/metamodule/disable").exists()
 
-    val warningText = when {
+    return when {
         !metaProp ->
-            stringResource(R.string.no_meta_module_installed)
+            context.getString(R.string.no_meta_module_installed)
 
         metaProp && metaRemoved ->
-            stringResource(R.string.meta_module_removed)
+            context.getString(R.string.meta_module_removed)
 
         metaProp && metaDisabled ->
-            stringResource(R.string.meta_module_disabled)
+            context.getString(R.string.meta_module_disabled)
 
         else -> null
     }
+}
 
-    if (warningText == null) return
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun MetaModuleWarningCard(
+    text: String
+) {
     var show by remember { mutableStateOf(true) }
 
     AnimatedVisibility(
@@ -284,13 +283,11 @@ private fun MetaModuleWarningCard(
         exit = fadeOut() + shrinkVertically()
     ) {
         WarningCard(
-            message = warningText,
+            message = text,
             onClose = {
                 show = false
             }
         )
-
-        Spacer(Modifier.height(8.dp))
     }
 }
 
@@ -305,7 +302,7 @@ private fun ModuleList(
     onInstallModule: (Uri) -> Unit,
     onClickModule: (id: String, name: String, hasWebUi: Boolean) -> Unit,
     snackBarHost: SnackbarHostState,
-    context: Context
+    scrollBehavior: SearchBarScrollBehavior
 ) {
     val failedEnable = stringResource(R.string.apm_failed_to_enable)
     val failedDisable = stringResource(R.string.apm_failed_to_disable)
@@ -323,6 +320,7 @@ private fun ModuleList(
     val downloadingText = stringResource(R.string.apm_downloading)
     val startDownloadingText = stringResource(R.string.apm_start_downloading)
 
+    val context = LocalContext.current
     val loadingDialog = rememberLoadingDialog()
     val confirmDialog = rememberConfirmDialog()
 
@@ -337,7 +335,7 @@ private fun ModuleList(
                 runCatching {
                     if (Patterns.WEB_URL.matcher(changelogUrl).matches()) {
                         apApp.okhttpClient.newCall(
-                                okhttp3.Request.Builder().url(changelogUrl).build()
+                                Request.Builder().url(changelogUrl).build()
                             ).execute().use { it.body?.string().orEmpty() }
                     } else {
                         changelogUrl
@@ -427,22 +425,31 @@ private fun ModuleList(
         onRefresh = { viewModel.fetchModuleList() },
         isRefreshing = viewModel.isRefreshing
     ) {
+        val metaModuleWarningText by produceState<String?>(initialValue = null, viewModel.moduleList) {
+            value = withContext(Dispatchers.IO) {
+                getMetaModuleWarningText(viewModel, context)
+            }
+        }
+
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().nestedScroll(scrollBehavior.nestedScrollConnection),
             state = state,
             verticalArrangement = Arrangement.spacedBy(16.dp),
             contentPadding = remember {
                 PaddingValues(
                     start = 16.dp,
-                    top = 16.dp,
+                    top = 11.dp, // spacedBy - TopBar padding
                     end = 16.dp,
                     bottom = 16.dp + 16.dp + 56.dp /*  Scaffold Fab Spacing + Fab container height */
                 )
             },
         ) {
-            item {
-                MetaModuleWarningCard(viewModel)
+            if (metaModuleWarningText != null) {
+                item {
+                    MetaModuleWarningCard(metaModuleWarningText!!)
+                }
             }
+
             when {
                 modules.isEmpty() -> {
                     item {
