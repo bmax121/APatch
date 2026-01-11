@@ -51,6 +51,7 @@ fun SearchAppBar(
     onBackClick: (() -> Unit)? = null,
     onConfirm: (() -> Unit)? = null,
     dropdownContent: @Composable (() -> Unit)? = null,
+    leadingActions: @Composable (() -> Unit)? = null,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
@@ -144,10 +145,15 @@ fun SearchAppBar(
             AnimatedVisibility(
                 visible = !onSearch
             ) {
-                IconButton(
-                    onClick = { onSearch = true },
-                    content = { Icon(Icons.Filled.Search, null) }
-                )
+                androidx.compose.foundation.layout.Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    leadingActions?.invoke()
+                    IconButton(
+                        onClick = { onSearch = true },
+                        content = { Icon(Icons.Filled.Search, null) }
+                    )
+                }
             }
 
             dropdownContent?.invoke()
