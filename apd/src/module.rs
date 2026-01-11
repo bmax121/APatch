@@ -114,7 +114,7 @@ pub fn get_common_script_envs() -> Vec<(&'static str, String)> {
     ]
 }
 
-// becuase we use something like A-B update
+// because we use something like A-B update
 // we need to update the module state after the boot_completed
 // if someone(such as the module) install a module before the boot_completed
 // then it may cause some problems, just forbid it

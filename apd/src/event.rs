@@ -25,7 +25,7 @@ use crate::{
         fork_for_result, init_load_package_uid_config, init_load_su_path, refresh_ap_package_list,
     },
     utils::{
-        switch_cgroups, {self},
+        self, switch_cgroups,
     },
 };
 
@@ -208,6 +208,11 @@ fn run_stage(stage: &str, superkey: Option<String>, block: bool) {
         return;
     }
 
+    // execute metamodule stage script first (priority)
+    if let Err(e) = metamodule::exec_stage_script(stage, block) {
+        warn!("Failed to exec metamodule {stage} script: {e}");
+    }
+
     if let Err(e) = module::exec_common_scripts(&format!("{stage}.d"), block) {
         warn!("Failed to exec common {stage} scripts: {e}");
     }
@@ -216,16 +221,6 @@ fn run_stage(stage: &str, superkey: Option<String>, block: bool) {
     }
     if let Err(e) = module::exec_stage_lua(stage, block, superkey.as_deref().unwrap_or("")) {
         warn!("Failed to exec {stage} lua: {e}");
-    }
-
-    // execute metamodule stage script first (priority)
-    if let Err(e) = metamodule::exec_stage_script(stage, block) {
-        warn!("Failed to exec metamodule {stage} script: {e}");
-    }
-
-    // execute regular modules stage scripts
-    if let Err(e) = crate::module::exec_stage_script(stage, block) {
-        warn!("Failed to exec {stage} scripts: {e}");
     }
 }
 
