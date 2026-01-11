@@ -204,10 +204,10 @@ fun SearchAppBar(
         inputField = {
             SearchBarDefaults.InputField(
                 modifier = Modifier
-                    .padding(bottom = 5.dp)
-                    .height(48.dp)
                     .focusRequester(focusRequester)
-                    .clip(SearchBarDefaults.inputFieldShape),
+                    .padding(bottom = 5.dp)
+                    .clip(SearchBarDefaults.inputFieldShape)
+                    .height(53.dp), // box padding + icon padding + icon size
                 searchBarState = searchBarState,
                 textFieldState = textFieldState,
                 onSearch = { text ->
