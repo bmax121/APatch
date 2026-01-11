@@ -3,6 +3,11 @@
     <string name="app_name" translatable="false">APatch</string>
 
     <string name="home">Home</string>
+
+    <string name="search">Search</string>
+    <string name="search_apps">Search Apps</string>
+    <string name="search_modules">Search modules</string>
+    <string name="back">Back</string>
     <string name="learn_more">Learn more</string>
 
     <string name="success">Success</string>

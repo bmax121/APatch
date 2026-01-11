@@ -25,6 +25,10 @@
     <string name="reboot">重启</string>
     <string name="home_need_update">新版本可升级</string>
     <string name="home">主页</string>
+    <string name="back">返回</string>
+    <string name="search">搜索</string>
+    <string name="search_apps">搜索应用</string>
+    <string name="search_modules">搜索模块</string>
     <string name="learn_more">了解更多</string>
     <string name="patch_set_superkey">设置超级密钥</string>
     <string name="settings">设置</string>

@@ -11,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.bmax.apatch.apApp
+import me.bmax.apatch.util.HanziToPinyin
 import me.bmax.apatch.util.listModules
 import org.json.JSONArray
 import org.json.JSONObject
@@ -47,6 +48,7 @@ class APModuleViewModel : ViewModel() {
         val changelog: String,
     )
 
+    var search by mutableStateOf("")
     var isRefreshing by mutableStateOf(false)
         private set
 
@@ -56,7 +58,10 @@ class APModuleViewModel : ViewModel() {
         val comparator = compareByDescending<ModuleInfo> { it.metamodule && it.enabled }
             .thenBy(collator) { it.id }
 
-        modules.sortedWith(comparator).also {
+        modules.filter {
+            it.id.contains(search, true) || it.name.contains(search, true) || HanziToPinyin.getInstance()
+                .toPinyinString(it.name)?.contains(search, true) == true
+        }.sortedWith(comparator).also {
             isRefreshing = false
         }
     }
