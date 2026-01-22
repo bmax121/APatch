@@ -180,8 +180,8 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
 
                 // todo: args
                 scope.launch {
-                    val rc = loadModule(loadingDialog, uri, "") == 0
-                    val toastText = if (rc) successToastText else failToastText
+                    val rc = loadModule(loadingDialog, uri, "")
+                    val toastText = if (rc == 0) successToastText else "$failToastText: $rc"
                     withContext(Dispatchers.Main) {
                         Toast.makeText(
                             context, toastText, Toast.LENGTH_SHORT
