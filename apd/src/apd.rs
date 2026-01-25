@@ -21,8 +21,8 @@ fn print_usage(opts: Options) {
 
 fn set_identity(uid: u32, gid: u32) {
     #[cfg(any(target_os = "linux", target_os = "android"))]
-    let gid = unsafe { Gid::from_raw(gid) };
-    let uid = unsafe { Uid::from_raw(uid) };
+    let gid = Gid::from_raw(gid);
+    let uid = Uid::from_raw(uid);
     set_thread_res_gid(gid, gid, gid).ok();
     set_thread_res_uid(uid, uid, uid).ok();
 }
@@ -171,9 +171,9 @@ pub fn root_shell() -> Result<()> {
             let pw_name = pw_name.to_string_lossy();
 
             command = command
-                .env("HOME", home.as_ref())
-                .env("USER", pw_name.as_ref())
-                .env("LOGNAME", pw_name.as_ref())
+                .env("HOME", home.as_ref() as &str)
+                .env("USER", pw_name.as_ref() as &str)
+                .env("LOGNAME", pw_name.as_ref() as &str)
                 .env("SHELL", &shell);
         }
     }

@@ -18,7 +18,7 @@ use libc::{
 use rustix::{
     fs::{Mode, OFlags, open},
     io::dup,
-    ioctl::{Getter, ReadOpcode, ioctl},
+    ioctl::{Getter, Opcode, ioctl, opcode},
     process::setsid,
     pty::{grantpt, unlockpt},
     stdio::{dup2_stderr, dup2_stdin, dup2_stdout},
@@ -30,8 +30,10 @@ use crate::{defs::PTS_NAME, utils::get_tmp_path};
 // https://github.com/topjohnwu/Magisk/blob/5627053b7481618adfdf8fa3569b48275589915b/native/src/core/su/pts.cpp
 
 fn get_pty_num<F: AsFd>(fd: F) -> Result<u32> {
+    // TIOCGPTN: Get the PTY number
+    const TIOCGPTN: Opcode = opcode::read::<u32>(b'T', 0x30);
     Ok(unsafe {
-        let tiocgptn = Getter::<ReadOpcode<b'T', 0x30, u32>, u32>::new();
+        let tiocgptn = Getter::<TIOCGPTN, u32>::new();
         ioctl(fd, tiocgptn)?
     })
 }

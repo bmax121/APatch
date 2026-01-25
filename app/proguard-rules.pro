@@ -10,9 +10,12 @@
 -dontwarn java.beans.Introspector
 -dontwarn java.beans.VetoableChangeListener
 -dontwarn java.beans.VetoableChangeSupport
+-dontwarn java.beans.BeanInfo
+-dontwarn java.beans.IntrospectionException
+-dontwarn java.beans.PropertyDescriptor
 
 # Keep ini4j Service Provider Interface
--keep,allowobfuscation,allowoptimization public class org.ini4j.spi.*
+-keep,allowobfuscation,allowoptimization class org.ini4j.spi.** { *; }
 
 # Kotlin
 -assumenosideeffects class kotlin.jvm.internal.Intrinsics {

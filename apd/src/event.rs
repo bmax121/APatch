@@ -24,9 +24,7 @@ use crate::{
     supercall::{
         fork_for_result, init_load_package_uid_config, init_load_su_path, refresh_ap_package_list,
     },
-    utils::{
-        self, switch_cgroups,
-    },
+    utils::{self, switch_cgroups},
 };
 
 pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {

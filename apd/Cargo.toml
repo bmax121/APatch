@@ -11,7 +11,7 @@ anyhow = "1"
 csv = "1.3.1"
 clap = { version = "4", features = ["derive"] }
 const_format = "0.2"
-zip = { version = "5.1.1",features = [
+zip = { version = "7.2.0",features = [
     "deflate",
     "deflate64",
     "time",
@@ -41,13 +41,13 @@ which = "8"
 getopts = "0.2"
 errno = "0.3.14"
 notify = "8.2"
-signal-hook = "0.3"
+signal-hook = "0.4"
 
 [target.'cfg(any(target_os = "android", target_os = "linux"))'.dependencies]
-rustix = { git = "https://github.com/AndroidPatch/rustix", branch = "main", features = ["all-apis"] }
+rustix = { version = "1", features = ["all-apis"] }
 # some android specific dependencies which compiles under unix are also listed here for convenience of coding
 android-properties = { version = "0.2.2", features = ["bionic-deprecated"] }
-procfs = "0.17"
+procfs = "0.18"
 loopdev = { git = "https://github.com/AndroidPatch/loopdev" }
 
 [target.'cfg(target_os = "android")'.dependencies]
@@ -56,6 +56,7 @@ android_logger = { version = "0.15", default-features = false }
 [profile.release]
 strip = true
 overflow-checks = false
+rpath = false
 opt-level = 3
 codegen-units = 1
 panic = "abort"
