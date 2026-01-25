@@ -22,10 +22,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Icon
@@ -167,9 +169,15 @@ class MainActivity : AppCompatActivity() {
                     ) {
                         if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
                             Row(modifier = Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.Horizontal))) {
-                                SideBar(navController = navController, modifier = Modifier.windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.Top)), visibleDestinations = visibleDestinations)
+                                SideBar(
+                                    navController = navController,
+                                    modifier = Modifier.windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.Top)),
+                                    visibleDestinations = visibleDestinations
+                                )
                                 DestinationsNavHost(
-                                    modifier = Modifier.weight(1f),
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .consumeWindowInsets(WindowInsets.safeDrawing.only(WindowInsetsSides.Start)),
                                     navGraph = NavGraphs.root,
                                     navController = navController,
                                     engine = rememberNavHostEngine(navHostContentAlignment = Alignment.TopCenter),
@@ -178,7 +186,7 @@ class MainActivity : AppCompatActivity() {
                             }
                         } else {
                             DestinationsNavHost(
-                                modifier = Modifier.padding(innerPadding),
+                                modifier = Modifier.padding(innerPadding).consumeWindowInsets(innerPadding),
                                 navGraph = NavGraphs.root,
                                 navController = navController,
                                 engine = rememberNavHostEngine(navHostContentAlignment = Alignment.TopCenter),
@@ -256,10 +264,6 @@ private fun BottomBar(navController: NavHostController, visibleDestinations: Set
 @Composable
 private fun SideBar(navController: NavHostController, modifier: Modifier = Modifier, visibleDestinations: Set<BottomBarDestination>) {
     val navigator = navController.rememberDestinationsNavigator()
-    val bottomBarRoutes = remember {
-        BottomBarDestination.entries.map { it.direction.route }.toSet()
-    }
-    val currentRoute = navController.currentBackStackEntry?.destination?.route
 
     Crossfade(
         targetState = visibleDestinations,
