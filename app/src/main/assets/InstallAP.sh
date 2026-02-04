@@ -36,7 +36,7 @@ function failed(){
 }
 
 function boot_execute_ab(){
-	./lib/arm64-v8a/libmagiskboot.so unpack boot.img
+	./lib/arm64-v8a/libkptools.so unpack boot.img
 	if [[ ! $(./lib/arm64-v8a/libkptools.so -i ./kernel -f | grep CONFIG_KALLSYMS=y) ]]; then
 		kernelFlagsErr
 	fi
@@ -46,14 +46,14 @@ function boot_execute_ab(){
 		failed
 	fi
 	ui_printfile /dev/tmp/install/log
-	./lib/arm64-v8a/libmagiskboot.so repack boot.img
+	./lib/arm64-v8a/libkptools.so repack boot.img
 	dd if=/dev/tmp/install/new-boot.img of=/dev/block/by-name/boot$slot
 	mv boot.img /data/boot.img
 	apatchNote
 }
 
 function boot_execute(){
-	./lib/arm64-v8a/libmagiskboot.so unpack boot.img
+	./lib/arm64-v8a/libkptools.so unpack boot.img
 	if [[ ! $(./lib/arm64-v8a/libkptools.so -i ./kernel -f | grep CONFIG_KALLSYMS=y) ]]; then
 		kernelFlagsErr
 	fi
@@ -63,7 +63,7 @@ function boot_execute(){
 		failed
 	fi
 	ui_printfile /dev/tmp/install/log
-	./lib/arm64-v8a/libmagiskboot.so repack boot.img
+	./lib/arm64-v8a/libkptools.so repack boot.img
 	dd if=/dev/tmp/install/new-boot.img of=/dev/block/by-name/boot$slot
 	mv boot.img /data/boot.img
 	apatchNote
@@ -75,7 +75,6 @@ cd /dev/tmp/install
 
 chmod a+x ./assets/kpimg
 chmod a+x ./lib/arm64-v8a/libkptools.so
-chmod a+x ./lib/arm64-v8a/libmagiskboot.so
 
 slot=$(getprop ro.boot.slot_suffix)
 

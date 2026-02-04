@@ -39,7 +39,7 @@ object Version {
         patchDir.deleteRecursively()
         patchDir.mkdirs()
         val execs = listOf(
-            "libkptools.so", "libmagiskboot.so", "libbusybox.so"
+            "libkptools.so",  "libbusybox.so"
         )
 
         val info = apApp.applicationInfo

@@ -115,15 +115,24 @@ jobs:
           name: "mappings"
           path: "app/build/outputs/mapping/release/"
 
-      - name: Upload build artifact
+      - name: Upload build artifact1
         env:
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
         if: ${{ env.SIGNING_KEY != '' }}
         uses: actions/upload-artifact@v6
         with:
-          name: APatch
+          name: APatch-Release
           path: |
             ${{ steps.sign_app.outputs.signedReleaseFile }}
+
+      - name: Upload build artifact2
+        env:
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+        if: ${{ env.SIGNING_KEY != '' }}
+        uses: actions/upload-artifact@v6
+        with:
+          name: APatch-Debug
+          path: |
             ${{ steps.sign_debug_app.outputs.signedReleaseFile }}
 
       - name: Post to channel

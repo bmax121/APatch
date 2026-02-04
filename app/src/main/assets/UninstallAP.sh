@@ -25,25 +25,25 @@ function failed(){
 }
 
 function boot_execute_ab(){
-	./lib/arm64-v8a/libmagiskboot.so unpack boot.img
+	./lib/arm64-v8a/libkptools.so unpack boot.img
 	mv kernel kernel-origin
 	./lib/arm64-v8a/libkptools.so -u --image kernel-origin  --out ./kernel
 	if [[ ! "$?" == 0 ]]; then
 		failed
 	fi
-	./lib/arm64-v8a/libmagiskboot.so repack boot.img
+	./lib/arm64-v8a/libkptools.so repack boot.img
 	dd if=/dev/tmp/install/new-boot.img of=/dev/block/by-name/boot$slot
 	apatchNote
 }
 
 function boot_execute(){
-	./lib/arm64-v8a/libmagiskboot.so unpack boot.img
+	./lib/arm64-v8a/libkptools.so unpack boot.img
 	mv kernel kernel-origin
 	./lib/arm64-v8a/libkptools.so -u --image kernel-origin  --out ./kernel
 	if [[ ! "$?" == 0 ]]; then
 		failed
 	fi
-	./lib/arm64-v8a/libmagiskboot.so repack boot.img
+	./lib/arm64-v8a/libkptools.so repack boot.img
 	dd if=/dev/tmp/install/new-boot.img of=/dev/block/by-name/boot
 	apatchNote
 }
@@ -53,7 +53,7 @@ function main(){
 cd /dev/tmp/install
 
 chmod a+x ./lib/arm64-v8a/libkptools.so
-chmod a+x ./lib/arm64-v8a/libmagiskboot.so
+
 
 slot=$(getprop ro.boot.slot_suffix)
 

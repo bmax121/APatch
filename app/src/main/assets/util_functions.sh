@@ -421,7 +421,7 @@ install_apatch() {
       abort "! $BOOTIMAGE is read only"
       ;;
   esac
-  ./magiskboot cleanup
+  
   rm -f new-boot.img
 
   run_migrations
@@ -526,7 +526,7 @@ run_migrations() {
     BACKUP=$MAGISKBIN/stock_${name}.img
     [ -f $BACKUP ] || continue
     if [ $name = 'boot' ]; then
-      LOCSHA1=$($MAGISKBIN/magiskboot sha1 $BACKUP)
+      #LOCSHA1=$($MAGISKBIN/magiskboot sha1 $BACKUP)
       mkdir /data/magisk_backup_${LOCSHA1} 2>/dev/null
     fi
     TARGET=/data/magisk_backup_${LOCSHA1}/${name}.img

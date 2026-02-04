@@ -19,12 +19,12 @@ BOOTIMAGE=$1
 echo "- Target image: $BOOTIMAGE"
 
   # Check for dependencies
-command -v ./magiskboot >/dev/null 2>&1 || { echo "- Command magiskboot not found!"; exit 1; }
+
 command -v ./kptools >/dev/null 2>&1 || { echo "- Command kptools not found!"; exit 1; }
 
 if [ ! -f kernel ]; then
 echo "- Unpacking boot image"
-./magiskboot unpack "$BOOTIMAGE" >/dev/null 2>&1
+./kptools unpack "$BOOTIMAGE" >/dev/null 2>&1
 if [ $? -ne 0 ]; then
     >&2 echo "- Unpack error: $?"
     exit $?
@@ -44,7 +44,7 @@ if [ ! $(./kptools -i kernel -l | grep patched=false) ]; then
       exit $?
     fi
     echo "- Repacking boot image"
-    ./magiskboot repack "$BOOTIMAGE" >/dev/null 2>&1
+    ./kptools repack "$BOOTIMAGE" >/dev/null 2>&1
     if [ $? -ne 0 ]; then
       >&2 echo "- Repack error: $?"
       exit $?
