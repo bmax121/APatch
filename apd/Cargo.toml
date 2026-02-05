@@ -6,12 +6,12 @@ edition = "2024"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-mlua = { version = "0.11.5", features = ["lua54","vendored"] }
+mlua = { version = "0.11.6", features = ["lua54","vendored"] }
 anyhow = "1"
 csv = "1.3.1"
 clap = { version = "4", features = ["derive"] }
 const_format = "0.2"
-zip = { version = "7.2.0",features = [
+zip = { version = "7.3.0",features = [
     "deflate",
     "deflate64",
     "time",
