@@ -42,9 +42,13 @@ command -v ./kptools >/dev/null 2>&1 || { >&2 echo "- Command kptools not found!
 
 if [ ! -f kernel ]; then
 echo "- Unpacking boot image"
-./kptools unpack "$BOOTIMAGE" >/dev/null 2>&1
-  if [ $? -ne 0 ]; then
-    >&2 echo "- Unpack error: $?"
+
+set -x
+./kptools unpack "$BOOTIMAGE" "$@"
+patch_rc=$?
+set +x
+  if [ $patch_rc -ne 0 ]; then
+    >&2 echo "- Unpack error: $patch_rc"
     exit $?
   fi
 fi
@@ -76,7 +80,7 @@ if [ $patch_rc -ne 0 ]; then
 fi
 
 echo "- Repacking boot image"
-./kptools repack "$BOOTIMAGE" >/dev/null 2>&1
+./kptools repack "$BOOTIMAGE"
 
 if [ ! $(./kptools -i kernel.ori -f | grep CONFIG_KALLSYMS_ALL=y) ]; then
 	echo "- Detected CONFIG_KALLSYMS_ALL is not set!"
