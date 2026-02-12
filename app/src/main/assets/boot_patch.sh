@@ -15,7 +15,6 @@
 # bootimg            binary        The target boot image
 # kpimg              binary        KernelPatch core Image
 # kptools            executable    The KernelPatch tools binary to inject kpimg to kernel Image
-# magiskboot         executable    Magisk tool to unpack boot.img.
 #
 #######################################################################################
 

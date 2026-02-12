@@ -20,7 +20,7 @@ use notify::{
 use signal_hook::{consts::signal::*, iterator::Signals};
 
 use crate::{
-    assets, defs, metamodule, module, restorecon, supercall,
+    assets, defs, lua, metamodule, module, restorecon, supercall,
     supercall::{
         fork_for_result, init_load_package_uid_config, init_load_su_path, refresh_ap_package_list,
     },
@@ -171,8 +171,7 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     if let Err(e) = module::exec_stage_script("post-fs-data", true) {
         warn!("exec post-fs-data scripts failed: {}", e);
     }
-    if let Err(e) = module::exec_stage_lua("post-fs-data", true, superkey.as_deref().unwrap_or(""))
-    {
+    if let Err(e) = lua::exec_stage_lua("post-fs-data", true, superkey.as_deref().unwrap_or("")) {
         warn!("Failed to exec post-fs-data lua: {}", e);
     }
     // load system.prop
@@ -217,7 +216,7 @@ fn run_stage(stage: &str, superkey: Option<String>, block: bool) {
     if let Err(e) = module::exec_stage_script(stage, block) {
         warn!("Failed to exec {stage} scripts: {e}");
     }
-    if let Err(e) = module::exec_stage_lua(stage, block, superkey.as_deref().unwrap_or("")) {
+    if let Err(e) = lua::exec_stage_lua(stage, block, superkey.as_deref().unwrap_or("")) {
         warn!("Failed to exec {stage} lua: {e}");
     }
 }
