@@ -46,7 +46,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Card
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -473,29 +475,30 @@ private fun KStatusCard(
         UninstallDialog(showDialog = showUninstallDialog, navigator)
     }
 
-    val cardBackgroundColor = when (kpState) {
+    val (cardBackgroundColor, cardContentColor) = when (kpState) {
         APApplication.State.KERNELPATCH_INSTALLED -> {
-            MaterialTheme.colorScheme.primary
+            MaterialTheme.colorScheme.primary to MaterialTheme.colorScheme.onPrimary
         }
 
         APApplication.State.KERNELPATCH_NEED_UPDATE, APApplication.State.KERNELPATCH_NEED_REBOOT -> {
-            MaterialTheme.colorScheme.secondary
+            MaterialTheme.colorScheme.secondary to MaterialTheme.colorScheme.onSecondary
         }
 
         else -> {
-            MaterialTheme.colorScheme.secondaryContainer
+            MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp) to MaterialTheme.colorScheme.onSurface
         }
     }
 
-    ElevatedCard(
+    Card(
         onClick = {
             if (kpState != APApplication.State.KERNELPATCH_INSTALLED) {
                 navigator.navigate(InstallModeSelectScreenDestination)
             }
         },
-        colors = CardDefaults.elevatedCardColors(containerColor = cardBackgroundColor),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = if (kpState == APApplication.State.UNKNOWN_STATE) 0.dp else 6.dp
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = cardBackgroundColor,
+            contentColor = cardContentColor
         )
     ) {
         Column(
@@ -644,10 +647,9 @@ private fun KStatusCard(
 
 @Composable
 private fun AStatusCard(apState: APApplication.State) {
-    ElevatedCard(
-        colors = CardDefaults.elevatedCardColors(containerColor = run {
-            MaterialTheme.colorScheme.secondaryContainer
-        })
+    Card(
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp))
     ) {
         Column(
             modifier = Modifier
@@ -858,7 +860,10 @@ private fun getDeviceInfo(): String {
 
 @Composable
 private fun InfoCard(kpState: APApplication.State, apState: APApplication.State) {
-    ElevatedCard {
+    Card(
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp))
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -952,7 +957,10 @@ fun UpdateCard() {
 fun LearnMoreCard() {
     val uriHandler = LocalUriHandler.current
 
-    ElevatedCard {
+    Card(
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp))
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
