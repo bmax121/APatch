@@ -66,7 +66,7 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     } else {
         info!("Failed to delete .old files.");
     }
-    let logcat_path = format!("{}locat.log", defs::APATCH_LOG_FOLDER);
+    let logcat_path = format!("{}logcat.log", defs::APATCH_LOG_FOLDER);
     let dmesg_path = format!("{}dmesg.log", defs::APATCH_LOG_FOLDER);
     let bootlog = fs::File::create(dmesg_path)?;
     args = vec![
