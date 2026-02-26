@@ -246,26 +246,27 @@ private fun getMetaModuleWarningText(
     viewModel: APModuleViewModel,
     context: Context
 ) : String? {
-    val hasSystemModule = viewModel.moduleList.any { module ->
-        SuFile.open("/data/adb/modules/${module.id}/system").exists()
+    val needsMountModule = viewModel.moduleList.any { module ->
+        val moduleDir = "/data/adb/modules/${module.id}"
+
+        // Module requires mounting if it has a system dir and no skip_mount file
+        val hasSystem = SuFile.open("$moduleDir/system").isDirectory
+        val isSkipped = SuFile.open("$moduleDir/skip_mount").isFile
+
+        hasSystem && !isSkipped
     }
 
-    if (!hasSystemModule) return null
+    if (!needsMountModule) return null
 
-    val metaProp = SuFile.open("/data/adb/metamodule/module.prop").exists()
-    val metaRemoved = SuFile.open("/data/adb/metamodule/remove").exists()
-    val metaDisabled = SuFile.open("/data/adb/metamodule/disable").exists()
+    val metaDir = "/data/adb/metamodule"
+    val metaProp = SuFile.open("$metaDir/module.prop").isFile
+    val metaRemoved = SuFile.open("$metaDir/remove").isFile
+    val metaDisabled = SuFile.open("$metaDir/disable").isFile
 
     return when {
-        !metaProp ->
-            context.getString(R.string.no_meta_module_installed)
-
-        metaProp && metaRemoved ->
-            context.getString(R.string.meta_module_removed)
-
-        metaProp && metaDisabled ->
-            context.getString(R.string.meta_module_disabled)
-
+        !metaProp -> context.getString(R.string.no_meta_module_installed)
+        metaRemoved -> context.getString(R.string.meta_module_removed)
+        metaDisabled -> context.getString(R.string.meta_module_disabled)
         else -> null
     }
 }
