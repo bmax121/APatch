@@ -88,11 +88,16 @@ fun pinnedScrollBehavior(
 private class PinnedScrollBehavior(
     val canScroll: () -> Boolean,
 ) : SearchBarScrollBehavior {
+    // Offset remains 0 so the bar never moves vertically
     override var scrollOffset by mutableFloatStateOf(0f)
     override var scrollOffsetLimit by mutableFloatStateOf(0f)
+
+    // Track contentOffset to allow for tonal elevation/color changes on scroll
     override var contentOffset by mutableFloatStateOf(0f)
 
     override fun Modifier.searchBarScrollBehavior(): Modifier {
+        // We remove the .layout { ... } and .draggable blocks
+        // that were responsible for hiding/moving the bar.
         return this.onSizeChanged { size ->
             scrollOffsetLimit = -size.height.toFloat()
         }
@@ -102,6 +107,9 @@ private class PinnedScrollBehavior(
         object : NestedScrollConnection {
             override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
                 if (!canScroll()) return Offset.Zero
+
+                // We don't modify scrollOffset here because we want it pinned.
+                // We only return Offset.Zero to show we aren't consuming any scroll.
                 return Offset.Zero
             }
 
@@ -111,16 +119,30 @@ private class PinnedScrollBehavior(
                 source: NestedScrollSource,
             ): Offset {
                 if (!canScroll()) return Offset.Zero
+
+                // Update contentOffset so the UI knows how far the user has scrolled
+                // This is used for "overlapped" state (changing colors/elevation)
                 contentOffset += consumed.y
                 return Offset.Zero
             }
         }
-
     companion object {
-        fun Saver(canScroll: () -> Boolean): Saver<PinnedScrollBehavior, *> =
+        fun Saver(
+            canScroll: () -> Boolean
+        ): Saver<PinnedScrollBehavior, *> =
             listSaver(
-                save = { listOf(it.scrollOffset, it.scrollOffsetLimit, it.contentOffset) },
-                restore = { PinnedScrollBehavior(canScroll = canScroll) },
+                save = {
+                    listOf(
+                        it.scrollOffset,
+                        it.scrollOffsetLimit,
+                        it.contentOffset,
+                    )
+                },
+                restore = {
+                    PinnedScrollBehavior(
+                        canScroll = canScroll,
+                    )
+                },
             )
     }
 }
