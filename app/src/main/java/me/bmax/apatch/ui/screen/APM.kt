@@ -276,7 +276,7 @@ private fun getMetaModuleWarningText(
 private fun MetaModuleWarningCard(
     text: String
 ) {
-    var show by remember { mutableStateOf(true) }
+    var show by rememberSaveable { mutableStateOf(true) }
 
     AnimatedVisibility(
         visible = show,
