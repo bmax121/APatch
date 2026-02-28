@@ -11,27 +11,26 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.automirrored.twotone.ArrowBack
 import androidx.compose.material.icons.twotone.Search
-import androidx.compose.material3.AppBarWithSearch
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MotionScheme
+import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.SearchBarScrollBehavior
 import androidx.compose.material3.SearchBarValue
@@ -42,13 +41,13 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
@@ -80,14 +79,9 @@ fun pinnedScrollBehavior(
         flingAnimationSpec,
         canScroll,
         reverseLayout,
-        saver =
-            PinnedScrollBehavior.Saver(
-                canScroll = canScroll,
-            ),
+        saver = PinnedScrollBehavior.Saver(canScroll = canScroll),
     ) {
-        PinnedScrollBehavior(
-            canScroll = canScroll,
-        )
+        PinnedScrollBehavior(canScroll = canScroll)
     }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -196,133 +190,130 @@ fun SearchAppBar(
         onDispose { keyboardController?.hide() }
     }
 
-    val colorScheme = MaterialTheme.colorScheme
-    val cardColor = colorScheme.background
+    val cardColor = MaterialTheme.colorScheme.background
 
-    AppBarWithSearch(
-        state = searchBarState,
-        inputField = {
-            SearchBarDefaults.InputField(
-                modifier = Modifier
-                    .focusRequester(focusRequester)
-                    .padding(bottom = 5.dp)
-                    .clip(SearchBarDefaults.inputFieldShape)
-                    .height(53.dp), // box padding + icon padding + icon size
-                searchBarState = searchBarState,
-                textFieldState = textFieldState,
-                onSearch = { text ->
-                    scope.launch { searchBarState.animateToCollapsed() }
-                    keyboardController?.hide()
-                    focusManager.clearFocus()
-                    onSearchTextChange(text)
-                },
-                colors = SearchBarDefaults.inputFieldColors(
-                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-                    focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-                ),
-                placeholder = {
-                    Text(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clearAndSetSemantics {},
-                        text = searchBarPlaceHolderText,
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                },
-                leadingIcon = {
-                    Row {
-                        if (onBackClick == null && isExpanded) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.TwoTone.ArrowBack,
-                                contentDescription = stringResource(R.string.back),
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier
-                                    .padding(start = 8.dp)
-                                    .size(40.dp)
-                                    .clip(CircleShape)
-                                    .clickable {
-                                        if (textFieldState.text.isNotEmpty()) {
-                                            textFieldState.edit {
-                                                replace(0, length, "")
-                                            }
-                                            return@clickable
-                                        }
-                                        scope.launch {
-                                            searchBarState.animateToCollapsed()
-                                            keyboardController?.hide()
-                                            focusManager.clearFocus()
-                                        }
-                                    }
-                                    .padding(8.dp)
-                            )
-                        }
-                        else {
-                            Icon(
-                                imageVector = Icons.TwoTone.Search,
-                                contentDescription = stringResource(R.string.search),
-
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier
-                                    .padding(start = 8.dp)
-                                    .size(40.dp)
-                                    .clip(CircleShape)
-                                    .clickable {
-                                        scope.launch {
-                                            searchBarState.animateToExpanded()
-                                            focusRequester.requestFocus()
-                                            keyboardController?.show()
-                                        }
-                                    }
-                                    .padding(8.dp)
-                            )
-                        }
-                        Spacer(modifier = Modifier.width(3.dp))
-                    }
-                }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .windowInsetsPadding(
+                WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top)
             )
-        },
-        navigationIcon = {
-            if (onBackClick != null) {
-                IconButton(onClick = {
-                    if (isExpanded) {
-                        if (textFieldState.text.isNotEmpty()) {
-                            textFieldState.edit {
-                                replace(0, length, "")
-                            }
-                        } else {
-                            scope.launch {
-                                searchBarState.animateToCollapsed()
-                                keyboardController?.hide()
-                                focusManager.clearFocus()
-                            }
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        // navigationIcon slot
+        if (onBackClick != null) {
+            IconButton(onClick = {
+                if (isExpanded) {
+                    if (textFieldState.text.isNotEmpty()) {
+                        textFieldState.edit { replace(0, length, "") }
+                    } else {
+                        scope.launch {
+                            searchBarState.animateToCollapsed()
+                            keyboardController?.hide()
+                            focusManager.clearFocus()
                         }
-                        return@IconButton
                     }
-                    onBackClick.invoke()
-                }) {
-                    Icon(
-                        Icons.AutoMirrored.Outlined.ArrowBack,
-                        contentDescription = stringResource(R.string.back)
-                    )
+                    return@IconButton
                 }
-            } else {
-                navigationContent?.invoke()
+                onBackClick.invoke()
+            }) {
+                Icon(
+                    Icons.AutoMirrored.Outlined.ArrowBack,
+                    contentDescription = stringResource(R.string.back)
+                )
             }
-        },
-        actions = {
-            dropdownContent?.invoke()
-        },
-        scrollBehavior = scrollBehavior,
-        colors = SearchBarDefaults.appBarWithSearchColors(
-            searchBarColors = SearchBarDefaults.colors(
+        } else {
+            navigationContent?.invoke()
+        }
+
+        SearchBar(
+            state = searchBarState,
+            inputField = {
+                SearchBarDefaults.InputField(
+                    modifier = Modifier
+                        .focusRequester(focusRequester)
+                        .padding(bottom = 5.dp)
+                        .clip(SearchBarDefaults.inputFieldShape),
+                    searchBarState = searchBarState,
+                    textFieldState = textFieldState,
+                    onSearch = { text ->
+                        scope.launch { searchBarState.animateToCollapsed() }
+                        keyboardController?.hide()
+                        focusManager.clearFocus()
+                        onSearchTextChange(text)
+                    },
+                    colors = SearchBarDefaults.inputFieldColors(
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                        focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                    ),
+                    placeholder = {
+                        Text(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clearAndSetSemantics {},
+                            text = searchBarPlaceHolderText,
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    },
+                    leadingIcon = {
+                        Row {
+                            if (onBackClick == null && isExpanded) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.TwoTone.ArrowBack,
+                                    contentDescription = stringResource(R.string.back),
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    modifier = Modifier
+                                        .padding(start = 8.dp)
+                                        .size(40.dp)
+                                        .clip(CircleShape)
+                                        .clickable {
+                                            if (textFieldState.text.isNotEmpty()) {
+                                                textFieldState.edit { replace(0, length, "") }
+                                                return@clickable
+                                            }
+                                            scope.launch {
+                                                searchBarState.animateToCollapsed()
+                                                keyboardController?.hide()
+                                                focusManager.clearFocus()
+                                            }
+                                        }
+                                        .padding(8.dp)
+                                )
+                            } else {
+                                Icon(
+                                    imageVector = Icons.TwoTone.Search,
+                                    contentDescription = stringResource(R.string.search),
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    modifier = Modifier
+                                        .padding(start = 8.dp)
+                                        .size(40.dp)
+                                        .clip(CircleShape)
+                                        .clickable {
+                                            scope.launch {
+                                                searchBarState.animateToExpanded()
+                                                focusRequester.requestFocus()
+                                                keyboardController?.show()
+                                            }
+                                        }
+                                        .padding(8.dp)
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(3.dp))
+                        }
+                    },
+                    trailingIcon = {
+                        dropdownContent?.invoke()
+                    }
+                )
+            },
+            modifier = Modifier.weight(1f),
+            colors = SearchBarDefaults.colors(
                 containerColor = cardColor.copy(alpha = 0f)
             ),
-            scrolledSearchBarContainerColor = cardColor.copy(alpha = 0f),
-            appBarContainerColor = cardColor.copy(alpha = 0f),
-            scrolledAppBarContainerColor = cardColor.copy(alpha = 0f)
         )
-    )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

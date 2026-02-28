@@ -381,8 +381,17 @@ fn _install_module(zip: &str) -> Result<()> {
     // Check if this module is a metamodule
     let is_metamodule = metamodule::is_metamodule(&module_prop);
 
+    // Check if module needs mounting (has system/ dir and no skip_mount file)
+    let needs_mount = {
+        let zip_file = fs::File::open(&zip_path)?;
+        let archive = zip::ZipArchive::new(zip_file)?;
+        let has_system = archive.file_names().any(|name| name.starts_with("system/"));
+        let has_skip_mount = archive.file_names().any(|name| name == "skip_mount");
+        has_system && !has_skip_mount
+    };
+
     // Check if it's safe to install regular module
-    if !is_metamodule && let Err(is_disabled) = metamodule::check_install_safety() {
+    if !is_metamodule && needs_mount && let Err(is_disabled) = metamodule::check_install_safety() {
         println!("\n❌ Installation Blocked");
         println!("┌────────────────────────────────");
         println!("│ A metamodule with custom installer is active");
