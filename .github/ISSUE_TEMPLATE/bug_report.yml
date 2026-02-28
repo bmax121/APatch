@@ -9,10 +9,13 @@ body:
         Thanks for reporting issues of APatch!
         To better assist you, please provide the following information.
         To avoid duplicate issues, please use English in the title.
+        For KernelPatch specific issues (e.g., patching failures, kernel panics, etc.), please report them at: [KernelPatch](https://github.com/bmax121/KernelPatch)
 
         感谢给 APatch 汇报问题！
         为了使我们更好地帮助你，请提供以下信息。
         为了防止重复汇报，标题请务必使用英文。
+        如果是 KernelPatch 的问题（例如修补失败，内核崩溃等），请移步 [KernelPatch 仓库](https://github.com/bmax121/KernelPatch)。
+        
 
   - type: checkboxes
     attributes:
