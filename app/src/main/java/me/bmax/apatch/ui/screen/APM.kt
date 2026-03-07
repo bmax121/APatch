@@ -158,7 +158,6 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
             SearchAppBar(
                 searchText = viewModel.search,
                 onSearchTextChange = { viewModel.search = it },
-                scrollBehavior = scrollBehavior,
                 searchBarPlaceHolderText = stringResource(R.string.search_modules)
             )
         },
