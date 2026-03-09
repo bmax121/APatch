@@ -80,7 +80,6 @@ fun SuperUserScreen() {
             SearchAppBar(
                 searchText = viewModel.search,
                 onSearchTextChange = { viewModel.search = it },
-                scrollBehavior = scrollBehavior,
                 searchBarPlaceHolderText = stringResource(R.string.search_apps),
                 dropdownContent = {
                     var showDropdown by remember { mutableStateOf(false) }
