@@ -13,6 +13,7 @@ mod restorecon;
 mod sepolicy;
 mod supercall;
 mod utils;
+mod resetprop;
 fn main() -> anyhow::Result<()> {
     cli::run()
 }
