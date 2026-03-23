@@ -27,8 +27,23 @@ use crate::{
     utils::{self, switch_cgroups},
 };
 
+pub fn report_kernel(superkey: Option<String>, event: &str, state: &str) -> Result<()> {
+    let args = vec![
+        superkey.unwrap_or_default(),
+        "event".to_string(),
+        event.to_string(),
+        state.to_string(),
+    ];
+    let args_ref: Vec<&str> = args.iter().map(|s| s.as_str()).collect();
+    let result = utils::run_command("truncate", &args_ref, None)?.wait()?;
+    Ok(())
+}
+
+
+
 pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     utils::umask(0);
+    report_kernel(superkey.clone(), "post-fs-data", "before")?;
     use std::process::Stdio;
     #[cfg(unix)]
     init_load_package_uid_config(&superkey);
@@ -43,6 +58,7 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
 
     if utils::has_magisk() {
         warn!("Magisk detected, skip post-fs-data!");
+        report_kernel(superkey.clone(), "post-fs-data", "after")?;
         return Ok(());
     }
 
@@ -182,10 +198,10 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     info!("remove update flag");
     let _ = fs::remove_file(module_update_flag);
 
-    run_stage("post-mount", superkey, true);
+    run_stage("post-mount", superkey.clone(), true);
 
     env::set_current_dir("/").with_context(|| "failed to chdir to /")?;
-
+    report_kernel(superkey, "post-fs-data", "after")?;
     Ok(())
 }
 
