@@ -50,7 +50,7 @@ android-properties = { version = "0.2.2", features = ["bionic-deprecated"] }
 procfs = "0.18"
 loopdev = { git = "https://github.com/AndroidPatch/loopdev" }
 prop-rs-android = { git = "https://github.com/Kernel-SU/ksu_props" }
-
+policy = {git = "https://github.com/AndroidPatch/ap_policy"}
 [target.'cfg(target_os = "android")'.dependencies]
 android_logger = { version = "0.15", default-features = false }
 

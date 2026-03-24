@@ -137,8 +137,8 @@ class APApplication : Application(), Thread.UncaughtExceptionHandler {
                 "ln -s $APD_PATH $APD_LINK_PATH",
                 "restorecon $APD_PATH",
 
-                "cp -f ${nativeDir}/libmagiskpolicy.so $MAGISKPOLICY_BIN_PATH",
-                "chmod +x $MAGISKPOLICY_BIN_PATH",
+                "rm -f $MAGISKPOLICY_BIN_PATH",
+                "ln -s $APD_PATH $MAGISKPOLICY_BIN_PATH",
                 "rm -f $RESETPROP_BIN_PATH",
                 "ln -s $APD_PATH $RESETPROP_BIN_PATH",
                

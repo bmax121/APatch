@@ -44,6 +44,9 @@ enum Commands {
     /// Resetprop - Magisk-compatible system property tool
     Resetprop(crate::resetprop::Args),
 
+    /// MagiskPolicy - SELinux Policy Patch Tool
+    Policy(crate::mpolicy::Args),
+
     /// SELinux policy Patch tool
     Sepolicy {
         #[command(subcommand)]
@@ -128,7 +131,10 @@ pub fn run() -> Result<()> {
         let all_args: Vec<String> = std::env::args().collect();
         crate::resetprop::resetprop_main(&all_args)
     }
-
+    if arg0.ends_with("magiskpolicy") {
+        let all_args: Vec<String> = std::env::args().collect();
+        crate::mpolicy::policy_main(&all_args)
+    }
 
     let cli = Args::parse();
 
@@ -177,6 +183,8 @@ pub fn run() -> Result<()> {
                     std::process::exit(2);
                 }
         }),
+
+        Commands::Policy(policy_args) => crate::mpolicy::execute(&policy_args),
     };
 
     if let Err(e) = &result {

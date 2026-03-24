@@ -9,7 +9,7 @@ use std::{
     thread,
     time::Duration,
 };
-
+use crate::mpolicy::{get_policy_main};
 use anyhow::{Context, Result};
 use libc::SIGPWR;
 use log::{info, warn};
@@ -50,8 +50,14 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
 
     init_load_su_path(&superkey);
 
-    let args = ["/data/adb/ap/bin/magiskpolicy", "--magisk", "--live"];
-    fork_for_result("/data/adb/ap/bin/magiskpolicy", &args, &superkey);
+    let mut sepol = get_policy_main(&[
+        "magiskpolicy".to_string(),
+        "--live".to_string(),
+    ])?;
+    sepol.magisk_rules();
+    sepol.to_file("/sys/fs/selinux/load")
+            .context("Cannot apply policy")?;
+
 
     info!("Re-privilege apd profile after injecting sepolicy");
     supercall::privilege_apd_profile(&superkey);

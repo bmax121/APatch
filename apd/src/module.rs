@@ -9,7 +9,7 @@ use std::{
     process::Command,
     str::FromStr,
 };
-
+use crate::mpolicy::{get_policy_main};
 use crate::lua;
 use anyhow::{Context, Result, anyhow, bail, ensure};
 use const_format::concatcp;
@@ -184,12 +184,13 @@ pub fn load_sepolicy_rule() -> Result<()> {
         }
 
         info!("load policy: {}", &rule_file.display());
-        Command::new(assets::MAGISKPOLICY_PATH)
-            .arg("--live")
-            .arg("--apply")
-            .arg(&rule_file)
-            .status()
-            .with_context(|| format!("Failed to exec {}", rule_file.display()))?;
+        let mut sepol = get_policy_main(&[
+            "magiskpolicy".to_string(),
+            "--live".to_string(),
+            "--apply".to_string(),
+            rule_file.display().to_string()
+        ])?;
+
         Ok(())
     })?;
 
