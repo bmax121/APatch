@@ -22,7 +22,7 @@ use signal_hook::{consts::signal::*, iterator::Signals};
 use crate::{
     assets, defs, lua, metamodule, module, restorecon, supercall,
     supercall::{
-        fork_for_result, init_load_package_uid_config, init_load_su_path, refresh_ap_package_list,
+        init_load_package_uid_config, init_load_su_path, refresh_ap_package_list,
     },
     utils::{self, switch_cgroups},
 };
@@ -94,10 +94,11 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     args = vec![
         "-s",
         "9",
-        "120s",
+        "45s",
         "logcat",
         "-b",
         "main,system,crash",
+        "DrmLibFs:S",
         "-f",
         &logcat_path,
         "logcatcher-bootlog:S",
