@@ -35,7 +35,7 @@ pub fn report_kernel(superkey: Option<String>, event: &str, state: &str) -> Resu
         state.to_string(),
     ];
     let args_ref: Vec<&str> = args.iter().map(|s| s.as_str()).collect();
-    let result = utils::run_command("truncate", &args_ref, None)?.wait()?;
+    let _ = utils::run_command("truncate", &args_ref, None)?.wait()?;
     Ok(())
 }
 

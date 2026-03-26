@@ -1,13 +1,12 @@
 use std::{
     ffi::{CStr, CString},
-    fmt::Write,
     fs::File,
     io::{self, Read},
     process,
     sync::{Arc, Mutex},
 };
 
-use libc::{EINVAL, c_int, c_long, c_void, execv, fork, pid_t, setenv, syscall, uid_t, wait};
+use libc::{EINVAL, c_long, c_void, syscall, uid_t};
 use log::{error, info, warn};
 
 use crate::package::{read_ap_package_config, synchronize_package_uid};

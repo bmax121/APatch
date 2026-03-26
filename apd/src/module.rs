@@ -184,7 +184,7 @@ pub fn load_sepolicy_rule() -> Result<()> {
         }
 
         info!("load policy: {}", &rule_file.display());
-        let mut sepol = get_policy_main(&[
+        let mut _sepol = get_policy_main(&[
             "magiskpolicy".to_string(),
             "--live".to_string(),
             "--apply".to_string(),
