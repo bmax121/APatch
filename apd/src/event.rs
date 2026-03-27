@@ -9,7 +9,7 @@ use std::{
     thread,
     time::Duration,
 };
-use crate::mpolicy::{get_policy_main};
+use crate::sepolicy::{get_policy_main};
 use anyhow::{Context, Result};
 use libc::SIGPWR;
 use log::{info, warn};
@@ -22,7 +22,7 @@ use signal_hook::{consts::signal::*, iterator::Signals};
 use crate::{
     assets, defs, lua, metamodule, module, restorecon, supercall,
     supercall::{
-        init_load_package_uid_config, init_load_su_path, refresh_ap_package_list,
+        init_load_su_path, refresh_ap_package_list,
     },
     utils::{self, switch_cgroups},
 };
@@ -46,7 +46,6 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     report_kernel(superkey.clone(), "post-fs-data", "before")?;
     use std::process::Stdio;
     #[cfg(unix)]
-    init_load_package_uid_config(&superkey);
 
     init_load_su_path(&superkey);
 

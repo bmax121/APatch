@@ -275,40 +275,6 @@ pub fn privilege_apd_profile(superkey: &Option<String>) {
     }
 }
 
-pub fn init_load_package_uid_config(superkey: &Option<String>) {
-    let package_configs = read_ap_package_config();
-    let key = convert_superkey(superkey);
-
-    for config in package_configs {
-        if config.allow == 1 && config.exclude == 0 {
-            match key {
-                Some(ref key) => {
-                    let profile = SuProfile {
-                        uid: config.uid,
-                        to_uid: config.to_uid,
-                        scontext: convert_string_to_u8_array(&config.sctx),
-                    };
-                    let result = sc_su_grant_uid(key, &profile);
-                    info!("Processed {}: result = {}", config.pkg, result);
-                }
-                _ => {
-                    warn!("Superkey is None, skipping config: {}", config.pkg);
-                }
-            }
-        }
-        if config.allow == 0 && config.exclude == 1 {
-            match key {
-                Some(ref key) => {
-                    let result = sc_set_ap_mod_exclude(key, config.uid as i64, 1);
-                    info!("Processed exclude {}: result = {}", config.pkg, result);
-                }
-                _ => {
-                    warn!("Superkey is None, skipping config: {}", config.pkg);
-                }
-            }
-        }
-    }
-}
 
 pub fn init_load_su_path(superkey: &Option<String>) {
     let su_path_file = "/data/adb/ap/su_path";
