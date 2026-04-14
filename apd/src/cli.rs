@@ -63,6 +63,12 @@ enum Module {
         id: String,
     },
 
+    /// UudoUninstall module <id>
+    UndoUninstall {
+        /// module id
+        id: String,
+    },
+
     /// enable module <id>
     Enable {
         /// module id
@@ -154,6 +160,7 @@ pub fn run() -> Result<()> {
             match command {
                 Module::Install { zip } => module::install_module(&zip),
                 Module::Uninstall { id } => module::uninstall_module(&id),
+                Module::UndoUninstall { id } => module::undo_uninstall_module(&id),
                 Module::Action { id } => module::run_action(&id),
                 Module::Lua { id, function } => {
                     lua::run_lua(&id, &function, false, true).map_err(|e| anyhow::anyhow!("{}", e))
