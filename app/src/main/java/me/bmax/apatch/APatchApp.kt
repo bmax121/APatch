@@ -272,7 +272,8 @@ class APApplication : Application(), Thread.UncaughtExceptionHandler {
         // TODO: 2. remove all usage of superkey
         sharedPreferences = getSharedPreferences(SP_NAME, Context.MODE_PRIVATE)
         APatchKeyHelper.setSharedPreferences(sharedPreferences)
-        superKey = APatchKeyHelper.readSPSuperKey()
+        val savedKey = APatchKeyHelper.readSPSuperKey()
+        superKey = if (savedKey.isNullOrEmpty()) "su" else savedKey
 
         okhttpClient =
             OkHttpClient.Builder().cache(Cache(File(cacheDir, "okhttp"), 10 * 1024 * 1024))
