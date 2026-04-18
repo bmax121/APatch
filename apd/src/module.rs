@@ -526,6 +526,47 @@ pub fn uninstall_module(id: &str) -> Result<()> {
     Ok(())
 }
 
+pub fn _undo_uninstall_module(id: &str, update_dir: &str) -> Result<()> {
+    let dir = Path::new(update_dir);
+    ensure!(dir.exists(), "No module installed");
+
+    let mut found = false;
+    for entry in fs::read_dir(dir)?.flatten() {
+        let path = entry.path();
+        let module_prop = path.join("module.prop");
+        if !module_prop.exists() {
+            continue;
+        }
+
+        let content = fs::read(&module_prop)?;
+        let mut module_id = String::new();
+
+        PropertiesIter::new_with_encoding(Cursor::new(content), encoding_rs::UTF_8,).read_into(
+            |k, v| {
+                if k == "id" {
+                    module_id = v;
+                }
+            }
+        )?;
+        if module_id == id {
+            let remove_file = path.join(defs::REMOVE_FILE_NAME);
+            fs::remove_file(remove_file).with_context(|| "Failed to remove removefile.")?;
+            found = true;
+            break;
+        }
+    }
+
+    ensure!(found, "Module not found");
+
+    let _ = mark_module_state(id, defs::REMOVE_FILE_NAME, false);
+    Ok(())
+}
+pub fn undo_uninstall_module(id: &str) -> Result<()> {
+    _undo_uninstall_module(id, defs::MODULE_DIR)?;
+    mark_update()?;
+    Ok(())
+}
+
 /// Read module.prop from the given module path and return as a HashMap
 pub fn read_module_prop(module_path: &Path) -> Result<HashMap<String, String>> {
     let module_prop = module_path.join("module.prop");

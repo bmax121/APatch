@@ -84,6 +84,7 @@
     <string name="apm_uninstall_success">%s 已卸载</string>
     <string name="apm_install">安装</string>
     <string name="apm_remove">卸载</string>
+    <string name="apm_undo">撤销</string>
     <string name="apm_uninstall_confirm">确认要卸载“%s”模块吗？</string>
     <string name="metamodule_uninstall_confirm">"您确定要卸载模块 %s 吗？此操作将影响所有模块，并且元模块提供的某些功能（如挂载）将不再工作。  "</string>
     <string name="warning_of_meta_module_title">需要元模块</string>
@@ -96,6 +97,8 @@
     <string name="apm_overlay_fs_not_available">模块功能不可用，因为内核禁用了 OverlayFS！</string>
     <string name="apm_changelog">更新日志</string>
     <string name="apm_uninstall_failed">无法卸载 %s</string>
+    <string name="apm_module_undo_uninstall_success">%s 已恢复</string>
+    <string name="apm_module_undo_uninstall_failed">%s 恢复失败</string>
     <string name="apm_downloading">正在下载“%s”模块……</string>
     <string name="apm_magisk_conflict">模块功能不可用，因与 Magisk 存在冲突！</string>
     <string name="apm_desc">描述</string>

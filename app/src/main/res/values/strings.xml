@@ -153,11 +153,14 @@
     <string name="apm_failed_to_disable">Failed to disable module: %s</string>
     <string name="apm_empty">No module installed</string>
     <string name="apm_remove">Remove</string>
+    <string name="apm_undo">Undo</string>
     <string name="apm_install">Install</string>
     <string name="apm_uninstall_confirm">Uninstall the %s module?</string>
     <string name="metamodule_uninstall_confirm">"Are you sure you want to uninstall module %s? This action will affect all modules, and certain features provided by the metamodule (such as mounting) will no longer work.  "</string>
     <string name="apm_uninstall_success">%s uninstalled</string>
     <string name="apm_uninstall_failed">Failed to uninstall: %s</string>
+    <string name="apm_module_undo_uninstall_success">Successfully canceled uninstall of %s</string>
+    <string name="apm_module_undo_uninstall_failed">Failed to undo uninstall: %s</string>
     <string name="apm_version">Version</string>
     <string name="apm_author">Author</string>
     <string name="apm_desc">Desc</string>
