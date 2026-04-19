@@ -153,8 +153,6 @@ fn sc_su_reset_path(key: &CStr, path: &CStr) -> c_long {
     }
 }
 
-
-
 fn sc_su_uid_nums(key: &CStr) -> c_long {
     if key.to_bytes().is_empty() {
         return (-EINVAL).into();
@@ -275,7 +273,6 @@ pub fn privilege_apd_profile(superkey: &Option<String>) {
     }
 }
 
-
 pub fn init_load_su_path(superkey: &Option<String>) {
     let su_path_file = "/data/adb/ap/su_path";
 
@@ -307,5 +304,3 @@ pub fn init_load_su_path(superkey: &Option<String>) {
         }
     }
 }
-
-
