@@ -1,3 +1,12 @@
+use crate::sepolicy::get_policy_main;
+use anyhow::{Context, Result};
+use libc::SIGPWR;
+use log::{info, warn};
+use notify::{
+    Config, Event, EventKind, INotifyWatcher, RecursiveMode, Watcher,
+    event::{ModifyKind, RenameMode},
+};
+use signal_hook::{consts::signal::*, iterator::Signals};
 use std::{
     env,
     ffi::CStr,
@@ -9,21 +18,10 @@ use std::{
     thread,
     time::Duration,
 };
-use crate::sepolicy::{get_policy_main};
-use anyhow::{Context, Result};
-use libc::SIGPWR;
-use log::{info, warn};
-use notify::{
-    Config, Event, EventKind, INotifyWatcher, RecursiveMode, Watcher,
-    event::{ModifyKind, RenameMode},
-};
-use signal_hook::{consts::signal::*, iterator::Signals};
 
 use crate::{
     assets, defs, lua, metamodule, module, restorecon, supercall,
-    supercall::{
-        init_load_su_path, refresh_ap_package_list,
-    },
+    supercall::{init_load_su_path, refresh_ap_package_list},
     utils::{self, switch_cgroups},
 };
 
@@ -39,27 +37,26 @@ pub fn report_kernel(superkey: Option<String>, event: &str, state: &str) -> Resu
     Ok(())
 }
 
-
-
 pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
     utils::umask(0);
     report_kernel(superkey.clone(), "post-fs-data", "before")?;
     use std::process::Stdio;
     #[cfg(unix)]
-
     init_load_su_path(&superkey);
 
-    let mut sepol = get_policy_main(&[
-        "magiskpolicy".to_string(),
-        "--live".to_string(),
-    ])?;
+    let mut sepol = get_policy_main(&["magiskpolicy".to_string(), "--live".to_string()])?;
     sepol.magisk_rules();
-    sepol.to_file("/sys/fs/selinux/load")
-            .context("Cannot apply policy")?;
-
+    sepol
+        .to_file("/sys/fs/selinux/load")
+        .context("Cannot apply policy")?;
 
     info!("Re-privilege apd profile after injecting sepolicy");
     supercall::privilege_apd_profile(&superkey);
+
+    // Clear all temporary module configs early
+    if let Err(e) = crate::module_config::clear_all_temp_configs() {
+        warn!("clear temp configs failed: {e}");
+    }
 
     if utils::has_magisk() {
         warn!("Magisk detected, skip post-fs-data!");
@@ -335,9 +332,8 @@ pub fn start_uid_listener() -> Result<()> {
             let skey = CStr::from_bytes_with_nul(b"su\0")
                 .expect("[start_uid_listener] CStr::from_bytes_with_nul failed");
             refresh_ap_package_list(&skey, &mutex);
-            report_kernel(None, "uid_listener", "package-list-updated")
-                .unwrap_or_else(|e| {
-                    warn!("Failed to report kernel about package list update: {e}");
+            report_kernel(None, "uid_listener", "package-list-updated").unwrap_or_else(|e| {
+                warn!("Failed to report kernel about package list update: {e}");
             });
         } else if !debounce {
             thread::sleep(Duration::from_secs(1));

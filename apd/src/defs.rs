@@ -29,6 +29,11 @@ pub const METAMODULE_METAINSTALL_SCRIPT: &str = "metainstall.sh";
 pub const METAMODULE_METAUNINSTALL_SCRIPT: &str = "metauninstall.sh";
 pub const METAMODULE_DIR: &str = concatcp!(ADB_DIR, "metamodule/");
 
+// Module config
+pub const MODULE_CONFIG_DIR: &str = concatcp!(WORKING_DIR, "module_configs/");
+    pub const PERSIST_CONFIG_NAME: &str = "persist.config";
+    pub const TEMP_CONFIG_NAME: &str = "tmp.config";
+    
 pub const PTS_NAME: &str = "pts";
 
 pub const VERSION_CODE: &str = include_str!(concat!(env!("OUT_DIR"), "/VERSION_CODE"));

@@ -1,7 +1,7 @@
-use crate::{defs, event, lua, module, supercall, utils};
+use crate::{defs, event, lua, module, module_config, supercall, utils};
 #[cfg(target_os = "android")]
 use android_logger::Config;
-use anyhow::Result;
+use anyhow::{Context, Result};
 use clap::Parser;
 #[cfg(target_os = "android")]
 use log::LevelFilter;
@@ -46,7 +46,6 @@ enum Commands {
 
     /// MagiskPolicy - SELinux Policy Patch Tool
     Sepolicy(crate::sepolicy::Args),
-
 }
 
 #[derive(clap::Subcommand, Debug)]
@@ -95,6 +94,57 @@ enum Module {
     },
     /// list all modules
     List,
+
+    /// manage module configuration
+    Config {
+        /// target internal module name (resolved as internal.<name>)
+        #[arg(long)]
+        internal: Option<String>,
+        #[command(subcommand)]
+        command: ModuleConfigCmd,
+    },
+}
+
+#[derive(clap::Subcommand, Debug)]
+enum ModuleConfigCmd {
+    /// Get a config value
+    Get {
+        /// config key
+        key: String,
+    },
+
+    /// Set a config value
+    Set {
+        /// config key
+        key: String,
+        /// config value (omit to read from stdin)
+        value: Option<String>,
+        /// read value from stdin (default if value not provided)
+        #[arg(long)]
+        stdin: bool,
+        /// use temporary config (cleared on reboot)
+        #[arg(short, long)]
+        temp: bool,
+    },
+
+    /// List all config entries
+    List,
+
+    /// Delete a config entry
+    Delete {
+        /// config key
+        key: String,
+        /// delete from temporary config
+        #[arg(short, long)]
+        temp: bool,
+    },
+
+    /// Clear all config entries
+    Clear {
+        /// clear temporary config
+        #[arg(short, long)]
+        temp: bool,
+    },
 }
 
 #[derive(clap::Subcommand, Debug)]
@@ -168,6 +218,95 @@ pub fn run() -> Result<()> {
                 Module::Enable { id } => module::enable_module(&id),
                 Module::Disable { id } => module::disable_module(&id),
                 Module::List => module::list_modules(),
+                Module::Config { internal, command } => {
+                    let module_id = match internal {
+                        Some(internal_name) => format!("internal.{internal_name}"),
+                        None => std::env::var("AP_MODULE").map_err(|_| {
+                            anyhow::anyhow!(
+                                "This command must be run in the context of a module or passed --internal <name>"
+                            )
+                        })?,
+                    };
+
+                    match command {
+                        ModuleConfigCmd::Get { key } => {
+                            // Use merge_configs to respect priority (temp overrides persist)
+                            let config = module_config::merge_configs(&module_id)?;
+                            match config.get(&key) {
+                                Some(value) => {
+                                    println!("{value}");
+                                    Ok(())
+                                }
+                                None => anyhow::bail!("Key '{key}' not found"),
+                            }
+                        }
+                        ModuleConfigCmd::Set {
+                            key,
+                            value,
+                            stdin,
+                            temp,
+                        } => {
+                            // Validate key at CLI layer for better user experience
+                            module_config::validate_config_key(&key)?;
+
+                            // Read value from stdin or argument
+                            let value_str = match value {
+                                Some(v) if !stdin => v,
+                                _ => {
+                                    // Read from stdin
+                                    use std::io::Read;
+                                    let mut buffer = String::new();
+                                    std::io::stdin()
+                                        .read_to_string(&mut buffer)
+                                        .context("Failed to read from stdin")?;
+                                    buffer
+                                }
+                            };
+
+                            // Validate value
+                            module_config::validate_config_value(&value_str)?;
+
+                            let config_type = if temp {
+                                module_config::ConfigType::Temp
+                            } else {
+                                module_config::ConfigType::Persist
+                            };
+                            module_config::set_config_value(
+                                &module_id,
+                                &key,
+                                &value_str,
+                                config_type,
+                            )
+                        }
+                        ModuleConfigCmd::List => {
+                            let config = module_config::merge_configs(&module_id)?;
+                            if config.is_empty() {
+                                println!("No config entries found");
+                            } else {
+                                for (key, value) in config {
+                                    println!("{key}={value}");
+                                }
+                            }
+                            Ok(())
+                        }
+                        ModuleConfigCmd::Delete { key, temp } => {
+                            let config_type = if temp {
+                                module_config::ConfigType::Temp
+                            } else {
+                                module_config::ConfigType::Persist
+                            };
+                            module_config::delete_config_value(&module_id, &key, config_type)
+                        }
+                        ModuleConfigCmd::Clear { temp } => {
+                            let config_type = if temp {
+                                module_config::ConfigType::Temp
+                            } else {
+                                module_config::ConfigType::Persist
+                            };
+                            module_config::clear_config(&module_id, config_type)
+                        }
+                    }
+                }
             }
         }
 
@@ -180,10 +319,9 @@ pub fn run() -> Result<()> {
                 {
                     std::process::exit(2);
                 }
-        }),
+            }),
 
         Commands::Sepolicy(sepolicy_args) => crate::sepolicy::execute(&sepolicy_args),
-
     };
 
     if let Err(e) = &result {

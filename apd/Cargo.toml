@@ -42,6 +42,7 @@ getopts = "0.2"
 errno = "0.3.14"
 notify = "8.2"
 signal-hook = "0.4"
+regex-lite = "0.1.9"
 
 [target.'cfg(any(target_os = "android", target_os = "linux"))'.dependencies]
 rustix = { version = "1", features = ["all-apis"] }
