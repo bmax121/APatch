@@ -56,7 +56,7 @@ class PatchesViewModel : ViewModel() {
     var bootDev by mutableStateOf("")
     var kimgInfo by mutableStateOf(KPModel.KImgInfo("", false))
     var kpimgInfo by mutableStateOf(KPModel.KPImgInfo("", "", "", "", ""))
-    var superkey by mutableStateOf("")
+    var superkey by mutableStateOf(APApplication.superKey)
     var existedExtras = mutableStateListOf<KPModel.IExtraInfo>()
     var newExtras = mutableStateListOf<KPModel.IExtraInfo>()
     var newExtrasFileName = mutableListOf<String>()
@@ -115,7 +115,7 @@ class PatchesViewModel : ViewModel() {
                     kpimg["version"].toString(),
                     kpimg["compile_time"].toString(),
                     kpimg["config"].toString(),
-                    "",     // manager no longer keeps a separate superkey
+                    APApplication.superKey,     // current key
                     kpimg["root_superkey"].toString(),   // empty
                 )
             } else {
@@ -349,7 +349,7 @@ class PatchesViewModel : ViewModel() {
         val suFile = File("/system/bin/su")
         return suFile.exists() && suFile.canExecute()
     }
-    fun doPatch(mode: PatchMode, useKey: Boolean) {
+    fun doPatch(mode: PatchMode) {
         viewModelScope.launch(Dispatchers.IO) {
             patching = true
             Log.d(TAG, "starting patching...")
@@ -372,11 +372,9 @@ class PatchesViewModel : ViewModel() {
             // adapt for 0.10.7 and lower KP
             var isKpOld = false
 
-            val superkey = if (useKey && this@PatchesViewModel.superkey.isNotEmpty()) this@PatchesViewModel.superkey else "su"
-
             if (mode == PatchMode.PATCH_AND_INSTALL || mode == PatchMode.INSTALL_TO_NEXT_SLOT) {
 
-                val KPCheck = shell.newJob().add("truncate ${APApplication.superKey} -Z u:r:magisk:s0 -c whoami").exec()
+                val KPCheck = shell.newJob().add("truncate $superkey -Z u:r:magisk:s0 -c whoami").exec()
 
                 if (KPCheck.isSuccess && !isSuExecutable()) {
                     patchCommand.addAll(0, listOf("truncate", APApplication.superKey, "-Z", APApplication.MAGISK_SCONTEXT, "-c"))

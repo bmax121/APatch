@@ -18,10 +18,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.HelpOutline
@@ -29,6 +31,8 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.InstallMobile
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.Block
 import androidx.compose.material.icons.outlined.Cached
@@ -47,6 +51,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -63,12 +68,17 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.window.DialogWindowProvider
+import androidx.compose.ui.window.SecureFlagPolicy
 import androidx.lifecycle.compose.dropUnlessResumed
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
@@ -99,8 +109,14 @@ private val managerVersion = getManagerVersion()
 @Destination<RootGraph>(start = true)
 @Composable
 fun HomeScreen(navigator: DestinationsNavigator) {
+    var showPatchFloatAction by remember { mutableStateOf(true) }
+
     val kpState by APApplication.kpStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
     val apState by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
+
+    if (kpState != APApplication.State.UNKNOWN_STATE) {
+        showPatchFloatAction = false
+    }
 
     Scaffold(topBar = {
         TopBar(onInstallClick = dropUnlessResumed {
@@ -181,6 +197,179 @@ fun UninstallDialog(showDialog: MutableState<Boolean>, navigator: DestinationsNa
             val dialogWindowProvider = LocalView.current.parent as DialogWindowProvider
             APDialogBlurBehindUtils.setupWindowBlurListener(dialogWindowProvider.window)
         }
+    }
+
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AuthFailedTipDialog(showDialog: MutableState<Boolean>) {
+    BasicAlertDialog(
+        onDismissRequest = { showDialog.value = false }, properties = DialogProperties(
+            decorFitsSystemWindows = true,
+            usePlatformDefaultWidth = false,
+            securePolicy = SecureFlagPolicy.SecureOff
+        )
+    ) {
+        Surface(
+            modifier = Modifier
+                .width(320.dp)
+                .wrapContentHeight(),
+            shape = RoundedCornerShape(20.dp),
+            tonalElevation = AlertDialogDefaults.TonalElevation,
+            color = AlertDialogDefaults.containerColor,
+        ) {
+            Column(modifier = Modifier.padding(PaddingValues(all = 24.dp))) {
+                // Title
+                Box(
+                    Modifier
+                        .padding(PaddingValues(bottom = 16.dp))
+                        .align(Alignment.Start)
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.home_dialog_auth_fail_title),
+                        style = MaterialTheme.typography.headlineSmall
+                    )
+                }
+
+                // Content
+                Box(
+                    Modifier
+                        .weight(weight = 1f, fill = false)
+                        .padding(PaddingValues(bottom = 24.dp))
+                        .align(Alignment.Start)
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.home_dialog_auth_fail_content),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+
+                // Buttons
+                Row(
+                    modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End
+                ) {
+                    TextButton(onClick = { showDialog.value = false }) {
+                        Text(text = stringResource(id = android.R.string.ok))
+                    }
+                }
+            }
+            val dialogWindowProvider = LocalView.current.parent as DialogWindowProvider
+            APDialogBlurBehindUtils.setupWindowBlurListener(dialogWindowProvider.window)
+        }
+    }
+
+}
+
+val checkSuperKeyValidation: (superKey: String) -> Boolean = { superKey ->
+    superKey.length in 8..63 && superKey.any { it.isDigit() } && superKey.any { it.isLetter() }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AuthSuperKey(showDialog: MutableState<Boolean>, showFailedDialog: MutableState<Boolean>) {
+    var key by remember { mutableStateOf("") }
+    var keyVisible by remember { mutableStateOf(false) }
+    var enable by remember { mutableStateOf(false) }
+
+    BasicAlertDialog(
+        onDismissRequest = { showDialog.value = false }, properties = DialogProperties(
+            decorFitsSystemWindows = true,
+            usePlatformDefaultWidth = false,
+            securePolicy = SecureFlagPolicy.SecureOff
+        )
+    ) {
+        Surface(
+            modifier = Modifier
+                .width(310.dp)
+                .wrapContentHeight(),
+            shape = RoundedCornerShape(30.dp),
+            tonalElevation = AlertDialogDefaults.TonalElevation,
+            color = AlertDialogDefaults.containerColor,
+        ) {
+            Column(modifier = Modifier.padding(PaddingValues(all = 24.dp))) {
+                // Title
+                Box(
+                    Modifier
+                        .padding(PaddingValues(bottom = 16.dp))
+                        .align(Alignment.Start)
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.home_auth_key_title),
+                        style = MaterialTheme.typography.headlineSmall
+                    )
+                }
+
+                // Content
+                Box(
+                    Modifier
+                        .weight(weight = 1f, fill = false)
+                        .align(Alignment.Start)
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.home_auth_key_desc),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+
+                // Content2
+                Box(
+                    contentAlignment = Alignment.CenterEnd,
+                ) {
+                    OutlinedTextField(
+                        value = key,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 6.dp),
+                        onValueChange = {
+                            key = it
+                            enable = checkSuperKeyValidation(key)
+                        },
+                        shape = RoundedCornerShape(50.0f),
+                        label = { Text(stringResource(id = R.string.super_key)) },
+                        visualTransformation = if (keyVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+                    )
+                    IconButton(
+                        modifier = Modifier
+                            .size(40.dp)
+                            .padding(top = 15.dp, end = 5.dp),
+                        onClick = { keyVisible = !keyVisible }) {
+                        Icon(
+                            imageVector = if (keyVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                            contentDescription = null,
+                            tint = Color.Gray
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+                // Buttons
+                Row(
+                    modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End
+                ) {
+                    TextButton(onClick = { showDialog.value = false }) {
+                        Text(stringResource(id = android.R.string.cancel))
+                    }
+
+                    Button(onClick = {
+                        showDialog.value = false
+
+                        val preVerifyKey = Natives.nativeReady(key)
+                        if (preVerifyKey) {
+                            APApplication.superKey = key
+                        } else {
+                            showFailedDialog.value = true
+                        }
+
+                    }, enabled = enable) {
+                        Text(stringResource(id = android.R.string.ok))
+                    }
+                }
+            }
+        }
+        val dialogWindowProvider = LocalView.current.parent as DialogWindowProvider
+        APDialogBlurBehindUtils.setupWindowBlurListener(dialogWindowProvider.window)
     }
 }
 
@@ -269,6 +458,16 @@ private fun KStatusCard(
     kpState: APApplication.State, apState: APApplication.State, navigator: DestinationsNavigator
 ) {
 
+    val showAuthFailedTipDialog = remember { mutableStateOf(false) }
+    if (showAuthFailedTipDialog.value) {
+        AuthFailedTipDialog(showDialog = showAuthFailedTipDialog)
+    }
+
+    val showAuthKeyDialog = remember { mutableStateOf(false) }
+    if (showAuthKeyDialog.value) {
+        AuthSuperKey(showDialog = showAuthKeyDialog, showFailedDialog = showAuthFailedTipDialog)
+    }
+
     val showUninstallDialog = remember { mutableStateOf(false) }
     if (showUninstallDialog.value) {
         UninstallDialog(showDialog = showUninstallDialog, navigator)
@@ -335,7 +534,7 @@ private fun KStatusCard(
                 Column(
                     Modifier
                         .weight(2f)
-                        .padding(start = 16.dp, end = 1.dp)
+                        .padding(start = 16.dp)
                 ) {
                     when (kpState) {
                         APApplication.State.KERNELPATCH_INSTALLED -> {
@@ -386,7 +585,7 @@ private fun KStatusCard(
                     Button(onClick = {
                         when (kpState) {
                             APApplication.State.UNKNOWN_STATE -> {
-                                navigator.navigate(InstallModeSelectScreenDestination)
+                                showAuthKeyDialog.value = true
                             }
 
                             APApplication.State.KERNELPATCH_NEED_UPDATE -> {
@@ -417,7 +616,7 @@ private fun KStatusCard(
                     }, content = {
                         when (kpState) {
                             APApplication.State.UNKNOWN_STATE -> {
-                                Text(text = stringResource(id = R.string.home_ap_cando_install))
+                                Text(text = stringResource(id = R.string.super_key))
                             }
 
                             APApplication.State.KERNELPATCH_NEED_UPDATE -> {

@@ -68,11 +68,8 @@ mv kernel kernel.ori
 
 echo "- Patching kernel"
 
-KPT_ARGS=""
-[ "$SUPERKEY" != "su" ] && KPT_ARGS="-S $SUPERKEY"
-
 set -x
-./kptools -p -i kernel.ori $KPT_ARGS -k kpimg -o kernel "$@"
+./kptools -p -i kernel.ori -S "$SUPERKEY" -k kpimg -o kernel "$@"
 patch_rc=$?
 set +x
 
