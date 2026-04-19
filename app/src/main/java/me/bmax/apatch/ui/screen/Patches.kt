@@ -249,8 +249,11 @@ fun Patches(mode: PatchesViewModel.PatchMode) {
             if (!viewModel.patching && !viewModel.patchdone) {
                 // patch start
                 if (mode != PatchesViewModel.PatchMode.UNPATCH) {
-                    StartButton(stringResource(id = R.string.patch_start_patch_btn)) {
-                        viewModel.doPatch(mode, needKey)
+                    val isKeyReady = !needKey || viewModel.superkey.isNotEmpty()
+                    if (isKeyReady) {
+                        StartButton(stringResource(id = R.string.patch_start_patch_btn)) {
+                            viewModel.doPatch(mode, needKey)
+                        }
                     }
                 }
                 // unpatch
