@@ -215,7 +215,7 @@ pub fn exec_script<T: AsRef<Path>>(path: T, wait: bool) -> Result<()> {
 
     if is_module_script && module_id.is_none() {
         debug!(
-            "Failed to extract module_id from script path '{}'. Script will run without KSU_MODULE environment variable.",
+            "Failed to extract module_id from script path '{}'. Script will run without AP_MODULE environment variable.",
             path.as_ref().display()
         );
     }
