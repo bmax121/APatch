@@ -22,7 +22,6 @@ function kernelFlagsErr(){
 
 function apatchNote(){
 	ui_print "- APatch Patch Done"
-	ui_print "- APatch Key is: Ap$skey"
 	ui_print "- We do have saved Origin Boot image to /data"
 	ui_print "- If you encounter bootloop, reboot into Recovery and flash it"
 	exit
@@ -41,7 +40,7 @@ function boot_execute_ab(){
 		kernelFlagsErr
 	fi
 	mv kernel kernel-origin
-	./lib/arm64-v8a/libkptools.so -p --image kernel-origin --skey "Ap$skey" --kpimg ./assets/kpimg --out ./kernel 2>&1 | tee /dev/tmp/install/log
+	./lib/arm64-v8a/libkptools.so -p --image kernel-origin --kpimg ./assets/kpimg --out ./kernel 2>&1 | tee /dev/tmp/install/log
 	if [[ ! $(cat /dev/tmp/install/log | grep "patch done") ]]; then
 		failed
 	fi
@@ -58,7 +57,7 @@ function boot_execute(){
 		kernelFlagsErr
 	fi
 	mv kernel kernel-origin
-	./lib/arm64-v8a/libkptools.so -p --image kernel-origin --skey "Ap$skey" --kpimg ./assets/kpimg --out ./kernel 2>&1 | tee /dev/tmp/install/log
+	./lib/arm64-v8a/libkptools.so -p --image kernel-origin --kpimg ./assets/kpimg --out ./kernel 2>&1 | tee /dev/tmp/install/log
 	if [[ ! $(cat /dev/tmp/install/log | grep "patch done") ]]; then
 		failed
 	fi
@@ -77,8 +76,6 @@ chmod a+x ./assets/kpimg
 chmod a+x ./lib/arm64-v8a/libkptools.so
 
 slot=$(getprop ro.boot.slot_suffix)
-
-skey=$(cat /proc/sys/kernel/random/uuid | cut -d \- -f1)
 
 if [[ ! "$slot" == "" ]]; then
 
