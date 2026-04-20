@@ -86,7 +86,6 @@ struct ResetPropParser {
     arg: Args,
 }
 
-
 pub fn resetprop_main(args: &[String]) -> ! {
     if let Err(err) = run_from_args(args) {
         let code = if err.downcast_ref::<WaitTimeoutError>().is_some() {
