@@ -16,6 +16,7 @@ import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.FrameLayout
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -52,6 +53,7 @@ class WebUIActivity : ComponentActivity() {
     private lateinit var insets: Insets
     private var insetsContinuation: CancellableContinuation<Unit>? = null
     private var isInsetsEnabled = false
+    private var webCanGoBack = false
     private lateinit var fileChooserLauncher: ActivityResultLauncher<Intent>
     private var filePathCallback: ValueCallback<Array<Uri>>? = null
 
@@ -63,6 +65,17 @@ class WebUIActivity : ComponentActivity() {
         }
 
         super.onCreate(savedInstanceState)
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (webCanGoBack) {
+                    webView?.goBack()
+                    return
+                }
+                isEnabled = false
+                onBackPressedDispatcher.onBackPressed()
+            }
+        })
 
         setContent {
             APatchTheme {
@@ -192,6 +205,11 @@ class WebUIActivity : ComponentActivity() {
                 }
 
                 return webViewAssetLoader.shouldInterceptRequest(url)
+            }
+
+            override fun doUpdateVisitedHistory(view: WebView?, url: String?, isReload: Boolean) {
+                webCanGoBack = view?.canGoBack() == true
+                super.doUpdateVisitedHistory(view, url, isReload)
             }
         }
 
