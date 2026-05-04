@@ -1,7 +1,6 @@
 package me.bmax.apatch
 
 import android.app.Application
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
@@ -50,7 +49,6 @@ class APApplication : Application(), Thread.UncaughtExceptionHandler {
 
         @Deprecated("No more KPatch ELF from 0.11.0-dev")
         const val KPATCH_PATH = "/data/adb/kpatch"
-        const val SUPERCMD = "/system/bin/truncate"
         const val APATCH_FOLDER = "/data/adb/ap/"
         private const val APATCH_BIN_FOLDER = APATCH_FOLDER + "bin/"
         private const val APATCH_LOG_FOLDER = APATCH_FOLDER + "log/"
@@ -267,7 +265,7 @@ class APApplication : Application(), Thread.UncaughtExceptionHandler {
         // TODO: We can't totally protect superkey from be stolen by root or LSPosed-like injection tools in user space, the only way is don't use superkey,
         // TODO: 1. make me root by kernel
         // TODO: 2. remove all usage of superkey
-        sharedPreferences = getSharedPreferences(SP_NAME, Context.MODE_PRIVATE)
+        sharedPreferences = getSharedPreferences(SP_NAME, MODE_PRIVATE)
         superKey = "su"
 
         okhttpClient =
