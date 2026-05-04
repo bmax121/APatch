@@ -80,9 +80,8 @@ fun createRootShell(globalMnt: Boolean = false): Shell {
 private fun createMainRootShell() : Shell {
     val builder = Shell.Builder.create()
         .setInitializers(RootShellInitializer::class.java)
-        .setCommands(SUPERCMD, APApplication.superKey, "-Z", APApplication.MAGISK_SCONTEXT)
     val shell = try {
-        builder.build()
+        builder.build(SUPERCMD, APApplication.superKey, "-Z", APApplication.MAGISK_SCONTEXT)
     } catch (e: Throwable) {
         Log.e(TAG, "su failed: ", e)
         builder.setCommands(getKPatchPath(), APApplication.superKey, "su", "-Z", APApplication.MAGISK_SCONTEXT)
