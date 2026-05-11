@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.ActivityManager
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.net.Uri
 import android.os.Build
@@ -43,6 +44,8 @@ import me.bmax.apatch.ui.webui.AppIconUtil
 import me.bmax.apatch.ui.webui.Insets
 import me.bmax.apatch.ui.webui.SuFilePathHandler
 import me.bmax.apatch.ui.webui.WebViewInterface
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
 import java.io.File
 
 @SuppressLint("SetJavaScriptEnabled")
@@ -196,10 +199,13 @@ class WebUIActivity : ComponentActivity() {
                     if (!packageName.isNullOrEmpty()) {
                         val icon = AppIconUtil.loadAppIconSync(this@WebUIActivity, packageName, 512)
                         if (icon != null) {
-                            val stream = java.io.ByteArrayOutputStream()
-                            icon.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, stream)
-                            val inputStream = java.io.ByteArrayInputStream(stream.toByteArray())
-                            return WebResourceResponse("image/png", null, inputStream)
+                            val stream = ByteArrayOutputStream()
+                            icon.compress(Bitmap.CompressFormat.PNG, 100, stream)
+                            return WebResourceResponse(
+                                "image/png", null, 200, "OK",
+                                mapOf("Access-Control-Allow-Origin" to "*"),
+                                ByteArrayInputStream(stream.toByteArray())
+                            )
                         }
                     }
                 }
