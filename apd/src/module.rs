@@ -43,7 +43,7 @@ pub enum ModuleType {
     Updated,
 }
 
-fn exec_install_script(module_file: &str, is_metamodule: bool) -> Result<()> {
+fn exec_install_script(module_file: &str, is_metamodule: bool, module_id: &str) -> Result<()> {
     let realpath = std::fs::canonicalize(module_file)
         .with_context(|| format!("realpath: {module_file} failed"))?;
 
@@ -53,7 +53,7 @@ fn exec_install_script(module_file: &str, is_metamodule: bool) -> Result<()> {
 
     let result = Command::new(assets::BUSYBOX_PATH)
         .args(["sh", "-c", &install_script])
-        .envs(get_common_script_envs())
+        .envs(get_common_script_envs(Some(module_id)))
         .env("OUTFD", "1")
         .env("ZIPFILE", realpath)
         .status()?;
@@ -97,8 +97,8 @@ pub fn handle_updated_modules() -> Result<()> {
 }
 
 /// Get common environment variables for script execution
-pub fn get_common_script_envs() -> Vec<(&'static str, String)> {
-    vec![
+pub fn get_common_script_envs(module_id: Option<&str>) -> Vec<(&'static str, String)> {
+    let mut envs = vec![
         ("ASH_STANDALONE", "1".to_string()),
         ("APATCH", "true".to_string()),
         ("APATCH_VER", defs::VERSION_NAME.to_string()),
@@ -111,7 +111,13 @@ pub fn get_common_script_envs() -> Vec<(&'static str, String)> {
                 defs::BINARY_DIR.trim_end_matches('/')
             ),
         ),
-    ]
+    ];
+
+    if let Some(id) = module_id {
+        envs.push(("AP_MODULE", id.to_string()));
+    }
+
+    envs
 }
 
 // because we use something like A-B update
@@ -236,23 +242,7 @@ pub fn exec_script<T: AsRef<Path>>(path: T, wait: bool) -> Result<()> {
         .current_dir(path.as_ref().parent().unwrap())
         .arg("sh")
         .arg(path.as_ref())
-        .env("ASH_STANDALONE", "1")
-        .env("APATCH", "true")
-        .env("APATCH_VER", defs::VERSION_NAME)
-        .env("APATCH_VER_CODE", defs::VERSION_CODE)
-        .env(
-            "PATH",
-            format!(
-                "{}:{}",
-                env_var("PATH")?,
-                defs::BINARY_DIR.trim_end_matches('/')
-            ),
-        );
-
-    // Set AP_MODULE environment variable
-    if let Some(id) = module_id {
-        command = command.env("AP_MODULE", id);
-    }
+        .envs(get_common_script_envs(module_id.as_deref()));
 
     let result = if wait {
         command.status().map(|_| ())
@@ -487,7 +477,7 @@ fn _install_module(zip: &str) -> Result<()> {
     archive.extract(&_module_update_dir)?;
 
     println!("- Running module installer");
-    exec_install_script(zip, is_metamodule)?;
+    exec_install_script(zip, is_metamodule, module_id)?;
 
     // set permission and selinux context for $MOD/system
     let module_system_dir = PathBuf::from(module_dir.clone()).join("system");
