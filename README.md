@@ -85,4 +85,4 @@ Furthermore, we need more volunteers to [contribute to the documentation](https:
 
 ## License
 
-APatch is licensed under the GNU General Public License v3 [GPL-3](http://www.gnu.org/copyleft/gpl.html).
+APatch is licensed under the GNU General Public License v3 [GPL-3](http://www.gnu.org/copyleft/gpl.html)..
