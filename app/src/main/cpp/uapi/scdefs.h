@@ -74,6 +74,13 @@ struct su_profile
     char scontext[SUPERCALL_SCONTEXT_LEN];
 };
 
+struct data_item
+{
+    void *data;
+    int dlen;
+    int offset;
+};
+
 #ifdef ANDROID
 #define SH_PATH "/system/bin/sh"
 #define SU_PATH "/system/bin/kp"
