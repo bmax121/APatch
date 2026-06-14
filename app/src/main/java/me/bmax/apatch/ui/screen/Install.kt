@@ -76,10 +76,15 @@ enum class MODULE_TYPE {
 @Composable
 @Destination<RootGraph>
 fun InstallScreen(navigator: DestinationsNavigator, uri: Uri, type: MODULE_TYPE) {
-    var text by remember { mutableStateOf("") }
-    var tempText: String
+    var text by rememberSaveable { mutableStateOf("") }
     val logContent = remember { StringBuilder() }
     var showFloatAction by rememberSaveable { mutableStateOf(false) }
+
+    fun appendLog(line: String) {
+        logContent.append(line).append("\n")
+        val newText = text + line + "\n"
+        text = if (newText.length > 100_000) newText.takeLast(100_000) else newText
+    }
     val metaModuleAlertDialog = rememberCustomDialog { dismiss: () -> Unit ->
         val uriHandler = LocalUriHandler.current
         AlertDialog(
@@ -141,21 +146,17 @@ fun InstallScreen(navigator: DestinationsNavigator, uri: Uri, type: MODULE_TYPE)
                 }
 
             }, onStdout = {
-                tempText = "$it\n"
-                if (tempText.startsWith("[H[J")) { // clear command
-                    text = tempText.substring(6)
+                if (it.startsWith("[H[J")) { // clear command
+                    text = it.substring(5)
                 } else {
-                    text += tempText
+                    appendLog(it)
                 }
-                logContent.append(it).append("\n")
             }, onStderr = {
-                tempText = "$it\n"
-                if (tempText.startsWith("[H[J")) { // clear command
-                    text = tempText.substring(6)
+                if (it.startsWith("[H[J")) { // clear command
+                    text = it.substring(5)
                 } else {
-                    text += tempText
+                    appendLog(it)
                 }
-                logContent.append(it).append("\n")
             })
         }
     }
