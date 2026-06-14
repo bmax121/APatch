@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -50,12 +51,17 @@ import java.util.Locale
 @Destination<RootGraph>
 fun ExecuteAPMActionScreen(navigator: DestinationsNavigator, moduleId: String) {
     var text by rememberSaveable { mutableStateOf("") }
-    var tempText: String
-    val logContent = rememberSaveable { StringBuilder() }
+    val logContent = remember { StringBuilder() }
     val snackBarHost = LocalSnackbarHost.current
     val scope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
     var actionResult: Boolean
+
+    fun appendLog(line: String) {
+        logContent.append(line).append("\n")
+        val newText = text + line + "\n"
+        text = if (newText.length > 100_000) newText.takeLast(100_000) else newText
+    }
 
     LaunchedEffect(Unit) {
         if (text.isNotEmpty()) {
@@ -65,16 +71,14 @@ fun ExecuteAPMActionScreen(navigator: DestinationsNavigator, moduleId: String) {
             runAPModuleAction(
                 moduleId,
                 onStdout = {
-                    tempText = "$it\n"
-                    if (tempText.startsWith("[H[J")) { // clear command
-                        text = tempText.substring(6)
+                    if (it.startsWith("\u001B[H\u001B[2J")) { // clear command
+                        text = it.substring(9)
                     } else {
-                        text += tempText
+                        appendLog(it)
                     }
-                    logContent.append(it).append("\n")
                 },
                 onStderr = {
-                    logContent.append(it).append("\n")
+                    appendLog(it)
                 }
             ).let {
                 actionResult = it
