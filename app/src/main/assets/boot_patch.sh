@@ -97,12 +97,25 @@ fi
 
 if [ "$FLASH_TO_DEVICE" = "true" ]; then
   # flash
-  if [ -b "$BOOTIMAGE" ] || [ -c "$BOOTIMAGE" ] && [ -f "new-boot.img" ]; then
-    echo "- Flashing new boot image"
-    flash_image new-boot.img "$BOOTIMAGE"
-    if [ $? -ne 0 ]; then
-      >&2 echo "- Flash error: $?"
-      exit $?
+  # Note: `[ -b X ] || [ -c X ] && [ -f Y ]` is parsed as
+  #   `[ -b X ] || ( [ -c X ] && [ -f Y ] )`
+  # by every POSIX sh on Android (ash, mksh, toybox). When BOOTIMAGE
+  # was a block device the `[ -f "new-boot.img" ]` check was therefore
+  # never evaluated, and the script would attempt to flash even when
+  # the repack step had silently failed and new-boot.img was missing.
+  # The nested if makes both conditions required and produces a clear
+  # error when the output file is absent.
+  if [ -b "$BOOTIMAGE" ] || [ -c "$BOOTIMAGE" ]; then
+    if [ -f "new-boot.img" ]; then
+      echo "- Flashing new boot image"
+      flash_image new-boot.img "$BOOTIMAGE"
+      if [ $? -ne 0 ]; then
+        >&2 echo "- Flash error: $?"
+        exit $?
+      fi
+    else
+      >&2 echo "- new-boot.img missing - refusing to flash"
+      exit 1
     fi
   fi
 
