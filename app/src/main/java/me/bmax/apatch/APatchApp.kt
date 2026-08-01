@@ -14,6 +14,7 @@ import androidx.lifecycle.MutableLiveData
 import com.topjohnwu.superuser.CallbackList
 import me.bmax.apatch.ui.CrashHandleActivity
 import me.bmax.apatch.util.APatchCli
+import me.bmax.apatch.util.APatchKeyHelper
 import me.bmax.apatch.util.Version
 import me.bmax.apatch.util.getRootShell
 import me.bmax.apatch.util.rootShellForResult
@@ -239,6 +240,42 @@ class APApplication : Application(), Thread.UncaughtExceptionHandler {
                     return@thread
                 }
             }
+
+        /**
+         * Resolve the SuperKey used to authenticate against the running kernel.
+         *
+         * The new manager defaults to "su" (implicit signature/uid authorization).
+         * Kernels patched by legacy versions, however, were patched with a real
+         * random/custom SuperKey and know nothing about signature authorization,
+         * so "su" fails for users who upgraded from such a version. To keep the
+         * original SuperKey upgrade path working, fall back to the legacy SuperKey
+         * persisted (Keystore-encrypted) by older managers and use it to elevate,
+         * letting the user upgrade the kernel to the latest signature-authorized one.
+         *
+         * Once "su" succeeds the kernel no longer relies on a SuperKey, so any
+         * stale legacy key is cleared.
+         */
+        private fun resolveSuperKey(): String {
+            APatchKeyHelper.setSharedPreferences(sharedPreferences)
+            val savedKey = APatchKeyHelper.readSPSuperKey()
+
+            // Signature authorization (new default).
+            if (Natives.nativeReady("su")) {
+                if (!savedKey.isNullOrEmpty()) {
+                    APatchKeyHelper.clearConfigKey()
+                    Log.i(TAG, "signature auth ready, cleared legacy SuperKey")
+                }
+                return "su"
+            }
+
+            // Legacy kernel patched with a real SuperKey: reuse the stored one.
+            if (!savedKey.isNullOrEmpty() && Natives.nativeReady(savedKey)) {
+                Log.i(TAG, "fallback to legacy stored SuperKey for upgrade")
+                return savedKey
+            }
+
+            return "su"
+        }
     }
 
     override fun onCreate() {
@@ -268,7 +305,7 @@ class APApplication : Application(), Thread.UncaughtExceptionHandler {
         // TODO: 1. make me root by kernel
         // TODO: 2. remove all usage of superkey
         sharedPreferences = getSharedPreferences(SP_NAME, Context.MODE_PRIVATE)
-        superKey = "su"
+        superKey = resolveSuperKey()
 
         okhttpClient =
             OkHttpClient.Builder().cache(Cache(File(cacheDir, "okhttp"), 10 * 1024 * 1024))
