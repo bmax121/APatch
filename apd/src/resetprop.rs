@@ -11,7 +11,7 @@ use std::path::Path;
 use std::time::Duration;
 
 #[derive(Debug)]
-pub struct WaitTimeoutError {
+struct WaitTimeoutError {
     name: String,
 }
 
@@ -24,9 +24,16 @@ impl fmt::Display for WaitTimeoutError {
 impl std::error::Error for WaitTimeoutError {}
 
 /// Magisk-compatible Android system property tool.
-#[derive(Debug, clap::Args)]
+#[derive(Parser)]
+#[command(
+    name = "resetprop",
+    version,
+    about = "Magisk-compatible system property tool",
+    disable_help_subcommand = true,
+    after_help = "Arguments:\n  NAME   Property name.\n  VALUE  Property value (for set or wait-for-value)."
+)]
 #[allow(clippy::struct_excessive_bools)]
-pub struct Args {
+struct Args {
     /// Skip property_service (force direct mmap operation).
     #[arg(short = 'n', long = "skip-svc")]
     skip_svc: bool,
@@ -47,43 +54,52 @@ pub struct Args {
     #[arg(short = 'v', long = "verbose")]
     verbose: bool,
 
-    /// Wait for a property to exist or match a value.
+    /// Wait for a property to exist or change from a given value to another value.
     #[arg(short = 'w', long = "wait")]
     wait: bool,
 
     /// Timeout in seconds for --wait (default: wait forever).
-    #[arg(long = "timeout")]
-    timeout: Option<f64>,
+    #[arg(long = "timeout", value_parser = parse_timeout)]
+    timeout: Option<Duration>,
 
     /// Load and set properties from FILE.
     #[arg(short = 'f', long = "file")]
     file: Option<String>,
 
-    /// Compact property area memory (reclaim holes left by deleted properties).
-    /// Optionally pass a SELinux context name to compact only that area.
-    #[arg(short = 'c', long = "compact")]
-    compact: bool,
+    /// Rebuild a property area by SELinux context name, or all property areas if name is not given.
+    #[arg(short = 'c', long = "rebuild", alias = "compact")]
+    rebuild: bool,
 
-    /// Show SELinux context when listing properties.
+    /// Show SELinux context when listing properties, or if -c is used, rebuild the property area containing the property NAME.
     #[arg(short = 'Z')]
     show_context: bool,
 
-    /// Property name.
-    name: Option<String>,
+    /// Force rebuild all property areas, should be used with `-c` . Without this flag set, only abnormal property areas will be rebuilt.
+    #[arg(long = "force")]
+    force: bool,
 
-    /// Property value (for set or wait-for-value).
-    value: Option<String>,
+    #[arg(
+        allow_hyphen_values = true,
+        trailing_var_arg = true,
+        num_args = 0..=2,
+        hide = true,
+    )]
+    arguments: Vec<String>,
 }
-#[derive(Parser)]
-#[command(
-    name = "resetprop",
-    version,
-    about = "Magisk-compatible system property tool",
-    disable_help_subcommand = true
-)]
-struct ResetPropParser {
-    #[command(flatten)]
-    arg: Args,
+
+fn parse_timeout(s: &str) -> Result<Duration> {
+    let timeout: f64 = s.parse()?;
+    Ok(Duration::try_from_secs_f64(timeout)?)
+}
+
+impl Args {
+    fn name(&self) -> Option<&String> {
+        self.arguments.first()
+    }
+
+    fn value(&self) -> Option<&String> {
+        self.arguments.get(1)
+    }
 }
 
 pub fn resetprop_main(args: &[String]) -> ! {
@@ -99,11 +115,11 @@ pub fn resetprop_main(args: &[String]) -> ! {
     std::process::exit(0);
 }
 
-/// Entry point for resetprop multicall.
+/// Entry point for resetprop multicall and subcommand.
 ///
 /// `args` should include argv[0] (the program name).
 fn run_from_args(args: &[String]) -> Result<()> {
-    let parser = match ResetPropParser::try_parse_from(args) {
+    let cli = match Args::try_parse_from(args) {
         Ok(cli) => cli,
         Err(err) => {
             if matches!(
@@ -116,11 +132,7 @@ fn run_from_args(args: &[String]) -> Result<()> {
             return Err(anyhow::anyhow!("{err}"));
         }
     };
-    execute(&parser.arg)
-}
-/// Execute resetprop logic
-/// Subcommand will direct call that, skip run_from_args
-pub fn execute(cli: &Args) -> Result<()> {
+
     sys_prop::init().context("Failed to initialize system property API")?;
 
     let rp = ResetProp {
@@ -129,43 +141,34 @@ pub fn execute(cli: &Args) -> Result<()> {
         persist_only: cli.persist_only,
         verbose: cli.verbose,
         show_context: cli.show_context,
+        rebuild: false,
     };
 
     // Validate: at most one special mode
-    let special_modes = u8::from(cli.wait)
-        + u8::from(cli.delete)
-        + u8::from(cli.compact)
-        + u8::from(cli.file.is_some());
+    let special_modes = u8::from(cli.wait) + u8::from(cli.delete) + u8::from(cli.file.is_some());
     if special_modes > 1 {
         bail!("multiple operation modes detected");
     }
 
+    if cli.rebuild && !(special_modes == 0 || cli.delete) {
+        bail!("Only -d can be used with -c");
+    }
+
     // -w: wait mode
     if cli.wait {
-        let name = cli
-            .name
-            .as_deref()
-            .context("--wait requires a property name")?;
-        let timeout = cli.timeout.map(Duration::from_secs_f64);
+        let name = cli.name().context("--wait requires a property name")?;
         let ok = rp
-            .wait(name, cli.value.as_deref(), timeout)
+            .wait(
+                name,
+                cli.value().map(std::string::String::as_str),
+                cli.timeout,
+            )
             .context("wait failed")?;
         if !ok {
             return Err(WaitTimeoutError {
                 name: name.to_owned(),
             }
             .into());
-        }
-        return Ok(());
-    }
-
-    // -c: compact property area memory
-    // When a positional argument is given, treat it as a SELinux context name.
-    if cli.compact {
-        let context = cli.name.as_deref();
-        let compacted = sys_prop::compact(context).context("compact failed")?;
-        if !compacted {
-            bail!("nothing to compact");
         }
         return Ok(());
     }
@@ -181,18 +184,35 @@ pub fn execute(cli: &Args) -> Result<()> {
 
     // -d: delete
     if cli.delete {
-        let name = cli
-            .name
-            .as_deref()
-            .context("--delete requires a property name")?;
+        let name = cli.name().context("--delete requires a property name")?;
         let deleted = rp.delete(name).context("delete failed")?;
         if !deleted {
             bail!("{name} not found");
         }
+        if !cli.rebuild {
+            return Ok(());
+        }
+    }
+
+    if cli.rebuild {
+        if let Some(name) = cli.name() {
+            let ctx = if cli.show_context || cli.delete {
+                sys_prop::get_context(name)?
+            } else {
+                name.to_owned()
+            };
+            rp.rebuild(&ctx)?;
+        } else if !rp.rebuild_all(cli.force)? {
+            eprintln!("Something wrong happened, see log for detail.");
+            std::process::exit(1);
+        }
         return Ok(());
     }
 
-    match (&cli.name, &cli.value) {
+    let name = cli.name();
+    let value = cli.value();
+
+    match (name, value) {
         // resetprop name value (set)
         (Some(name), Some(value)) => {
             rp.set(name, value)
@@ -234,6 +254,7 @@ pub fn load_system_prop_file(path: &Path) -> Result<()> {
         persist_only: false,
         verbose: false,
         show_context: false,
+        rebuild: false,
     };
 
     let file = File::open(path).with_context(|| format!("Failed to open {}", path.display()))?;

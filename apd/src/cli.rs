@@ -42,7 +42,12 @@ enum Commands {
     UidListener,
 
     /// Resetprop - Magisk-compatible system property tool
-    Resetprop(crate::resetprop::Args),
+    #[command(disable_help_flag = true)]
+    Resetprop {
+        /// Arguments passed to resetprop
+        #[arg(trailing_var_arg = true, allow_hyphen_values = true, num_args = 0..)]
+        args: Vec<String>,
+    },
 
     /// MagiskPolicy - SELinux Policy Patch Tool
     Sepolicy(crate::sepolicy::Args),
@@ -312,14 +317,11 @@ pub fn run() -> Result<()> {
 
         Commands::Services => event::on_services(cli.superkey),
 
-        Commands::Resetprop(resetprop_args) => crate::resetprop::execute(&resetprop_args)
-            .inspect_err(|e| {
-                if e.downcast_ref::<crate::resetprop::WaitTimeoutError>()
-                    .is_some()
-                {
-                    std::process::exit(2);
-                }
-            }),
+        Commands::Resetprop { args } => {
+            let mut full_args = vec!["resetprop".to_string()];
+            full_args.extend(args);
+            crate::resetprop::resetprop_main(&full_args)
+        }
 
         Commands::Sepolicy(sepolicy_args) => crate::sepolicy::execute(&sepolicy_args),
     };
