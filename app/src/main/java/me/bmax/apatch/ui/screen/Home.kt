@@ -736,16 +736,17 @@ fun UpdateCard() {
         val updateDialog = rememberConfirmDialog(onConfirm = { uriHandler.openUri(newVersionUrl) })
         WarningCard(
             message = stringResource(id = R.string.home_new_apatch_found).format(newVersionCode),
-            MaterialTheme.colorScheme.outlineVariant
-        ) {
-            if (changelog.isEmpty()) {
-                uriHandler.openUri(newVersionUrl)
-            } else {
-                updateDialog.showConfirm(
-                    title = title, content = changelog, markdown = true, confirm = updateText
-                )
+            color = MaterialTheme.colorScheme.outlineVariant,
+            onClick = {
+                if (changelog.isEmpty()) {
+                    uriHandler.openUri(newVersionUrl)
+                } else {
+                    updateDialog.showConfirm(
+                        title = title, content = changelog, markdown = true, confirm = updateText
+                    )
+                }
             }
-        }
+        )
     }
 }
 
