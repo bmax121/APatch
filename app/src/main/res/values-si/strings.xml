@@ -28,14 +28,11 @@
     <string name="home_click_to_learn_apatch">මෙතන Click කරන්න</string>
     <string name="patch_warnning">Install කරද්දි මොකක්ම හරි අවුලක් ආවොත් ඔයාගේ Data lost වේවි. ඒක නිසා වැදගත් දේවල් Backup කරගෙනම ඉන්න.</string>
     <string name="send_log">Log යවන්න</string>
-    <string name="clear_super_key">මුරපදය මකා දමන්න</string>
     <string name="home_install_unknown">හඳුනා ගැනීමට නොහැක</string>
-    <string name="home_auth_key_desc">මුරපදය ඇතුළත් කරන්න</string>
     <string name="home_working">වැඩ කරමින් තිබේ</string>
     <string name="su_hide_system_apps">System Apps පෙන්වීම නතර කරන්න</string>
     <string name="home_installing">ස්ථාපනය කරමින්</string>
     <string name="su_show_system_apps">System Apps ද පෙන්වන්න</string>
-    <string name="home_auth_key_title">මුරපදය</string>
     <string name="apm_overlay_fs_not_available">ඔයාගේ Kernel එකේ OverlayFS කියන function එක enable වෙලා නැහැ. මේකට අපිටම කියලා OverlayFS enable කරපු Kernel එකක් compile කරගන්න ඕනි 😕!</string>
     <string name="apm_remove">ඉවත් කරන්න</string>
     <string name="apm_magisk_conflict">Magisk හි මොඩියුල්ස් සමග ගැටෙන නිසා, මෙම විශේෂාංගය තාවකාලිකව ක්‍රියා විරහිත කර ඇත!</string>
@@ -46,7 +43,7 @@
     <string name="kpm_load_toast_succ">සාර්ථකව එකතු කරන ලදී</string>
     <string name="home_selinux_status">SELinux තත්වය</string>
     <string name="apm_update">යාවත්කාලීන කරන්න</string>
-    <string name="about_source_code">මූල කේතය බලන්න %1$s<br/> අපේ ටෙලිග්‍රෑම් චැනලයට එකතු වන්න %2$s</string>
+    <string name="about_source_code">මූල කේතය බලන්න %1$s</string>
     <string name="settings">සැකසුම්</string>
     <string name="reboot_recovery">Recovery එකට</string>
     <string name="reboot_bootloader">Fastboot mode එකට</string>
@@ -61,7 +58,7 @@
     <string name="kpm">KPModule</string>
     <string name="kpm_load">එකතු කරන්න</string>
     <string name="kpm_load_toast_failed">එකතු කිරීමට නොහැකි විය</string>
-    <string name="kpm_unload_confirm">මෙම \"%s\" මොඩියුල් එක ඉවත් කිරීමට අවශ්‍ය ද?</string>
+    <string name="kpm_unload_confirm">මෙම \&quot;%s\&quot; මොඩියුල් එක ඉවත් කිරීමට අවශ්‍ය ද?</string>
     <string name="kpm_unload">ඉවත් කරන්න</string>
     <string name="kpm_apm_empty">දැනට කිසිඳු මොඩියුල් එකක් භාවිතා කර නැත</string>
     <string name="kpm_license">බලපත්‍රය</string>
@@ -78,7 +75,7 @@
     <string name="apm_version">අනුවාදය</string>
     <string name="apm_desc">අවරෝහණ</string>
     <string name="apm_changelog">අලුත් දේවල්</string>
-    <string name="apm_downloading">\"%s\" මොඩියුලය බාගත වෙමින්…</string>
+    <string name="apm_downloading">\&quot;%s\&quot; මොඩියුලය බාගත වෙමින්…</string>
     <string name="apm_start_downloading">බාගත කිරීම ආරම්භ කළා %s</string>
     <string name="settings_app_language">භාෂාව</string>
     <string name="kpm_version">අනුවාදය</string>
@@ -94,7 +91,6 @@
     <string name="patch_item_kernel">කර්නලය</string>
     <string name="patch_item_extra_kpm_license">බලපත්‍රය:</string>
     <string name="su_pkg_excluded_setting_title">වෙනස් කිරීම් අතෑරලා දාන්න</string>
-    <string name="home_dialog_auth_fail_content">Super Key එක සත්‍යාපනය කරන්න බෑ, ඒ හින්දා APatch හරියට වැඩ කරන්නේ නෑ.\nසත්‍යාපනය අවුල් වෙන්න හේතු ටිකක් මෙන්න:\n1. ඔයා boot image එක KernelPatch එක්ක පැච් කර නැ.\n2. පැච් කරපු boot image එක flash වෙලා නෑ.\n3. Super key එක වැරදි.\n4. ඔබගේ උපාංගය APatch සහ KernelPatch වලට හරියන්නේ නෑ වගේ .\n\nතව පාරක් ට්‍රයි කරලා බලන්න. තවමත් ඒත් හරියන්නේ නැත්තං , ඔයාට හැම වෙලේම නිල ගැටළු ඇසීමේ පිටුවෙන් ප්‍රශ්න ඇසීමට හැකිය.</string>
     <string name="indigo_theme">ඉන්ඩිගෝ Theme</string>
     <string name="light_blue_theme">ලා නිල් Theme</string>
     <string name="patch_item_bootimg_dev">උපාංගය:</string>
@@ -112,7 +108,7 @@
     <string name="settings_check_update_summary">යෙදුම open කිරීමේදී Update සඳහා ස්වයංක්‍රීයව පරීක්ෂා කරන්න</string>
     <string name="patch_select_bootimg_btn">Boot කරන්න තෝරන්න</string>
     <string name="patch_embed_kpm_btn">KPM යොදන්න</string>
-    <string name="patch_start_patch_btn">"යං "</string>
+    <string name="patch_start_patch_btn">&quot;යං &quot;</string>
     <string name="patch_item_bootimg">බුටිම්</string>
     <string name="patch_start_unpatch_btn">UnPatch</string>
     <string name="patch_item_error">!!අවුලක්!!</string>
@@ -162,9 +158,7 @@
     <string name="hide_apatch_dialog_summary">මෙය භාවිතා කරන නව යෙදුම් ලේබලය ලෙස භාවිතා කරනු ඇත</string>
     <string name="hide_apatch_manager_failure">හංගන්න බෑ වගේනේ, කරුණාකර අවුල වාර්තා කරන්න!</string>
     <string name="setting_reset_su_path">Su patch රීසෙට් කරන්න</string>
-    <string name="settings_donot_store_superkey">Super Key එක phone එකේ කොහේවත් තියාගන්න එපා</string>
     <string name="home_new_apatch_found">නව අනුවාදයක් තිබේ: %s, උත්ශ්‍රේණියට ඔබන්න</string>
-    <string name="home_dialog_auth_fail_title">සත්‍යාපනය වැරදි වගේ</string>
     <string name="kpm_control_dialog_content">ඉන්පුට් control parameters:</string>
     <string name="kpm_control_ok">වැඩේ ගොඩ ලොක්කා!</string>
     <string name="kpm_control_failed">වැඩේ කෙලවුනා!</string>
@@ -174,7 +168,6 @@
     <string name="blue_theme">නිල් Theme</string>
     <string name="brown_theme">දුඹුරු Theme</string>
     <string name="cyan_theme">Cyan Theme</string>
-    <string name="settings_donot_store_superkey_summary">මැනේජර් ආරම්භ කරන හැම වෙලේම Super Key එක ඉල්ලන්න</string>
     <string name="mode_select_page_title">දාන්න</string>
     <string name="apm_action">අක්ෂන්</string>
     <string name="mode_select_page_patch_and_install">පැච් එකත් එක්ක දාන්න</string>
@@ -199,4 +192,32 @@
     <string name="enable_web_debugging_summary">WebUI නිදොස් කිරීමට භාවිතා කළ හැක, කරුණාකර අවශ්‍ය විට විතරක් දාගන්න.</string>
     <string name="mode_select_page_install_inactive_slot">අක්‍රිය ස්ලොට් වලට දාන්න (OTA පස්සේ)</string>
     <string name="settings_night_mode_follow_sys">සිස්ටම් dark theme වගේ වෙන්න</string>
+    <string name="about_app_desc">Kernel root solution with only a stripped kernel image, providing the ability of mounting system module and hooking kernel function.</string>
+    <string name="about_github" translatable="false">GitHub</string>
+    <string name="about_powered_by">Powered by %1$s</string>
+    <string name="about_telegram_channel">Telegram channel</string>
+    <string name="about_telegram_group">Telegram group</string>
+    <string name="about_weblate" translatable="false">Weblate</string>
+    <string name="apm_module_undo_uninstall_failed">Failed to undo uninstall: %s</string>
+    <string name="apm_module_undo_uninstall_success">Successfully canceled uninstall of %s</string>
+    <string name="apm_undo">Undo</string>
+    <string name="back">Back</string>
+    <string name="crash_handle_copied">Crash log copied to clipboard.</string>
+    <string name="crash_handle_copy">Copy crash log</string>
+    <string name="crash_handle_title">App crashed…</string>
+    <string name="learn_more">Learn more</string>
+    <string name="log_saved">Logs saved</string>
+    <string name="meta_module_disabled">module not mounted, because metamodule disabled</string>
+    <string name="meta_module_removed">module not mounted, because metamodule being delete</string>
+    <string name="metamodule_uninstall_confirm">&quot;Are you sure you want to uninstall module %s? This action will affect all modules, and certain features provided by the metamodule (such as mounting) will no longer work.  &quot;</string>
+    <string name="no_meta_module_installed">module not mounted, because metamodule not installed</string>
+    <string name="patch_custom_superkey">Custom SuperKey</string>
+    <string name="patch_custom_superkey_summary">still can use superkey manager root, now we are verify manager signature by kernel</string>
+    <string name="search">Search</string>
+    <string name="search_apps">Search Apps</string>
+    <string name="search_modules">Search modules</string>
+    <string name="settings_sucompat">Legacy su compatibility</string>
+    <string name="settings_sucompat_summary">Enable path_probe hooks for legacy su compatibility</string>
+    <string name="warning_of_meta_module_summary">This module want to mount /system, meta module will handle that. Otherwise, it might not work.</string>
+    <string name="warning_of_meta_module_title">Require Meta module</string>
 </resources>

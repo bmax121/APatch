@@ -74,7 +74,6 @@
     <string name="apm_author">作者</string>
     <string name="patch_title">修補</string>
     <string name="send_log">發送日誌</string>
-    <string name="home_auth_key_desc">認證通過後開始執行</string>
     <string name="home_patch_set_key_desc">執行 KernelPatch 時所需的唯一憑證</string>
     <string name="apm">AP模組</string>
     <string name="safe_mode">安全模式</string>
@@ -83,11 +82,9 @@
     <string name="patch_set_superkey">設定超級密鑰</string>
     <string name="home_su_path">可執行 SU 路徑</string>
     <string name="home_patch_next_step">下一步</string>
-    <string name="home_auth_key_title">輸入超級密鑰</string>
     <string name="home_not_installed">尚未安裝</string>
     <string name="kpm">KP模組</string>
-    <string name="about_source_code"><![CDATA[<p>在%1$s<p/> 查看原始碼加入我們的 %2$s 頻道<p/>加入我們的 %3$s 群組]]></string>
-    <string name="clear_super_key">清除超級密鑰</string>
+    <string name="about_source_code">&lt;p&gt;在%1$s&lt;p/&gt; 查看原始碼加入我們的 %2$s 頻道&lt;p/&gt;加入我們的 %3$s 群組</string>
     <string name="apm_not_installed">AndroidPatch 尚未安裝</string>
     <string name="system_default">系統預設</string>
     <string name="settings_app_language">語言</string>
@@ -143,7 +140,6 @@
     <string name="mode_select_page_patch_and_install">修補並安裝</string>
     <string name="mode_select_page_install_inactive_slot">安裝到非活動插槽（OTA 之後）</string>
     <string name="mode_select_page_select_file">選擇要修補的「boot image」</string>
-    <string name="home_dialog_auth_fail_title">鑒權失敗</string>
     <string name="enable_web_debugging">啟用 WebView 偵錯</string>
     <string name="home_more_menu_feedback_or_suggestion">回饋或建議</string>
     <string name="home_more_menu_about">關於</string>
@@ -153,8 +149,6 @@
     <string name="settings_check_update_summary">開啟應用程式時自動檢查更新</string>
     <string name="apm_webui_open">打開網頁介面</string>
     <string name="enable_web_debugging_summary">可用於偵錯WebUI，請僅在需要時啟用。</string>
-    <string name="settings_donot_store_superkey">停用本機儲存密鑰</string>
-    <string name="home_dialog_auth_fail_content">無法驗證超級密鑰，因此 APatch 無法正常運作。 \n以下是驗證失敗的一些可能原因： \n1. 您尚未使用 KernelPatch 程式修補啟動映像檔。 \n2. 修補後的啟動映像檔未刷入裝置。 \n3. 超級密鑰錯誤。 \n4. 您的裝置不支援 APatch 和 KernelPatch。 \n \n請檢查並再次嘗試。如果仍存在問題，您隨時可以在官方存放庫的議題頁面上提問。</string>
     <string name="home_install_unknown_summary">點擊以安裝</string>
     <string name="home_device_info">裝置</string>
     <string name="home_new_apatch_found">新版本可用：%s，點選升級。</string>
@@ -164,7 +158,6 @@
     <string name="home_dialog_uninstall_all">完全卸載</string>
     <string name="home_system_version">系統版本</string>
     <string name="home_kpatch_version">KernelPatch 版本</string>
-    <string name="settings_donot_store_superkey_summary">每次管理器啟動時驗證超級密鑰</string>
     <string name="patch_mode_install_to_next_slot">模式：安裝到另一個插槽（OTA之後）</string>
     <string name="kpm_control">控制</string>
     <string name="about_telegram_group">Telegram 群組</string>
@@ -209,5 +202,24 @@
     <string name="crash_handle_copy">複製崩潰日誌</string>
     <string name="apm_action">執行</string>
     <string name="crash_handle_copied">已將崩潰日誌複製到剪貼簿。</string>
-    <string name="settings_force_overlayfs_mode">強制使用 OverlayFS</string>
+    <string name="about_github" translatable="false">GitHub</string>
+    <string name="about_weblate" translatable="false">Weblate</string>
+    <string name="apm_module_undo_uninstall_failed">Failed to undo uninstall: %s</string>
+    <string name="apm_module_undo_uninstall_success">Successfully canceled uninstall of %s</string>
+    <string name="apm_undo">Undo</string>
+    <string name="back">Back</string>
+    <string name="learn_more">Learn more</string>
+    <string name="meta_module_disabled">module not mounted, because metamodule disabled</string>
+    <string name="meta_module_removed">module not mounted, because metamodule being delete</string>
+    <string name="metamodule_uninstall_confirm">&quot;Are you sure you want to uninstall module %s? This action will affect all modules, and certain features provided by the metamodule (such as mounting) will no longer work.  &quot;</string>
+    <string name="no_meta_module_installed">module not mounted, because metamodule not installed</string>
+    <string name="patch_custom_superkey">Custom SuperKey</string>
+    <string name="patch_custom_superkey_summary">still can use superkey manager root, now we are verify manager signature by kernel</string>
+    <string name="search">Search</string>
+    <string name="search_apps">Search Apps</string>
+    <string name="search_modules">Search modules</string>
+    <string name="settings_sucompat">Legacy su compatibility</string>
+    <string name="settings_sucompat_summary">Enable path_probe hooks for legacy su compatibility</string>
+    <string name="warning_of_meta_module_summary">This module want to mount /system, meta module will handle that. Otherwise, it might not work.</string>
+    <string name="warning_of_meta_module_title">Require Meta module</string>
 </resources>

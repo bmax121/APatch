@@ -50,7 +50,6 @@
     <string name="patch_item_extra_name">نام:</string>
     <string name="patch_item_extra_version">نسخه:</string>
     <string name="patch_item_extra_author">نویسنده:</string>
-    <string name="home_auth_key_title">واردکردن ابر کلید</string>
     <string name="apatch_version_update">نسخه: %s -&gt; %s</string>
     <string name="home_install_unknown_summary">برای نصب کلیک کنید</string>
     <string name="home_click_to_install">برای نصب کلیک کنید</string>
@@ -71,8 +70,7 @@
     <string name="patch_item_extra_args">دستورات:</string>
     <string name="patch_item_skey">ابر کلید</string>
     <string name="settings_global_namespace_mode_summary">همه جلسات ریشه از فضای نام نصب جهانی استفاده می کنند</string>
-    <string name="about_source_code"><![CDATA[<p>مشاهده کد منبع در %1$s<p/>به کانال %2$s ما بپیوندید<p/>به گروه %3$s ما بپیوندید]]></string>
-    <string name="clear_super_key">حذف ابر کلید</string>
+    <string name="about_source_code">&lt;p&gt;مشاهده کد منبع در %1$s&lt;p/&gt;به کانال %2$s ما بپیوندید&lt;p/&gt;به گروه %3$s ما بپیوندید</string>
     <string name="patch_set_superkey">تنظیم ابر کلید</string>
     <string name="patch_embed_kpm_btn">قراردادن KPM</string>
     <string name="patch_mode_install_to_next_slot">حالت: نصب در اسلات بعدی (بعد از OTA)</string>
@@ -82,7 +80,6 @@
     <string name="home_manager_version">مدیر نسخه</string>
     <string name="home_install_unknown">نصب نشده یا معتبر</string>
     <string name="home_patch_set_key_desc">فقط اعتبار برای KernelPatch</string>
-    <string name="home_auth_key_desc">شروع بعد از صدور گواهینامه</string>
     <string name="home_patch_next_step">گام بعد</string>
     <string name="patch_item_error">!!! اوه!!!</string>
     <string name="patch_item_bootimg_slot">اسلات:</string>
@@ -102,7 +99,7 @@
     <string name="kpm_embed">جاسازی</string>
     <string name="kpm_load_toast_succ">با موفقیت بارگذاری شد</string>
     <string name="kpm_load_toast_failed">بارگذاری نا موفق بود</string>
-    <string name="kpm_unload_confirm">بارگذاری ماژول \"%s\" لغو‌شود؟</string>
+    <string name="kpm_unload_confirm">بارگذاری ماژول \&quot;%s\&quot; لغو‌شود؟</string>
     <string name="kpm_unload">لغو‌بارگذاری</string>
     <string name="kpm_control">کنترل</string>
     <string name="kpm_desc">شرح</string>
@@ -122,10 +119,9 @@
     <string name="su_refresh">تازه سازی</string>
     <string name="apm">ماژول AP</string>
     <string name="apm_not_installed">AndroidPatch نصب نشده</string>
-    <string name="apm_failed_to_enable">فعالسازی ماژول \"%s\" ناموفق بود</string>
+    <string name="apm_failed_to_enable">فعالسازی ماژول \&quot;%s\&quot; ناموفق بود</string>
     <string name="enable_web_debugging">فعالسازی اشکال زدایی نمای وب</string>
     <string name="enable_web_debugging_summary">می تواند برای اشکال زدایی رابط کاربری وب استفاده شود. لطفا فقط وقتی لازم است فعال کنید.</string>
-    <string name="settings_donot_store_superkey_summary">اعتبار سنجی ابر کلید با هر بار شروع مدیر</string>
     <string name="mode_select_page_patch_and_install">وصله و نصب</string>
     <string name="cyan_theme">فیروزه ای</string>
     <string name="deep_orange_theme">نارنجی تیره</string>
@@ -144,7 +140,6 @@
     <string name="apm_author">نویسنده</string>
     <string name="apm_desc">توضیحات</string>
     <string name="mode_select_page_install_inactive_slot">نصب در یک اسلات غیرفعال (بعد از OTA)</string>
-    <string name="home_dialog_auth_fail_title">اعتبار سنجی نا موفق بود</string>
     <string name="home_dialog_uninstall_title">حذف نصب</string>
     <string name="home_dialog_uninstall_ap_only">حذف AndroidPatch</string>
     <string name="home_dialog_uninstall_all">حذف نصب همه</string>
@@ -152,17 +147,17 @@
     <string name="settings_night_mode_follow_sys">پیروی از تم تاریک سیستم</string>
     <string name="about_telegram_channel">کانال تلگرام</string>
     <string name="crash_handle_copy">کپی کردن گزارش کرش</string>
-    <string name="apm_failed_to_disable">غیرفعالسازی ماژول \"%s\" ناموفق بود</string>
+    <string name="apm_failed_to_disable">غیرفعالسازی ماژول \&quot;%s\&quot; ناموفق بود</string>
     <string name="apm_empty">ماژولی نصب نشده است</string>
     <string name="apm_install">نصب</string>
-    <string name="apm_uninstall_confirm">ماژول \"%s\" حذف نصب شود؟</string>
-    <string name="apm_uninstall_success">\"%s\" حذف نصب شد</string>
+    <string name="apm_uninstall_confirm">ماژول \&quot;%s\&quot; حذف نصب شود؟</string>
+    <string name="apm_uninstall_success">\&quot;%s\&quot; حذف نصب شد</string>
     <string name="apm_remove">حذف</string>
-    <string name="apm_uninstall_failed">حذف نصب \"%s\" ناموفق بود</string>
+    <string name="apm_uninstall_failed">حذف نصب \&quot;%s\&quot; ناموفق بود</string>
     <string name="apm_magisk_conflict">ماژول ها به علت درگیری با Msgisk در دسترس نیستند!</string>
     <string name="apm_changelog">گزارش تغییرات</string>
     <string name="apm_update">بروزرسانی</string>
-    <string name="apm_downloading">بارگیری ماژول \"%s\" …</string>
+    <string name="apm_downloading">بارگیری ماژول \&quot;%s\&quot; …</string>
     <string name="apm_new_version_available">نسخه جدید %s در دسترس است، برای بروزرسانی کلیک کنید.</string>
     <string name="hide_apatch_manager">مخفی کردن مدیر APatch</string>
     <string name="apm_reboot_to_apply">برای اعمال مجددا راه اندازی کنید</string>
@@ -196,14 +191,33 @@
     <string name="mode_select_page_install_inactive_slot_warning">دستگاه شما بعد از راه اندازی مجدد **مجبور خواهد شد** در اسلات غیرفعال فعلی راه اندازی شود!\nاز این گزینه فقط بعد از اتمام OTA استفاده کنید.\nادامه؟</string>
     <string name="apm_version">نسخه</string>
     <string name="blue_theme">آبی</string>
-    <string name="settings_donot_store_superkey">ابر کلید را به صورت محلی ذخیره نکنید</string>
     <string name="setting_reset_su_new_path">مسیر کامل جدید</string>
     <string name="kpm_control_outMsg">پیام</string>
     <string name="settings_use_system_color_theme">تم رنگی سیستم</string>
     <string name="kpm_control_dialog_title">کنترل KPModule</string>
-    <string name="home_dialog_auth_fail_content">اعتبار سنجی ابر کلید ناموفق بود، بنابراین APatch نمی تواند به درستی کار کند. \nدلایل احتمالی:\n1. شما boot.img را به KernelPatch وصله نکردید.\n2. وصله boot.img فلش نشده است.\n3. ابر کلید اشتباه است یا حاوی کاراکترهای خاص است.\n4. دستگاه شما از APatch و KernelPatch پشتیبانی نمی کند.\n\nلطفا بررسی کنید و دوباره امتحان کنید. اگر هنوز مشکلات وجود دارند، همیشه می توانید در صفحه مسائل مخزن رسمی سؤال بپرسید..</string>
     <string name="settings_night_mode_follow_sys_summary">جابجایی خودکار به تم تاریک بر اساس تنظیمات سیستم</string>
     <string name="settings_use_system_color_theme_summary">استفاده از تم رنگی تولید شده بر اساس تصویر زمینه فعلی سیستم</string>
     <string name="about_app_desc">راه حل روت کرنل فقط با یک ایمیج جدا از کرنل،قابلیت نصب ماژول سیستم و قلاب کردن توابع کرنل را ارئه می دهد.</string>
     <string name="about_powered_by">قدرت گرفته از %1$s</string>
+    <string name="about_github" translatable="false">GitHub</string>
+    <string name="about_weblate" translatable="false">Weblate</string>
+    <string name="apm_module_undo_uninstall_failed">Failed to undo uninstall: %s</string>
+    <string name="apm_module_undo_uninstall_success">Successfully canceled uninstall of %s</string>
+    <string name="apm_undo">Undo</string>
+    <string name="app_name" translatable="false">APatch</string>
+    <string name="back">Back</string>
+    <string name="learn_more">Learn more</string>
+    <string name="meta_module_disabled">module not mounted, because metamodule disabled</string>
+    <string name="meta_module_removed">module not mounted, because metamodule being delete</string>
+    <string name="metamodule_uninstall_confirm">&quot;Are you sure you want to uninstall module %s? This action will affect all modules, and certain features provided by the metamodule (such as mounting) will no longer work.  &quot;</string>
+    <string name="no_meta_module_installed">module not mounted, because metamodule not installed</string>
+    <string name="patch_custom_superkey">Custom SuperKey</string>
+    <string name="patch_custom_superkey_summary">still can use superkey manager root, now we are verify manager signature by kernel</string>
+    <string name="search">Search</string>
+    <string name="search_apps">Search Apps</string>
+    <string name="search_modules">Search modules</string>
+    <string name="settings_sucompat">Legacy su compatibility</string>
+    <string name="settings_sucompat_summary">Enable path_probe hooks for legacy su compatibility</string>
+    <string name="warning_of_meta_module_summary">This module want to mount /system, meta module will handle that. Otherwise, it might not work.</string>
+    <string name="warning_of_meta_module_title">Require Meta module</string>
 </resources>

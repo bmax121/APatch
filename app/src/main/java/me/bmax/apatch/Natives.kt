@@ -152,4 +152,10 @@ object Natives {
     fun resetSuPath(path: String): Boolean {
         return nativeResetSuPath(APApplication.superKey, path)
     }
+
+    @FastNative
+    private external fun nativeControlFeature(superKey: String, featureName: String, state: Int): Long
+    fun controlFeature(featureName: String, enable: Boolean): Long {
+        return nativeControlFeature(APApplication.superKey, featureName, if (enable) 1 else 0)
+    }
 }

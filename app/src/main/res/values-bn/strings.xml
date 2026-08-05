@@ -8,7 +8,7 @@
     <string name="reboot_bootloader">বুটলোডারে যান</string>
     <string name="reboot_download">ডাউনলোড মোডে রিবুট করুন</string>
     <string name="about">বিস্তারিত</string>
-    <string name="about_source_code"><![CDATA[<p>সোর্স কোড দেখুন%1$s<p/>আমাদের জয়েন করুন%2$s চ্যানেল<p/>আমাদের জয়েন করুন%3$s গ্রুপ]]></string>
+    <string name="about_source_code">&lt;p&gt;সোর্স কোড দেখুন%1$s&lt;p/&gt;আমাদের জয়েন করুন%2$s চ্যানেল&lt;p/&gt;আমাদের জয়েন করুন%3$s গ্রুপ</string>
     <string name="safe_mode">সেফ মোড</string>
     <string name="super_key">সুপারকি</string>
     <string name="home_patch_set_key_desc">কারনেলপ্যাচের এর জন্য শুধুমাত্র শংসাপত্র</string>
@@ -18,7 +18,6 @@
     <string name="apatch_version_update">সংস্করণ %s → %s</string>
     <string name="home_su_path">এক্সিকিউটেবল su</string>
     <string name="home_apatch_version">APatch সংস্করণ</string>
-    <string name="home_auth_key_title">সুপারকি প্রবেশ করুন</string>
     <string name="home_ap_cando_update">হালনাগাদ</string>
     <string name="home_ap_cando_uninstall">আনইনস্টল করুন</string>
     <string name="patch_warnning">ইনস্টলেশন ঝুঁকিপূর্ণ, অনুগ্রহ করে নিশ্চিত করুন যে আপনার ডেটা ব্যাকআপ করা আছে।</string>
@@ -31,7 +30,6 @@
     <string name="patch_set_superkey">সুপারকি সেট করুন</string>
     <string name="home_patch_next_step">পরবর্তী ধাপ</string>
     <string name="home_click_to_install">ইনস্টল করতে ক্লিক করুন</string>
-    <string name="home_auth_key_desc">প্রত্যয়িতকরণের পরে কাজ শুরু করুন</string>
     <string name="home_installing">ইনস্টলরত</string>
     <string name="home_need_update">নতুন সংস্করণ উপলভ্য</string>
     <string name="kpatch_version">সংস্করণ : %s</string>
@@ -44,10 +42,10 @@
     <string name="su_title">সুপারইউজার</string>
     <string name="kpm_desc">বিবরণ</string>
     <string name="su_refresh">রিফ্রেশ</string>
-    <string name="apm_failed_to_disable">\"%s\" মডিউল বন্ধ করা যায়নি</string>
+    <string name="apm_failed_to_disable">\&quot;%s\&quot; মডিউল বন্ধ করা যায়নি</string>
     <string name="apm_empty">কোন মডিউল ইনস্টল করা নেই</string>
     <string name="apm_remove">বাদ দিন</string>
-    <string name="apm_failed_to_enable">মডিউল \"%s\" চালু করা যায়নি</string>
+    <string name="apm_failed_to_enable">মডিউল \&quot;%s\&quot; চালু করা যায়নি</string>
     <string name="apm_uninstall_confirm">আপনি কি নিশ্চিত মডিউল %s আনইনস্টল করতে চান?</string>
     <string name="apm_uninstall_success">%s আনইনস্টল করা হয়েছে</string>
     <string name="home_manager_version">ম্যানেজার ভার্সন</string>
@@ -69,7 +67,7 @@
     <string name="apm_reboot_to_apply">কার্যকর করতে রিবুট করুন</string>
     <string name="apm_changelog">চেঞ্জলগ</string>
     <string name="apm_update">আপডেট</string>
-    <string name="apm_downloading">\"%s\" মডিউল ডাউনলোড হচ্ছে…</string>
+    <string name="apm_downloading">\&quot;%s\&quot; মডিউল ডাউনলোড হচ্ছে…</string>
     <string name="home_kernel">কার্নেল সংস্ককরণ</string>
     <string name="kpm_kp_not_installed">কার্নেল প্যাচ ইনস্টল করা নেই</string>
     <string name="kpm_load_toast_failed">লোড ব্যর্থ হয়েছে</string>
@@ -96,7 +94,6 @@
     <string name="settings_check_update_summary">অ্যাপ খোলার সময় স্বয়ংক্রিয়ভাবে হালনাগাদ চেক করুন</string>
     <string name="kpatch_shadow_path_title">কেপ্যাচ</string>
     <string name="kpatch_version_update">সংস্করণ %s → %s</string>
-    <string name="clear_super_key">সুপার_কি মুছুন</string>
     <string name="home_install_unknown_summary">ইন্সটল করতে ক্লিক করুন</string>
     <string name="home_kpatch_info_title">তথ্য</string>
     <string name="patch_config_title">প্যাচসমূহ</string>
@@ -140,13 +137,10 @@
     <string name="enable_web_debugging">ওয়েবভিউ ডিবাগিং চালু করুন</string>
     <string name="mode_select_page_title">ইন্সটল</string>
     <string name="mode_select_page_patch_and_install">প্যাচ এবং ইন্সটল</string>
-    <string name="settings_donot_store_superkey_summary">প্রতিবার ম্যানেজার চালু করার সময় সুপার কি দিন</string>
     <string name="home_new_apatch_found">আপডেট সংস্করণ এসে গেছে %s, আপগ্রেড করতে এখানে ক্লিক করুন।</string>
     <string name="mode_select_page_install_inactive_slot">নিষ্ক্রিয় স্লটে ইনস্টল করুন (OTA এর পরে)</string>
-    <string name="home_dialog_auth_fail_title">প্রমান করতে ব্যর্থ হয়েছে</string>
     <string name="enable_web_debugging_summary">WebUI ডিবাগ করতে ব্যবহার করা যেতে পারে, অনুগ্রহ করে শুধুমাত্র প্রয়োজন হলেই চালু করুন।</string>
     <string name="home_more_menu_feedback_or_suggestion">ফিডব্যাক অথবা পরামর্শ</string>
-    <string name="settings_donot_store_superkey">ফোন এর সিষ্টেমে সুপার কী সংরক্ষণ করবেন না</string>
     <string name="home_dialog_uninstall_ap_only">এন্ড্রয়েডপ্যাচ দূর করুন</string>
     <string name="settings_custom_color_theme">কালার থিম</string>
     <string name="amber_theme">অ্যাম্বার থিম</string>
@@ -192,7 +186,6 @@
     <string name="about_telegram_group">টেলিগ্রাম গ্রুপ</string>
     <string name="about_powered_by">দ্বারা চালিত %1$s</string>
     <string name="about_app_desc">Kernel রুট সমাধান যা শুধু একটা খোলা Kernel image, যা সিস্টেম মডিউলকে মাউন্ট এবং Kernel ফাংশনকে হুক করার সক্ষমতা প্রদান করে।</string>
-    <string name="home_dialog_auth_fail_content">সুপার কি যাচাই করা যায়নি,তাই Apatch সঠিক ভাবে কাজ করতে পারবেনা\nযেইসব কারনে এই সমস্যা হতে পারে:\n১. আপনি boot.img কে KernelPatch দিয়ে Patch করেননি\n২.Patch করা Boot.img ফ্লাশ করা হয়নি\n৩.ভুল সুপার কি ব্যাবহার করেছেন বা সুপার কি এর মধ্যে অক্ষর ছাড়াও অন্য বিশেষ ক্যারেক্টার ছিলো\n৪.আপনার ডিভাইস Apatch এবং KernelPatch সাপোর্ট করেনা\n\nদয়া করে আবার সব কিছু চেক করুন, যদি এর পরও সমস্যা হয়, আপনি সব সময় অফিশিয়াল রিপোজিটোরি পেইজে প্রশ্ন করতে পারবেন।</string>
     <string name="crash_handle_copied">ক্রাশ লগ ক্লিপ বোর্ডে কপি হয়েছে।</string>
     <string name="crash_handle_title">এপ ক্রাশ করেছে…</string>
     <string name="mode_select_page_install_inactive_slot_warning">আপনার ডিভাইস একটি রিবুট এর পর বর্তমান নিষ্ক্রিয় সল্ট এ খুলে যাবে\nএই অপশনটি শুধু ব্যাবহার করুন OTA আপডেট হয়ে গেলে\nচালিয়ে যান?</string>
@@ -207,8 +200,24 @@
     <string name="deep_purple_theme">গাড় বেগুনি</string>
     <string name="crash_handle_copy">ক্রাশ এর লগ কপি করুন</string>
     <string name="sakura_theme">সাকুরা</string>
-    <string name="settings_lite_mode">লাইট মোড চালু করুন</string>
-    <string name="settings_lite_mode_mode_summary">APModule ফাংশনগুলি সক্রিয় করার পরে ক্ষতির সম্মুখীন হতে পারে, কিন্তু মাঝে মধ্যে এটি কার্যকরভাবে সনাক্তকরণ এড়াতে পারে, রিবুট প্রয়োজন।</string>
-    <string name="settings_force_overlayfs_mode">জোর পুর্বক OverlayFS ব্যাবহার করুন</string>
-    <string name="settings_force_overlayfs_mode_summary">OverlayFS ব্যাবহার করে APModules মাউন্ট করুন ম্যাজিক মাউন্ট এর পরিবর্তে যদি কার্নেল এটা সাপোর্ট করে, রিবুট আবশ্যক।</string>
+    <string name="about_github" translatable="false">GitHub</string>
+    <string name="about_weblate" translatable="false">Weblate</string>
+    <string name="apm_module_undo_uninstall_failed">Failed to undo uninstall: %s</string>
+    <string name="apm_module_undo_uninstall_success">Successfully canceled uninstall of %s</string>
+    <string name="apm_undo">Undo</string>
+    <string name="back">Back</string>
+    <string name="learn_more">Learn more</string>
+    <string name="meta_module_disabled">module not mounted, because metamodule disabled</string>
+    <string name="meta_module_removed">module not mounted, because metamodule being delete</string>
+    <string name="metamodule_uninstall_confirm">&quot;Are you sure you want to uninstall module %s? This action will affect all modules, and certain features provided by the metamodule (such as mounting) will no longer work.  &quot;</string>
+    <string name="no_meta_module_installed">module not mounted, because metamodule not installed</string>
+    <string name="patch_custom_superkey">Custom SuperKey</string>
+    <string name="patch_custom_superkey_summary">still can use superkey manager root, now we are verify manager signature by kernel</string>
+    <string name="search">Search</string>
+    <string name="search_apps">Search Apps</string>
+    <string name="search_modules">Search modules</string>
+    <string name="settings_sucompat">Legacy su compatibility</string>
+    <string name="settings_sucompat_summary">Enable path_probe hooks for legacy su compatibility</string>
+    <string name="warning_of_meta_module_summary">This module want to mount /system, meta module will handle that. Otherwise, it might not work.</string>
+    <string name="warning_of_meta_module_title">Require Meta module</string>
 </resources>

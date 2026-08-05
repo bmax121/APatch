@@ -15,7 +15,7 @@
     <string name="reboot_edl">Reboot ke EDL</string>
     <string name="home_learn_apatch">Pelajari APatch</string>
     <string name="about">Tentang</string>
-    <string name="about_source_code"><![CDATA[<p>Lihat kode sumber di %1$s<p/>Gabung kanal %2$s kami<p/>Gabung grup %3$s kami]]></string>
+    <string name="about_source_code">&lt;p&gt;Lihat kode sumber di %1$s&lt;p/&gt;Gabung kanal %2$s kami&lt;p/&gt;Gabung grup %3$s kami</string>
     <string name="send_log">Kirim log</string>
     <string name="safe_mode">Mode aman</string>
     <string name="home_patch_set_key_desc">Kredensial untuk KernelPatch</string>
@@ -31,9 +31,7 @@
     <string name="apatch_version">Versi: %s</string>
     <string name="home_need_update">Versi terbaru tersedia</string>
     <string name="apatch_version_update">Versi: %s -&gt; %s</string>
-    <string name="home_auth_key_title">Masukkan SuperKey</string>
     <string name="reboot_download">Reboot ke Download</string>
-    <string name="home_auth_key_desc">Mulai setelah sertifikasi</string>
     <string name="home_ap_cando_update">Perbarui</string>
     <string name="home_ap_cando_uninstall">Hapus</string>
     <string name="home_ap_cando_install">Instal</string>
@@ -45,7 +43,7 @@
     <string name="apm_uninstall_success">%s berhasil dihapus</string>
     <string name="apm_install">Instal</string>
     <string name="apm_remove">Hapus</string>
-    <string name="apm_uninstall_confirm">Hapus modul \"%s\"?</string>
+    <string name="apm_uninstall_confirm">Hapus modul \&quot;%s\&quot;?</string>
     <string name="apm_version">Versi</string>
     <string name="apm_overlay_fs_not_available">Modul tidak tersedia karena OverlayFS dinonaktifkan oleh kernel!</string>
     <string name="apm_uninstall_failed">Gagal menghapus %s</string>
@@ -63,8 +61,8 @@
     <string name="apm_new_version_available">Versi baru %s tersedia, klik untuk memperbarui.</string>
     <string name="apm_update">Membarui</string>
     <string name="su_refresh">Muat ulang</string>
-    <string name="apm_failed_to_disable">Gagal menonaktifkan modul \"%s\"</string>
-    <string name="apm_failed_to_enable">Gagal mengaktifkan modul \"%s\"</string>
+    <string name="apm_failed_to_disable">Gagal menonaktifkan modul \&quot;%s\&quot;</string>
+    <string name="apm_failed_to_enable">Gagal mengaktifkan modul \&quot;%s\&quot;</string>
     <string name="su_hide_system_apps">Sembunyikan aplikasi sistem</string>
     <string name="kpm_kp_not_installed">KernelPatch tidak terinstal</string>
     <string name="su_pkg_excluded_setting_title">Kecualikan modifikasi</string>
@@ -87,7 +85,6 @@
     <string name="kpm_unload">Lepas</string>
     <string name="kpm_args">Argu</string>
     <string name="home_fingerprint">Identitas</string>
-    <string name="clear_super_key">Hapus SuperKey</string>
     <string name="apm_not_installed">AndroidPatch tidak terinstal</string>
     <string name="settings_app_language">Bahasa</string>
     <string name="system_default">Bawaan sistem</string>
@@ -142,7 +139,6 @@
     <string name="patch_mode_install_to_next_slot">Mode: Instal ke slot nonaktif (Setelah OTA)</string>
     <string name="settings_check_update_summary">Otomatis memeriksa pembaruan saat membuka manajer</string>
     <string name="apm_webui_open">Buka</string>
-    <string name="home_dialog_auth_fail_title">Gagal mengautentikasi</string>
     <string name="home_more_menu_about">Tentang</string>
     <string name="mode_select_page_patch_and_install">Patch dan pasang</string>
     <string name="mode_select_page_select_file">Pilih Boot Image</string>
@@ -159,10 +155,7 @@
     <string name="home_install_unknown_summary">Klik untuk menginstal</string>
     <string name="home_device_info">Perangkat</string>
     <string name="home_system_version">Versi Sistem</string>
-    <string name="home_dialog_auth_fail_content">Gagal mengautentikasi SuperKey, APatch tidak dapat berfungsi normal.\nHal ini dapat disebabkan oleh:\n1. Boot.img tidak di-patch dengan KernelPatch.\n2. Tidak menginstal/pasang boot.img yang sudah di-patch.\n3. Salah memasukkan atau terdapat karakter spesial pada SuperKey.\n4. Perangkat tidak mendukung APatch dan KernelPatch.\n\nCek dan coba kembali. Jika tetap gagal, dapat menanyakan pada laman permasalahan di repositori resmi kami.</string>
     <string name="enable_web_debugging_summary">Dapat digunakan untuk men-debug WebUI. Harap aktifkan hanya bila diperlukan.</string>
-    <string name="settings_donot_store_superkey_summary">Autentikasi SuperKey setiap kali membuka manajer</string>
-    <string name="settings_donot_store_superkey">Jangan simpan SuperKey secara lokal</string>
     <string name="home_new_apatch_found">Versi terbaru %s tersedia, klik untuk memperbarui.</string>
     <string name="kpm_control_failed">Operasi gagal!</string>
     <string name="settings_night_mode_follow_sys_summary">Beralih secara otomatis ke tema gelap berdasarkan bawaan sistem</string>
@@ -207,8 +200,24 @@
     <string name="crash_handle_copy">Salin log kerusakan</string>
     <string name="crash_handle_title">Aplikasi telah berhenti…</string>
     <string name="crash_handle_copied">Log kerusakan telah disalin.</string>
-    <string name="settings_lite_mode">Aktifkan Mode Lite</string>
-    <string name="settings_lite_mode_mode_summary">APModule mungkin gagal berfungsi setelah diaktifkan, tapi terkadang masih tetap efektif dalam menghindari deteksi. Reboot diperlukan.</string>
-    <string name="settings_force_overlayfs_mode">Penggunaan Paksa OverlayFS</string>
-    <string name="settings_force_overlayfs_mode_summary">Jika kernel mendukung, APMount menggunakan OverlayFS dibandingkan MagicMount. Reboot dibutuhkan.</string>
+    <string name="about_github" translatable="false">GitHub</string>
+    <string name="about_weblate" translatable="false">Weblate</string>
+    <string name="apm_module_undo_uninstall_failed">Failed to undo uninstall: %s</string>
+    <string name="apm_module_undo_uninstall_success">Successfully canceled uninstall of %s</string>
+    <string name="apm_undo">Undo</string>
+    <string name="back">Back</string>
+    <string name="learn_more">Learn more</string>
+    <string name="meta_module_disabled">module not mounted, because metamodule disabled</string>
+    <string name="meta_module_removed">module not mounted, because metamodule being delete</string>
+    <string name="metamodule_uninstall_confirm">&quot;Are you sure you want to uninstall module %s? This action will affect all modules, and certain features provided by the metamodule (such as mounting) will no longer work.  &quot;</string>
+    <string name="no_meta_module_installed">module not mounted, because metamodule not installed</string>
+    <string name="patch_custom_superkey">Custom SuperKey</string>
+    <string name="patch_custom_superkey_summary">still can use superkey manager root, now we are verify manager signature by kernel</string>
+    <string name="search">Search</string>
+    <string name="search_apps">Search Apps</string>
+    <string name="search_modules">Search modules</string>
+    <string name="settings_sucompat">Legacy su compatibility</string>
+    <string name="settings_sucompat_summary">Enable path_probe hooks for legacy su compatibility</string>
+    <string name="warning_of_meta_module_summary">This module want to mount /system, meta module will handle that. Otherwise, it might not work.</string>
+    <string name="warning_of_meta_module_title">Require Meta module</string>
 </resources>

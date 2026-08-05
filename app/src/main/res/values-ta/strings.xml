@@ -4,10 +4,9 @@
     <string name="patch_item_extra_kpm_desciption">விளக்கம்:</string>
     <string name="patch_item_extra_args">ஆர்க்ச்:</string>
     <string name="patch_item_extra_event">நிகழ்வு:</string>
-    <string name="kpm_unload_confirm">\"%s\" தொகுதியை இறக்கவா?</string>
+    <string name="kpm_unload_confirm">\&quot;%s\&quot; தொகுதியை இறக்கவா?</string>
     <string name="kpm_author">நூலாசிரியர்</string>
     <string name="apm">Apmodule</string>
-    <string name="home_dialog_auth_fail_title">ஏற்பு தோல்வியடைந்தது</string>
     <string name="crash_handle_copied">இடைநிலைப்பலகைக்கு நகலெடுக்கப்பட்ட செயலிழப்பு பதிவு.</string>
     <string name="home">வீடு</string>
     <string name="failure">தோல்வி</string>
@@ -36,7 +35,6 @@
     <string name="log_saved">பதிவுகள் சேமிக்கப்பட்டன</string>
     <string name="safe_mode">பாதுகாப்பான பயன்முறை</string>
     <string name="super_key">சூப்பர்கி</string>
-    <string name="clear_super_key">தெளிவான சூப்பர்கி</string>
     <string name="patch_set_superkey">சூப்பர்கி அமைக்கவும்</string>
     <string name="home_not_installed">நிறுவப்படவில்லை</string>
     <string name="home_patch_set_key_desc">கர்னல் பேட்சிற்கான சான்றுகள் மட்டுமே</string>
@@ -51,9 +49,7 @@
     <string name="apatch_version">பதிப்பு: %s</string>
     <string name="apatch_version_update">பதிப்பு: %s -&gt; %s</string>
     <string name="kpatch_version_update">பதிப்பு: %s -&gt; %s</string>
-    <string name="home_auth_key_title">சூப்பர்கி உள்ளிடவும்</string>
     <string name="kpatch_shadow_path_title">கேஒட்டு</string>
-    <string name="home_auth_key_desc">சான்றிதழுக்குப் பிறகு தொடங்கவும்</string>
     <string name="home_kpatch_info_title">தகவல்</string>
     <string name="home_ap_cando_install">நிறுவவும்</string>
     <string name="home_ap_cando_update">புதுப்பிப்பு</string>
@@ -121,12 +117,12 @@
     <string name="su_hide_system_apps">கணினி பயன்பாடுகளை மறைக்கவும்</string>
     <string name="su_refresh">புதுப்பி</string>
     <string name="apm_not_installed">AndroidPatch நிறுவப்படவில்லை</string>
-    <string name="apm_failed_to_enable">\"%s\" தொகுதியை இயக்க முடியவில்லை</string>
-    <string name="apm_failed_to_disable">\"%s\" தொகுதியை அணைக்க முடியவில்லை</string>
+    <string name="apm_failed_to_enable">\&quot;%s\&quot; தொகுதியை இயக்க முடியவில்லை</string>
+    <string name="apm_failed_to_disable">\&quot;%s\&quot; தொகுதியை அணைக்க முடியவில்லை</string>
     <string name="apm_empty">எந்த தொகுதி நிறுவப்படவில்லை</string>
     <string name="apm_remove">அகற்று</string>
     <string name="apm_install">நிறுவவும்</string>
-    <string name="apm_uninstall_confirm">\"%s\" தொகுதியை நிறுவல் நீக்கவா?</string>
+    <string name="apm_uninstall_confirm">\&quot;%s\&quot; தொகுதியை நிறுவல் நீக்கவா?</string>
     <string name="apm_uninstall_success">%s நிறுவல் நீக்கப்பட்டது</string>
     <string name="apm_uninstall_failed">%s நிறுவல் நீக்க முடியவில்லை</string>
     <string name="apm_version">பதிப்பு</string>
@@ -136,7 +132,7 @@
     <string name="apm_magisk_conflict">மேகிசுடனான மோதல் காரணமாக தொகுதிகள் கிடைக்கவில்லை!</string>
     <string name="apm_reboot_to_apply">நடைமுறைக்கு வர மறுதொடக்கம் செய்யுங்கள்</string>
     <string name="apm_changelog">மாற்றபதிவு</string>
-    <string name="apm_downloading">\"%s\" தொகுதி பதிவிறக்குகிறது…</string>
+    <string name="apm_downloading">\&quot;%s\&quot; தொகுதி பதிவிறக்குகிறது…</string>
     <string name="apm_start_downloading">%s பதிவிறக்கத் தொடங்குங்கள்</string>
     <string name="apm_new_version_available">புதிய பதிப்பு %s கிடைக்கின்றன, மேம்படுத்த சொடுக்கு செய்க.</string>
     <string name="hide_apatch_manager">அபாட்ச் மேலாளரை மறைக்கவும்</string>
@@ -151,15 +147,12 @@
     <string name="apm_action">செயல்</string>
     <string name="enable_web_debugging">வெப்வியூ பிழைத்திருத்தத்தை இயக்கவும்</string>
     <string name="enable_web_debugging_summary">WebUI ஐ பிழைத்திருத்த பயன்படுத்தலாம். தேவைப்படும்போது மட்டுமே இயக்கவும்.</string>
-    <string name="settings_donot_store_superkey">சூப்பர்கீவை உள்ளக சேமிக்க வேண்டாம்</string>
-    <string name="settings_donot_store_superkey_summary">மேலாளர் தொடங்கும் ஒவ்வொரு முறையும் சூப்பர்கியை அங்கீகரிக்கவும்</string>
     <string name="home_new_apatch_found">புதிய பதிப்பு %s கிடைக்கின்றன, மேம்படுத்த சொடுக்கு செய்க.</string>
     <string name="mode_select_page_title">நிறுவவும்</string>
     <string name="mode_select_page_patch_and_install">இணைப்பு மற்றும் நிறுவவும்</string>
     <string name="mode_select_page_select_file">இணைப்புக்கு துவக்க படத்தைத் தேர்ந்தெடுக்கவும்</string>
     <string name="mode_select_page_install_inactive_slot">செயலற்ற ச்லாட்டுக்கு நிறுவவும் (OTA க்குப் பிறகு)</string>
     <string name="mode_select_page_install_inactive_slot_warning">மறுதொடக்கத்திற்குப் பிறகு தற்போதைய செயலற்ற ச்லாட்டுக்கு துவக்க உங்கள் சாதனம் ** கட்டாயப்படுத்தப்படும் **! \nOTA முடிந்ததும் மட்டுமே இந்த விருப்பத்தைப் பயன்படுத்தவும். \nதொடரவா?</string>
-    <string name="home_dialog_auth_fail_content">சூப்பர்கியை அங்கீகரிக்க முடியவில்லை, எனவே அப்பாட்ச் சரியாக வேலை செய்ய முடியாது. \nஅங்கீகார தோல்விக்கான சில காரணங்கள் இங்கே: \n1. நீங்கள் boot.img ஐ கர்னல்பாட்ச் மூலம் இணைக்கவில்லை. \n2. இணைக்கப்பட்ட துவக்க. ஐ.எம்.சி ஒளிரவில்லை. \n3. சூப்பர்ச்கி தவறானது அல்லது சிறப்பு எழுத்துக்கள் உள்ளன. \n4. உங்கள் சாதனம் அபாட்ச் மற்றும் கர்னல்பாட்சை ஆதரிக்காது. \n\nதயவுசெய்து சரிபார்த்து மீண்டும் முயற்சிக்கவும். இன்னும் சிக்கல்கள் இருந்தால், அதிகாரப்பூர்வ களஞ்சியத்தின் சிக்கல்கள் பக்கத்தில் நீங்கள் எப்போதும் கேள்விகளைக் கேட்கலாம்.</string>
     <string name="home_more_menu_feedback_or_suggestion">கருத்து அல்லது பரிந்துரை</string>
     <string name="home_more_menu_about">பற்றி</string>
     <string name="home_dialog_uninstall_title">நிறுவல் நீக்க</string>
@@ -204,6 +197,27 @@
     <string name="crash_handle_title">பயன்பாடு செயலிழந்தது…</string>
     <string name="crash_handle_copy">செயலிழப்பு பதிவை நகலெடுக்கவும்</string>
     <string name="android_patch">ஆண்ட்ராய்டுஒட்டு</string>
-    <string name="about_source_code"><![CDATA[<p>மூலக் குறியீட்டை %1$s<p/>எங்கள் %2$s சேனலில் சேர்<p/>எங்கள் %3$s குழுவில் சேர்]]></string>
+    <string name="about_source_code">&lt;p&gt;மூலக் குறியீட்டை %1$s&lt;p/&gt;எங்கள் %2$s சேனலில் சேர்&lt;p/&gt;எங்கள் %3$s குழுவில் சேர்</string>
     <string name="patch_item_kpimg">கேபிபட</string>
+    <string name="about_github" translatable="false">GitHub</string>
+    <string name="about_weblate" translatable="false">Weblate</string>
+    <string name="apm_module_undo_uninstall_failed">Failed to undo uninstall: %s</string>
+    <string name="apm_module_undo_uninstall_success">Successfully canceled uninstall of %s</string>
+    <string name="apm_undo">Undo</string>
+    <string name="app_name" translatable="false">APatch</string>
+    <string name="back">Back</string>
+    <string name="learn_more">Learn more</string>
+    <string name="meta_module_disabled">module not mounted, because metamodule disabled</string>
+    <string name="meta_module_removed">module not mounted, because metamodule being delete</string>
+    <string name="metamodule_uninstall_confirm">&quot;Are you sure you want to uninstall module %s? This action will affect all modules, and certain features provided by the metamodule (such as mounting) will no longer work.  &quot;</string>
+    <string name="no_meta_module_installed">module not mounted, because metamodule not installed</string>
+    <string name="patch_custom_superkey">Custom SuperKey</string>
+    <string name="patch_custom_superkey_summary">still can use superkey manager root, now we are verify manager signature by kernel</string>
+    <string name="search">Search</string>
+    <string name="search_apps">Search Apps</string>
+    <string name="search_modules">Search modules</string>
+    <string name="settings_sucompat">Legacy su compatibility</string>
+    <string name="settings_sucompat_summary">Enable path_probe hooks for legacy su compatibility</string>
+    <string name="warning_of_meta_module_summary">This module want to mount /system, meta module will handle that. Otherwise, it might not work.</string>
+    <string name="warning_of_meta_module_title">Require Meta module</string>
 </resources>

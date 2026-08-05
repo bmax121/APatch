@@ -170,6 +170,9 @@
     <string name="enable_web_debugging">启用 WebView 调试</string>
     <string name="home_new_apatch_found">发现新版本：%s，单击升级。</string>
     <string name="settings_check_update_summary">应用启动时自动检测更新</string>
+    <string name="settings_clear_super_key_dialog">确定要继续吗？</string>
+    <string name="settings_sucompat">旧版 su 兼容</string>
+    <string name="settings_sucompat_summary">启用 path_probe 钩子以支持旧版 su 兼容</string>
     <string name="enable_web_debugging_summary">可用于调试 WebUI，请仅在需要时启用。</string>
     <string name="home_device_info">设备</string>
     <string name="home_system_version">系统版本</string>

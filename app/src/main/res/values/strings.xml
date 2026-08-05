@@ -30,6 +30,8 @@
     <string name="system_default">System default</string>
     <string name="settings_global_namespace_mode">Global namespace mode</string>
     <string name="settings_global_namespace_mode_summary">All root sessions use the global mount namespace</string>
+    <string name="settings_sucompat">Legacy su compatibility</string>
+    <string name="settings_sucompat_summary">Enable path_probe hooks for legacy su compatibility</string>
     <string name="settings_clear_super_key_dialog">Do you really want to proceed?</string>
 
     <string name="settings_check_update">Check for updates</string>

@@ -17,7 +17,7 @@
     <string name="settings">Ustawienia</string>
     <string name="home_patch_next_step">Kolejny krok</string>
     <string name="home_not_installed">Nie zainstalowany</string>
-    <string name="about_source_code"><![CDATA[<p>Zobacz kod źródłowy na %1$s<p/>Dołącz do naszego kanału %2$s <p/>Dołącz do naszej grupy %3$s]]></string>
+    <string name="about_source_code">&lt;p&gt;Zobacz kod źródłowy na %1$s&lt;p/&gt;Dołącz do naszego kanału %2$s &lt;p/&gt;Dołącz do naszej grupy %3$s</string>
     <string name="home_ap_cando_uninstall">Odinstaluj</string>
     <string name="apatch_version">Wersja: %s</string>
     <string name="home_ap_cando_install">Instaluj</string>
@@ -45,16 +45,16 @@
     <string name="apm_uninstall_success">Moduł %s odinstalowany</string>
     <string name="apm_install">Instaluj</string>
     <string name="apm_remove">Usuń</string>
-    <string name="apm_uninstall_confirm">Odinstalować moduł \"%s\"?</string>
+    <string name="apm_uninstall_confirm">Odinstalować moduł \&quot;%s\&quot;?</string>
     <string name="apm_version">Wersja</string>
     <string name="apm_overlay_fs_not_available">Moduły są niedostępne, ponieważ OverlayFS jest wyłączony przez jądro!</string>
-    <string name="apm_failed_to_disable">Nie udało się wyłączyć modułu \"%s\"</string>
+    <string name="apm_failed_to_disable">Nie udało się wyłączyć modułu \&quot;%s\&quot;</string>
     <string name="apm_uninstall_failed">Nie udało się odinstalować modułu %s</string>
-    <string name="apm_failed_to_enable">Nie udało się włączyć modułu: \"%s\"</string>
+    <string name="apm_failed_to_enable">Nie udało się włączyć modułu: \&quot;%s\&quot;</string>
     <string name="apm_magisk_conflict">Moduły są niedostępne, ponieważ istnieje konflikt z Magiskiem!</string>
     <string name="apm_author">Autor</string>
     <string name="apm_changelog">Lista zmian</string>
-    <string name="apm_downloading">Pobieranie modułu \"%s\"…</string>
+    <string name="apm_downloading">Pobieranie modułu \&quot;%s\&quot;…</string>
     <string name="apm_update">Aktualizacja</string>
     <string name="android_patch">AndroidPatch</string>
     <string name="apm_start_downloading">Rozpocznij pobieranie: %s</string>
@@ -66,7 +66,6 @@
     <string name="patch_set_superkey">Ustaw SuperKey</string>
     <string name="reboot_bootloader">Restartuj do Bootloadera</string>
     <string name="home_apatch_version">Wersja APatch</string>
-    <string name="home_auth_key_title">Wpisz SuperKey</string>
     <string name="apm_reboot_to_apply">Uruchom ponownie aby zadziałało</string>
     <string name="apm_empty">Brak zainstalowanych modułów</string>
     <string name="home_working">Włączony</string>
@@ -74,12 +73,11 @@
     <string name="home_selinux_status_unknown">Nieznany</string>
     <string name="su_pkg_excluded_setting_title">Wyklucz modyfikacje</string>
     <string name="kpm_kp_not_installed">KernelPatch jest niezainstalowany</string>
-    <string name="clear_super_key">Wyczyść SuperKey</string>
     <string name="patch_warnning">Instalacja wiąże się z ryzykiem. Upewnij się, że utworzono kopię zapasową danych.</string>
     <string name="safe_mode">Tryb bezpieczny</string>
     <string name="home_install_unknown">Nie zainstalowano lub nie uwierzytelniono</string>
     <string name="home_ap_cando_update">Aktualizacja</string>
-    <string name="kpm_unload_confirm">Rozpakować \"%s\" moduł?</string>
+    <string name="kpm_unload_confirm">Rozpakować \&quot;%s\&quot; moduł?</string>
     <string name="kpm_desc">Opis</string>
     <string name="kpm_args">Argumenty</string>
     <string name="su_selinux_via_hook">ominięcie za pomocą haka</string>
@@ -89,7 +87,6 @@
     <string name="system_default">Domyślne ustawienie systemowe</string>
     <string name="apm_not_installed">AndroidPatch jest niezainstalowany</string>
     <string name="home_patch_set_key_desc">Tylko dane uwierzytelniające dla KernelPatch</string>
-    <string name="home_auth_key_desc">Rozpocznij po uzyskaniu certyfikatu</string>
     <string name="kpm_unload">Rozpakuj</string>
     <string name="patch">Załataj</string>
     <string name="settings_global_namespace_mode">Tryb globalnej przestrzeni nazw</string>
@@ -184,13 +181,10 @@
     <string name="orange_theme">Pomarańczowy</string>
     <string name="hide_apatch_manager_failure">Nie udało się ukryć. Zgłoś błąd!</string>
     <string name="enable_web_debugging_summary">Może być używane do debugowania WebUI. Włącz tylko w razie potrzeby.</string>
-    <string name="settings_donot_store_superkey">Nie przechowuj SuperKey lokalnie</string>
-    <string name="settings_donot_store_superkey_summary">Uwierzytelniaj SuperKey przy każdym uruchomieniu menadżera</string>
     <string name="home_new_apatch_found">Dostępna jest nowa wersja %s. Kliknij, aby uaktualnić.</string>
     <string name="mode_select_page_title">Zainstaluj</string>
     <string name="mode_select_page_install_inactive_slot">Zainstaluj do nieaktywnego slotu (po aktualizacji OTA)</string>
     <string name="sakura_theme">Sakura</string>
-    <string name="home_dialog_auth_fail_content">Nie można uwierzytelnić SuperKey, dlatego APatch nie może działać poprawnie.\nOto kilka możliwych przyczyn niepowodzenia uwierzytelniania:\n1. Nie zaktualizowano pliku boot.img za pomocą KernelPatch.\n2. Poprawiony plik boot.img nie został sflashowany.\n3. Klucz SuperKey jest nieprawidłowy lub zawiera znaki specjalne.\n4. Urządzenie nie obsługuje APatch i KernelPatch.\n\nSprawdź i spróbuj ponownie. Jeśli nadal występują problemy, zawsze możesz zadawać pytania na oficjalnej stronie repozytorium.</string>
     <string name="home_more_menu_feedback_or_suggestion">Opinie bądź sugestie</string>
     <string name="about_app_desc">Rozwiązanie rootowania jądra z jedynie okrojonym obrazem jądra, zapewniające możliwość montowania modułu systemowego i hakowania funkcji jądra.</string>
     <string name="success">Zakończono sukcesem</string>
@@ -198,7 +192,6 @@
     <string name="home_device_info">Urządzenie</string>
     <string name="home_system_version">Wersja systemu</string>
     <string name="kpm_install">Instaluj</string>
-    <string name="home_dialog_auth_fail_title">Uwierzytelnianie nie powiodło się</string>
     <string name="home_dialog_uninstall_title">Odinstaluj</string>
     <string name="home_kpatch_version">Wersja KernelPatch</string>
     <string name="save_log">Zapisz logi</string>
@@ -207,8 +200,24 @@
     <string name="crash_handle_title">Aplikacja się wysypała…</string>
     <string name="crash_handle_copy">Kopiuj logi awarii</string>
     <string name="crash_handle_copied">Logi awarii skopiowano do schowka.</string>
-    <string name="settings_lite_mode">Włącz tryb uproszczony</string>
-    <string name="settings_lite_mode_mode_summary">Moduły AP mogą wykazywać awarie po włączeniu tej funkcji, ale w niektórych przypadkach mogą nadal skutecznie unikać wykrycia. Wymagane ponowne uruchomienie.</string>
-    <string name="settings_force_overlayfs_mode">Wymuś użycie OverlayFS</string>
-    <string name="settings_force_overlayfs_mode_summary">Użyj OverlayFS zamiast Magic Mount do montowania modułów AP, gdy jądro to obsługuje. Wymagane jest ponowne uruchomienie.</string>
+    <string name="about_github" translatable="false">GitHub</string>
+    <string name="about_weblate" translatable="false">Weblate</string>
+    <string name="apm_module_undo_uninstall_failed">Failed to undo uninstall: %s</string>
+    <string name="apm_module_undo_uninstall_success">Successfully canceled uninstall of %s</string>
+    <string name="apm_undo">Undo</string>
+    <string name="back">Back</string>
+    <string name="learn_more">Learn more</string>
+    <string name="meta_module_disabled">module not mounted, because metamodule disabled</string>
+    <string name="meta_module_removed">module not mounted, because metamodule being delete</string>
+    <string name="metamodule_uninstall_confirm">&quot;Are you sure you want to uninstall module %s? This action will affect all modules, and certain features provided by the metamodule (such as mounting) will no longer work.  &quot;</string>
+    <string name="no_meta_module_installed">module not mounted, because metamodule not installed</string>
+    <string name="patch_custom_superkey">Custom SuperKey</string>
+    <string name="patch_custom_superkey_summary">still can use superkey manager root, now we are verify manager signature by kernel</string>
+    <string name="search">Search</string>
+    <string name="search_apps">Search Apps</string>
+    <string name="search_modules">Search modules</string>
+    <string name="settings_sucompat">Legacy su compatibility</string>
+    <string name="settings_sucompat_summary">Enable path_probe hooks for legacy su compatibility</string>
+    <string name="warning_of_meta_module_summary">This module want to mount /system, meta module will handle that. Otherwise, it might not work.</string>
+    <string name="warning_of_meta_module_title">Require Meta module</string>
 </resources>

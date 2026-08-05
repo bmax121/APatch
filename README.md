@@ -5,7 +5,6 @@
 
 [![Latest Release](https://img.shields.io/github/v/release/bmax121/APatch?label=Release&logo=github)](https://github.com/bmax121/APatch/releases/latest)
 [![Nightly Release](https://img.shields.io/badge/Nightly%20release-gray?logo=hackthebox&logoColor=fff)](https://nightly.link/bmax121/APatch/workflows/build/main/APatch-Release)
-[![Weblate](https://img.shields.io/badge/Localization-Weblate-teal?logo=weblate)](https://hosted.weblate.org/engage/APatch)
 [![Channel](https://img.shields.io/badge/Follow-Telegram-blue.svg?logo=telegram)](https://t.me/APatchGroup)
 [![GitHub License](https://img.shields.io/github/license/bmax121/APatch?logo=gnu)](/LICENSE)
 
@@ -19,11 +18,7 @@ The patching of Android kernel and Android system.
 - APatch relies on [KernelPatch](https://github.com/bmax121/KernelPatch/).
 - The APatch UI and the APModule source code have been derived and modified from [KernelSU](https://github.com/tiann/KernelSU).
 
-[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
-     alt="Get it on F-Droid"
-     height="80">](https://f-droid.org/packages/me.bmax.apatch/)
-
-Or download the latest APK from the [Releases Section](https://github.com/bmax121/APatch/releases/latest).
+The only way to download the latest APK is from the [Releases Section](https://github.com/bmax121/APatch/releases/latest).
 
 ## Supported Versions
 
@@ -48,13 +43,7 @@ It is critical to use robust keys and safeguard them from exposure to maintain t
 
 ## Translation
 
-To help translate APatch or improve existing translations, please use [Weblate](https://hosted.weblate.org/engage/apatch/). PR of APatch translation is no longer accepted, because it will conflict with Weblate.
-
-<div align="center">
-
-[![Translation Status](https://hosted.weblate.org/widget/APatch/open-graph.png)](https://hosted.weblate.org/engage/APatch/)
-
-</div>
+Translations are managed by LLM. Chinese and English are the reference languages and do not accept PR corrections. If you want to contribute a new language or improve an existing translation, please open a PR with the specific language only.
 
 ## Get Help
 

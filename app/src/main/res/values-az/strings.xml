@@ -11,11 +11,10 @@
     <string name="about">Haqqında</string>
     <string name="settings_app_language">Dil</string>
     <string name="home_learn_apatch">APatch haqqında öyrənin</string>
-    <string name="about_source_code">Mənbə koduna %1$s ünvanında baxın<br/>%2$s kanalımıza qoşulun.qrupumuza qoşulun.</string>
+    <string name="about_source_code">Mənbə koduna %1$s ünvanında baxın</string>
     <string name="system_default">Sistem defoltu</string>
     <string name="send_log">Günlükü göndərin</string>
     <string name="safe_mode">Təhlükəsiz rejim</string>
-    <string name="clear_super_key">Açarı silin</string>
     <string name="super_key">SuperAçar</string>
     <string name="patch_set_superkey">SuperAçar təyin edin</string>
     <string name="home_patch_set_key_desc">Yalnız NüvəYamağı üçün etimadnamə</string>
@@ -34,8 +33,6 @@
     <string name="kernel_patch">NüvəYamağı</string>
     <string name="android_patch">AndroidYamağı</string>
     <string name="home_apatch_version">APatch: %s</string>
-    <string name="home_auth_key_title">SuperAçarı daxil edin</string>
-    <string name="home_auth_key_desc">Sertifikasiyadan sonra başlayın</string>
     <string name="home_ap_cando_install">Quraşdır</string>
     <string name="home_ap_cando_uninstall">Sil</string>
     <string name="patch_title">Yamaq</string>
@@ -50,7 +47,7 @@
     <string name="kpm_load">Yüklə</string>
     <string name="kpm_load_toast_succ">Yükləmə uğurlu oldu</string>
     <string name="kpm_load_toast_failed">Yükləmə uğursuz oldu</string>
-    <string name="kpm_unload_confirm">\"%s\" modulunun yüklənməsini ləğv etmək istəyirsiniz mi?</string>
+    <string name="kpm_unload_confirm">\&quot;%s\&quot; modulunun yüklənməsini ləğv etmək istəyirsiniz mi?</string>
     <string name="kpm_unload">Ləğv et</string>
     <string name="kpm_apm_empty">Heç bir modul yüklənməyib</string>
     <string name="kpm_license">Lisans</string>
@@ -66,11 +63,11 @@
     <string name="su_hide_system_apps">Sistem proqramlarını gizlədin</string>
     <string name="su_refresh">Yeniləyin</string>
     <string name="apm">AYModulu</string>
-    <string name="apm_failed_to_enable">\"%s\" modulunu yandırmaq mümkün olmadı</string>
-    <string name="apm_failed_to_disable">\"%s\" modulunu söndürmək mümkün olmadı</string>
+    <string name="apm_failed_to_enable">\&quot;%s\&quot; modulunu yandırmaq mümkün olmadı</string>
+    <string name="apm_failed_to_disable">\&quot;%s\&quot; modulunu söndürmək mümkün olmadı</string>
     <string name="apm_empty">Heç bir modul quraşdırılmayıb</string>
     <string name="apm_remove">Sil</string>
-    <string name="apm_uninstall_confirm">\"%s\" modulunu silmək istəyirsiniz mi?</string>
+    <string name="apm_uninstall_confirm">\&quot;%s\&quot; modulunu silmək istəyirsiniz mi?</string>
     <string name="apm_uninstall_success">%s silindi</string>
     <string name="apm_uninstall_failed">%s modulunu silmək mümkün olmadı</string>
     <string name="apm_version">Versiya</string>
@@ -81,7 +78,7 @@
     <string name="apm_reboot_to_apply">Effektiv olmağı üçün yenidən başladın</string>
     <string name="apm_changelog">Dəyişikliklər jurnalı</string>
     <string name="apm_update">Güncəllə</string>
-    <string name="apm_downloading">\"%s\" modulu endirilir…</string>
+    <string name="apm_downloading">\&quot;%s\&quot; modulu endirilir…</string>
     <string name="apm_start_downloading">%s endirilməsi başladıldı</string>
     <string name="apm_new_version_available">Yeni versiyanı quraşdırmaq üçün klikləyin, %s.</string>
     <string name="reboot_edl">Təcili yükləmə rejiminə yenidən başlat</string>
@@ -108,7 +105,7 @@
     <string name="patch_mode_patch_and_install">Mode: Yamala və quraşdır</string>
     <string name="patch_embed_kpm_btn">KPM-i göm</string>
     <string name="patch_start_patch_btn">Başla</string>
-    <string name="patch_start_unpatch_btn">"Yamanı Deaktiv edin "</string>
+    <string name="patch_start_unpatch_btn">&quot;Yamanı Deaktiv edin &quot;</string>
     <string name="patch_item_bootimg_slot">yuva:</string>
     <string name="patch_item_bootimg_dev">cihaz:</string>
     <string name="patch_item_kernel">Kernel</string>
@@ -149,14 +146,11 @@
     <string name="enable_web_debugging_summary">WebUI-ni sazlamaq üçün istifadə edilə bilər, zəhmət olmasa, yalnız lazım olduqda aktivləşdirin.</string>
     <string name="setting_reset_su_new_path">yeni tam yol</string>
     <string name="enable_web_debugging">Webgörüntələmə Xəta Çeşidləməyi aktivləşdirin</string>
-    <string name="settings_donot_store_superkey">Super açarı local cihazda saxlamayın</string>
     <string name="home_new_apatch_found">Yeni versiya mövcuddur: %s, Güncəlləmək üçün mənə klikləyin</string>
-    <string name="settings_donot_store_superkey_summary">Menecer hər dəfə açılanda super açarı təsdiq edin</string>
     <string name="mode_select_page_title">Quraşdır</string>
     <string name="mode_select_page_select_file">Yamaq üçün boot image-i seçin</string>
     <string name="mode_select_page_install_inactive_slot">Qeyri-aktiv Yuvaya quraşdırın (OTA-dan sonra)</string>
     <string name="mode_select_page_patch_and_install">Yamala və quraşdır</string>
-    <string name="home_dialog_auth_fail_title">Doğrulama uğursuz oldu</string>
     <string name="mode_select_page_install_inactive_slot_warning">Cihazınız yenidən işə salındıqdan sonra cari qeyri-aktiv yuvaya yükləməyə **MƏCBUR EDİLƏCƏK**!
 \nBu seçimi yalnız OTA tamamlandıqdan sonra istifadə edin.
 \nDavam edilsinmi?</string>
@@ -194,7 +188,6 @@
     <string name="yellow_theme">Sarı Tema</string>
     <string name="about_app_version">Versiya %1$s</string>
     <string name="apm_webui_open">Aç</string>
-    <string name="home_dialog_auth_fail_content">Super açarın doğrulanması mümkün deyil, buna görə də APAtch düzgün işləyə bilməz. \nDoğrulama uğursuzluğunun bəzi mümkün səbəbləri bunlardır: \n1. Siz boot ­görüntüsü KernelPatch ilə yamalamamısınız. \n2. Yamalı boot görüntüsü flashlanmadı. \n3. Super açar səhvdir. \n4. Cihazınız APatch və KernelPatch-i dəstəkləmir. \n \nZəhmət olmasa yoxlayın və yenidən cəhd edin. Hələ də problemlər varsa, siz həmişə rəsmi repozitoriyanın problem səhifəsində sual verə bilərsiniz.</string>
     <string name="kpm_control_outMsg">Mesajlar</string>
     <string name="kpm_control_paramters">Parametrlər</string>
     <string name="kpm_control_dialog_content">Giriş nəzarət parametrləri:</string>
@@ -211,4 +204,24 @@
     <string name="crash_handle_title">Program çöktü…</string>
     <string name="crash_handle_copy">Çöküntü qeydini kopyala</string>
     <string name="crash_handle_copied">Clipboarda çöküntü qeydi kopyalandı.</string>
+    <string name="about_github" translatable="false">GitHub</string>
+    <string name="about_weblate" translatable="false">Weblate</string>
+    <string name="apm_module_undo_uninstall_failed">Failed to undo uninstall: %s</string>
+    <string name="apm_module_undo_uninstall_success">Successfully canceled uninstall of %s</string>
+    <string name="apm_undo">Undo</string>
+    <string name="back">Back</string>
+    <string name="learn_more">Learn more</string>
+    <string name="meta_module_disabled">module not mounted, because metamodule disabled</string>
+    <string name="meta_module_removed">module not mounted, because metamodule being delete</string>
+    <string name="metamodule_uninstall_confirm">&quot;Are you sure you want to uninstall module %s? This action will affect all modules, and certain features provided by the metamodule (such as mounting) will no longer work.  &quot;</string>
+    <string name="no_meta_module_installed">module not mounted, because metamodule not installed</string>
+    <string name="patch_custom_superkey">Custom SuperKey</string>
+    <string name="patch_custom_superkey_summary">still can use superkey manager root, now we are verify manager signature by kernel</string>
+    <string name="search">Search</string>
+    <string name="search_apps">Search Apps</string>
+    <string name="search_modules">Search modules</string>
+    <string name="settings_sucompat">Legacy su compatibility</string>
+    <string name="settings_sucompat_summary">Enable path_probe hooks for legacy su compatibility</string>
+    <string name="warning_of_meta_module_summary">This module want to mount /system, meta module will handle that. Otherwise, it might not work.</string>
+    <string name="warning_of_meta_module_title">Require Meta module</string>
 </resources>

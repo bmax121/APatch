@@ -2,18 +2,17 @@
 <resources>
     <string name="apm_reboot_to_apply">Riavvia per rendere effettive le modifiche</string>
     <string name="android_patch">Patch di Android</string>
-    <string name="kpm_unload_confirm">Rimuovi modulo \"%s\"?</string>
+    <string name="kpm_unload_confirm">Rimuovi modulo \&quot;%s\&quot;?</string>
     <string name="apm_uninstall_success">%s disinstallato</string>
     <string name="send_log">Invia registro</string>
     <string name="apm_install">Installa</string>
-    <string name="home_auth_key_desc">Avvia dopo la certificazione</string>
     <string name="kpatch_version">Versione: %s</string>
     <string name="apm_remove">Rimuovi</string>
-    <string name="patch_warnning">L\'installazione comporta dei rischi. Assicurati che i tuoi dati siano stati salvati.</string>
+    <string name="patch_warnning">L\&apos;installazione comporta dei rischi. Assicurati che i tuoi dati siano stati salvati.</string>
     <string name="kpm_kp_not_installed">KernelPatch non installato</string>
     <string name="home_patch_set_key_desc">Credenziale solo per KernelPatch</string>
     <string name="home_install_unknown">Non installato o verificato</string>
-    <string name="apm_uninstall_confirm">Disinstallare il modulo \"%s\"?</string>
+    <string name="apm_uninstall_confirm">Disinstallare il modulo \&quot;%s\&quot;?</string>
     <string name="su_pkg_excluded_setting_title">Escludi modifiche</string>
     <string name="reboot_download">Riavvia in modalità Download</string>
     <string name="home_click_to_learn_apatch">Scopri le caratteristiche di APatch e come utilizzarlo</string>
@@ -33,7 +32,7 @@
     <string name="home_ap_cando_install">Installa</string>
     <string name="reboot_recovery">Riavvia in Recovery</string>
     <string name="home_learn_apatch">Scopri APatch</string>
-    <string name="apm_failed_to_disable">Impossibile disabilitare il modulo \"%s\"</string>
+    <string name="apm_failed_to_disable">Impossibile disabilitare il modulo \&quot;%s\&quot;</string>
     <string name="kernel_patch">Patch di Kernel</string>
     <string name="home_click_to_install">Clicca per installare</string>
     <string name="home_selinux_status_unknown">Sconosciuto</string>
@@ -43,10 +42,10 @@
     <string name="home_selinux_status">Stato di SELinux</string>
     <string name="apm_uninstall_failed">Impossibile disinstallare %s</string>
     <string name="kpm_author">Autore</string>
-    <string name="apm_failed_to_enable">Impossibile abilitare il modulo \"%s\"</string>
+    <string name="apm_failed_to_enable">Impossibile abilitare il modulo \&quot;%s\&quot;</string>
     <string name="home">Home</string>
     <string name="patch_set_superkey">Imposta Superchiave</string>
-    <string name="apm_downloading">Download del modulo \"%s\" in corso…</string>
+    <string name="apm_downloading">Download del modulo \&quot;%s\&quot; in corso…</string>
     <string name="su_hide_system_apps">Nascondi app di sistema</string>
     <string name="apm_magisk_conflict">I moduli non sono disponibili a causa di un conflitto con Magisk!</string>
     <string name="home_ap_cando_update">Aggiorna</string>
@@ -59,13 +58,12 @@
     <string name="apm_empty">Nessun modulo installato</string>
     <string name="kpm_load">Carica</string>
     <string name="home_patch_next_step">Avanti</string>
-    <string name="home_auth_key_title">Inserisci Superchiave</string>
     <string name="apm_update">Aggiorna</string>
     <string name="home_not_installed">Non installato</string>
     <string name="kpm_license">Licenza</string>
     <string name="reboot_bootloader">Riavvia in modalità Bootloader</string>
     <string name="kpm_apm_empty">Nessun modulo caricato</string>
-    <string name="about_source_code">&lt;![CDATA[&lt;p&gt;Visualizza codice sorgente %1$s&lt;p/&gt; Unisci il nostro %2$s canale &lt;p/&gt; Unisci il nostro %3$s gruppo]]] &gt;</string>
+    <string name="about_source_code"><![CDATA[<p>Visualizza codice sorgente %1$s<p/> Unisci il nostro %2$s canale <p/> Unisci il nostro %3$s gruppo]]></string>
     <string name="home_manager_version">Versione del gestore</string>
     <string name="kpm_load_toast_succ">Caricamento riuscito</string>
     <string name="apm_author">Autore</string>
@@ -87,7 +85,6 @@
     <string name="super_key">Superchiave</string>
     <string name="app_name" translatable="false">APatch</string>
     <string name="kpm">KPModule</string>
-    <string name="clear_super_key">Elimina Superchiave</string>
     <string name="apm_not_installed">AndroidPatch non installato</string>
     <string name="system_default">Predefinito di sistema</string>
     <string name="settings_app_language">Lingua</string>
@@ -110,9 +107,8 @@
     <string name="patch_item_new_extra_kpm">Incorpora nuovo</string>
     <string name="patch_item_existed_extra_kpm">Esistito</string>
     <string name="mode_select_page_install_inactive_slot_warning">Il dispositivo sarà **FORZATO** ad avviarsi nello slot inattivo dopo il riavvio!
-\nUsa questa opzione solo dopo l\'OTA.
+\nUsa questa opzione solo dopo l\&apos;OTA.
 \nContinuare?</string>
-    <string name="home_dialog_auth_fail_title">Autenticazione fallita</string>
     <string name="home_system_version">Versione di sistema</string>
     <string name="home_install_unknown_summary">Clicca per installare</string>
     <string name="home_device_info">Dispositivo</string>
@@ -125,26 +121,24 @@
     <string name="mode_select_page_patch_and_install">Applica patch e installa</string>
     <string name="kpm_embed">Incorpora</string>
     <string name="mode_select_page_install_inactive_slot">Installa nello slot inattivo (dopo OTA)</string>
-    <string name="settings_donot_store_superkey">Non memorizzare la SuperKey in locale</string>
     <string name="patch_start_patch_btn">Inizia</string>
     <string name="kpatch_shadow_path_title">Kpatch</string>
     <string name="patch_item_kpimg_config">Configurazione:</string>
     <string name="hide_apatch_dialog_new_manager_name">Nuovo nome del gestore</string>
-    <string name="settings_check_update_summary">Cerca aggiornamenti automaticamente all\'avvio dell\'app</string>
+    <string name="settings_check_update_summary">Cerca aggiornamenti automaticamente all\&apos;avvio dell\&apos;app</string>
     <string name="patch_mode_install_to_next_slot">Modalità: Installa nello slot successivo (Dopo OTA)</string>
     <string name="enable_web_debugging">Attiva debug di WebView</string>
-    <string name="settings_donot_store_superkey_summary">Richiedi la SuperKey ogni volta che il gestore viene avviato</string>
     <string name="patch_item_extra_version">Versione:</string>
     <string name="patch_item_extra_author">Autore:</string>
     <string name="patch_item_extra_event">Evento:</string>
     <string name="patch_item_extra_kpm_license">Licenza:</string>
     <string name="patch_item_bootimg_dev">Dispositivo:</string>
     <string name="patch_select_bootimg_btn">Seleziona avvio</string>
-    <string name="hide_apatch_manager_failure">Errore nel nascondere l\'app, per favore segnala il bug!</string>
+    <string name="hide_apatch_manager_failure">Errore nel nascondere l\&apos;app, per favore segnala il bug!</string>
     <string name="kpm_install">Installa</string>
     <string name="patch_item_extra_args">Argomenti:</string>
     <string name="patch_item_skey">Super chiave</string>
-    <string name="hide_apatch_dialog_summary">Sarà usato come nome dell\'applicazione mostrato nel launcher</string>
+    <string name="hide_apatch_dialog_summary">Sarà usato come nome dell\&apos;applicazione mostrato nel launcher</string>
     <string name="failure">Fallimento</string>
     <string name="patch_item_bootimg">Bootimg</string>
     <string name="patch_start_unpatch_btn">Rimuovi patch</string>
@@ -160,10 +154,9 @@
     <string name="patch_item_extra_name">Nome:</string>
     <string name="hide_apatch_manager">Nascondi il gestore di APatch</string>
     <string name="success">Successo</string>
-    <string name="kpm_control_dialog_content">Parametri di controllo dell\'ingresso:</string>
+    <string name="kpm_control_dialog_content">Parametri di controllo dell\&apos;ingresso:</string>
     <string name="kpm_control_ok">Operazione riuscita!</string>
     <string name="settings_night_mode_follow_sys">Segui il Tema scuro di sistema</string>
-    <string name="home_dialog_auth_fail_content">Impossibile autenticare la Super chiave, APatch non può funzionare correttamente.\nEcco alcuni possibili motivi per il fallimento dell\'autenticazione:\n1. Non hai applicato la patch all\'immagine di avvio con KernelPatch.\n2. L\'immagine di avvio con patch non è stata installata.\n3. Errata Super chiave.\n4. Il dispositivo non supporta APatch e KernelPatch.\nControlla e riprova. Se ci sono ancora problemi, puoi sempre fare domande sulla pagina dei problemi del repository ufficiale.</string>
     <string name="kpm_control_paramters">Parametri</string>
     <string name="settings_night_mode_follow_sys_summary">Passa automaticamente al Tema scuro usando le impostazioni di sistema</string>
     <string name="home_more_menu_about">Chi siamo</string>
@@ -199,7 +192,7 @@
     <string name="teal_theme">Tema verde acqua</string>
     <string name="yellow_theme">Tema giallo</string>
     <string name="about_app_version">Versione %1$s</string>
-    <string name="about_app_desc">Soluzione Kernel Root con solo un\'immagine del kernel ridotta, che offre la possibilità di montare il modulo di sistema e agganciare la funzione kernel.</string>
+    <string name="about_app_desc">Soluzione Kernel Root con solo un\&apos;immagine del kernel ridotta, che offre la possibilità di montare il modulo di sistema e agganciare la funzione kernel.</string>
     <string name="about_telegram_channel">Canale Telegram</string>
     <string name="about_telegram_group">Gruppo Telegram</string>
     <string name="save_log">Salva registro</string>
@@ -209,8 +202,24 @@
     <string name="crash_handle_title">App chiusa in modo anomalo..</string>
     <string name="crash_handle_copy">Copia registro di arresto anomalo</string>
     <string name="apm_action">Azione</string>
-    <string name="settings_lite_mode">Abilita la modalità Lite</string>
-    <string name="settings_lite_mode_mode_summary">Le funzioni APModule potrebbero presentare errori dopo essere state abilitate, ma in alcuni casi possono comunque eludere efficacemente il rilevamento. Riavvio richiesto.</string>
-    <string name="settings_force_overlayfs_mode">Forza l\'uso di OverlayFS</string>
-    <string name="settings_force_overlayfs_mode_summary">Utilizzare OverlayFS per montare gli APModuli invece di Magic Mount quando il supporto del kernel è disponibile. Riavviare il sistema.</string>
+    <string name="about_github" translatable="false">GitHub</string>
+    <string name="about_weblate" translatable="false">Weblate</string>
+    <string name="apm_module_undo_uninstall_failed">Failed to undo uninstall: %s</string>
+    <string name="apm_module_undo_uninstall_success">Successfully canceled uninstall of %s</string>
+    <string name="apm_undo">Undo</string>
+    <string name="back">Back</string>
+    <string name="learn_more">Learn more</string>
+    <string name="meta_module_disabled">module not mounted, because metamodule disabled</string>
+    <string name="meta_module_removed">module not mounted, because metamodule being delete</string>
+    <string name="metamodule_uninstall_confirm">&quot;Are you sure you want to uninstall module %s? This action will affect all modules, and certain features provided by the metamodule (such as mounting) will no longer work.  &quot;</string>
+    <string name="no_meta_module_installed">module not mounted, because metamodule not installed</string>
+    <string name="patch_custom_superkey">Custom SuperKey</string>
+    <string name="patch_custom_superkey_summary">still can use superkey manager root, now we are verify manager signature by kernel</string>
+    <string name="search">Search</string>
+    <string name="search_apps">Search Apps</string>
+    <string name="search_modules">Search modules</string>
+    <string name="settings_sucompat">Legacy su compatibility</string>
+    <string name="settings_sucompat_summary">Enable path_probe hooks for legacy su compatibility</string>
+    <string name="warning_of_meta_module_summary">This module want to mount /system, meta module will handle that. Otherwise, it might not work.</string>
+    <string name="warning_of_meta_module_title">Require Meta module</string>
 </resources>

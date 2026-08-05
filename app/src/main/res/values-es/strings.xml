@@ -14,7 +14,7 @@
     <string name="reboot">Reiniciar</string>
     <string name="settings">Ajustes</string>
     <string name="reboot_bootloader">Reiniciar al gestor de arranque</string>
-    <string name="about_source_code"><![CDATA[<p>Ver código fuente en %1$s<p/>Unirse a nuestro canal de %2$s<p/>Unirse a nuestro grupo de %3$s]]></string>
+    <string name="about_source_code">&lt;p&gt;Ver código fuente en %1$s&lt;p/&gt;Unirse a nuestro canal de %2$s&lt;p/&gt;Unirse a nuestro grupo de %3$s</string>
     <string name="send_log">Enviar registro de fallos</string>
     <string name="kpatch_version">Versión: %s</string>
     <string name="home_patch_set_key_desc">Clave única para KernelPatch</string>
@@ -30,9 +30,7 @@
     <string name="home_working">Funcionando 😋</string>
     <string name="home_patch_next_step">Siguiente paso</string>
     <string name="home_not_installed">Sin instalar</string>
-    <string name="home_auth_key_desc">Comenzar tras la certificación</string>
     <string name="home_ap_cando_install">Instalar</string>
-    <string name="home_auth_key_title">Escribir superclave</string>
     <string name="home_ap_cando_update">Actualizar</string>
     <string name="kpm_kp_not_installed">KernelPatch no está instalado</string>
     <string name="home_fingerprint">Huella del dispositivo</string>
@@ -87,7 +85,6 @@
     <string name="apm_update">Actualizar</string>
     <string name="kpm">KPModule</string>
     <string name="apm_author">Autor</string>
-    <string name="clear_super_key">Borrar superclave</string>
     <string name="apm_not_installed">AndroidPatch no está instalado</string>
     <string name="settings_app_language">Idioma</string>
     <string name="system_default">Predeterminado del sistema</string>
@@ -145,7 +142,6 @@
     <string name="home_more_menu_about">Acerca de</string>
     <string name="mode_select_page_install_inactive_slot">Instalar en la partición («slot») inactiva (tras una actualización OTA)</string>
     <string name="mode_select_page_select_file">Elige una imagen de arranque «boot» que parchear</string>
-    <string name="home_dialog_auth_fail_title">La autenticación ha fallado</string>
     <string name="mode_select_page_title">Instalar</string>
     <string name="mode_select_page_patch_and_install">Parchear e instalar</string>
     <string name="mode_select_page_install_inactive_slot_warning">Tu dispositivo se verá **OBLIGADO** a arrancar desde la partición («slot») que ahora está inactiva. \nUtiliza esta opción solo cuando una actualización del sistema (OTA) haya terminado de instalarse, justo antes de tener que reiniciar. \n¿Quieres continuar?</string>
@@ -157,12 +153,9 @@
     <string name="home_dialog_uninstall_title">Desinstalar</string>
     <string name="home_dialog_uninstall_ap_only">Quitar AndroidPatch</string>
     <string name="home_dialog_uninstall_all">Desinstalarlo todo</string>
-    <string name="home_dialog_auth_fail_content">Parece que la superclave no da resultado, por lo que APatch no funcionará correctamente. \nA continuación se muestran algunas posibles causas de este error de autenticación: \n1. No has parcheado el «boot.img» original con KernelPatch. \n2. No has flasheado (vía «fastboot flash») dicho «boot.img» ya parcheado. \n3. La superclave que has elegido no es correcta o contiene caracteres especiales.\n4. Tu dispositivo no es compatible con APatch o KernelPatch. \n \nRepásalo todo e inténtalo de nuevo. Si sigue habiendo problemas siempre puedes hacer preguntas en inglés en la pestaña «issues» del repositorio oficial.</string>
     <string name="apm_webui_open">Abrir</string>
     <string name="enable_web_debugging_summary">Se puede utilizar para depurar WebUI, actívalo solo si se necesita de verdad.</string>
-    <string name="settings_donot_store_superkey">No guardar la superclave de forma local</string>
     <string name="patch_mode_install_to_next_slot">Modo: Instalar en el «slot» inactivo (tras OTA)</string>
-    <string name="settings_donot_store_superkey_summary">Pedir que se escriba la superclave al abrir APatch Manager</string>
     <string name="home_new_apatch_found">Nueva versión disponible: %s, toca para actualizar.</string>
     <string name="settings_use_system_color_theme">Utilizar colores del sistema</string>
     <string name="kpm_control_dialog_title">Control de KPModule</string>
@@ -207,8 +200,24 @@
     <string name="crash_handle_copy">Copiar registro de fallos</string>
     <string name="crash_handle_title">La aplicación ha fallado…</string>
     <string name="crash_handle_copied">Se copió el registro de fallos al portapapeles.</string>
-    <string name="settings_lite_mode">Activar el modo ligero</string>
-    <string name="settings_lite_mode_mode_summary">Puede que no todas las funciones de los APModules funcionen en este modo, pero se evitan posibles detecciones. Es necesario reiniciar para que surta efecto.</string>
-    <string name="settings_force_overlayfs_mode">Forzar el uso de OverlayFS</string>
-    <string name="settings_force_overlayfs_mode_summary">Si el kernel lo admite, se utilizará OverlayFS para montar las carpetas de los APModules en vez de Magic Mount. Es necesario reiniciar para que surta efecto.</string>
+    <string name="about_github" translatable="false">GitHub</string>
+    <string name="about_weblate" translatable="false">Weblate</string>
+    <string name="apm_module_undo_uninstall_failed">Failed to undo uninstall: %s</string>
+    <string name="apm_module_undo_uninstall_success">Successfully canceled uninstall of %s</string>
+    <string name="apm_undo">Undo</string>
+    <string name="back">Back</string>
+    <string name="learn_more">Learn more</string>
+    <string name="meta_module_disabled">module not mounted, because metamodule disabled</string>
+    <string name="meta_module_removed">module not mounted, because metamodule being delete</string>
+    <string name="metamodule_uninstall_confirm">&quot;Are you sure you want to uninstall module %s? This action will affect all modules, and certain features provided by the metamodule (such as mounting) will no longer work.  &quot;</string>
+    <string name="no_meta_module_installed">module not mounted, because metamodule not installed</string>
+    <string name="patch_custom_superkey">Custom SuperKey</string>
+    <string name="patch_custom_superkey_summary">still can use superkey manager root, now we are verify manager signature by kernel</string>
+    <string name="search">Search</string>
+    <string name="search_apps">Search Apps</string>
+    <string name="search_modules">Search modules</string>
+    <string name="settings_sucompat">Legacy su compatibility</string>
+    <string name="settings_sucompat_summary">Enable path_probe hooks for legacy su compatibility</string>
+    <string name="warning_of_meta_module_summary">This module want to mount /system, meta module will handle that. Otherwise, it might not work.</string>
+    <string name="warning_of_meta_module_title">Require Meta module</string>
 </resources>

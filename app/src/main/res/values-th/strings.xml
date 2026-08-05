@@ -5,7 +5,6 @@
     <string name="reboot">รีบูต</string>
     <string name="settings">ตั้งค่า</string>
     <string name="send_log">Send logs</string>
-    <string name="home_auth_key_desc">เริ่มทำงานหลังจากได้รับการรับรอง</string>
     <string name="home_click_to_learn_apatch">เรียนรู้เกี่ยวกับคุณสมบัติ APatch และวิธีการใช้</string>
     <string name="home_installing">กำลังติดตั้ง</string>
     <string name="home_ap_cando_uninstall">ถอนการติดตั้ง</string>
@@ -47,7 +46,7 @@
     <string name="apm_uninstall_failed">กำลังดาวน์โหลดโมดูล: %s…</string>
     <string name="apm_failed_to_enable">ไม่สามารถเปิดใช้งานโมดูล: %s</string>
     <string name="su_hide_system_apps">ซ่อนแอประบบ</string>
-    <string name="apm_magisk_conflict">โมดูลถูกปิดใช้งานเนื่องจากขัดแย้งกับ Magisk\'s.</string>
+    <string name="apm_magisk_conflict">โมดูลถูกปิดใช้งานเนื่องจากขัดแย้งกับ Magisk\&apos;s.</string>
     <string name="apm_new_version_available">รุ่นใหม่: %s พร้อมใช้งาน</string>
     <string name="apm_empty">ไม่มีการติดตั้งโมดูล</string>
     <string name="apm_author">ผู้เขียน</string>
@@ -69,20 +68,18 @@
     <string name="home_fingerprint">ลายนิ้วมือ</string>
     <string name="super_key">SuperKey</string>
     <string name="kernel_patch">APatch</string>
-    <string name="android_patch">&lt;![CDATA[&lt;p&gt;View source code at %1$s&lt;br/&gt;Join our %2$s channel</string>
+    <string name="android_patch">AndroidPatch</string>
     <string name="reboot_bootloader">รีบูตเข้าสู่บูตโหลดเดอร์</string>
     <string name="reboot_download">รีบูตเข้าสู่โหมดดาวน์โหลด</string>
     <string name="reboot_edl">รีบูตเข้าสู่โหมด EDL</string>
-    <string name="about_source_code">&lt;![CDATA[&lt;p&gt;View source code at %1$s&lt;br/&gt;Join our %2$s channel</string>
+    <string name="about_source_code"><![CDATA[<p>View source code at %1$s<p/>Join our %2$s channel<p/>Join our %3$s group]]></string>
     <string name="home_patch_set_key_desc">ข้อมูลรับรองสำหรับ KernelPatch เท่านั้น</string>
     <string name="home_apatch_version">เวอร์ชั่น APatch</string>
     <string name="patch_title">แพทซ์</string>
     <string name="home_kernel">Kernel</string>
     <string name="kpm_args">Args</string>
     <string name="su_title">Superuser</string>
-    <string name="clear_super_key">ล้าง คีย์</string>
     <string name="home_su_path">su: %s</string>
-    <string name="home_auth_key_title">ใส่ SuperKey</string>
     <string name="home_selinux_status_enforcing">Enforcing</string>
     <string name="home_selinux_status_permissive">Permissive</string>
     <string name="home_selinux_status_unknown">ไม่ทราบ</string>
@@ -155,8 +152,6 @@
     <string name="home_system_version">เวอร์ชันระบบ</string>
     <string name="hide_apatch_manager">ซ่อนตัวจัดการ APatch</string>
     <string name="hide_apatch_manager_summary">ติดตั้งแอปผู้จัดการใหม่ด้วยรหัสแพ็กเกจสุ่มและป้ายชื่อแอปที่กำหนดเอง</string>
-    <string name="settings_donot_store_superkey_summary">ตรวจสอบสิทธิ์ซุปเปอร์คีย์ทุกครั้งที่ผู้จัดการเริ่มต้น</string>
-    <string name="settings_donot_store_superkey">ห้ามเก็บซุปเปอร์คีย์ไว้ในเครื่อง</string>
     <string name="mode_select_page_title">ติดตั้ง</string>
     <string name="mode_select_page_patch_and_install">ยืนยันและติดตั้ง</string>
     <string name="home_new_apatch_found">มีเวอร์ชันใหม่แล้ว: ,คลิกเพื่ออัปเกรด</string>
@@ -191,7 +186,6 @@
     <string name="kpm_control_failed">การดำเนินการล้มเหลว!</string>
     <string name="blue_theme">ธีมสีฟ้า</string>
     <string name="apm_action">การกระทำ</string>
-    <string name="home_dialog_auth_fail_title">การตรวจสอบสิทธิ์ล้มเหลว</string>
     <string name="kpm_control_dialog_content">จัดเตรียมไปยังฟังก์ชัน</string>
     <string name="home_dialog_uninstall_all">ถอนการติดตั้งทั้งหมด</string>
     <string name="patch_item_extra_args">อาร์กส์</string>
@@ -206,5 +200,24 @@
     <string name="settings_custom_color_theme">ธีมสี</string>
     <string name="amber_theme">ธีมสีเหลือง</string>
     <string name="deep_orange_theme">ธีมสีส้มเข้ม</string>
-    <string name="home_dialog_auth_fail_content">ไม่สามารถตรวจสอบสิทธิ์ซูเปอร์คีย์ได้ ดังนั้น APatch จึงไม่สามารถทำงานได้อย่างถูกต้อง\n\nต่อไปนี้คือสาเหตุที่เป็นไปได้บางประการที่ทำให้การตรวจสอบสิทธิ์ล้มเหลว:\n\n1. คุณไม่ได้รีเซ็ตการบูตด้วย KernelPatch\n\n2. รีเซ็ตการบูตที่เนิ่มใหม่แล้วไม่ได้ถูกต้อง\n\n3. ซูเปอร์คีย์ไม่ถูกต้อง\n\n4. อุปกรณ์ของคุณไม่รองรับ APatch และ KernelPatch\n\nโปรดตรวจสอบและลองอีกครั้ง หากยังคงมีปัญหาอยู่ คุณสามารถถามคำถามได้เสมอที่หน้าปัญหาของที่เก็บข้อมูลอย่างเป็นทางการ</string>
+    <string name="about_github" translatable="false">GitHub</string>
+    <string name="about_weblate" translatable="false">Weblate</string>
+    <string name="apm_module_undo_uninstall_failed">Failed to undo uninstall: %s</string>
+    <string name="apm_module_undo_uninstall_success">Successfully canceled uninstall of %s</string>
+    <string name="apm_undo">Undo</string>
+    <string name="back">Back</string>
+    <string name="learn_more">Learn more</string>
+    <string name="meta_module_disabled">module not mounted, because metamodule disabled</string>
+    <string name="meta_module_removed">module not mounted, because metamodule being delete</string>
+    <string name="metamodule_uninstall_confirm">&quot;Are you sure you want to uninstall module %s? This action will affect all modules, and certain features provided by the metamodule (such as mounting) will no longer work.  &quot;</string>
+    <string name="no_meta_module_installed">module not mounted, because metamodule not installed</string>
+    <string name="patch_custom_superkey">Custom SuperKey</string>
+    <string name="patch_custom_superkey_summary">still can use superkey manager root, now we are verify manager signature by kernel</string>
+    <string name="search">Search</string>
+    <string name="search_apps">Search Apps</string>
+    <string name="search_modules">Search modules</string>
+    <string name="settings_sucompat">Legacy su compatibility</string>
+    <string name="settings_sucompat_summary">Enable path_probe hooks for legacy su compatibility</string>
+    <string name="warning_of_meta_module_summary">This module want to mount /system, meta module will handle that. Otherwise, it might not work.</string>
+    <string name="warning_of_meta_module_title">Require Meta module</string>
 </resources>

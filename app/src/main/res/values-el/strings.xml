@@ -17,7 +17,6 @@
     <string name="home_click_to_learn_apatch">Μάθετε για τα χαρακτηριστικά του APatch και πώς να το χρησιμοποιείτε</string>
     <string name="settings_app_language">Γλώσσα</string>
     <string name="patch">Επιδιόρθωση</string>
-    <string name="home_auth_key_title">Εισαγάγετε το ΥπέρΚλειδί</string>
     <string name="apm">Ενότητα AP</string>
     <string name="apm_install">Εγκατάσταση</string>
     <string name="apm_update">Ενημέρωση</string>
@@ -25,11 +24,11 @@
     <string name="home_working">Λειτουργεί 😋</string>
     <string name="patch_title">Επιδιόρθωση</string>
     <string name="kpatch_version">Έκδοση: %s</string>
-    <string name="kpm_unload_confirm">Ξεφόρτωση ενότητας \"%s\"?</string>
+    <string name="kpm_unload_confirm">Ξεφόρτωση ενότητας \&quot;%s\&quot;?</string>
     <string name="apatch_version">Έκδοση: %s</string>
     <string name="home_fingerprint">Δακτυλικό αποτύπωμα</string>
     <string name="su_title">Υπερχρήστης</string>
-    <string name="apm_downloading">Λήψη της ενότητας \"%s\"…</string>
+    <string name="apm_downloading">Λήψη της ενότητας \&quot;%s\&quot;…</string>
     <string name="su_hide_system_apps">Απόκρυψη εφαρμογών συστήματος</string>
     <string name="home_selinux_status_disabled">Απενεργοποιημένο</string>
     <string name="kpm_author">Δημιουργός</string>
@@ -40,9 +39,9 @@
     <string name="home_selinux_status">Κατάσταση SELinux</string>
     <string name="send_log">Αποστολή αρχείων καταγραφής</string>
     <string name="safe_mode">Ασφαλής λειτουργία</string>
-    <string name="about_source_code"><![CDATA[<p>Προβολή πηγαίου κώδικα στο %1$s<p/>Εγγραφείτε στο κανάλι μας %2$s<p/>Εγγραφείτε στην ομάδα μας %3$s]]></string>
-    <string name="apm_uninstall_confirm">Απεγκατάσταση ενότητας \"%s\"?</string>
-    <string name="apm_failed_to_disable">Δεν ήταν δυνατή η απενεργοποίηση της ενότητας \"%s\"</string>
+    <string name="about_source_code">&lt;p&gt;Προβολή πηγαίου κώδικα στο %1$s&lt;p/&gt;Εγγραφείτε στο κανάλι μας %2$s&lt;p/&gt;Εγγραφείτε στην ομάδα μας %3$s</string>
+    <string name="apm_uninstall_confirm">Απεγκατάσταση ενότητας \&quot;%s\&quot;?</string>
+    <string name="apm_failed_to_disable">Δεν ήταν δυνατή η απενεργοποίηση της ενότητας \&quot;%s\&quot;</string>
     <string name="apm_empty">Δεν υπάρχει εγκατεστημένη ενότητα</string>
     <string name="apm_remove">Αφαίρεση</string>
     <string name="apm_desc">Περιγραφή</string>
@@ -53,7 +52,6 @@
     <string name="apm_new_version_available">Η νέα έκδοση %s είναι διαθέσιμη, κάντε κλικ για αναβάθμιση.</string>
     <string name="apm_start_downloading">Έναρξη λήψης %s</string>
     <string name="super_key">ΥπέρΚλειδί</string>
-    <string name="clear_super_key">Εκκαθάριση ΥπέρΚλειδιού</string>
     <string name="patch_set_superkey">Ορισμός ΥπέρΚλειδιού</string>
     <string name="home_patch_set_key_desc">Μόνο διαπιστευτήρια για το KernelPatch</string>
     <string name="home_patch_next_step">Επόμενο βήμα</string>
@@ -62,7 +60,6 @@
     <string name="home_installing">Γίνεται εγκατάσταση</string>
     <string name="apatch_version_update">Έκδοση: %s -&gt; %s</string>
     <string name="home_su_path">Εκτελέσιμο su</string>
-    <string name="home_auth_key_desc">Έναρξη μετά την πιστοποίηση</string>
     <string name="home_ap_cando_update">Ενημέρωση</string>
     <string name="home_kernel">Έκδοση Πυρήνα</string>
     <string name="home_manager_version">Έκδοση διαχειριστή</string>
@@ -78,7 +75,7 @@
     <string name="kpm_args">Επιχειρήματα</string>
     <string name="su_pkg_excluded_label">Αποκλεισμένο</string>
     <string name="su_pkg_excluded_setting_title">Εξαίρεση τροποποιήσεων</string>
-    <string name="apm_failed_to_enable">Δεν ήταν δυνατή η ενεργοποίηση της ενότητας \"%s\"</string>
+    <string name="apm_failed_to_enable">Δεν ήταν δυνατή η ενεργοποίηση της ενότητας \&quot;%s\&quot;</string>
     <string name="apm_uninstall_failed">Δεν ήταν δυνατή η απεγκατάσταση του %s</string>
     <string name="apm_version">Έκδοση</string>
     <string name="apm_author">Δημιουργός</string>
@@ -115,7 +112,6 @@
     <string name="blue_grey_theme">Μπλέ γκρί</string>
     <string name="enable_web_debugging_summary">Μπορεί να χρησιμοποιηθεί για εντοπισμό σφαλμάτων WebUI, Παρακαλώ ενεργοποιήσει μόνο όταν χρειάζεται.</string>
     <string name="hide_apatch_manager_summary">Εγκατάσταση μιας εφαρμογής proxy με τυχαίο αναγνωριστικό πακέτου και προσαρμοσμένη ετικέτα εφαρμογής</string>
-    <string name="home_dialog_auth_fail_content">Δεν είναι δυνατός ο έλεγχος ταυτότητας του ΥπέρΚλειδιού, επομένως το APatch δεν μπορεί να λειτουργήσει σωστά.\nΑκολουθούν ορισμένοι πιθανοί λόγοι για την αποτυχία του ελέγχου ταυτότητας:\n1. Δεν επιδιορθώσατε το boot.img με το KernelPatch.\n2. Το διορθωμένο boot.img δεν περάστηκε.\n3. Το ΥπέρΚλειδί είναι λάθος ή περιέχει ειδικούς χαρακτήρες.\n4. Η συσκευή σας δεν υποστηρίζει το APatch και KernelPatch.\n\nΕλέγξτε και δοκιμάστε ξανά. Εάν εξακολουθούν να υπάρχουν προβλήματα, μπορείτε πάντα να κάνετε ερωτήσεις στη σελίδα ζητημάτων του επίσημου αποθετηρίου.</string>
     <string name="crash_handle_copied">Το αρχείο καταγραφής σφαλμάτων αντιγράφηκε στο πρόχειρο.</string>
     <string name="settings_global_namespace_mode">Λειτουργία καθολικού χώρου ονομάτων</string>
     <string name="settings_global_namespace_mode_summary">Όλες οι συνεδρίες root χρησιμοποιούν τον χώρο ονομάτων καθολικής προσάρτησης</string>
@@ -139,13 +135,11 @@
     <string name="hide_apatch_dialog_new_manager_name">Νέο όνομα διαχειριστή</string>
     <string name="hide_apatch_dialog_summary">Θα χρησιμοποιηθεί ως η νέα ετικέτα εφαρμογής που εμφανίζεται στο πρόγραμμα εκκίνησης</string>
     <string name="hide_apatch_manager_failure">Αποτυχία απόκρυψης, Παρακαλώ αναφέρετε το σφάλμα!</string>
-    <string name="settings_donot_store_superkey">Μη αποθήκευση ΥπέρΚλειδιού τοπικά</string>
     <string name="enable_web_debugging">Ενεργοποίηση εντοπισμού σφαλμάτων WebView</string>
     <string name="mode_select_page_patch_and_install">Επιδιόρθωση και Εγκατάσταση</string>
     <string name="mode_select_page_select_file">Επιλογή εικόνας boot για επιδιόρθωση</string>
     <string name="home_new_apatch_found">Νέα έκδοση %s είναι διαθέσιμη, κλικ για αναβάθμιση.</string>
     <string name="mode_select_page_title">Εγκατάσταση</string>
-    <string name="home_dialog_auth_fail_title">Ο έλεγχος ταυτότητας απέτυχε</string>
     <string name="kpatch_shadow_path_title">kpatch</string>
     <string name="patch_item_kpimg_comile_time">Ώρα:</string>
     <string name="patch_item_error">!!ΣΦΑΛΜΑ!!</string>
@@ -166,7 +160,6 @@
     <string name="patch_item_bootimg_slot">υποδοχή:</string>
     <string name="home_ap_cando_reboot">Επανεκκίνηση</string>
     <string name="kpm_control">Έλεγχος</string>
-    <string name="settings_donot_store_superkey_summary">Έλεγχος ταυτότητας του ΥπέρΚλειδιού κάθε φορά που ξεκινά ο διαχειριστής</string>
     <string name="setting_reset_su_new_path">Νέα πλήρης διαδρομή</string>
     <string name="home_dialog_uninstall_ap_only">Αφαίρεση AndroidPatch</string>
     <string name="home_dialog_uninstall_all">Απεγκατάσταση όλων</string>
@@ -207,8 +200,24 @@
     <string name="patch_item_bootimg">bootimg</string>
     <string name="patch_item_extra_author">Δημιουργός</string>
     <string name="patch_item_extra_args">Επιχειρήματα:</string>
-    <string name="settings_lite_mode">Ενεργοποίηση λειτουργίας Lite</string>
-    <string name="settings_lite_mode_mode_summary">Οι λειτουργίες του APModule ενδέχεται να παρουσιάσουν σφάλματα μετά την ενεργοποίηση τους, αλλά σε ορισμένες περιπτώσεις μπορούν να αποφύγουν αποτελεσματικά τον εντοπισμό. Απαιτείται επανεκκίνηση.</string>
-    <string name="settings_force_overlayfs_mode">Επιβολή χρήσης OverlayFS</string>
-    <string name="settings_force_overlayfs_mode_summary">Χρήση του OverlayFS για προσάρτηση του APModules αντί για το Magic Mount όταν είναι διαθέσιμη η υποστήριξη από τον πυρήνα. Απαιτείται επανεκκίνηση.</string>
+    <string name="about_github" translatable="false">GitHub</string>
+    <string name="about_weblate" translatable="false">Weblate</string>
+    <string name="apm_module_undo_uninstall_failed">Failed to undo uninstall: %s</string>
+    <string name="apm_module_undo_uninstall_success">Successfully canceled uninstall of %s</string>
+    <string name="apm_undo">Undo</string>
+    <string name="back">Back</string>
+    <string name="learn_more">Learn more</string>
+    <string name="meta_module_disabled">module not mounted, because metamodule disabled</string>
+    <string name="meta_module_removed">module not mounted, because metamodule being delete</string>
+    <string name="metamodule_uninstall_confirm">&quot;Are you sure you want to uninstall module %s? This action will affect all modules, and certain features provided by the metamodule (such as mounting) will no longer work.  &quot;</string>
+    <string name="no_meta_module_installed">module not mounted, because metamodule not installed</string>
+    <string name="patch_custom_superkey">Custom SuperKey</string>
+    <string name="patch_custom_superkey_summary">still can use superkey manager root, now we are verify manager signature by kernel</string>
+    <string name="search">Search</string>
+    <string name="search_apps">Search Apps</string>
+    <string name="search_modules">Search modules</string>
+    <string name="settings_sucompat">Legacy su compatibility</string>
+    <string name="settings_sucompat_summary">Enable path_probe hooks for legacy su compatibility</string>
+    <string name="warning_of_meta_module_summary">This module want to mount /system, meta module will handle that. Otherwise, it might not work.</string>
+    <string name="warning_of_meta_module_title">Require Meta module</string>
 </resources>

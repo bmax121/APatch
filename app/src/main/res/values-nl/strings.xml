@@ -13,7 +13,7 @@
     <string name="settings_global_namespace_mode">Globale naamruimtemodus</string>
     <string name="settings_global_namespace_mode_summary">Alle rootsessies gebruiken de globale mount-naamruimte</string>
     <string name="home_learn_apatch">Leer APatch</string>
-    <string name="about_source_code"><![CDATA[<p>Bekijk de broncode op %1$s<p/>Word lid van ons%2$s kanaal<p/>Word lid van ons%3$s groep]]></string>
+    <string name="about_source_code">&lt;p&gt;Bekijk de broncode op %1$s&lt;p/&gt;Word lid van ons%2$s kanaal&lt;p/&gt;Word lid van ons%3$s groep</string>
     <string name="send_log">Logbestanden versturen</string>
     <string name="safe_mode">Veilige modus</string>
     <string name="super_key">SuperKey</string>
@@ -33,7 +33,7 @@
     <string name="home_selinux_status_permissive">Permissief</string>
     <string name="home_selinux_status_unknown">Onbekend</string>
     <string name="kpm">KPModule</string>
-    <string name="kpm_unload_confirm">Module \"%s\" ontladen?</string>
+    <string name="kpm_unload_confirm">Module \&quot;%s\&quot; ontladen?</string>
     <string name="kpm_unload">Ontladen</string>
     <string name="kpm_apm_empty">Geen module geladen</string>
     <string name="kpm_author">Auteur</string>
@@ -46,14 +46,13 @@
     <string name="apm_reboot_to_apply">Start opnieuw op om van kracht te gaan</string>
     <string name="apm_changelog">Wijzigingslog</string>
     <string name="home">Thuis</string>
-    <string name="patch_warnning">Installatie brengt risico\'s met zich mee. Zorg ervoor dat er een back-up van uw gegevens wordt gemaakt.</string>
+    <string name="patch_warnning">Installatie brengt risico\&apos;s met zich mee. Zorg ervoor dat er een back-up van uw gegevens wordt gemaakt.</string>
     <string name="reboot_bootloader">Start opnieuw op naar Bootloader</string>
     <string name="home_click_to_learn_apatch">Leer meer over de functies van APatch en hoe u deze kunt gebruiken</string>
     <string name="reboot_download">Start opnieuw op naar Download</string>
     <string name="reboot_recovery">Start opnieuw op naar herstel</string>
     <string name="apatch_version">Versie: %s</string>
     <string name="home_su_path">Uitvoerbare su</string>
-    <string name="home_auth_key_desc">Start na certificering</string>
     <string name="home_ap_cando_update">Werk bij</string>
     <string name="apatch_version_update">Versie: %s -&gt; %s</string>
     <string name="home_apatch_version">APatch versie</string>
@@ -74,16 +73,16 @@
     <string name="su_refresh">Vernieuwen</string>
     <string name="apm_not_installed">AndroidPatch niet geïnstalleerd</string>
     <string name="apm">APModule</string>
-    <string name="apm_failed_to_disable">Kon de module \"%s\" niet uitschakelen</string>
-    <string name="apm_failed_to_enable">Kon de module \"%s\" niet inschakelen</string>
+    <string name="apm_failed_to_disable">Kon de module \&quot;%s\&quot; niet uitschakelen</string>
+    <string name="apm_failed_to_enable">Kon de module \&quot;%s\&quot; niet inschakelen</string>
     <string name="apm_update">Update</string>
     <string name="apm_remove">Verwijderen</string>
     <string name="apm_install">Installeren</string>
-    <string name="apm_uninstall_confirm">De module \"%s\" verwijderen?</string>
+    <string name="apm_uninstall_confirm">De module \&quot;%s\&quot; verwijderen?</string>
     <string name="apm_version">Versie</string>
     <string name="apm_desc">Beschr.</string>
     <string name="apm_author">Auteur</string>
-    <string name="apm_downloading">Downloaden \"%s\" module…</string>
+    <string name="apm_downloading">Downloaden \&quot;%s\&quot; module…</string>
     <string name="apm_start_downloading">Begin met downloaden %s</string>
     <string name="apm_new_version_available">Een nieuwe versie %s is beschikbaar, klik om te upgraden.</string>
     <string name="apm_overlay_fs_not_available">Modules zijn onbereikbaar als OverlayFS wordt uitgeschakeld door de kern!</string>
@@ -111,11 +110,9 @@
     <string name="save_log">Logboek opslaan</string>
     <string name="log_saved">Logboek opgeslagen</string>
     <string name="kpatch_version_update">Versie: %s -&gt; %s</string>
-    <string name="clear_super_key">SuperKey verwijderen</string>
     <string name="kpatch_shadow_path_title">kpatch</string>
     <string name="home_kpatch_info_title">Info</string>
     <string name="home_install_unknown_summary">Klik om te installeren</string>
-    <string name="home_auth_key_title">SuperKey invoeren</string>
     <string name="home_ap_cando_reboot">Herstarten</string>
     <string name="patch_config_title">Patches</string>
     <string name="patch_mode_uninstall_patch">Modus: KPatch verwijderen</string>
@@ -139,7 +136,6 @@
     <string name="apm_webui_open">Open</string>
     <string name="mode_select_page_install_inactive_slot">Installeer aan inactieve gleuf (Na OTA)</string>
     <string name="about_telegram_channel">Telegram Kanaal</string>
-    <string name="home_dialog_auth_fail_title">Verificatie gefaald</string>
     <string name="patch_item_error">!!Fout!!</string>
     <string name="patch_item_bootimg_dev">apparaat:</string>
     <string name="patch_item_kpimg_version">Versie:</string>
@@ -167,7 +163,6 @@
     <string name="setting_reset_su_path">su pad opnieuw instellen</string>
     <string name="enable_web_debugging">Webview Debuggen Inschakelen</string>
     <string name="enable_web_debugging_summary">Kan gebruikt worden om WebUI te debuggen, gelieve in te schakelen enkel wanneer nodig.</string>
-    <string name="settings_donot_store_superkey">Super sleutel niet opslaan in lokaal</string>
     <string name="home_new_apatch_found">Nieuwe versie beschikbaar:%s, klik mij en upgrade nu.</string>
     <string name="mode_select_page_title">Installeer</string>
     <string name="mode_select_page_patch_and_install">Oplappen en Installeren</string>
@@ -186,7 +181,6 @@
     <string name="kpm_install">Installeer</string>
     <string name="kpm_embed">Insluiten</string>
     <string name="apm_action">Actie</string>
-    <string name="settings_donot_store_superkey_summary">Verifieer de super sleutel elke keer dat de beheerder begint</string>
     <string name="home_dialog_uninstall_all">Verwijder Alles</string>
     <string name="kpm_control_outMsg">Bericht</string>
     <string name="mode_select_page_select_file">Selecteer een opstartimage om te patchen</string>
@@ -205,10 +199,25 @@
     <string name="about_powered_by">Aangedreven door %1$s</string>
     <string name="patch_item_extra_kpm_license">Licentie:</string>
     <string name="kpm_control">Controle</string>
-    <string name="home_dialog_auth_fail_content">Niet in staat om de super sleutel te verifieren, daarom kan APatch niet correct werken.\nHier zijn een paar mogelijke redenen voor het falen van de verificatie:\n1. U heeft de opstart afbeelding niet opgelapt met KernLap.\n2. De opgelapte opstart afbeelding was niet geflashed.\n3. Super sleutel fout.\n4. Uw apparaat ondersteunt APatch en KernLap niet.\n\nGelieve te checken en opnieuwe te proberen. Indien er nog steeds problemen zijn, kan je steeds vragen stellen op de officiele respository\'s problemen pagina.</string>
     <string name="patch_start_unpatch_btn">Ontsnipperen</string>
-    <string name="settings_lite_mode">Lite-modus inschakelen</string>
-    <string name="settings_lite_mode_mode_summary">APModule-functies kunnen fouten vertonen nadat ze zijn ingeschakeld, maar in sommige gevallen kunnen ze detectie nog steeds effectief vermijden. Opnieuw opstarten is vereist.</string>
-    <string name="settings_force_overlayfs_mode">Forceer het gebruik van OverlayFS</string>
-    <string name="settings_force_overlayfs_mode_summary">Gebruik OverlayFS om APModules te mounten in plaats van Magic Mount wanneer kernelondersteuning beschikbaar is. Herstarten is vereist.</string>
+    <string name="about_github" translatable="false">GitHub</string>
+    <string name="about_weblate" translatable="false">Weblate</string>
+    <string name="apm_module_undo_uninstall_failed">Failed to undo uninstall: %s</string>
+    <string name="apm_module_undo_uninstall_success">Successfully canceled uninstall of %s</string>
+    <string name="apm_undo">Undo</string>
+    <string name="back">Back</string>
+    <string name="learn_more">Learn more</string>
+    <string name="meta_module_disabled">module not mounted, because metamodule disabled</string>
+    <string name="meta_module_removed">module not mounted, because metamodule being delete</string>
+    <string name="metamodule_uninstall_confirm">&quot;Are you sure you want to uninstall module %s? This action will affect all modules, and certain features provided by the metamodule (such as mounting) will no longer work.  &quot;</string>
+    <string name="no_meta_module_installed">module not mounted, because metamodule not installed</string>
+    <string name="patch_custom_superkey">Custom SuperKey</string>
+    <string name="patch_custom_superkey_summary">still can use superkey manager root, now we are verify manager signature by kernel</string>
+    <string name="search">Search</string>
+    <string name="search_apps">Search Apps</string>
+    <string name="search_modules">Search modules</string>
+    <string name="settings_sucompat">Legacy su compatibility</string>
+    <string name="settings_sucompat_summary">Enable path_probe hooks for legacy su compatibility</string>
+    <string name="warning_of_meta_module_summary">This module want to mount /system, meta module will handle that. Otherwise, it might not work.</string>
+    <string name="warning_of_meta_module_title">Require Meta module</string>
 </resources>

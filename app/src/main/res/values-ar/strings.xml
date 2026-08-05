@@ -14,11 +14,10 @@
     <string name="about">حول التطبيق</string>
     <string name="home_learn_apatch">تعلم APatch</string>
     <string name="home_click_to_learn_apatch">تعرف على ميزات AndroidPatch وكيفية استخدامه</string>
-    <string name="about_source_code"><![CDATA[<p> عرض كود المصدر على %1$s<p/> انضم إلى قناتنا %2$s انضم إلى مجموعتنا %3$s]]></string>
+    <string name="about_source_code">&lt;p&gt; عرض كود المصدر على %1$s&lt;p/&gt; انضم إلى قناتنا %2$s انضم إلى مجموعتنا %3$s</string>
     <string name="send_log">أرسل السجلات</string>
     <string name="safe_mode">الوضع الآمن</string>
     <string name="super_key">المفتاح الخارق</string>
-    <string name="clear_super_key">محو المفتاح الخارق</string>
     <string name="patch_set_superkey">ضع المفتاح الخارق</string>
     <string name="home_patch_set_key_desc">اعتماد فقط لـKernelPatch</string>
     <string name="home_click_to_install">اضغط للتثبيت</string>
@@ -31,10 +30,8 @@
     <string name="home_need_update">اصدار جديد متوفر</string>
     <string name="apatch_version">الإصدار: %s</string>
     <string name="apatch_version_update">الإصدار: %s -&gt; %s</string>
-    <string name="home_auth_key_desc">البدء بعد التوثيق</string>
     <string name="home_su_path">مستخدم خارق قابل للتنفيذ</string>
     <string name="home_apatch_version">إصدار APatch</string>
-    <string name="home_auth_key_title">ادخل المفتاح الخارق</string>
     <string name="home_ap_cando_install">تثبيت</string>
     <string name="home_ap_cando_update">تحديث</string>
     <string name="home_ap_cando_uninstall">إلغاء التثبيت</string>
@@ -57,7 +54,7 @@
     <string name="kpm_kp_not_installed">KernelPatch غير مثبت</string>
     <string name="kpm_load_toast_succ">تم التحميل بنجاح</string>
     <string name="kpm_load_toast_failed">فشل التحميل</string>
-    <string name="kpm_unload_confirm">إلغاء تحميل \"%s\" الإضافة?</string>
+    <string name="kpm_unload_confirm">إلغاء تحميل \&quot;%s\&quot; الإضافة?</string>
     <string name="kpm_version">الاصدار</string>
     <string name="kpm_license">الترخيص</string>
     <string name="kpm_author">المؤلِّف</string>
@@ -70,7 +67,7 @@
     <string name="su_refresh">انعاش</string>
     <string name="apm_not_installed">AndroidPatch غير مثبت</string>
     <string name="apm_install">تثبيت</string>
-    <string name="apm_uninstall_confirm">الغاء تثبيت إضافة \"%s\"؟</string>
+    <string name="apm_uninstall_confirm">الغاء تثبيت إضافة \&quot;%s\&quot;؟</string>
     <string name="apm_uninstall_success">تم الغاء التثبيت %s</string>
     <string name="apm_uninstall_failed">لا يمكن الغاء تثبيت %s</string>
     <string name="apm_overlay_fs_not_available">الإضافات غير متاحة نظرًا لتعطيل نظام OverlayFS بواسطة النواة.</string>
@@ -79,7 +76,7 @@
     <string name="system_default">النظام الافتراضي</string>
     <string name="settings_app_language">الغة</string>
     <string name="apm">إضافة AP</string>
-    <string name="apm_failed_to_enable">غير قادر على تشغيل الإضافة \"%s\"</string>
+    <string name="apm_failed_to_enable">غير قادر على تشغيل الإضافة \&quot;%s\&quot;</string>
     <string name="apm_author">المؤلف</string>
     <string name="apm_changelog">سجل التغييرات</string>
     <string name="apm_update">تحديث</string>
@@ -87,7 +84,7 @@
     <string name="apm_version">الاصدار</string>
     <string name="apm_start_downloading">بدء التنزيل %s</string>
     <string name="apm_new_version_available">اضغط لتثبيت الإصدار الجديد %s.</string>
-    <string name="apm_failed_to_disable">لم يمكن إيقاف إضافة \"%s</string>
+    <string name="apm_failed_to_disable">لم يمكن إيقاف إضافة \&quot;%s</string>
     <string name="apm_empty">لم يتم تثبيت أي إضافة</string>
     <string name="apm_desc">Desc</string>
     <string name="apm_downloading">تنزيل إضافة %s…</string>
@@ -145,12 +142,9 @@
     <string name="home_device_info">الجهاز</string>
     <string name="home_system_version">إصدار النظام</string>
     <string name="home_kpatch_version">إصدار KernelPatch</string>
-    <string name="settings_donot_store_superkey">لا تقم بتخزين المفتاح الخارق محلياً</string>
-    <string name="settings_donot_store_superkey_summary">قم بتوثيق المفتاح الخارق في كل مرة يتم تفعيل التطبيق</string>
     <string name="home_new_apatch_found">إصدار جديد متوفر: %s، اضغط هنا للتحديث</string>
     <string name="mode_select_page_patch_and_install">تعديل و تثبيت</string>
     <string name="mode_select_page_select_file">اختر صورة تهميد لـAPatch</string>
-    <string name="home_dialog_auth_fail_title">فشلت المصادقة</string>
     <string name="home_more_menu_feedback_or_suggestion">التعليقات أو الاقتراحات</string>
     <string name="home_more_menu_about">حول</string>
     <string name="home_dialog_uninstall_title">إلغاء تثبيت</string>
@@ -160,7 +154,6 @@
     <string name="mode_select_page_install_inactive_slot_warning">**سيتم إجبار جهازك** على التمهيد إلى الفتحة غير النشطة الحالية بعد إعادة التشغيل!
 \nاستخدم هذا الخيار فقط بعد انتهاء التحديث الهوائي.
 \nهل تريد المتابعة؟</string>
-    <string name="home_dialog_auth_fail_content">غير قادر على مصادقة المفتاح الخارق، وبالتالي لا يمكن لـ APatch العمل بشكل صحيح. \nفيما يلي بعض الأسباب المحتملة لفشل المصادقة: \n1. لم تقم بتصحيح صورة التمهيد باستخدام KernelPatch. \n2. لم يتم تثبيت صورة التمهيد المصححة. \n3. مفتاح خارق خطأ. \n4. جهازك لا يدعم APatch وKernelPatch. \n \nيرجى التحقق والمحاولة مرة أخرى. إذا كانت لا تزال هناك مشكلات، فيمكنك دائمًا طرح الأسئلة على صفحة المشكلات الخاصة بالمستودع الرسمي.</string>
     <string name="patch_mode_patch_and_install">الوضع: باتش وتثبيت</string>
     <string name="patch_mode_install_to_next_slot">الوضع: تثبيت في الفتحة التالية (بعد OTA)</string>
     <string name="apm_webui_open">فتح</string>
@@ -209,4 +202,24 @@
     <string name="crash_handle_title">لقد تحطمت.</string>
     <string name="crash_handle_copy">نسخ سجل الأعطال</string>
     <string name="crash_handle_copied">تم نسخ سجل الأعطال إلى الحافظة.</string>
+    <string name="about_github" translatable="false">GitHub</string>
+    <string name="about_weblate" translatable="false">Weblate</string>
+    <string name="apm_module_undo_uninstall_failed">Failed to undo uninstall: %s</string>
+    <string name="apm_module_undo_uninstall_success">Successfully canceled uninstall of %s</string>
+    <string name="apm_undo">Undo</string>
+    <string name="back">Back</string>
+    <string name="learn_more">Learn more</string>
+    <string name="meta_module_disabled">module not mounted, because metamodule disabled</string>
+    <string name="meta_module_removed">module not mounted, because metamodule being delete</string>
+    <string name="metamodule_uninstall_confirm">&quot;Are you sure you want to uninstall module %s? This action will affect all modules, and certain features provided by the metamodule (such as mounting) will no longer work.  &quot;</string>
+    <string name="no_meta_module_installed">module not mounted, because metamodule not installed</string>
+    <string name="patch_custom_superkey">Custom SuperKey</string>
+    <string name="patch_custom_superkey_summary">still can use superkey manager root, now we are verify manager signature by kernel</string>
+    <string name="search">Search</string>
+    <string name="search_apps">Search Apps</string>
+    <string name="search_modules">Search modules</string>
+    <string name="settings_sucompat">Legacy su compatibility</string>
+    <string name="settings_sucompat_summary">Enable path_probe hooks for legacy su compatibility</string>
+    <string name="warning_of_meta_module_summary">This module want to mount /system, meta module will handle that. Otherwise, it might not work.</string>
+    <string name="warning_of_meta_module_title">Require Meta module</string>
 </resources>

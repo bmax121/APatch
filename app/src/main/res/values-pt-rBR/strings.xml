@@ -22,7 +22,7 @@
     <string name="about">Sobre</string>
     <string name="home_learn_apatch">Saiba mais sobre o APatch</string>
     <string name="home_click_to_learn_apatch">Conheça os recursos do APatch e como usá-lo</string>
-    <string name="about_source_code"><![CDATA[<p>Veja o código-fonte no %1$s<p/>Participe do nosso canal do %2$s<p/>Participe do nosso grupo do %3$s]]></string>
+    <string name="about_source_code">&lt;p&gt;Veja o código-fonte no %1$s&lt;p/&gt;Participe do nosso canal do %2$s&lt;p/&gt;Participe do nosso grupo do %3$s</string>
     <string name="send_log">Reportar registros</string>
     <string name="safe_mode">Modo de segurança</string>
     <string name="super_key">SuperKey</string>
@@ -40,8 +40,6 @@
     <string name="home_su_path">Su executável</string>
     <string name="apatch_version_update">Versão: %s -&gt; %s</string>
     <string name="home_apatch_version">Versão do APatch</string>
-    <string name="home_auth_key_title">Inserir SuperKey</string>
-    <string name="home_auth_key_desc">Iniciar após a certificação</string>
     <string name="home_ap_cando_install">Instalar</string>
     <string name="home_ap_cando_update">Atualizar</string>
     <string name="home_ap_cando_uninstall">Desinstalar</string>
@@ -87,7 +85,6 @@
     <string name="apm_downloading">Baixando módulo %s</string>
     <string name="apm_start_downloading">Começando a baixar %s</string>
     <string name="apm_new_version_available">Nova versão %s está disponível, clique para atualizar.</string>
-    <string name="clear_super_key">Limpar SuperKey</string>
     <string name="apm_not_installed">AndroidPatch não instalado</string>
     <string name="settings_app_language">Idioma</string>
     <string name="system_default">Padrão do sistema</string>
@@ -145,18 +142,14 @@
     <string name="mode_select_page_install_inactive_slot_warning">Seu dispositivo será **FORÇADO** a inicializar no slot inativo atual após uma reinicialização!
 \nSó use esta opção após a conclusão do OTA.
 \nDeseja continuar?</string>
-    <string name="home_dialog_auth_fail_title">Falha na autenticação</string>
     <string name="mode_select_page_select_file">Selecionar imagem boot para patch</string>
     <string name="mode_select_page_title">Instalar</string>
     <string name="mode_select_page_patch_and_install">Patch e instalação</string>
-    <string name="home_dialog_auth_fail_content">Não foi possível autenticar a SuperKey, portanto o APatch não pode funcionar corretamente. \nAqui estão alguns possíveis motivos para a falha de autenticação:\n1. Você não fez patch do boot.img com KernelPatch.\n2. O boot.img corrigido não foi flashado.\n3. A SuperKey está incorreta ou contém caracteres especiais.\n4. Seu dispositivo não oferece suporte ao APatch e KernelPatch.\n\nPor favor, verifique e tente novamente. Se ainda houver problemas, você pode fazer perguntas na página de problemas do repositório oficial.</string>
     <string name="home_more_menu_feedback_or_suggestion">Feedback ou sugestão</string>
     <string name="home_more_menu_about">Sobre</string>
     <string name="apm_webui_open">Abrir</string>
     <string name="enable_web_debugging">Ativar depuração do WebView</string>
-    <string name="settings_donot_store_superkey_summary">Autentique a SuperKey sempre que o gerenciador iniciar</string>
     <string name="enable_web_debugging_summary">Pode ser usado para depurar o WebUI. Por favor, ative somente quando necessário.</string>
-    <string name="settings_donot_store_superkey">Não armazenar a SuperKey no local</string>
     <string name="home_new_apatch_found">Nova versão %s está disponível, clique para atualizar.</string>
     <string name="patch_mode_install_to_next_slot">Modo: Instalar no slot inativo (Após o OTA)</string>
     <string name="home_device_info">Dispositivo</string>
@@ -209,8 +202,24 @@
     <string name="crash_handle_title">O app travou…</string>
     <string name="crash_handle_copy">Copiar registro de falhas</string>
     <string name="log_saved">Registros salvos</string>
-    <string name="settings_lite_mode">Ativar Modo lite</string>
-    <string name="settings_lite_mode_mode_summary">As funções do APMódulo podem apresentar falhas após serem ativadas, mas em alguns casos ainda podem evitar a detecção. Reinicialização necessária.</string>
-    <string name="settings_force_overlayfs_mode_summary">Use OverlayFS para montar os APMódulos em vez do Magic Mount, quando houver suporte no kernel. Reinicialização necessária.</string>
-    <string name="settings_force_overlayfs_mode">Forçar o uso do OverlayFS</string>
+    <string name="about_github" translatable="false">GitHub</string>
+    <string name="about_weblate" translatable="false">Weblate</string>
+    <string name="apm_module_undo_uninstall_failed">Failed to undo uninstall: %s</string>
+    <string name="apm_module_undo_uninstall_success">Successfully canceled uninstall of %s</string>
+    <string name="apm_undo">Undo</string>
+    <string name="back">Back</string>
+    <string name="learn_more">Learn more</string>
+    <string name="meta_module_disabled">module not mounted, because metamodule disabled</string>
+    <string name="meta_module_removed">module not mounted, because metamodule being delete</string>
+    <string name="metamodule_uninstall_confirm">&quot;Are you sure you want to uninstall module %s? This action will affect all modules, and certain features provided by the metamodule (such as mounting) will no longer work.  &quot;</string>
+    <string name="no_meta_module_installed">module not mounted, because metamodule not installed</string>
+    <string name="patch_custom_superkey">Custom SuperKey</string>
+    <string name="patch_custom_superkey_summary">still can use superkey manager root, now we are verify manager signature by kernel</string>
+    <string name="search">Search</string>
+    <string name="search_apps">Search Apps</string>
+    <string name="search_modules">Search modules</string>
+    <string name="settings_sucompat">Legacy su compatibility</string>
+    <string name="settings_sucompat_summary">Enable path_probe hooks for legacy su compatibility</string>
+    <string name="warning_of_meta_module_summary">This module want to mount /system, meta module will handle that. Otherwise, it might not work.</string>
+    <string name="warning_of_meta_module_title">Require Meta module</string>
 </resources>

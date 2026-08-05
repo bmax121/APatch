@@ -12,11 +12,10 @@
     <string name="settings_app_language">Jezik</string>
     <string name="home_learn_apatch">Nauči o APatch-u</string>
     <string name="home_click_to_learn_apatch">Nauči više o značajkama APatch i kako ih koristiti</string>
-    <string name="about_source_code">Pogledaj izvorni kod na %1$s<br/>Pridruži se na našem %2$s kanalu</string>
+    <string name="about_source_code">Pogledaj izvorni kod na %1$s</string>
     <string name="send_log">Pošalji logove</string>
     <string name="safe_mode">Sigurni način</string>
     <string name="super_key">SuperKey</string>
-    <string name="clear_super_key">Izbriši SuperKey</string>
     <string name="patch_set_superkey">Postavi SuperKey</string>
     <string name="home_patch_next_step">Sljedeći korak</string>
     <string name="home_not_installed">Nije instalirano</string>
@@ -31,7 +30,6 @@
     <string name="apatch_version_update">Inačica:
 \n%s -&gt; %s</string>
     <string name="home_su_path">su: %s</string>
-    <string name="home_auth_key_desc">Pokreni nakon certificiranja</string>
     <string name="home_ap_cando_install">Instaliraj</string>
     <string name="home_ap_cando_update">Ažuriraj</string>
     <string name="home_ap_cando_uninstall">De-instaliraj</string>
@@ -48,7 +46,7 @@
     <string name="kpm">KPModule</string>
     <string name="kpm_load_toast_succ">Učitavanje završeno</string>
     <string name="kpm_load_toast_failed">Učitavanje neusješno</string>
-    <string name="kpm_unload_confirm">Odčitaj \"%s\" modul?</string>
+    <string name="kpm_unload_confirm">Odčitaj \&quot;%s\&quot; modul?</string>
     <string name="kpm_unload">Odčitaj</string>
     <string name="kpm_apm_empty">Nijedan modul očitan</string>
     <string name="kpm_version">Inačica</string>
@@ -63,7 +61,7 @@
     <string name="su_refresh">Osvježi</string>
     <string name="apm">APModule</string>
     <string name="apm_not_installed">AndroidPatch nije instaliran</string>
-    <string name="apm_failed_to_enable">Nije bilo moguće uključit \"%s\" modul</string>
+    <string name="apm_failed_to_enable">Nije bilo moguće uključit \&quot;%s\&quot; modul</string>
     <string name="apm_empty">Nema modula instalirana</string>
     <string name="apm_remove">Ukloni</string>
     <string name="apm_install">Instaliraj</string>
@@ -75,13 +73,12 @@
     <string name="patch_warnning">Instalacija može biti riskantna. Sačuvaj osobne podatke.</string>
     <string name="kpm_load">Učitaj</string>
     <string name="home_apatch_version">Apatch: %s</string>
-    <string name="home_auth_key_title">Unesi SuperKey</string>
     <string name="home_selinux_status_enforcing">Enforcing</string>
     <string name="home_selinux_status_unknown">Nepoznato</string>
     <string name="kpm_kp_not_installed">KernelPatch nije instaliran</string>
-    <string name="apm_failed_to_disable">Nije bilo moguće isključiti \"%s\" modul</string>
+    <string name="apm_failed_to_disable">Nije bilo moguće isključiti \&quot;%s\&quot; modul</string>
     <string name="apm_desc">Opis</string>
-    <string name="apm_uninstall_confirm">Deinstaliraj \"%s\" modul?</string>
+    <string name="apm_uninstall_confirm">Deinstaliraj \&quot;%s\&quot; modul?</string>
     <string name="apm_uninstall_success">%s deinstaliran</string>
     <string name="apm_uninstall_failed">Nije bilo moguće deinstalirati %s</string>
     <string name="apm_version">Verzija</string>
@@ -91,7 +88,7 @@
     <string name="apm_reboot_to_apply">Ponovno pokreni za promjene</string>
     <string name="apm_changelog">Lista promjene</string>
     <string name="apm_update">Ažuriraj</string>
-    <string name="apm_downloading">Preuzimanje \"%s\" modula…</string>
+    <string name="apm_downloading">Preuzimanje \&quot;%s\&quot; modula…</string>
     <string name="kernel_patch">KernelPatch</string>
     <string name="android_patch">AndroidPatch</string>
     <string name="settings_global_namespace_mode_summary">Sve root sesije koriste globalni mount namespace</string>
@@ -139,18 +136,14 @@
     <string name="home_dialog_uninstall_ap_only">Deinstaliraj AndroidPatch</string>
     <string name="mode_select_page_install_inactive_slot_warning">Vaš uređaj će biti **FORSIRAN* da pokrene trenutni inaktivni slot nakon restarta!\nSamo koristite ovu opcije nakon što je OTA nadogradnje dovršena.\nNastaviti?</string>
     <string name="home_dialog_uninstall_all">Deinstaliraj sve</string>
-    <string name="home_dialog_auth_fail_title">Autentikacija nije uspjela</string>
     <string name="home_dialog_uninstall_title">Deinstaliraj</string>
     <string name="kpm_control_paramters">Parametri</string>
     <string name="kpm_control_outMsg">Poruka</string>
     <string name="kpm_control_ok">Operacija uspješna!</string>
     <string name="patch_item_kernel">Jezgra</string>
-    <string name="settings_donot_store_superkey_summary">Autentificiraj SuperKey pri svakom pokretanju upravitelja</string>
-    <string name="settings_donot_store_superkey">Nemoj spremati SuperKey u local</string>
     <string name="hide_apatch_dialog_new_manager_name">Novo ime upravitelja</string>
     <string name="settings_night_mode_follow_sys_summary">Automatski prebaci na tamni prikaz ovisno o postavkama sistema</string>
     <string name="patch_item_skey">SuperKey</string>
-    <string name="home_dialog_auth_fail_content">Nije moguće autentificirati SuperKey, stoga APatch ne može pravilno funkcionirati.\nOvo su neki od mogućih uzroka neuspjeha autentifikacije:\n1.</string>
     <string name="home_more_menu_feedback_or_suggestion">Povratne informacije ili prijedlozi</string>
     <string name="settings_night_theme_enabled">Uključi tamni prikaz</string>
     <string name="settings_custom_color_theme">Boje prikaza</string>
@@ -200,4 +193,33 @@
     <string name="crash_handle_copied">Log rušenja kopiran u međuspremnik.</string>
     <string name="cyan_theme">Cijan</string>
     <string name="about_app_version">Verzija %1$s</string>
+    <string name="about_app_desc">Kernel root solution with only a stripped kernel image, providing the ability of mounting system module and hooking kernel function.</string>
+    <string name="about_github" translatable="false">GitHub</string>
+    <string name="about_powered_by">Powered by %1$s</string>
+    <string name="about_weblate" translatable="false">Weblate</string>
+    <string name="apm_module_undo_uninstall_failed">Failed to undo uninstall: %s</string>
+    <string name="apm_module_undo_uninstall_success">Successfully canceled uninstall of %s</string>
+    <string name="apm_undo">Undo</string>
+    <string name="back">Back</string>
+    <string name="home_kpatch_version">KernelPatch version</string>
+    <string name="kpm_embed">Embed</string>
+    <string name="learn_more">Learn more</string>
+    <string name="meta_module_disabled">module not mounted, because metamodule disabled</string>
+    <string name="meta_module_removed">module not mounted, because metamodule being delete</string>
+    <string name="metamodule_uninstall_confirm">&quot;Are you sure you want to uninstall module %s? This action will affect all modules, and certain features provided by the metamodule (such as mounting) will no longer work.  &quot;</string>
+    <string name="mode_select_page_select_file">Select a boot image to patch</string>
+    <string name="no_meta_module_installed">module not mounted, because metamodule not installed</string>
+    <string name="patch_custom_superkey">Custom SuperKey</string>
+    <string name="patch_custom_superkey_summary">still can use superkey manager root, now we are verify manager signature by kernel</string>
+    <string name="patch_embed_kpm_btn">Embed KPM</string>
+    <string name="patch_item_bootimg_slot">Slot:</string>
+    <string name="patch_item_kpimg">kpimg</string>
+    <string name="patch_item_new_extra_kpm">Embed new</string>
+    <string name="search">Search</string>
+    <string name="search_apps">Search Apps</string>
+    <string name="search_modules">Search modules</string>
+    <string name="settings_sucompat">Legacy su compatibility</string>
+    <string name="settings_sucompat_summary">Enable path_probe hooks for legacy su compatibility</string>
+    <string name="warning_of_meta_module_summary">This module want to mount /system, meta module will handle that. Otherwise, it might not work.</string>
+    <string name="warning_of_meta_module_title">Require Meta module</string>
 </resources>

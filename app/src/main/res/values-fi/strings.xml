@@ -2,7 +2,7 @@
 <resources>
     <string name="settings">Asetukset</string>
     <string name="kernel_patch">KernelPatch</string>
-    <string name="reboot">"Käynnistä uudelleen "</string>
+    <string name="reboot">&quot;Käynnistä uudelleen &quot;</string>
     <string name="reboot_recovery">Käynnistä uudelleen palautukseen</string>
     <string name="reboot_bootloader">Käynnistä uudelleen käynnistyslataimeen</string>
     <string name="reboot_download">Käynnistä uudelleen ladataksesi</string>
@@ -19,7 +19,6 @@
     <string name="home_ap_cando_update">Päivitä</string>
     <string name="patch">Korjaus</string>
     <string name="patch_item_set_skey_label">SuperKeyn tulee olla 8–63 merkkiä pitkä ja sisältää numeroita ja kirjaimia, mutta ei erikoismerkkejä.</string>
-    <string name="clear_super_key">Tyhjennä SuperKey</string>
     <string name="home_device_info">Laite</string>
     <string name="patch_mode_patch_and_install">Tila: Korjaa ja asenna</string>
     <string name="apm_update">Päivitä</string>
@@ -34,7 +33,7 @@
     <string name="settings_check_update_summary">Tarkista päivitysten varalta automaattisesti sovelluksen avaamisen yhteydessä</string>
     <string name="home_learn_apatch">Opettele APatch</string>
     <string name="home_click_to_learn_apatch">Tutustu APatchin ominaisuuksiin ja sen käyttöön</string>
-    <string name="about_source_code"><![CDATA[<p>Tarkastele lähdekoodia %1$s<p/>Liity %2$s-kanavallemme<p/>Liity %3$s-ryhmäämme]]>:ssa</string>
+    <string name="about_source_code">&lt;p&gt;Tarkastele lähdekoodia %1$s&lt;p/&gt;Liity %2$s-kanavallemme&lt;p/&gt;Liity %3$s-ryhmäämme:ssa</string>
     <string name="send_log">Lähetä lokit</string>
     <string name="save_log">Tallenna lokit</string>
     <string name="log_saved">Lokit tallennettu</string>
@@ -54,8 +53,6 @@
     <string name="apatch_version_update">Versio: %s -&gt; %s</string>
     <string name="kpatch_version_update">Versio: %s -&gt; %s</string>
     <string name="kpatch_shadow_path_title">kpatch</string>
-    <string name="home_auth_key_title">Syötä SuperKey</string>
-    <string name="home_auth_key_desc">Käynnistä sertifioinnin jälkeen</string>
     <string name="home_kpatch_info_title">Tiedot</string>
     <string name="home_ap_cando_install">Asenna</string>
     <string name="home_ap_cando_uninstall">Poista asennus</string>
@@ -104,7 +101,7 @@
     <string name="kpm_add_kpm">Lisää KPM</string>
     <string name="kpm_load">Lataa</string>
     <string name="kpm_load_toast_failed">Lataus epäonnistui</string>
-    <string name="kpm_unload_confirm">Kumotaanko \"%s\"-moduulin lataus?</string>
+    <string name="kpm_unload_confirm">Kumotaanko \&quot;%s\&quot;-moduulin lataus?</string>
     <string name="kpm_unload">Kumoa lataus</string>
     <string name="kpm_control">Hallinta</string>
     <string name="kpm_apm_empty">Ei ladattu moduulia</string>
@@ -113,14 +110,12 @@
     <string name="kpm_author">Tekijä</string>
     <string name="kpm_desc">Kuvaus</string>
     <string name="apm_desc">Kuvaus</string>
-    <string name="apm_downloading">Ladataan \"%s\" -moduulia…</string>
+    <string name="apm_downloading">Ladataan \&quot;%s\&quot; -moduulia…</string>
     <string name="kpm_args">Args</string>
     <string name="hide_apatch_manager_summary">Asenna uusi hallintasovellus satunnaisen tunnuksen ja mukautetun nimikkeen kanssa</string>
     <string name="enable_web_debugging">Ota WebView-viankorjaus käyttöön</string>
-    <string name="settings_donot_store_superkey_summary">Todenna SuperKey aina, kun hallinta käynnistyy</string>
     <string name="mode_select_page_install_inactive_slot_warning">Laitteesi **pakottaa** käynnistymään nykyiseen ei-aktiiviseen kiinnittimeen uudelleenkäynnistyksen jälkeen!\nKäytä tätä vaihtoehtoa vasta OTA:n jälkeen.\nJatketaanko?</string>
     <string name="kpm_control_outMsg">Viesti</string>
-    <string name="home_dialog_auth_fail_content">SuperKeyä ei voi todentaa, joten APatch ei voi toimia kunnolla.\nTässä on joitain mahdollisia syitä todennuksen epäonnistumiseen:\n1. Et korjannut boot.img:ia KernelPatchilla.\n2. Korjattuun boot.img:iin flash-toimintaa ei ole sovellettu.\n3. SuperKey on väärä tai sisältää erikoismerkkejä.\n4. Laitteesi ei tue APatchia ja KernelPatchia.\n\nTarkista ja yritä uudelleen. Jos ongelmia ilmenee edelleen, voit aina esittää kysymyksiä virallisen tietovaraston ongelmasivulla.</string>
     <string name="about_app_desc">Kernel-juuriratkaisu, jossa on vain poistettu ytimen kuva, joka tarjoaa mahdollisuuden asentaa järjestelmämoduulia ja kiinnittää kernel-toiminnon.</string>
     <string name="kpm_control_ok">Toiminta onnistui!</string>
     <string name="settings_night_mode_follow_sys_summary">Vaihda automaattisesti tummaan teemaan järjestelmäasetusten mukaan</string>
@@ -135,12 +130,12 @@
     <string name="su_refresh">Virkistä</string>
     <string name="apm">APModule</string>
     <string name="apm_not_installed">AndroidPatch ei asennettu</string>
-    <string name="apm_failed_to_disable">Moduulia \"%s\" ei voitu kytkeä pois päältä</string>
-    <string name="apm_failed_to_enable">Moduulia \"%s\" ei voitu kytkeä päälle</string>
+    <string name="apm_failed_to_disable">Moduulia \&quot;%s\&quot; ei voitu kytkeä pois päältä</string>
+    <string name="apm_failed_to_enable">Moduulia \&quot;%s\&quot; ei voitu kytkeä päälle</string>
     <string name="apm_empty">Ei moduulia asennettu</string>
     <string name="apm_remove">Poista</string>
     <string name="apm_install">Asenna</string>
-    <string name="apm_uninstall_confirm">Poistetaanko \"%s\"-moduulin asennus?</string>
+    <string name="apm_uninstall_confirm">Poistetaanko \&quot;%s\&quot;-moduulin asennus?</string>
     <string name="apm_uninstall_success">%s:n asennus poistettu</string>
     <string name="apm_uninstall_failed">%s:n asennusta ei voitu poistaa</string>
     <string name="apm_version">Versio</string>
@@ -160,13 +155,11 @@
     <string name="apm_webui_open">Avaa</string>
     <string name="apm_action">Toiminta</string>
     <string name="enable_web_debugging_summary">Voidaan käyttää WebUI-viankorjaukseen. Ota käyttöön vain tarvittaessa.</string>
-    <string name="settings_donot_store_superkey">Älä säilytä SuperKeyä paikallisesti</string>
     <string name="home_new_apatch_found">Uusi versio %s on saatavilla, päivitä napsauttamalla.</string>
     <string name="mode_select_page_title">Asenna</string>
     <string name="mode_select_page_patch_and_install">Korjaa ja asenna</string>
     <string name="mode_select_page_select_file">Valitse korjattava käynnistyskuva</string>
     <string name="mode_select_page_install_inactive_slot">Asenna ei-aktiiviseen kiinnittimeen (OTA:n jälkeen)</string>
-    <string name="home_dialog_auth_fail_title">Todennus epäonnistui</string>
     <string name="home_more_menu_feedback_or_suggestion">Palaute tai ehdotus</string>
     <string name="home_more_menu_about">Tietoja</string>
     <string name="home_dialog_uninstall_title">Poista asennus</string>
@@ -206,4 +199,25 @@
     <string name="crash_handle_title">Sovellus kaatui…</string>
     <string name="crash_handle_copy">Kopioi kaatumisloki</string>
     <string name="crash_handle_copied">Kaatumisloki kopioittu leikepöydälle.</string>
+    <string name="about_github" translatable="false">GitHub</string>
+    <string name="about_weblate" translatable="false">Weblate</string>
+    <string name="apm_module_undo_uninstall_failed">Failed to undo uninstall: %s</string>
+    <string name="apm_module_undo_uninstall_success">Successfully canceled uninstall of %s</string>
+    <string name="apm_undo">Undo</string>
+    <string name="app_name" translatable="false">APatch</string>
+    <string name="back">Back</string>
+    <string name="learn_more">Learn more</string>
+    <string name="meta_module_disabled">module not mounted, because metamodule disabled</string>
+    <string name="meta_module_removed">module not mounted, because metamodule being delete</string>
+    <string name="metamodule_uninstall_confirm">&quot;Are you sure you want to uninstall module %s? This action will affect all modules, and certain features provided by the metamodule (such as mounting) will no longer work.  &quot;</string>
+    <string name="no_meta_module_installed">module not mounted, because metamodule not installed</string>
+    <string name="patch_custom_superkey">Custom SuperKey</string>
+    <string name="patch_custom_superkey_summary">still can use superkey manager root, now we are verify manager signature by kernel</string>
+    <string name="search">Search</string>
+    <string name="search_apps">Search Apps</string>
+    <string name="search_modules">Search modules</string>
+    <string name="settings_sucompat">Legacy su compatibility</string>
+    <string name="settings_sucompat_summary">Enable path_probe hooks for legacy su compatibility</string>
+    <string name="warning_of_meta_module_summary">This module want to mount /system, meta module will handle that. Otherwise, it might not work.</string>
+    <string name="warning_of_meta_module_title">Require Meta module</string>
 </resources>
