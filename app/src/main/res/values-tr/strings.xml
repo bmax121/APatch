@@ -16,9 +16,9 @@
     <string name="apm_uninstall_confirm">\&quot;%s\&quot; modülü kaldırılsın mı?</string>
     <string name="su_pkg_excluded_setting_title">Değişiklikleri hariç tut</string>
     <string name="reboot_download">İndirme modunda yeniden başlat</string>
-    <string name="home_click_to_learn_apatch">APatch\&apos;in özelliklerini ve nasıl kullanılacağını öğrenin</string>
+    <string name="home_click_to_learn_apatch">"APatch\'in özelliklerini ve nasıl kullanılacağını öğrenin"</string>
     <string name="apm_version">Sürüm</string>
-    <string name="su_pkg_excluded_setting_summary">Bu seçeneğin etkinleştirilmesi APatch\&apos;in bu uygulamanın modülleri tarafından değiştirilmiş herhangi bir dosyayı geri yüklemesine izin verecektir.</string>
+    <string name="su_pkg_excluded_setting_summary">"Bu seçeneğin etkinleştirilmesi APatch\'in bu uygulamanın modülleri tarafından değiştirilmiş herhangi bir dosyayı geri yüklemesine izin verecektir."</string>
     <string name="reboot_edl">EDL modunda yeniden başlat</string>
     <string name="home_installing">Kuruluyor</string>
     <string name="apm_start_downloading">İndirme başladı: \&quot;%s\&quot;</string>
@@ -39,7 +39,7 @@
     <string name="home_ap_cando_install">Kur</string>
     <string name="super_key">Süper Anahtar</string>
     <string name="reboot_recovery">Kurtarma modunda yeniden başlat</string>
-    <string name="home_learn_apatch">APatch\&apos;i öğrenin</string>
+    <string name="home_learn_apatch">"APatch\'i öğrenin"</string>
     <string name="apm_failed_to_disable">\&quot;%s \&quot;modülü devre dışı bırakılamadı</string>
     <string name="kernel_patch">KernelPatch</string>
     <string name="home_click_to_install">Kurmak için tıklayın</string>
@@ -55,7 +55,7 @@
     <string name="kpm_author">Geliştirici</string>
     <string name="apm_failed_to_enable">\&quot;%s\&quot; modülü etkinleştirilemedi</string>
     <string name="home">Ana sayfa</string>
-    <string name="patch_set_superkey">Süper Anahtar\&apos;ı ayarla</string>
+    <string name="patch_set_superkey">"Süper Anahtar\'ı ayarla"</string>
     <string name="apm_downloading">\&quot;%s\&quot;modülü indiriliyor…</string>
     <string name="su_hide_system_apps">Sistem uygulamalarını gizle</string>
     <string name="home_su_path">su programı</string>
@@ -67,7 +67,7 @@
     <string name="home_selinux_status_disabled">Devredışı</string>
     <string name="settings">Ayarlar</string>
     <string name="apm_new_version_available">Yeni %s sürümü mevcut, yükseltmek için tıklayın.</string>
-    <string name="apatch_version_update">Sürüm: %s -&gt; %s</string>
+    <string name="apatch_version_update">Sürüm: %1$s -&gt; %2$s</string>
     <string name="home_working">Çalışıyor 😋</string>
     <string name="apm_empty">Hiç modül kurulmadı</string>
     <string name="kpm_load">Yükle</string>
@@ -76,11 +76,11 @@
     <string name="home_kernel">Kernel versiyon</string>
     <string name="home_not_installed">Kurulu değil</string>
     <string name="kpm">KP Modül</string>
-    <string name="home_selinux_status_enforcing">Enforcing</string>
+    <string name="home_selinux_status_enforcing">Kısıtlayıcı</string>
     <string name="kpm_license">Lisans</string>
     <string name="reboot_bootloader">Önyükleyici modunda yeniden başlat</string>
     <string name="kpm_apm_empty">Yüklü modül yok</string>
-    <string name="about_source_code">&lt;p&gt;%1$s üzerinden kaynak koduna göz atın&lt;p/&gt;%2$s kanalımıza katılın&lt;p/&gt;%2$s grubumuza katılın</string>
+    <string name="about_source_code">&lt;p&gt;%1$s üzerinden kaynak koduna göz atın&lt;p/&gt;%2$s kanalımıza katılın&lt;p/&gt;%3$s grubumuza katılın</string>
     <string name="home_manager_version">Yönetici sürümü</string>
     <string name="kpm_load_toast_succ">Başarıyla yüklendi</string>
     <string name="apm_author">Geliştirici</string>
@@ -92,7 +92,7 @@
     <string name="settings_global_namespace_mode">Küresel ad alanı modu</string>
     <string name="settings_global_namespace_mode_summary">Tüm root oturumları global bağlama ad alanını kullanır</string>
     <string name="settings_clear_super_key_dialog">Gerçekten devam etmek istiyor musunuz?</string>
-    <string name="kpatch_version_update">Sürüm: %s -&gt; %s</string>
+    <string name="kpatch_version_update">Sürüm: %1$s -&gt; %2$s</string>
     <string name="kpatch_shadow_path_title">kpatch</string>
     <string name="home_ap_cando_reboot">Yeniden başlat</string>
     <string name="patch_config_title">Yamalar</string>
@@ -138,13 +138,13 @@
     <string name="failure">Başarısız</string>
     <string name="home_new_apatch_found">Yeni sürüm var: %s, Yükseltmek için tıklayın</string>
     <string name="settings_check_update">Güncellemeleri denetle</string>
-    <string name="patch_mode_install_to_next_slot">Mod: Aktif olmayan yuvaya kur (OTA\&apos;dan sonra)</string>
+    <string name="patch_mode_install_to_next_slot">"Mod: Aktif olmayan yuvaya kur (OTA\'dan sonra)"</string>
     <string name="mode_select_page_patch_and_install">Yama ve Kur</string>
     <string name="mode_select_page_select_file">Yama yapılacak bir boot (önyükleme) imajı seçin.</string>
     <string name="home_more_menu_feedback_or_suggestion">Geri bildirim veya öneri</string>
     <string name="home_more_menu_about">Hakkında</string>
     <string name="mode_select_page_title">Kur</string>
-    <string name="mode_select_page_install_inactive_slot">Etkin olmayan yuvaya kur (OTA\&apos;dan sonra)</string>
+    <string name="mode_select_page_install_inactive_slot">"Etkin olmayan yuvaya kur (OTA\'dan sonra)"</string>
     <string name="mode_select_page_install_inactive_slot_warning">Aygıtınız yeniden başlatıldıktan sonra geçerli etkin olmayan yuvaya önyükleme yapmaya **ZORLANACAK**!
 \nBu seçeneği yalnızca OTA tamamlandıktan sonra kullanın.
 \nDevam edilsin mi?</string>
@@ -158,7 +158,7 @@
     <string name="home_device_info">Aygıt</string>
     <string name="home_kpatch_version">KernelPatch sürümü</string>
     <string name="home_dialog_uninstall_title">Kaldır</string>
-    <string name="home_dialog_uninstall_ap_only">AndroidPatch\&apos;i kaldır</string>
+    <string name="home_dialog_uninstall_ap_only">"AndroidPatch\'i kaldır"</string>
     <string name="kpm_control">Denetim</string>
     <string name="kpm_control_outMsg">Mesaj</string>
     <string name="kpm_control_failed">İşlem başarısız!</string>
@@ -204,22 +204,32 @@
     <string name="crash_handle_copied">Çökme raporu panoya kopyalandı.</string>
     <string name="about_github" translatable="false">GitHub</string>
     <string name="about_weblate" translatable="false">Weblate</string>
-    <string name="apm_module_undo_uninstall_failed">Failed to undo uninstall: %s</string>
-    <string name="apm_module_undo_uninstall_success">Successfully canceled uninstall of %s</string>
-    <string name="apm_undo">Undo</string>
-    <string name="back">Back</string>
-    <string name="learn_more">Learn more</string>
-    <string name="meta_module_disabled">module not mounted, because metamodule disabled</string>
-    <string name="meta_module_removed">module not mounted, because metamodule being delete</string>
-    <string name="metamodule_uninstall_confirm">&quot;Are you sure you want to uninstall module %s? This action will affect all modules, and certain features provided by the metamodule (such as mounting) will no longer work.  &quot;</string>
-    <string name="no_meta_module_installed">module not mounted, because metamodule not installed</string>
-    <string name="patch_custom_superkey">Custom SuperKey</string>
-    <string name="patch_custom_superkey_summary">still can use superkey manager root, now we are verify manager signature by kernel</string>
-    <string name="search">Search</string>
-    <string name="search_apps">Search Apps</string>
-    <string name="search_modules">Search modules</string>
-    <string name="settings_sucompat">Legacy su compatibility</string>
+    <string name="apm_module_undo_uninstall_failed">Kaldırma işlemi geri alınamadı: %s</string>
+    <string name="apm_module_undo_uninstall_success">%s kaldırma işlemi başarıyla iptal edildi</string>
+    <string name="apm_undo">Geri al</string>
+    <string name="back">Geri</string>
+    <string name="learn_more">Daha fazla bilgi</string>
+    <string name="meta_module_disabled">modül bağlanmadı, çünkü metamodül devre dışı</string>
+    <string name="meta_module_removed">modül bağlanmadı, çünkü metamodül siliniyor</string>
+    <string name="metamodule_uninstall_confirm">&quot;%s modülünü kaldırmak istediğinize emin misiniz? Bu işlem tüm modülleri etkileyecek ve metamodül tarafından sağlanan bazı özellikler (bağlama gibi) artık çalışmayacak.  &quot;</string>
+    <string name="no_meta_module_installed">modül bağlanmadı, çünkü metamodül kurulu değil</string>
+    <string name="patch_custom_superkey">Özel Süper Anahtar</string>
+    <string name="patch_custom_superkey_summary">süper anahtar yöneticisi root kullanmaya devam edebilir, artık yönetici imzasını kernel ile doğruluyoruz</string>
+    <string name="search">Ara</string>
+    <string name="search_apps">Uygulamaları ara</string>
+    <string name="search_modules">Modülleri ara</string>
+    <string name="settings_sucompat">Eski su uyumluluğu</string>
     <string name="settings_sucompat_summary">Enable path_probe hooks for legacy su compatibility</string>
-    <string name="warning_of_meta_module_summary">This module want to mount /system, meta module will handle that. Otherwise, it might not work.</string>
-    <string name="warning_of_meta_module_title">Require Meta module</string>
+    <string name="warning_of_meta_module_summary">Bu modül /system\'i bağlamak istiyor, meta modül bunu halledecek. Aksi takdirde çalışmayabilir.</string>
+    <string name="warning_of_meta_module_title">Meta modül gerektirir</string>
+    <string name="settings_jailbreak_mode">Jailbreak modu</string>
+    <string name="settings_jailbreak_mode_summary">KernelPatch modülünü orijinal çekirdeğe yükler. Bu modda yama yapmaya izin verilmez.</string>
+    <string name="settings_jailbreak_soft_reboot">Yumuşak yeniden başlatma</string>
+    <string name="settings_jailbreak_soft_reboot_message">Modül yüklendi. Sistem şimdi yeniden başlatılsın mı?</string>
+    <string name="settings_jailbreak_loaded">Jailbreak modülü yüklendi</string>
+    <string name="settings_jailbreak_failed">Jailbreak modülü yüklenemedi</string>
+    <string name="jailbreak_no_patch">Jailbreak modunda yama yapmaya izin verilmez.</string>
+    <string name="jailbreak">Jailbreak</string>
+    <string name="jailbreak_triggered">Jailbreak tetiklendi. Root bekleyin, ardından yumuşak yeniden başlatma yapın.</string>
+    <string name="reboot_soft">Yumuşak yeniden başlatma</string>
 </resources>

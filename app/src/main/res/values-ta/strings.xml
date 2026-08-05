@@ -47,8 +47,8 @@
     <string name="home_installing">நிறுவுகிறது</string>
     <string name="kpatch_version">பதிப்பு: %s</string>
     <string name="apatch_version">பதிப்பு: %s</string>
-    <string name="apatch_version_update">பதிப்பு: %s -&gt; %s</string>
-    <string name="kpatch_version_update">பதிப்பு: %s -&gt; %s</string>
+    <string name="apatch_version_update">பதிப்பு: %1$s -&gt; %2$s</string>
+    <string name="kpatch_version_update">பதிப்பு: %1$s -&gt; %2$s</string>
     <string name="kpatch_shadow_path_title">கேஒட்டு</string>
     <string name="home_kpatch_info_title">தகவல்</string>
     <string name="home_ap_cando_install">நிறுவவும்</string>
@@ -201,23 +201,33 @@
     <string name="patch_item_kpimg">கேபிபட</string>
     <string name="about_github" translatable="false">GitHub</string>
     <string name="about_weblate" translatable="false">Weblate</string>
-    <string name="apm_module_undo_uninstall_failed">Failed to undo uninstall: %s</string>
-    <string name="apm_module_undo_uninstall_success">Successfully canceled uninstall of %s</string>
-    <string name="apm_undo">Undo</string>
+    <string name="apm_module_undo_uninstall_failed">நிறுவல் நீக்கத்தை மீளமைக்க முடியவில்லை: %s</string>
+    <string name="apm_module_undo_uninstall_success">%s இன் நிறுவல் நீக்கம் வெற்றிகரமாக ரத்து செய்யப்பட்டது</string>
+    <string name="apm_undo">மீளமை</string>
     <string name="app_name" translatable="false">APatch</string>
-    <string name="back">Back</string>
-    <string name="learn_more">Learn more</string>
-    <string name="meta_module_disabled">module not mounted, because metamodule disabled</string>
-    <string name="meta_module_removed">module not mounted, because metamodule being delete</string>
-    <string name="metamodule_uninstall_confirm">&quot;Are you sure you want to uninstall module %s? This action will affect all modules, and certain features provided by the metamodule (such as mounting) will no longer work.  &quot;</string>
-    <string name="no_meta_module_installed">module not mounted, because metamodule not installed</string>
-    <string name="patch_custom_superkey">Custom SuperKey</string>
-    <string name="patch_custom_superkey_summary">still can use superkey manager root, now we are verify manager signature by kernel</string>
-    <string name="search">Search</string>
-    <string name="search_apps">Search Apps</string>
-    <string name="search_modules">Search modules</string>
-    <string name="settings_sucompat">Legacy su compatibility</string>
-    <string name="settings_sucompat_summary">Enable path_probe hooks for legacy su compatibility</string>
-    <string name="warning_of_meta_module_summary">This module want to mount /system, meta module will handle that. Otherwise, it might not work.</string>
-    <string name="warning_of_meta_module_title">Require Meta module</string>
+    <string name="back">பின்செல்</string>
+    <string name="learn_more">மேலும் அறிக</string>
+    <string name="meta_module_disabled">மெட்டாமாட்யூல் முடக்கப்பட்டதால், தொகுதி ஏற்றப்படவில்லை</string>
+    <string name="meta_module_removed">மெட்டாமாட்யூல் நீக்கப்படுவதால், தொகுதி ஏற்றப்படவில்லை</string>
+    <string name="metamodule_uninstall_confirm">"தொகுதி %s ஐ நிறுவல் நீக்க விரும்புகிறீர்களா? இந்த செயல் அனைத்து தொகுதிகளையும் பாதிக்கும், மேலும் மெட்டாமாட்யூலால் வழங்கப்படும் சில அம்சங்கள் (மவுண்ட் செய்வது போன்றவை) இனி வேலை செய்யாது."</string>
+    <string name="no_meta_module_installed">மெட்டாமாட்யூல் நிறுவப்படாததால், தொகுதி ஏற்றப்படவில்லை</string>
+    <string name="patch_custom_superkey">தனிப்பயன் SuperKey</string>
+    <string name="patch_custom_superkey_summary">இன்னும் சூப்பர்கி மேலாளர் ரூட்டைப் பயன்படுத்தலாம், இப்போது கர்னல் மேலாளர் கையொப்பத்தை சரிபார்க்கிறது</string>
+    <string name="search">தேடு</string>
+    <string name="search_apps">பயன்பாடுகளைத் தேடு</string>
+    <string name="search_modules">தொகுதிகளைத் தேடு</string>
+    <string name="settings_sucompat">பழைய su இணக்கத்தன்மை</string>
+    <string name="settings_sucompat_summary">பழைய su இணக்கத்தை இயக்கு (su வேலை செய்யாதபோது)</string>
+    <string name="warning_of_meta_module_summary">இந்த தொகுதி /system ஐ மவுண்ட் செய்ய விரும்புகிறது, மெட்டா தொகுதி அதை கவனித்துக் கொள்ளும். இல்லையெனில், அது வேலை செய்யாமல் போகலாம்.</string>
+    <string name="warning_of_meta_module_title">மெட்டா தொகுதி தேவை</string>
+    <string name="settings_jailbreak_mode">ஜெயில்பிரேக் முறை</string>
+    <string name="settings_jailbreak_mode_summary">அசல் கர்னலில் KernelPatch தொகுதியை ஏற்றவும். இந்த முறையில் patching அனுமதிக்கப்படாது.</string>
+    <string name="settings_jailbreak_soft_reboot">மென்மையான மறுதொடக்கம்</string>
+    <string name="settings_jailbreak_soft_reboot_message">தொகுதி ஏற்றப்பட்டது. இப்போது கணினியை மறுதொடக்கம் செய்யவா?</string>
+    <string name="settings_jailbreak_loaded">ஜெயில்பிரேக் தொகுதி ஏற்றப்பட்டது</string>
+    <string name="settings_jailbreak_failed">ஜெயில்பிரேக் தொகுதியை ஏற்ற முடியவில்லை</string>
+    <string name="jailbreak_no_patch">ஜெயில்பிரேக் முறையில் patching அனுமதிக்கப்படாது.</string>
+    <string name="jailbreak">ஜெயில்பிரேக்</string>
+    <string name="jailbreak_triggered">ஜெயில்பிரேக் தூண்டப்பட்டது. root கிடைக்கும் வரை காத்திருந்து, பின்னர் மென்மையான மறுதொடக்கம் செய்யவும்.</string>
+    <string name="reboot_soft">மென்மையான மறுதொடக்கம்</string>
 </resources>

@@ -1,3 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="settings_sucompat">توافق su القديم</string>
+    <string name="settings_sucompat_summary">فعّل توافق su القديم (لما su ما يشتغل)</string>
+    <string name="settings_jailbreak_mode">وضع كسر الحماية</string>
+    <string name="settings_jailbreak_mode_summary">حمّل وحدة KernelPatch على نواة أصلية. ما في تثبيت بهالوضع.</string>
+    <string name="settings_jailbreak_soft_reboot">إعادة تشغيل ناعمة</string>
+    <string name="settings_jailbreak_soft_reboot_message">انتحملت الوحدة. هل نعيد تشغيل النظام هلق؟</string>
+    <string name="settings_jailbreak_loaded">انتحملت وحدة كسر الحماية</string>
+    <string name="settings_jailbreak_failed">فشل تحميل وحدة كسر الحماية</string>
+    <string name="jailbreak_no_patch">ما في تثبيت بوضع كسر الحماية.</string>
+    <string name="jailbreak">كسر الحماية</string>
+    <string name="jailbreak_triggered">تم تفعيل كسر الحماية. استنى صلاحية الروت وبعدها اعمل إعادة تشغيل ناعمة.</string>
+    <string name="reboot_soft">إعادة تشغيل ناعمة</string>
 </resources>

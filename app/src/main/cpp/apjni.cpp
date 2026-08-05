@@ -7,6 +7,8 @@
 
 #include <cstring>
 #include <vector>
+#include <unistd.h>
+#include <sys/wait.h>
 
 #include "apjni.hpp"
 #include "supercall.h"
@@ -265,6 +267,42 @@ jboolean nativeResetSuPath(JNIEnv *env, jobject /* this */, jstring super_key_js
     return sc_su_reset_path(super_key.get(), su_path.get()) == 0;
 }
 
+void nativeForkDontCareAndExecApd(JNIEnv *env, jclass /* this */, jstring apd_path_jstr, jstring module_path_jstr, jstring pkg_jstr) {
+    const auto apd_path = JUTFString(env, apd_path_jstr);
+    const auto module_path = JUTFString(env, module_path_jstr);
+    const auto pkg = JUTFString(env, pkg_jstr);
+
+    int pid = fork();
+    if (pid < 0) {
+        LOGE("fork");
+        return;
+    } else if (pid > 0) {
+        int status = 0;
+        if (TEMP_FAILURE_RETRY(waitpid(pid, &status, 0)) < 0) {
+            LOGE("waitpid");
+        }
+        return;
+    }
+
+    if (setuid(0) != 0) {
+        LOGE("setuid");
+        _exit(1);
+    }
+
+    pid = fork();
+    if (pid < 0) {
+        LOGE("fork 2");
+        _exit(1);
+    } else if (pid > 0) {
+        _exit(0);
+    }
+
+    execl(apd_path.get(), "apd", "late-load", "--magica", "5555", "--module", module_path.get(),
+          "--package-name", pkg.get(), (char *)nullptr);
+    LOGE("exec magica");
+    _exit(1);
+}
+
 JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void * /*reserved*/) {
     LOGI("Enter OnLoad");
 
@@ -306,7 +344,19 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void * /*reserved*/) {
         LOGE("Failed to register native methods");
         return JNI_FALSE;
     }
-    
+
+    auto magicaClazz = JNI_FindClass(env, "me/bmax/apatch/magica/AppZygotePreload");
+    if (magicaClazz.get() != nullptr) {
+        const static JNINativeMethod magicaMethods[] = {
+            {"forkDontCareAndExecApd", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V", reinterpret_cast<void *>(&nativeForkDontCareAndExecApd)},
+        };
+        if (JNI_RegisterNatives(env, magicaClazz, magicaMethods, sizeof(magicaMethods) / sizeof(magicaMethods[0])) < 0) [[unlikely]] {
+            LOGE("Failed to register magica native methods");
+        }
+    } else {
+        LOGE("Failed to find AppZygotePreload class");
+    }
+
     LOGI("JNI_OnLoad Done!");
     return JNI_VERSION_1_6;
 }

@@ -3,4 +3,16 @@
     <string name="su_pkg_excluded_setting_summary">\t</string>
     <string name="about_app_version">%1$s</string>
     <string name="about_app_desc">…\t\t…“”” </string>
+    <string name="settings_sucompat">توافق su القديم</string>
+    <string name="settings_sucompat_summary">فعّل توافق su القديم (عندما لا يعمل su)</string>
+    <string name="settings_jailbreak_mode">وضع كسر الحماية</string>
+    <string name="settings_jailbreak_mode_summary">قم بتحميل وحدة KernelPatch على نواة أصلية. لا يُسمح بالتثبيت في هذا الوضع.</string>
+    <string name="settings_jailbreak_soft_reboot">إعادة تشغيل ناعمة</string>
+    <string name="settings_jailbreak_soft_reboot_message">تم تحميل الوحدة. هل تريد إعادة تشغيل الإطار الآن؟</string>
+    <string name="settings_jailbreak_loaded">تم تحميل وحدة كسر الحماية</string>
+    <string name="settings_jailbreak_failed">فشل تحميل وحدة كسر الحماية</string>
+    <string name="jailbreak_no_patch">لا يُسمح بالتثبيت في وضع كسر الحماية.</string>
+    <string name="jailbreak">كسر الحماية</string>
+    <string name="jailbreak_triggered">تم تفعيل كسر الحماية. انتظر الحصول على صلاحيات الجذر ثم قم بإعادة تشغيل ناعمة.</string>
+    <string name="reboot_soft">إعادة تشغيل ناعمة</string>
 </resources>

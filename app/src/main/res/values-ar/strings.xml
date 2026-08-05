@@ -29,7 +29,7 @@
     <string name="home_install_unknown">غير مثبت أو مصادق عليه</string>
     <string name="home_need_update">اصدار جديد متوفر</string>
     <string name="apatch_version">الإصدار: %s</string>
-    <string name="apatch_version_update">الإصدار: %s -&gt; %s</string>
+    <string name="apatch_version_update">الإصدار: %1$s -&gt; %2$s</string>
     <string name="home_su_path">مستخدم خارق قابل للتنفيذ</string>
     <string name="home_apatch_version">إصدار APatch</string>
     <string name="home_ap_cando_install">تثبيت</string>
@@ -58,7 +58,7 @@
     <string name="kpm_version">الاصدار</string>
     <string name="kpm_license">الترخيص</string>
     <string name="kpm_author">المؤلِّف</string>
-    <string name="kpm_desc">Desc</string>
+    <string name="kpm_desc">الوصف</string>
     <string name="kpm_args">الحجج</string>
     <string name="su_pkg_excluded_setting_title">استثناء التعديلات</string>
     <string name="su_pkg_excluded_setting_summary">هذا الخيار سيسمح لـAPache باستعادة أي ملف معدل بواسطة هذا التطبيق.</string>
@@ -86,7 +86,7 @@
     <string name="apm_new_version_available">اضغط لتثبيت الإصدار الجديد %s.</string>
     <string name="apm_failed_to_disable">لم يمكن إيقاف إضافة \&quot;%s</string>
     <string name="apm_empty">لم يتم تثبيت أي إضافة</string>
-    <string name="apm_desc">Desc</string>
+    <string name="apm_desc">الوصف</string>
     <string name="apm_downloading">تنزيل إضافة %s…</string>
     <string name="patch">باتش</string>
     <string name="settings_global_namespace_mode_summary">جميع مساحات الروت تستخدم مساحة الاسم العامة للتثبيت</string>
@@ -95,7 +95,7 @@
     <string name="patch_item_extra_name">الاسم:</string>
     <string name="patch_item_set_skey_label">يجب أن يكون طول المفتاح الخارق ٧~٦٣ علامة ويتضمن كلاً من الأرقام والحروف بلا علامات مميزة</string>
     <string name="settings_clear_super_key_dialog">هل تريد حقًا المتابعة؟</string>
-    <string name="kpatch_version_update">الإصدار: %s -&gt; %s</string>
+    <string name="kpatch_version_update">الإصدار: %1$s -&gt; %2$s</string>
     <string name="kpatch_shadow_path_title">kpatch</string>
     <string name="home_kpatch_info_title">معلومات</string>
     <string name="home_ap_cando_reboot">إعادة تشغيل</string>
@@ -204,22 +204,32 @@
     <string name="crash_handle_copied">تم نسخ سجل الأعطال إلى الحافظة.</string>
     <string name="about_github" translatable="false">GitHub</string>
     <string name="about_weblate" translatable="false">Weblate</string>
-    <string name="apm_module_undo_uninstall_failed">Failed to undo uninstall: %s</string>
-    <string name="apm_module_undo_uninstall_success">Successfully canceled uninstall of %s</string>
-    <string name="apm_undo">Undo</string>
-    <string name="back">Back</string>
-    <string name="learn_more">Learn more</string>
-    <string name="meta_module_disabled">module not mounted, because metamodule disabled</string>
-    <string name="meta_module_removed">module not mounted, because metamodule being delete</string>
-    <string name="metamodule_uninstall_confirm">&quot;Are you sure you want to uninstall module %s? This action will affect all modules, and certain features provided by the metamodule (such as mounting) will no longer work.  &quot;</string>
-    <string name="no_meta_module_installed">module not mounted, because metamodule not installed</string>
-    <string name="patch_custom_superkey">Custom SuperKey</string>
-    <string name="patch_custom_superkey_summary">still can use superkey manager root, now we are verify manager signature by kernel</string>
-    <string name="search">Search</string>
-    <string name="search_apps">Search Apps</string>
-    <string name="search_modules">Search modules</string>
-    <string name="settings_sucompat">Legacy su compatibility</string>
-    <string name="settings_sucompat_summary">Enable path_probe hooks for legacy su compatibility</string>
-    <string name="warning_of_meta_module_summary">This module want to mount /system, meta module will handle that. Otherwise, it might not work.</string>
-    <string name="warning_of_meta_module_title">Require Meta module</string>
+    <string name="apm_module_undo_uninstall_failed">فشل التراجع عن إلغاء التثبيت: %s</string>
+    <string name="apm_module_undo_uninstall_success">تم التراجع عن إلغاء تثبيت %s بنجاح</string>
+    <string name="apm_undo">تراجع</string>
+    <string name="back">رجوع</string>
+    <string name="learn_more">اعرف المزيد</string>
+    <string name="meta_module_disabled">الوحدة غير مثبتة، لأن metamodule معطّل</string>
+    <string name="meta_module_removed">الوحدة غير مثبتة، لأن metamodule تم حذفه</string>
+    <string name="metamodule_uninstall_confirm">&quot;هل أنت متأكد أنك تريد إلغاء تثبيت الوحدة %s؟ سيؤثر هذا الإجراء على جميع الوحدات، ولن تعمل بعض الميزات التي يوفرها metamodule (مثل التركيب) بعد الآن.&quot;</string>
+    <string name="no_meta_module_installed">الوحدة غير مثبتة، لأن metamodule غير مثبت</string>
+    <string name="patch_custom_superkey">المفتاح الخارق المخصص</string>
+    <string name="patch_custom_superkey_summary">لا يزال بإمكانك استخدام مدير الجذر بالمفتاح الخارق، والآن تتحقق النواة من توقيع المدير</string>
+    <string name="search">بحث</string>
+    <string name="search_apps">بحث التطبيقات</string>
+    <string name="search_modules">بحث الوحدات</string>
+    <string name="settings_sucompat">توافق su القديم</string>
+    <string name="settings_sucompat_summary">تفعيل توافق su القديم (لحالات عدم عمل su)</string>
+    <string name="warning_of_meta_module_summary">تريد هذه الوحدة تركيب /system، وسيتولى metamodule ذلك. وإلا فقد لا تعمل.</string>
+    <string name="warning_of_meta_module_title">يتطلب وحدة Meta</string>
+    <string name="settings_jailbreak_mode">وضع كسر الحماية</string>
+    <string name="settings_jailbreak_mode_summary">قم بتحميل وحدة KernelPatch على نواة أصلية. لا يُسمح بالتثبيت في هذا الوضع.</string>
+    <string name="settings_jailbreak_soft_reboot">إعادة تشغيل ناعمة</string>
+    <string name="settings_jailbreak_soft_reboot_message">تم تحميل الوحدة. هل تريد إعادة تشغيل الإطار الآن؟</string>
+    <string name="settings_jailbreak_loaded">تم تحميل وحدة كسر الحماية</string>
+    <string name="settings_jailbreak_failed">فشل تحميل وحدة كسر الحماية</string>
+    <string name="jailbreak_no_patch">لا يُسمح بالتثبيت في وضع كسر الحماية.</string>
+    <string name="jailbreak">كسر الحماية</string>
+    <string name="jailbreak_triggered">تم تفعيل كسر الحماية. انتظر الحصول على صلاحيات الجذر ثم قم بإعادة تشغيل ناعمة.</string>
+    <string name="reboot_soft">إعادة تشغيل ناعمة</string>
 </resources>

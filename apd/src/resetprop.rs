@@ -265,3 +265,21 @@ pub fn load_system_prop_file(path: &Path) -> Result<()> {
     info!("Loaded system.prop from {}", path.display());
     Ok(())
 }
+
+/// Set a single system property, bypassing the property service (like resetprop -n).
+pub fn set_prop(name: &str, value: &str) -> Result<()> {
+    sys_prop::init().context("Failed to initialize system property API")?;
+
+    let rp = ResetProp {
+        skip_svc: true,
+        persistent: false,
+        persist_only: false,
+        verbose: false,
+        show_context: false,
+        rebuild: false,
+    };
+
+    rp.set(name, value)
+        .with_context(|| format!("Failed to set {name}"))?;
+    Ok(())
+}

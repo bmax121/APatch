@@ -344,3 +344,41 @@ pub fn start_uid_listener() -> Result<()> {
 
     Ok(())
 }
+
+/// Emulate a system reboot: restart the Android framework (`stop` / `start`)
+/// and re-apply the boot stages. Used by jailbreak mode so that a runtime-loaded
+/// `kernelpatch.ko` stays active (a full reboot would drop it).
+pub fn soft_reboot(superkey: Option<String>) -> Result<()> {
+    use std::process::Command;
+
+    info!("emulating soft reboot!");
+    utils::switch_mnt_ns(1)?;
+    std::env::set_current_dir("/").with_context(|| "failed to chdir to /")?;
+
+    if let Err(e) = crate::resetprop::set_prop("sys.boot_completed", "0") {
+        warn!("reset boot completed failed: {e}");
+    }
+
+    info!("stop");
+    let status = Command::new("stop").status().context("stop failed")?;
+    if !status.success() {
+        warn!("stop exited with status: {status}");
+    }
+
+    info!("post-fs-data");
+    // Never abort the soft reboot here: the framework must always be restarted.
+    if let Err(e) = on_post_data_fs(superkey.clone()) {
+        warn!("post-fs-data failed during soft reboot: {e:#}");
+    }
+
+    info!("start");
+    let status = Command::new("start").status().context("start failed")?;
+    if !status.success() {
+        warn!("start exited with status: {status}");
+    }
+
+    info!("services");
+    on_services(superkey)?;
+
+    Ok(())
+}

@@ -36,6 +36,7 @@ import androidx.compose.material.icons.filled.Engineering
 import androidx.compose.material.icons.filled.FeaturedPlayList
 import androidx.compose.material.icons.filled.FormatColorFill
 import androidx.compose.material.icons.filled.InvertColors
+import androidx.compose.material.icons.filled.LockOpen
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Translate
@@ -92,10 +93,12 @@ import me.bmax.apatch.ui.component.SwitchItem
 import me.bmax.apatch.ui.component.rememberLoadingDialog
 import me.bmax.apatch.ui.theme.refreshTheme
 import me.bmax.apatch.util.getBugreportFile
+import me.bmax.apatch.util.installJailbreak
 import me.bmax.apatch.util.isGlobalNamespaceEnabled
 import me.bmax.apatch.util.outputStream
 import me.bmax.apatch.util.rootShellForResult
 import me.bmax.apatch.util.setGlobalNamespaceEnabled
+import me.bmax.apatch.util.softReboot
 import me.bmax.apatch.util.ui.APDialogBlurBehindUtils
 import me.bmax.apatch.util.ui.LocalSnackbarHost
 import me.bmax.apatch.util.ui.NavigationBarsSpacer
@@ -142,6 +145,11 @@ fun SettingScreen() {
         val showThemeChooseDialog = remember { mutableStateOf(false) }
         if (showThemeChooseDialog.value) {
             ThemeChooseDialog(showThemeChooseDialog)
+        }
+
+        val showJailbreakSoftRebootDialog = remember { mutableStateOf(false) }
+        if (showJailbreakSoftRebootDialog.value) {
+            JailbreakSoftRebootDialog(showJailbreakSoftRebootDialog)
         }
 
         var showLogBottomSheet by remember { mutableStateOf(false) }
@@ -224,6 +232,43 @@ fun SettingScreen() {
                             if (result == 0L) {
                                 prefs.edit { putBoolean("sucompat_enabled", enabled) }
                                 sucompatEnabled = enabled
+                            }
+                        }
+                    })
+            }
+
+            // Jailbreak mode
+            if (kPatchReady && aPatchReady) {
+                val jailbreakLoadedMsg = stringResource(R.string.settings_jailbreak_loaded)
+                val jailbreakFailedMsg = stringResource(R.string.settings_jailbreak_failed)
+                val jailbreakTriggeredMsg = stringResource(R.string.jailbreak_triggered)
+                var jailbreakEnabled by rememberSaveable {
+                    mutableStateOf(prefs.getBoolean("jailbreak_enabled", false))
+                }
+                SwitchItem(
+                    icon = Icons.Filled.LockOpen,
+                    title = stringResource(R.string.settings_jailbreak_mode),
+                    summary = stringResource(R.string.settings_jailbreak_mode_summary),
+                    checked = jailbreakEnabled,
+                    onCheckedChange = { enabled ->
+                        scope.launch(Dispatchers.IO) {
+                            if (enabled) {
+                                val success = installJailbreak()
+                                withContext(Dispatchers.Main) {
+                                    if (success) {
+                                        jailbreakEnabled = true
+                                        prefs.edit { putBoolean("jailbreak_enabled", true) }
+                                        Toast.makeText(context, jailbreakTriggeredMsg, Toast.LENGTH_SHORT)
+                                            .show()
+                                    } else {
+                                        Toast.makeText(context, jailbreakFailedMsg, Toast.LENGTH_SHORT)
+                                            .show()
+                                    }
+                                }
+                            } else {
+                                rootShellForResult("rm -f ${APApplication.JAILBREAK_FILE}")
+                                prefs.edit { putBoolean("jailbreak_enabled", false) }
+                                jailbreakEnabled = false
                             }
                         }
                     })
@@ -687,6 +732,66 @@ fun LanguageDialog(showLanguageDialog: MutableState<Boolean>) {
                                 }
                             }
                         )
+                    }
+                }
+            }
+            val dialogWindowProvider = LocalView.current.parent as DialogWindowProvider
+            APDialogBlurBehindUtils.setupWindowBlurListener(dialogWindowProvider.window)
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun JailbreakSoftRebootDialog(showDialog: MutableState<Boolean>) {
+    BasicAlertDialog(
+        onDismissRequest = { showDialog.value = false }, properties = DialogProperties(
+            decorFitsSystemWindows = true,
+            usePlatformDefaultWidth = false,
+        )
+    ) {
+        Surface(
+            modifier = Modifier
+                .width(310.dp)
+                .wrapContentHeight(),
+            shape = RoundedCornerShape(30.dp),
+            tonalElevation = AlertDialogDefaults.TonalElevation,
+            color = AlertDialogDefaults.containerColor,
+        ) {
+            Column(modifier = Modifier.padding(PaddingValues(all = 24.dp))) {
+                Box(
+                    Modifier
+                        .padding(PaddingValues(bottom = 16.dp))
+                        .align(Alignment.Start)
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.settings_jailbreak_soft_reboot),
+                        style = MaterialTheme.typography.headlineSmall
+                    )
+                }
+                Box(
+                    Modifier
+                        .padding(PaddingValues(bottom = 12.dp))
+                        .align(Alignment.Start)
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.settings_jailbreak_soft_reboot_message),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End
+                ) {
+                    TextButton(onClick = { showDialog.value = false }) {
+                        Text(stringResource(id = android.R.string.cancel))
+                    }
+
+                    Button(onClick = {
+                        showDialog.value = false
+                        softReboot()
+                    }) {
+                        Text(stringResource(id = R.string.settings_jailbreak_soft_reboot))
                     }
                 }
             }

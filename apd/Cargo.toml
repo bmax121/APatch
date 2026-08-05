@@ -43,6 +43,11 @@ errno = "0.3.14"
 notify = "8.2"
 signal-hook = "0.4"
 regex-lite = "0.1.9"
+# for insmod (ELF parsing + symbol relocation, no version check)
+goblin = "0.10"
+scroll = "0.13"
+# for magica (jailbreak adb-root escalation)
+adb_client = "3"
 
 [target.'cfg(any(target_os = "android", target_os = "linux"))'.dependencies]
 rustix = { version = "1", features = ["all-apis"] }

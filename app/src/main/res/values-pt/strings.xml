@@ -35,7 +35,7 @@
     <string name="kpatch_version">Versão: %s</string>
     <string name="home_working">Funcionado</string>
     <string name="home_installing">Instalando</string>
-    <string name="apatch_version_update">Versão: %s -&gt; %s</string>
+    <string name="apatch_version_update">Versão: %1$s -&gt; %2$s</string>
     <string name="home_ap_cando_install">Instalar</string>
     <string name="home_selinux_status_unknown">Desconhecido</string>
     <string name="kpm_load">Carregar</string>
@@ -97,7 +97,7 @@
     <string name="settings_clear_super_key_dialog">Você realmente quer prosseguir?</string>
     <string name="settings_check_update_summary">Verifique automaticamente as atualizações ao abrir o aplicativo</string>
     <string name="home_install_unknown_summary">Clique para instalar</string>
-    <string name="kpatch_version_update">Versão: %s -&gt; %s</string>
+    <string name="kpatch_version_update">Versão: %1$s -&gt; %2$s</string>
     <string name="home_kpatch_info_title">Informação</string>
     <string name="patch_select_bootimg_btn">Selecione a inicialização</string>
     <string name="patch_start_patch_btn">Início</string>
@@ -177,7 +177,7 @@
     <string name="home_system_version">Versão do sistema</string>
     <string name="kpm_add_kpm">Adicionar KPM</string>
     <string name="kpm_embed">Embutido</string>
-    <string name="kpm_control">Control</string>
+    <string name="kpm_control">Controlo</string>
     <string name="apm_webui_open">Abrir</string>
     <string name="enable_web_debugging_summary">Pode ser usado para depurar o WebUI. Por favor, ative somente quando necessário.</string>
     <string name="home_new_apatch_found">Nova versão %s está disponível, clique para atualizar.</string>
@@ -204,22 +204,32 @@
     <string name="crash_handle_copied">Registo de falhas copiado.</string>
     <string name="about_github" translatable="false">GitHub</string>
     <string name="about_weblate" translatable="false">Weblate</string>
-    <string name="apm_module_undo_uninstall_failed">Failed to undo uninstall: %s</string>
-    <string name="apm_module_undo_uninstall_success">Successfully canceled uninstall of %s</string>
-    <string name="apm_undo">Undo</string>
-    <string name="back">Back</string>
-    <string name="learn_more">Learn more</string>
-    <string name="meta_module_disabled">module not mounted, because metamodule disabled</string>
-    <string name="meta_module_removed">module not mounted, because metamodule being delete</string>
-    <string name="metamodule_uninstall_confirm">&quot;Are you sure you want to uninstall module %s? This action will affect all modules, and certain features provided by the metamodule (such as mounting) will no longer work.  &quot;</string>
-    <string name="no_meta_module_installed">module not mounted, because metamodule not installed</string>
-    <string name="patch_custom_superkey">Custom SuperKey</string>
-    <string name="patch_custom_superkey_summary">still can use superkey manager root, now we are verify manager signature by kernel</string>
-    <string name="search">Search</string>
-    <string name="search_apps">Search Apps</string>
-    <string name="search_modules">Search modules</string>
-    <string name="settings_sucompat">Legacy su compatibility</string>
-    <string name="settings_sucompat_summary">Enable path_probe hooks for legacy su compatibility</string>
-    <string name="warning_of_meta_module_summary">This module want to mount /system, meta module will handle that. Otherwise, it might not work.</string>
-    <string name="warning_of_meta_module_title">Require Meta module</string>
+    <string name="apm_module_undo_uninstall_failed">Não foi possível desfazer a desinstalação: %s</string>
+    <string name="apm_module_undo_uninstall_success">Desinstalação de %s cancelada com sucesso</string>
+    <string name="apm_undo">Desfazer</string>
+    <string name="back">Voltar</string>
+    <string name="learn_more">Saber mais</string>
+    <string name="meta_module_disabled">módulo não montado, porque o metamódulo está desativado</string>
+    <string name="meta_module_removed">módulo não montado, porque o metamódulo está a ser eliminado</string>
+    <string name="metamodule_uninstall_confirm">&quot;Tem a certeza de que deseja desinstalar o módulo %s? Esta ação afetará todos os módulos, e determinadas funcionalidades fornecidas pelo metamódulo (como a montagem) deixarão de funcionar.  &quot;</string>
+    <string name="no_meta_module_installed">módulo não montado, porque o metamódulo não está instalado</string>
+    <string name="patch_custom_superkey">SuperKey personalizada</string>
+    <string name="patch_custom_superkey_summary">ainda é possível usar o root do gestor superkey; agora verificamos a assinatura do gestor pelo kernel</string>
+    <string name="search">Pesquisar</string>
+    <string name="search_apps">Pesquisar aplicações</string>
+    <string name="search_modules">Pesquisar módulos</string>
+    <string name="settings_sucompat">Compatibilidade su legada</string>
+    <string name="settings_sucompat_summary">Ativar compatibilidade su (para quando su não funciona)</string>
+    <string name="warning_of_meta_module_summary">Este módulo quer montar /system; o módulo meta irá tratar disso. Caso contrário, pode não funcionar.</string>
+    <string name="warning_of_meta_module_title">Requer módulo Meta</string>
+    <string name="settings_jailbreak_mode">Modo jailbreak</string>
+    <string name="settings_jailbreak_mode_summary">Carrega o módulo KernelPatch num kernel original. Não é permitido aplicar patches neste modo.</string>
+    <string name="settings_jailbreak_soft_reboot">Reinicialização suave</string>
+    <string name="settings_jailbreak_soft_reboot_message">O módulo foi carregado. Reiniciar o sistema agora?</string>
+    <string name="settings_jailbreak_loaded">Módulo de jailbreak carregado</string>
+    <string name="settings_jailbreak_failed">Falha ao carregar o módulo de jailbreak</string>
+    <string name="jailbreak_no_patch">Não é permitido aplicar patches no modo jailbreak.</string>
+    <string name="jailbreak">Jailbreak</string>
+    <string name="jailbreak_triggered">Jailbreak acionado. Aguarde a obtenção de root e, em seguida, reinicie em modo suave.</string>
+    <string name="reboot_soft">Reinicialização suave</string>
 </resources>

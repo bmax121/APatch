@@ -57,7 +57,7 @@
     <string name="home_click_to_learn_apatch">Дізнайтеся більше про можливості APatch і про його використання</string>
     <string name="about_source_code">&lt;p&gt; Перегляньте вихідний код на %1$s&lt;p/&gt; Приєднуйтеся до нашого каналу %2$s&lt;p/&gt; Приєднуйтеся до нашої групи %3$s</string>
     <string name="send_log">Надіслати журнали</string>
-    <string name="apatch_version_update">Версія: %s → %s</string>
+    <string name="apatch_version_update">Версія: %1$s → %2$s</string>
     <string name="home_apatch_version">Версія APatch</string>
     <string name="home_need_update">Доступне оновлення</string>
     <string name="home_ap_cando_uninstall">Видалити</string>
@@ -112,7 +112,7 @@
     <string name="patch_item_kpimg_config">Налаштування:</string>
     <string name="patch_item_new_extra_kpm">Вбудувати новий</string>
     <string name="patch_item_existed_extra_kpm">Існуючий</string>
-    <string name="patch_item_extra_name">Ім\&apos;я:</string>
+    <string name="patch_item_extra_name">"Ім\'я:"</string>
     <string name="patch_item_extra_version">Версія:</string>
     <string name="patch_item_extra_author">Автор:</string>
     <string name="patch_item_extra_kpm_license">Ліцензія:</string>
@@ -122,7 +122,7 @@
     <string name="patch_item_set_skey_label">SuperKey має містити 8-63 символи та містити цифри та літери, але без спеціальних символів.</string>
     <string name="patch_item_skey">СуперКлюч</string>
     <string name="settings_clear_super_key_dialog">Ви дійсно хочете продовжити?</string>
-    <string name="kpatch_version_update">Версія: %s -&gt; %s</string>
+    <string name="kpatch_version_update">Версія: %1$s -&gt; %2$s</string>
     <string name="home_kpatch_info_title">Інфо</string>
     <string name="settings_check_update_summary">Автоматично перевіряти оновлення при відкритті застосунку</string>
     <string name="success">Успішно</string>
@@ -137,8 +137,8 @@
     <string name="home_device_info">Пристрій</string>
     <string name="home_system_version">Версія системи</string>
     <string name="home_kpatch_version">Версія KernelPatch</string>
-    <string name="hide_apatch_dialog_new_manager_name">Нове ім\&apos;я менеджера</string>
-    <string name="hide_apatch_dialog_summary">Воно буде використовуватися як нове ім\&apos;я застосунку, яке відображатиметься на робочому столі</string>
+    <string name="hide_apatch_dialog_new_manager_name">"Нове ім\'я менеджера"</string>
+    <string name="hide_apatch_dialog_summary">"Воно буде використовуватися як нове ім\'я застосунку, яке відображатиметься на робочому столі"</string>
     <string name="hide_apatch_manager_failure">Не вдалося сховатися. Будь ласка, повідомте про помилку!</string>
     <string name="enable_web_debugging">Увімкнути налагодження WebView</string>
     <string name="setting_reset_su_path">Скинути шлях до файлу su</string>
@@ -158,7 +158,7 @@
     <string name="mode_select_page_install_inactive_slot_warning">Ваш пристрій буде **ПРИМУШЕНО** завантажитися в поточний неактивний слот після перезавантаження!
 \nВикористовуйте цей параметр лише після завершення OTA.
 \nПродовжити?</string>
-    <string name="home_more_menu_feedback_or_suggestion">Зворотній зв\&apos;язок</string>
+    <string name="home_more_menu_feedback_or_suggestion">"Зворотній зв\'язок"</string>
     <string name="kpm_control_dialog_content">Введіть параметри контролю:</string>
     <string name="kpm_control_outMsg">Повідомлення</string>
     <string name="kpm_control_ok">Операцію виконано успішно!</string>
@@ -204,22 +204,32 @@
     <string name="crash_handle_copy">Копіювати журнал збоїв</string>
     <string name="about_github" translatable="false">GitHub</string>
     <string name="about_weblate" translatable="false">Weblate</string>
-    <string name="apm_module_undo_uninstall_failed">Failed to undo uninstall: %s</string>
-    <string name="apm_module_undo_uninstall_success">Successfully canceled uninstall of %s</string>
-    <string name="apm_undo">Undo</string>
-    <string name="back">Back</string>
-    <string name="learn_more">Learn more</string>
-    <string name="meta_module_disabled">module not mounted, because metamodule disabled</string>
-    <string name="meta_module_removed">module not mounted, because metamodule being delete</string>
-    <string name="metamodule_uninstall_confirm">&quot;Are you sure you want to uninstall module %s? This action will affect all modules, and certain features provided by the metamodule (such as mounting) will no longer work.  &quot;</string>
-    <string name="no_meta_module_installed">module not mounted, because metamodule not installed</string>
-    <string name="patch_custom_superkey">Custom SuperKey</string>
-    <string name="patch_custom_superkey_summary">still can use superkey manager root, now we are verify manager signature by kernel</string>
-    <string name="search">Search</string>
-    <string name="search_apps">Search Apps</string>
-    <string name="search_modules">Search modules</string>
-    <string name="settings_sucompat">Legacy su compatibility</string>
-    <string name="settings_sucompat_summary">Enable path_probe hooks for legacy su compatibility</string>
-    <string name="warning_of_meta_module_summary">This module want to mount /system, meta module will handle that. Otherwise, it might not work.</string>
-    <string name="warning_of_meta_module_title">Require Meta module</string>
+    <string name="apm_module_undo_uninstall_failed">Не вдалося скасувати видалення: %s</string>
+    <string name="apm_module_undo_uninstall_success">Скасування видалення %s успішне</string>
+    <string name="apm_undo">Скасувати</string>
+    <string name="back">Назад</string>
+    <string name="learn_more">Дізнатися більше</string>
+    <string name="meta_module_disabled">модуль не змонтовано, оскільки метамодуль вимкнено</string>
+    <string name="meta_module_removed">модуль не змонтовано, оскільки метамодуль видаляється</string>
+    <string name="metamodule_uninstall_confirm">Ви впевнені, що хочете видалити модуль %s? Ця дія вплине на всі модулі, і певні функції, які надає метамодуль (наприклад, монтування), більше не працюватимуть.</string>
+    <string name="no_meta_module_installed">модуль не змонтовано, оскільки метамодуль не встановлено</string>
+    <string name="patch_custom_superkey">Власний SuperKey</string>
+    <string name="patch_custom_superkey_summary">ви все ще можете використовувати root через менеджер superkey, тепер ми перевіряємо підпис менеджера ядром</string>
+    <string name="search">Пошук</string>
+    <string name="search_apps">Пошук застосунків</string>
+    <string name="search_modules">Пошук модулів</string>
+    <string name="settings_sucompat">Сумісність зі старим su</string>
+    <string name="settings_sucompat_summary">Увімкнути сумісність зі старим su (якщо su не працює)</string>
+    <string name="warning_of_meta_module_summary">Цей модуль хоче змонтувати /system, метамодуль це зробить. Інакше він може не працювати.</string>
+    <string name="warning_of_meta_module_title">Потрібен метамодуль</string>
+    <string name="settings_jailbreak_mode">Режим джейлбрейка</string>
+    <string name="settings_jailbreak_mode_summary">Завантажує модуль KernelPatch на стокове ядро. У цьому режимі патчинг заборонено.</string>
+    <string name="settings_jailbreak_soft_reboot">Мяке перезавантаження</string>
+    <string name="settings_jailbreak_soft_reboot_message">Модуль завантажено. Перезавантажити систему зараз?</string>
+    <string name="settings_jailbreak_loaded">Модуль джейлбрейка завантажено</string>
+    <string name="settings_jailbreak_failed">Не вдалося завантажити модуль джейлбрейка</string>
+    <string name="jailbreak_no_patch">У режимі джейлбрейка патчинг заборонено.</string>
+    <string name="jailbreak">Джейлбрейк</string>
+    <string name="jailbreak_triggered">"Jailbreak активовано. Дочекайтеся отримання root, а потім виконайте м'яке перезавантаження."</string>
+    <string name="reboot_soft">"М'яке перезавантаження"</string>
 </resources>

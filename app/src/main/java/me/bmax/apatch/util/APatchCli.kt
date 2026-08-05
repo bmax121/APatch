@@ -2,12 +2,14 @@ package me.bmax.apatch.util
 
 import android.content.ContentResolver
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.Signature
 import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.provider.OpenableColumns
+import android.system.Os
 import android.util.Base64
 import android.util.Log
 import com.topjohnwu.superuser.CallbackList
@@ -331,12 +333,86 @@ fun runAPModuleAction(
 }
 
 fun reboot(reason: String = "") {
+    if (reason == "soft_reboot") {
+        softReboot()
+        return
+    }
     if (reason == "recovery") {
         // KEYCODE_POWER = 26, hide incorrect "Factory data reset" message
         getRootShell().newJob().add("/system/bin/input keyevent 26").exec()
     }
     getRootShell().newJob()
         .add("/system/bin/svc power reboot $reason || /system/bin/reboot $reason").exec()
+}
+
+/** Soft reboot: restart the Android framework while keeping runtime-loaded modules. */
+fun softReboot() {
+    getRootShell().newJob().add("${APApplication.APD_PATH} soft-reboot").exec()
+}
+
+/**
+ * Detect the Kernel Module Interface (KMI) of the running kernel, e.g.
+ * `android14-5.15`, from `uname -r` (same parsing as KernelSU).
+ */
+fun getKmi(): String? {
+    val release = runCatching { Os.uname().release }.getOrNull() ?: return null
+    val m = Regex("(.* )?(\\d+\\.\\d+)(\\S+)?(android\\d+)(.*)").find(release) ?: return null
+    return "${m.groupValues[4]}-${m.groupValues[2]}"
+}
+
+/** Asset name of the KernelPatch ko matching this device's kernel (KMI). */
+fun jailbreakAssetName(): String? {
+    val kmi = getKmi() ?: return null
+    return "${kmi}_kernelpatch.ko"
+}
+
+/** Extract the bundled kernelpatch.ko for this device's kernel to the app files dir. */
+fun extractJailbreakKo(): File? {
+    val name = jailbreakAssetName() ?: return null
+    val file = File(apApp.filesDir, "kernelpatch.ko")
+    return runCatching {
+        apApp.assets.open(name).use { input ->
+            file.outputStream().use { output -> input.copyTo(output) }
+        }
+        file
+    }.getOrNull()
+}
+
+/**
+ * Install jailbreak mode: extract the bundled kernelpatch.ko for this kernel to
+ * the app files dir (no root needed), then trigger the magica chain via the
+ * isolated app-zygote service. The apd then escalates to full root through adb
+ * and runs `late-load` (loads the module, applies Magisk policy, marks jailbreak).
+ */
+fun installJailbreak(): Boolean {
+    val ko = extractJailbreakKo() ?: return false
+    if (!ko.exists() || ko.length() == 0L) {
+        Log.e(TAG, "extracted jailbreak ko is missing or empty")
+        return false
+    }
+    return try {
+        val intent = Intent(apApp, me.bmax.apatch.magica.MagicaService::class.java)
+        apApp.startService(intent)
+        Log.i(TAG, "MagicaService started for jailbreak")
+        true
+    } catch (e: Throwable) {
+        Log.e(TAG, "start MagicaService failed: $e")
+        false
+    }
+}
+
+/** Whether the SELinux mode is permissive (getenforce), the prerequisite for jailbreak. */
+fun isSELinuxPermissive(): Boolean {
+    val shell = Shell.Builder.create().build("sh")
+    val out = ArrayList<String>()
+    val result = shell.newJob().add("getenforce").to(out, ArrayList()).exec()
+    return result.isSuccess &&
+        out.firstOrNull()?.trim()?.equals("Permissive", ignoreCase = true) == true
+}
+
+/** Whether jailbreak mode is active (the ko has been loaded and a marker written). */
+fun isJailbreakMode(): Boolean {
+    return runCatching { SuFile(APApplication.JAILBREAK_FILE).exists() }.getOrDefault(false)
 }
 
 fun hasMagisk(): Boolean {

@@ -8,7 +8,7 @@
     <string name="apm_install">Installa</string>
     <string name="kpatch_version">Versione: %s</string>
     <string name="apm_remove">Rimuovi</string>
-    <string name="patch_warnning">L\&apos;installazione comporta dei rischi. Assicurati che i tuoi dati siano stati salvati.</string>
+    <string name="patch_warnning">"L\'installazione comporta dei rischi. Assicurati che i tuoi dati siano stati salvati."</string>
     <string name="kpm_kp_not_installed">KernelPatch non installato</string>
     <string name="home_patch_set_key_desc">Credenziale solo per KernelPatch</string>
     <string name="home_install_unknown">Non installato o verificato</string>
@@ -53,7 +53,7 @@
     <string name="home_selinux_status_disabled">Spento</string>
     <string name="settings">Impostazioni</string>
     <string name="apm_new_version_available">Clicca per installare la nuova versione %s.</string>
-    <string name="apatch_version_update">Versione: %s -&gt; %s</string>
+    <string name="apatch_version_update">Versione: %1$s -&gt; %2$s</string>
     <string name="home_working">In esecuzione 😋</string>
     <string name="apm_empty">Nessun modulo installato</string>
     <string name="kpm_load">Carica</string>
@@ -106,9 +106,9 @@
     <string name="patch_item_kpimg_version">Versione:</string>
     <string name="patch_item_new_extra_kpm">Incorpora nuovo</string>
     <string name="patch_item_existed_extra_kpm">Esistito</string>
-    <string name="mode_select_page_install_inactive_slot_warning">Il dispositivo sarà **FORZATO** ad avviarsi nello slot inattivo dopo il riavvio!
-\nUsa questa opzione solo dopo l\&apos;OTA.
-\nContinuare?</string>
+    <string name="mode_select_page_install_inactive_slot_warning">"Il dispositivo sarà **FORZATO** ad avviarsi nello slot inattivo dopo il riavvio!
+\nUsa questa opzione solo dopo l\'OTA.
+\nContinuare?"</string>
     <string name="home_system_version">Versione di sistema</string>
     <string name="home_install_unknown_summary">Clicca per installare</string>
     <string name="home_device_info">Dispositivo</string>
@@ -125,7 +125,7 @@
     <string name="kpatch_shadow_path_title">Kpatch</string>
     <string name="patch_item_kpimg_config">Configurazione:</string>
     <string name="hide_apatch_dialog_new_manager_name">Nuovo nome del gestore</string>
-    <string name="settings_check_update_summary">Cerca aggiornamenti automaticamente all\&apos;avvio dell\&apos;app</string>
+    <string name="settings_check_update_summary">"Cerca aggiornamenti automaticamente all\'avvio dell\'app"</string>
     <string name="patch_mode_install_to_next_slot">Modalità: Installa nello slot successivo (Dopo OTA)</string>
     <string name="enable_web_debugging">Attiva debug di WebView</string>
     <string name="patch_item_extra_version">Versione:</string>
@@ -134,11 +134,11 @@
     <string name="patch_item_extra_kpm_license">Licenza:</string>
     <string name="patch_item_bootimg_dev">Dispositivo:</string>
     <string name="patch_select_bootimg_btn">Seleziona avvio</string>
-    <string name="hide_apatch_manager_failure">Errore nel nascondere l\&apos;app, per favore segnala il bug!</string>
+    <string name="hide_apatch_manager_failure">"Errore nel nascondere l\'app, per favore segnala il bug!"</string>
     <string name="kpm_install">Installa</string>
     <string name="patch_item_extra_args">Argomenti:</string>
     <string name="patch_item_skey">Super chiave</string>
-    <string name="hide_apatch_dialog_summary">Sarà usato come nome dell\&apos;applicazione mostrato nel launcher</string>
+    <string name="hide_apatch_dialog_summary">"Sarà usato come nome dell\'applicazione mostrato nel launcher"</string>
     <string name="failure">Fallimento</string>
     <string name="patch_item_bootimg">Bootimg</string>
     <string name="patch_start_unpatch_btn">Rimuovi patch</string>
@@ -146,7 +146,7 @@
     <string name="setting_reset_su_path">Reimposta il percorso su</string>
     <string name="home_kpatch_info_title">Informazioni</string>
     <string name="settings_clear_super_key_dialog">Sei sicuro di voler procedere?</string>
-    <string name="kpatch_version_update">Versione: %s -&gt; %s</string>
+    <string name="kpatch_version_update">Versione: %1$s -&gt; %2$s</string>
     <string name="apm_webui_open">Apri</string>
     <string name="enable_web_debugging_summary">Può essere usato per il Debug di WebUI, attiva solo se necessario.</string>
     <string name="patch_mode_bootimg_patch">Modalità: Applica patch</string>
@@ -154,7 +154,7 @@
     <string name="patch_item_extra_name">Nome:</string>
     <string name="hide_apatch_manager">Nascondi il gestore di APatch</string>
     <string name="success">Successo</string>
-    <string name="kpm_control_dialog_content">Parametri di controllo dell\&apos;ingresso:</string>
+    <string name="kpm_control_dialog_content">"Parametri di controllo dell\'ingresso:"</string>
     <string name="kpm_control_ok">Operazione riuscita!</string>
     <string name="settings_night_mode_follow_sys">Segui il Tema scuro di sistema</string>
     <string name="kpm_control_paramters">Parametri</string>
@@ -192,7 +192,7 @@
     <string name="teal_theme">Tema verde acqua</string>
     <string name="yellow_theme">Tema giallo</string>
     <string name="about_app_version">Versione %1$s</string>
-    <string name="about_app_desc">Soluzione Kernel Root con solo un\&apos;immagine del kernel ridotta, che offre la possibilità di montare il modulo di sistema e agganciare la funzione kernel.</string>
+    <string name="about_app_desc">"Soluzione Kernel Root con solo un\'immagine del kernel ridotta, che offre la possibilità di montare il modulo di sistema e agganciare la funzione kernel."</string>
     <string name="about_telegram_channel">Canale Telegram</string>
     <string name="about_telegram_group">Gruppo Telegram</string>
     <string name="save_log">Salva registro</string>
@@ -204,22 +204,32 @@
     <string name="apm_action">Azione</string>
     <string name="about_github" translatable="false">GitHub</string>
     <string name="about_weblate" translatable="false">Weblate</string>
-    <string name="apm_module_undo_uninstall_failed">Failed to undo uninstall: %s</string>
-    <string name="apm_module_undo_uninstall_success">Successfully canceled uninstall of %s</string>
-    <string name="apm_undo">Undo</string>
-    <string name="back">Back</string>
-    <string name="learn_more">Learn more</string>
-    <string name="meta_module_disabled">module not mounted, because metamodule disabled</string>
-    <string name="meta_module_removed">module not mounted, because metamodule being delete</string>
-    <string name="metamodule_uninstall_confirm">&quot;Are you sure you want to uninstall module %s? This action will affect all modules, and certain features provided by the metamodule (such as mounting) will no longer work.  &quot;</string>
-    <string name="no_meta_module_installed">module not mounted, because metamodule not installed</string>
-    <string name="patch_custom_superkey">Custom SuperKey</string>
-    <string name="patch_custom_superkey_summary">still can use superkey manager root, now we are verify manager signature by kernel</string>
-    <string name="search">Search</string>
-    <string name="search_apps">Search Apps</string>
-    <string name="search_modules">Search modules</string>
-    <string name="settings_sucompat">Legacy su compatibility</string>
-    <string name="settings_sucompat_summary">Enable path_probe hooks for legacy su compatibility</string>
-    <string name="warning_of_meta_module_summary">This module want to mount /system, meta module will handle that. Otherwise, it might not work.</string>
-    <string name="warning_of_meta_module_title">Require Meta module</string>
+    <string name="apm_module_undo_uninstall_failed">Impossibile annullare la disinstallazione: %s</string>
+    <string name="apm_module_undo_uninstall_success">Disinstallazione di %s annullata con successo</string>
+    <string name="apm_undo">Annulla</string>
+    <string name="back">Indietro</string>
+    <string name="learn_more">Scopri di più</string>
+    <string name="meta_module_disabled">modulo non montato, perché il metamodulo è disabilitato</string>
+    <string name="meta_module_removed">modulo non montato, perché il metamodulo è in fase di eliminazione</string>
+    <string name="metamodule_uninstall_confirm">&quot;Vuoi davvero disinstallare il modulo %s? Questa azione influirà su tutti i moduli e alcune funzioni fornite dal metamodulo (come il montaggio) non funzioneranno più.  &quot;</string>
+    <string name="no_meta_module_installed">modulo non montato, perché il metamodulo non è installato</string>
+    <string name="patch_custom_superkey">SuperKey personalizzata</string>
+    <string name="patch_custom_superkey_summary">puoi ancora usare il root del gestore superkey; ora verifichiamo la firma del gestore tramite il kernel</string>
+    <string name="search">Cerca</string>
+    <string name="search_apps">Cerca app</string>
+    <string name="search_modules">Cerca moduli</string>
+    <string name="settings_sucompat">Compatibilità su legacy</string>
+    <string name="settings_sucompat_summary">Abilita la compatibilità su legacy (per quando su non funziona)</string>
+    <string name="warning_of_meta_module_summary">Questo modulo vuole montare /system; il modulo meta lo gestirà. In caso contrario, potrebbe non funzionare.</string>
+    <string name="warning_of_meta_module_title">Richiede il modulo Meta</string>
+    <string name="settings_jailbreak_mode">Modalità jailbreak</string>
+    <string name="settings_jailbreak_mode_summary">Carica il modulo KernelPatch su un kernel non modificato. Il patching non è consentito in questa modalità.</string>
+    <string name="settings_jailbreak_soft_reboot">Riavvio soft</string>
+    <string name="settings_jailbreak_soft_reboot_message">Il modulo è stato caricato. Riavviare il sistema ora?</string>
+    <string name="settings_jailbreak_loaded">Modulo jailbreak caricato</string>
+    <string name="settings_jailbreak_failed">Impossibile caricare il modulo jailbreak</string>
+    <string name="jailbreak_no_patch">Il patching non è consentito in modalità jailbreak.</string>
+    <string name="jailbreak">Jailbreak</string>
+    <string name="jailbreak_triggered">Jailbreak attivato. Attendere il root, quindi riavviare in modalità soft.</string>
+    <string name="reboot_soft">Riavvio soft</string>
 </resources>

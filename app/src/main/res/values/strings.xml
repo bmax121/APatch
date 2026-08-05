@@ -31,7 +31,17 @@
     <string name="settings_global_namespace_mode">Global namespace mode</string>
     <string name="settings_global_namespace_mode_summary">All root sessions use the global mount namespace</string>
     <string name="settings_sucompat">Legacy su compatibility</string>
-    <string name="settings_sucompat_summary">Enable path_probe hooks for legacy su compatibility</string>
+    <string name="settings_sucompat_summary">"Enable legacy su compatibility (for when su doesn't work)"</string>
+    <string name="settings_jailbreak_mode">Jailbreak mode</string>
+    <string name="settings_jailbreak_mode_summary">"Load the KernelPatch module on a stock kernel. Patching is not allowed in this mode."</string>
+    <string name="settings_jailbreak_soft_reboot">Soft reboot</string>
+    <string name="settings_jailbreak_soft_reboot_message">"The module has been loaded. Restart the framework now?"</string>
+    <string name="settings_jailbreak_loaded">Jailbreak module loaded</string>
+    <string name="settings_jailbreak_failed">Failed to load jailbreak module</string>
+    <string name="jailbreak_no_patch">Patching is not allowed in jailbreak mode.</string>
+    <string name="jailbreak">Jailbreak</string>
+    <string name="jailbreak_triggered">Jailbreak triggered. Wait for root, then soft reboot.</string>
+    <string name="reboot_soft">Soft reboot</string>
     <string name="settings_clear_super_key_dialog">Do you really want to proceed?</string>
 
     <string name="settings_check_update">Check for updates</string>
@@ -61,8 +71,8 @@
     <string name="home_need_update">New version available</string>
     <string name="kpatch_version">Version: %s</string>
     <string name="apatch_version">Version: %s</string>
-    <string name="apatch_version_update">Version: %s -&gt; %s</string>
-    <string name="kpatch_version_update">Version: %s -&gt; %s</string>
+    <string name="apatch_version_update">Version: %1$s -&gt; %2$s</string>
+    <string name="kpatch_version_update">Version: %1$s -&gt; %2$s</string>
     <string name="kpatch_shadow_path_title">kpatch</string>
     <string name="home_kpatch_info_title">Info</string>
 

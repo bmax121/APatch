@@ -11,7 +11,7 @@
     <string name="about">Haqqında</string>
     <string name="settings_app_language">Dil</string>
     <string name="home_learn_apatch">APatch haqqında öyrənin</string>
-    <string name="about_source_code">Mənbə koduna %1$s ünvanında baxın</string>
+    <string name="about_source_code">&lt;p&gt;Mənbə koduna %1$s ünvanında baxın&lt;p/&gt;%2$s kanalımıza qoşulun&lt;p/&gt;%3$s qrupumuza qoşulun</string>
     <string name="system_default">Sistem defoltu</string>
     <string name="send_log">Günlükü göndərin</string>
     <string name="safe_mode">Təhlükəsiz rejim</string>
@@ -27,12 +27,12 @@
     <string name="apatch_version">Versiya:
 \n%s</string>
     <string name="apatch_version_update">Versiya:
-\n%s -&gt; %s</string>
-    <string name="home_su_path">su: %s</string>
+\n%1$s -&gt; %2$s</string>
+    <string name="home_su_path">İcra edilə bilən su</string>
     <string name="kpatch_version">Versiya: %s</string>
     <string name="kernel_patch">NüvəYamağı</string>
     <string name="android_patch">AndroidYamağı</string>
-    <string name="home_apatch_version">APatch: %s</string>
+    <string name="home_apatch_version">APatch versiyası</string>
     <string name="home_ap_cando_install">Quraşdır</string>
     <string name="home_ap_cando_uninstall">Sil</string>
     <string name="patch_title">Yamaq</string>
@@ -91,13 +91,13 @@
     <string name="apm_install">Quraşdır</string>
     <string name="apm_not_installed">AndroidYamağı quraşdırılmayıb</string>
     <string name="apm_overlay_fs_not_available">OverlayFS nüvə tərəfindən deaktiv edildiyi üçün modullar əlçatan deyil.</string>
-    <string name="settings_global_namespace_mode">Global namespace mode</string>
+    <string name="settings_global_namespace_mode">Qlobal ad məkanı rejimi</string>
     <string name="settings_global_namespace_mode_summary">Bütün kök sessiyaları qlobal bağlama adməkanından istifadə edir</string>
     <string name="settings_clear_super_key_dialog">Həqiqətən davam etmək istəyirsən?</string>
     <string name="settings_check_update">Yeniləməni yoxlayın</string>
     <string name="settings_check_update_summary">Proqramı açarkən avtomatik olaraq yeniləmələri yoxlayın</string>
     <string name="home_install_unknown_summary">Quraşdırmaq üçün kliklə</string>
-    <string name="kpatch_version_update">Versiya: %s -&gt; %s</string>
+    <string name="kpatch_version_update">Versiya: %1$s -&gt; %2$s</string>
     <string name="kpatch_shadow_path_title">kpatch</string>
     <string name="home_kpatch_info_title">Məlumat</string>
     <string name="patch_config_title">Yamalar</string>
@@ -108,7 +108,7 @@
     <string name="patch_start_unpatch_btn">&quot;Yamanı Deaktiv edin &quot;</string>
     <string name="patch_item_bootimg_slot">yuva:</string>
     <string name="patch_item_bootimg_dev">cihaz:</string>
-    <string name="patch_item_kernel">Kernel</string>
+    <string name="patch_item_kernel">Nüvə</string>
     <string name="patch_item_kpimg">kpimg</string>
     <string name="patch_item_kpimg_version">versiya:</string>
     <string name="patch_item_kpimg_comile_time">zaman:</string>
@@ -206,22 +206,32 @@
     <string name="crash_handle_copied">Clipboarda çöküntü qeydi kopyalandı.</string>
     <string name="about_github" translatable="false">GitHub</string>
     <string name="about_weblate" translatable="false">Weblate</string>
-    <string name="apm_module_undo_uninstall_failed">Failed to undo uninstall: %s</string>
-    <string name="apm_module_undo_uninstall_success">Successfully canceled uninstall of %s</string>
-    <string name="apm_undo">Undo</string>
-    <string name="back">Back</string>
-    <string name="learn_more">Learn more</string>
-    <string name="meta_module_disabled">module not mounted, because metamodule disabled</string>
-    <string name="meta_module_removed">module not mounted, because metamodule being delete</string>
-    <string name="metamodule_uninstall_confirm">&quot;Are you sure you want to uninstall module %s? This action will affect all modules, and certain features provided by the metamodule (such as mounting) will no longer work.  &quot;</string>
-    <string name="no_meta_module_installed">module not mounted, because metamodule not installed</string>
-    <string name="patch_custom_superkey">Custom SuperKey</string>
-    <string name="patch_custom_superkey_summary">still can use superkey manager root, now we are verify manager signature by kernel</string>
-    <string name="search">Search</string>
-    <string name="search_apps">Search Apps</string>
-    <string name="search_modules">Search modules</string>
-    <string name="settings_sucompat">Legacy su compatibility</string>
-    <string name="settings_sucompat_summary">Enable path_probe hooks for legacy su compatibility</string>
-    <string name="warning_of_meta_module_summary">This module want to mount /system, meta module will handle that. Otherwise, it might not work.</string>
-    <string name="warning_of_meta_module_title">Require Meta module</string>
+    <string name="apm_module_undo_uninstall_failed">Silinməni geri qaytarmaq mümkün olmadı: %s</string>
+    <string name="apm_module_undo_uninstall_success">%s silinməsi uğurla ləğv edildi</string>
+    <string name="apm_undo">Geri qaytar</string>
+    <string name="back">Geri</string>
+    <string name="learn_more">Daha çox öyrənin</string>
+    <string name="meta_module_disabled">modul quraşdırılmayıb, çünki metamodul deaktiv edilib</string>
+    <string name="meta_module_removed">modul quraşdırılmayıb, çünki metamodul silinir</string>
+    <string name="metamodule_uninstall_confirm">%s modulunu silmək istədiyinizə əminsiniz? Bu əməliyyat bütün modullara təsir edəcək və metamodulun təmin etdiyi bəzi xüsusiyyətlər (məsələn, mount etmə) artıq işləməyəcək.</string>
+    <string name="no_meta_module_installed">modul quraşdırılmayıb, çünki metamodul quraşdırılmayıb</string>
+    <string name="patch_custom_superkey">Fərdi SuperKey</string>
+    <string name="patch_custom_superkey_summary">hələ də superkey menecerinin root funksiyasından istifadə edə bilərsiniz, indi menecerin imzasını nüvə vasitəsilə yoxlayırıq</string>
+    <string name="search">Axtar</string>
+    <string name="search_apps">Proqramları axtar</string>
+    <string name="search_modules">Modulları axtar</string>
+    <string name="settings_sucompat">Köhnə su uyğunluğu</string>
+    <string name="settings_sucompat_summary">Köhnə su uyğunluğunu aktivləşdirin (su işləmədikdə)</string>
+    <string name="warning_of_meta_module_summary">Bu modul /system-i mount etmək istəyir, meta modul bununla məşğul olacaq. Əks halda, işləməyə bilər.</string>
+    <string name="warning_of_meta_module_title">Meta modul tələb olunur</string>
+    <string name="settings_jailbreak_mode">Cilbrik rejimi</string>
+    <string name="settings_jailbreak_mode_summary">Stock kernel üzərində KernelPatch modulunu yükləyin. Bu rejimdə yamaq tətbiq etmək icazə verilmir.</string>
+    <string name="settings_jailbreak_soft_reboot">Yumşaq yenidən başlatma</string>
+    <string name="settings_jailbreak_soft_reboot_message">Modul yükləndi. İndi çərçivəni yenidən başlatmaq istəyirsiniz?</string>
+    <string name="settings_jailbreak_loaded">Cilbrik modulu yükləndi</string>
+    <string name="settings_jailbreak_failed">Cilbrik modulunu yükləmək mümkün olmadı</string>
+    <string name="jailbreak_no_patch">Cilbrik rejimində yamaq tətbiq etməyə icazə verilmir.</string>
+    <string name="jailbreak">Cilbrik</string>
+    <string name="jailbreak_triggered">Jailbreak aktivləşdirildi. Kök icazəsini gözləyin, sonra yumşaq yenidən başladın.</string>
+    <string name="reboot_soft">Yumşaq yenidən başlatma</string>
 </resources>

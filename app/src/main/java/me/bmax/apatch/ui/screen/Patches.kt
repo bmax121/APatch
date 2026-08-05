@@ -87,9 +87,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.bmax.apatch.R
 import me.bmax.apatch.ui.component.SwitchItem
+import me.bmax.apatch.ui.component.WarningCard
 import me.bmax.apatch.ui.viewmodel.KPModel
 import me.bmax.apatch.ui.viewmodel.PatchesViewModel
 import me.bmax.apatch.util.Version
+import me.bmax.apatch.util.isJailbreakMode
 import me.bmax.apatch.util.reboot
 import me.bmax.apatch.util.ui.APDialogBlurBehindUtils
 
@@ -98,6 +100,27 @@ private const val TAG = "Patches"
 @Destination<RootGraph>
 @Composable
 fun Patches(mode: PatchesViewModel.PatchMode) {
+    var jailbreakBlocked by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        jailbreakBlocked = withContext(Dispatchers.IO) { isJailbreakMode() }
+    }
+
+    if (jailbreakBlocked) {
+        Scaffold(topBar = { TopBar() }) { innerPadding ->
+            Box(
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .padding(12.dp)
+            ) {
+                WarningCard(
+                    message = stringResource(R.string.jailbreak_no_patch),
+                    color = MaterialTheme.colorScheme.outlineVariant,
+                )
+            }
+        }
+        return
+    }
+
     val scrollState = rememberScrollState()
     val scope = rememberCoroutineScope()
 

@@ -3,7 +3,7 @@
     <string name="app_name" translatable="false">APatch</string>
     <string name="reboot">Ponovno pokreni</string>
     <string name="home">Početna</string>
-    <string name="patch">Patch</string>
+    <string name="patch">Zakrpa</string>
     <string name="settings">Postavke</string>
     <string name="reboot_recovery">Pokreni u Modu za Oporavak</string>
     <string name="reboot_bootloader">Pokreni u Bootloader</string>
@@ -12,7 +12,7 @@
     <string name="settings_app_language">Jezik</string>
     <string name="home_learn_apatch">Nauči o APatch-u</string>
     <string name="home_click_to_learn_apatch">Nauči više o značajkama APatch i kako ih koristiti</string>
-    <string name="about_source_code">Pogledaj izvorni kod na %1$s</string>
+    <string name="about_source_code">&lt;p&gt;Pogledaj izvorni kod na %1$s&lt;p/&gt;Pridružite se našem %2$s kanalu&lt;p/&gt;Pridružite se našoj %3$s grupi</string>
     <string name="send_log">Pošalji logove</string>
     <string name="safe_mode">Sigurni način</string>
     <string name="super_key">SuperKey</string>
@@ -28,21 +28,21 @@
     <string name="apatch_version">Inačica:
 \n%s</string>
     <string name="apatch_version_update">Inačica:
-\n%s -&gt; %s</string>
-    <string name="home_su_path">su: %s</string>
+\n%1$s -&gt; %2$s</string>
+    <string name="home_su_path">Izvršivi su</string>
     <string name="home_ap_cando_install">Instaliraj</string>
     <string name="home_ap_cando_update">Ažuriraj</string>
     <string name="home_ap_cando_uninstall">De-instaliraj</string>
-    <string name="patch_title">Patch</string>
+    <string name="patch_title">Zakrpa</string>
     <string name="home_kernel">Kernel</string>
     <string name="about">Informacije</string>
     <string name="system_default">Sistemska postavka</string>
     <string name="settings_global_namespace_mode">Global Namespace Mode</string>
     <string name="home_manager_version">Upravitelj verzija</string>
     <string name="home_fingerprint">Otisak</string>
-    <string name="home_selinux_status">SELinux status</string>
+    <string name="home_selinux_status">Status SELinuxa</string>
     <string name="home_selinux_status_disabled">Isključeno</string>
-    <string name="home_selinux_status_permissive">Permissive</string>
+    <string name="home_selinux_status_permissive">Permisivno</string>
     <string name="kpm">KPModule</string>
     <string name="kpm_load_toast_succ">Učitavanje završeno</string>
     <string name="kpm_load_toast_failed">Učitavanje neusješno</string>
@@ -54,7 +54,7 @@
     <string name="kpm_author">Autor</string>
     <string name="kpm_desc">Opis</string>
     <string name="kpm_args">Argumenti</string>
-    <string name="su_title">Superuser</string>
+    <string name="su_title">Superkorisnik</string>
     <string name="su_pkg_excluded_setting_summary">Uključivanjem ove opcije dozvoljavate APatch-u da vrati bilo koje datoteke modificirane modulima ove aplikacije.</string>
     <string name="su_show_system_apps">Prikaži sistemske aplikacije</string>
     <string name="su_hide_system_apps">Sakrij sistemske aplikacije</string>
@@ -72,8 +72,8 @@
     <string name="su_pkg_excluded_setting_title">Isključi modifikacije</string>
     <string name="patch_warnning">Instalacija može biti riskantna. Sačuvaj osobne podatke.</string>
     <string name="kpm_load">Učitaj</string>
-    <string name="home_apatch_version">Apatch: %s</string>
-    <string name="home_selinux_status_enforcing">Enforcing</string>
+    <string name="home_apatch_version">Verzija APatch-a</string>
+    <string name="home_selinux_status_enforcing">Primjenjivanje</string>
     <string name="home_selinux_status_unknown">Nepoznato</string>
     <string name="kpm_kp_not_installed">KernelPatch nije instaliran</string>
     <string name="apm_failed_to_disable">Nije bilo moguće isključiti \&quot;%s\&quot; modul</string>
@@ -114,7 +114,7 @@
     <string name="patch_item_extra_event">Događaj:</string>
     <string name="home_new_apatch_found">Nova verzija %s je dostupna, klikni za nadogradnju.</string>
     <string name="settings_check_update_summary">Automatski provjeri za nadogradnje prilikom otvaranja aplikacije</string>
-    <string name="kpatch_version_update">Verzija: %s -&gt; %s</string>
+    <string name="kpatch_version_update">Verzija: %1$s -&gt; %2$s</string>
     <string name="home_ap_cando_reboot">Restartiraj</string>
     <string name="patch_mode_patch_and_install">Mod: Patch i instaliraj</string>
     <string name="patch_mode_install_to_next_slot">Mod: Instaliraj na inaktivni slot (Poslije OTA nadogradnje)</string>
@@ -193,33 +193,43 @@
     <string name="crash_handle_copied">Log rušenja kopiran u međuspremnik.</string>
     <string name="cyan_theme">Cijan</string>
     <string name="about_app_version">Verzija %1$s</string>
-    <string name="about_app_desc">Kernel root solution with only a stripped kernel image, providing the ability of mounting system module and hooking kernel function.</string>
+    <string name="about_app_desc">Rješenje za root na razini jezgre sa samo ogoljenom slikom jezgre, koje pruža mogućnost montiranja sistemskih modula i presretanja funkcija jezgre.</string>
     <string name="about_github" translatable="false">GitHub</string>
-    <string name="about_powered_by">Powered by %1$s</string>
+    <string name="about_powered_by">Pokreće %1$s</string>
     <string name="about_weblate" translatable="false">Weblate</string>
-    <string name="apm_module_undo_uninstall_failed">Failed to undo uninstall: %s</string>
-    <string name="apm_module_undo_uninstall_success">Successfully canceled uninstall of %s</string>
-    <string name="apm_undo">Undo</string>
-    <string name="back">Back</string>
-    <string name="home_kpatch_version">KernelPatch version</string>
-    <string name="kpm_embed">Embed</string>
-    <string name="learn_more">Learn more</string>
-    <string name="meta_module_disabled">module not mounted, because metamodule disabled</string>
-    <string name="meta_module_removed">module not mounted, because metamodule being delete</string>
-    <string name="metamodule_uninstall_confirm">&quot;Are you sure you want to uninstall module %s? This action will affect all modules, and certain features provided by the metamodule (such as mounting) will no longer work.  &quot;</string>
-    <string name="mode_select_page_select_file">Select a boot image to patch</string>
-    <string name="no_meta_module_installed">module not mounted, because metamodule not installed</string>
-    <string name="patch_custom_superkey">Custom SuperKey</string>
-    <string name="patch_custom_superkey_summary">still can use superkey manager root, now we are verify manager signature by kernel</string>
-    <string name="patch_embed_kpm_btn">Embed KPM</string>
-    <string name="patch_item_bootimg_slot">Slot:</string>
+    <string name="apm_module_undo_uninstall_failed">Neuspješno poništavanje deinstalacije: %s</string>
+    <string name="apm_module_undo_uninstall_success">Uspješno poništena deinstalacija %s</string>
+    <string name="apm_undo">Poništi</string>
+    <string name="back">Natrag</string>
+    <string name="home_kpatch_version">Verzija KernelPatcha</string>
+    <string name="kpm_embed">Ugradi</string>
+    <string name="learn_more">Saznaj više</string>
+    <string name="meta_module_disabled">modul nije montiran jer je metamodul onemogućen</string>
+    <string name="meta_module_removed">modul nije montiran jer se metamodul briše</string>
+    <string name="metamodule_uninstall_confirm">"Jeste li sigurni da želite deinstalirati modul %s? Ova radnja će utjecati na sve module, a neke značajke koje pruža metamodul (poput montiranja) više neće raditi.  "</string>
+    <string name="mode_select_page_select_file">Odaberi sliku za pokretanje za patchiranje</string>
+    <string name="no_meta_module_installed">modul nije montiran jer metamodul nije instaliran</string>
+    <string name="patch_custom_superkey">Prilagođeni SuperKey</string>
+    <string name="patch_custom_superkey_summary">još uvijek možete koristiti root putem upravitelja superkey; sada provjeravamo potpis upravitelja u kernelu</string>
+    <string name="patch_embed_kpm_btn">Ugradi KPM</string>
+    <string name="patch_item_bootimg_slot">Utor:</string>
     <string name="patch_item_kpimg">kpimg</string>
-    <string name="patch_item_new_extra_kpm">Embed new</string>
-    <string name="search">Search</string>
-    <string name="search_apps">Search Apps</string>
-    <string name="search_modules">Search modules</string>
-    <string name="settings_sucompat">Legacy su compatibility</string>
-    <string name="settings_sucompat_summary">Enable path_probe hooks for legacy su compatibility</string>
-    <string name="warning_of_meta_module_summary">This module want to mount /system, meta module will handle that. Otherwise, it might not work.</string>
-    <string name="warning_of_meta_module_title">Require Meta module</string>
+    <string name="patch_item_new_extra_kpm">Ugradi novo</string>
+    <string name="search">Pretraži</string>
+    <string name="search_apps">Pretraži aplikacije</string>
+    <string name="search_modules">Pretraži module</string>
+    <string name="settings_sucompat">Starija su kompatibilnost</string>
+    <string name="settings_sucompat_summary">Omogući stariju su kompatibilnost (kada su ne radi)</string>
+    <string name="warning_of_meta_module_summary">Ovaj modul želi montirati /system, metamodul će to riješiti. Inače, možda neće raditi.</string>
+    <string name="warning_of_meta_module_title">Potreban Meta modul</string>
+    <string name="settings_jailbreak_mode">Način jailbreak</string>
+    <string name="settings_jailbreak_mode_summary">Učitajte KernelPatch modul na nepromijenjenoj jezgri. U ovom načinu rada patchanje nije dopušteno.</string>
+    <string name="settings_jailbreak_soft_reboot">Mekani ponovni pokret</string>
+    <string name="settings_jailbreak_soft_reboot_message">Modul je učitan. Želite li sada ponovno pokrenuti sustav?</string>
+    <string name="settings_jailbreak_loaded">Modul jailbreak učitan</string>
+    <string name="settings_jailbreak_failed">Učitavanje modula jailbreak nije uspjelo</string>
+    <string name="jailbreak_no_patch">Patchanje nije dopušteno u načinu jailbreak.</string>
+    <string name="jailbreak">Jailbreak</string>
+    <string name="jailbreak_triggered">Jailbreak je aktiviran. Pričekajte root, zatim napravite mekani ponovni pokret.</string>
+    <string name="reboot_soft">Mekani ponovni pokret</string>
 </resources>

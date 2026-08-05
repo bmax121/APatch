@@ -47,7 +47,7 @@
     <string name="home_installing">Instaluje se</string>
     <string name="home_click_to_install">Kliknutím nainstalovat</string>
     <string name="apatch_version">Verze: %s</string>
-    <string name="apatch_version_update">Verze: %s -&gt; %s</string>
+    <string name="apatch_version_update">Verze: %1$s -&gt; %2$s</string>
     <string name="patch_item_bootimg_dev">zařízení:</string>
     <string name="settings_check_update_summary">Automaticky kontrolovat aktualizace při otevření aplikace</string>
     <string name="save_log">Uložit protokoly</string>
@@ -55,7 +55,7 @@
     <string name="super_key">SuperKlíč</string>
     <string name="home_patch_next_step">Další krok</string>
     <string name="kpatch_version">Verze: %s</string>
-    <string name="kpatch_version_update">Verze: %s -&gt; %s</string>
+    <string name="kpatch_version_update">Verze: %1$s -&gt; %2$s</string>
     <string name="home_install_unknown_summary">Kliknutím nainstalovat</string>
     <string name="about_source_code">&lt;p&gt;Zobrazit zdrojový kód na %1$s&lt;p/&gt; Připojit se k našemu kanálu %2$s&lt;p/&gt; Připojit se k naší skupině %3$s</string>
     <string name="home_learn_apatch">Prozkoumat APatch</string>
@@ -201,23 +201,33 @@
     <string name="crash_handle_copied">Kopírovat protokol o selhání do schránky.</string>
     <string name="about_github" translatable="false">GitHub</string>
     <string name="about_weblate" translatable="false">Weblate</string>
-    <string name="apm_module_undo_uninstall_failed">Failed to undo uninstall: %s</string>
-    <string name="apm_module_undo_uninstall_success">Successfully canceled uninstall of %s</string>
-    <string name="apm_undo">Undo</string>
+    <string name="apm_module_undo_uninstall_failed">Nepodařilo se vrátit odinstalaci: %s</string>
+    <string name="apm_module_undo_uninstall_success">Úspěšně zrušena odinstalace %s</string>
+    <string name="apm_undo">Zpět</string>
     <string name="app_name" translatable="false">APatch</string>
-    <string name="back">Back</string>
-    <string name="learn_more">Learn more</string>
-    <string name="meta_module_disabled">module not mounted, because metamodule disabled</string>
-    <string name="meta_module_removed">module not mounted, because metamodule being delete</string>
-    <string name="metamodule_uninstall_confirm">&quot;Are you sure you want to uninstall module %s? This action will affect all modules, and certain features provided by the metamodule (such as mounting) will no longer work.  &quot;</string>
-    <string name="no_meta_module_installed">module not mounted, because metamodule not installed</string>
-    <string name="patch_custom_superkey">Custom SuperKey</string>
-    <string name="patch_custom_superkey_summary">still can use superkey manager root, now we are verify manager signature by kernel</string>
-    <string name="search">Search</string>
-    <string name="search_apps">Search Apps</string>
-    <string name="search_modules">Search modules</string>
-    <string name="settings_sucompat">Legacy su compatibility</string>
+    <string name="back">Zpět</string>
+    <string name="learn_more">Zjistit více</string>
+    <string name="meta_module_disabled">modul není připojen, protože metamodul je zakázán</string>
+    <string name="meta_module_removed">modul není připojen, protože metamodul je odstraněn</string>
+    <string name="metamodule_uninstall_confirm">&quot;Opravdu chcete odinstalovat modul %s? Tato akce ovlivní všechny moduly a některé funkce poskytované metamodulem (například připojování) přestanou fungovat.  &quot;</string>
+    <string name="no_meta_module_installed">modul není připojen, protože metamodul není nainstalován</string>
+    <string name="patch_custom_superkey">Vlastní SuperKlíč</string>
+    <string name="patch_custom_superkey_summary">stále můžete použít root správce SuperKlíče, nyní ověřujeme podpis správce jádrem</string>
+    <string name="search">Hledat</string>
+    <string name="search_apps">Hledat aplikace</string>
+    <string name="search_modules">Hledat moduly</string>
+    <string name="settings_sucompat">Kompatibilita staršího su</string>
     <string name="settings_sucompat_summary">Enable path_probe hooks for legacy su compatibility</string>
-    <string name="warning_of_meta_module_summary">This module want to mount /system, meta module will handle that. Otherwise, it might not work.</string>
-    <string name="warning_of_meta_module_title">Require Meta module</string>
+    <string name="warning_of_meta_module_summary">Tento modul chce připojit /system, metamodul to bude řešit. Jinak by nemusel fungovat.</string>
+    <string name="warning_of_meta_module_title">Vyžaduje meta modul</string>
+    <string name="settings_jailbreak_mode">Režim jailbreak</string>
+    <string name="settings_jailbreak_mode_summary">Načte modul KernelPatch na neupraveném jádře. V tomto režimu není povoleno patchování.</string>
+    <string name="settings_jailbreak_soft_reboot">Měkký restart</string>
+    <string name="settings_jailbreak_soft_reboot_message">Modul byl načten. Chcete nyní restartovat systém?</string>
+    <string name="settings_jailbreak_loaded">Modul jailbreak byl načten</string>
+    <string name="settings_jailbreak_failed">Nepodařilo se načíst modul jailbreak</string>
+    <string name="jailbreak_no_patch">V režimu jailbreak není povoleno patchování.</string>
+    <string name="jailbreak">Jailbreak</string>
+    <string name="jailbreak_triggered">Jailbreak aktivován. Počkejte na získání rootu a poté proveďte měkký restart.</string>
+    <string name="reboot_soft">Měkký restart</string>
 </resources>

@@ -62,6 +62,8 @@ class APApplication : Application(), Thread.UncaughtExceptionHandler {
         private const val NEED_REBOOT_FILE = "/dev/.need_reboot"
         const val GLOBAL_NAMESPACE_FILE = "/data/adb/.global_namespace_enable"
         const val SUCOMPAT_FILE = "/data/adb/ap/sucompat"
+        const val JAILBREAK_FILE = APATCH_FOLDER + "jailbreak"
+        const val JAILBREAK_KO_PATH = APATCH_FOLDER + "kernelpatch.ko"
         const val KPMS_DIR = APATCH_FOLDER + "kpms/"
 
         @Deprecated("Use 'apd -V'")
@@ -281,6 +283,12 @@ class APApplication : Application(), Thread.UncaughtExceptionHandler {
 
     override fun onCreate() {
         super.onCreate()
+        // The app-zygote for the jailbreak MagicaService runs without a UserManager,
+        // so shared prefs and other context-dependent setup are unavailable there.
+        // AppZygotePreload drives the jailbreak via JNI directly; skip init here.
+        if (getSystemService(Context.USER_SERVICE) == null) {
+            return
+        }
         apApp = this
 
         val isArm64 = Build.SUPPORTED_ABIS.any { it == "arm64-v8a" }

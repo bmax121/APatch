@@ -22,7 +22,7 @@
     <string name="home_device_info">Laite</string>
     <string name="patch_mode_patch_and_install">Tila: Korjaa ja asenna</string>
     <string name="apm_update">Päivitä</string>
-    <string name="patch_item_kernel">Kernel</string>
+    <string name="patch_item_kernel">Ydin</string>
     <string name="home_su_path">Suoritettava su</string>
     <string name="patch_item_extra_kpm_desciption">Kuvaus:</string>
     <string name="kpm">KPModule</string>
@@ -50,8 +50,8 @@
     <string name="home_need_update">Uusi versio saatavilla</string>
     <string name="kpatch_version">Versio: %s</string>
     <string name="apatch_version">Versio: %s</string>
-    <string name="apatch_version_update">Versio: %s -&gt; %s</string>
-    <string name="kpatch_version_update">Versio: %s -&gt; %s</string>
+    <string name="apatch_version_update">Versio: %1$s -&gt; %2$s</string>
+    <string name="kpatch_version_update">Versio: %1$s -&gt; %2$s</string>
     <string name="kpatch_shadow_path_title">kpatch</string>
     <string name="home_kpatch_info_title">Tiedot</string>
     <string name="home_ap_cando_install">Asenna</string>
@@ -80,7 +80,7 @@
     <string name="patch_item_extra_version">Versio:</string>
     <string name="patch_item_extra_author">Tekijä:</string>
     <string name="patch_item_extra_kpm_license">Lisenssi:</string>
-    <string name="patch_item_extra_args">Args:</string>
+    <string name="patch_item_extra_args">Argumentit:</string>
     <string name="patch_item_extra_event">Tapahtuma:</string>
     <string name="patch_item_skey">SuperKey</string>
     <string name="home_kernel">Kernel</string>
@@ -111,7 +111,7 @@
     <string name="kpm_desc">Kuvaus</string>
     <string name="apm_desc">Kuvaus</string>
     <string name="apm_downloading">Ladataan \&quot;%s\&quot; -moduulia…</string>
-    <string name="kpm_args">Args</string>
+    <string name="kpm_args">Argumentit</string>
     <string name="hide_apatch_manager_summary">Asenna uusi hallintasovellus satunnaisen tunnuksen ja mukautetun nimikkeen kanssa</string>
     <string name="enable_web_debugging">Ota WebView-viankorjaus käyttöön</string>
     <string name="mode_select_page_install_inactive_slot_warning">Laitteesi **pakottaa** käynnistymään nykyiseen ei-aktiiviseen kiinnittimeen uudelleenkäynnistyksen jälkeen!\nKäytä tätä vaihtoehtoa vasta OTA:n jälkeen.\nJatketaanko?</string>
@@ -201,23 +201,33 @@
     <string name="crash_handle_copied">Kaatumisloki kopioittu leikepöydälle.</string>
     <string name="about_github" translatable="false">GitHub</string>
     <string name="about_weblate" translatable="false">Weblate</string>
-    <string name="apm_module_undo_uninstall_failed">Failed to undo uninstall: %s</string>
-    <string name="apm_module_undo_uninstall_success">Successfully canceled uninstall of %s</string>
-    <string name="apm_undo">Undo</string>
+    <string name="apm_module_undo_uninstall_failed">Asennuksen poiston kumoaminen epäonnistui: %s</string>
+    <string name="apm_module_undo_uninstall_success">%s:n asennuksen poisto peruutettu onnistuneesti</string>
+    <string name="apm_undo">Kumoa</string>
     <string name="app_name" translatable="false">APatch</string>
-    <string name="back">Back</string>
-    <string name="learn_more">Learn more</string>
-    <string name="meta_module_disabled">module not mounted, because metamodule disabled</string>
-    <string name="meta_module_removed">module not mounted, because metamodule being delete</string>
-    <string name="metamodule_uninstall_confirm">&quot;Are you sure you want to uninstall module %s? This action will affect all modules, and certain features provided by the metamodule (such as mounting) will no longer work.  &quot;</string>
-    <string name="no_meta_module_installed">module not mounted, because metamodule not installed</string>
-    <string name="patch_custom_superkey">Custom SuperKey</string>
-    <string name="patch_custom_superkey_summary">still can use superkey manager root, now we are verify manager signature by kernel</string>
-    <string name="search">Search</string>
-    <string name="search_apps">Search Apps</string>
-    <string name="search_modules">Search modules</string>
-    <string name="settings_sucompat">Legacy su compatibility</string>
-    <string name="settings_sucompat_summary">Enable path_probe hooks for legacy su compatibility</string>
-    <string name="warning_of_meta_module_summary">This module want to mount /system, meta module will handle that. Otherwise, it might not work.</string>
-    <string name="warning_of_meta_module_title">Require Meta module</string>
+    <string name="back">Takaisin</string>
+    <string name="learn_more">Lue lisää</string>
+    <string name="meta_module_disabled">moduulia ei liitetty, koska metamoduuli on poistettu käytöstä</string>
+    <string name="meta_module_removed">moduulia ei liitetty, koska metamoduuli poistetaan</string>
+    <string name="metamodule_uninstall_confirm">Haluatko varmasti poistaa moduulin %s? Tämä toiminto vaikuttaa kaikkiin moduuleihin, ja tietyt metamoduulin tarjoamat ominaisuudet (kuten liittäminen) eivät enää toimi.</string>
+    <string name="no_meta_module_installed">moduulia ei liitetty, koska metamoduulia ei ole asennettu</string>
+    <string name="patch_custom_superkey">Mukautettu SuperKey</string>
+    <string name="patch_custom_superkey_summary">voit edelleen käyttää superkey-managerin root-toimintoa, nyt vahvistamme managerin allekirjoituksen ytimen avulla</string>
+    <string name="search">Haku</string>
+    <string name="search_apps">Hae sovelluksia</string>
+    <string name="search_modules">Hae moduuleja</string>
+    <string name="settings_sucompat">Vanha su-yhteensopivuus</string>
+    <string name="settings_sucompat_summary">Ota käyttöön vanha su-yhteensopivuus (kun su ei toimi)</string>
+    <string name="warning_of_meta_module_summary">Tämä moduuli haluaa liittää /system-kansion, metamoduuli hoitaa sen. Muuten se ei ehkä toimi.</string>
+    <string name="warning_of_meta_module_title">Vaatii metamoduulin</string>
+    <string name="settings_jailbreak_mode">Jailbreak-tila</string>
+    <string name="settings_jailbreak_mode_summary">Lataa KernelPatch-moduuli muokkaamattomaan ytimeen. Tässä tilassa korjaaminen ei ole sallittua.</string>
+    <string name="settings_jailbreak_soft_reboot">Pehmeä uudelleenkäynnistys</string>
+    <string name="settings_jailbreak_soft_reboot_message">Moduuli on ladattu. Käynnistetäänkö järjestelmä nyt uudelleen?</string>
+    <string name="settings_jailbreak_loaded">Jailbreak-moduuli ladattu</string>
+    <string name="settings_jailbreak_failed">Jailbreak-moduulin lataus epäonnistui</string>
+    <string name="jailbreak_no_patch">Korjaaminen ei ole sallittua jailbreak-tilassa.</string>
+    <string name="jailbreak">Jailbreak</string>
+    <string name="jailbreak_triggered">Jailbreak käynnistetty. Odota root-oikeuksia ja tee sitten pehmeä uudelleenkäynnistys.</string>
+    <string name="reboot_soft">Pehmeä uudelleenkäynnistys</string>
 </resources>

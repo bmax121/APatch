@@ -23,7 +23,7 @@
     <string name="home_patch_set_key_desc">Nur Anmeldedaten für KernelPatch</string>
     <string name="home_patch_next_step">Nächster Schritt</string>
     <string name="kpatch_version">Version: %s</string>
-    <string name="apatch_version_update">Version: %s -&gt; %s</string>
+    <string name="apatch_version_update">Version: %1$s -&gt; %2$s</string>
     <string name="home_manager_version">Manager Version</string>
     <string name="su_pkg_excluded_setting_summary">Durch Aktivierung dieser Option kann APatch alle von den Modulen dieser App geänderten Dateien wiederherstellen.</string>
     <string name="apm_failed_to_disable">Das Modul \&quot;%s\&quot; konnte nicht deaktiviert werden</string>
@@ -43,7 +43,7 @@
     <string name="safe_mode">Sicherer Modus</string>
     <string name="home_click_to_install">Klicke zum Installieren</string>
     <string name="home_working">Funktioniert</string>
-    <string name="home_su_path">su: %s</string>
+    <string name="home_su_path">Ausführbare su</string>
     <string name="patch_title">Patch</string>
     <string name="su_pkg_excluded_label">Absondern</string>
     <string name="home_selinux_status_enforcing">Erzwingt</string>
@@ -68,7 +68,7 @@
     <string name="kpm_version">Version</string>
     <string name="kpm_license">Lizenz</string>
     <string name="kpm_author">Autor</string>
-    <string name="su_title">Superuser</string>
+    <string name="su_title">Superbenutzer</string>
     <string name="su_show_system_apps">Systemanwendungen zeigen</string>
     <string name="su_hide_system_apps">System-Apps ausblenden</string>
     <string name="apm_remove">Entfernen</string>
@@ -94,7 +94,7 @@
     <string name="kpatch_shadow_path_title">kpatch</string>
     <string name="home_kpatch_info_title">Info</string>
     <string name="settings_clear_super_key_dialog">Wollen Sie wirklich fortfahren?</string>
-    <string name="kpatch_version_update">Version: %s -&gt; %s</string>
+    <string name="kpatch_version_update">Version: %1$s -&gt; %2$s</string>
     <string name="patch_config_title">Korrekturen</string>
     <string name="patch_mode_bootimg_patch">Modus: Korrektur</string>
     <string name="patch_mode_uninstall_patch">Modus: EntKorrektur</string>
@@ -116,7 +116,7 @@
     <string name="patch_item_extra_author">Autor:</string>
     <string name="patch_item_extra_kpm_license">Lizenz:</string>
     <string name="patch_item_extra_kpm_desciption">Beschreibung:</string>
-    <string name="patch_item_extra_args">Args:</string>
+    <string name="patch_item_extra_args">Argumente:</string>
     <string name="patch_item_extra_event">Ereignis:</string>
     <string name="patch_item_skey">SuperKey</string>
     <string name="patch_start_patch_btn">Starten</string>
@@ -204,22 +204,32 @@
     <string name="crash_handle_title">App ist abgestürzt…</string>
     <string name="about_github" translatable="false">GitHub</string>
     <string name="about_weblate" translatable="false">Weblate</string>
-    <string name="apm_module_undo_uninstall_failed">Failed to undo uninstall: %s</string>
-    <string name="apm_module_undo_uninstall_success">Successfully canceled uninstall of %s</string>
-    <string name="apm_undo">Undo</string>
-    <string name="back">Back</string>
-    <string name="learn_more">Learn more</string>
-    <string name="meta_module_disabled">module not mounted, because metamodule disabled</string>
-    <string name="meta_module_removed">module not mounted, because metamodule being delete</string>
-    <string name="metamodule_uninstall_confirm">&quot;Are you sure you want to uninstall module %s? This action will affect all modules, and certain features provided by the metamodule (such as mounting) will no longer work.  &quot;</string>
-    <string name="no_meta_module_installed">module not mounted, because metamodule not installed</string>
-    <string name="patch_custom_superkey">Custom SuperKey</string>
-    <string name="patch_custom_superkey_summary">still can use superkey manager root, now we are verify manager signature by kernel</string>
-    <string name="search">Search</string>
-    <string name="search_apps">Search Apps</string>
-    <string name="search_modules">Search modules</string>
-    <string name="settings_sucompat">Legacy su compatibility</string>
-    <string name="settings_sucompat_summary">Enable path_probe hooks for legacy su compatibility</string>
-    <string name="warning_of_meta_module_summary">This module want to mount /system, meta module will handle that. Otherwise, it might not work.</string>
-    <string name="warning_of_meta_module_title">Require Meta module</string>
+    <string name="apm_module_undo_uninstall_failed">Widerruf der Deinstallation fehlgeschlagen: %s</string>
+    <string name="apm_module_undo_uninstall_success">Deinstallation von %s erfolgreich abgebrochen</string>
+    <string name="apm_undo">Rückgängig</string>
+    <string name="back">Zurück</string>
+    <string name="learn_more">Mehr erfahren</string>
+    <string name="meta_module_disabled">Modul nicht gemountet, da die Metamodul deaktiviert ist</string>
+    <string name="meta_module_removed">Modul nicht gemountet, da die Metamodul gelöscht wird</string>
+    <string name="metamodule_uninstall_confirm">"Sind Sie sicher, dass Sie Modul %s deinstallieren möchten? Diese Aktion betrifft alle Module, und bestimmte von der Metamodul bereitgestellte Funktionen (wie das Mounten) funktionieren dann nicht mehr.  "</string>
+    <string name="no_meta_module_installed">Modul nicht gemountet, da die Metamodul nicht installiert ist</string>
+    <string name="patch_custom_superkey">Benutzerdefinierter SuperKey</string>
+    <string name="patch_custom_superkey_summary">Sie können den SuperKey-Manager weiterhin für Root verwenden; jetzt verifiziert der Kernel die Signatur des Managers</string>
+    <string name="search">Suchen</string>
+    <string name="search_apps">Apps suchen</string>
+    <string name="search_modules">Module suchen</string>
+    <string name="settings_sucompat">Alte su-Kompatibilität</string>
+    <string name="settings_sucompat_summary">Alt-su-Kompatibilität aktivieren (falls su nicht funktioniert)</string>
+    <string name="warning_of_meta_module_summary">Dieses Modul möchte /system mounten; die Metamodul übernimmt das. Andernfalls funktioniert es möglicherweise nicht.</string>
+    <string name="warning_of_meta_module_title">Metamodul erforderlich</string>
+    <string name="settings_jailbreak_mode">Jailbreak-Modus</string>
+    <string name="settings_jailbreak_mode_summary">Lädt das KernelPatch-Modul auf einem unmodifizierten Kernel. In diesem Modus ist kein Patchen erlaubt.</string>
+    <string name="settings_jailbreak_soft_reboot">Weicher Neustart</string>
+    <string name="settings_jailbreak_soft_reboot_message">Das Modul wurde geladen. Soll das System jetzt neu gestartet werden?</string>
+    <string name="settings_jailbreak_loaded">Jailbreak-Modul geladen</string>
+    <string name="settings_jailbreak_failed">Jailbreak-Modul konnte nicht geladen werden</string>
+    <string name="jailbreak_no_patch">Im Jailbreak-Modus ist kein Patchen erlaubt.</string>
+    <string name="jailbreak">Jailbreak</string>
+    <string name="jailbreak_triggered">Jailbreak ausgelöst. Warten Sie auf Root und starten Sie dann weich neu.</string>
+    <string name="reboot_soft">Weicher Neustart</string>
 </resources>
