@@ -5,7 +5,9 @@ use std::{env, ffi::CStr, path::PathBuf, process::Command};
 use anyhow::{Ok, Result};
 #[cfg(unix)]
 use getopts::Options;
-use rustix::thread::{Gid, Uid, set_thread_res_gid, set_thread_res_uid};
+use rustix::thread::{
+    Gid, Uid, set_thread_groups, set_thread_res_gid, set_thread_res_uid,
+};
 
 #[cfg(any(target_os = "linux", target_os = "android"))]
 use crate::pty::prepare_pty;
@@ -14,15 +16,24 @@ use crate::{
     utils::{self, umask},
 };
 
-fn print_usage(opts: Options) {
+fn print_usage(opts: &Options) {
     let brief = "APatch\n\nUsage: <command> [options] [-] [user [argument...]]".to_string();
     print!("{}", opts.usage(&brief));
 }
 
-fn set_identity(uid: u32, gid: u32) {
+fn parse_gid(g: &str) -> Result<u32, std::num::ParseIntError> {
+    g.parse::<u32>()
+}
+
+fn set_identity(uid: u32, gid: u32, groups: &[u32]) {
     #[cfg(any(target_os = "linux", target_os = "android"))]
     let gid = Gid::from_raw(gid);
     let uid = Uid::from_raw(uid);
+    #[cfg(any(target_os = "linux", target_os = "android"))]
+    {
+        let groups: Vec<Gid> = groups.iter().map(|&g| Gid::from_raw(g)).collect();
+        let _ = set_thread_groups(&groups);
+    }
     set_thread_res_gid(gid, gid, gid).ok();
     set_thread_res_uid(uid, uid, uid).ok();
 }
@@ -77,6 +88,13 @@ pub fn root_shell() -> Result<()> {
         "mount-master",
         "force run in the global mount namespace",
     );
+    opts.optopt("g", "group", "Specify the primary group", "GROUP");
+    opts.optmulti(
+        "G",
+        "supp-group",
+        "Specify a supplementary group. The first specified supplementary group is also used as a primary group if the option -g is not specified.",
+        "GROUP",
+    );
     opts.optflag("", "no-pty", "Do not allocate a new pseudo terminal.");
 
     // Replace -cn with -z, -mm with -M for supporting getopt_long
@@ -97,13 +115,13 @@ pub fn root_shell() -> Result<()> {
         Result::Ok(m) => m,
         Err(f) => {
             println!("{f}");
-            print_usage(opts);
+            print_usage(&opts);
             std::process::exit(-1);
         }
     };
 
     if matches.opt_present("h") {
-        print_usage(opts);
+        print_usage(&opts);
         return Ok(());
     }
 
@@ -122,6 +140,19 @@ pub fn root_shell() -> Result<()> {
     let preserve_env = matches.opt_present("p");
     let mount_master = matches.opt_present("M");
 
+    // -g overrides the primary group, -G appends supplementary groups
+    let groups = matches
+        .opt_strs("G")
+        .into_iter()
+        .map(|g| {
+            parse_gid(&g).unwrap_or_else(|_| {
+                println!("Invalid GID: {g}");
+                print_usage(&opts);
+                std::process::exit(-1);
+            })
+        })
+        .collect::<Vec<u32>>();
+
     // we've made sure that -c is the last option and it already contains the whole command, no need to construct it again
     let args = matches
         .opt_str("c")
@@ -136,20 +167,35 @@ pub fn root_shell() -> Result<()> {
 
     // use current uid if no user specified, these has been done in kernel!
     let mut uid = unsafe { libc::getuid() };
-    let gid = unsafe { libc::getgid() };
+    let mut gid = unsafe { libc::getgid() };
     if free_idx < matches.free.len() {
         let name = &matches.free[free_idx];
-        uid = unsafe {
+        (uid, gid) = unsafe {
             #[cfg(target_arch = "aarch64")]
             let pw = libc::getpwnam(name.as_ptr()).as_ref();
             #[cfg(target_arch = "x86_64")]
             let pw = libc::getpwnam(name.as_ptr() as *const i8).as_ref();
 
             match pw {
-                Some(pw) => pw.pw_uid,
-                None => name.parse::<u32>().unwrap_or(0),
+                Some(pw) => (pw.pw_uid, pw.pw_gid),
+                None => {
+                    let uid = name.parse::<u32>().unwrap_or(0);
+                    (uid, uid)
+                }
             }
         }
+    }
+
+    if let Some(g) = matches.opt_str("g").map(|g| {
+        parse_gid(&g).unwrap_or_else(|_| {
+            println!("Invalid GID: {g}");
+            print_usage(&opts);
+            std::process::exit(-1);
+        })
+    }) {
+        gid = g;
+    } else if !groups.is_empty() {
+        gid = groups[0];
     }
 
     // https://github.com/topjohnwu/Magisk/blob/master/native/src/core/su/su_daemon.cpp#L408
@@ -208,7 +254,7 @@ pub fn root_shell() -> Result<()> {
                 let _ = utils::switch_mnt_ns(1);
             }
 
-            set_identity(uid, gid);
+            set_identity(uid, gid, &groups);
 
             Result::Ok(())
         })
