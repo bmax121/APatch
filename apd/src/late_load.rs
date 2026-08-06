@@ -2,7 +2,7 @@
 //! and apply Magisk SELinux policy, mirroring KernelSU's `late-load` flow.
 
 use anyhow::{Result, bail};
-use log::info;
+use log::{info, warn};
 use regex_lite::Regex;
 use std::ffi::CStr;
 use std::path::{Path, PathBuf};
@@ -85,6 +85,14 @@ pub fn run(module: Option<PathBuf>, kmi: Option<String>, package_name: Option<St
         let _ = Command::new("am")
             .args(["start", "-n", &format!("{pkg}/me.bmax.apatch.ui.MainActivity")])
             .status();
+    }
+
+    // The jailbreak needs permissive SELinux to run, but once the module, policy
+    // and manager are all in place, restore enforcing.
+    if let Err(e) = std::fs::write("/sys/fs/selinux/enforce", "1") {
+        warn!("failed to set SELinux enforcing: {e}");
+    } else {
+        info!("SELinux set to enforcing");
     }
 
     Ok(())

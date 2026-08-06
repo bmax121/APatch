@@ -346,10 +346,15 @@ pub fn start_uid_listener() -> Result<()> {
 }
 
 /// Emulate a system reboot: restart the Android framework (`stop` / `start`)
-/// and re-apply the boot stages. Used by jailbreak mode so that a runtime-loaded
+/// and re-apply the service stage. Used by jailbreak mode so that a runtime-loaded
 /// `kernelpatch.ko` stays active (a full reboot would drop it).
 pub fn soft_reboot(superkey: Option<String>) -> Result<()> {
     use std::process::Command;
+
+    // Detach from the caller (app root shell) first: `stop` tears down the
+    // framework including the app/zygote tree this process was spawned from, so
+    // without daemonizing the `start` below would never be reached.
+    utils::daemonize()?;
 
     info!("emulating soft reboot!");
     utils::switch_mnt_ns(1)?;
@@ -367,6 +372,8 @@ pub fn soft_reboot(superkey: Option<String>) -> Result<()> {
 
     info!("post-fs-data");
     // Never abort the soft reboot here: the framework must always be restarted.
+    // The daemonized stdin (dev null) keeps the supercall/truncate redirects from
+    // blocking, so re-applying the boot stages is safe.
     if let Err(e) = on_post_data_fs(superkey.clone()) {
         warn!("post-fs-data failed during soft reboot: {e:#}");
     }

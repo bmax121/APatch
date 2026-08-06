@@ -135,6 +135,61 @@ pub fn switch_cgroups() {
     }
 }
 
+/// Detach the current process into a background daemon so it survives the
+/// framework being torn down around it (e.g. `stop` during a soft reboot).
+/// Redirects stdin/stdout/stderr to /dev/null and double-forks out of the
+/// caller's process group / cgroup.
+#[cfg(any(target_os = "linux", target_os = "android"))]
+pub fn daemonize() -> Result<()> {
+    use std::os::fd::AsRawFd;
+
+    let pid = unsafe { libc::fork() };
+    if pid < 0 {
+        bail!("fork error: {}", std::io::Error::last_os_error());
+    }
+    if pid > 0 {
+        // Parent: wait for the child, then exit so the caller sees success.
+        let mut status: i32 = 0;
+        loop {
+            if unsafe { libc::waitpid(pid, &mut status, 0) } < 0 {
+                if std::io::Error::last_os_error().raw_os_error() != Some(libc::EINTR) {
+                    std::process::exit(1);
+                }
+            } else {
+                break;
+            }
+        }
+        std::process::exit(0);
+    }
+
+    unsafe { libc::setsid() };
+    switch_cgroups();
+
+    if let Result::Ok(null) = File::open("/dev/null") {
+        let fd = null.as_raw_fd();
+        unsafe {
+            libc::dup2(fd, 0);
+            libc::dup2(fd, 1);
+            libc::dup2(fd, 2);
+        }
+    }
+
+    let pid = unsafe { libc::fork() };
+    if pid < 0 {
+        bail!("fork error: {}", std::io::Error::last_os_error());
+    }
+    if pid > 0 {
+        unsafe { libc::_exit(0) };
+    }
+
+    Ok(())
+}
+
+#[cfg(not(any(target_os = "linux", target_os = "android")))]
+pub fn daemonize() -> Result<()> {
+    Ok(())
+}
+
 #[cfg(any(target_os = "linux", target_os = "android"))]
 pub fn umask(mask: u32) {
     unsafe { libc::umask(mask) };
