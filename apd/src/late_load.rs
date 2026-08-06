@@ -2,6 +2,7 @@
 //! and apply Magisk SELinux policy, mirroring KernelSU's `late-load` flow.
 
 use anyhow::{Result, bail};
+use libc::c_long;
 use log::{info, warn};
 use regex_lite::Regex;
 use std::ffi::CStr;
@@ -62,6 +63,20 @@ pub fn run(module: Option<PathBuf>, kmi: Option<String>, package_name: Option<St
     // Skip if the module is already loaded (the manager restart re-triggers the
     // app-zygote, which would otherwise fail with EEXIST on a second load).
     if Path::new("/sys/module/kernelpatch").exists() {
+        // A real KernelPatch installed in boot.img also exposes /sys/module/kernelpatch.
+        // Detect it via the supercall hello interface: if it responds with the magic
+        // value, a real KP is active and we must not write the jailbreak marker.
+        const __NR_SUPERCALL: c_long = 45;
+        const SUPERCALL_HELLO: c_long = 0x1000;
+        const SUPERCALL_HELLO_MAGIC: c_long = 0x11581158;
+        let key = b"su\0";
+        let version_code: u32 = (0 << 16) | (13 << 8) | 1;
+        let cmd = ((version_code as c_long) << 32) | (0x1158 << 16) | (SUPERCALL_HELLO & 0xFFFF);
+        let ret = unsafe { libc::syscall(__NR_SUPERCALL, key.as_ptr(), cmd) };
+        if ret == SUPERCALL_HELLO_MAGIC {
+            info!("real KernelPatch detected via supercall, skipping jailbreak late-load entirely");
+            return Ok(());
+        }
         info!("kernelpatch module already loaded, skip loading");
     } else {
         // Load the module without version check.
