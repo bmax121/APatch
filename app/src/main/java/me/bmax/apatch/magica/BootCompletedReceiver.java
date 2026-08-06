@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import java.io.File;
+
 import me.bmax.apatch.util.APatchCliKt;
 
 /** Auto-jailbreak on boot: if root is not available, trigger the magica chain. */
@@ -22,6 +24,13 @@ public class BootCompletedReceiver extends BroadcastReceiver {
             return;
         }
         if (APatchCliKt.rootAvailable()) {
+            return;
+        }
+        // Only auto-trigger jailbreak if the user has previously opted into jailbreak
+        // mode (the marker file exists). Without this guard, flashing a real KernelPatch
+        // boot.img from fastboot would cause the boot receiver to re-trigger the magica
+        // chain, which would then re-write the jailbreak marker and confuse the UI.
+        if (!new File("/data/adb/ap/jailbreak").exists()) {
             return;
         }
         try {

@@ -21,6 +21,7 @@ import me.bmax.apatch.APApplication
 import me.bmax.apatch.APApplication.Companion.SUPERCMD
 import me.bmax.apatch.BuildConfig
 import me.bmax.apatch.apApp
+import me.bmax.apatch.Natives
 import me.bmax.apatch.ui.screen.MODULE_TYPE
 import java.io.File
 import java.security.MessageDigest
@@ -410,9 +411,43 @@ fun isSELinuxPermissive(): Boolean {
         out.firstOrNull()?.trim()?.equals("Permissive", ignoreCase = true) == true
 }
 
-/** Whether jailbreak mode is active (the ko has been loaded and a marker written). */
+/** Whether jailbreak mode is active in the current boot. */
 fun isJailbreakMode(): Boolean {
-    return runCatching { SuFile(APApplication.JAILBREAK_FILE).exists() }.getOrDefault(false)
+    val hasMarker = runCatching { SuFile(APApplication.JAILBREAK_FILE).exists() }.getOrDefault(false)
+    if (!hasMarker) return false
+
+    // The marker persists across full reboots, while a late-loaded module does not.
+    // A boot-patched KernelPatch can therefore coexist with a stale marker after the
+    // user flashes boot.img from fastboot. Only treat the marker as active when the
+    // runtime module is still loaded in this boot.
+    val runtimeModuleLoaded = File("/sys/module/kernelpatch").exists()
+    if (!runtimeModuleLoaded && Natives.nativeReady(APApplication.superKey)) {
+        clearJailbreakMarker()
+        Log.i(TAG, "removed stale jailbreak marker after boot-patched KernelPatch was detected")
+    }
+    return runtimeModuleLoaded
+}
+
+/**
+ * Whether patching/installing is blocked by jailbreak mode.
+ * The persistent marker is validated against the runtime module so a stale marker left
+ * after flashing a patched boot image cannot block patching.
+ */
+fun isJailbreakPatchBlocked(): Boolean {
+    return isJailbreakMode()
+}
+
+/**
+ * True when a real KernelPatch is installed to boot (the supercall interface is ready
+ * and there is no jailbreak marker). Used to avoid offering jailbreak on a patched device.
+ */
+fun isRealKernelPatchInstalled(): Boolean {
+    return !isJailbreakMode() && Natives.nativeReady(APApplication.superKey)
+}
+
+/** Remove the jailbreak marker file, e.g. after a real KernelPatch installation succeeds. */
+fun clearJailbreakMarker(): Boolean {
+    return rootShellForResult("rm -f ${APApplication.JAILBREAK_FILE}").isSuccess
 }
 
 fun hasMagisk(): Boolean {
