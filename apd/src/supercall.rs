@@ -36,6 +36,13 @@ struct SuProfile {
     scontext: [u8; SUPERCALL_SCONTEXT_LEN],
 }
 
+#[repr(C)]
+struct DataItem {
+    data: *mut c_void,
+    dlen: i32,
+    offset: i32,
+}
+
 fn ver_and_cmd(cmd: c_long) -> c_long {
     let version_code: u32 = ((MAJOR << 16) + (MINOR << 8) + PATCH).try_into().unwrap();
     ((version_code as c_long) << 32) | (0x1158 << 16) | (cmd & 0xFFFF)
@@ -73,9 +80,7 @@ fn sc_kstorage_write(
     key: &CStr,
     gid: i32,
     did: i64,
-    data: *mut c_void,
-    offset: i32,
-    dlen: i32,
+    data: &DataItem,
 ) -> c_long {
     if key.to_bytes().is_empty() {
         return (-EINVAL).into();
@@ -88,19 +93,22 @@ fn sc_kstorage_write(
             gid as c_long,
             did as c_long,
             data,
-            (((offset as i64) << 32) | (dlen as i64)) as c_long,
         ) as c_long
     }
 }
 
 fn sc_set_ap_mod_exclude(key: &CStr, uid: i64, exclude: i32) -> c_long {
+    let data_item = DataItem {
+        data: &exclude as *const i32 as *mut c_void,
+        dlen: size_of::<i32>() as i32,
+        offset: 0,
+    };
+
     sc_kstorage_write(
         key,
         KSTORAGE_EXCLUDE_LIST_GROUP,
         uid,
-        &exclude as *const i32 as *mut c_void,
-        0,
-        size_of::<i32>() as i32,
+        &data_item,
     )
 }
 
