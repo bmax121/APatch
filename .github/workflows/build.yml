@@ -77,37 +77,43 @@ jobs:
           ./gradlew clean assembleDebug assembleRelease
           echo "BUILD_TOOL_VERSION=$(ls /usr/local/lib/android/sdk/build-tools/ | tail -n 1)" >> $GITHUB_ENV
 
-      - name: Sign Release
-        env:
-          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
-          BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
-        if: ${{ env.SIGNING_KEY != '' }}
-        continue-on-error: true
-        uses: kevin-david/zipalign-sign-android-release@v2
+      - name: Sign Release (v2 only)
         id: sign_app
-        with:
-          releaseDirectory: app/build/outputs/apk/release
-          signingKeyBase64: ${{ secrets.SIGNING_KEY }}
-          alias: ${{ secrets.ALIAS }}
-          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
-          keyPassword: ${{ secrets.KEY_PASSWORD }}
-          zipAlign: true
-
-      - name: Sign Debug APK
+        if: ${{ env.SIGNING_KEY != '' }}
+        continue-on-error: true
         env:
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
           BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
+          KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          echo "$SIGNING_KEY" | base64 -d > "$RUNNER_TEMP/apatch-signing.jks"
+          export KEYSTORE_FILE="$RUNNER_TEMP/apatch-signing.jks"
+          SIGNED=$(bash .github/scripts/sign_v2_only.sh app/build/outputs/apk/release | tail -n 1)
+          echo "signedReleaseFile=$SIGNED" >> "$GITHUB_OUTPUT"
+          echo "signedReleaseFile0=$SIGNED" >> "$GITHUB_OUTPUT"
+          echo "signedReleaseFiles=$SIGNED" >> "$GITHUB_OUTPUT"
+          echo "nofSignedReleaseFiles=1" >> "$GITHUB_OUTPUT"
+
+      - name: Sign Debug APK (v2 only)
+        id: sign_debug_app
         if: ${{ env.SIGNING_KEY != '' }}
         continue-on-error: true
-        uses: kevin-david/zipalign-sign-android-release@v2
-        id: sign_debug_app
-        with:
-          releaseDirectory: app/build/outputs/apk/debug
-          signingKeyBase64: ${{ secrets.SIGNING_KEY }}
-          alias: ${{ secrets.ALIAS }}
-          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
-          keyPassword: ${{ secrets.KEY_PASSWORD }}
-          zipAlign: true
+        env:
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+          BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
+          KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          echo "$SIGNING_KEY" | base64 -d > "$RUNNER_TEMP/apatch-signing.jks"
+          export KEYSTORE_FILE="$RUNNER_TEMP/apatch-signing.jks"
+          SIGNED=$(bash .github/scripts/sign_v2_only.sh app/build/outputs/apk/debug | tail -n 1)
+          echo "signedReleaseFile=$SIGNED" >> "$GITHUB_OUTPUT"
+          echo "signedReleaseFile0=$SIGNED" >> "$GITHUB_OUTPUT"
+          echo "signedReleaseFiles=$SIGNED" >> "$GITHUB_OUTPUT"
+          echo "nofSignedReleaseFiles=1" >> "$GITHUB_OUTPUT"
 
       - name: Upload mappings
         uses: actions/upload-artifact@v7
