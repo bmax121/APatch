@@ -47,7 +47,9 @@ import me.bmax.apatch.util.isABDevice
 import me.bmax.apatch.util.isJailbreakMode
 import me.bmax.apatch.util.rootAvailable
 
-var selectedBootImage: Uri? = null
+// Hand-off channel from this screen to the Patches screen; a plain var would not
+// notify the LaunchedEffect consuming it there.
+var selectedBootImage by mutableStateOf<Uri?>(null)
 
 @Destination<RootGraph>
 @Composable

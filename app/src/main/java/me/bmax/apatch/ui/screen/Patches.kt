@@ -58,7 +58,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -127,7 +126,7 @@ fun Patches(mode: PatchesViewModel.PatchMode) {
     var needKey by rememberSaveable { mutableStateOf(false) }
 
     val viewModel = viewModel<PatchesViewModel>()
-    SideEffect {
+    LaunchedEffect(mode) {
         viewModel.prepare(mode)
     }
 
@@ -178,12 +177,17 @@ fun Patches(mode: PatchesViewModel.PatchMode) {
             ErrorView(viewModel.error)
             KernelPatchImageView(viewModel.kpimgInfo)
 
-            if (mode == PatchesViewModel.PatchMode.PATCH_ONLY && selectedBootImage != null && viewModel.kimgInfo.banner.isEmpty()) {
-                viewModel.copyAndParseBootimg(selectedBootImage!!)
-                // Fix endless loop. It's not normal if (parse done && working thread is not working) but banner still null
-                // Leave user re-choose
-                if (!viewModel.running && viewModel.kimgInfo.banner.isEmpty()) {
-                    selectedBootImage = null
+            // Consume a boot image chosen on the install-mode screen exactly once;
+            // calling copyAndParseBootimg in composition refires per recomposition.
+            LaunchedEffect(selectedBootImage) {
+                val bootImage = selectedBootImage
+                if (mode == PatchesViewModel.PatchMode.PATCH_ONLY && bootImage != null && viewModel.kimgInfo.banner.isEmpty()) {
+                    viewModel.copyAndParseBootimg(bootImage)
+                    // Fix endless loop. It's not normal if (parse done && working thread is not working) but banner still null
+                    // Leave user re-choose
+                    if (!viewModel.running && viewModel.kimgInfo.banner.isEmpty()) {
+                        selectedBootImage = null
+                    }
                 }
             }
 
