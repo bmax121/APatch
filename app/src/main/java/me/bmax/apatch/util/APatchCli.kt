@@ -217,7 +217,7 @@ fun listModules(): String {
 fun migrateStockBootBackup() {
     withNewRootShell {
         newJob().add(
-            "cp /data/user/*/me.bmax.apatch/patch/ori.img /data/adb/ap/ 2>/dev/null && rm -f /data/user/*/me.bmax.apatch/patch/ori.img; true"
+            "mkdir -p /data/adb/ap && cp /data/user/*/me.bmax.apatch/patch/ori.img /data/adb/ap/ 2>/dev/null && rm -f /data/user/*/me.bmax.apatch/patch/ori.img; true"
         ).exec()
     }
 }
