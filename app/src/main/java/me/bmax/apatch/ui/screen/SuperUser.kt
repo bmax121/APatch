@@ -152,14 +152,10 @@ private fun AppItem(
 
     ListItem(
         modifier = Modifier.clickable(onClick = {
-            if (!rootGranted) {
-                showEditProfile = !showEditProfile
-            } else {
-                rootGranted = false
-                config.allow = 0
-                Natives.revokeSu(app.uid)
-                PkgConfig.changeConfig(config)
-            }
+            // Tapping the row only toggles the profile editor; granting or
+            // revoking root goes through the Switch alone so a stray tap can
+            // never strip an app's root access.
+            showEditProfile = !showEditProfile
         }),
         headlineContent = { Text(app.label) },
         leadingContent = {
