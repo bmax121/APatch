@@ -98,7 +98,6 @@ pub fn on_post_data_fs(superkey: Option<String>) -> Result<()> {
         "-f",
         &logcat_path,
         "logcatcher-bootlog:S",
-        "&",
     ];
     let _ = unsafe {
         Command::new("timeout")
