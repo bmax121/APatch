@@ -149,10 +149,8 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
     ) { viewModel.fetchModuleList() }
     val scrollBehavior = pinnedScrollBehavior()
 
-    //TODO: FIXME -> val isSafeMode = Natives.getSafeMode()
-    val isSafeMode = false
     val hasMagisk = hasMagisk()
-    val hideInstallButton = isSafeMode || hasMagisk
+    val hideInstallButton = hasMagisk
 
     val moduleListState = rememberLazyListState()
 
