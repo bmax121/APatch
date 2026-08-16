@@ -19,6 +19,7 @@ import com.topjohnwu.superuser.Shell
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
+import me.bmax.apatch.APApplication
 import me.bmax.apatch.IAPRootService
 import me.bmax.apatch.Natives
 import me.bmax.apatch.apApp
@@ -48,7 +49,10 @@ class SuperUserViewModel : ViewModel() {
 
     @Parcelize
     data class AppInfo(
-        val label: String, val packageInfo: PackageInfo, val config: PkgConfig.Config
+        val label: String,
+        val pinyin: String,
+        val packageInfo: PackageInfo,
+        val config: PkgConfig.Config
     ) : Parcelable {
         val packageName: String
             get() = packageInfo.packageName
@@ -61,6 +65,8 @@ class SuperUserViewModel : ViewModel() {
     var isRefreshing by mutableStateOf(false)
         private set
 
+    private val collator = Collator.getInstance(Locale.getDefault())
+
     private val sortedList by derivedStateOf {
         val comparator = compareBy<AppInfo> {
             when {
@@ -68,18 +74,20 @@ class SuperUserViewModel : ViewModel() {
                 it.config.exclude == 1 -> 1
                 else -> 2
             }
-        }.then(compareBy(Collator.getInstance(Locale.getDefault()), AppInfo::label))
+        }.then(compareBy(collator, AppInfo::label))
         apps.sortedWith(comparator)
     }
 
     val appList by derivedStateOf {
+        val query = search.lowercase()
         sortedList.filter {
-            it.label.lowercase().contains(search.lowercase()) || it.packageName.lowercase()
-                .contains(search.lowercase()) || HanziToPinyin.getInstance()
-                .toPinyinString(it.label).contains(search.lowercase())
+            it.label.lowercase().contains(query) || it.packageName.lowercase()
+                .contains(query) || it.pinyin.contains(query)
         }.filter {
             it.uid == 2000 // Always show shell
                     || showSystemApps || it.packageInfo.applicationInfo!!.flags.and(ApplicationInfo.FLAG_SYSTEM) == 0
+        }.filter {
+            it.packageName != apApp.packageName
         }
     }
 
@@ -150,8 +158,12 @@ class SuperUserViewModel : ViewModel() {
                         config.allow = 1
                         config.profile = actProfile
                     }
+                    val label = appInfo.loadLabel(apApp.packageManager).toString()
                     AppInfo(
-                        label = appInfo.loadLabel(apApp.packageManager).toString(),
+                        label = label,
+                        // Pinyin is only needed for search filtering; converting is
+                        // expensive, so do it once here instead of per keystroke.
+                        pinyin = HanziToPinyin.getInstance().toPinyinString(label),
                         packageInfo = it,
                         config = config
                     )
@@ -168,5 +180,56 @@ class SuperUserViewModel : ViewModel() {
         } finally {
             isRefreshing = false
         }
+    }
+
+    // Replaces the app's config wholesale so the snapshot state holding `apps`
+    // invalidates and the UI recomposes; mutating Config fields in place would
+    // leave the list showing stale grant/exclude state after a refresh.
+    private fun updateAppConfig(app: AppInfo, newConfig: PkgConfig.Config) {
+        synchronized(appsLock) {
+            apps = apps.map {
+                if (it.packageName == app.packageName && it.uid == app.uid) it.copy(config = newConfig) else it
+            }
+        }
+    }
+
+    fun setRootGranted(app: AppInfo, granted: Boolean) {
+        val config = app.config
+        val newConfig = if (granted) {
+            config.copy(
+                allow = 1,
+                exclude = 0,
+                profile = config.profile.copy(uid = app.uid, scontext = APApplication.MAGISK_SCONTEXT)
+            )
+        } else {
+            config.copy(allow = 0, profile = config.profile.copy(uid = app.uid))
+        }
+        PkgConfig.changeConfig(newConfig)
+        if (granted) {
+            Natives.grantSu(app.uid, 0, newConfig.profile.scontext)
+            Natives.setUidExclude(app.uid, 0)
+        } else {
+            Natives.revokeSu(app.uid)
+        }
+        updateAppConfig(app, newConfig)
+    }
+
+    fun setExcluded(app: AppInfo, excluded: Boolean) {
+        val config = app.config
+        val newConfig = if (excluded) {
+            config.copy(
+                allow = 0,
+                exclude = 1,
+                profile = config.profile.copy(uid = app.uid, scontext = APApplication.DEFAULT_SCONTEXT)
+            )
+        } else {
+            config.copy(exclude = 0, profile = config.profile.copy(uid = app.uid))
+        }
+        if (excluded) {
+            Natives.revokeSu(app.uid)
+        }
+        PkgConfig.changeConfig(newConfig)
+        Natives.setUidExclude(app.uid, newConfig.exclude)
+        updateAppConfig(app, newConfig)
     }
 }

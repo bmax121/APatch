@@ -9,6 +9,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import me.bmax.apatch.apApp
 import me.bmax.apatch.util.HanziToPinyin
@@ -39,6 +41,9 @@ class APModuleViewModel : ViewModel() {
         val hasActionScript: Boolean,
         val metamodule: Boolean,
         val updateInfo: ModuleUpdateInfo? = null,
+        // Pinyin of `name`, precomputed at load time; per-keystroke conversion in
+        // the search filter dropped frames on the main thread.
+        val pinyin: String = "",
     )
 
     data class ModuleUpdateInfo(
@@ -52,18 +57,16 @@ class APModuleViewModel : ViewModel() {
     var isRefreshing by mutableStateOf(false)
         private set
 
-    val moduleList by derivedStateOf {
-        val collator = Collator.getInstance(Locale.getDefault())
+    private val collator = Collator.getInstance(Locale.getDefault())
 
+    val moduleList by derivedStateOf {
         val comparator = compareByDescending<ModuleInfo> { it.metamodule && it.enabled }
             .thenBy(collator) { it.id }
 
         modules.filter {
-            it.id.contains(search, true) || it.name.contains(search, true) || HanziToPinyin.getInstance()
-                .toPinyinString(it.name)?.contains(search, true) == true
-        }.sortedWith(comparator).also {
-            isRefreshing = false
-        }
+            it.id.contains(search, true) || it.name.contains(search, true) ||
+                it.pinyin.contains(search, true)
+        }.sortedWith(comparator)
     }
 
     var isNeedRefresh by mutableStateOf(false)
@@ -76,8 +79,6 @@ class APModuleViewModel : ViewModel() {
     fun fetchModuleList() {
         viewModelScope.launch(Dispatchers.IO) {
             isRefreshing = true
-
-            val oldModuleList = modules
 
             val start = SystemClock.elapsedRealtime()
 
@@ -92,10 +93,11 @@ class APModuleViewModel : ViewModel() {
                     .asSequence()
                     .map { array.getJSONObject(it) }
                     .map { obj ->
+                        val name = obj.optString("name")
                         ModuleInfo(
                             obj.getString("id"),
 
-                            obj.optString("name"),
+                            name,
                             obj.optString("author", "Unknown"),
                             obj.optString("version", "Unknown"),
                             obj.optInt("versionCode", 0),
@@ -106,26 +108,25 @@ class APModuleViewModel : ViewModel() {
                             obj.optString("updateJson"),
                             obj.getBooleanCompat("web"),
                             obj.getBooleanCompat("action"),
-                            obj.getBooleanCompat("metamodule")
+                            obj.getBooleanCompat("metamodule"),
+                            pinyin = HanziToPinyin.getInstance().toPinyinString(name) ?: ""
                         )
                     }.toList()
-                viewModelScope.launch(Dispatchers.IO) {
-                    val updatedModules = modules.map { module ->
+                isNeedRefresh = false
+                isRefreshing = false
+
+                // One network round trip per enabled module; running them
+                // concurrently makes the total latency the slowest response
+                // instead of the sum of all responses.
+                modules = modules.map { module ->
+                    async {
                         if (module.enabled && module.updateJson.isNotEmpty() && !module.update && !module.remove) {
                             module.copy(updateInfo = runCatching { checkUpdate(module) }.getOrNull())
                         } else module
                     }
-                    modules = updatedModules
-                }
-                isNeedRefresh = false
+                }.awaitAll()
             }.onFailure { e ->
                 Log.e(TAG, "fetchModuleList: ", e)
-                isRefreshing = false
-            }
-
-            // when both old and new is kotlin.collections.EmptyList
-            // moduleList update will don't trigger
-            if (oldModuleList === modules) {
                 isRefreshing = false
             }
 
