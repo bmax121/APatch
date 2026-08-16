@@ -31,7 +31,6 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -50,16 +49,12 @@ import coil3.request.crossfade
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import kotlinx.coroutines.launch
-import me.bmax.apatch.APApplication
-import me.bmax.apatch.Natives
 import me.bmax.apatch.R
-import me.bmax.apatch.apApp
 import me.bmax.apatch.ui.component.ProvideMenuShape
 import me.bmax.apatch.ui.component.SearchAppBar
 import me.bmax.apatch.ui.component.SwitchItem
 import me.bmax.apatch.ui.component.pinnedScrollBehavior
 import me.bmax.apatch.ui.viewmodel.SuperUserViewModel
-import me.bmax.apatch.util.PkgConfig
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -132,8 +127,8 @@ fun SuperUserScreen() {
             isRefreshing = viewModel.isRefreshing
         ) {
             LazyColumn(Modifier.fillMaxSize()) {
-                items(viewModel.appList.filter { it.packageName != apApp.packageName }, key = { it.packageName + it.uid }) { app ->
-                    AppItem(app)
+                items(viewModel.appList, key = { it.packageName + it.uid }) { app ->
+                    AppItem(app, viewModel)
                 }
             }
         }
@@ -144,11 +139,12 @@ fun SuperUserScreen() {
 @Composable
 private fun AppItem(
     app: SuperUserViewModel.AppInfo,
+    viewModel: SuperUserViewModel,
 ) {
     val config = app.config
     var showEditProfile by remember { mutableStateOf(false) }
-    var rootGranted by remember { mutableStateOf(config.allow != 0) }
-    var excludeApp by remember { mutableIntStateOf(config.exclude) }
+    val rootGranted = config.allow != 0
+    val excluded = config.exclude == 1
 
     ListItem(
         modifier = Modifier.clickable(onClick = {
@@ -175,7 +171,7 @@ private fun AppItem(
                 Text(app.packageName)
                 FlowRow {
 
-                    if (excludeApp == 1) {
+                    if (excluded) {
                         LabelText(label = stringResource(id = R.string.su_pkg_excluded_label))
                     }
                     if (rootGranted) {
@@ -194,23 +190,7 @@ private fun AppItem(
         },
         trailingContent = {
             Switch(checked = rootGranted, onCheckedChange = {
-                rootGranted = !rootGranted
-                if (rootGranted) {
-                    excludeApp = 0
-                    config.allow = 1
-                    config.exclude = 0
-                    config.profile.scontext = APApplication.MAGISK_SCONTEXT
-                } else {
-                    config.allow = 0
-                }
-                config.profile.uid = app.uid
-                PkgConfig.changeConfig(config)
-                if (config.allow == 1) {
-                    Natives.grantSu(app.uid, 0, config.profile.scontext)
-                    Natives.setUidExclude(app.uid, 0)
-                } else {
-                    Natives.revokeSu(app.uid)
-                }
+                viewModel.setRootGranted(app, it)
             })
         },
     )
@@ -225,20 +205,9 @@ private fun AppItem(
             icon = Icons.Filled.Security,
             title = stringResource(id = R.string.su_pkg_excluded_setting_title),
             summary = stringResource(id = R.string.su_pkg_excluded_setting_summary),
-            checked = excludeApp == 1,
+            checked = excluded,
             onCheckedChange = {
-                if (it) {
-                    excludeApp = 1
-                    config.allow = 0
-                    config.profile.scontext = APApplication.DEFAULT_SCONTEXT
-                    Natives.revokeSu(app.uid)
-                } else {
-                    excludeApp = 0
-                }
-                config.exclude = excludeApp
-                config.profile.uid = app.uid
-                PkgConfig.changeConfig(config)
-                Natives.setUidExclude(app.uid, excludeApp)
+                viewModel.setExcluded(app, it)
             },
         )
     }
