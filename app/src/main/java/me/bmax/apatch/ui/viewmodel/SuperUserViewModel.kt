@@ -187,8 +187,10 @@ class SuperUserViewModel : ViewModel() {
     // leave the list showing stale grant/exclude state after a refresh.
     private fun updateAppConfig(app: AppInfo, newConfig: PkgConfig.Config) {
         synchronized(appsLock) {
+            // Grant/exclude are per-UID operations; every package sharing the
+            // UID must show the new state, or its stale row could overwrite it.
             apps = apps.map {
-                if (it.packageName == app.packageName && it.uid == app.uid) it.copy(config = newConfig) else it
+                if (it.uid == app.uid) it.copy(config = newConfig.copy(pkg = it.packageName)) else it
             }
         }
     }
