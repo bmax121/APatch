@@ -114,11 +114,15 @@ fun SettingScreen() {
     var isGlobalNamespaceEnabled by rememberSaveable {
         mutableStateOf(false)
     }
+    var namespaceLoaded by remember { mutableStateOf(false) }
     // The check shells out as root; run it once off the main thread instead of
-    // synchronously in composition on every recomposition.
+    // synchronously in composition on every recomposition. The switch stays
+    // disabled until the real value lands so a fast tap can't act on the
+    // placeholder and get overwritten by the late result.
     LaunchedEffect(kPatchReady && aPatchReady) {
         if (kPatchReady && aPatchReady) {
             isGlobalNamespaceEnabled = withContext(Dispatchers.IO) { isGlobalNamespaceEnabled() }
+            namespaceLoaded = true
         }
     }
 
@@ -189,6 +193,7 @@ fun SettingScreen() {
                     title = stringResource(id = R.string.settings_global_namespace_mode),
                     summary = stringResource(id = R.string.settings_global_namespace_mode_summary),
                     checked = isGlobalNamespaceEnabled,
+                    enabled = namespaceLoaded,
                     onCheckedChange = {
                         setGlobalNamespaceEnabled(
                             if (isGlobalNamespaceEnabled) {
