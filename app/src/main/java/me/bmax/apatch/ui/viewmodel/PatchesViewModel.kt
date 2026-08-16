@@ -203,7 +203,7 @@ class PatchesViewModel : ViewModel() {
     fun copyAndParseBootimg(uri: Uri) {
         viewModelScope.launch(Dispatchers.IO) {
             workMutex.withLock {
-                ensurePrepared()
+                if (!ensurePrepared()) return@withLock
                 if (running) return@withLock
                 running = true
                 try {
@@ -257,8 +257,10 @@ class PatchesViewModel : ViewModel() {
     // Runs the one-time initialization with the caller already holding
     // workMutex. Every patchDir consumer funnels through this so ordering does
     // not depend on which fire-and-forget coroutine grabs the lock first.
-    private suspend fun ensurePrepared() {
-        if (prepared) return
+    // Returns false when initialization failed; callers must not touch
+    // patchDir in that case.
+    private suspend fun ensurePrepared(): Boolean {
+        if (prepared) return true
         running = true
         try {
             prepare()
@@ -269,9 +271,11 @@ class PatchesViewModel : ViewModel() {
                 extractAndParseBootimg(entryMode)
             }
             prepared = true
+            return true
         } catch (e: Exception) {
             Log.e(TAG, "prepare failed", e)
             error = "prepare failed: ${e.message}\n"
+            return false
         } finally {
             running = false
         }
@@ -287,7 +291,7 @@ class PatchesViewModel : ViewModel() {
     fun embedKPM(uri: Uri) {
         viewModelScope.launch(Dispatchers.IO) {
             workMutex.withLock {
-                ensurePrepared()
+                if (!ensurePrepared()) return@withLock
                 if (running) return@withLock
                 running = true
                 error = ""
@@ -342,40 +346,44 @@ class PatchesViewModel : ViewModel() {
     fun doUnpatch() {
         viewModelScope.launch(Dispatchers.IO) {
             workMutex.withLock {
-                ensurePrepared()
+                if (!ensurePrepared()) return@withLock
                 patching = true
-                patchLog = ""
-                Log.i(TAG, "starting unpatching...")
+                try {
+                    patchLog = ""
+                    Log.i(TAG, "starting unpatching...")
 
-                val logs = object : CallbackList<String>() {
-                    override fun onAddElement(e: String?) {
-                        patchLog += e
-                        Log.i(TAG, "" + e)
-                        patchLog += "\n"
+                    val logs = object : CallbackList<String>() {
+                        override fun onAddElement(e: String?) {
+                            patchLog += e
+                            Log.i(TAG, "" + e)
+                            patchLog += "\n"
+                        }
                     }
+
+                    val result = shell.newJob().add(
+                        "export ASH_STANDALONE=1",
+                        "cd $patchDir",
+                        "cp /data/adb/ap/ori.img new-boot.img",
+                        "./busybox sh ./boot_unpatch.sh $bootDev",
+                        "rm -f ${APApplication.APD_PATH}",
+                        "rm -rf ${APApplication.APATCH_FOLDER}",
+                    ).to(logs, logs).exec()
+
+                    if (result.isSuccess) {
+                        logs.add(" Unpatch successful")
+                        needReboot = true
+                        APApplication.markNeedReboot()
+                    } else {
+                        logs.add(" Unpatched failed")
+                        error = result.err.joinToString("\n")
+                    }
+                    logs.add("****************************")
+
+                    patchdone = true
+                    patching = false
+                } finally {
+                    patching = false
                 }
-
-                val result = shell.newJob().add(
-                    "export ASH_STANDALONE=1",
-                    "cd $patchDir",
-                    "cp /data/adb/ap/ori.img new-boot.img",
-                    "./busybox sh ./boot_unpatch.sh $bootDev",
-                    "rm -f ${APApplication.APD_PATH}",
-                    "rm -rf ${APApplication.APATCH_FOLDER}",
-                ).to(logs, logs).exec()
-
-                if (result.isSuccess) {
-                    logs.add(" Unpatch successful")
-                    needReboot = true
-                    APApplication.markNeedReboot()
-                } else {
-                    logs.add(" Unpatched failed")
-                    error = result.err.joinToString("\n")
-                }
-                logs.add("****************************")
-
-                patchdone = true
-                patching = false
             }
         }
     }
@@ -386,195 +394,199 @@ class PatchesViewModel : ViewModel() {
     fun doPatch(mode: PatchMode, useKey: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
             workMutex.withLock {
-                ensurePrepared()
+                if (!ensurePrepared()) return@withLock
                 patching = true
-                Log.d(TAG, "starting patching...")
+                try {
+                    Log.d(TAG, "starting patching...")
 
-                val apVer = Version.getManagerVersion().second
-                val rand = (1..4).map { ('a'..'z').random() }.joinToString("")
-                val outFilename = "apatch_patched_${apVer}_${BuildConfig.buildKPV}_${rand}.img"
+                    val apVer = Version.getManagerVersion().second
+                    val rand = (1..4).map { ('a'..'z').random() }.joinToString("")
+                    val outFilename = "apatch_patched_${apVer}_${BuildConfig.buildKPV}_${rand}.img"
 
-                val logs = object : CallbackList<String>() {
-                    override fun onAddElement(e: String?) {
-                        patchLog += e
-                        Log.d(TAG, "" + e)
-                        patchLog += "\n"
-                    }
-                }
-                logs.add("****************************")
-
-                var patchCommand = mutableListOf("./busybox sh boot_patch.sh \"$0\" \"$@\"")
-
-                // adapt for 0.10.7 and lower KP
-                var isKpOld = false
-
-                val superkey = if (useKey && this@PatchesViewModel.superkey.isNotEmpty()) this@PatchesViewModel.superkey else "su"
-
-                if (mode == PatchMode.PATCH_AND_INSTALL || mode == PatchMode.INSTALL_TO_NEXT_SLOT) {
-
-                    val KPCheck = shell.newJob().add("truncate ${APApplication.superKey} -Z u:r:magisk:s0 -c whoami").exec()
-
-                    if (KPCheck.isSuccess && !isSuExecutable()) {
-                        patchCommand.addAll(0, listOf("truncate", APApplication.superKey, "-Z", APApplication.MAGISK_SCONTEXT, "-c"))
-                        patchCommand.addAll(listOf(superkey, srcBoot.path, "true"))
-                    } else {
-                        patchCommand = mutableListOf("./busybox", "sh", "boot_patch.sh")
-                        patchCommand.addAll(listOf(superkey, srcBoot.path, "true"))
-                        isKpOld = true
-                    }
-
-                } else {
-                    patchCommand.addAll(0, listOf("sh", "-c"))
-                    patchCommand.addAll(listOf(superkey, srcBoot.path))
-                }
-
-                for (i in 0..<newExtrasFileName.size) {
-                    patchCommand.addAll(listOf("-M", newExtrasFileName[i]))
-                    val extra = newExtras[i]
-                    if (extra.args.isNotEmpty()) {
-                        patchCommand.addAll(listOf("-A", extra.args))
-                    }
-                    if (extra.event.isNotEmpty()) {
-                        patchCommand.addAll(listOf("-V", extra.event))
-                    }
-                    patchCommand.addAll(listOf("-T", extra.type.desc))
-                }
-                for (i in 0..<existedExtras.size) {
-                    val extra = existedExtras[i]
-                    patchCommand.addAll(listOf("-E", extra.name))
-                    if (extra.args.isNotEmpty()) {
-                        patchCommand.addAll(listOf("-A", extra.args))
-                    }
-                    if (extra.event.isNotEmpty()) {
-                        patchCommand.addAll(listOf("-V", extra.event))
-                    }
-                    patchCommand.addAll(listOf("-T", extra.type.desc))
-                }
-
-                val builder = ProcessBuilder(patchCommand)
-
-                Log.i(TAG, "patchCommand: $patchCommand")
-
-                var succ = false
-
-                if (isKpOld) {
-                    val resultString = "\"" + patchCommand.joinToString(separator = "\" \"") + "\""
-                    val result = shell.newJob().add(
-                        "export ASH_STANDALONE=1",
-                        "cd $patchDir",
-                        resultString,
-                    ).to(logs, logs).exec()
-                    succ = result.isSuccess
-                } else {
-                    builder.environment().put("ASH_STANDALONE", "1")
-                    builder.directory(patchDir)
-                    builder.redirectErrorStream(true)
-
-                    val process = builder.start()
-
-                    Thread {
-                        BufferedReader(InputStreamReader(process.inputStream)).use { reader ->
-                            var line: String?
-                            while (reader.readLine().also { line = it } != null) {
-                                patchLog += line
-                                Log.i(TAG, "" + line)
-                                patchLog += "\n"
-                            }
+                    val logs = object : CallbackList<String>() {
+                        override fun onAddElement(e: String?) {
+                            patchLog += e
+                            Log.d(TAG, "" + e)
+                            patchLog += "\n"
                         }
-                    }.start()
-                    succ = process.waitFor() == 0
-                }
-
-                if (!succ) {
-                    val msg = " Patch failed."
-                    error = msg
-    //                error += result.err.joinToString("\n")
-                    logs.add(error)
+                    }
                     logs.add("****************************")
-                    patching = false
-                    return@launch
-                }
 
-                // Move the stock boot backup to where the unpatch flow expects it;
-                // boot_patch.sh leaves ori.img in the app-private work dir, and the
-                // OTA post_ota.sh cleanup deletes that dir on reboot. Only created
-                // when the boot image was not already patched.
-                shell.newJob().add(
-                    "[ -f $patchDir/ori.img ] && mkdir -p /data/adb/ap && cp $patchDir/ori.img /data/adb/ap/ && rm -f $patchDir/ori.img || true"
-                ).to(logs, logs).exec()
+                    var patchCommand = mutableListOf("./busybox sh boot_patch.sh \"$0\" \"$@\"")
 
-                if (mode == PatchMode.PATCH_AND_INSTALL) {
-                    logs.add("- Reboot to finish the installation...")
-                    needReboot = true
-                    APApplication.markNeedReboot()
-                } else if (mode == PatchMode.INSTALL_TO_NEXT_SLOT) {
-                    logs.add("- Connecting boot hal...")
-                    val bootctlStatus = shell.newJob().add(
-                        "cd $patchDir", "chmod 0777 $patchDir/bootctl", "./bootctl hal-info"
-                    ).to(logs, logs).exec()
-                    if (!bootctlStatus.isSuccess) {
-                        logs.add("[X] Failed to connect to boot hal, you may need switch slot manually")
-                    } else {
-                        val currSlot = shellForResult(
-                            shell, "cd $patchDir", "./bootctl get-current-slot"
-                        ).out.toString()
-                        val targetSlot = if (currSlot.contains("0")) {
-                            1
+                    // adapt for 0.10.7 and lower KP
+                    var isKpOld = false
+
+                    val superkey = if (useKey && this@PatchesViewModel.superkey.isNotEmpty()) this@PatchesViewModel.superkey else "su"
+
+                    if (mode == PatchMode.PATCH_AND_INSTALL || mode == PatchMode.INSTALL_TO_NEXT_SLOT) {
+
+                        val KPCheck = shell.newJob().add("truncate ${APApplication.superKey} -Z u:r:magisk:s0 -c whoami").exec()
+
+                        if (KPCheck.isSuccess && !isSuExecutable()) {
+                            patchCommand.addAll(0, listOf("truncate", APApplication.superKey, "-Z", APApplication.MAGISK_SCONTEXT, "-c"))
+                            patchCommand.addAll(listOf(superkey, srcBoot.path, "true"))
                         } else {
-                            0
+                            patchCommand = mutableListOf("./busybox", "sh", "boot_patch.sh")
+                            patchCommand.addAll(listOf(superkey, srcBoot.path, "true"))
+                            isKpOld = true
                         }
-                        logs.add("- Switching to next slot: $targetSlot...")
-                        val setNextActiveSlot = shell.newJob().add(
-                            "cd $patchDir", "./bootctl set-active-boot-slot $targetSlot"
-                        ).exec()
-                        if (setNextActiveSlot.isSuccess) {
-                            logs.add("- Switch done")
-                            logs.add("- Writing boot marker script...")
-                            val markBootableScript = shell.newJob().add(
-                                "mkdir -p /data/adb/post-fs-data.d && rm -rf /data/adb/post-fs-data.d/post_ota.sh && touch /data/adb/post-fs-data.d/post_ota.sh",
-                                "echo \"chmod 0777 $patchDir/bootctl\" > /data/adb/post-fs-data.d/post_ota.sh",
-                                "echo \"chown root:root 0777 $patchDir/bootctl\" > /data/adb/post-fs-data.d/post_ota.sh",
-                                "echo \"$patchDir/bootctl mark-boot-successful\" > /data/adb/post-fs-data.d/post_ota.sh",
-                                "echo >> /data/adb/post-fs-data.d/post_ota.sh",
-                                "echo \"rm -rf $patchDir\" >> /data/adb/post-fs-data.d/post_ota.sh",
-                                "echo >> /data/adb/post-fs-data.d/post_ota.sh",
-                                "echo \"rm -f /data/adb/post-fs-data.d/post_ota.sh\" >> /data/adb/post-fs-data.d/post_ota.sh",
-                                "chmod 0777 /data/adb/post-fs-data.d/post_ota.sh",
-                                "chown root:root /data/adb/post-fs-data.d/post_ota.sh",
-                            ).to(logs, logs).exec()
-                            if (markBootableScript.isSuccess) {
-                                logs.add("- Boot marker script write done")
+
+                    } else {
+                        patchCommand.addAll(0, listOf("sh", "-c"))
+                        patchCommand.addAll(listOf(superkey, srcBoot.path))
+                    }
+
+                    for (i in 0..<newExtrasFileName.size) {
+                        patchCommand.addAll(listOf("-M", newExtrasFileName[i]))
+                        val extra = newExtras[i]
+                        if (extra.args.isNotEmpty()) {
+                            patchCommand.addAll(listOf("-A", extra.args))
+                        }
+                        if (extra.event.isNotEmpty()) {
+                            patchCommand.addAll(listOf("-V", extra.event))
+                        }
+                        patchCommand.addAll(listOf("-T", extra.type.desc))
+                    }
+                    for (i in 0..<existedExtras.size) {
+                        val extra = existedExtras[i]
+                        patchCommand.addAll(listOf("-E", extra.name))
+                        if (extra.args.isNotEmpty()) {
+                            patchCommand.addAll(listOf("-A", extra.args))
+                        }
+                        if (extra.event.isNotEmpty()) {
+                            patchCommand.addAll(listOf("-V", extra.event))
+                        }
+                        patchCommand.addAll(listOf("-T", extra.type.desc))
+                    }
+
+                    val builder = ProcessBuilder(patchCommand)
+
+                    Log.i(TAG, "patchCommand: $patchCommand")
+
+                    var succ = false
+
+                    if (isKpOld) {
+                        val resultString = "\"" + patchCommand.joinToString(separator = "\" \"") + "\""
+                        val result = shell.newJob().add(
+                            "export ASH_STANDALONE=1",
+                            "cd $patchDir",
+                            resultString,
+                        ).to(logs, logs).exec()
+                        succ = result.isSuccess
+                    } else {
+                        builder.environment().put("ASH_STANDALONE", "1")
+                        builder.directory(patchDir)
+                        builder.redirectErrorStream(true)
+
+                        val process = builder.start()
+
+                        Thread {
+                            BufferedReader(InputStreamReader(process.inputStream)).use { reader ->
+                                var line: String?
+                                while (reader.readLine().also { line = it } != null) {
+                                    patchLog += line
+                                    Log.i(TAG, "" + line)
+                                    patchLog += "\n"
+                                }
+                            }
+                        }.start()
+                        succ = process.waitFor() == 0
+                    }
+
+                    if (!succ) {
+                        val msg = " Patch failed."
+                        error = msg
+        //                error += result.err.joinToString("\n")
+                        logs.add(error)
+                        logs.add("****************************")
+                        patching = false
+                        return@launch
+                    }
+
+                    // Move the stock boot backup to where the unpatch flow expects it;
+                    // boot_patch.sh leaves ori.img in the app-private work dir, and the
+                    // OTA post_ota.sh cleanup deletes that dir on reboot. Only created
+                    // when the boot image was not already patched.
+                    shell.newJob().add(
+                        "[ -f $patchDir/ori.img ] && mkdir -p /data/adb/ap && cp $patchDir/ori.img /data/adb/ap/ && rm -f $patchDir/ori.img || true"
+                    ).to(logs, logs).exec()
+
+                    if (mode == PatchMode.PATCH_AND_INSTALL) {
+                        logs.add("- Reboot to finish the installation...")
+                        needReboot = true
+                        APApplication.markNeedReboot()
+                    } else if (mode == PatchMode.INSTALL_TO_NEXT_SLOT) {
+                        logs.add("- Connecting boot hal...")
+                        val bootctlStatus = shell.newJob().add(
+                            "cd $patchDir", "chmod 0777 $patchDir/bootctl", "./bootctl hal-info"
+                        ).to(logs, logs).exec()
+                        if (!bootctlStatus.isSuccess) {
+                            logs.add("[X] Failed to connect to boot hal, you may need switch slot manually")
+                        } else {
+                            val currSlot = shellForResult(
+                                shell, "cd $patchDir", "./bootctl get-current-slot"
+                            ).out.toString()
+                            val targetSlot = if (currSlot.contains("0")) {
+                                1
                             } else {
-                                logs.add("[X] Boot marker scripts write failed")
+                                0
+                            }
+                            logs.add("- Switching to next slot: $targetSlot...")
+                            val setNextActiveSlot = shell.newJob().add(
+                                "cd $patchDir", "./bootctl set-active-boot-slot $targetSlot"
+                            ).exec()
+                            if (setNextActiveSlot.isSuccess) {
+                                logs.add("- Switch done")
+                                logs.add("- Writing boot marker script...")
+                                val markBootableScript = shell.newJob().add(
+                                    "mkdir -p /data/adb/post-fs-data.d && rm -rf /data/adb/post-fs-data.d/post_ota.sh && touch /data/adb/post-fs-data.d/post_ota.sh",
+                                    "echo \"chmod 0777 $patchDir/bootctl\" > /data/adb/post-fs-data.d/post_ota.sh",
+                                    "echo \"chown root:root 0777 $patchDir/bootctl\" > /data/adb/post-fs-data.d/post_ota.sh",
+                                    "echo \"$patchDir/bootctl mark-boot-successful\" > /data/adb/post-fs-data.d/post_ota.sh",
+                                    "echo >> /data/adb/post-fs-data.d/post_ota.sh",
+                                    "echo \"rm -rf $patchDir\" >> /data/adb/post-fs-data.d/post_ota.sh",
+                                    "echo >> /data/adb/post-fs-data.d/post_ota.sh",
+                                    "echo \"rm -f /data/adb/post-fs-data.d/post_ota.sh\" >> /data/adb/post-fs-data.d/post_ota.sh",
+                                    "chmod 0777 /data/adb/post-fs-data.d/post_ota.sh",
+                                    "chown root:root /data/adb/post-fs-data.d/post_ota.sh",
+                                ).to(logs, logs).exec()
+                                if (markBootableScript.isSuccess) {
+                                    logs.add("- Boot marker script write done")
+                                } else {
+                                    logs.add("[X] Boot marker scripts write failed")
+                                }
                             }
                         }
-                    }
-                    logs.add("- Reboot to finish the installation...")
-                    needReboot = true
-                    APApplication.markNeedReboot()
-                } else if (mode == PatchMode.PATCH_ONLY) {
-                    val newBootFile = patchDir.getChildFile("new-boot.img")
-                    val outDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-                    if (!outDir.exists()) outDir.mkdirs()
-                    val outPath = File(outDir, outFilename)
-                    val inputUri = newBootFile.getUri(apApp)
+                        logs.add("- Reboot to finish the installation...")
+                        needReboot = true
+                        APApplication.markNeedReboot()
+                    } else if (mode == PatchMode.PATCH_ONLY) {
+                        val newBootFile = patchDir.getChildFile("new-boot.img")
+                        val outDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                        if (!outDir.exists()) outDir.mkdirs()
+                        val outPath = File(outDir, outFilename)
+                        val inputUri = newBootFile.getUri(apApp)
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        val outUri = createDownloadUri(apApp, outFilename)
-                        succ = insertDownload(apApp, outUri, inputUri)
-                    } else {
-                        newBootFile.inputStream().copyAndClose(outPath.outputStream())
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                            val outUri = createDownloadUri(apApp, outFilename)
+                            succ = insertDownload(apApp, outUri, inputUri)
+                        } else {
+                            newBootFile.inputStream().copyAndClose(outPath.outputStream())
+                        }
+                        if (succ) {
+                            logs.add(" Output file is written to ")
+                            logs.add(" ${outPath.path}")
+                        } else {
+                            logs.add(" Write patched boot.img failed")
+                        }
                     }
-                    if (succ) {
-                        logs.add(" Output file is written to ")
-                        logs.add(" ${outPath.path}")
-                    } else {
-                        logs.add(" Write patched boot.img failed")
-                    }
+                    logs.add("****************************")
+                    patchdone = true
+                    patching = false
+                } finally {
+                    patching = false
                 }
-                logs.add("****************************")
-                patchdone = true
-                patching = false
             }
         }
     }
