@@ -37,6 +37,33 @@ fn exec_shell_commands(commands: &[(&str, &[&str])], log_prefix: &str) -> Result
     Ok(())
 }
 
+fn prop_file_paths() -> Result<(String, String, String)> {
+    let debuggable_context = sys_prop::get_context("ro.debuggable")
+        .context("Failed to get context for ro.debuggable")?;
+    info!("ro.debuggable context: {debuggable_context}");
+
+    let adb_secure_context = sys_prop::get_context("ro.adb.secure")
+        .context("Failed to get context for ro.adb.secure")?;
+    info!("ro.adb.secure context: {adb_secure_context}");
+
+    Ok((
+        "/dev/__properties__/properties_serial".to_string(),
+        format!("/dev/__properties__/{debuggable_context}"),
+        format!("/dev/__properties__/{adb_secure_context}"),
+    ))
+}
+
+fn chmod_prop_files(mode: &str, paths: &(String, String, String)) -> Result<()> {
+    exec_shell_commands(
+        &[
+            ("chmod", &[mode, &paths.0]),
+            ("chmod", &[mode, &paths.1]),
+            ("chmod", &[mode, &paths.2]),
+        ],
+        "Executing",
+    )
+}
+
 fn enable_adb_root(port: u16) -> Result<()> {
     // We are in limited root (uid 0) by the app-zygote bootstrap.
     anyhow::ensure!(
@@ -46,29 +73,11 @@ fn enable_adb_root(port: u16) -> Result<()> {
 
     sys_prop::init().context("Failed to initialize system property API")?;
     let rp = resetprop();
-
-    let debuggable_context = sys_prop::get_context("ro.debuggable")
-        .context("Failed to get context for ro.debuggable")?;
-    info!("ro.debuggable context: {debuggable_context}");
-
-    let adb_secure_context = sys_prop::get_context("ro.adb.secure")
-        .context("Failed to get context for ro.adb.secure")?;
-    info!("ro.adb.secure context: {adb_secure_context}");
-
-    let props_serial = "/dev/__properties__/properties_serial";
-    let debuggable_context = format!("/dev/__properties__/{debuggable_context}");
-    let adb_secure_context = format!("/dev/__properties__/{adb_secure_context}");
+    let paths = prop_file_paths()?;
     let port_str = port.to_string();
 
     // chmod property files to writable
-    exec_shell_commands(
-        &[
-            ("chmod", &["0644", props_serial]),
-            ("chmod", &["0644", &debuggable_context]),
-            ("chmod", &["0644", &adb_secure_context]),
-        ],
-        "Executing",
-    )?;
+    chmod_prop_files("0644", &paths)?;
 
     // Set properties via internal API
     rp.set("ro.debuggable", "1")
@@ -79,11 +88,9 @@ fn enable_adb_root(port: u16) -> Result<()> {
     info!("Executing: resetprop -n ro.adb.secure 0");
 
     // Restore permissions and restart adbd
+    chmod_prop_files("0444", &paths)?;
     exec_shell_commands(
         &[
-            ("chmod", &["0444", props_serial]),
-            ("chmod", &["0444", &debuggable_context]),
-            ("chmod", &["0444", &adb_secure_context]),
             ("setprop", &["service.adb.root", "1"]),
             ("setprop", &["service.adb.tcp.port", &port_str]),
             ("setprop", &["ctl.restart", "adbd"]),
@@ -95,29 +102,41 @@ fn enable_adb_root(port: u16) -> Result<()> {
 }
 
 pub fn disable_adb_root() -> Result<()> {
-    // We have full root now, no need to chmod.
+    // The magica error path calls this with the caller's limited root, where the
+    // property files are 0444; make them writable first (same dance as
+    // enable_adb_root) or the restore silently fails exactly when it matters.
     sys_prop::init().context("Failed to initialize system property API")?;
     let rp = resetprop();
+    let paths = prop_file_paths()?;
 
-    info!("Restoring: resetprop -n ro.debuggable 0");
-    rp.set("ro.debuggable", "0")
-        .context("Failed to set ro.debuggable")?;
+    chmod_prop_files("0644", &paths)?;
 
-    info!("Restoring: resetprop -n ro.adb.secure 1");
-    rp.set("ro.adb.secure", "1")
-        .context("Failed to set ro.adb.secure")?;
+    let result = (|| -> Result<()> {
+        info!("Restoring: resetprop -n ro.debuggable 0");
+        rp.set("ro.debuggable", "0")
+            .context("Failed to set ro.debuggable")?;
 
-    for prop in &[
-        "service.adb.root",
-        "service.adb.tcp.port",
-        "ro.boot.selinux",
-    ] {
-        info!("Restoring: resetprop --delete {prop}");
-        let _ = rp.delete(prop);
-        if let Ok(ctx) = sys_prop::get_context(prop) {
-            let _ = rp.rebuild(&ctx);
+        info!("Restoring: resetprop -n ro.adb.secure 1");
+        rp.set("ro.adb.secure", "1")
+            .context("Failed to set ro.adb.secure")?;
+
+        for prop in &[
+            "service.adb.root",
+            "service.adb.tcp.port",
+            "ro.boot.selinux",
+        ] {
+            info!("Restoring: resetprop --delete {prop}");
+            let _ = rp.delete(prop);
+            if let Ok(ctx) = sys_prop::get_context(prop) {
+                let _ = rp.rebuild(&ctx);
+            }
         }
-    }
+        Ok(())
+    })();
+
+    // Restore the file permissions even if a property write failed.
+    let chmod_result = chmod_prop_files("0444", &paths);
+    result.and(chmod_result)?;
 
     exec_shell_commands(&[("setprop", &["ctl.restart", "adbd"])], "Restoring")?;
 
@@ -202,7 +221,14 @@ fn run_via_adb(
     let mut stdout = Vec::new();
     let mut stderr = Vec::new();
     if let Err(e) = device.shell_command(&cmd, Some(&mut stdout), Some(&mut stderr)) {
+        // Usually expected: the remote's own disable_adb_root restarts adbd and
+        // drops this connection mid-command. But the error also covers the
+        // remote never having run, so belt-and-suspenders: disable adb root
+        // locally as well (idempotent, at worst one extra adbd bounce).
         info!("adb shell finished with error (may be expected): {e}");
+        if let Err(e) = disable_adb_root() {
+            error!("disable adb root after shell error failed: {e:#}");
+        }
     }
     if !stdout.is_empty() {
         info!("stdout: {}", String::from_utf8_lossy(&stdout));
