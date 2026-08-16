@@ -144,18 +144,30 @@ fn create_transfer(ptmx: OwnedFd) -> Result<()> {
     pump_stdin_async(ptmx_r);
     pump_stdout_blocking(ptmx_w);
 
-    let mut status: c_int = -1;
+    let mut status: c_int = 0;
 
-    unsafe {
+    let code = unsafe {
         loop {
-            if waitpid(pid, &mut status, 0) == -1 && *__errno() != EINTR {
-                continue;
+            if waitpid(pid, &mut status, 0) != -1 {
+                break;
             }
-            break;
+            if *__errno() != EINTR {
+                // Permanent waitpid failure (e.g. ECHILD): the child is gone and
+                // its real exit status is unknowable.
+                exit(1);
+            }
         }
-    }
+        if libc::WIFEXITED(status) {
+            libc::WEXITSTATUS(status)
+        } else if libc::WIFSIGNALED(status) {
+            // Shell convention for a child killed by a signal.
+            128 + libc::WTERMSIG(status)
+        } else {
+            1
+        }
+    };
 
-    exit(status)
+    exit(code)
 }
 
 pub fn prepare_pty() -> Result<()> {
