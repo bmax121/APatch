@@ -41,6 +41,7 @@ import androidx.compose.material.icons.outlined.SystemUpdate
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -168,23 +169,40 @@ fun UninstallDialog(showDialog: MutableState<Boolean>, navigator: DestinationsNa
                         style = MaterialTheme.typography.headlineSmall
                     )
                 }
+                Text(
+                    text = stringResource(id = R.string.home_dialog_uninstall_message),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(PaddingValues(bottom = 24.dp))
+                )
                 Row(
-                    modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center
+                    modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End
                 ) {
+                    TextButton(onClick = { showDialog.value = false }) {
+                        Text(text = stringResource(id = android.R.string.cancel))
+                    }
+
                     TextButton(onClick = {
                         showDialog.value = false
                         APApplication.uninstallApatch()
                     }) {
                         Text(text = stringResource(id = R.string.home_dialog_uninstall_ap_only))
                     }
-
-                    TextButton(onClick = {
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+                Button(
+                    onClick = {
                         showDialog.value = false
                         APApplication.uninstallApatch()
                         navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.UNPATCH))
-                    }) {
-                        Text(text = stringResource(id = R.string.home_dialog_uninstall_all))
-                    }
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.error,
+                        contentColor = MaterialTheme.colorScheme.onError
+                    )
+                ) {
+                    Text(text = stringResource(id = R.string.home_dialog_uninstall_all))
                 }
             }
             val dialogWindowProvider = LocalView.current.parent as DialogWindowProvider
@@ -194,12 +212,10 @@ fun UninstallDialog(showDialog: MutableState<Boolean>, navigator: DestinationsNa
 }
 
 @Composable
-fun RebootDropdownItem(@StringRes id: Int, reason: String = "") {
+fun RebootDropdownItem(@StringRes id: Int, reason: String = "", onClick: (() -> Unit)? = null) {
     DropdownMenuItem(text = {
         Text(stringResource(id))
-    }, onClick = {
-        reboot(reason)
-    })
+    }, onClick = onClick ?: { reboot(reason) })
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -222,6 +238,15 @@ private fun TopBar(
         }
 
         if (kpState != APApplication.State.UNKNOWN_STATE) {
+            val downloadTitle = stringResource(id = R.string.reboot_download)
+            val downloadConfirmText = stringResource(id = R.string.reboot_download_confirm)
+            val edlTitle = stringResource(id = R.string.reboot_edl)
+            val edlConfirmText = stringResource(id = R.string.reboot_edl_confirm)
+            var pendingRebootReason by remember { mutableStateOf<String?>(null) }
+            val rebootConfirmDialog = rememberConfirmDialog(onConfirm = {
+                pendingRebootReason?.let { reboot(it) }
+            })
+
             IconButton(onClick = {
                 showDropdownReboot = true
             }) {
@@ -238,8 +263,22 @@ private fun TopBar(
                         RebootDropdownItem(id = R.string.reboot_soft, reason = "soft_reboot")
                         RebootDropdownItem(id = R.string.reboot_recovery, reason = "recovery")
                         RebootDropdownItem(id = R.string.reboot_bootloader, reason = "bootloader")
-                        RebootDropdownItem(id = R.string.reboot_download, reason = "download")
-                        RebootDropdownItem(id = R.string.reboot_edl, reason = "edl")
+                        // Download/EDL drop the device into flashing modes that look dead
+                        // to a normal user, so they get a confirmation step first.
+                        RebootDropdownItem(id = R.string.reboot_download, onClick = {
+                            showDropdownReboot = false
+                            pendingRebootReason = "download"
+                            rebootConfirmDialog.showConfirm(
+                                title = downloadTitle, content = downloadConfirmText
+                            )
+                        })
+                        RebootDropdownItem(id = R.string.reboot_edl, onClick = {
+                            showDropdownReboot = false
+                            pendingRebootReason = "edl"
+                            rebootConfirmDialog.showConfirm(
+                                title = edlTitle, content = edlConfirmText
+                            )
+                        })
                     }
                 }
             }

@@ -25,6 +25,8 @@
     <string name="reboot_bootloader">Reboot to Bootloader</string>
     <string name="reboot_download">Reboot to Download</string>
     <string name="reboot_edl">Reboot to EDL</string>
+    <string name="reboot_download_confirm">Reboot into Download mode? The device will boot into the firmware flashing interface.</string>
+    <string name="reboot_edl_confirm">Reboot into EDL (Emergency Download) mode? The screen will stay black and the device can only be recovered with a deep flash tool.</string>
     <string name="about">About</string>
     <string name="settings_app_language">Language</string>
     <string name="system_default">System default</string>
@@ -219,6 +221,7 @@
 
     <string name="home_dialog_uninstall_ap_only">Remove AndroidPatch</string>
     <string name="home_dialog_uninstall_all">Uninstall all</string>
+    <string name="home_dialog_uninstall_message">Remove AndroidPatch only removes the manager app and keeps the patched boot image. Uninstall all also restores the stock boot image, and the device will lose root until it is patched again.</string>
 
     <string name="kpm_control_dialog_title">Control KPModule</string>
     <string name="kpm_control_dialog_content">Input control parameters:</string>
