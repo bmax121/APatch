@@ -3,6 +3,8 @@ package me.bmax.apatch.ui.component
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.DecayAnimationSpec
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -25,11 +27,9 @@ import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.automirrored.twotone.ArrowBack
 import androidx.compose.material.icons.twotone.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MotionScheme
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.SearchBarScrollBehavior
@@ -65,12 +65,11 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import me.bmax.apatch.R
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @ExperimentalMaterial3Api
 @Composable
 fun pinnedScrollBehavior(
     canScroll: () -> Boolean = { true },
-    snapAnimationSpec: AnimationSpec<Float> = MotionScheme.expressive().defaultEffectsSpec(),
+    snapAnimationSpec: AnimationSpec<Float> = spring(stiffness = Spring.StiffnessMediumLow),
     flingAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay(),
     reverseLayout: Boolean = false,
 ): SearchBarScrollBehavior =
@@ -97,9 +96,6 @@ private class PinnedScrollBehavior(
     override var scrollOffset by mutableFloatStateOf(0f)
     override var scrollOffsetLimit by mutableFloatStateOf(0f)
 
-    // Track contentOffset to allow for tonal elevation/color changes on scroll
-    override var contentOffset by mutableFloatStateOf(0f)
-
     override fun Modifier.searchBarScrollBehavior(): Modifier {
         // We remove the .layout { ... } and .draggable blocks
         // that were responsible for hiding/moving the bar.
@@ -122,14 +118,7 @@ private class PinnedScrollBehavior(
                 consumed: Offset,
                 available: Offset,
                 source: NestedScrollSource,
-            ): Offset {
-                if (!canScroll()) return Offset.Zero
-
-                // Update contentOffset so the UI knows how far the user has scrolled
-                // This is used for "overlapped" state (changing colors/elevation)
-                contentOffset += consumed.y
-                return Offset.Zero
-            }
+            ): Offset = Offset.Zero
         }
 
     companion object {
@@ -141,7 +130,6 @@ private class PinnedScrollBehavior(
                     listOf(
                         it.scrollOffset,
                         it.scrollOffsetLimit,
-                        it.contentOffset,
                     )
                 },
                 restore = {

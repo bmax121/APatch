@@ -55,8 +55,8 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import coil.Coil
-import coil.ImageLoader
+import coil3.ImageLoader
+import coil3.SingletonImageLoader
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.animations.NavHostAnimatedDestinationStyle
 import com.ramcosta.composedestinations.generated.NavGraphs
@@ -68,8 +68,6 @@ import me.bmax.apatch.ui.screen.BottomBarDestination
 import me.bmax.apatch.ui.theme.APatchTheme
 import me.bmax.apatch.ui.viewmodel.SuperUserViewModel
 import me.bmax.apatch.util.ui.LocalSnackbarHost
-import me.zhanghai.android.appiconloader.coil.AppIconFetcher
-import me.zhanghai.android.appiconloader.coil.AppIconKeyer
 
 class MainActivity : AppCompatActivity() {
 
@@ -198,15 +196,15 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Initialize Coil
-        val iconSize = resources.getDimensionPixelSize(android.R.dimen.app_icon_size)
-        Coil.setImageLoader(
-            ImageLoader.Builder(this)
-                .components {
-                    add(AppIconKeyer())
-                    add(AppIconFetcher.Factory(iconSize, false, this@MainActivity))
-                }
-                .build()
+        SingletonImageLoader.setSafe(
+            SingletonImageLoader.Factory { context ->
+                ImageLoader.Builder(context)
+                    .components {
+                        add(AppIconKeyer())
+                        add(AppIconFetcher.Factory(context))
+                    }
+                    .build()
+            }
         )
 
         isLoading = false

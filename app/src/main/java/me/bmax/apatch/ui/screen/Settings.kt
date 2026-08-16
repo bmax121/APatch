@@ -33,7 +33,7 @@ import androidx.compose.material.icons.filled.Commit
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.DeveloperMode
 import androidx.compose.material.icons.filled.Engineering
-import androidx.compose.material.icons.filled.FeaturedPlayList
+import androidx.compose.material.icons.automirrored.filled.FeaturedPlayList
 import androidx.compose.material.icons.filled.FormatColorFill
 import androidx.compose.material.icons.filled.InvertColors
 import androidx.compose.material.icons.filled.Save
@@ -205,7 +205,7 @@ fun SettingScreen() {
                     )
                 }
                 SwitchItem(
-                    icon = Icons.Filled.FeaturedPlayList,
+                    icon = Icons.AutoMirrored.Filled.FeaturedPlayList,
                     title = stringResource(id = R.string.settings_sucompat),
                     summary = stringResource(id = R.string.settings_sucompat_summary),
                     checked = sucompatEnabled,

@@ -6,14 +6,14 @@ plugins {
 
 project.ext.set("kernelPatchVersion", "0.13.5")
 
-val androidMinSdkVersion by extra(26)
-val androidTargetSdkVersion by extra(36)
-val androidCompileSdkVersion by extra(36)
-val androidBuildToolsVersion by extra("36.1.0")
-val androidCompileNdkVersion by extra("29.0.14206865")
-val managerVersionCode by extra(getVersionCode())
-val managerVersionName by extra(getVersionName())
-val branchName by extra(getBranch())
+extra.set("androidMinSdkVersion", 26)
+extra.set("androidTargetSdkVersion", 36)
+extra.set("androidCompileSdkVersion", 37)
+extra.set("androidBuildToolsVersion", "36.1.0")
+extra.set("androidCompileNdkVersion", "29.0.14206865")
+extra.set("managerVersionCode", getVersionCode())
+extra.set("managerVersionName", getVersionName())
+extra.set("branchName", getBranch())
 fun Project.exec(command: String) = providers.exec {
     commandLine(command.split(" "))
 }.standardOutput.asText.get().trim()
@@ -42,7 +42,7 @@ fun getVersionName(): String {
 
 tasks.register("printVersion") {
     doLast {
-        println("Version code: $managerVersionCode")
-        println("Version name: $managerVersionName")
+        println("Version code: ${project.extra["managerVersionCode"]}")
+        println("Version name: ${project.extra["managerVersionName"]}")
     }
 }

@@ -1,13 +1,12 @@
 [versions]
-agp = "9.0.0"
-kotlin = "2.3.10"
-ksp = "2.3.5"
-compose-bom = "2026.01.01"
-lifecycle = "2.10.0"
+agp = "9.3.1"
+kotlin = "2.4.10"
+ksp = "2.3.11"
+compose-bom = "2026.08.00"
+lifecycle = "2.11.0"
 compose-destination = "2.3.0"
 libsu = "6.0.0"
-compose-material3 = "1.5.0-alpha13"
-sheets-compose-dialogs = "1.3.0"
+coil3 = "3.5.0"
 
 [plugins]
 agp-app = { id = "com.android.application", version.ref = "agp" }
@@ -18,14 +17,14 @@ kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 
 [libraries]
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.7.1" }
-androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version = "1.12.3" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.8.0" }
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version = "1.13.0" }
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version = "1.2.0" }
-androidx-webkit = { group = "androidx.webkit", name = "webkit", version = "1.15.0" }
+androidx-webkit = { group = "androidx.webkit", name = "webkit", version = "1.17.0" }
 
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
 androidx-compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
-androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "compose-material3" }
+androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
@@ -43,18 +42,14 @@ com-github-topjohnwu-libsu-io = { group = "com.github.topjohnwu.libsu", name = "
 
 dev-rikka-rikkax-parcelablelist = { module = "dev.rikka.rikkax.parcelablelist:parcelablelist", version = "2.0.1" }
 
-io-coil-kt-coil-compose = { group = "io.coil-kt", name = "coil-compose", version = "2.7.0" }
+io-coil-kt-coil3-coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil3" }
 
-kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version = "1.10.2" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version = "1.11.0" }
 
-me-zhanghai-android-appiconloader-coil = { group = "me.zhanghai.android.appiconloader", name = "appiconloader-coil", version = "1.5.0" }
+okhttp = { module = "com.squareup.okhttp3:okhttp", version = "4.12.0" }
 
 compose-destinations-core = { group = "io.github.raamcosta.compose-destinations", name = "core", version.ref = "compose-destination" }
 compose-destinations-ksp = { group = "io.github.raamcosta.compose-destinations", name = "ksp", version.ref = "compose-destination" }
-
-sheet-compose-dialogs-core = { group = "com.maxkeppeler.sheets-compose-dialogs", name = "core", version.ref = "sheets-compose-dialogs" }
-sheet-compose-dialogs-list = { group = "com.maxkeppeler.sheets-compose-dialogs", name = "list", version.ref = "sheets-compose-dialogs" }
-sheet-compose-dialogs-input = { group = "com.maxkeppeler.sheets-compose-dialogs", name = "input", version.ref = "sheets-compose-dialogs" }
 
 markdown = { group = "io.noties.markwon", name = "core", version = "4.6.2" }
 
