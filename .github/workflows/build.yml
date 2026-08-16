@@ -36,7 +36,8 @@ jobs:
         id: parse_version
         run: |
           COMMIT_NUM=$(git rev-list --count HEAD)
-          VERSION=$(echo "$COMMIT_NUM + 200 + 10000" | bc)
+          source version.properties
+          VERSION=$((managerVersionEpoch + COMMIT_NUM))
           echo "Generated Version: $VERSION"
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
 

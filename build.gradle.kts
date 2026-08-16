@@ -4,7 +4,9 @@ plugins {
     alias(libs.plugins.kotlin.compose.compiler) apply false
 }
 
-project.ext.set("kernelPatchVersion", "0.13.5")
+// app/src/main/cpp/version is the single source of the KernelPatch version;
+// apd/build.rs derives its copy from it as well.
+project.ext.set("kernelPatchVersion", getKernelPatchVersion())
 
 extra.set("androidMinSdkVersion", 26)
 extra.set("androidTargetSdkVersion", 36)
@@ -27,9 +29,19 @@ fun getGitDescribe(): String {
 }
 
 fun getVersionCode(): Int {
-    val commitCount = getGitCommitCount()
-    val major = 1
-    return major * 10000 + commitCount + 200
+    val props = java.util.Properties().apply {
+        File(rootDir, "version.properties").inputStream().use { load(it) }
+    }
+    val epoch = props.getProperty("managerVersionEpoch").toInt()
+    return epoch + getGitCommitCount()
+}
+
+fun getKernelPatchVersion(): String {
+    val header = File(rootDir, "app/src/main/cpp/version").readText()
+    fun part(name: String) = Regex("""#define $name (\d+)""")
+        .find(header)?.groupValues?.get(1)
+        ?: error("$name not found in app/src/main/cpp/version")
+    return "${part("MAJOR")}.${part("MINOR")}.${part("PATCH")}"
 }
 
 fun getBranch(): String {
