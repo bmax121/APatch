@@ -99,8 +99,13 @@ private fun createMainRootShell() : Shell {
 }
 
 object APatchCli {
+    @Volatile
     var SHELL: Shell = createMainRootShell()
     val GLOBAL_MNT_SHELL: Shell = createRootShell(true)
+
+    // Serialized so a reader can never observe the half-reset MainShell (private
+    // fields cleared via reflection) between the reset and the SHELL swap.
+    @Synchronized
     fun refresh() {
         val tmp = SHELL
 
@@ -202,10 +207,6 @@ fun listModules(): String {
     val shell = getRootShell()
     val out =
         shell.newJob().add("${APApplication.APD_PATH} module list").to(ArrayList(), null).exec().out
-    withNewRootShell{
-       newJob().add("cp /data/user/*/me.bmax.apatch/patch/ori.img /data/adb/ap/ && rm /data/user/*/me.bmax.apatch/patch/ori.img")
-       .to(ArrayList(),null).exec()
-   }
     return out.joinToString("\n").ifBlank { "[]" }
 }
 
@@ -222,7 +223,7 @@ fun getMetaModuleImplement(): String {
         }
 
         val prop = Properties()
-        prop.load(metaModuleProp.newInputStream())
+        metaModuleProp.newInputStream().use { prop.load(it) }
 
         val name = prop.getProperty("name")
         Log.i(TAG, "Meta module implement: $name")
@@ -262,42 +263,42 @@ fun installModule(
     uri: Uri, type: MODULE_TYPE, onFinish: (Boolean) -> Unit, onStdout: (String) -> Unit, onStderr: (String) -> Unit
 ): Boolean {
     val resolver = apApp.contentResolver
-    with(resolver.openInputStream(uri)) {
-        val file = File(apApp.cacheDir, "module_$type.zip")
+    val file = File(apApp.cacheDir, "module_$type.zip")
+    resolver.openInputStream(uri)?.use { input ->
         file.outputStream().use { output ->
-            this?.copyTo(output)
+            input.copyTo(output)
         }
+    } ?: return false
 
-        val stdoutCallback: CallbackList<String?> = object : CallbackList<String?>() {
-            override fun onAddElement(s: String?) {
-                onStdout(s ?: "")
-            }
+    val stdoutCallback: CallbackList<String?> = object : CallbackList<String?>() {
+        override fun onAddElement(s: String?) {
+            onStdout(s ?: "")
         }
-
-        val stderrCallback: CallbackList<String?> = object : CallbackList<String?>() {
-            override fun onAddElement(s: String?) {
-                onStderr(s ?: "")
-            }
-        }
-
-        val shell = getRootShell()
-
-        var result = false
-        if(type == MODULE_TYPE.APM) {
-            val cmd = "${APApplication.APD_PATH} module install ${file.absolutePath}"
-            result = shell.newJob().add(cmd).to(stdoutCallback, stderrCallback)
-                    .exec().isSuccess
-        } else {
-//            ZipUtils.
-        }
-
-        Log.i(TAG, "install $type module $uri result: $result")
-
-        file.delete()
-
-        onFinish(result)
-        return result
     }
+
+    val stderrCallback: CallbackList<String?> = object : CallbackList<String?>() {
+        override fun onAddElement(s: String?) {
+            onStderr(s ?: "")
+        }
+    }
+
+    val shell = getRootShell()
+
+    var result = false
+    if(type == MODULE_TYPE.APM) {
+        val cmd = "${APApplication.APD_PATH} module install ${file.absolutePath}"
+        result = shell.newJob().add(cmd).to(stdoutCallback, stderrCallback)
+                .exec().isSuccess
+    } else {
+//            ZipUtils.
+    }
+
+    Log.i(TAG, "install $type module $uri result: $result")
+
+    file.delete()
+
+    onFinish(result)
+    return result
 }
 
 fun runAPModuleAction(
@@ -395,11 +396,12 @@ fun installJailbreak(): Boolean {
 
 /** Whether the SELinux mode is permissive (getenforce), the prerequisite for jailbreak. */
 fun isSELinuxPermissive(): Boolean {
-    val shell = Shell.Builder.create().build("sh")
-    val out = ArrayList<String>()
-    val result = shell.newJob().add("getenforce").to(out, ArrayList()).exec()
-    return result.isSuccess &&
-        out.firstOrNull()?.trim()?.equals("Permissive", ignoreCase = true) == true
+    Shell.Builder.create().build("sh").use { shell ->
+        val out = ArrayList<String>()
+        val result = shell.newJob().add("getenforce").to(out, ArrayList()).exec()
+        return result.isSuccess &&
+            out.firstOrNull()?.trim()?.equals("Permissive", ignoreCase = true) == true
+    }
 }
 
 /** Whether jailbreak mode is active (the ko has been loaded and a marker written). */

@@ -459,6 +459,14 @@ class PatchesViewModel : ViewModel() {
                 return@launch
             }
 
+            // Move the stock boot backup to where the unpatch flow expects it;
+            // boot_patch.sh leaves ori.img in the app-private work dir, and the
+            // OTA post_ota.sh cleanup deletes that dir on reboot. Only created
+            // when the boot image was not already patched.
+            shell.newJob().add(
+                "[ -f $patchDir/ori.img ] && mkdir -p /data/adb/ap && cp $patchDir/ori.img /data/adb/ap/ && rm -f $patchDir/ori.img || true"
+            ).to(logs, logs).exec()
+
             if (mode == PatchMode.PATCH_AND_INSTALL) {
                 logs.add("- Reboot to finish the installation...")
                 needReboot = true
