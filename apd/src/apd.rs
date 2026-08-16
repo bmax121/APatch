@@ -95,16 +95,20 @@ pub fn root_shell() -> Result<()> {
         "Specify a supplementary group. The first specified supplementary group is also used as a primary group if the option -g is not specified.",
         "GROUP",
     );
+    // Accepted for Magisk-compatible invocations (su -cn/-z/-Z <context>) from legacy
+    // root apps. Per-session SELinux context switching is not implemented, so the
+    // requested context is ignored with a warning below.
+    opts.optopt("Z", "context", "Specify SELinux context (ignored)", "CONTEXT");
     opts.optflag("", "no-pty", "Do not allocate a new pseudo terminal.");
 
-    // Replace -cn with -z, -mm with -M for supporting getopt_long
+    // Replace -cn and -z with -Z, -mm with -M for backwards compatibility (same as Magisk)
     let args = args
         .into_iter()
         .map(|e| {
             if e == "-mm" {
                 "-M".to_string()
-            } else if e == "-cn" {
-                "-z".to_string()
+            } else if e == "-cn" || e == "-z" {
+                "-Z".to_string()
             } else {
                 e
             }
@@ -139,6 +143,10 @@ pub fn root_shell() -> Result<()> {
     let mut is_login = matches.opt_present("l");
     let preserve_env = matches.opt_present("p");
     let mount_master = matches.opt_present("M");
+
+    if let Some(context) = matches.opt_str("Z") {
+        log::warn!("su: SELinux context {context} requested but per-session context switching is not supported, ignoring");
+    }
 
     // -g overrides the primary group, -G appends supplementary groups
     let groups = matches
