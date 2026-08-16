@@ -393,6 +393,14 @@ fn _install_module(zip: &str) -> Result<()> {
     };
     let module_id = module_id.trim();
 
+    // The id becomes a directory name under MODULE_DIR and is interpolated into
+    // shell commands by the manager; reject path traversal at this trust boundary
+    // (same rule as KernelSU and module_config.rs).
+    let id_re = regex_lite::Regex::new(r"^[a-zA-Z][a-zA-Z0-9._-]+$")?;
+    if !id_re.is_match(module_id) {
+        bail!("invalid module id: {module_id}");
+    }
+
     // Check if this module is a metamodule
     let is_metamodule = metamodule::is_metamodule(&module_prop);
 
