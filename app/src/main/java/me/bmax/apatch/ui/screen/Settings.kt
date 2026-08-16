@@ -56,6 +56,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -71,7 +72,6 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
@@ -114,8 +114,12 @@ fun SettingScreen() {
     var isGlobalNamespaceEnabled by rememberSaveable {
         mutableStateOf(false)
     }
-    if (kPatchReady && aPatchReady) {
-        isGlobalNamespaceEnabled = isGlobalNamespaceEnabled()
+    // The check shells out as root; run it once off the main thread instead of
+    // synchronously in composition on every recomposition.
+    LaunchedEffect(kPatchReady && aPatchReady) {
+        if (kPatchReady && aPatchReady) {
+            isGlobalNamespaceEnabled = withContext(Dispatchers.IO) { isGlobalNamespaceEnabled() }
+        }
     }
 
     val snackBarHost = LocalSnackbarHost.current
@@ -424,12 +428,7 @@ fun SettingScreen() {
                                     Text(
                                         text = stringResource(id = R.string.save_log),
                                         modifier = Modifier.padding(top = 16.dp),
-                                        textAlign = TextAlign.Center.also {
-                                            LineHeightStyle(
-                                                alignment = LineHeightStyle.Alignment.Center,
-                                                trim = LineHeightStyle.Trim.None
-                                            )
-                                        }
+                                        textAlign = TextAlign.Center
 
                                     )
                                 }
@@ -476,12 +475,7 @@ fun SettingScreen() {
                                     Text(
                                         text = stringResource(id = R.string.send_log),
                                         modifier = Modifier.padding(top = 16.dp),
-                                        textAlign = TextAlign.Center.also {
-                                            LineHeightStyle(
-                                                alignment = LineHeightStyle.Alignment.Center,
-                                                trim = LineHeightStyle.Trim.None
-                                            )
-                                        }
+                                        textAlign = TextAlign.Center
 
                                     )
                                 }

@@ -2,20 +2,31 @@ package me.bmax.apatch.util
 
 import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.ui.res.stringResource
 import com.topjohnwu.superuser.Shell
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import me.bmax.apatch.R
+
+private fun querySELinuxStatus(): Pair<Boolean, String> {
+    Shell.Builder.create().build("sh").use { shell ->
+        val list = ArrayList<String>()
+        val result = shell.newJob().add("getenforce").to(list, list).exec()
+        return result.isSuccess to result.out.joinToString("\n").trim()
+    }
+}
 
 @Composable
 fun getSELinuxStatus(): String {
-    val shell = Shell.Builder.create()
-        .build("sh")
-
-    val list = ArrayList<String>()
-    val result = shell.newJob().add("getenforce").to(list, list).exec()
-    val output = result.out.joinToString("\n").trim()
-
-    if (result.isSuccess) {
+    // The getenforce shell round trip runs once on the IO dispatcher, not on
+    // every recomposition of the caller.
+    val status by produceState<Pair<Boolean, String>?>(null) {
+        value = withContext(Dispatchers.IO) { querySELinuxStatus() }
+    }
+    val (success, output) = status ?: return stringResource(R.string.home_selinux_status_unknown)
+    if (success) {
         return when (output) {
             "Enforcing" -> stringResource(R.string.home_selinux_status_enforcing)
             "Permissive" -> stringResource(R.string.home_selinux_status_permissive)

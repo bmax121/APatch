@@ -130,7 +130,16 @@ fun HomeScreen(navigator: DestinationsNavigator) {
             if (kpState != APApplication.State.UNKNOWN_STATE && apState != APApplication.State.ANDROIDPATCH_INSTALLED) {
                 AStatusCard(apState)
             }
-            val checkUpdate = APApplication.sharedPreferences.getBoolean("check_update", true)
+            val prefs = APApplication.sharedPreferences
+            val checkUpdate by produceState(initialValue = prefs.getBoolean("check_update", true)) {
+                val listener = android.content.SharedPreferences.OnSharedPreferenceChangeListener { p, key ->
+                    if (key == "check_update") {
+                        value = p.getBoolean(key, true)
+                    }
+                }
+                prefs.registerOnSharedPreferenceChangeListener(listener)
+                awaitDispose { prefs.unregisterOnSharedPreferenceChangeListener(listener) }
+            }
             if (checkUpdate) {
                 UpdateCard()
             }
@@ -772,12 +781,10 @@ private fun InfoCard(kpState: APApplication.State, apState: APApplication.State)
                 .fillMaxWidth()
                 .padding(start = 24.dp, top = 24.dp, end = 24.dp, bottom = 16.dp)
         ) {
-            val contents = StringBuilder()
             val uname = Os.uname()
 
             @Composable
             fun InfoCardItem(label: String, content: String) {
-                contents.appendLine(label).appendLine(content).appendLine()
                 Text(text = label, style = MaterialTheme.typography.bodyLarge)
                 Text(text = content, style = MaterialTheme.typography.bodyMedium)
             }
