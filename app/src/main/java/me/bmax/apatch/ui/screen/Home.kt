@@ -56,6 +56,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -100,6 +101,7 @@ import me.bmax.apatch.util.getSELinuxStatus
 import me.bmax.apatch.util.installJailbreak
 import me.bmax.apatch.util.isJailbreakMode
 import me.bmax.apatch.util.isSELinuxPermissive
+import me.bmax.apatch.util.migrateStockBootBackup
 import me.bmax.apatch.util.reboot
 import me.bmax.apatch.util.softReboot
 import me.bmax.apatch.util.ui.APDialogBlurBehindUtils
@@ -111,6 +113,12 @@ private val managerVersion = getManagerVersion()
 fun HomeScreen(navigator: DestinationsNavigator) {
     val kpState by APApplication.kpStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
     val apState by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
+
+    // Pick up a stock boot backup left behind by a manually flashed PATCH_ONLY
+    // install; see migrateStockBootBackup.
+    LaunchedEffect(Unit) {
+        withContext(Dispatchers.IO) { migrateStockBootBackup() }
+    }
 
     Scaffold(topBar = {
         TopBar(onInstallClick = dropUnlessResumed {
