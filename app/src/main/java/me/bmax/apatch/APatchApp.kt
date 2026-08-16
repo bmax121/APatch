@@ -1,4 +1,4 @@
-package me.bmax.apatch
+package com.home.ten
 
 import android.app.Application
 import android.content.Context
@@ -11,12 +11,12 @@ import androidx.core.content.edit
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.topjohnwu.superuser.CallbackList
-import me.bmax.apatch.ui.CrashHandleActivity
-import me.bmax.apatch.util.APatchCli
-import me.bmax.apatch.util.APatchKeyHelper
-import me.bmax.apatch.util.Version
-import me.bmax.apatch.util.getRootShell
-import me.bmax.apatch.util.rootShellForResult
+import com.home.ten.ui.CrashHandleActivity
+import com.home.ten.util.APatchCli
+import com.home.ten.util.APatchKeyHelper
+import com.home.ten.util.Version
+import com.home.ten.util.getRootShell
+import com.home.ten.util.rootShellForResult
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import java.io.File

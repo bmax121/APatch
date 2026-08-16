@@ -83,7 +83,7 @@ pub fn run(module: Option<PathBuf>, kmi: Option<String>, package_name: Option<St
         info!("restarting manager {pkg}...");
         let _ = Command::new("am").args(["force-stop", &pkg]).status();
         let _ = Command::new("am")
-            .args(["start", "-n", &format!("{pkg}/me.bmax.apatch.ui.MainActivity")])
+            .args(["start", "-n", &format!("{pkg}/com.home.ten.ui.MainActivity")])
             .status();
     }
 

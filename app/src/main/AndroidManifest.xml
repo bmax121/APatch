@@ -26,7 +26,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.APatch"
         android:usesCleartextTraffic="true"
-        android:zygotePreloadName="me.bmax.apatch.magica.AppZygotePreload"
+        android:zygotePreloadName="com.home.ten.magica.AppZygotePreload"
         tools:targetApi="34">
 
         <activity
@@ -87,7 +87,7 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
             <intent-filter>
-                <action android:name="me.bmax.apatch.magica.LAUNCH" />
+                <action android:name="com.home.ten.magica.LAUNCH" />
             </intent-filter>
         </receiver>
 
