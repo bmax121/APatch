@@ -167,6 +167,23 @@ pub fn run(
 ) -> Result<()> {
     enable_adb_root(port)?;
 
+    let result = run_via_adb(port, module, kmi, package_name);
+    if result.is_err() {
+        // The remote `late-load --post-magica` that normally disables adb root may
+        // never have run; don't leave an unauthenticated root adb port behind.
+        if let Err(e) = disable_adb_root() {
+            error!("disable adb root failed: {e:#}");
+        }
+    }
+    result
+}
+
+fn run_via_adb(
+    port: u16,
+    module: &Option<PathBuf>,
+    kmi: &Option<String>,
+    package_name: &Option<String>,
+) -> Result<()> {
     let mut device = connect_to_device(port)?;
 
     let self_path = std::env::current_exe().context("Failed to get self exe path")?;
