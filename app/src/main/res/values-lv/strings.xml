@@ -235,4 +235,8 @@
     <string name="jailbreak">Jailbreak</string>
     <string name="jailbreak_triggered">Jailbreak aktivizēts. Uzgaidiet root tiesības un pēc tam veiciet mīksto pārstartēšanu.</string>
     <string name="reboot_soft">Mīkstā pārstartēšana</string>
+    <string name="kpm_installed">Instalēts</string>
+    <string name="kpm_disabled">Atspējots (stāsies spēkā pēc restartēšanas)</string>
+    <string name="kpm_embedded">Iegults</string>
+    <string name="kpm_embedded_unload_invalid">Iegultos KPM nevar izlādēt; pēc restartēšanas tie paliks aktīvi.</string>
 </resources>

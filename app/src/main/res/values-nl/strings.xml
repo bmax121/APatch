@@ -235,4 +235,8 @@
     <string name="jailbreak">Jailbreak</string>
     <string name="jailbreak_triggered">Jailbreak geactiveerd. Wacht op root en voer daarna een zachte herstart uit.</string>
     <string name="reboot_soft">Zachte herstart</string>
+    <string name="kpm_installed">Geïnstalleerd</string>
+    <string name="kpm_disabled">Uitgeschakeld (wordt actief na opnieuw opstarten)</string>
+    <string name="kpm_embedded">Ingebed</string>
+    <string name="kpm_embedded_unload_invalid">Ingebedde KPM’s kunnen niet worden uitgeladen; ze blijven actief na opnieuw opstarten.</string>
 </resources>

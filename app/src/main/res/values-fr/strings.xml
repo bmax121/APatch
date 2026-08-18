@@ -237,4 +237,8 @@
     <string name="jailbreak">Jailbreak</string>
     <string name="jailbreak_triggered">"Jailbreak déclenché. Attendez d'obtenir root, puis redémarrez en douceur."</string>
     <string name="reboot_soft">Redémarrage en douceur</string>
+    <string name="kpm_installed">Installé</string>
+    <string name="kpm_disabled">Désactivé (prendra effet après le redémarrage)</string>
+    <string name="kpm_embedded">Intégré</string>
+    <string name="kpm_embedded_unload_invalid">Les KPM intégrés ne peuvent pas être déchargés ; ils resteront actifs après le redémarrage.</string>
 </resources>

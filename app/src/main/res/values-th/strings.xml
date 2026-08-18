@@ -235,4 +235,8 @@
     <string name="jailbreak">เจลเบรก</string>
     <string name="jailbreak_triggered">ทำการเจลเบรกแล้ว รอรับ root จากนั้นรีสตาร์ทแบบซอฟต์</string>
     <string name="reboot_soft">รีสตาร์ทแบบซอฟต์</string>
+    <string name="kpm_installed">ติดตั้งแล้ว</string>
+    <string name="kpm_disabled">ปิดใช้งาน (มีผลหลังรีบูต)</string>
+    <string name="kpm_embedded">ฝังอยู่</string>
+    <string name="kpm_embedded_unload_invalid">ไม่สามารถยกเลิกการโหลด KPM ที่ฝังอยู่ได้ และจะยังคงทำงานหลังรีบูต</string>
 </resources>

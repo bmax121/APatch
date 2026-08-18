@@ -235,4 +235,8 @@
     <string name="jailbreak">Jailbreak</string>
     <string name="jailbreak_triggered">Jailbreak aktyvuotas. Palaukite root teisių, tada atlikite minkštąjį perkrovimą.</string>
     <string name="reboot_soft">Minkštasis perkrovimas</string>
+    <string name="kpm_installed">Įdiegta</string>
+    <string name="kpm_disabled">Išjungta (įsigalios paleidus iš naujo)</string>
+    <string name="kpm_embedded">Įterpta</string>
+    <string name="kpm_embedded_unload_invalid">Įterptų KPM negalima iškrauti; paleidus iš naujo jie liks aktyvūs.</string>
 </resources>

@@ -235,4 +235,8 @@
     <string name="jailbreak">Jailbreak</string>
     <string name="jailbreak_triggered">Jailbreak dicetuskan. Tunggu root, kemudian lakukan reboot lembut.</string>
     <string name="reboot_soft">Reboot lembut</string>
+    <string name="kpm_installed">Dipasang</string>
+    <string name="kpm_disabled">Dilumpuhkan (berkuat kuasa selepas but semula)</string>
+    <string name="kpm_embedded">Terbenam</string>
+    <string name="kpm_embedded_unload_invalid">KPM terbenam tidak boleh dinyahmuat; ia akan kekal aktif selepas but semula.</string>
 </resources>

@@ -235,4 +235,8 @@
     <string name="jailbreak">জেলব্রেক</string>
     <string name="jailbreak_triggered">জেলব্রেক ট্রিগার হয়েছে। রুট পাওয়ার জন্য অপেক্ষা করুন, তারপর সফট রিবুট করুন।</string>
     <string name="reboot_soft">সফট রিবুট</string>
+    <string name="kpm_installed">ইনস্টল করা হয়েছে</string>
+    <string name="kpm_disabled">নিষ্ক্রিয় (রিবুটের পরে কার্যকর হবে)</string>
+    <string name="kpm_embedded">এমবেড করা</string>
+    <string name="kpm_embedded_unload_invalid">এমবেড করা KPM আনলোড করা যায় না; রিবুটের পরেও এটি সক্রিয় থাকবে।</string>
 </resources>

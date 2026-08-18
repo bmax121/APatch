@@ -239,4 +239,8 @@
     <string name="jailbreak">Cilbrik</string>
     <string name="jailbreak_triggered">Jailbreak aktivləşdirildi. Kök icazəsini gözləyin, sonra yumşaq yenidən başladın.</string>
     <string name="reboot_soft">Yumşaq yenidən başlatma</string>
+    <string name="kpm_installed">Quraşdırılıb</string>
+    <string name="kpm_disabled">Deaktivdir (yenidən başladıldıqdan sonra qüvvəyə minir)</string>
+    <string name="kpm_embedded">Daxil edilib</string>
+    <string name="kpm_embedded_unload_invalid">Daxil edilmiş KPM-lər yüklənə bilməz; yenidən başladıldıqdan sonra da aktiv qalacaq.</string>
 </resources>

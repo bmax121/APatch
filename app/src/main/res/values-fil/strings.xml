@@ -235,4 +235,8 @@
     <string name="jailbreak">Jailbreak</string>
     <string name="jailbreak_triggered">Na-trigger ang jailbreak. Maghintay para sa root, pagkatapos ay mag-soft reboot.</string>
     <string name="reboot_soft">Malambot na reboot</string>
+    <string name="kpm_installed">Naka-install</string>
+    <string name="kpm_disabled">Naka-disable (magkakabisa pagkatapos mag-reboot)</string>
+    <string name="kpm_embedded">Naka-embed</string>
+    <string name="kpm_embedded_unload_invalid">Hindi maaaring i-unload ang mga naka-embed na KPM; mananatiling aktibo ang mga ito pagkatapos mag-reboot.</string>
 </resources>

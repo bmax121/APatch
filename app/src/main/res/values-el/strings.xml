@@ -235,4 +235,8 @@
     <string name="jailbreak">Jailbreak</string>
     <string name="jailbreak_triggered">Ενεργοποιήθηκε το jailbreak. Περιμένετε για root και κάντε επανεκκίνηση σε μαλακό τρόπο.</string>
     <string name="reboot_soft">Μαλακή επανεκκίνηση</string>
+    <string name="kpm_installed">Εγκατεστημένο</string>
+    <string name="kpm_disabled">Απενεργοποιημένο (ισχύει μετά την επανεκκίνηση)</string>
+    <string name="kpm_embedded">Ενσωματωμένο</string>
+    <string name="kpm_embedded_unload_invalid">Τα ενσωματωμένα KPM δεν μπορούν να αποφορτωθούν· θα παραμείνουν ενεργά μετά την επανεκκίνηση.</string>
 </resources>

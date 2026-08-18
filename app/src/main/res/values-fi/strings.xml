@@ -235,4 +235,8 @@
     <string name="jailbreak">Jailbreak</string>
     <string name="jailbreak_triggered">Jailbreak käynnistetty. Odota root-oikeuksia ja tee sitten pehmeä uudelleenkäynnistys.</string>
     <string name="reboot_soft">Pehmeä uudelleenkäynnistys</string>
+    <string name="kpm_installed">Asennettu</string>
+    <string name="kpm_disabled">Poistettu käytöstä (tulee voimaan uudelleenkäynnistyksen jälkeen)</string>
+    <string name="kpm_embedded">Upotettu</string>
+    <string name="kpm_embedded_unload_invalid">Upotettuja KPM-moduuleja ei voi poistaa käytöstä; ne pysyvät aktiivisina uudelleenkäynnistyksen jälkeen.</string>
 </resources>

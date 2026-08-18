@@ -237,4 +237,8 @@
     <string name="jailbreak">كسر الحماية</string>
     <string name="jailbreak_triggered">تم تفعيل كسر الحماية. انتظر الحصول على صلاحيات الجذر ثم قم بإعادة تشغيل ناعمة.</string>
     <string name="reboot_soft">إعادة تشغيل ناعمة</string>
+    <string name="kpm_installed">مثبّت</string>
+    <string name="kpm_disabled">معطّل (يسري بعد إعادة التشغيل)</string>
+    <string name="kpm_embedded">مضمّن</string>
+    <string name="kpm_embedded_unload_invalid">لا يمكن إلغاء تحميل وحدات KPM المضمّنة؛ ستظل فعّالة بعد إعادة التشغيل.</string>
 </resources>

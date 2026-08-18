@@ -235,4 +235,8 @@
     <string name="jailbreak">Jailbreak</string>
     <string name="jailbreak_triggered">Jailbreak aktivován. Počkejte na získání rootu a poté proveďte měkký restart.</string>
     <string name="reboot_soft">Měkký restart</string>
+    <string name="kpm_installed">Nainstalováno</string>
+    <string name="kpm_disabled">Zakázáno (projeví se po restartu)</string>
+    <string name="kpm_embedded">Vestavěno</string>
+    <string name="kpm_embedded_unload_invalid">Vestavěné KPM nelze odpojit; po restartu zůstanou aktivní.</string>
 </resources>

@@ -63,7 +63,8 @@ class APApplication : Application(), Thread.UncaughtExceptionHandler {
         const val SELINUX_HIDE_FILE = APATCH_FOLDER + "selinux_hide"
         const val JAILBREAK_FILE = APATCH_FOLDER + "jailbreak"
         const val JAILBREAK_KO_PATH = APATCH_FOLDER + "kernelpatch.ko"
-        const val KPMS_DIR = APATCH_FOLDER + "kpms/"
+        /** Persisted, file-backed KPMs. Each module lives in <id>/<id>.kpm. */
+        const val KPMS_DIR = APATCH_FOLDER + "kpm/"
 
         @Deprecated("Use 'apd -V'")
         const val APATCH_VERSION_PATH = APATCH_FOLDER + "version"

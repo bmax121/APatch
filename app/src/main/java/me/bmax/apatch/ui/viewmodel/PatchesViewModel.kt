@@ -184,6 +184,8 @@ class PatchesViewModel : ViewModel() {
                                 extra["license"].toString(),
                                 extra["author"].toString(),
                                 extra["description"].toString(),
+                                moduleId = safeKpmModuleId(name),
+                                loadSource = "embedded",
                             )
                             existedExtras.add(kpmInfo)
                         }
@@ -329,6 +331,8 @@ class PatchesViewModel : ViewModel() {
                             kpm["license"].toString(),
                             kpm["author"].toString(),
                             kpm["description"].toString(),
+                            moduleId = safeKpmModuleId(kpm["name"].toString()),
+                            loadSource = "embedded",
                         )
                         newExtras.add(kpmInfo)
                         newExtrasFileName.add(kpmFileName)

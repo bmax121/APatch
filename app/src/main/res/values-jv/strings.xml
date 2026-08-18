@@ -235,4 +235,8 @@
     <string name="jailbreak">Jailbreak</string>
     <string name="jailbreak_triggered">Jailbreak wis dipicu. Enteni root, banjur soft reboot.</string>
     <string name="reboot_soft">Reboot alus</string>
+    <string name="kpm_installed">Diinstal</string>
+    <string name="kpm_disabled">Dipatèni (ditrapaké sawisé miwiti manèh)</string>
+    <string name="kpm_embedded">Ditanam</string>
+    <string name="kpm_embedded_unload_invalid">KPM sing ditanam ora bisa di-unload; bakal tetep aktif sawisé miwiti manèh.</string>
 </resources>

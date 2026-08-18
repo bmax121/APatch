@@ -42,6 +42,12 @@ object KPModel {
         var license: String,
         var author: String,
         var description: String,
+        /** Directory name used by the file-backed KPM store. */
+        var moduleId: String = "",
+        /** file, embedded, or empty when the kernel did not report a source. */
+        var loadSource: String = "",
+        var installed: Boolean = false,
+        var disabled: Boolean = false,
     ) : IExtraInfo
 
     @Immutable

@@ -237,4 +237,8 @@
     <string name="jailbreak">Jailbreak</string>
     <string name="jailbreak_triggered">Jailbreak ausgelöst. Warten Sie auf Root und starten Sie dann weich neu.</string>
     <string name="reboot_soft">Weicher Neustart</string>
+    <string name="kpm_installed">Installiert</string>
+    <string name="kpm_disabled">Deaktiviert (wird nach dem Neustart wirksam)</string>
+    <string name="kpm_embedded">Eingebettet</string>
+    <string name="kpm_embedded_unload_invalid">Eingebettete KPMs können nicht entladen werden; sie bleiben nach dem Neustart aktiv.</string>
 </resources>

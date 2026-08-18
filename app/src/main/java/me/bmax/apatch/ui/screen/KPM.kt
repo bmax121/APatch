@@ -40,6 +40,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBarScrollBehavior
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -95,11 +96,16 @@ import me.bmax.apatch.ui.component.rememberConfirmDialog
 import me.bmax.apatch.ui.component.rememberLoadingDialog
 import me.bmax.apatch.ui.viewmodel.KPModel
 import me.bmax.apatch.ui.viewmodel.KPModuleViewModel
+import me.bmax.apatch.ui.viewmodel.safeKpmModuleId
 import me.bmax.apatch.ui.viewmodel.PatchesViewModel
 import me.bmax.apatch.util.inputStream
 import me.bmax.apatch.util.ui.APDialogBlurBehindUtils
 import me.bmax.apatch.util.writeTo
+import me.bmax.apatch.util.rootShellForResult
 import java.io.IOException
+import java.io.File
+import java.io.StringReader
+import org.ini4j.Ini
 
 private const val TAG = "KernelPatchModule"
 private lateinit var targetKPMToControl: KPModel.KPMInfo
@@ -192,6 +198,19 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
                 }
             }
 
+            val selectInstallKpmLauncher = rememberLauncherForActivityResult(
+                contract = ActivityResultContracts.StartActivityForResult()
+            ) {
+                if (it.resultCode != RESULT_OK) return@rememberLauncherForActivityResult
+                val uri = it.data?.data ?: return@rememberLauncherForActivityResult
+                scope.launch {
+                    val rc = installKpm(uri)
+                    Toast.makeText(context, if (rc == 0) successToastText else "$failToastText: $rc", Toast.LENGTH_SHORT).show()
+                    viewModel.markNeedRefresh()
+                    viewModel.fetchModuleList()
+                }
+            }
+
             var expanded by remember { mutableStateOf(false) }
             val options = listOf(moduleEmbed, moduleInstall, moduleLoad)
 
@@ -224,11 +243,8 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
                                     }
 
                                     moduleInstall -> {
-                                        Toast.makeText(
-                                            context,
-                                            "Under development",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
+                                        val intent = Intent(Intent.ACTION_GET_CONTENT).apply { type = "*/*" }
+                                        selectInstallKpmLauncher.launch(intent)
                                     }
 
                                     moduleLoad -> {
@@ -260,8 +276,7 @@ suspend fun loadModule(loadingDialog: LoadingDialogHandle, uri: Uri, args: Strin
     val rc = loadingDialog.withLoading {
         withContext(Dispatchers.IO) {
             run {
-                val kpmDir: ExtendedFile =
-                    FileSystemManager.getLocal().getFile(apApp.filesDir.parent, "kpm")
+                val kpmDir: ExtendedFile = FileSystemManager.getLocal().getFile(apApp.cacheDir.path, "kpm")
                 kpmDir.deleteRecursively()
                 kpmDir.mkdirs()
                 val rand = (1..4).map { ('a'..'z').random() }.joinToString("")
@@ -280,6 +295,33 @@ suspend fun loadModule(loadingDialog: LoadingDialogHandle, uri: Uri, args: Strin
         }
     }
     return rc
+}
+
+/** Install a KPM without loading it: the boot-time loader owns this directory. */
+suspend fun installKpm(uri: Uri): Int = withContext(Dispatchers.IO) {
+    val temp = File(apApp.cacheDir, "kpm-install-${System.currentTimeMillis()}.kpm")
+    try {
+        uri.inputStream().use { input -> temp.outputStream().use { input.copyTo(it) } }
+        val infoResult = rootShellForResult(
+            "${APApplication.APATCH_FOLDER}bin/kptools -l -M '${temp.absolutePath}'"
+        )
+        if (!infoResult.isSuccess) return@withContext -2
+        val section = Ini(StringReader(infoResult.out.joinToString("\n")))["kpm"] ?: return@withContext -3
+        val name = section["name"]?.toString()?.trim().orEmpty()
+        if (name.isEmpty()) return@withContext -4
+        val id = safeKpmModuleId(name)
+        val dir = "${APApplication.KPMS_DIR}$id"
+        val destination = "$dir/$id.kpm"
+        val result = rootShellForResult(
+            "mkdir -p '$dir' && cp -f '${temp.absolutePath}' '$destination' && chmod 0644 '$destination' && rm -f '$dir/disable'"
+        )
+        if (result.isSuccess) 0 else -5
+    } catch (e: Exception) {
+        Log.e(TAG, "install KPM failed", e)
+        -1
+    } finally {
+        temp.delete()
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -384,6 +426,7 @@ private fun KPModuleList(
     val outMsgStringRes = stringResource(id = R.string.kpm_control_outMsg)
     val okStringRes = stringResource(id = R.string.kpm_control_ok)
     val failedStringRes = stringResource(id = R.string.kpm_control_failed)
+    val embeddedUnloadInvalid = stringResource(id = R.string.kpm_embedded_unload_invalid)
 
     val confirmDialog = rememberConfirmDialog()
     val loadingDialog = rememberLoadingDialog()
@@ -419,6 +462,10 @@ private fun KPModuleList(
     }
 
     suspend fun onModuleUninstall(module: KPModel.KPMInfo) {
+        if (module.loadSource == "embedded") {
+            Toast.makeText(context, embeddedUnloadInvalid, Toast.LENGTH_LONG).show()
+            return
+        }
         val confirmResult = confirmDialog.awaitConfirm(
             moduleStr,
             content = moduleUninstallConfirm.format(module.name),
@@ -431,7 +478,11 @@ private fun KPModuleList(
 
         val success = loadingDialog.withLoading {
             withContext(Dispatchers.IO) {
-                Natives.unloadKernelPatchModule(module.name) == 0L
+                val unloaded = module.loadSource.isBlank() || Natives.unloadKernelPatchModule(module.name) == 0L
+                if (module.installed) {
+                    val id = safeKpmModuleId(module.moduleId.ifBlank { module.name })
+                    rootShellForResult("rm -rf '${APApplication.KPMS_DIR}$id'").isSuccess && (unloaded || module.disabled)
+                } else unloaded
             }
         }
 
@@ -484,6 +535,17 @@ private fun KPModuleList(
                                 targetKPMToControl = module
                                 showKPMControlDialog.value = true
                             },
+                            onToggle = { enabled ->
+                                scope.launch {
+                                    withContext(Dispatchers.IO) {
+                                        val id = safeKpmModuleId(module.moduleId.ifBlank { module.name })
+                                        if (enabled) rootShellForResult("rm -f '${APApplication.KPMS_DIR}$id/disable'")
+                                        else rootShellForResult("mkdir -p '${APApplication.KPMS_DIR}$id' && touch '${APApplication.KPMS_DIR}$id/disable'")
+                                    }
+                                    viewModel.markNeedRefresh()
+                                    viewModel.fetchModuleList()
+                                }
+                            },
                         )
 
                         // fix last item shadow incomplete in LazyColumn
@@ -500,6 +562,7 @@ private fun KPModuleItem(
     module: KPModel.KPMInfo,
     onUninstall: (KPModel.KPMInfo) -> Unit,
     onControl: (KPModel.KPMInfo) -> Unit,
+    onToggle: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
     alpha: Float = 1f,
 ) {
@@ -537,6 +600,15 @@ private fun KPModuleItem(
                             textDecoration = decoration,
                             overflow = TextOverflow.Ellipsis
                         )
+
+                        if (module.loadSource == "embedded") {
+                            Text(stringResource(R.string.kpm_embedded), style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.primary)
+                        } else if (module.installed) {
+                            Text(if (module.disabled) stringResource(R.string.kpm_disabled) else stringResource(R.string.kpm_installed),
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.primary)
+                        }
 
                         Text(
                             text = "${module.version}, $moduleAuthor ${module.author}",
@@ -578,6 +650,11 @@ private fun KPModuleItem(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Spacer(modifier = Modifier.weight(1f))
+
+                    if (module.installed) {
+                        Switch(checked = !module.disabled, onCheckedChange = onToggle)
+                        Spacer(modifier = Modifier.width(8.dp))
+                    }
 
                     FilledTonalButton(
                         onClick = { onControl(module) },

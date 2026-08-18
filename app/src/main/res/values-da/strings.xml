@@ -235,4 +235,8 @@
     <string name="jailbreak">Jailbreak</string>
     <string name="jailbreak_triggered">Jailbreak udløst. Vent på root, og genstart derefter blødt.</string>
     <string name="reboot_soft">Blød genstart</string>
+    <string name="kpm_installed">Installeret</string>
+    <string name="kpm_disabled">Deaktiveret (træder i kraft efter genstart)</string>
+    <string name="kpm_embedded">Indlejret</string>
+    <string name="kpm_embedded_unload_invalid">Indlejrede KPM’er kan ikke afindlæses; de forbliver aktive efter genstart.</string>
 </resources>

@@ -237,4 +237,8 @@
     <string name="jailbreak">ジェイルブレイク</string>
     <string name="jailbreak_triggered">ジェイルブレイクを実行しました。rootを取得するまでお待ちください。その後、ソフトリブートします。</string>
     <string name="reboot_soft">ソフトリブート</string>
+    <string name="kpm_installed">インストール済み</string>
+    <string name="kpm_disabled">無効（再起動後に反映）</string>
+    <string name="kpm_embedded">埋め込み済み</string>
+    <string name="kpm_embedded_unload_invalid">埋め込み KPM はアンロードできません。再起動後も有効です。</string>
 </resources>

@@ -235,4 +235,8 @@
     <string name="jailbreak">Jailbreak</string>
     <string name="jailbreak_triggered">Jailbreak activado. Espera a obtener root y reinicia en modo suave.</string>
     <string name="reboot_soft">Reinicio suave</string>
+    <string name="kpm_installed">Instalado</string>
+    <string name="kpm_disabled">Desactivado (se aplicará después de reiniciar)</string>
+    <string name="kpm_embedded">Incrustado</string>
+    <string name="kpm_embedded_unload_invalid">Los KPM incrustados no se pueden descargar; seguirán activos después de reiniciar.</string>
 </resources>

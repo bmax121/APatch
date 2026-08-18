@@ -235,4 +235,8 @@
     <string name="jailbreak">Jailbreak</string>
     <string name="jailbreak_triggered">A jailbreak elindult. Várja meg a root-ot, majd hajtson végre lágy újraindítást.</string>
     <string name="reboot_soft">Lágy újraindítás</string>
+    <string name="kpm_installed">Telepítve</string>
+    <string name="kpm_disabled">Letiltva (újraindítás után lép életbe)</string>
+    <string name="kpm_embedded">Beágyazva</string>
+    <string name="kpm_embedded_unload_invalid">A beágyazott KPM-ek nem tölthetők le; újraindítás után is aktívak maradnak.</string>
 </resources>

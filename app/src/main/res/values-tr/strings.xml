@@ -237,4 +237,8 @@
     <string name="jailbreak">Jailbreak</string>
     <string name="jailbreak_triggered">Jailbreak tetiklendi. Root bekleyin, ardından yumuşak yeniden başlatma yapın.</string>
     <string name="reboot_soft">Yumuşak yeniden başlatma</string>
+    <string name="kpm_installed">Yüklendi</string>
+    <string name="kpm_disabled">Devre dışı (yeniden başlatmadan sonra uygulanır)</string>
+    <string name="kpm_embedded">Gömülü</string>
+    <string name="kpm_embedded_unload_invalid">Gömülü KPM’ler kaldırılamaz; yeniden başlatmadan sonra etkin kalırlar.</string>
 </resources>

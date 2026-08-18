@@ -235,4 +235,8 @@
     <string name="jailbreak">Jailbreak</string>
     <string name="jailbreak_triggered">"S'ha activat el jailbreak. Espereu a obtenir root i, després, reinicieu en mode suau."</string>
     <string name="reboot_soft">Reinici suau</string>
+    <string name="kpm_installed">Instal·lat</string>
+    <string name="kpm_disabled">Desactivat (s’aplicarà després de reiniciar)</string>
+    <string name="kpm_embedded">Incrustat</string>
+    <string name="kpm_embedded_unload_invalid">Els KPM incrustats no es poden descarregar; continuaran actius després de reiniciar.</string>
 </resources>

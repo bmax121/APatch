@@ -235,4 +235,8 @@
     <string name="jailbreak">Джейлбрейк</string>
     <string name="jailbreak_triggered">Jailbreak активирован. Дождитесь получения root, затем выполните мягкую перезагрузку.</string>
     <string name="reboot_soft">Мягкая перезагрузка</string>
+    <string name="kpm_installed">Установлен</string>
+    <string name="kpm_disabled">Отключён (вступит в силу после перезагрузки)</string>
+    <string name="kpm_embedded">Встроен</string>
+    <string name="kpm_embedded_unload_invalid">Встроенные KPM нельзя выгрузить; после перезагрузки они останутся активными.</string>
 </resources>

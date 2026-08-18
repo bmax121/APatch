@@ -239,4 +239,8 @@
     <string name="jailbreak">Jailbreak</string>
     <string name="jailbreak_triggered">Jailbreak declanșat. Așteptați obținerea root, apoi reporniți ușor.</string>
     <string name="reboot_soft">Repornire ușoară</string>
+    <string name="kpm_installed">Instalat</string>
+    <string name="kpm_disabled">Dezactivat (se aplică după repornire)</string>
+    <string name="kpm_embedded">Încorporat</string>
+    <string name="kpm_embedded_unload_invalid">Modulele KPM încorporate nu pot fi descărcate; vor rămâne active după repornire.</string>
 </resources>

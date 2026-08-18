@@ -155,6 +155,10 @@
     <string name="kpm_author">Author</string>
     <string name="kpm_desc">Desc</string>
     <string name="kpm_args">Args</string>
+    <string name="kpm_installed">Installed</string>
+    <string name="kpm_disabled">Disabled (takes effect after reboot)</string>
+    <string name="kpm_embedded">Embedded</string>
+    <string name="kpm_embedded_unload_invalid">Embedded KPMs cannot be unloaded; it will remain active after reboot.</string>
 
     <string name="su_title">Superuser</string>
     <string name="su_selinux_via_hook">Bypass via hook</string>

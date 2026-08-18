@@ -235,4 +235,8 @@
     <string name="jailbreak">Jailbreak</string>
     <string name="jailbreak_triggered">Jailbreak utløst. Vent på root, og utfør deretter en myk omstart.</string>
     <string name="reboot_soft">Myk omstart</string>
+    <string name="kpm_installed">Installert</string>
+    <string name="kpm_disabled">Deaktivert (trer i kraft etter omstart)</string>
+    <string name="kpm_embedded">Innebygd</string>
+    <string name="kpm_embedded_unload_invalid">Innebygde KPM-er kan ikke lastes ut; de forblir aktive etter omstart.</string>
 </resources>

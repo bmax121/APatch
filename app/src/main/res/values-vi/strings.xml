@@ -237,4 +237,8 @@
     <string name="jailbreak">Jailbreak</string>
     <string name="jailbreak_triggered">Đã kích hoạt jailbreak. Chờ lấy quyền root, sau đó khởi động lại mềm.</string>
     <string name="reboot_soft">Khởi động lại mềm</string>
+    <string name="kpm_installed">Đã cài đặt</string>
+    <string name="kpm_disabled">Đã tắt (có hiệu lực sau khi khởi động lại)</string>
+    <string name="kpm_embedded">Đã nhúng</string>
+    <string name="kpm_embedded_unload_invalid">Không thể tải KPM đã nhúng; chúng vẫn hoạt động sau khi khởi động lại.</string>
 </resources>

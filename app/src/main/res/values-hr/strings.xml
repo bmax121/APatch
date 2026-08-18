@@ -237,4 +237,8 @@
     <string name="jailbreak">Jailbreak</string>
     <string name="jailbreak_triggered">Jailbreak je aktiviran. Pričekajte root, zatim napravite mekani ponovni pokret.</string>
     <string name="reboot_soft">Mekani ponovni pokret</string>
+    <string name="kpm_installed">Instalirano</string>
+    <string name="kpm_disabled">Onemogućeno (primjenjuje se nakon ponovnog pokretanja)</string>
+    <string name="kpm_embedded">Ugrađeno</string>
+    <string name="kpm_embedded_unload_invalid">Ugrađeni KPM-ovi ne mogu se ukloniti; ostat će aktivni nakon ponovnog pokretanja.</string>
 </resources>

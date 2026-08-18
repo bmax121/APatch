@@ -237,4 +237,8 @@
     <string name="jailbreak">Джейлбрейк</string>
     <string name="jailbreak_triggered">"Jailbreak активовано. Дочекайтеся отримання root, а потім виконайте м'яке перезавантаження."</string>
     <string name="reboot_soft">"М'яке перезавантаження"</string>
+    <string name="kpm_installed">Встановлено</string>
+    <string name="kpm_disabled">Вимкнено (набере чинності після перезавантаження)</string>
+    <string name="kpm_embedded">Вбудовано</string>
+    <string name="kpm_embedded_unload_invalid">Вбудовані KPM не можна вивантажити; після перезавантаження вони залишаться активними.</string>
 </resources>

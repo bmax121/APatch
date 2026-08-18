@@ -235,4 +235,8 @@
     <string name="jailbreak">جیلبریک</string>
     <string name="jailbreak_triggered">جیلبریک فعال شد. منتظر دریافت روت بمانید، سپس ریاستارت نرم انجام دهید.</string>
     <string name="reboot_soft">ریاستارت نرم</string>
+    <string name="kpm_installed">نصب‌شده</string>
+    <string name="kpm_disabled">غیرفعال (پس از راه‌اندازی مجدد اعمال می‌شود)</string>
+    <string name="kpm_embedded">جاسازی‌شده</string>
+    <string name="kpm_embedded_unload_invalid">KPMهای جاسازی‌شده قابل بارزدایی نیستند؛ پس از راه‌اندازی مجدد فعال می‌مانند.</string>
 </resources>

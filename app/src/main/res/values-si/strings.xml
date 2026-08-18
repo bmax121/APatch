@@ -235,4 +235,8 @@
     <string name="jailbreak">ජේල්බ්රේක්</string>
     <string name="jailbreak_triggered">ජේල්බ්රේක් අවුලුවන ලදී. root ලබා ගැනීමට රැඳී සිට, පසුව මෘදු reboot කරන්න.</string>
     <string name="reboot_soft">මෘදු reboot</string>
+    <string name="kpm_installed">ස්ථාපිතයි</string>
+    <string name="kpm_disabled">අක්‍රියයි (නැවත ආරම්භ කිරීමෙන් පසු බලපැවැත්වේ)</string>
+    <string name="kpm_embedded">කාවැද්දූ</string>
+    <string name="kpm_embedded_unload_invalid">කාවැද්දූ KPM ඉවත් කළ නොහැක; නැවත ආරම්භ කිරීමෙන් පසුවද සක්‍රියව පවතිනු ඇත.</string>
 </resources>

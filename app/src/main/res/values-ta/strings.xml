@@ -235,4 +235,8 @@
     <string name="jailbreak">ஜெயில்பிரேக்</string>
     <string name="jailbreak_triggered">ஜெயில்பிரேக் தூண்டப்பட்டது. root கிடைக்கும் வரை காத்திருந்து, பின்னர் மென்மையான மறுதொடக்கம் செய்யவும்.</string>
     <string name="reboot_soft">மென்மையான மறுதொடக்கம்</string>
+    <string name="kpm_installed">நிறுவப்பட்டது</string>
+    <string name="kpm_disabled">முடக்கப்பட்டது (மறுதொடக்கத்திற்குப் பிறகு நடைமுறைக்கு வரும்)</string>
+    <string name="kpm_embedded">உட்பொதிக்கப்பட்டது</string>
+    <string name="kpm_embedded_unload_invalid">உட்பொதிக்கப்பட்ட KPM-ஐ இறக்க முடியாது; மறுதொடக்கத்திற்குப் பிறகும் செயலில் இருக்கும்.</string>
 </resources>

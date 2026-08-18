@@ -235,4 +235,8 @@
     <string name="jailbreak">Jailbreak</string>
     <string name="jailbreak_triggered">Jailbreak uruchomiony. Poczekaj na root, a następnie wykonaj miękki restart.</string>
     <string name="reboot_soft">Miękki restart</string>
+    <string name="kpm_installed">Zainstalowano</string>
+    <string name="kpm_disabled">Wyłączono (zacznie obowiązywać po ponownym uruchomieniu)</string>
+    <string name="kpm_embedded">Osadzono</string>
+    <string name="kpm_embedded_unload_invalid">Osadzonych modułów KPM nie można odładować; pozostaną aktywne po ponownym uruchomieniu.</string>
 </resources>
