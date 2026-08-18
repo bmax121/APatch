@@ -1,2 +1,5 @@
 /target
-.cargo/
+# .cargo holds tracked target rustflags (link-time size opts);
+# keep everything else local (credentials, per-machine overrides).
+.cargo/*
+!.cargo/config.toml

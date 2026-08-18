@@ -1,0 +1,13 @@
+# Link-time size opts, mirroring app/src/main/cpp/CMakeLists.txt's apjni flags.
+# All stable rustc/lld flags; applied via rustflags since [profile] cannot carry them.
+[target.aarch64-linux-android]
+rustflags = [
+    # dead section removal (mostly redundant with fat LTO, kept for parity)
+    "-C", "link-arg=-Wl,--gc-sections",
+    # Identical Code Folding: merge byte-identical functions
+    "-C", "link-arg=-Wl,--icf=all",
+    # drop the .note.gnu.build-id section
+    "-C", "link-arg=-Wl,--build-id=none",
+    # hide staticlib symbols from dynamic export (-fvisibility=hidden analogue)
+    "-C", "link-arg=-Wl,--exclude-libs,ALL",
+]
