@@ -254,10 +254,8 @@ pub fn run() -> Result<()> {
                 return magica::run(port, &module, &kmi, &package_name);
             }
             let result = late_load::run(module, kmi, package_name);
-            if post_magica {
-                if let Err(e) = magica::disable_adb_root() {
-                    log::error!("disable adb root failed: {e:#}");
-                }
+            if post_magica && let Err(e) = magica::disable_adb_root() {
+                log::error!("disable adb root failed: {e:#}");
             }
             result
         }

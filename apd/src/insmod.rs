@@ -47,7 +47,9 @@ fn kernel_symbols() -> Result<Vec<(String, u64)>> {
             continue;
         };
         let _ty = splits.next();
-        let Some(symbol) = splits.next() else { continue };
+        let Some(symbol) = splits.next() else {
+            continue;
+        };
         // Stop reading as soon as we hit module symbols.
         if splits.next().is_some() {
             break;

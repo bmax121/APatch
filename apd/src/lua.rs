@@ -31,43 +31,38 @@ pub fn load_all_lua_modules(lua: &Lua) -> LuaResult<()> {
     };
 
     if modules_dir.exists() {
-        for entry in
-            fs::read_dir(modules_dir).unwrap_or_else(|_| fs::read_dir("/dev/null").unwrap())
+        for entry in fs::read_dir(modules_dir)
+            .unwrap_or_else(|_| fs::read_dir("/dev/null").unwrap())
+            .flatten()
         {
-            if let Ok(entry) = entry {
-                let path = entry.path();
-                if path.is_dir() {
-                    let id = path.file_name().unwrap().to_string_lossy().to_string();
-                    let package: Table = lua.globals().get("package")?;
-                    let old_cpath: String = package.get("cpath")?;
-                    let new_cpath = format!("{}/?.so;{}", path.to_string_lossy(), old_cpath);
-                    package.set("cpath", new_cpath)?;
+            let path = entry.path();
+            if path.is_dir() {
+                let id = path.file_name().unwrap().to_string_lossy().to_string();
+                let package: Table = lua.globals().get("package")?;
+                let old_cpath: String = package.get("cpath")?;
+                let new_cpath = format!("{}/?.so;{}", path.to_string_lossy(), old_cpath);
+                package.set("cpath", new_cpath)?;
 
-                    let lua_file = path.join(format!("{}.lua", id));
+                let lua_file = path.join(format!("{}.lua", id));
 
-                    if lua_file.exists() {
-                        match fs::read_to_string(&lua_file) {
-                            Ok(code) => {
-                                match lua
-                                    .load(&code)
-                                    .set_name(&*lua_file.to_string_lossy())
-                                    .eval::<Table>()
-                                {
-                                    Ok(module) => {
-                                        modules.set(id.clone(), module.clone())?;
-                                    }
-                                    Err(e) => {
-                                        eprintln!(
-                                            "Failed to eval Lua {}: {}",
-                                            lua_file.display(),
-                                            e
-                                        );
-                                    }
+                if lua_file.exists() {
+                    match fs::read_to_string(&lua_file) {
+                        Ok(code) => {
+                            match lua
+                                .load(&code)
+                                .set_name(&*lua_file.to_string_lossy())
+                                .eval::<Table>()
+                            {
+                                Ok(module) => {
+                                    modules.set(id.clone(), module.clone())?;
+                                }
+                                Err(e) => {
+                                    eprintln!("Failed to eval Lua {}: {}", lua_file.display(), e);
                                 }
                             }
-                            Err(e) => {
-                                eprintln!("Failed to read Lua {}: {}", lua_file.display(), e);
-                            }
+                        }
+                        Err(e) => {
+                            eprintln!("Failed to read Lua {}: {}", lua_file.display(), e);
                         }
                     }
                 }
@@ -118,7 +113,7 @@ pub fn read_text_lua(lua: &Lua) -> LuaResult<Function> {
 
 pub fn exec_stage_lua(stage: &str, wait: bool, superkey: &str) -> Result<()> {
     let stage_safe = stage.replace('-', "_");
-    run_lua(&superkey, &stage_safe, true, wait).map_err(|e| anyhow::anyhow!("{}", e))?;
+    run_lua(superkey, &stage_safe, true, wait).map_err(|e| anyhow::anyhow!("{}", e))?;
     Ok(())
 }
 

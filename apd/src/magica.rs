@@ -2,8 +2,8 @@
 //! then run the actual `late-load` through an adb shell so it has full root.
 //! Ported from KernelSU's `ksud/src/magica.rs` and adapted for APatch.
 
-use adb_client::tcp::ADBTcpDevice;
 use adb_client::ADBDeviceExt;
+use adb_client::tcp::ADBTcpDevice;
 use anyhow::{Context, Result, bail};
 use log::{error, info};
 use prop_rs_android::resetprop::ResetProp;

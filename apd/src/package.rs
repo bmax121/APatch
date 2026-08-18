@@ -96,10 +96,7 @@ pub fn write_ap_package_config(package_configs: &[PackageConfig]) -> io::Result<
         }
         return Ok(());
     }
-    Err(io::Error::new(
-        io::ErrorKind::Other,
-        "Failed after max retries",
-    ))
+    Err(io::Error::other("Failed after max retries"))
 }
 
 fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
@@ -116,6 +113,10 @@ pub fn synchronize_package_uid() -> io::Result<()> {
     for _ in 0..max_retry {
         match read_lines("/data/system/packages.list") {
             Ok(lines) => {
+                // Skip bad lines instead of `map_while(Result::ok)`: truncating
+                // at the first error would drop the tail of the list, and the
+                // retain() below would then revoke grants for those packages.
+                #[allow(clippy::lines_filter_map_ok)]
                 let lines: Vec<_> = lines.filter_map(|line| line.ok()).collect();
 
                 let mut package_configs = read_ap_package_config();
@@ -175,8 +176,5 @@ pub fn synchronize_package_uid() -> io::Result<()> {
             }
         }
     }
-    Err(io::Error::new(
-        io::ErrorKind::Other,
-        "Failed after max retries",
-    ))
+    Err(io::Error::other("Failed after max retries"))
 }

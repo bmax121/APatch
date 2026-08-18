@@ -123,8 +123,8 @@ pub fn get_policy_main(args: &[String]) -> Result<SePolicy> {
 /// Load the live SELinux policy, apply Magisk rules and push it into the kernel.
 /// Equivalent to `magiskpolicy --magisk --live`.
 pub fn apply_magisk_policy_live() -> Result<()> {
-    let mut sepol =
-        get_policy_main(&["magiskpolicy".to_string(), "--live".to_string()]).context("Cannot load policy")?;
+    let mut sepol = get_policy_main(&["magiskpolicy".to_string(), "--live".to_string()])
+        .context("Cannot load policy")?;
     sepol.magisk_rules();
     sepol
         .to_file("/sys/fs/selinux/load")

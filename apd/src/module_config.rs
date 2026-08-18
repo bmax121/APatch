@@ -174,7 +174,9 @@ pub fn load_config(module_id: &str, config_type: ConfigType) -> Result<HashMap<S
             .with_context(|| format!("Failed to read value length for entry {i}"))?;
         let value_len = u32::from_le_bytes(value_len_buf) as usize;
         if value_len > MAX_CONFIG_VALUE_LEN {
-            bail!("Config value length {value_len} exceeds max {MAX_CONFIG_VALUE_LEN} for entry {i}");
+            bail!(
+                "Config value length {value_len} exceeds max {MAX_CONFIG_VALUE_LEN} for entry {i}"
+            );
         }
 
         // Read value data

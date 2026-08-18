@@ -1,13 +1,16 @@
 #[cfg(unix)]
 use std::os::unix::process::CommandExt;
-use std::{env, ffi::{CStr, CString}, path::PathBuf, process::Command};
+use std::{
+    env,
+    ffi::{CStr, CString},
+    path::PathBuf,
+    process::Command,
+};
 
 use anyhow::{Ok, Result};
 #[cfg(unix)]
 use getopts::Options;
-use rustix::thread::{
-    Gid, Uid, set_thread_groups, set_thread_res_gid, set_thread_res_uid,
-};
+use rustix::thread::{Gid, Uid, set_thread_groups, set_thread_res_gid, set_thread_res_uid};
 
 #[cfg(any(target_os = "linux", target_os = "android"))]
 use crate::pty::prepare_pty;
@@ -99,7 +102,12 @@ pub fn root_shell() -> Result<()> {
     // Accepted for Magisk-compatible invocations (su -cn/-z/-Z <context>) from legacy
     // root apps. Per-session SELinux context switching is not implemented, so the
     // requested context is ignored with a warning below.
-    opts.optopt("Z", "context", "Specify SELinux context (ignored)", "CONTEXT");
+    opts.optopt(
+        "Z",
+        "context",
+        "Specify SELinux context (ignored)",
+        "CONTEXT",
+    );
     opts.optflag("", "no-pty", "Do not allocate a new pseudo terminal.");
 
     // Replace -cn and -z with -Z, -mm with -M for backwards compatibility (same as Magisk)
@@ -146,7 +154,9 @@ pub fn root_shell() -> Result<()> {
     let mount_master = matches.opt_present("M");
 
     if let Some(context) = matches.opt_str("Z") {
-        log::warn!("su: SELinux context {context} requested but per-session context switching is not supported, ignoring");
+        log::warn!(
+            "su: SELinux context {context} requested but per-session context switching is not supported, ignoring"
+        );
     }
 
     // -g overrides the primary group, -G appends supplementary groups
@@ -250,10 +260,10 @@ pub fn root_shell() -> Result<()> {
         command = command.env("ENV", defs::AP_RC_PATH);
     }
     #[cfg(target_os = "android")]
-    if !matches.opt_present("no-pty") {
-        if let Err(e) = prepare_pty() {
-            log::error!("failed to prepare pty: {:?}", e);
-        }
+    if !matches.opt_present("no-pty")
+        && let Err(e) = prepare_pty()
+    {
+        log::error!("failed to prepare pty: {:?}", e);
     }
     // escape from the current cgroup and become session leader
     // WARNING!!! This cause some root shell hang forever!

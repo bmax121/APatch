@@ -188,7 +188,7 @@ pub fn load_sepolicy_rule() -> Result<()> {
             return Ok(());
         }
 
-        info!("load policy: {}", &rule_file.display());
+        info!("load policy: {}", rule_file.display());
         let mut _sepol = get_policy_main(&[
             "magiskpolicy".to_string(),
             "--live".to_string(),
@@ -475,7 +475,7 @@ fn _install_module(zip: &str) -> Result<()> {
     let _module_update_dir = format!("{}{}", modules_update_dir.display(), module_id);
     info!("module dir: {}", module_dir);
     if !Path::new(&module_dir.clone()).exists() {
-        fs::create_dir(&module_dir.clone()).expect("Failed to create module folder");
+        fs::create_dir(module_dir.clone()).expect("Failed to create module folder");
         let permissions = fs::Permissions::from_mode(0o700);
         fs::set_permissions(module_dir.clone(), permissions).expect("Failed to set permissions");
     }
@@ -506,8 +506,7 @@ fn _install_module(zip: &str) -> Result<()> {
 }
 
 pub fn install_module(zip: &str) -> Result<()> {
-    let result = _install_module(zip);
-    result
+    _install_module(zip)
 }
 
 pub fn _uninstall_module(id: &str, update_dir: &str) -> Result<()> {
@@ -626,7 +625,7 @@ pub fn run_action(id: &str) -> Result<()> {
         let _ = exec_script(&action_script_path, true);
     } else {
         //if no action.sh, try to run lua action
-        lua::run_lua(&id, "action", false, true).map_err(|e| anyhow::anyhow!("{}", e))?;
+        lua::run_lua(id, "action", false, true).map_err(|e| anyhow::anyhow!("{}", e))?;
     }
     Ok(())
 }
@@ -640,7 +639,7 @@ fn _change_module_state(module_dir: &str, mid: &str, enable: bool) -> Result<()>
     if enable {
         if disable_path.exists() {
             fs::remove_file(&disable_path).with_context(|| {
-                format!("Failed to remove disable file: {}", &disable_path.display())
+                format!("Failed to remove disable file: {}", disable_path.display())
             })?;
         }
     } else {
