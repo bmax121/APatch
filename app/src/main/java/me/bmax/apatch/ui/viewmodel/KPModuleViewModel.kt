@@ -40,6 +40,26 @@ private fun parseKpmInfo(raw: String, fallbackId: String = ""): KPModel.KPMInfo?
     )
 }.getOrNull()
 
+private fun parseKernelKpmInfo(raw: String, fallbackName: String): KPModel.KPMInfo? {
+    val lines = raw.split('\n')
+    if (lines.none { it.startsWith("name=") }) return null
+    fun value(key: String) = lines.firstOrNull { it.startsWith("$key=") }
+        ?.removePrefix("$key=") ?: ""
+    val name = value("name").ifBlank { fallbackName }
+    return KPModel.KPMInfo(
+        KPModel.ExtraType.KPM,
+        name,
+        value("load_event"),
+        value("args"),
+        value("version"),
+        value("license"),
+        value("author"),
+        value("description"),
+        safeKpmModuleId(fallbackName),
+        value("load_source")
+    )
+}
+
 class KPModuleViewModel : ViewModel() {
     companion object { private var modules by mutableStateOf<List<KPModel.KPMInfo>>(emptyList()) }
 
@@ -58,6 +78,12 @@ class KPModuleViewModel : ViewModel() {
     }
 
     fun markNeedRefresh() { isNeedRefresh = true }
+
+    fun updateModuleDisabled(moduleId: String, disabled: Boolean) {
+        modules = modules.map { module ->
+            if (module.moduleId == moduleId) module.copy(disabled = disabled) else module
+        }
+    }
 
     fun fetchModuleList() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -81,20 +107,31 @@ class KPModuleViewModel : ViewModel() {
                         safeKpmModuleId(kernelName),
                         lines.firstOrNull { it.startsWith("load_source=") }?.removePrefix("load_source=") ?: ""
                     )
-                    result[info.moduleId] = info.copy(installed = info.loadSource == "file")
+                    // load_source=file only describes where this instance was loaded from.
+                    // It does not mean the KPM belongs to APatch's persistent install store.
+                    // The installed flag is set only when the directory scan below finds
+                    // /data/adb/ap/kpm/<id>/<id>.kpm.
+                    result[info.moduleId] = info.copy(installed = false, disabled = false)
                 }
                 val dirs = rootShellForResult("find ${APApplication.KPMS_DIR} -mindepth 1 -maxdepth 1 -type d -print").out
                 dirs.map { it.trim().substringAfterLast('/') }.filter(String::isNotBlank).forEach { id ->
                     val file = "${APApplication.KPMS_DIR}$id/$id.kpm"
+                    // Repair installations created before KPM files were relabeled.
+                    rootShellForResult("chown 0:0 '${APApplication.KPMS_DIR}$id' '$file' && chmod 0755 '${APApplication.KPMS_DIR}$id' && chmod 0644 '$file' && restorecon -R '${APApplication.KPMS_DIR}$id'")
                     val parsed = rootShellForResult("${APApplication.APATCH_FOLDER}bin/kptools -l -M '$file'")
                         .out.joinToString("\n").let { parseKpmInfo(it, id) } ?: return@forEach
                     val key = safeKpmModuleId(id)
                     val old = result[key]
+                    // Refresh the same live metadata exposed by `truncate su module info <name>`.
+                    val live = parseKernelKpmInfo(Natives.kernelPatchModuleInfo(id), id)
+                    val current = live ?: old
                     val disabled = rootShellForResult("[ -e '${APApplication.KPMS_DIR}$id/disable' ]").isSuccess
-                    result[key] = old?.copy(
+                    result[key] = current?.copy(
                         moduleId = id, installed = true, disabled = disabled,
-                        version = parsed.version, license = parsed.license,
-                        author = parsed.author, description = parsed.description
+                        version = current.version.ifBlank { parsed.version },
+                        license = current.license.ifBlank { parsed.license },
+                        author = current.author.ifBlank { parsed.author },
+                        description = current.description.ifBlank { parsed.description }
                     ) ?: parsed.copy(moduleId = id, installed = true, disabled = disabled, loadSource = "")
                 }
                 modules = result.values.toList()
