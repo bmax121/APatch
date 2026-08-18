@@ -297,7 +297,7 @@ suspend fun loadModule(loadingDialog: LoadingDialogHandle, uri: Uri, args: Strin
     return rc
 }
 
-/** Install a KPM without loading it: the boot-time loader owns this directory. */
+/** Install a KPM and load it immediately. It will also be loaded again at boot. */
 suspend fun installKpm(uri: Uri): Int = withContext(Dispatchers.IO) {
     val temp = File(apApp.cacheDir, "kpm-install-${System.currentTimeMillis()}.kpm")
     try {
@@ -313,9 +313,18 @@ suspend fun installKpm(uri: Uri): Int = withContext(Dispatchers.IO) {
         val dir = "${APApplication.KPMS_DIR}$id"
         val destination = "$dir/$id.kpm"
         val result = rootShellForResult(
-            "mkdir -p '$dir' && cp -f '${temp.absolutePath}' '$destination' && chmod 0644 '$destination' && rm -f '$dir/disable'"
+            "mkdir -p '$dir' && cp -f '${temp.absolutePath}' '$destination' && chown 0:0 '$dir' '$destination' && chmod 0755 '$dir' && chmod 0644 '$destination' && restorecon -R '$dir' && rm -f '$dir/disable'"
         )
-        if (result.isSuccess) 0 else -5
+        if (!result.isSuccess) return@withContext -5
+
+        // Installation is expected to take effect immediately, rather than waiting
+        // for the next boot. The persisted file is still the source for boot loading.
+        val loadRc = Natives.loadKernelPatchModule(
+            destination,
+            section["args"]?.toString().orEmpty()
+        ).toInt()
+        Log.i(TAG, "install and load KPM $name from $destination, rc=$loadRc")
+        if (loadRc == 0) 0 else loadRc
     } catch (e: Exception) {
         Log.e(TAG, "install KPM failed", e)
         -1
@@ -420,13 +429,13 @@ private fun KPModuleList(
 ) {
     val moduleStr = stringResource(id = R.string.kpm)
     val moduleUninstallConfirm = stringResource(id = R.string.kpm_unload_confirm)
+    val embeddedUnloadInvalid = stringResource(id = R.string.kpm_embedded_unload_invalid)
     val uninstall = stringResource(id = R.string.kpm_unload)
     val cancel = stringResource(id = android.R.string.cancel)
     val context = LocalContext.current
     val outMsgStringRes = stringResource(id = R.string.kpm_control_outMsg)
     val okStringRes = stringResource(id = R.string.kpm_control_ok)
     val failedStringRes = stringResource(id = R.string.kpm_control_failed)
-    val embeddedUnloadInvalid = stringResource(id = R.string.kpm_embedded_unload_invalid)
 
     val confirmDialog = rememberConfirmDialog()
     val loadingDialog = rememberLoadingDialog()
@@ -462,13 +471,13 @@ private fun KPModuleList(
     }
 
     suspend fun onModuleUninstall(module: KPModel.KPMInfo) {
-        if (module.loadSource == "embedded") {
-            Toast.makeText(context, embeddedUnloadInvalid, Toast.LENGTH_LONG).show()
-            return
-        }
         val confirmResult = confirmDialog.awaitConfirm(
             moduleStr,
-            content = moduleUninstallConfirm.format(module.name),
+            content = if (module.loadSource == "embedded") {
+                embeddedUnloadInvalid
+            } else {
+                moduleUninstallConfirm.format(module.name)
+            },
             confirm = uninstall,
             dismiss = cancel
         )
@@ -479,7 +488,7 @@ private fun KPModuleList(
         val success = loadingDialog.withLoading {
             withContext(Dispatchers.IO) {
                 val unloaded = module.loadSource.isBlank() || Natives.unloadKernelPatchModule(module.name) == 0L
-                if (module.installed) {
+                if (module.installed && module.loadSource != "embedded") {
                     val id = safeKpmModuleId(module.moduleId.ifBlank { module.name })
                     rootShellForResult("rm -rf '${APApplication.KPMS_DIR}$id'").isSuccess && (unloaded || module.disabled)
                 } else unloaded
@@ -539,9 +548,13 @@ private fun KPModuleList(
                                 scope.launch {
                                     withContext(Dispatchers.IO) {
                                         val id = safeKpmModuleId(module.moduleId.ifBlank { module.name })
-                                        if (enabled) rootShellForResult("rm -f '${APApplication.KPMS_DIR}$id/disable'")
-                                        else rootShellForResult("mkdir -p '${APApplication.KPMS_DIR}$id' && touch '${APApplication.KPMS_DIR}$id/disable'")
+                                        if (enabled) {
+                                            rootShellForResult("rm -f '${APApplication.KPMS_DIR}$id/disable'")
+                                        } else {
+                                            rootShellForResult("touch '${APApplication.KPMS_DIR}$id/disable'")
+                                        }
                                     }
+                                    viewModel.updateModuleDisabled(module.moduleId, !enabled)
                                     viewModel.markNeedRefresh()
                                     viewModel.fetchModuleList()
                                 }
@@ -625,6 +638,10 @@ private fun KPModuleItem(
                         )
                     }
 
+                    if (module.installed && module.loadSource != "embedded") {
+                        Switch(checked = !module.disabled, onCheckedChange = onToggle)
+                    }
+
                 }
 
                 Text(
@@ -650,11 +667,6 @@ private fun KPModuleItem(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Spacer(modifier = Modifier.weight(1f))
-
-                    if (module.installed) {
-                        Switch(checked = !module.disabled, onCheckedChange = onToggle)
-                        Spacer(modifier = Modifier.width(8.dp))
-                    }
 
                     FilledTonalButton(
                         onClick = { onControl(module) },
