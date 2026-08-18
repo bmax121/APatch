@@ -11,12 +11,11 @@ use std::{
     collections::HashMap,
     env::var as env_var,
     fs::{self, remove_dir_all},
-    io::Cursor,
+    io::{Cursor, Read},
     path::{Path, PathBuf},
     process::Command,
     str::FromStr,
 };
-use zip_extensions::zip_extract_file_to_memory;
 
 #[allow(clippy::wildcard_imports)]
 use crate::utils::*;
@@ -375,10 +374,12 @@ fn _install_module(zip: &str) -> Result<()> {
 
     // read the module_id from zip
     let mut buffer: Vec<u8> = Vec::new();
-    let entry_path = PathBuf::from_str("module.prop")?;
     let zip_path = PathBuf::from_str(zip)?;
     let zip_path = zip_path.canonicalize()?;
-    zip_extract_file_to_memory(&zip_path, &entry_path, &mut buffer)?;
+    {
+        let mut archive = zip::ZipArchive::new(fs::File::open(&zip_path)?)?;
+        archive.by_name("module.prop")?.read_to_end(&mut buffer)?;
+    }
     let mut module_prop = HashMap::new();
     PropertiesIter::new_with_encoding(Cursor::new(buffer), encoding_rs::UTF_8).read_into(
         |k, v| {

@@ -11,15 +11,13 @@ anyhow = "1.0.104"
 csv = "1.4.0"
 clap = { version = "4.6.6", features = ["derive"] }
 const_format = "0.2.36"
+# "time" is not enabled: apd never reads or writes zip timestamps.
+# "deflate-flate2-zlib-rs" instead of "deflate": drops the write-only zopfli
+# encoder but keeps the zlib-rs backend, which provides the inflate path
+# (flate2 without any backend fails to compile).
 zip = { version = "8.6.0",features = [
-    "deflate",
+    "deflate-flate2-zlib-rs",
     "deflate64",
-    "time",
-    "lzma",
-    "xz",
-], default-features = false }
-zip-extensions = { git = "https://github.com/AndroidPatch/zip-extensions-rs.git", branch = "master", features = [
-    "deflate",
     "lzma",
     "xz",
 ], default-features = false }
@@ -39,17 +37,23 @@ notify = "8.2.0"
 signal-hook = "0.4.4"
 regex-lite = "0.1.9"
 # for insmod (ELF parsing + symbol relocation, no version check)
-goblin = "0.10.7"
+# only the ELF formats matter; PE/Mach-O/archive parsers are dead weight
+goblin = { version = "0.10.7", default-features = false, features = ["std", "elf32", "elf64", "endian_fd"] }
 scroll = "0.13.0"
 # for magica (jailbreak adb-root escalation)
-adb_client = "3.2.3"
+# framebuffer (image crate) is unused - magica only needs TCP + shell
+adb_client = { version = "3.2.3", default-features = false }
 
 [target.'cfg(any(target_os = "android", target_os = "linux"))'.dependencies]
 rustix = { version = "1.1.4", features = ["all-apis"] }
 # some android specific dependencies which compiles under unix are also listed here for convenience of coding
 android-properties = { version = "0.2.2", features = ["bionic-deprecated"] }
 prop-rs-android = { git = "https://github.com/Kernel-SU/ksu_props", rev = "6f5723105d8d4cacad31d83d343defbf032c7b33"}
-policy = {git = "https://github.com/AndroidPatch/ap_policy"}
+# Pinned to pre-rewrite rev: master (6ee5489) sepol_add_type does two reallocs
+# and writes the new pointers back only if BOTH succeed; on a partial failure
+# policydb keeps a dangling address, and callers discard the error. This runs
+# on the boot-time magisk_rules() path. Re-bump once ap_policy fixes it.
+policy = {git = "https://github.com/AndroidPatch/ap_policy", rev = "51ff1161e23a343971e3db764056ec6ee7c8cc2e"}
 [target.'cfg(target_os = "android")'.dependencies]
 android_logger = { version = "0.15.1", default-features = false }
 
