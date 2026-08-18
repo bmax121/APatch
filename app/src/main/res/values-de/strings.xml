@@ -220,6 +220,11 @@
     <string name="search_modules">Module suchen</string>
     <string name="settings_sucompat">Alte su-Kompatibilität</string>
     <string name="settings_sucompat_summary">Alt-su-Kompatibilität aktivieren (falls su nicht funktioniert)</string>
+    <string name="settings_selinux_hide">SELinux-Änderung verbergen (Test)</string>
+    <string name="settings_selinux_hide_summary">Verbirgt SELinux-Änderungen vor der Erkennung durch Benutzerprozesse (diese Funktion kann instabil sein). Der abgesicherte Modus kann diese Funktion deaktivieren.</string>
+    <string name="settings_selinux_hide_warning_title">Warnung</string>
+    <string name="settings_selinux_hide_warning_below_5_10">Diese Funktion wurde nur mit Kernel 5.10 und höher getestet und kann auf niedrigeren Kernelversionen instabil sein.</string>
+    <string name="settings_selinux_hide_warning_non_gki">Nicht-GKI-Kernel bergen ein höheres Risiko und können Startfehler verursachen. Stellen Sie sicher, dass Ihre Daten gesichert sind.</string>
     <string name="warning_of_meta_module_summary">Dieses Modul möchte /system mounten; die Metamodul übernimmt das. Andernfalls funktioniert es möglicherweise nicht.</string>
     <string name="warning_of_meta_module_title">Metamodul erforderlich</string>
     <string name="settings_jailbreak_mode">Jailbreak-Modus</string>

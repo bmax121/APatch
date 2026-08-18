@@ -204,6 +204,11 @@
     <string name="settings_night_theme_enabled">Aktifake tema peteng</string>
     <string name="settings_sucompat">Kompatibilitas su lawas</string>
     <string name="settings_sucompat_summary">Aktifake kompatibilitas su lawas (yen su ora bisa digunakake)</string>
+    <string name="settings_selinux_hide">Slingi owah-owahan SELinux (Test)</string>
+    <string name="settings_selinux_hide_summary">Slingi owah-owahan SELinux supaya ora bisa dideteksi proses pangguna (fitur iki bisa uga ora stabil). Mode aman bisa mateni fitur iki.</string>
+    <string name="settings_selinux_hide_warning_title">Pènget</string>
+    <string name="settings_selinux_hide_warning_below_5_10">Fitur iki mung dites ing kernel 5.10 lan luwih dhuwur lan bisa uga ora stabil ing versi kernel sing luwih cilik.</string>
+    <string name="settings_selinux_hide_warning_non_gki">Kernel non-GKI duwe risiko luwih gedhe lan bisa nyebabake boot gagal. Manawa data sampeyan wis digaring.</string>
     <string name="settings_use_system_color_theme">Tema werna sistem</string>
     <string name="settings_use_system_color_theme_summary">Gunakake tema werna sing digawe dening sistem adhedhasar wallpaper saiki</string>
     <string name="su_hide_system_apps">Ndhelikake aplikasi sistem</string>

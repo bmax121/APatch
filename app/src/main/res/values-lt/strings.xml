@@ -204,6 +204,11 @@
     <string name="settings_night_theme_enabled">Įgalinti tamsiąją temą</string>
     <string name="settings_sucompat">Senoji su suderinamumas</string>
     <string name="settings_sucompat_summary">Įgalinti seną su suderinamumą (kai su neveikia)</string>
+    <string name="settings_selinux_hide">Slėpti SELinux pakeitimus (Testas)</string>
+    <string name="settings_selinux_hide_summary">Paslėpti SELinux pakeitimus, kad jų neaptiktų vartotojo procesai (ši funkcija gali būti nestabili). Saugusis režimas gali išjungti šią funkciją.</string>
+    <string name="settings_selinux_hide_warning_title">Įspėjimas</string>
+    <string name="settings_selinux_hide_warning_below_5_10">Ši funkcija išbandyta tik su 5.10 ir naujesniais branduoliais ir gali būti nestabili senesnėse branduolio versijose.</string>
+    <string name="settings_selinux_hide_warning_non_gki">Ne GKI branduoliai kelia didesnę riziką ir gali sukelti įkrovos gedimą. Įsitikinkite, kad jūsų duomenys atsarginti.</string>
     <string name="settings_use_system_color_theme">Sistemos spalvų tema</string>
     <string name="settings_use_system_color_theme_summary">Naudoti sistemos sukurtą spalvų temą pagal dabartinę užsklandą</string>
     <string name="su_hide_system_apps">Slėpti sistemos programas</string>

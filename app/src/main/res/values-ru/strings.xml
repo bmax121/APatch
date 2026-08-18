@@ -218,6 +218,11 @@
     <string name="search_modules">Поиск модулей</string>
     <string name="settings_sucompat">Совместимость со старым su</string>
     <string name="settings_sucompat_summary">Включить совместимость со старым su (если su не работает)</string>
+    <string name="settings_selinux_hide">Скрыть изменение SELinux (Тест)</string>
+    <string name="settings_selinux_hide_summary">Скрывает изменения SELinux от обнаружения пользовательскими процессами (эта функция может быть нестабильной). Безопасный режим может отключить эту функцию.</string>
+    <string name="settings_selinux_hide_warning_title">Предупреждение</string>
+    <string name="settings_selinux_hide_warning_below_5_10">Эта функция протестирована только на ядре 5.10 и выше и может быть нестабильной на более старых версиях ядра.</string>
+    <string name="settings_selinux_hide_warning_non_gki">Не-GKI ядра несут больший риск и могут вызвать сбой загрузки. Убедитесь, что ваши данные сохранены в резервной копии.</string>
     <string name="warning_of_meta_module_summary">Этот модуль хочет смонтировать /system, метамодуль обработает это. В противном случае он может не работать.</string>
     <string name="warning_of_meta_module_title">Требуется метамодуль</string>
     <string name="settings_jailbreak_mode">Режим джейлбрейка</string>

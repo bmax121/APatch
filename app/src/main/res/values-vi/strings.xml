@@ -220,6 +220,11 @@
     <string name="search_modules">Tìm kiếm mô-đun</string>
     <string name="settings_sucompat">Tương thích su cũ</string>
     <string name="settings_sucompat_summary">Bật tương thích su cũ (cho khi su không hoạt động)</string>
+    <string name="settings_selinux_hide">Ẩn thay đổi SELinux (Thử nghiệm)</string>
+    <string name="settings_selinux_hide_summary">Ẩn các thay đổi SELinux để các tiến trình người dùng không phát hiện được (tính năng này có thể không ổn định). Chế độ an toàn có thể tắt tính năng này.</string>
+    <string name="settings_selinux_hide_warning_title">Cảnh báo</string>
+    <string name="settings_selinux_hide_warning_below_5_10">Tính năng này chỉ được thử nghiệm trên kernel 5.10 trở lên và có thể không ổn định trên các phiên bản kernel thấp hơn.</string>
+    <string name="settings_selinux_hide_warning_non_gki">Kernel không phải GKI có rủi ro cao hơn và có thể gây lỗi khởi động. Đảm bảo rằng bạn đã sao lưu dữ liệu.</string>
     <string name="warning_of_meta_module_summary">Mô-đun này muốn mount /system, mô-đun meta sẽ xử lý việc đó. Nếu không, nó có thể không hoạt động.</string>
     <string name="warning_of_meta_module_title">Yêu cầu mô-đun meta</string>
     <string name="settings_jailbreak_mode">Chế độ jailbreak</string>

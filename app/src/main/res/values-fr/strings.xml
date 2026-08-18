@@ -220,6 +220,11 @@
     <string name="search_modules">Rechercher des modules</string>
     <string name="settings_sucompat">Compatibilité su héritée</string>
     <string name="settings_sucompat_summary">Activer la compatibilité su héritée (lorsque su ne fonctionne pas)</string>
+    <string name="settings_selinux_hide">Masquer les modifications SELinux (Test)</string>
+    <string name="settings_selinux_hide_summary">"Masque les modifications SELinux pour qu'elles ne soient pas détectées par les processus utilisateur (cette fonction peut être instable). Le mode sans échec peut désactiver cette fonction."</string>
+    <string name="settings_selinux_hide_warning_title">Avertissement</string>
+    <string name="settings_selinux_hide_warning_below_5_10">"Cette fonction n'est testée que sur les noyaux 5.10 et plus et peut être instable sur les versions de noyau inférieures."</string>
+    <string name="settings_selinux_hide_warning_non_gki">"Les noyaux non-GKI présentent un risque plus élevé et peuvent provoquer un échec de démarrage. Assurez-vous d'avoir sauvegardé vos données."</string>
     <string name="warning_of_meta_module_summary">"Ce module veut monter /system ; le module meta s'en chargera. Sinon, il risque de ne pas fonctionner."</string>
     <string name="warning_of_meta_module_title">Module Meta requis</string>
     <string name="settings_jailbreak_mode">Mode jailbreak</string>

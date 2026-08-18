@@ -2,6 +2,11 @@
 <resources>
     <string name="settings_sucompat">توافق su القديم</string>
     <string name="settings_sucompat_summary">فعّل توافق su القديم (لما su ما يشتغل)</string>
+    <string name="settings_selinux_hide">إخفاء تعديل SELinux (تجريبي)</string>
+    <string name="settings_selinux_hide_summary">خبّي تعديلات SELinux عشان ما تنكشف من عمليات المستخدم (هالميزة ممكن تكون غير مستقرة). الوضع الآمن بيقدر يعطّلها.</string>
+    <string name="settings_selinux_hide_warning_title">تحذير</string>
+    <string name="settings_selinux_hide_warning_below_5_10">هالميزة منختبرت إلا على نواة 5.10 وفوق، وممكن تكون غير مستقرة على النوى الأقل.</string>
+    <string name="settings_selinux_hide_warning_non_gki">النوى غير GKI خطرها أكبر وممكن تسبب فشل بالإقلاع. تأكد إنك عامل نسخة احتياطية.</string>
     <string name="settings_jailbreak_mode">وضع كسر الحماية</string>
     <string name="settings_jailbreak_mode_summary">حمّل وحدة KernelPatch على نواة أصلية. ما في تثبيت بهالوضع.</string>
     <string name="settings_jailbreak_soft_reboot">إعادة تشغيل ناعمة</string>

@@ -209,6 +209,11 @@
     <string name="settings_night_theme_enabled">Iespējot tumšo tēmu</string>
     <string name="settings_sucompat">Vecā su saderība</string>
     <string name="settings_sucompat_summary">Iespējot veco su saderību (ja su nedarbojas)</string>
+    <string name="settings_selinux_hide">Paslēpt SELinux modifikāciju (Tests)</string>
+    <string name="settings_selinux_hide_summary">Paslēpiet SELinux izmaiņas no lietotāja procesu noteikšanas (šī funkcija var būt nestabila). Drošais režīms var atspējot šo funkciju.</string>
+    <string name="settings_selinux_hide_warning_title">Brīdinājums</string>
+    <string name="settings_selinux_hide_warning_below_5_10">Šī funkcija ir pārbaudīta tikai kodolā 5.10 un jaunākā, un var būt nestabila vecākās kodola versijās.</string>
+    <string name="settings_selinux_hide_warning_non_gki">Ne-GKI kodoli ir saistīti ar lielāku risku un var izraisīt sāknēšanas kļūmi. Pārliecinieties, ka dati ir dublēti.</string>
     <string name="settings_use_system_color_theme">Sistēmas krāsu tēma</string>
     <string name="settings_use_system_color_theme_summary">Izmantot sistēmas ģenerētu krāsu tēmu, pamatojoties uz pašreizējo fona attēlu</string>
     <string name="su_hide_system_apps">Slēpt sistēmas lietotnes</string>

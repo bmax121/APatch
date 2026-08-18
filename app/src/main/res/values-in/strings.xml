@@ -218,6 +218,11 @@
     <string name="search_modules">Cari modul</string>
     <string name="settings_sucompat">Kompatibilitas su lama</string>
     <string name="settings_sucompat_summary">Aktifkan kompatibilitas su lama (untuk saat su tidak berfungsi)</string>
+    <string name="settings_selinux_hide">Sembunyikan modifikasi SELinux (Uji Coba)</string>
+    <string name="settings_selinux_hide_summary">Menyembunyikan perubahan SELinux agar tidak terdeteksi oleh proses pengguna (fitur ini mungkin tidak stabil). Mode aman dapat menonaktifkan fitur ini.</string>
+    <string name="settings_selinux_hide_warning_title">Peringatan</string>
+    <string name="settings_selinux_hide_warning_below_5_10">Fitur ini hanya diuji pada kernel 5.10 ke atas dan mungkin tidak stabil pada versi kernel yang lebih rendah.</string>
+    <string name="settings_selinux_hide_warning_non_gki">Kernel non-GKI memiliki risiko yang lebih besar dan dapat menyebabkan kegagalan boot. Pastikan data Anda sudah dicadangkan.</string>
     <string name="warning_of_meta_module_summary">Modul ini ingin me-mount /system, modul meta akan menanganinya. Jika tidak, modul mungkin tidak berfungsi.</string>
     <string name="warning_of_meta_module_title">Memerlukan modul meta</string>
     <string name="settings_jailbreak_mode">Mode jailbreak</string>

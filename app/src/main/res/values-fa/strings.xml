@@ -218,6 +218,11 @@
     <string name="search_modules">جستجوی ماژول‌ها</string>
     <string name="settings_sucompat">سازگاری su قدیمی</string>
     <string name="settings_sucompat_summary">فعال‌سازی سازگاری قدیمی su (برای زمانی که su کار نمی‌کند)</string>
+    <string name="settings_selinux_hide">پنهان‌سازی تغییر SELinux (آزمایشی)</string>
+    <string name="settings_selinux_hide_summary">پنهان‌کردن تغییرات SELinux از شناسایی توسط فرآیندهای کاربر (این قابلیت ممکن است ناپایدار باشد). حالت امن می‌تواند این قابلیت را غیرفعال کند.</string>
+    <string name="settings_selinux_hide_warning_title">هشدار</string>
+    <string name="settings_selinux_hide_warning_below_5_10">این قابلیت فقط روی هسته 5.10 و بالاتر آزمایش شده است و ممکن است روی نسخه‌های پایین‌تر هسته ناپایدار باشد.</string>
+    <string name="settings_selinux_hide_warning_non_gki">هسته‌های غیر GKI خطر بیشتری دارند و ممکن است باعث از کار افتادن بوت شوند. مطمئن شوید از داده‌های خود نسخه پشتیبان تهیه کرده‌اید.</string>
     <string name="warning_of_meta_module_summary">این ماژول می‌خواهد /system را mount کند؛ متا ماژول این کار را انجام می‌دهد. در غیر این صورت ممکن است کار نکند.</string>
     <string name="warning_of_meta_module_title">نیاز به متا ماژول</string>
     <string name="settings_jailbreak_mode">حالت جیلبریک</string>

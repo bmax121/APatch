@@ -173,6 +173,11 @@
     <string name="settings_clear_super_key_dialog">确定要继续吗？</string>
     <string name="settings_sucompat">旧版 su 兼容</string>
     <string name="settings_sucompat_summary">启用旧版su兼容(适用于su不生效)</string>
+    <string name="settings_selinux_hide">隐藏Selinux修改(测试)</string>
+    <string name="settings_selinux_hide_summary">隐藏selinux的修改防止被用户进程探测到(该功能可能不稳定)。安全模式可禁用生效。</string>
+    <string name="settings_selinux_hide_warning_title">警告</string>
+    <string name="settings_selinux_hide_warning_below_5_10">该功能仅在5.10及以上内核上测试过，在5.10以下内核上可能不稳定。</string>
+    <string name="settings_selinux_hide_warning_non_gki">非GKI内核风险更大，可能导致无法开机，请确保已备份数据。</string>
     <string name="settings_jailbreak_mode">越狱模式</string>
     <string name="settings_jailbreak_mode_summary">在未修补的内核上加载 KernelPatch 模块。该模式下不允许修补。</string>
     <string name="settings_jailbreak_soft_reboot">软重启</string>

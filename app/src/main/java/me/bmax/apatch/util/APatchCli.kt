@@ -374,6 +374,21 @@ fun jailbreakAssetName(): String? {
     return "${kmi}_kernelpatch.ko"
 }
 
+/**
+ * Running kernel version as a comparable integer, e.g. `4.19` -> 419,
+ * `5.10` -> 510, `6.1` -> 601. Returns null if it can't be parsed.
+ */
+fun getKernelVersionCode(): Int? {
+    val release = runCatching { Os.uname().release }.getOrNull() ?: return null
+    val m = Regex("^(\\d+)\\.(\\d+)").find(release) ?: return null
+    val major = m.groupValues[1].toIntOrNull() ?: return null
+    val minor = m.groupValues[2].toIntOrNull() ?: return null
+    return major * 100 + minor
+}
+
+/** Whether the running kernel is a GKI kernel (i.e. exposes `android<N>` in uname). */
+fun isGkiKernel(): Boolean = getKmi() != null
+
 /** Extract the bundled kernelpatch.ko for this device's kernel to the app files dir. */
 fun extractJailbreakKo(): File? {
     val name = jailbreakAssetName() ?: return null

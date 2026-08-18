@@ -214,6 +214,11 @@
     <string name="settings_night_theme_enabled">Paganahin ang dark theme</string>
     <string name="settings_sucompat">Legacy na su compatibility</string>
     <string name="settings_sucompat_summary">I-enable ang lumang su compatibility (para kapag hindi gumagana ang su)</string>
+    <string name="settings_selinux_hide">Itago ang pagbabago ng SELinux (Pagsubok)</string>
+    <string name="settings_selinux_hide_summary">Itago ang mga pagbabago sa SELinux para hindi matukoy ng mga proseso ng user (maaaring hindi matatag ang feature na ito). Maaaring i-disable ng safe mode ang feature na ito.</string>
+    <string name="settings_selinux_hide_warning_title">Babala</string>
+    <string name="settings_selinux_hide_warning_below_5_10">Ang feature na ito ay nasubok lamang sa kernel 5.10 pataas at maaaring hindi matatag sa mas mababang bersyon ng kernel.</string>
+    <string name="settings_selinux_hide_warning_non_gki">Ang mga hindi GKI na kernel ay may mas malaking panganib at maaaring magdulot ng pagkabigo sa pag-boot. Siguraduhing naka-backup ang iyong data.</string>
     <string name="settings_use_system_color_theme">Tema ng kulay ng system</string>
     <string name="settings_use_system_color_theme_summary">Gumamit ng tema ng kulay na binuo ng system batay sa kasalukuyang wallpaper</string>
     <string name="teal_theme">Teal</string>

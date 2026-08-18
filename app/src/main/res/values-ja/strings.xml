@@ -220,6 +220,11 @@
     <string name="search_modules">モジュールを検索</string>
     <string name="settings_sucompat">レガシー su 互換性</string>
     <string name="settings_sucompat_summary">レガシーsu互換性を有効にする（suが機能しない場合）</string>
+    <string name="settings_selinux_hide">SELinux変更を隠す（テスト）</string>
+    <string name="settings_selinux_hide_summary">SELinuxの変更がユーザープロセスから検出されるのを防ぎます（この機能は不安定な場合があります）。セーフモードではこの機能を無効にできます。</string>
+    <string name="settings_selinux_hide_warning_title">警告</string>
+    <string name="settings_selinux_hide_warning_below_5_10">この機能はカーネル5.10以上でのみテストされており、それより低いバージョンでは不安定になる可能性があります。</string>
+    <string name="settings_selinux_hide_warning_non_gki">非GKIカーネルはリスクが高く、起動に失敗する可能性があります。データのバックアップを確認してください。</string>
     <string name="warning_of_meta_module_summary">このモジュールは /system をマウントしようとします。メタモジュールがそれを処理します。そうしないと、動作しない可能性があります。</string>
     <string name="warning_of_meta_module_title">Meta モジュールが必要</string>
     <string name="settings_jailbreak_mode">ジェイルブレイクモード</string>

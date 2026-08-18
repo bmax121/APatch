@@ -218,6 +218,11 @@
     <string name="search_modules">Hledat moduly</string>
     <string name="settings_sucompat">Kompatibilita staršího su</string>
     <string name="settings_sucompat_summary">Enable path_probe hooks for legacy su compatibility</string>
+    <string name="settings_selinux_hide">Skrýt úpravy SELinuxu (Test)</string>
+    <string name="settings_selinux_hide_summary">Skryje změny SELinuxu před detekcí uživatelskými procesy (tato funkce může být nestabilní). Nouzový režim může tuto funkci zakázat.</string>
+    <string name="settings_selinux_hide_warning_title">Varování</string>
+    <string name="settings_selinux_hide_warning_below_5_10">Tato funkce byla testována pouze na jádře 5.10 a vyšším a na nižších verzích jádra může být nestabilní.</string>
+    <string name="settings_selinux_hide_warning_non_gki">Jádra mimo GKI s sebou nesou vyšší riziko a mohou způsobit selhání spuštění. Ujistěte se, že máte zálohovaná data.</string>
     <string name="warning_of_meta_module_summary">Tento modul chce připojit /system, metamodul to bude řešit. Jinak by nemusel fungovat.</string>
     <string name="warning_of_meta_module_title">Vyžaduje meta modul</string>
     <string name="settings_jailbreak_mode">Režim jailbreak</string>

@@ -218,6 +218,11 @@
     <string name="search_modules">Αναζήτηση ενοτήτων</string>
     <string name="settings_sucompat">Συμβατότητα παλαιού su</string>
     <string name="settings_sucompat_summary">Ενεργοποίηση συμβατότητας su (για όταν το su δεν λειτουργεί)</string>
+    <string name="settings_selinux_hide">Απόκρυψη τροποποίησης SELinux (Δοκιμή)</string>
+    <string name="settings_selinux_hide_summary">Απόκρυψη των αλλαγών SELinux από την ανίχνευση από διεργασίες χρήστη (αυτή η δυνατότητα μπορεί να είναι ασταθής). Η ασφαλής λειτουργία μπορεί να απενεργοποιήσει αυτή τη δυνατότητα.</string>
+    <string name="settings_selinux_hide_warning_title">Προειδοποίηση</string>
+    <string name="settings_selinux_hide_warning_below_5_10">Αυτή η δυνατότητα έχει δοκιμαστεί μόνο σε πυρήνα 5.10 και νεότερο και μπορεί να είναι ασταθής σε παλαιότερες εκδόσεις πυρήνα.</string>
+    <string name="settings_selinux_hide_warning_non_gki">Οι πυρήνες μη-GKI ενέχουν μεγαλύτερο κίνδυνο και μπορεί να προκαλέσουν αποτυχία εκκίνησης. Βεβαιωθείτε ότι τα δεδομένα σας έχουν δημιουργηθεί αντίγραφα ασφαλείας.</string>
     <string name="warning_of_meta_module_summary">Αυτή η ενότητα θέλει να προσαρτήσει το /system, το meta module θα το διαχειριστεί. Διαφορετικά, μπορεί να μην λειτουργήσει.</string>
     <string name="warning_of_meta_module_title">Απαιτείται Meta module</string>
     <string name="settings_jailbreak_mode">Λειτουργία jailbreak</string>

@@ -222,6 +222,11 @@
     <string name="search_modules">Caută module</string>
     <string name="settings_sucompat">Compatibilitate cu su veche</string>
     <string name="settings_sucompat_summary">Activați compatibilitatea su veche (pentru când su nu funcționează)</string>
+    <string name="settings_selinux_hide">Ascunde modificarea SELinux (Test)</string>
+    <string name="settings_selinux_hide_summary">Ascunde modificările SELinux de a fi detectate de procesele utilizatorului (această funcție poate fi instabilă). Modul de siguranță poate dezactiva această funcție.</string>
+    <string name="settings_selinux_hide_warning_title">Avertisment</string>
+    <string name="settings_selinux_hide_warning_below_5_10">Această funcție a fost testată doar pe nucleul 5.10 și mai nou și poate fi instabilă pe versiuni mai vechi de nucleu.</string>
+    <string name="settings_selinux_hide_warning_non_gki">Nucleele non-GKI prezintă un risc mai mare și pot cauza eșecul pornirii. Asigurați-vă că datele dvs. sunt salvate.</string>
     <string name="warning_of_meta_module_summary">Acest modul dorește să monteze /system, metamodulul se va ocupa de asta. În caz contrar, s-ar putea să nu funcționeze.</string>
     <string name="warning_of_meta_module_title">Necesită metamodul</string>
     <string name="settings_jailbreak_mode">Mod jailbreak</string>

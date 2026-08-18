@@ -204,6 +204,11 @@
     <string name="settings_night_theme_enabled">Aktivér mørkt tema</string>
     <string name="settings_sucompat">Legacy su-kompatibilitet</string>
     <string name="settings_sucompat_summary">Enable path_probe hooks for legacy su compatibility</string>
+    <string name="settings_selinux_hide">Skjul SELinux-ændring (Test)</string>
+    <string name="settings_selinux_hide_summary">Skjuler SELinux-ændringer fra at blive opdaget af brugerprocesser (denne funktion kan være ustabil). Sikker tilstand kan deaktivere denne funktion.</string>
+    <string name="settings_selinux_hide_warning_title">Advarsel</string>
+    <string name="settings_selinux_hide_warning_below_5_10">Denne funktion er kun testet på kerne 5.10 og nyere og kan være ustabil på ældre versioner.</string>
+    <string name="settings_selinux_hide_warning_non_gki">Ikke-GKI-kerner udgør en større risiko og kan forårsage opstartsfejl. Sørg for, at dine data er sikkerhedskopieret.</string>
     <string name="settings_use_system_color_theme">Systemets farvetema</string>
     <string name="settings_use_system_color_theme_summary">Brug et farvetema genereret af systemet baseret på den aktuelle tapet</string>
     <string name="su_hide_system_apps">Skjul systemapps</string>

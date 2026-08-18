@@ -220,6 +220,11 @@
     <string name="search_modules">Cerca moduli</string>
     <string name="settings_sucompat">Compatibilità su legacy</string>
     <string name="settings_sucompat_summary">Abilita la compatibilità su legacy (per quando su non funziona)</string>
+    <string name="settings_selinux_hide">Nascondi modifica SELinux (Test)</string>
+    <string name="settings_selinux_hide_summary">Nasconde le modifiche SELinux per impedirne il rilevamento da parte dei processi utente (questa funzione potrebbe essere instabile). La modalità provvisoria può disattivare questa funzione.</string>
+    <string name="settings_selinux_hide_warning_title">Avviso</string>
+    <string name="settings_selinux_hide_warning_below_5_10">Questa funzione è stata testata solo su kernel 5.10 e superiori e potrebbe essere instabile su versioni inferiori.</string>
+    <string name="settings_selinux_hide_warning_non_gki">I kernel non GKI comportano un rischio maggiore e possono causare errori di avvio. Assicurati di aver eseguito un backup dei dati.</string>
     <string name="warning_of_meta_module_summary">Questo modulo vuole montare /system; il modulo meta lo gestirà. In caso contrario, potrebbe non funzionare.</string>
     <string name="warning_of_meta_module_title">Richiede il modulo Meta</string>
     <string name="settings_jailbreak_mode">Modalità jailbreak</string>

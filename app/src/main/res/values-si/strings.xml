@@ -218,6 +218,11 @@
     <string name="search_modules">මොඩියුල සොයන්න</string>
     <string name="settings_sucompat">පැරණි su අනුකූලතාව</string>
     <string name="settings_sucompat_summary">පැරණි su අනුකූලතාව සක්‍රීය කරන්න (su වැඩ නොකරන විට)</string>
+    <string name="settings_selinux_hide">SELinux වෙනස්කම් සඟවන්න (පරීක්ෂණය)</string>
+    <string name="settings_selinux_hide_summary">පරිශීලක ක්රියාවලි හඳුනා නොගැනීම සඳහා SELinux වෙනස්කම් සඟවන්න (මෙම විශේෂාංගය අස්ථායී විය හැක). ආරක්ෂිත ප්රකාරය මෙම විශේෂාංගය අක්රීය කළ හැක.</string>
+    <string name="settings_selinux_hide_warning_title">අනතුරු ඇඟවීම</string>
+    <string name="settings_selinux_hide_warning_below_5_10">මෙම විශේෂාංගය පරීක්ෂා කර ඇත්තේ 5.10 සහ ඊට වැඩි කර්නල් වල පමණක් වන අතර පහළ කර්නල් සංස්කරණ වල අස්ථායී විය හැක.</string>
+    <string name="settings_selinux_hide_warning_non_gki">GKI නොවන කර්නල් වල වැඩි අවදානමක් ඇති අතර ආරම්භක අසාර්ථකත්වයට හේතු විය හැක. ඔබේ දත්ත උපස්ථ කර ඇති බවට වග බලා ගන්න.</string>
     <string name="warning_of_meta_module_summary">මෙම module එකට /system mount කිරීමට අවශ්‍යයි; metamodule එය භාර ගනී. එසේ නොවුවහොත් එය ක්‍රියා නොකරනු ඇත.</string>
     <string name="warning_of_meta_module_title">Meta module එකක් අවශ්‍යයි</string>
     <string name="settings_jailbreak_mode">ජේල්බ්රේක් මාදිලිය</string>

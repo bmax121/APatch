@@ -214,6 +214,11 @@
     <string name="settings_night_mode_follow_sys_summary">Bytt automatisk til mørkt tema basert på systeminnstillingene</string>
     <string name="settings_sucompat">Eldre su-kompatibilitet</string>
     <string name="settings_sucompat_summary">Aktiver gammel su-kompatibilitet (når su ikke fungerer)</string>
+    <string name="settings_selinux_hide">Skjul SELinux-modifikasjon (Test)</string>
+    <string name="settings_selinux_hide_summary">Skjuler SELinux-endringer fra å bli oppdaget av brukerprosesser (denne funksjonen kan være ustabil). Sikker modus kan deaktivere denne funksjonen.</string>
+    <string name="settings_selinux_hide_warning_title">Advarsel</string>
+    <string name="settings_selinux_hide_warning_below_5_10">Denne funksjonen er kun testet på kjerne 5.10 og nyere, og kan være ustabil på lavere kjerneversjoner.</string>
+    <string name="settings_selinux_hide_warning_non_gki">Ikke-GKI-kjerner har en høyere risiko og kan føre til oppstartsfeil. Sørg for at dataene dine er sikkerhetskopiert.</string>
     <string name="settings_use_system_color_theme">Systemfargetema</string>
     <string name="settings_use_system_color_theme_summary">Bruk et fargetema generert av systemet basert på gjeldende bakgrunnsbilde</string>
     <string name="teal_theme">Blågrønn</string>

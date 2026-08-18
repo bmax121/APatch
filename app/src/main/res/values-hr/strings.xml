@@ -220,6 +220,11 @@
     <string name="search_modules">Pretraži module</string>
     <string name="settings_sucompat">Starija su kompatibilnost</string>
     <string name="settings_sucompat_summary">Omogući stariju su kompatibilnost (kada su ne radi)</string>
+    <string name="settings_selinux_hide">Sakrij SELinux modifikaciju (Test)</string>
+    <string name="settings_selinux_hide_summary">Sakrij SELinux promjene od otkrivanja od strane korisničkih procesa (ova značajka može biti nestabilna). Sigurni način rada može onemogućiti ovu značajku.</string>
+    <string name="settings_selinux_hide_warning_title">Upozorenje</string>
+    <string name="settings_selinux_hide_warning_below_5_10">Ova značajka testirana je samo na jezgri 5.10 i novijoj te može biti nestabilna na nižim verzijama jezgre.</string>
+    <string name="settings_selinux_hide_warning_non_gki">Ne-GKI jezgre nose veći rizik i mogu uzrokovati neuspjeh pokretanja. Provjerite jeste li napravili sigurnosnu kopiju podataka.</string>
     <string name="warning_of_meta_module_summary">Ovaj modul želi montirati /system, metamodul će to riješiti. Inače, možda neće raditi.</string>
     <string name="warning_of_meta_module_title">Potreban Meta modul</string>
     <string name="settings_jailbreak_mode">Način jailbreak</string>

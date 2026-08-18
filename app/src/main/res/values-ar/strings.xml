@@ -220,6 +220,11 @@
     <string name="search_modules">بحث الوحدات</string>
     <string name="settings_sucompat">توافق su القديم</string>
     <string name="settings_sucompat_summary">تفعيل توافق su القديم (لحالات عدم عمل su)</string>
+    <string name="settings_selinux_hide">إخفاء تعديل SELinux (اختباري)</string>
+    <string name="settings_selinux_hide_summary">إخفاء تعديلات SELinux لمنع اكتشافها من قبل عمليات المستخدم (قد تكون هذه الميزة غير مستقرة). يمكن للوضع الآمن تعطيل هذه الميزة.</string>
+    <string name="settings_selinux_hide_warning_title">تحذير</string>
+    <string name="settings_selinux_hide_warning_below_5_10">تم اختبار هذه الميزة على نواة 5.10 وما فوق فقط وقد تكون غير مستقرة على إصدارات النواة الأقل.</string>
+    <string name="settings_selinux_hide_warning_non_gki">تحمل النوى غير GKI مخاطر أكبر وقد تؤدي إلى فشل الإقلاع. تأكد من عمل نسخة احتياطية لبياناتك.</string>
     <string name="warning_of_meta_module_summary">تريد هذه الوحدة تركيب /system، وسيتولى metamodule ذلك. وإلا فقد لا تعمل.</string>
     <string name="warning_of_meta_module_title">يتطلب وحدة Meta</string>
     <string name="settings_jailbreak_mode">وضع كسر الحماية</string>

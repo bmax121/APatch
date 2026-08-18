@@ -218,6 +218,11 @@
     <string name="search_modules">Modules zoeken</string>
     <string name="settings_sucompat">Oude su-compatibiliteit</string>
     <string name="settings_sucompat_summary">Oude su-compatibiliteit inschakelen (voor wanneer su niet werkt)</string>
+    <string name="settings_selinux_hide">SELinux-wijziging verbergen (Test)</string>
+    <string name="settings_selinux_hide_summary">Verbergt SELinux-wijzigingen zodat ze niet worden gedetecteerd door gebruikersprocessen (deze functie kan onstabiel zijn). De veilige modus kan deze functie uitschakelen.</string>
+    <string name="settings_selinux_hide_warning_title">Waarschuwing</string>
+    <string name="settings_selinux_hide_warning_below_5_10">Deze functie is alleen getest op kernel 5.10 en hoger en kan onstabiel zijn op lagere kernelversies.</string>
+    <string name="settings_selinux_hide_warning_non_gki">Niet-GKI-kernels brengen een groter risico met zich mee en kunnen opstartfouten veroorzaken. Zorg ervoor dat uw gegevens zijn geback-upt.</string>
     <string name="warning_of_meta_module_summary">Deze module wil /system mounten; de meta-module zal dat afhandelen. Anders werkt het mogelijk niet.</string>
     <string name="warning_of_meta_module_title">Meta-module vereist</string>
     <string name="settings_jailbreak_mode">Jailbreak-modus</string>

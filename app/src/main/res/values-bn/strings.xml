@@ -218,6 +218,11 @@
     <string name="search_modules">মডিউল অনুসন্ধান করুন</string>
     <string name="settings_sucompat">লিগ্যাসি su সামঞ্জস্য</string>
     <string name="settings_sucompat_summary">লিগ্যাসি su সামঞ্জস্য সক্ষম করুন (su কাজ না করলে)</string>
+    <string name="settings_selinux_hide">SELinux পরিবর্তন লুকান (পরীক্ষা)</string>
+    <string name="settings_selinux_hide_summary">ব্যবহারকারী প্রক্রিয়াগুলি যাতে এটি সনাক্ত করতে না পারে সেজন্য SELinux পরিবর্তনগুলি লুকান (এই বৈশিষ্ট্যটি অস্থির হতে পারে)। নিরাপদ মোড এই বৈশিষ্ট্যটি অক্ষম করতে পারে।</string>
+    <string name="settings_selinux_hide_warning_title">সতর্কতা</string>
+    <string name="settings_selinux_hide_warning_below_5_10">এই বৈশিষ্ট্যটি শুধুমাত্র 5.10 এবং তার উপরে কার্নেলে পরীক্ষা করা হয়েছে এবং নিম্ন কার্নেল সংস্করণে অস্থির হতে পারে।</string>
+    <string name="settings_selinux_hide_warning_non_gki">অ-জিআইকেআই (GKI) কার্নেলগুলিতে বেশি ঝুঁকি রয়েছে এবং বুট ব্যর্থতার কারণ হতে পারে। আপনার ডেটা ব্যাকআপ নিয়েছেন তা নিশ্চিত করুন।</string>
     <string name="warning_of_meta_module_summary">এই মডিউলটি /system মাউন্ট করতে চায়, মেটা মডিউল সেটি পরিচালনা করবে। অন্যথায়, এটি কাজ নাও করতে পারে।</string>
     <string name="warning_of_meta_module_title">মেটা মডিউল প্রয়োজন</string>
     <string name="settings_jailbreak_mode">জেলব্রেক মোড</string>

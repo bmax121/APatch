@@ -218,6 +218,11 @@
     <string name="search_modules">Hae moduuleja</string>
     <string name="settings_sucompat">Vanha su-yhteensopivuus</string>
     <string name="settings_sucompat_summary">Ota käyttöön vanha su-yhteensopivuus (kun su ei toimi)</string>
+    <string name="settings_selinux_hide">Piilota SELinux-muokkaus (Testi)</string>
+    <string name="settings_selinux_hide_summary">Piilottaa SELinux-muutokset käyttäjäprosessien havaitsemiselta (tämä toiminto voi olla epävakaa). Vikasietotila voi poistaa tämän toiminnon käytöstä.</string>
+    <string name="settings_selinux_hide_warning_title">Varoitus</string>
+    <string name="settings_selinux_hide_warning_below_5_10">Tätä toimintoa on testattu vain ytimillä 5.10 ja uudemmilla, ja se voi olla epävakaa vanhemmissa ydinversioissa.</string>
+    <string name="settings_selinux_hide_warning_non_gki">Muut kuin GKI-ytimet aiheuttavat suuremman riskin ja voivat aiheuttaa käynnistyksen epäonnistumisen. Varmista, että tietosi on varmuuskopioitu.</string>
     <string name="warning_of_meta_module_summary">Tämä moduuli haluaa liittää /system-kansion, metamoduuli hoitaa sen. Muuten se ei ehkä toimi.</string>
     <string name="warning_of_meta_module_title">Vaatii metamoduulin</string>
     <string name="settings_jailbreak_mode">Jailbreak-tila</string>

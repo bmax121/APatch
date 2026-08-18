@@ -218,6 +218,11 @@
     <string name="search_modules">தொகுதிகளைத் தேடு</string>
     <string name="settings_sucompat">பழைய su இணக்கத்தன்மை</string>
     <string name="settings_sucompat_summary">பழைய su இணக்கத்தை இயக்கு (su வேலை செய்யாதபோது)</string>
+    <string name="settings_selinux_hide">SELinux மாற்றத்தை மறை (சோதனை)</string>
+    <string name="settings_selinux_hide_summary">SELinux மாற்றங்களை பயனர் செயல்முறைகள் கண்டறியாத வண்ணம் மறை (இந்த அம்சம் நிலையற்றதாக இருக்கலாம்). பாதுகாப்பு முறை இந்த அம்சத்தை முடக்கலாம்.</string>
+    <string name="settings_selinux_hide_warning_title">எச்சரிக்கை</string>
+    <string name="settings_selinux_hide_warning_below_5_10">இந்த அம்சம் 5.10 மற்றும் அதற்கு மேற்பட்ட கர்னல்களில் மட்டுமே சோதிக்கப்பட்டது, மேலும் குறைந்த கர்னல் பதிப்புகளில் நிலையற்றதாக இருக்கலாம்.</string>
+    <string name="settings_selinux_hide_warning_non_gki">GKI அல்லாத கர்னல்கள் அதிக ஆபத்தை ஏற்படுத்தும் மற்றும் துவக்க தோல்வியை ஏற்படுத்தலாம். உங்கள் தரவு காப்புப் பிரதி எடுக்கப்பட்டுள்ளதா என்பதை உறுதிப்படுத்தவும்.</string>
     <string name="warning_of_meta_module_summary">இந்த தொகுதி /system ஐ மவுண்ட் செய்ய விரும்புகிறது, மெட்டா தொகுதி அதை கவனித்துக் கொள்ளும். இல்லையெனில், அது வேலை செய்யாமல் போகலாம்.</string>
     <string name="warning_of_meta_module_title">மெட்டா தொகுதி தேவை</string>
     <string name="settings_jailbreak_mode">ஜெயில்பிரேக் முறை</string>

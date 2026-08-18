@@ -206,6 +206,11 @@
     <string name="settings_night_theme_enabled">Dayakan tema gelap</string>
     <string name="settings_sucompat">Keserasian su lama</string>
     <string name="settings_sucompat_summary">Dayakan keserasian su lama (apabila su tidak berfungsi)</string>
+    <string name="settings_selinux_hide">Sembunyikan pengubahsuaian SELinux (Ujian)</string>
+    <string name="settings_selinux_hide_summary">Sembunyikan perubahan SELinux daripada dikesan oleh proses pengguna (ciri ini mungkin tidak stabil). Mod selamat boleh melumpuhkan ciri ini.</string>
+    <string name="settings_selinux_hide_warning_title">Amaran</string>
+    <string name="settings_selinux_hide_warning_below_5_10">Ciri ini hanya diuji pada kernel 5.10 dan ke atas dan mungkin tidak stabil pada versi kernel yang lebih rendah.</string>
+    <string name="settings_selinux_hide_warning_non_gki">Kernel bukan GKI membawa risiko yang lebih tinggi dan boleh menyebabkan kegagalan but. Pastikan data anda telah disandarkan.</string>
     <string name="settings_use_system_color_theme">Tema warna sistem</string>
     <string name="settings_use_system_color_theme_summary">Gunakan tema warna yang dijana oleh sistem berdasarkan kertas dinding semasa</string>
     <string name="su_hide_system_apps">Sembunyikan apl sistem</string>

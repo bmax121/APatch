@@ -220,6 +220,11 @@
     <string name="search_modules">搜尋模組</string>
     <string name="settings_sucompat">舊版 su 相容性</string>
     <string name="settings_sucompat_summary">啟用舊版su兼容(適用於su不生效)</string>
+    <string name="settings_selinux_hide">隱藏SELinux修改（測試）</string>
+    <string name="settings_selinux_hide_summary">隱藏 SELinux 的修改以防止被使用者程序偵測到（此功能可能不穩定）。安全模式可停用此功能。</string>
+    <string name="settings_selinux_hide_warning_title">警告</string>
+    <string name="settings_selinux_hide_warning_below_5_10">此功能僅在 5.10 及以上內核測試過，在較低的內核版本上可能不穩定。</string>
+    <string name="settings_selinux_hide_warning_non_gki">非 GKI 內核風險更大，可能導致無法開機。請確保已備份資料。</string>
     <string name="warning_of_meta_module_summary">此模組想要掛載 /system，元模組會處理此事。否則，它可能無法正常運作。</string>
     <string name="warning_of_meta_module_title">需要元模組</string>
     <string name="settings_jailbreak_mode">越獄模式</string>
