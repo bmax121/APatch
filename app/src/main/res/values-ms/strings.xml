@@ -239,4 +239,5 @@
     <string name="kpm_disabled">Dilumpuhkan (berkuat kuasa selepas but semula)</string>
     <string name="kpm_embedded">Terbenam</string>
     <string name="kpm_embedded_unload_invalid">KPM terbenam tidak boleh dinyahmuat; ia akan kekal aktif selepas but semula.</string>
+    <string name="kpm_install_toast_succ">Berjaya dipasang; berkuat kuasa selepas but semula</string>
 </resources>

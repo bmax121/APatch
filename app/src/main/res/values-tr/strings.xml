@@ -241,4 +241,5 @@
     <string name="kpm_disabled">Devre dışı (yeniden başlatmadan sonra uygulanır)</string>
     <string name="kpm_embedded">Gömülü</string>
     <string name="kpm_embedded_unload_invalid">Gömülü KPM’ler kaldırılamaz; yeniden başlatmadan sonra etkin kalırlar.</string>
+    <string name="kpm_install_toast_succ">Başarıyla yüklendi; yeniden başlatmadan sonra uygulanır</string>
 </resources>

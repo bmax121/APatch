@@ -239,4 +239,5 @@
     <string name="kpm_disabled">Desactivado (se aplicará después de reiniciar)</string>
     <string name="kpm_embedded">Incrustado</string>
     <string name="kpm_embedded_unload_invalid">Los KPM incrustados no se pueden descargar; seguirán activos después de reiniciar.</string>
+    <string name="kpm_install_toast_succ">Instalado correctamente; se aplicará después de reiniciar</string>
 </resources>

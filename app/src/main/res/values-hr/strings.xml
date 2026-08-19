@@ -241,4 +241,5 @@
     <string name="kpm_disabled">Onemogućeno (primjenjuje se nakon ponovnog pokretanja)</string>
     <string name="kpm_embedded">Ugrađeno</string>
     <string name="kpm_embedded_unload_invalid">Ugrađeni KPM-ovi ne mogu se ukloniti; ostat će aktivni nakon ponovnog pokretanja.</string>
+    <string name="kpm_install_toast_succ">Uspješno instalirano; primjenjuje se nakon ponovnog pokretanja</string>
 </resources>

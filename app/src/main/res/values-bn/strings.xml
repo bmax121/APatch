@@ -239,4 +239,5 @@
     <string name="kpm_disabled">নিষ্ক্রিয় (রিবুটের পরে কার্যকর হবে)</string>
     <string name="kpm_embedded">এমবেড করা</string>
     <string name="kpm_embedded_unload_invalid">এমবেড করা KPM আনলোড করা যায় না; রিবুটের পরেও এটি সক্রিয় থাকবে।</string>
+    <string name="kpm_install_toast_succ">সফলভাবে ইনস্টল করা হয়েছে; রিবুটের পরে কার্যকর হবে</string>
 </resources>

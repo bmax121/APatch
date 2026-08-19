@@ -241,4 +241,5 @@
     <string name="kpm_disabled">無効（再起動後に反映）</string>
     <string name="kpm_embedded">埋め込み済み</string>
     <string name="kpm_embedded_unload_invalid">埋め込み KPM はアンロードできません。再起動後も有効です。</string>
+    <string name="kpm_install_toast_succ">インストールに成功しました。再起動後に反映されます</string>
 </resources>

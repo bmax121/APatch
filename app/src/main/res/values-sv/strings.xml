@@ -239,4 +239,5 @@
     <string name="kpm_disabled">Inaktiverad (börjar gälla efter omstart)</string>
     <string name="kpm_embedded">Inbäddad</string>
     <string name="kpm_embedded_unload_invalid">Inbäddade KPM kan inte laddas ur; de förblir aktiva efter omstart.</string>
+    <string name="kpm_install_toast_succ">Installerad; börjar gälla efter omstart</string>
 </resources>

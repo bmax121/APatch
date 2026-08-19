@@ -143,6 +143,7 @@
     <string name="kpm_add_kpm">Add KPM</string>
     <string name="kpm_load">Load</string>
     <string name="kpm_install">Install</string>
+    <string name="kpm_install_toast_succ">Installed successfully; takes effect after reboot</string>
     <string name="kpm_embed">Embed</string>
     <string name="kpm_load_toast_succ">Load succeed</string>
     <string name="kpm_load_toast_failed">Load failed</string>

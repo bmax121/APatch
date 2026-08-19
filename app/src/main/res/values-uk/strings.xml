@@ -241,4 +241,5 @@
     <string name="kpm_disabled">Вимкнено (набере чинності після перезавантаження)</string>
     <string name="kpm_embedded">Вбудовано</string>
     <string name="kpm_embedded_unload_invalid">Вбудовані KPM не можна вивантажити; після перезавантаження вони залишаться активними.</string>
+    <string name="kpm_install_toast_succ">Успішно встановлено; набере чинності після перезавантаження</string>
 </resources>

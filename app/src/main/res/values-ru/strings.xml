@@ -239,4 +239,5 @@
     <string name="kpm_disabled">Отключён (вступит в силу после перезагрузки)</string>
     <string name="kpm_embedded">Встроен</string>
     <string name="kpm_embedded_unload_invalid">Встроенные KPM нельзя выгрузить; после перезагрузки они останутся активными.</string>
+    <string name="kpm_install_toast_succ">Успешно установлено; вступит в силу после перезагрузки</string>
 </resources>

@@ -241,4 +241,5 @@
     <string name="kpm_disabled">Desativado (entra em vigor após reiniciar)</string>
     <string name="kpm_embedded">Incorporado</string>
     <string name="kpm_embedded_unload_invalid">Não é possível descarregar KPM incorporados; continuarão ativos após reiniciar.</string>
+    <string name="kpm_install_toast_succ">Instalado com sucesso; entra em vigor após reiniciar</string>
 </resources>

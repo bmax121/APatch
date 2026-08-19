@@ -239,4 +239,5 @@
     <string name="kpm_disabled">முடக்கப்பட்டது (மறுதொடக்கத்திற்குப் பிறகு நடைமுறைக்கு வரும்)</string>
     <string name="kpm_embedded">உட்பொதிக்கப்பட்டது</string>
     <string name="kpm_embedded_unload_invalid">உட்பொதிக்கப்பட்ட KPM-ஐ இறக்க முடியாது; மறுதொடக்கத்திற்குப் பிறகும் செயலில் இருக்கும்.</string>
+    <string name="kpm_install_toast_succ">வெற்றிகரமாக நிறுவப்பட்டது; மறுதொடக்கத்திற்குப் பிறகு நடைமுறைக்கு வரும்</string>
 </resources>

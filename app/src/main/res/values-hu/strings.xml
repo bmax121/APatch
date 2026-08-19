@@ -239,4 +239,5 @@
     <string name="kpm_disabled">Letiltva (újraindítás után lép életbe)</string>
     <string name="kpm_embedded">Beágyazva</string>
     <string name="kpm_embedded_unload_invalid">A beágyazott KPM-ek nem tölthetők le; újraindítás után is aktívak maradnak.</string>
+    <string name="kpm_install_toast_succ">Sikeresen telepítve; újraindítás után lép életbe</string>
 </resources>

@@ -241,4 +241,5 @@
     <string name="kpm_disabled">Deaktiviert (wird nach dem Neustart wirksam)</string>
     <string name="kpm_embedded">Eingebettet</string>
     <string name="kpm_embedded_unload_invalid">Eingebettete KPMs können nicht entladen werden; sie bleiben nach dem Neustart aktiv.</string>
+    <string name="kpm_install_toast_succ">Erfolgreich installiert; wird nach dem Neustart wirksam</string>
 </resources>

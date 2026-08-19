@@ -116,8 +116,6 @@ class KPModuleViewModel : ViewModel() {
                 val dirs = rootShellForResult("find ${APApplication.KPMS_DIR} -mindepth 1 -maxdepth 1 -type d -print").out
                 dirs.map { it.trim().substringAfterLast('/') }.filter(String::isNotBlank).forEach { id ->
                     val file = "${APApplication.KPMS_DIR}$id/$id.kpm"
-                    // Repair installations created before KPM files were relabeled.
-                    rootShellForResult("chown 0:0 '${APApplication.KPMS_DIR}$id' '$file' && chmod 0755 '${APApplication.KPMS_DIR}$id' && chmod 0644 '$file' && restorecon -R '${APApplication.KPMS_DIR}$id'")
                     val parsed = rootShellForResult("${APApplication.APATCH_FOLDER}bin/kptools -l -M '$file'")
                         .out.joinToString("\n").let { parseKpmInfo(it, id) } ?: return@forEach
                     val key = safeKpmModuleId(id)

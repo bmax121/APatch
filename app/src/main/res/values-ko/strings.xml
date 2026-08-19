@@ -241,4 +241,5 @@
     <string name="kpm_disabled">사용 중지됨 (재부팅 후 적용)</string>
     <string name="kpm_embedded">임베드됨</string>
     <string name="kpm_embedded_unload_invalid">임베드된 KPM은 언로드할 수 없으며 재부팅 후에도 활성 상태로 유지됩니다.</string>
+    <string name="kpm_install_toast_succ">성공적으로 설치됨. 재부팅 후 적용됩니다</string>
 </resources>

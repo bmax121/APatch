@@ -239,4 +239,5 @@
     <string name="kpm_disabled">Poistettu käytöstä (tulee voimaan uudelleenkäynnistyksen jälkeen)</string>
     <string name="kpm_embedded">Upotettu</string>
     <string name="kpm_embedded_unload_invalid">Upotettuja KPM-moduuleja ei voi poistaa käytöstä; ne pysyvät aktiivisina uudelleenkäynnistyksen jälkeen.</string>
+    <string name="kpm_install_toast_succ">Asennettu onnistuneesti; tulee voimaan uudelleenkäynnistyksen jälkeen</string>
 </resources>

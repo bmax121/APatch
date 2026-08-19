@@ -241,4 +241,5 @@
     <string name="kpm_disabled">Đã tắt (có hiệu lực sau khi khởi động lại)</string>
     <string name="kpm_embedded">Đã nhúng</string>
     <string name="kpm_embedded_unload_invalid">Không thể tải KPM đã nhúng; chúng vẫn hoạt động sau khi khởi động lại.</string>
+    <string name="kpm_install_toast_succ">Đã cài đặt thành công; có hiệu lực sau khi khởi động lại</string>
 </resources>

@@ -158,6 +158,7 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
             val moduleInstall = stringResource(id = R.string.kpm_install)
             val moduleEmbed = stringResource(id = R.string.kpm_embed)
             val successToastText = stringResource(id = R.string.kpm_load_toast_succ)
+            val installSuccessToastText = stringResource(id = R.string.kpm_install_toast_succ)
             val failToastText = stringResource(id = R.string.kpm_load_toast_failed)
             val loadingDialog = rememberLoadingDialog()
 
@@ -205,7 +206,7 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
                 val uri = it.data?.data ?: return@rememberLauncherForActivityResult
                 scope.launch {
                     val rc = installKpm(uri)
-                    Toast.makeText(context, if (rc == 0) successToastText else "$failToastText: $rc", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, if (rc == 0) installSuccessToastText else "$failToastText: $rc", Toast.LENGTH_SHORT).show()
                     viewModel.markNeedRefresh()
                     viewModel.fetchModuleList()
                 }
@@ -313,18 +314,14 @@ suspend fun installKpm(uri: Uri): Int = withContext(Dispatchers.IO) {
         val dir = "${APApplication.KPMS_DIR}$id"
         val destination = "$dir/$id.kpm"
         val result = rootShellForResult(
-            "mkdir -p '$dir' && cp -f '${temp.absolutePath}' '$destination' && chown 0:0 '$dir' '$destination' && chmod 0755 '$dir' && chmod 0644 '$destination' && restorecon -R '$dir' && rm -f '$dir/disable'"
+            "mkdir -p '$dir' && cp -f '${temp.absolutePath}' '$destination'"
         )
         if (!result.isSuccess) return@withContext -5
 
-        // Installation is expected to take effect immediately, rather than waiting
-        // for the next boot. The persisted file is still the source for boot loading.
-        val loadRc = Natives.loadKernelPatchModule(
-            destination,
-            section["args"]?.toString().orEmpty()
-        ).toInt()
-        Log.i(TAG, "install and load KPM $name from $destination, rc=$loadRc")
-        if (loadRc == 0) 0 else loadRc
+        // Installed KPMs are loaded by the boot-time loader. Do not load them in
+        // the current session; installation takes effect after reboot.
+        Log.i(TAG, "install KPM $name to $destination; reboot required")
+        0
     } catch (e: Exception) {
         Log.e(TAG, "install KPM failed", e)
         -1

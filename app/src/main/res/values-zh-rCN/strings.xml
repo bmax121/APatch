@@ -241,4 +241,5 @@
     <string name="kpm_disabled">已禁用（重启后生效）</string>
     <string name="kpm_embedded">已嵌入</string>
     <string name="kpm_embedded_unload_invalid">嵌入的 KPM 无法卸载；重启后仍会保持生效。</string>
+    <string name="kpm_install_toast_succ">安装成功，重启后生效</string>
 </resources>

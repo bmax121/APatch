@@ -239,4 +239,5 @@
     <string name="kpm_disabled">අක්‍රියයි (නැවත ආරම්භ කිරීමෙන් පසු බලපැවැත්වේ)</string>
     <string name="kpm_embedded">කාවැද්දූ</string>
     <string name="kpm_embedded_unload_invalid">කාවැද්දූ KPM ඉවත් කළ නොහැක; නැවත ආරම්භ කිරීමෙන් පසුවද සක්‍රියව පවතිනු ඇත.</string>
+    <string name="kpm_install_toast_succ">සාර්ථකව ස්ථාපනය කරන ලදී; නැවත ආරම්භ කිරීමෙන් පසු බලපැවැත්වේ</string>
 </resources>

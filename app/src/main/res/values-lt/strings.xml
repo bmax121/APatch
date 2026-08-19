@@ -239,4 +239,5 @@
     <string name="kpm_disabled">Išjungta (įsigalios paleidus iš naujo)</string>
     <string name="kpm_embedded">Įterpta</string>
     <string name="kpm_embedded_unload_invalid">Įterptų KPM negalima iškrauti; paleidus iš naujo jie liks aktyvūs.</string>
+    <string name="kpm_install_toast_succ">Sėkmingai įdiegta; įsigalios paleidus iš naujo</string>
 </resources>

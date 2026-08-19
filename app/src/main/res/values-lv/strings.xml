@@ -239,4 +239,5 @@
     <string name="kpm_disabled">Atspējots (stāsies spēkā pēc restartēšanas)</string>
     <string name="kpm_embedded">Iegults</string>
     <string name="kpm_embedded_unload_invalid">Iegultos KPM nevar izlādēt; pēc restartēšanas tie paliks aktīvi.</string>
+    <string name="kpm_install_toast_succ">Veiksmīgi instalēts; stāsies spēkā pēc restartēšanas</string>
 </resources>

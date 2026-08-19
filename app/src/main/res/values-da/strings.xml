@@ -239,4 +239,5 @@
     <string name="kpm_disabled">Deaktiveret (træder i kraft efter genstart)</string>
     <string name="kpm_embedded">Indlejret</string>
     <string name="kpm_embedded_unload_invalid">Indlejrede KPM’er kan ikke afindlæses; de forbliver aktive efter genstart.</string>
+    <string name="kpm_install_toast_succ">Installeret; træder i kraft efter genstart</string>
 </resources>

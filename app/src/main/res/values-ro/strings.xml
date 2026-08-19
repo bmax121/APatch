@@ -243,4 +243,5 @@
     <string name="kpm_disabled">Dezactivat (se aplică după repornire)</string>
     <string name="kpm_embedded">Încorporat</string>
     <string name="kpm_embedded_unload_invalid">Modulele KPM încorporate nu pot fi descărcate; vor rămâne active după repornire.</string>
+    <string name="kpm_install_toast_succ">Instalat cu succes; se aplică după repornire</string>
 </resources>

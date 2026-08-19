@@ -239,4 +239,5 @@
     <string name="kpm_disabled">Zakázáno (projeví se po restartu)</string>
     <string name="kpm_embedded">Vestavěno</string>
     <string name="kpm_embedded_unload_invalid">Vestavěné KPM nelze odpojit; po restartu zůstanou aktivní.</string>
+    <string name="kpm_install_toast_succ">Úspěšně nainstalováno; projeví se po restartu</string>
 </resources>

@@ -24,4 +24,5 @@
     <string name="kpm_embedded">مضمّن</string>
     <string name="kpm_embedded_unload_invalid">لا يمكن إلغاء تحميل وحدات KPM المضمّنة؛ ستظل فعّالة بعد إعادة التشغيل.</string>
     <string name="reboot_soft">إعادة تشغيل ناعمة</string>
+    <string name="kpm_install_toast_succ">تم التثبيت بنجاح؛ يسري بعد إعادة التشغيل</string>
 </resources>

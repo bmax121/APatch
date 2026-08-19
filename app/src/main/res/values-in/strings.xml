@@ -239,4 +239,5 @@
     <string name="kpm_disabled">Dinonaktifkan (berlaku setelah mulai ulang)</string>
     <string name="kpm_embedded">Tertanam</string>
     <string name="kpm_embedded_unload_invalid">KPM tertanam tidak dapat dibongkar; akan tetap aktif setelah mulai ulang.</string>
+    <string name="kpm_install_toast_succ">Berhasil dipasang; berlaku setelah mulai ulang</string>
 </resources>

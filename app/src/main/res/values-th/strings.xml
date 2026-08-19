@@ -239,4 +239,5 @@
     <string name="kpm_disabled">ปิดใช้งาน (มีผลหลังรีบูต)</string>
     <string name="kpm_embedded">ฝังอยู่</string>
     <string name="kpm_embedded_unload_invalid">ไม่สามารถยกเลิกการโหลด KPM ที่ฝังอยู่ได้ และจะยังคงทำงานหลังรีบูต</string>
+    <string name="kpm_install_toast_succ">ติดตั้งสำเร็จ มีผลหลังรีบูต</string>
 </resources>

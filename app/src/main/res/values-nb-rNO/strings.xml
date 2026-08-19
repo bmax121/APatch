@@ -239,4 +239,5 @@
     <string name="kpm_disabled">Deaktivert (trer i kraft etter omstart)</string>
     <string name="kpm_embedded">Innebygd</string>
     <string name="kpm_embedded_unload_invalid">Innebygde KPM-er kan ikke lastes ut; de forblir aktive etter omstart.</string>
+    <string name="kpm_install_toast_succ">Installert; trer i kraft etter omstart</string>
 </resources>
