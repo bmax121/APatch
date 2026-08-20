@@ -23,10 +23,19 @@ object PkgConfig {
         var pkg: String = "", var exclude: Int = 0, var allow: Int = 0, var profile: Natives.Profile
     ) : Parcelable {
         companion object {
-            fun fromLine(line: String): Config {
-                val sp = line.split(",")
-                val profile = Natives.Profile(sp[3].toInt(), sp[4].toInt(), sp[5])
-                return Config(sp[0], sp[1].toInt(), sp[2].toInt(), profile)
+            fun fromLine(line: String): Config? {
+                val sp = line.split(',', limit = 6)
+                if (sp.size < 6) return null
+                val pkg = sp[0].trim()
+                val exclude = sp[1].trim().toIntOrNull()
+                val allow = sp[2].trim().toIntOrNull()
+                val uid = sp[3].trim().toIntOrNull()
+                val toUid = sp[4].trim().toIntOrNull()
+                val scontext = sp[5].trim()
+                if (pkg.isEmpty() || exclude == null || allow == null ||
+                    uid == null || toUid == null || scontext.isEmpty()
+                ) return null
+                return Config(pkg, exclude, allow, Natives.Profile(uid, toUid, scontext))
             }
         }
 
@@ -43,10 +52,12 @@ object PkgConfig {
         val configs = HashMap<Int, Config>()
         val file = File(APApplication.PACKAGE_CONFIG_FILE)
         if (file.exists()) {
-            file.readLines().drop(1).filter { it.isNotEmpty() }.forEach {
+            file.readLines().filter { it.isNotBlank() }.forEach {
                 Log.d(TAG, it)
                 val p = Config.fromLine(it)
-                if (!p.isDefault()) {
+                if (p == null) {
+                    Log.w(TAG, "Skip malformed package_config line: $it")
+                } else if (!p.isDefault()) {
                     configs[p.profile.uid] = p
                 }
             }
