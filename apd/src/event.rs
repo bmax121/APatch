@@ -334,7 +334,7 @@ pub fn start_uid_listener() -> Result<()> {
             debounce = false;
             let skey = c"su";
             refresh_ap_package_list(skey, &mutex);
-            report_kernel(None, "boot-completed", "package-list-updated");
+            report_kernel(None, "uid_listener", "package-list-updated");
         } else if !debounce {
             thread::sleep(Duration::from_secs(1));
             debounce = true;
