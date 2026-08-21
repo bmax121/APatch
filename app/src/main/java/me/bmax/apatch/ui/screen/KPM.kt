@@ -103,7 +103,6 @@ import me.bmax.apatch.util.ui.APDialogBlurBehindUtils
 import me.bmax.apatch.util.writeTo
 import me.bmax.apatch.util.rootShellForResult
 import java.io.IOException
-import java.io.File
 import java.io.StringReader
 import org.ini4j.Ini
 
@@ -298,13 +297,19 @@ suspend fun loadModule(loadingDialog: LoadingDialogHandle, uri: Uri, args: Strin
     return rc
 }
 
-/** Install a KPM and load it immediately. It will also be loaded again at boot. */
+/** Install a KPM from an app-local temporary file; it takes effect after reboot. */
 suspend fun installKpm(uri: Uri): Int = withContext(Dispatchers.IO) {
-    val temp = File(apApp.cacheDir, "kpm-install-${System.currentTimeMillis()}.kpm")
+    val tempDir: ExtendedFile =
+        FileSystemManager.getLocal().getFile(apApp.cacheDir.path, "kpm-install")
+    tempDir.deleteRecursively()
+    tempDir.mkdirs()
+    val rand = (1..4).map { ('a'..'z').random() }.joinToString("")
+    val temp = tempDir.getChildFile("$rand.kpm")
     try {
-        uri.inputStream().use { input -> temp.outputStream().use { input.copyTo(it) } }
+        Log.d(TAG, "save temporary KPM: ${temp.path}")
+        uri.inputStream().buffered().writeTo(temp)
         val infoResult = rootShellForResult(
-            "${APApplication.APATCH_FOLDER}bin/kptools -l -M '${temp.absolutePath}'"
+            "${APApplication.APATCH_FOLDER}bin/kptools -l -M '${temp.path}'"
         )
         if (!infoResult.isSuccess) return@withContext -2
         val section = Ini(StringReader(infoResult.out.joinToString("\n")))["kpm"] ?: return@withContext -3
@@ -314,7 +319,7 @@ suspend fun installKpm(uri: Uri): Int = withContext(Dispatchers.IO) {
         val dir = "${APApplication.KPMS_DIR}$id"
         val destination = "$dir/$id.kpm"
         val result = rootShellForResult(
-            "mkdir -p '$dir' && cp -f '${temp.absolutePath}' '$destination'"
+            "mkdir -p '$dir' && cp -f '${temp.path}' '$destination'"
         )
         if (!result.isSuccess) return@withContext -5
 
@@ -326,7 +331,7 @@ suspend fun installKpm(uri: Uri): Int = withContext(Dispatchers.IO) {
         Log.e(TAG, "install KPM failed", e)
         -1
     } finally {
-        temp.delete()
+        tempDir.deleteRecursively()
     }
 }
 
