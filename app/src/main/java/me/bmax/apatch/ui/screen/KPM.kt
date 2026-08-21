@@ -81,6 +81,8 @@ import com.topjohnwu.superuser.nio.ExtendedFile
 import com.topjohnwu.superuser.nio.FileSystemManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import me.bmax.apatch.APApplication
 import me.bmax.apatch.Natives
@@ -107,6 +109,11 @@ import java.io.StringReader
 import org.ini4j.Ini
 
 private const val TAG = "KernelPatchModule"
+private val kpmInstallMutex = Mutex()
+private data class UninstallResult(
+    val unloaded: Boolean,
+    val removed: Boolean,
+)
 private lateinit var targetKPMToControl: KPModel.KPMInfo
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -204,10 +211,9 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
                 if (it.resultCode != RESULT_OK) return@rememberLauncherForActivityResult
                 val uri = it.data?.data ?: return@rememberLauncherForActivityResult
                 scope.launch {
-                    val rc = installKpm(uri)
+                    val rc = kpmInstallMutex.withLock { installKpm(uri) }
                     Toast.makeText(context, if (rc == 0) installSuccessToastText else "$failToastText: $rc", Toast.LENGTH_SHORT).show()
                     viewModel.markNeedRefresh()
-                    viewModel.fetchModuleList()
                 }
             }
 
@@ -487,17 +493,22 @@ private fun KPModuleList(
             return
         }
 
-        val success = loadingDialog.withLoading {
+        val result = loadingDialog.withLoading {
             withContext(Dispatchers.IO) {
                 val unloaded = module.loadSource.isBlank() || Natives.unloadKernelPatchModule(module.name) == 0L
-                if (module.installed && module.loadSource != "embedded") {
+                val removed = if (module.installed && module.loadSource != "embedded") {
                     val id = safeKpmModuleId(module.moduleId.ifBlank { module.name })
-                    rootShellForResult("rm -rf '${APApplication.KPMS_DIR}$id'").isSuccess && (unloaded || module.disabled)
-                } else unloaded
+                    val dir = "${APApplication.KPMS_DIR}$id"
+                    rootShellForResult("rm -rf '$dir' && test ! -e '$dir'").isSuccess
+                } else true
+                UninstallResult(unloaded, removed)
             }
         }
 
-        if (success) {
+        // Refresh even when the live kernel instance could not be unloaded:
+        // the persistent file may still have been removed and must not remain
+        // represented as installed in the UI.
+        if (result.removed) {
             viewModel.fetchModuleList()
         }
     }
