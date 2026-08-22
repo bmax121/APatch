@@ -91,8 +91,15 @@ class KPModuleViewModel : ViewModel() {
             val start = SystemClock.elapsedRealtime()
             runCatching {
                 val result = linkedMapOf<String, KPModel.KPMInfo>()
-                var names = Natives.kernelPatchModuleList()
-                if (Natives.kernelPatchModuleNum() <= 0) names = ""
+                val names = if (Natives.kernelPatchModuleNum() > 0) {
+                    Natives.kernelPatchModuleList()
+                } else {
+                    ""
+                }
+                val loadedIds = names.split('\n')
+                    .map(String::trim)
+                    .filter(String::isNotBlank)
+                    .toSet()
                 names.split('\n').filter(String::isNotBlank).forEach { kernelName ->
                     val lines = Natives.kernelPatchModuleInfo(kernelName).split('\n')
                     val info = KPModel.KPMInfo(
@@ -121,7 +128,11 @@ class KPModuleViewModel : ViewModel() {
                     val key = safeKpmModuleId(id)
                     val old = result[key]
                     // Refresh the same live metadata exposed by `truncate su module info <name>`.
-                    val live = parseKernelKpmInfo(Natives.kernelPatchModuleInfo(id), id)
+                    val live = if (id in loadedIds) {
+                        parseKernelKpmInfo(Natives.kernelPatchModuleInfo(id), id)
+                    } else {
+                        null
+                    }
                     val current = live ?: old
                     val disabled = rootShellForResult("[ -e '${APApplication.KPMS_DIR}$id/disable' ]").isSuccess
                     result[key] = current?.copy(
