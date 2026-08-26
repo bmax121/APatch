@@ -26,3 +26,5 @@ APatch 的 APModule（APM）机制源自 KernelSU，但两者并非完全相同�
 ## 出现启动问题时
 
 停止批量尝试，回滚到迁移前的可启动状态。确认是哪个模块导致问题后，再向模块作者提供设备型号、Android/内核版本、APatch 版本和模块版本；不要在公开 Issue 中上传密钥、设备凭据或包含个人数据的完整日志。
+
+本指南也回应了 [APatch Discussion #354](https://github.com/bmax121/APatch/discussions/354) 中关于从 KernelSU 迁移模块的问题。
