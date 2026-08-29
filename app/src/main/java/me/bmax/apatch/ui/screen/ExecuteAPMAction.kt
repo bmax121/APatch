@@ -71,8 +71,8 @@ fun ExecuteAPMActionScreen(navigator: DestinationsNavigator, moduleId: String) {
             runAPModuleAction(
                 moduleId,
                 onStdout = {
-                    if (it.startsWith("\u001B[H\u001B[2J")) { // clear command
-                        text = it.substring(9)
+                    if (it.startsWith("\u001B[H\u001B[J")) { // clear command
+                        text = it.substring(6)
                     } else {
                         appendLog(it)
                     }

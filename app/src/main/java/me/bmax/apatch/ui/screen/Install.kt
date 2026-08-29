@@ -146,14 +146,14 @@ fun InstallScreen(navigator: DestinationsNavigator, uri: Uri, type: MODULE_TYPE)
                 }
 
             }, onStdout = {
-                if (it.startsWith("[H[J")) { // clear command
-                    text = it.substring(5)
+                if (it.startsWith("\u001B[H\u001B[J")) { // clear command
+                    text = it.substring(6)
                 } else {
                     appendLog(it)
                 }
             }, onStderr = {
-                if (it.startsWith("[H[J")) { // clear command
-                    text = it.substring(5)
+                if (it.startsWith("\u001B[H\u001B[J")) { // clear command
+                    text = it.substring(6)
                 } else {
                     appendLog(it)
                 }
