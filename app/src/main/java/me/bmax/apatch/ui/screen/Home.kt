@@ -66,6 +66,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -365,6 +366,10 @@ private fun KStatusCard(
             MaterialTheme.colorScheme.secondary
         }
 
+        kpState == APApplication.State.KERNELPATCH_INCOMPATIBLE -> {
+            Color(0xFFFFA726)
+        }
+
         else -> {
             MaterialTheme.colorScheme.secondaryContainer
         }
@@ -387,7 +392,8 @@ private fun KStatusCard(
                 .padding(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (!isJailbreak && kpState == APApplication.State.KERNELPATCH_NEED_UPDATE) {
+            if (!isJailbreak && (kpState == APApplication.State.KERNELPATCH_NEED_UPDATE ||
+                        kpState == APApplication.State.KERNELPATCH_INCOMPATIBLE)) {
                 Row {
                     Text(
                         text = stringResource(R.string.kernel_patch),
@@ -412,6 +418,10 @@ private fun KStatusCard(
 
                     kpState == APApplication.State.KERNELPATCH_NEED_UPDATE || kpState == APApplication.State.KERNELPATCH_NEED_REBOOT -> {
                         Icon(Icons.Outlined.SystemUpdate, stringResource(R.string.home_need_update))
+                    }
+
+                    kpState == APApplication.State.KERNELPATCH_INCOMPATIBLE -> {
+                        Icon(Icons.Filled.Warning, stringResource(R.string.home_kp_incompatible))
                     }
 
                     else -> {
@@ -458,6 +468,21 @@ private fun KStatusCard(
                             )
                         }
 
+                        kpState == APApplication.State.KERNELPATCH_INCOMPATIBLE -> {
+                            Text(
+                                text = stringResource(R.string.home_kp_incompatible),
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                            Spacer(Modifier.height(6.dp))
+                            Text(
+                                text = stringResource(
+                                    R.string.home_kp_incompatible_summary,
+                                    Version.installedKPVString(),
+                                    Version.buildKPVString()
+                                ), style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
+
                         else -> {
                             Text(
                                 text = stringResource(R.string.home_install_unknown),
@@ -469,7 +494,7 @@ private fun KStatusCard(
                             )
                         }
                     }
-                    if (!isJailbreak && kpState != APApplication.State.UNKNOWN_STATE && kpState != APApplication.State.KERNELPATCH_NEED_UPDATE && kpState != APApplication.State.KERNELPATCH_NEED_REBOOT) {
+                    if (!isJailbreak && kpState != APApplication.State.UNKNOWN_STATE && kpState != APApplication.State.KERNELPATCH_NEED_UPDATE && kpState != APApplication.State.KERNELPATCH_NEED_REBOOT && kpState != APApplication.State.KERNELPATCH_INCOMPATIBLE) {
                         Spacer(Modifier.height(4.dp))
                         Text(
                             text = "${Version.installedKPVString()} (${managerVersion.second}) - " + if (apState != APApplication.State.ANDROIDPATCH_NOT_INSTALLED) "Full" else "KernelPatch",
@@ -500,6 +525,10 @@ private fun KStatusCard(
                                 }
                             }
 
+                            kpState == APApplication.State.KERNELPATCH_INCOMPATIBLE -> {
+                                navigator.navigate(InstallModeSelectScreenDestination)
+                            }
+
                             kpState == APApplication.State.KERNELPATCH_NEED_REBOOT -> {
                                 reboot()
                             }
@@ -528,6 +557,10 @@ private fun KStatusCard(
 
                             kpState == APApplication.State.KERNELPATCH_NEED_UPDATE -> {
                                 Text(text = stringResource(id = R.string.home_ap_cando_update))
+                            }
+
+                            kpState == APApplication.State.KERNELPATCH_INCOMPATIBLE -> {
+                                Text(text = stringResource(id = R.string.home_ap_cando_downgrade))
                             }
 
                             kpState == APApplication.State.KERNELPATCH_NEED_REBOOT -> {
