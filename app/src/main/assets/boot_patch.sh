@@ -100,9 +100,10 @@ if [ "$FLASH_TO_DEVICE" = "true" ]; then
   if [ -b "$BOOTIMAGE" ] || [ -c "$BOOTIMAGE" ] && [ -f "new-boot.img" ]; then
     echo "- Flashing new boot image"
     flash_image new-boot.img "$BOOTIMAGE"
-    if [ $? -ne 0 ]; then
-      >&2 echo "- Flash error: $?"
-      exit $?
+    flash_rc=$?
+    if [ "$flash_rc" -ne 0 ]; then
+      >&2 echo "- Flash error: $flash_rc"
+      exit "$flash_rc"
     fi
   fi
 
@@ -110,4 +111,3 @@ if [ "$FLASH_TO_DEVICE" = "true" ]; then
 else
   echo "- Successfully Patched!"
 fi
-
