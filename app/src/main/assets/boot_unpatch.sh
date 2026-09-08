@@ -42,15 +42,17 @@ if [ ! $(./kptools -i kernel -l | grep patched=false) ]; then
     mv kernel kernel.ori
     echo "- Unpatching kernel"
     ./kptools -u --image kernel.ori --out kernel "$@"
-    if [ $? -ne 0 ]; then
-      >&2 echo "- Unpatch error: $?"
-      exit $?
+    unpatch_rc=$?
+    if [ $unpatch_rc -ne 0 ]; then
+      >&2 echo "- Unpatch error: $unpatch_rc"
+      exit "$unpatch_rc"
     fi
     echo "- Repacking boot image"
     ./kptools repack "$BOOTIMAGE"
-    if [ $? -ne 0 ]; then
-      >&2 echo "- Repack error: $?"
-      exit $?
+    repack_rc=$?
+    if [ $repack_rc -ne 0 ]; then
+      >&2 echo "- Repack error: $repack_rc"
+      exit "$repack_rc"
     fi
   fi
 

@@ -376,8 +376,10 @@ class PatchesViewModel : ViewModel() {
                         APApplication.markNeedReboot()
 
                         val cleanupResult = shell.newJob().add(
-                            "rm -f ${APApplication.APD_PATH} && " +
-                                "rm -rf ${APApplication.APATCH_FOLDER}",
+                            "cleanup_failed=false; " +
+                                "rm -f ${APApplication.APD_PATH} || cleanup_failed=true; " +
+                                "rm -rf ${APApplication.APATCH_FOLDER} || cleanup_failed=true; " +
+                                "[ \"${'$'}cleanup_failed\" = false ]",
                         ).to(logs, logs).exec()
 
                         if (cleanupResult.isSuccess) {
