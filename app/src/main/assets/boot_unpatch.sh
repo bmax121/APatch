@@ -42,16 +42,22 @@ if [ ! $(./kptools -i kernel -l | grep patched=false) ]; then
     mv kernel kernel.ori
     echo "- Unpatching kernel"
     ./kptools -u --image kernel.ori --out kernel "$@"
-    if [ $? -ne 0 ]; then
-      >&2 echo "- Unpatch error: $?"
-      exit $?
+    patch_rc=$?
+    if [ "$patch_rc" -ne 0 ]; then
+      >&2 echo "- Unpatch error: $patch_rc"
+      exit "$patch_rc"
     fi
     echo "- Repacking boot image"
     ./kptools repack "$BOOTIMAGE"
-    if [ $? -ne 0 ]; then
-      >&2 echo "- Repack error: $?"
-      exit $?
+    patch_rc=$?
+    if [ "$patch_rc" -ne 0 ]; then
+      >&2 echo "- Repack error: $patch_rc"
+      exit "$patch_rc"
     fi
+    repair_boot_avb_footer "$BOOTIMAGE" new-boot.img || {
+      >&2 echo "- Cannot preserve the original boot image's AVB metadata."
+      exit 1
+    }
   fi
 
 else
@@ -64,10 +70,10 @@ fi
 if [ -f "new-boot.img" ]; then
   echo "- Flashing boot image"
   flash_image new-boot.img "$BOOTIMAGE"
-
-  if [ $? -ne 0 ]; then
-    >&2 echo "- Flash error: $?"
-    exit $?
+  patch_rc=$?
+  if [ "$patch_rc" -ne 0 ]; then
+    >&2 echo "- Flash error: $patch_rc"
+    exit "$patch_rc"
   fi
 fi
 

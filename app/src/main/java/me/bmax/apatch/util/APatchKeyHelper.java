@@ -21,6 +21,7 @@ import javax.crypto.spec.GCMParameterSpec;
 public class APatchKeyHelper {
     protected static final String SUPER_KEY = "super_key";
     protected static final String SUPER_KEY_ENC = "super_key_enc";
+    private static final String PENDING_SUPER_KEY_ENC = "pending_super_key_enc";
     private static final String TAG = "APatchSecurityHelper";
     private static final String ANDROID_KEYSTORE = "AndroidKeyStore";
     private static final String SKIP_STORE_SUPER_KEY = "skip_store_super_key";
@@ -150,6 +151,7 @@ public class APatchKeyHelper {
 
     public static void setShouldSkipStoreSuperKey(boolean should) {
         clearConfigKey();
+        clearPendingSuperKey();
         prefs.edit().putInt(SKIP_STORE_SUPER_KEY, should ? 1 : 0).apply();
     }
 
@@ -178,6 +180,22 @@ public class APatchKeyHelper {
         if (shouldSkipStoreSuperKey()) return;
         key = APatchKeyHelper.encrypt(key);
         prefs.edit().putString(SUPER_KEY_ENC, key).apply();
+    }
+
+    public static String readPendingSuperKey() {
+        String encrypted = prefs.getString(PENDING_SUPER_KEY_ENC, "");
+        return encrypted.isEmpty() ? "" : decrypt(encrypted);
+    }
+
+    // Keep the running kernel's key until the newly patched image actually boots.
+    public static void writePendingSuperKey(String key) {
+        if (shouldSkipStoreSuperKey()) return;
+        String encrypted = encrypt(key);
+        if (encrypted != null) prefs.edit().putString(PENDING_SUPER_KEY_ENC, encrypted).apply();
+    }
+
+    public static void clearPendingSuperKey() {
+        prefs.edit().remove(PENDING_SUPER_KEY_ENC).apply();
     }
 
 }

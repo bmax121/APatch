@@ -251,31 +251,125 @@ find_boot_image() {
   [ -z $BOOTIMAGE ] || echo "BOOTIMAGE=$BOOTIMAGE"
 }
 
-flash_image() {
-  local CMD1
-  case "$1" in
-    *.gz) CMD1="gzip -d < '$1' 2>/dev/null";;
-    *)    CMD1="cat '$1'";;
+# Read boot header integers (Android's supported ARM64 host is little-endian)
+# and AVB footer integers (big-endian), without depending on an AVB algorithm.
+boot_read_le32() {
+  od -An -v -j "$2" -N 4 -tu4 "$1" | tr -d ' \n'
+}
+
+boot_read_be64() {
+  local hex
+  hex=$(od -An -v -j "$2" -N 8 -tx1 "$1" | tr -d ' \n') || return 1
+  # Shell arithmetic is signed; reject sizes outside its positive range.
+  [ "${#hex}" -eq 16 ] || return 1
+  case "$hex" in [89abcdefABCDEF]*) return 1 ;; esac
+  echo "$((0x$hex))"
+}
+
+boot_write_be64() {
+  local shift byte
+  for shift in 56 48 40 32 24 16 8 0; do
+    byte=$((($1 >> shift) & 255))
+    printf "\\$(printf '%03o' "$byte")"
+  done
+}
+
+# kptools 0.13.8 searches for an AVB0 header with a hard-coded libavb version.
+# On Pixel 11 (libavb 1.4 / ML-DSA) it selects an embedded GKI RSA certificate
+# instead. Locate the real metadata through the original AVBf footer, and move
+# that footer's offsets by the kernel's change in padded size. The metadata,
+# signature algorithm, rollback index and build properties stay byte-identical.
+repair_boot_avb_footer() (
+  set -o pipefail
+  local original="$1" repacked="$2"
+  local original_size repacked_size footer magic
+  if [ -b "$original" ]; then
+    original_size=$(blockdev --getsize64 "$original") || return 1
+  else
+    original_size=$(stat -c '%s' "$original") || return 1
+  fi
+  [ "$original_size" -ge 64 ] || return 0
+  footer=$((original_size - 64))
+  magic=$(od -An -v -j "$footer" -N 4 -tx1 "$original" | tr -d ' \n') || return 1
+  [ "$magic" = 41564266 ] || return 0
+
+  repacked_size=$(stat -c '%s' "$repacked") || return 1
+  [ "$repacked_size" -ge 64 ] || return 1
+  local version page_size old_kernel new_kernel delta
+  version=$(boot_read_le32 "$original" 40) || return 1
+  [ "$version" = "$(boot_read_le32 "$repacked" 40)" ] || return 1
+  case "$version" in
+    0|1|2) page_size=$(boot_read_le32 "$original" 36) || return 1
+           [ "$page_size" = "$(boot_read_le32 "$repacked" 36)" ] || return 1 ;;
+    3|4) page_size=4096 ;;
+    *) return 1 ;;
   esac
+  [ "$page_size" -ge 512 ] && [ $((page_size & (page_size - 1))) -eq 0 ] || return 1
+  old_kernel=$(boot_read_le32 "$original" 8) || return 1
+  new_kernel=$(boot_read_le32 "$repacked" 8) || return 1
+  [ "$old_kernel" -gt 0 ] && [ "$new_kernel" -gt 0 ] || return 1
+  delta=$(( ((new_kernel + page_size - 1) / page_size - (old_kernel + page_size - 1) / page_size) * page_size ))
+
+  local old_payload old_offset metadata_size new_payload new_offset old_hash new_hash
+  old_payload=$(boot_read_be64 "$original" "$((footer + 12))") || return 1
+  old_offset=$(boot_read_be64 "$original" "$((footer + 20))") || return 1
+  metadata_size=$(boot_read_be64 "$original" "$((footer + 28))") || return 1
+  # Subtraction avoids overflow when validating untrusted footer lengths.
+  [ "$old_payload" -ge "$((page_size + (old_kernel + page_size - 1) / page_size * page_size))" ] || return 1
+  [ "$old_offset" -ge "$old_payload" ] && [ "$old_offset" -le "$footer" ] || return 1
+  [ "$metadata_size" -ge 256 ] && [ "$metadata_size" -le "$((footer - old_offset))" ] || return 1
+  new_payload=$((old_payload + delta))
+  new_offset=$((old_offset + delta))
+  [ "$new_payload" -ge 0 ] && [ "$new_offset" -ge "$new_payload" ] || return 1
+  [ "$new_offset" -le "$((repacked_size - 64))" ] || return 1
+  [ "$metadata_size" -le "$((repacked_size - 64 - new_offset))" ] || return 1
+  magic=$(od -An -v -j "$old_offset" -N 4 -tx1 "$original" | tr -d ' \n') || return 1
+  [ "$magic" = 41564230 ] || return 1
+
+  # Fail before flashing if the repacker discarded, truncated or changed the
+  # original metadata. Never try to recreate it by scanning for magic bytes.
+  old_hash=$(dd if="$original" bs=1 skip="$old_offset" count="$metadata_size" 2>/dev/null | sha256sum) || return 1
+  new_hash=$(dd if="$repacked" bs=1 skip="$new_offset" count="$metadata_size" 2>/dev/null | sha256sum) || return 1
+  [ "$old_hash" = "$new_hash" ] || return 1
+
+  dd if="$original" of="$repacked" bs=1 skip="$footer" seek="$((repacked_size - 64))" count=64 conv=notrunc 2>/dev/null || return 1
+  boot_write_be64 "$new_payload" | dd of="$repacked" bs=1 seek="$((repacked_size - 52))" conv=notrunc 2>/dev/null || return 1
+  boot_write_be64 "$new_offset" | dd of="$repacked" bs=1 seek="$((repacked_size - 44))" conv=notrunc 2>/dev/null || return 1
+  echo "- Preserved original AVB metadata at offset $new_offset"
+)
+
+flash_image() (
+  # A read/decompression failure must also fail the write pipeline. Keep this
+  # setting local to flashing so callers retain their own shell options.
+  set -o pipefail
+  local image="$1"
+  [ -s "$image" ] || return 1
+  read_flash_image() {
+    case "$image" in
+      *.gz) gzip -dc "$image" ;;
+      *) cat "$image" ;;
+    esac
+  }
   if [ -b "$2" ]; then {
-      local img_sz=$(stat -c '%s' "$1")
-      local blk_sz=$(blockdev --getsize64 "$2")
-      local blk_bs=$(blockdev --getbsz "$2")
+      local img_sz blk_sz blk_bs blk_ro
+      img_sz=$(stat -c '%s' "$image") || return $?
+      blk_sz=$(blockdev --getsize64 "$2") || return $?
+      blk_bs=$(blockdev --getbsz "$2") || return $?
       [ "$img_sz" -gt "$blk_sz" ] && return 1
-      blockdev --setrw "$2"
-      local blk_ro=$(blockdev --getro "$2")
+      blockdev --setrw "$2" || return $?
+      blk_ro=$(blockdev --getro "$2") || return $?
       [ "$blk_ro" -eq 1 ] && return 2
-      eval "$CMD1" | dd of="$2" bs="$blk_bs" iflag=fullblock conv=notrunc,fsync 2>/dev/null
-      sync
+      read_flash_image | dd of="$2" bs="$blk_bs" iflag=fullblock conv=notrunc,fsync 2>/dev/null || return $?
+      sync || return $?
   } elif [ -c "$2" ]; then {
-      flash_eraseall "$2" >&2
-      eval "$CMD1" | nandwrite -p "$2" - >&2
+      flash_eraseall "$2" >&2 || return $?
+      read_flash_image | nandwrite -p "$2" - >&2 || return $?
   } else {
       echo "- Not block or char device, storing image"
-      eval "$CMD1" > "$2" 2>/dev/null
+      read_flash_image > "$2" 2>/dev/null || return $?
   } fi
   return 0
-}
+)
 
 setup_mntpoint() {
   local POINT=$1

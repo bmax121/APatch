@@ -85,6 +85,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.bmax.apatch.R
+import me.bmax.apatch.APApplication
 import me.bmax.apatch.ui.component.SwitchItem
 import me.bmax.apatch.ui.component.WarningCard
 import me.bmax.apatch.ui.viewmodel.KPModel
@@ -123,7 +124,8 @@ fun Patches(mode: PatchesViewModel.PatchMode) {
     val scrollState = rememberScrollState()
     val scope = rememberCoroutineScope()
 
-    var needKey by rememberSaveable { mutableStateOf(false) }
+    val keyRequired = !APApplication.signatureAuthSupported
+    var needKey by rememberSaveable { mutableStateOf(keyRequired) }
 
     val viewModel = viewModel<PatchesViewModel>()
     LaunchedEffect(mode) {
@@ -221,8 +223,10 @@ fun Patches(mode: PatchesViewModel.PatchMode) {
                     SwitchItem(
                         icon = Icons.Default.Key,
                         title = stringResource(R.string.patch_custom_superkey),
-                        summary = stringResource(R.string.patch_custom_superkey_summary),
-                        checked = needKey,
+                        summary = stringResource(if (keyRequired) R.string.patch_superkey_required
+                                                 else R.string.patch_custom_superkey_summary),
+                        checked = needKey || keyRequired,
+                        enabled = !keyRequired,
                         onCheckedChange = { checked ->
                             needKey = checked
                         }
@@ -230,7 +234,7 @@ fun Patches(mode: PatchesViewModel.PatchMode) {
                 }
 
                 AnimatedVisibility(
-                    visible = needKey,
+                    visible = needKey || keyRequired,
                     enter = expandVertically() + fadeIn(),
                     exit = shrinkVertically() + fadeOut()
                 ) {
@@ -276,10 +280,11 @@ fun Patches(mode: PatchesViewModel.PatchMode) {
             if (!viewModel.patching && !viewModel.patchdone) {
                 // patch start
                 if (mode != PatchesViewModel.PatchMode.UNPATCH) {
-                    val isKeyReady = !needKey || viewModel.superkey.isNotEmpty()
+                    val useKey = needKey || keyRequired
+                    val isKeyReady = !useKey || viewModel.superkey.isNotEmpty()
                     if (isKeyReady) {
                         StartButton(stringResource(id = R.string.patch_start_patch_btn)) {
-                            viewModel.doPatch(mode, needKey)
+                            viewModel.doPatch(mode, useKey)
                         }
                     }
                 }

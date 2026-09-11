@@ -3,6 +3,9 @@
 import com.android.build.gradle.tasks.PackageApplication
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.net.URI
+import java.nio.file.AtomicMoveNotSupportedException
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 
 plugins {
     alias(libs.plugins.agp.app)
@@ -182,48 +185,45 @@ kotlin {
 
 fun registerDownloadTask(
     taskName: String, srcUrl: String, destPath: String, project: Project
-) {
-    project.tasks.register(taskName) {
-        val destFile = File(destPath)
+) = project.tasks.register(taskName) {
+    val destFile = File(destPath)
+    // The release URL is an input, not its Last-Modified timestamp. A cached
+    // payload may be newer on disk while still belonging to an older KP release.
+    inputs.property("sourceUrl", srcUrl)
+    outputs.file(destFile)
 
-        doLast {
-            if (!destFile.exists() || isFileUpdated(srcUrl, destFile)) {
-                println(" - Downloading $srcUrl to ${destFile.absolutePath}")
-                downloadFile(srcUrl, destFile)
-                println(" - Download completed.")
-            } else {
-                println(" - File is up-to-date, skipping download.")
-            }
-        }
-    }
-}
-
-fun isFileUpdated(url: String, localFile: File): Boolean {
-    val connection = URI.create(url).toURL().openConnection()
-    val remoteLastModified = connection.getHeaderFieldDate("Last-Modified", 0L)
-    return remoteLastModified > localFile.lastModified()
-}
-
-fun downloadFile(url: String, destFile: File) {
-    URI.create(url).toURL().openStream().use { input ->
-        destFile.outputStream().use { output ->
-            input.copyTo(output)
-        }
+    doLast {
+        println(" - Downloading $srcUrl to ${destFile.absolutePath}")
+        downloadFileRetry(srcUrl, destFile)
+        println(" - Download completed.")
     }
 }
 
 /** Download with connect/read timeouts and retries (robust against flaky networks). */
 fun downloadFileRetry(url: String, destFile: File, maxRetries: Int = 5) {
+    destFile.parentFile.mkdirs()
     var attempt = 0
     while (true) {
+        val partial = File.createTempFile(destFile.name, ".part", destFile.parentFile)
         try {
             val conn = URI.create(url).toURL().openConnection()
             conn.connectTimeout = 15000
             conn.readTimeout = 60000
             conn.getInputStream().use { input ->
-                destFile.outputStream().use { output ->
+                partial.outputStream().use { output ->
                     input.copyTo(output)
                 }
+            }
+            check(partial.length() > 0) { "Empty download: $url" }
+            val expectedLength = conn.contentLengthLong
+            check(expectedLength < 0 || partial.length() == expectedLength) {
+                "Incomplete download: $url"
+            }
+            try {
+                Files.move(partial.toPath(), destFile.toPath(),
+                    StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING)
+            } catch (_: AtomicMoveNotSupportedException) {
+                Files.move(partial.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING)
             }
             return
         } catch (e: Exception) {
@@ -231,6 +231,8 @@ fun downloadFileRetry(url: String, destFile: File, maxRetries: Int = 5) {
             if (attempt >= maxRetries) throw e
             println(" - download attempt $attempt/$maxRetries failed for $url: ${e.message}")
             Thread.sleep(2000L * attempt)
+        } finally {
+            partial.delete()
         }
     }
 }
@@ -265,22 +267,17 @@ val jailbreakKmis = listOf(
     "android14-5.15", "android14-6.1", "android15-6.6", "android16-6.12",
 )
 
+val jailbreakKoTasks = jailbreakKmis.map { kmi ->
+    registerDownloadTask(
+        taskName = "downloadJailbreakKo_$kmi",
+        srcUrl = "https://github.com/bmax121/KernelPatch/releases/download/$kernelPatchVersion/${kmi}_kernelpatch.ko",
+        destPath = "${project.projectDir}/src/main/assets/${kmi}_kernelpatch.ko",
+        project = project,
+    )
+}
+
 tasks.register("downloadJailbreakKo") {
-    doLast {
-        val assetsDir = File("${project.projectDir}/src/main/assets")
-        assetsDir.mkdirs()
-        jailbreakKmis.forEach { kmi ->
-            val srcUrl =
-                "https://github.com/bmax121/KernelPatch/releases/download/$kernelPatchVersion/${kmi}_kernelpatch.ko"
-            val destFile = File(assetsDir, "${kmi}_kernelpatch.ko")
-            if (!destFile.exists()) {
-                println(" - Downloading $srcUrl to ${destFile.absolutePath}")
-                downloadFileRetry(srcUrl, destFile)
-            } else {
-                println(" - $kmi kernelpatch.ko already present.")
-            }
-        }
-    }
+    dependsOn(jailbreakKoTasks)
 }
 
 tasks.register<Copy>("mergeScripts") {

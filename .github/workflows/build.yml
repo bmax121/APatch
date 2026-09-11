@@ -11,6 +11,7 @@ on:
       - 'build.gradle.kts'
       - 'gradle/libs.versions.toml'
       - 'version.properties'
+      - 'tests/**'
   pull_request:
     branches: [ "main" ]
     paths:
@@ -20,6 +21,7 @@ on:
       - 'build.gradle.kts'
       - 'gradle/libs.versions.toml'
       - 'version.properties'
+      - 'tests/**'
   workflow_call:
   workflow_dispatch:
 
@@ -33,6 +35,9 @@ jobs:
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
+
+      - name: Test boot patch failure handling
+        run: python3 -m unittest discover -s tests -v
 
       - name: Generate version
         id: parse_version

@@ -17,7 +17,7 @@ function kernelFlagsErr(){
 	ui_print "- Installation has Aborted!"
 	ui_print "- APatch requires CONFIG_KALLSYMS to be Enabled."
 	ui_print "- But your kernel seems NOT enabled it."
-	exit
+	exit 1
 }
 
 function apatchNote(){
@@ -31,40 +31,42 @@ function failed(){
 	ui_printfile /dev/tmp/install/log
 	ui_print "- APatch Patch Failed."
 	ui_print "- Please feedback to the developer with the screenshots."
-	exit
+	exit 1
 }
 
 function boot_execute_ab(){
-	./lib/arm64-v8a/libkptools.so unpack boot.img
+	./lib/arm64-v8a/libkptools.so unpack boot.img || failed
 	if [[ ! $(./lib/arm64-v8a/libkptools.so -i ./kernel -f | grep CONFIG_KALLSYMS=y) ]]; then
 		kernelFlagsErr
 	fi
 	mv kernel kernel-origin
-	./lib/arm64-v8a/libkptools.so -p --image kernel-origin --kpimg ./assets/kpimg --out ./kernel 2>&1 | tee /dev/tmp/install/log
+	./lib/arm64-v8a/libkptools.so -p --image kernel-origin --kpimg ./assets/kpimg --out ./kernel > /dev/tmp/install/log 2>&1 || failed
 	if [[ ! $(cat /dev/tmp/install/log | grep "patch done") ]]; then
 		failed
 	fi
 	ui_printfile /dev/tmp/install/log
-	./lib/arm64-v8a/libkptools.so repack boot.img
-	dd if=/dev/tmp/install/new-boot.img of=/dev/block/by-name/boot$slot
-	mv boot.img /data/boot.img
+	./lib/arm64-v8a/libkptools.so repack boot.img || failed
+	( . ./assets/util_functions.sh; repair_boot_avb_footer boot.img new-boot.img ) || failed
+	cp boot.img /data/boot.img || failed
+	dd if=/dev/tmp/install/new-boot.img of=/dev/block/by-name/boot$slot || failed
 	apatchNote
 }
 
 function boot_execute(){
-	./lib/arm64-v8a/libkptools.so unpack boot.img
+	./lib/arm64-v8a/libkptools.so unpack boot.img || failed
 	if [[ ! $(./lib/arm64-v8a/libkptools.so -i ./kernel -f | grep CONFIG_KALLSYMS=y) ]]; then
 		kernelFlagsErr
 	fi
 	mv kernel kernel-origin
-	./lib/arm64-v8a/libkptools.so -p --image kernel-origin --kpimg ./assets/kpimg --out ./kernel 2>&1 | tee /dev/tmp/install/log
+	./lib/arm64-v8a/libkptools.so -p --image kernel-origin --kpimg ./assets/kpimg --out ./kernel > /dev/tmp/install/log 2>&1 || failed
 	if [[ ! $(cat /dev/tmp/install/log | grep "patch done") ]]; then
 		failed
 	fi
 	ui_printfile /dev/tmp/install/log
-	./lib/arm64-v8a/libkptools.so repack boot.img
-	dd if=/dev/tmp/install/new-boot.img of=/dev/block/by-name/boot$slot
-	mv boot.img /data/boot.img
+	./lib/arm64-v8a/libkptools.so repack boot.img || failed
+	( . ./assets/util_functions.sh; repair_boot_avb_footer boot.img new-boot.img ) || failed
+	cp boot.img /data/boot.img || failed
+	dd if=/dev/tmp/install/new-boot.img of=/dev/block/by-name/boot$slot || failed
 	apatchNote
 }
 

@@ -29,6 +29,8 @@ import me.bmax.apatch.BuildConfig
 import me.bmax.apatch.R
 import me.bmax.apatch.apApp
 import me.bmax.apatch.util.Version
+import me.bmax.apatch.util.APatchKeyHelper
+import me.bmax.apatch.util.ManagerAuth
 import me.bmax.apatch.util.copyAndClose
 import me.bmax.apatch.util.copyAndCloseOut
 import me.bmax.apatch.util.createRootShell
@@ -138,8 +140,7 @@ class PatchesViewModel : ViewModel() {
         val result = shellForResult(
             shell,
             "cd $patchDir",
-            "./kptools unpacknolog $bootimg",
-            "./kptools -l -i kernel",
+            "./kptools unpacknolog \"$bootimg\" && ./kptools -l -i kernel",
         )
         if (result.isSuccess) {
             val ini = Ini(StringReader(result.out.joinToString("\n")))
@@ -199,7 +200,7 @@ class PatchesViewModel : ViewModel() {
     }
 
     val checkSuperKeyValidation: (superKey: String) -> Boolean = { superKey ->
-        superKey.length in 8..63 && superKey.any { it.isDigit() } && superKey.any { it.isLetter() }
+        ManagerAuth.isValidSuperKey(superKey)
     }
 
     fun copyAndParseBootimg(uri: Uri) {
@@ -368,9 +369,9 @@ class PatchesViewModel : ViewModel() {
                         "export ASH_STANDALONE=1",
                         "cd $patchDir",
                         "cp /data/adb/ap/ori.img new-boot.img",
-                        "./busybox sh ./boot_unpatch.sh $bootDev",
-                        "rm -f ${APApplication.APD_PATH}",
-                        "rm -rf ${APApplication.APATCH_FOLDER}",
+                        "./busybox sh ./boot_unpatch.sh $bootDev && " +
+                            "rm -f ${APApplication.APD_PATH} && " +
+                            "rm -rf ${APApplication.APATCH_FOLDER}",
                     ).to(logs, logs).exec()
 
                     if (result.isSuccess) {
@@ -396,6 +397,14 @@ class PatchesViewModel : ViewModel() {
         return suFile.exists() && suFile.canExecute()
     }
     fun doPatch(mode: PatchMode, useKey: Boolean) {
+        if (!useKey && !APApplication.signatureAuthSupported) {
+            error = apApp.getString(R.string.patch_superkey_required)
+            return
+        }
+        if (useKey && !checkSuperKeyValidation(superkey)) {
+            error = apApp.getString(R.string.patch_superkey_invalid)
+            return
+        }
         viewModelScope.launch(Dispatchers.IO) {
             workMutex.withLock {
                 if (!ensurePrepared()) return@withLock
@@ -466,7 +475,7 @@ class PatchesViewModel : ViewModel() {
 
                     val builder = ProcessBuilder(patchCommand)
 
-                    Log.i(TAG, "patchCommand: $patchCommand")
+                    Log.i(TAG, "patching boot image (custom SuperKey: $useKey)")
 
                     var succ = false
 
@@ -586,6 +595,7 @@ class PatchesViewModel : ViewModel() {
                         }
                     }
                     logs.add("****************************")
+                    if (succ && useKey) APatchKeyHelper.writePendingSuperKey(superkey)
                     patchdone = true
                     patching = false
                 } finally {
