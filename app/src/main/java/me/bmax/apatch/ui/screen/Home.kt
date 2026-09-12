@@ -28,6 +28,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.InstallMobile
+import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.LockOpen
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Refresh
@@ -90,6 +91,7 @@ import me.bmax.apatch.Natives
 import me.bmax.apatch.R
 import me.bmax.apatch.apApp
 import me.bmax.apatch.ui.component.ProvideMenuShape
+import me.bmax.apatch.ui.component.SuperKeyDialog
 import me.bmax.apatch.ui.component.WarningCard
 import me.bmax.apatch.ui.component.rememberConfirmDialog
 import me.bmax.apatch.ui.viewmodel.PatchesViewModel
@@ -243,10 +245,18 @@ private fun TopBar(
     val uriHandler = LocalUriHandler.current
     var showDropdownMoreOptions by remember { mutableStateOf(false) }
     var showDropdownReboot by remember { mutableStateOf(false) }
+    var showSuperKeyDialog by remember { mutableStateOf(false) }
+
+    if (showSuperKeyDialog) SuperKeyDialog { showSuperKeyDialog = false }
 
     TopAppBar(title = {
         Text(stringResource(R.string.app_name))
     }, actions = {
+        if (kpState == APApplication.State.UNKNOWN_STATE) {
+            IconButton(onClick = { showSuperKeyDialog = true }) {
+                Icon(Icons.Filled.Key, contentDescription = stringResource(R.string.superkey_login))
+            }
+        }
         IconButton(onClick = onInstallClick) {
             Icon(
                 imageVector = Icons.Filled.InstallMobile,
