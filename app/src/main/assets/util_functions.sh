@@ -251,6 +251,93 @@ find_boot_image() {
   [ -z $BOOTIMAGE ] || echo "BOOTIMAGE=$BOOTIMAGE"
 }
 
+# Read boot header integers (Android's supported ARM64 host is little-endian)
+# and AVB footer integers (big-endian), without depending on an AVB algorithm.
+boot_read_le32() {
+  od -An -v -j "$2" -N 4 -tu4 "$1" | tr -d ' \n'
+}
+
+boot_read_be64() {
+  local hex
+  hex=$(od -An -v -j "$2" -N 8 -tx1 "$1" | tr -d ' \n') || return 1
+  # Shell arithmetic is signed; reject sizes outside its positive range.
+  [ "${#hex}" -eq 16 ] || return 1
+  case "$hex" in [89abcdefABCDEF]*) return 1 ;; esac
+  echo "$((0x$hex))"
+}
+
+boot_write_be64() {
+  local shift byte
+  for shift in 56 48 40 32 24 16 8 0; do
+    byte=$((($1 >> shift) & 255))
+    printf "\\$(printf '%03o' "$byte")"
+  done
+}
+
+# kptools 0.13.8 searches for an AVB0 header with a hard-coded libavb version.
+# On Pixel 11 (libavb 1.4 / ML-DSA) it selects an embedded GKI RSA certificate
+# instead. Locate the real metadata through the original AVBf footer, and move
+# that footer's offsets by the kernel's change in padded size. The metadata,
+# signature algorithm, rollback index and build properties stay byte-identical.
+repair_boot_avb_footer() (
+  set -o pipefail
+  local original="$1" repacked="$2"
+  local original_size repacked_size footer magic
+  if [ -b "$original" ]; then
+    original_size=$(blockdev --getsize64 "$original") || return 1
+  else
+    original_size=$(stat -c '%s' "$original") || return 1
+  fi
+  [ "$original_size" -ge 64 ] || return 0
+  footer=$((original_size - 64))
+  magic=$(od -An -v -j "$footer" -N 4 -tx1 "$original" | tr -d ' \n') || return 1
+  [ "$magic" = 41564266 ] || return 0
+
+  repacked_size=$(stat -c '%s' "$repacked") || return 1
+  [ "$repacked_size" -ge 64 ] || return 1
+  local version page_size old_kernel new_kernel delta
+  version=$(boot_read_le32 "$original" 40) || return 1
+  [ "$version" = "$(boot_read_le32 "$repacked" 40)" ] || return 1
+  case "$version" in
+    0|1|2) page_size=$(boot_read_le32 "$original" 36) || return 1
+           [ "$page_size" = "$(boot_read_le32 "$repacked" 36)" ] || return 1 ;;
+    3|4) page_size=4096 ;;
+    *) return 1 ;;
+  esac
+  [ "$page_size" -ge 512 ] && [ $((page_size & (page_size - 1))) -eq 0 ] || return 1
+  old_kernel=$(boot_read_le32 "$original" 8) || return 1
+  new_kernel=$(boot_read_le32 "$repacked" 8) || return 1
+  [ "$old_kernel" -gt 0 ] && [ "$new_kernel" -gt 0 ] || return 1
+  delta=$(( ((new_kernel + page_size - 1) / page_size - (old_kernel + page_size - 1) / page_size) * page_size ))
+
+  local old_payload old_offset metadata_size new_payload new_offset old_hash new_hash
+  old_payload=$(boot_read_be64 "$original" "$((footer + 12))") || return 1
+  old_offset=$(boot_read_be64 "$original" "$((footer + 20))") || return 1
+  metadata_size=$(boot_read_be64 "$original" "$((footer + 28))") || return 1
+  # Subtraction avoids overflow when validating untrusted footer lengths.
+  [ "$old_payload" -ge "$((page_size + (old_kernel + page_size - 1) / page_size * page_size))" ] || return 1
+  [ "$old_offset" -ge "$old_payload" ] && [ "$old_offset" -le "$footer" ] || return 1
+  [ "$metadata_size" -ge 256 ] && [ "$metadata_size" -le "$((footer - old_offset))" ] || return 1
+  new_payload=$((old_payload + delta))
+  new_offset=$((old_offset + delta))
+  [ "$new_payload" -ge 0 ] && [ "$new_offset" -ge "$new_payload" ] || return 1
+  [ "$new_offset" -le "$((repacked_size - 64))" ] || return 1
+  [ "$metadata_size" -le "$((repacked_size - 64 - new_offset))" ] || return 1
+  magic=$(od -An -v -j "$old_offset" -N 4 -tx1 "$original" | tr -d ' \n') || return 1
+  [ "$magic" = 41564230 ] || return 1
+
+  # Fail before flashing if the repacker discarded, truncated or changed the
+  # original metadata. Never try to recreate it by scanning for magic bytes.
+  old_hash=$(dd if="$original" bs=1 skip="$old_offset" count="$metadata_size" 2>/dev/null | sha256sum) || return 1
+  new_hash=$(dd if="$repacked" bs=1 skip="$new_offset" count="$metadata_size" 2>/dev/null | sha256sum) || return 1
+  [ "$old_hash" = "$new_hash" ] || return 1
+
+  dd if="$original" of="$repacked" bs=1 skip="$footer" seek="$((repacked_size - 64))" count=64 conv=notrunc 2>/dev/null || return 1
+  boot_write_be64 "$new_payload" | dd of="$repacked" bs=1 seek="$((repacked_size - 52))" conv=notrunc 2>/dev/null || return 1
+  boot_write_be64 "$new_offset" | dd of="$repacked" bs=1 seek="$((repacked_size - 44))" conv=notrunc 2>/dev/null || return 1
+  echo "- Preserved original AVB metadata at offset $new_offset"
+)
+
 flash_image() {
   local CMD1
   case "$1" in

@@ -14,6 +14,7 @@ import com.topjohnwu.superuser.CallbackList
 import me.bmax.apatch.ui.CrashHandleActivity
 import me.bmax.apatch.util.APatchCli
 import me.bmax.apatch.util.APatchKeyHelper
+import me.bmax.apatch.util.ManagerAuth
 import me.bmax.apatch.util.Version
 import me.bmax.apatch.util.getRootShell
 import me.bmax.apatch.util.rootShellForResult
@@ -244,6 +245,8 @@ class APApplication : Application(), Thread.UncaughtExceptionHandler {
                 }
             }
 
+        val signatureAuthSupported by lazy { ManagerAuth.supportsSignatureAuth(apApp) }
+
         /**
          * Resolve the SuperKey used to authenticate against the running kernel.
          *
@@ -255,8 +258,8 @@ class APApplication : Application(), Thread.UncaughtExceptionHandler {
          * persisted (Keystore-encrypted) by older managers and use it to elevate,
          * letting the user upgrade the kernel to the latest signature-authorized one.
          *
-         * Once "su" succeeds the kernel no longer relies on a SuperKey, so any
-         * stale legacy key is cleared.
+         * Only a signature-compatible manager can discard its old key after
+         * "su" succeeds. A UID grant can otherwise last only until reboot.
          */
         private fun resolveSuperKey(): String {
             APatchKeyHelper.setSharedPreferences(sharedPreferences)
@@ -264,7 +267,7 @@ class APApplication : Application(), Thread.UncaughtExceptionHandler {
 
             // Signature authorization (new default).
             if (Natives.nativeReady("su")) {
-                if (!savedKey.isNullOrEmpty()) {
+                if (signatureAuthSupported && !savedKey.isNullOrEmpty()) {
                     APatchKeyHelper.clearConfigKey()
                     Log.i(TAG, "signature auth ready, cleared legacy SuperKey")
                 }
@@ -275,6 +278,14 @@ class APApplication : Application(), Thread.UncaughtExceptionHandler {
             if (!savedKey.isNullOrEmpty() && Natives.nativeReady(savedKey)) {
                 Log.i(TAG, "fallback to legacy stored SuperKey for upgrade")
                 return savedKey
+            }
+
+            val pendingKey = APatchKeyHelper.readPendingSuperKey()
+            if (!pendingKey.isNullOrEmpty() && Natives.nativeReady(pendingKey)) {
+                APatchKeyHelper.writeSPSuperKey(pendingKey)
+                APatchKeyHelper.clearPendingSuperKey()
+                Log.i(TAG, "authenticated newly patched kernel with saved SuperKey")
+                return pendingKey
             }
 
             return "su"

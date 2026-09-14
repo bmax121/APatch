@@ -65,12 +65,17 @@
 
     <string name="super_key">SuperKey</string>
     <string name="patch_set_superkey">Set SuperKey</string>
+    <string name="superkey_login">Log in with SuperKey</string>
+    <string name="superkey_login_description">Enter the SuperKey used when patching this boot image.</string>
+    <string name="superkey_login_failed">This key did not unlock KernelPatch. Check the key and that the patched boot image is running.</string>
+    <string name="patch_superkey_required">This manager requires a SuperKey for root. Set one before patching and keep it for recovery.</string>
+    <string name="patch_superkey_invalid">Use 8–63 UTF-8 bytes, including a letter and a number.</string>
     <string name="home_patch_set_key_desc">Only credential for KernelPatch</string>
     <string name="home_patch_next_step">Next step</string>
 
     <string name="home_not_installed">Not installed</string>
-    <string name="home_install_unknown">KernelPatch not installed</string>
-    <string name="home_install_unknown_summary">Root is unavailable. The kernel may not be patched or flashed yet.</string>
+    <string name="home_install_unknown">Root unavailable</string>
+    <string name="home_install_unknown_summary">APatch could not log in to KernelPatch. Boot a patched image or log in with its SuperKey.</string>
     <string name="home_click_to_install">Click to install</string>
     <string name="home_working">Working 😋</string>
 

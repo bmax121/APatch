@@ -46,6 +46,10 @@ function boot_execute_ab(){
 	fi
 	ui_printfile /dev/tmp/install/log
 	./lib/arm64-v8a/libkptools.so repack boot.img
+	( . ./assets/util_functions.sh; repair_boot_avb_footer boot.img new-boot.img ) || {
+		ui_print "- Cannot preserve the original boot image's AVB metadata."
+		exit 1
+	}
 	dd if=/dev/tmp/install/new-boot.img of=/dev/block/by-name/boot$slot
 	mv boot.img /data/boot.img
 	apatchNote
@@ -63,6 +67,10 @@ function boot_execute(){
 	fi
 	ui_printfile /dev/tmp/install/log
 	./lib/arm64-v8a/libkptools.so repack boot.img
+	( . ./assets/util_functions.sh; repair_boot_avb_footer boot.img new-boot.img ) || {
+		ui_print "- Cannot preserve the original boot image's AVB metadata."
+		exit 1
+	}
 	dd if=/dev/tmp/install/new-boot.img of=/dev/block/by-name/boot$slot
 	mv boot.img /data/boot.img
 	apatchNote

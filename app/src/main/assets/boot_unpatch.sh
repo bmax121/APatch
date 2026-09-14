@@ -52,6 +52,11 @@ if [ ! $(./kptools -i kernel -l | grep patched=false) ]; then
       >&2 echo "- Repack error: $?"
       exit $?
     fi
+    if ! repair_boot_avb_footer "$BOOTIMAGE" new-boot.img; then
+      >&2 echo "- Cannot preserve the original boot image's AVB metadata."
+      rm -f new-boot.img
+      exit 1
+    fi
   fi
 
 else
