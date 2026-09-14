@@ -63,6 +63,7 @@ public final class SuFilePathHandler implements WebViewAssetLoader.PathHandler {
     private final File mDirectory;
 
     private final Shell mShell;
+    private final java.util.concurrent.atomic.AtomicBoolean mClosed = new java.util.concurrent.atomic.AtomicBoolean(false);
     private final InsetsSupplier mInsetsSupplier;
     @NonNull
     private final OnInsetsRequestedListener mOnInsetsRequestedListener;
@@ -126,6 +127,26 @@ public final class SuFilePathHandler implements WebViewAssetLoader.PathHandler {
             }
         }
         return true;
+    }
+
+    /**
+     * Release the root shell held by this handler. Must be called when the
+     * hosting WebView/Activity is destroyed, otherwise the shell process leaks.
+     * Idempotent and thread-safe: concurrent {@link #handle} calls racing with
+     * close only observe an {@link IOException} (surfaced as 404), never a crash.
+     * After close, {@link #handle} keeps returning 404.
+     */
+    public void close() {
+        if (!mClosed.compareAndSet(false, true)) {
+            return;
+        }
+        if (mShell != null) {
+            try {
+                mShell.close();
+            } catch (IOException ignored) {
+                // Best-effort: the shell is being torn down anyway.
+            }
+        }
     }
 
     /**

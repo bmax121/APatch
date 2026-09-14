@@ -8,7 +8,8 @@ import kotlinx.parcelize.Parcelize
 import me.bmax.apatch.APApplication
 import me.bmax.apatch.Natives
 import java.io.File
-import java.io.FileWriter
+import java.io.FileOutputStream
+import java.io.OutputStreamWriter
 import kotlin.concurrent.thread
 
 object PkgConfig {
@@ -26,7 +27,7 @@ object PkgConfig {
             fun fromLine(line: String): Config? {
                 val sp = line.split(',', limit = 6)
                 if (sp.size < 6) return null
-                val pkg = sp[0].trim()
+                val pkg = sp[0].trim().removePrefix("\uFEFF")
                 val exclude = sp[1].trim().toIntOrNull()
                 val allow = sp[2].trim().toIntOrNull()
                 val uid = sp[3].trim().toIntOrNull()
@@ -54,6 +55,10 @@ object PkgConfig {
         if (file.exists()) {
             file.readLines().filter { it.isNotBlank() }.forEach {
                 Log.d(TAG, it)
+                // Skip the CSV header (and a possible UTF-8 BOM) quietly:
+                // it is not a malformed row.
+                val stripped = it.trimStart().removePrefix("\uFEFF")
+                if (stripped == CSV_HEADER || stripped.startsWith("pkg,")) return@forEach
                 val p = Config.fromLine(it)
                 if (p == null) {
                     Log.w(TAG, "Skip malformed package_config line: $it")
@@ -68,15 +73,36 @@ object PkgConfig {
     private fun writeConfigs(configs: HashMap<Int, Config>) {
         val file = File(APApplication.PACKAGE_CONFIG_FILE)
         if (!file.parentFile?.exists()!!) file.parentFile?.mkdirs()
-        val writer = FileWriter(file, false)
-        writer.write(CSV_HEADER + '\n')
-        configs.values.forEach {
-            if (!it.isDefault()) {
-                writer.write(it.toLine() + '\n')
+        // Write to a sibling temp file then rename into place: a concurrent
+        // reader (apd uid-listener / kernel reload) must never observe a
+        // half-written config, or it would treat every grant as gone. The temp
+        // name is app-specific to avoid clashing with apd's own .tmp writer.
+        val tmp = File(file.parentFile, "package_config.app.tmp")
+        try {
+            FileOutputStream(tmp, false).use { fos ->
+                OutputStreamWriter(fos, Charsets.UTF_8).use { writer ->
+                    writer.write(CSV_HEADER + '\n')
+                    configs.values.forEach {
+                        if (!it.isDefault()) {
+                            writer.write(it.toLine() + '\n')
+                        }
+                    }
+                    writer.flush()
+                }
+                // Persist content before the atomic rename so a crash can only
+                // leave the old file or the complete new file behind.
+                fos.fd.sync()
             }
+            if (!tmp.renameTo(file)) {
+                Log.e(TAG, "Failed to atomically replace ${file.path}")
+                // Don't leave a stale tmp behind to confuse the next write or
+                // a manual inspection; the original file is still intact.
+                tmp.delete()
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to write package configs", e)
+            tmp.delete()
         }
-        writer.flush()
-        writer.close()
     }
 
     fun changeConfig(config: Config) {
