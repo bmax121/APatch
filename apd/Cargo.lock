@@ -1382,7 +1382,7 @@ dependencies = [
 [[package]]
 name = "prop-rs"
 version = "0.2.0"
-source = "git+https://github.com/Kernel-SU/ksu_props?rev=6f5723105d8d4cacad31d83d343defbf032c7b33#6f5723105d8d4cacad31d83d343defbf032c7b33"
+source = "git+https://github.com/AndroidPatch/restprops?rev=6f5723105d8d4cacad31d83d343defbf032c7b33#6f5723105d8d4cacad31d83d343defbf032c7b33"
 dependencies = [
  "prost",
 ]
@@ -1390,7 +1390,7 @@ dependencies = [
 [[package]]
 name = "prop-rs-android"
 version = "0.2.0"
-source = "git+https://github.com/Kernel-SU/ksu_props?rev=6f5723105d8d4cacad31d83d343defbf032c7b33#6f5723105d8d4cacad31d83d343defbf032c7b33"
+source = "git+https://github.com/AndroidPatch/restprops?rev=6f5723105d8d4cacad31d83d343defbf032c7b33#6f5723105d8d4cacad31d83d343defbf032c7b33"
 dependencies = [
  "libc",
  "log",

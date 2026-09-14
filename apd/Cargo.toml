@@ -48,7 +48,7 @@ adb_client = { version = "3.2.3", default-features = false }
 rustix = { version = "1.1.4", features = ["all-apis"] }
 # some android specific dependencies which compiles under unix are also listed here for convenience of coding
 android-properties = { version = "0.2.2", features = ["bionic-deprecated"] }
-prop-rs-android = { git = "https://github.com/Kernel-SU/ksu_props", rev = "6f5723105d8d4cacad31d83d343defbf032c7b33"}
+prop-rs-android = { git = "https://github.com/AndroidPatch/restprops", rev = "6f5723105d8d4cacad31d83d343defbf032c7b33"}
 # Pinned to pre-rewrite rev: master (6ee5489) sepol_add_type does two reallocs
 # and writes the new pointers back only if BOTH succeed; on a partial failure
 # policydb keeps a dangling address, and callers discard the error. This runs
