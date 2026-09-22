@@ -172,6 +172,9 @@ public final class SuFilePathHandler implements WebViewAssetLoader.PathHandler {
     @WorkerThread
     @NonNull
     public WebResourceResponse handle(@NonNull String path) {
+        if (mClosed.get()) {
+            return new WebResourceResponse(null, null, null);
+        }
         if ("internal/insets.css".equals(path)) {
             mOnInsetsRequestedListener.onInsetsRequested(true);
             String css = mInsetsSupplier.get().getCss();

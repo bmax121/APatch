@@ -10,6 +10,7 @@ import me.bmax.apatch.Natives
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStreamWriter
+import java.io.RandomAccessFile
 import kotlin.concurrent.thread
 
 object PkgConfig {
@@ -88,10 +89,8 @@ object PkgConfig {
                         }
                     }
                     writer.flush()
+                    fos.fd.sync()
                 }
-                // Persist content before the atomic rename so a crash can only
-                // leave the old file or the complete new file behind.
-                fos.fd.sync()
             }
             if (!tmp.renameTo(file)) {
                 Log.e(TAG, "Failed to atomically replace ${file.path}")
@@ -105,23 +104,38 @@ object PkgConfig {
         }
     }
 
+    private fun <T> withConfigLock(block: () -> T): T {
+        val lockFile = File(
+            File(APApplication.PACKAGE_CONFIG_FILE).parentFile,
+            "package_config.lock"
+        )
+        lockFile.parentFile?.mkdirs()
+        return RandomAccessFile(lockFile, "rw").use { raf ->
+            raf.channel.use { channel ->
+                channel.lock().use { block() }
+            }
+        }
+    }
+
     fun changeConfig(config: Config) {
         thread {
             synchronized(PkgConfig.javaClass) {
-                Natives.su()
-                val configs = readConfigs()
-                val uid = config.profile.uid
-                // Root App should not be excluded
-                if (config.allow == 1) {
-                    config.exclude = 0
+                withConfigLock {
+                    Natives.su()
+                    val configs = readConfigs()
+                    val uid = config.profile.uid
+                    // Root App should not be excluded
+                    if (config.allow == 1) {
+                        config.exclude = 0
+                    }
+                    if (config.allow == 0 && configs[uid] != null && config.exclude != 0) {
+                        configs.remove(uid)
+                    } else {
+                        Log.d(TAG, "change config: $config")
+                        configs[uid] = config
+                    }
+                    writeConfigs(configs)
                 }
-                if (config.allow == 0 && configs[uid] != null && config.exclude != 0) {
-                    configs.remove(uid)
-                } else {
-                    Log.d(TAG, "change config: $config")
-                    configs[uid] = config
-                }
-                writeConfigs(configs)
             }
         }
     }

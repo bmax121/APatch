@@ -34,11 +34,17 @@ fn strip_bom(s: &str) -> &str {
     s.trim_start_matches('\u{FEFF}')
 }
 
+const HEADER: [&str; 6] = ["pkg", "exclude", "allow", "uid", "to_uid", "sctx"];
+
 fn is_header_record(record: &csv::StringRecord) -> bool {
-    record
-        .get(0)
-        .map(|f| strip_bom(f.trim()) == "pkg")
-        .unwrap_or(false)
+    if record.len() != HEADER.len() {
+        return false;
+    }
+    record.iter().enumerate().all(|(i, field)| {
+        let field = field.trim();
+        let field = if i == 0 { strip_bom(field) } else { field };
+        field == HEADER[i]
+    })
 }
 
 fn is_blank_record(record: &csv::StringRecord) -> bool {
@@ -145,14 +151,23 @@ pub fn write_ap_package_config(package_configs: &[PackageConfig]) -> io::Result<
             }
         };
 
-        let mut writer = csv::Writer::from_writer(file);
+        let mut writer = csv::WriterBuilder::new()
+            .has_headers(false)
+            .from_writer(file);
         let mut success = true;
 
-        for config in package_configs {
-            if let Err(e) = writer.serialize(config) {
-                warn!("Error serializing record: {}", e);
-                success = false;
-                break;
+        if let Err(e) = writer.write_record(HEADER) {
+            warn!("Error serializing header: {}", e);
+            success = false;
+        }
+
+        if success {
+            for config in package_configs {
+                if let Err(e) = writer.serialize(config) {
+                    warn!("Error serializing record: {}", e);
+                    success = false;
+                    break;
+                }
             }
         }
 
