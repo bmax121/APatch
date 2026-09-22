@@ -18,7 +18,7 @@
     <string name="reboot_edl">Starta om till EDL</string>
     <string name="settings_clear_super_key_dialog">Vill du verkligen fortsätta?</string>
     <string name="settings_check_update_summary">Sök automatiskt efter uppdateringar när appen öppnas</string>
-    <string name="settings_global_namespace_mode_summary">Alla root-sessioner använder det globala namnutrymme</string>
+    <string name="settings_global_namespace_mode_summary">Alla root-sessioner använder det globala monteringsnamnutrymmet</string>
     <string name="safe_mode">Säkert läge</string>
     <string name="send_log">Skicka logg</string>
     <string name="save_log">Spara logg</string>
@@ -112,12 +112,12 @@
     <string name="apm_webui_open">Öppna</string>
     <string name="setting_reset_su_path">Återställ genväg för su</string>
     <string name="setting_reset_su_new_path">ny fullständig genväg</string>
-    <string name="hide_apatch_manager_failure">Döljningen misslyckades, vänligen rapportera buggen!</string>
+    <string name="hide_apatch_manager_failure">Det gick inte att dölja appen. Rapportera gärna felet!</string>
     <string name="hide_apatch_dialog_summary">Det kommer att användas som en ny app-etikett som visas i startprogrammet</string>
     <string name="enable_web_debugging">Aktivera felsökning för WebView</string>
     <string name="mode_select_page_patch_and_install">Patcha och installera</string>
     <string name="home_more_menu_about">Om</string>
-    <string name="home_more_menu_feedback_or_suggestion">Återgivning eller förslag</string>
+    <string name="home_more_menu_feedback_or_suggestion">Återkoppling eller förslag</string>
     <string name="kpm_control_ok">Åtgärden lyckades!</string>
     <string name="kpm_control_failed">Åtgärden misslyckades!</string>
     <string name="settings_night_mode_follow_sys">Följ systemets mörka tema</string>
@@ -159,20 +159,20 @@
     <string name="super_key">SuperNyckel</string>
     <string name="patch_set_superkey">Sätt SuperNyckel</string>
     <string name="home_not_installed">Inte installerad</string>
-    <string name="patch_title">Patch</string>
-    <string name="patch_config_title">Patchar</string>
+    <string name="patch_title">Patcha</string>
+    <string name="patch_config_title">Patcher</string>
     <string name="patch_item_new_extra_kpm">Bädda in ny</string>
     <string name="patch_item_existed_extra_kpm">Existerade</string>
-    <string name="su_selinux_via_hook">bypass genom hook</string>
+    <string name="su_selinux_via_hook">Kringgå SELinux med en hook</string>
     <string name="pink_theme">Rosa tema</string>
     <string name="purple_theme">Lila tema</string>
-    <string name="settings_use_system_color_theme">System färgtema</string>
+    <string name="settings_use_system_color_theme">Systemets färgtema</string>
     <string name="settings_night_theme_enabled">Aktivera mörkt tema</string>
     <string name="teal_theme">Blågrönt tema</string>
     <string name="red_theme">Rött tema</string>
     <string name="cyan_theme">Cyan tema</string>
-    <string name="deep_orange_theme">Djuporanget tema</string>
-    <string name="about_app_desc">Kernelbaserad root-lösning med endast en avskalad kärnavbild, som ger möjlighet att montera systemmoduler och koppla in kärnfunktioner.</string>
+    <string name="deep_orange_theme">Djuporange tema</string>
+    <string name="about_app_desc">Kernelbaserad rootlösning med endast en avskalad kärnavbild, som ger möjlighet att montera systemmoduler och koppla in kärnfunktioner.</string>
     <string name="about_github" translatable="false">GitHub</string>
     <string name="about_weblate" translatable="false">Weblate</string>
     <string name="amber_theme">Bärnsten</string>
@@ -240,4 +240,7 @@
     <string name="kpm_embedded">Inbäddad</string>
     <string name="kpm_embedded_unload_invalid">Inbäddade KPM kan inte laddas ur; de förblir aktiva efter omstart.</string>
     <string name="kpm_install_toast_succ">Installerad; börjar gälla efter omstart</string>
+    <string name="reboot_download_confirm">Starta om i nedladdningsläge? Enheten startar till gränssnittet för att installera inbyggd programvara.</string>
+    <string name="reboot_edl_confirm">Starta om i EDL-läge (Emergency Download)? Skärmen förblir svart och enheten kan bara återställas med ett verktyg för avancerad ominstallation.</string>
+    <string name="home_dialog_uninstall_message">Om du väljer Ta bort AndroidPatch tas endast hanterarappen bort och den korrigerade startavbilden behålls. Avinstallera allt återställer också den ursprungliga startavbilden, och enheten förlorar rootåtkomst tills den korrigeras igen.</string>
 </resources>
