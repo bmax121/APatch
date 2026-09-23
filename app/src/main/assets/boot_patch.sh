@@ -48,7 +48,7 @@ patch_rc=$?
 set +x
   if [ $patch_rc -ne 0 ]; then
     >&2 echo "- Unpack error: $patch_rc"
-    exit $?
+    exit "$patch_rc"
   fi
 fi
 
@@ -78,11 +78,17 @@ set +x
 
 if [ $patch_rc -ne 0 ]; then
   >&2 echo "- Patch kernel error: $patch_rc"
-  exit $?
+  exit "$patch_rc"
 fi
 
 echo "- Repacking boot image"
 ./kptools repack "$BOOTIMAGE"
+repack_rc=$?
+
+if [ $repack_rc -ne 0 ]; then
+  >&2 echo "- Repack error: $repack_rc"
+  exit "$repack_rc"
+fi
 
 if [ ! $(./kptools -i kernel.ori -f | grep CONFIG_KALLSYMS_ALL=y) ]; then
 	echo "- Detected CONFIG_KALLSYMS_ALL is not set!"
@@ -90,19 +96,15 @@ if [ ! $(./kptools -i kernel.ori -f | grep CONFIG_KALLSYMS_ALL=y) ]; then
 	echo "- Make sure you have original boot image backup."
 fi
 
-if [ $? -ne 0 ]; then
-  >&2 echo "- Repack error: $?"
-  exit $?
-fi
-
 if [ "$FLASH_TO_DEVICE" = "true" ]; then
   # flash
   if [ -b "$BOOTIMAGE" ] || [ -c "$BOOTIMAGE" ] && [ -f "new-boot.img" ]; then
     echo "- Flashing new boot image"
     flash_image new-boot.img "$BOOTIMAGE"
-    if [ $? -ne 0 ]; then
-      >&2 echo "- Flash error: $?"
-      exit $?
+    flash_rc=$?
+    if [ "$flash_rc" -ne 0 ]; then
+      >&2 echo "- Flash error: $flash_rc"
+      exit "$flash_rc"
     fi
   fi
 
@@ -110,4 +112,3 @@ if [ "$FLASH_TO_DEVICE" = "true" ]; then
 else
   echo "- Successfully Patched!"
 fi
-

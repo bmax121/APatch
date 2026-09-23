@@ -262,17 +262,21 @@ flash_image() {
       local blk_sz=$(blockdev --getsize64 "$2")
       local blk_bs=$(blockdev --getbsz "$2")
       [ "$img_sz" -gt "$blk_sz" ] && return 1
-      blockdev --setrw "$2"
+      blockdev --setrw "$2" || return 2
       local blk_ro=$(blockdev --getro "$2")
       [ "$blk_ro" -eq 1 ] && return 2
-      eval "$CMD1" | dd of="$2" bs="$blk_bs" iflag=fullblock conv=notrunc,fsync 2>/dev/null
-      sync
+      eval "$CMD1" | dd of="$2" bs="$blk_bs" iflag=fullblock conv=notrunc,fsync
+      [ $? -ne 0 ] && return 3
+      sync || return 3
+      if [ "${1##*.}" != "gz" ]; then
+        cmp -s -n "$img_sz" "$1" "$2" || return 4
+      fi
   } elif [ -c "$2" ]; then {
-      flash_eraseall "$2" >&2
-      eval "$CMD1" | nandwrite -p "$2" - >&2
+      flash_eraseall "$2" >&2 || return 3
+      eval "$CMD1" | nandwrite -p "$2" - >&2 || return 3
   } else {
       echo "- Not block or char device, storing image"
-      eval "$CMD1" > "$2" 2>/dev/null
+      eval "$CMD1" > "$2" || return 3
   } fi
   return 0
 }
@@ -413,12 +417,24 @@ install_apatch() {
   . ./boot_patch.sh "$BOOTIMAGE"
   ui_print "- Flashing new boot image"
   flash_image new-boot.img "$BOOTIMAGE"
-  case $? in
+  flash_rc=$?
+  case $flash_rc in
+    0)
+      ;;
     1)
       abort "! Insufficient partition size"
       ;;
     2)
       abort "! $BOOTIMAGE is read only"
+      ;;
+    3)
+      abort "! Failed to write $BOOTIMAGE"
+      ;;
+    4)
+      abort "! Failed to verify $BOOTIMAGE after flashing"
+      ;;
+    *)
+      abort "! Flash failed with error $flash_rc"
       ;;
   esac
   
