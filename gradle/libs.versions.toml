@@ -1,12 +1,12 @@
 [versions]
-agp = "9.3.1"
-kotlin = "2.4.10"
-ksp = "2.3.11"
-compose-bom = "2026.08.00"
+agp = "9.4.1"
+kotlin = "2.4.20"
+ksp = "2.3.12"
+compose-bom = "2026.09.00"
 lifecycle = "2.11.0"
 compose-destination = "2.3.0"
 libsu = "6.0.0"
-coil3 = "3.5.0"
+coil3 = "3.6.3"
 
 [plugins]
 agp-app = { id = "com.android.application", version.ref = "agp" }
