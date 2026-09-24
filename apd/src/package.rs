@@ -19,7 +19,39 @@ pub struct PackageConfig {
     pub sctx: String,
 }
 
-pub fn read_ap_package_config() -> Vec<PackageConfig> {
+/// Outcome of reading package_config, distinguishing a legitimately empty
+/// config (header-only, i.e. user revoked everything) from a torn/unreadable
+/// one (missing, 0-byte, truncated) that must NOT trigger revokes.
+pub struct PackageConfigRead {
+    pub configs: Vec<PackageConfig>,
+    /// true if the file was opened and every row parsed cleanly.
+    /// Header-only parses as valid-but-empty. 0-byte / missing / dirty
+    /// files are invalid after retries.
+    pub valid: bool,
+}
+
+fn strip_bom(s: &str) -> &str {
+    s.trim_start_matches('\u{FEFF}')
+}
+
+const HEADER: [&str; 6] = ["pkg", "exclude", "allow", "uid", "to_uid", "sctx"];
+
+fn is_header_record(record: &csv::StringRecord) -> bool {
+    if record.len() != HEADER.len() {
+        return false;
+    }
+    record.iter().enumerate().all(|(i, field)| {
+        let field = field.trim();
+        let field = if i == 0 { strip_bom(field) } else { field };
+        field == HEADER[i]
+    })
+}
+
+fn is_blank_record(record: &csv::StringRecord) -> bool {
+    record.iter().all(|f| f.trim().is_empty())
+}
+
+pub fn read_ap_package_config_validated() -> PackageConfigRead {
     let max_retry = 5;
     for _ in 0..max_retry {
         let file = match File::open("/data/adb/ap/package_config") {
@@ -31,13 +63,47 @@ pub fn read_ap_package_config() -> Vec<PackageConfig> {
             }
         };
 
-        let mut reader = csv::Reader::from_reader(file);
+        // has_headers(false): the app and apd both emit a header line, but
+        // older tools / manual edits may leave the file headerless. With the
+        // default has_headers(true) a headerless file would silently swallow
+        // its first grant row, so parse every row and skip the literal header
+        // by content instead. The header must be detected on the raw
+        // StringRecord: deserializing it into PackageConfig (i32 fields)
+        // would always fail with `invalid digit` before any content check.
+        let mut reader = csv::ReaderBuilder::new()
+            .has_headers(false)
+            .trim(csv::Trim::All)
+            .flexible(true)
+            .from_reader(file);
         let mut package_configs = Vec::new();
         let mut success = true;
+        let mut saw_any_row = false;
 
-        for record in reader.deserialize() {
-            match record {
-                Ok(config) => package_configs.push(config),
+        for record in reader.records() {
+            let record = match record {
+                Ok(record) => record,
+                Err(e) => {
+                    warn!("Error reading CSV record: {}", e);
+                    success = false;
+                    break;
+                }
+            };
+            if is_blank_record(&record) {
+                continue;
+            }
+            saw_any_row = true;
+            if is_header_record(&record) {
+                continue;
+            }
+            match record.deserialize::<PackageConfig>(None) {
+                Ok(mut config) => {
+                    // A hand-edited file may carry a UTF-8 BOM on the first
+                    // data row; strip it so pkg matching / retain() works.
+                    if config.pkg.starts_with('\u{FEFF}') {
+                        config.pkg = strip_bom(&config.pkg).to_owned();
+                    }
+                    package_configs.push(config)
+                }
                 Err(e) => {
                     warn!("Error deserializing record: {}", e);
                     success = false;
@@ -46,12 +112,30 @@ pub fn read_ap_package_config() -> Vec<PackageConfig> {
             }
         }
 
+        // A 0-byte / blank-only file has no header and no rows: almost
+        // certainly a torn read, not a legit "revoke everything".
+        if success && !saw_any_row {
+            warn!("package_config has no parsable rows (empty?), treating as torn read");
+            success = false;
+        }
+
         if success {
-            return package_configs;
+            return PackageConfigRead {
+                configs: package_configs,
+                valid: true,
+            };
         }
         thread::sleep(Duration::from_secs(1));
     }
-    Vec::new()
+    PackageConfigRead {
+        configs: Vec::new(),
+        valid: false,
+    }
+}
+
+#[allow(dead_code)]
+pub fn read_ap_package_config() -> Vec<PackageConfig> {
+    read_ap_package_config_validated().configs
 }
 
 pub fn write_ap_package_config(package_configs: &[PackageConfig]) -> io::Result<()> {
@@ -67,14 +151,23 @@ pub fn write_ap_package_config(package_configs: &[PackageConfig]) -> io::Result<
             }
         };
 
-        let mut writer = csv::Writer::from_writer(file);
+        let mut writer = csv::WriterBuilder::new()
+            .has_headers(false)
+            .from_writer(file);
         let mut success = true;
 
-        for config in package_configs {
-            if let Err(e) = writer.serialize(config) {
-                warn!("Error serializing record: {}", e);
-                success = false;
-                break;
+        if let Err(e) = writer.write_record(HEADER) {
+            warn!("Error serializing header: {}", e);
+            success = false;
+        }
+
+        if success {
+            for config in package_configs {
+                if let Err(e) = writer.serialize(config) {
+                    warn!("Error serializing record: {}", e);
+                    success = false;
+                    break;
+                }
             }
         }
 
@@ -119,13 +212,29 @@ pub fn synchronize_package_uid() -> io::Result<()> {
                 #[allow(clippy::lines_filter_map_ok)]
                 let lines: Vec<_> = lines.filter_map(|line| line.ok()).collect();
 
-                let mut package_configs = read_ap_package_config();
+                // A torn package_config read must fail-open: syncing (and
+                // persisting) against an empty snapshot would drop grants.
+                let read = read_ap_package_config_validated();
+                if !read.valid {
+                    warn!("[synchronize_package_uid] package_config unreadable, skipping sync");
+                    return Err(io::Error::other("package_config is unreadable"));
+                }
+                let mut package_configs = read.configs;
 
                 let system_packages: Vec<String> = lines
                     .iter()
                     .filter_map(|line| line.split_whitespace().next())
                     .map(|pkg| pkg.to_string())
                     .collect();
+
+                // An empty/blank packages.list is almost certainly a torn read
+                // (PackageManager rewrites it via .tmp + rename) rather than a
+                // device with no packages. Retaining against it would wipe every
+                // persisted config below, so refuse to sync in that case.
+                if system_packages.is_empty() {
+                    warn!("[synchronize_package_uid] packages.list has no parsable entries, aborting sync");
+                    return Err(io::Error::other("packages.list is empty"));
+                }
 
                 let original_len = package_configs.len();
                 package_configs.retain(|config| system_packages.contains(&config.pkg));

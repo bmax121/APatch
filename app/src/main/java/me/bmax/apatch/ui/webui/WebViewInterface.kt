@@ -19,6 +19,7 @@ import com.topjohnwu.superuser.internal.UiThreadHandler
 import me.bmax.apatch.ui.WebUIActivity
 import me.bmax.apatch.ui.viewmodel.SuperUserViewModel
 import me.bmax.apatch.util.createRootShell
+import me.bmax.apatch.util.withNewRootShell
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.concurrent.CompletableFuture
@@ -26,8 +27,7 @@ import java.util.concurrent.CompletableFuture
 class WebViewInterface(val context: Context, private val webView: WebView) {
     @JavascriptInterface
     fun exec(cmd: String): String {
-        val shell = createRootShell()
-        return ShellUtils.fastCmd(shell, cmd)
+        return withNewRootShell { ShellUtils.fastCmd(this, cmd) }
     }
 
     @JavascriptInterface
@@ -60,8 +60,9 @@ class WebViewInterface(val context: Context, private val webView: WebView) {
         processOptions(finalCommand, options)
         finalCommand.append(cmd)
 
-        val shell = createRootShell()
-        val result = shell.newJob().add(finalCommand.toString()).to(ArrayList(), ArrayList()).exec()
+        val result = withNewRootShell {
+            newJob().add(finalCommand.toString()).to(ArrayList(), ArrayList()).exec()
+        }
         val stdout = result.out.joinToString(separator = "\n")
         val stderr = result.err.joinToString(separator = "\n")
 
@@ -118,7 +119,14 @@ class WebViewInterface(val context: Context, private val webView: WebView) {
             }
         }
 
-        val future = shell.newJob().add(finalCommand.toString()).to(stdout, stderr).enqueue()
+        // If enqueue() itself throws synchronously, whenComplete below is never
+        // registered, so close the shell here to avoid leaking it.
+        val future = try {
+            shell.newJob().add(finalCommand.toString()).to(stdout, stderr).enqueue()
+        } catch (t: Throwable) {
+            runCatching { shell.close() }
+            throw t
+        }
         val completableFuture = CompletableFuture.supplyAsync {
             future.get()
         }
@@ -143,6 +151,8 @@ class WebViewInterface(val context: Context, private val webView: WebView) {
                     webView.loadUrl(emitErrCode)
                 }
             }
+        }.whenComplete { _, _ ->
+            runCatching { shell.close() }
         }
     }
 
