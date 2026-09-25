@@ -147,10 +147,10 @@ static inline long sc_su_task(const char *key, pid_t tid, struct su_profile *pro
  * @param dlen 
  * @return long 
  */
-static inline long sc_kstorage_write(const char *key, int gid, long did, void *data, int offset, int dlen)
+static inline long sc_kstorage_write(const char *key, int gid, long did, struct data_item *data)
 {
     if (!key || !key[0]) return -EINVAL;
-    long ret = syscall(__NR_supercall, key, ver_and_cmd(key, SUPERCALL_KSTORAGE_WRITE), gid, did, data, (((long)offset << 32) | dlen));
+    long ret = syscall(__NR_supercall, key, ver_and_cmd(key, SUPERCALL_KSTORAGE_WRITE), gid, did, data);
     return ret;
 }
 
@@ -164,10 +164,10 @@ static inline long sc_kstorage_write(const char *key, int gid, long did, void *d
  * @param dlen 
  * @return long 
  */
-static inline long sc_kstorage_read(const char *key, int gid, long did, void *out_data, int offset, int dlen)
+static inline long sc_kstorage_read(const char *key, int gid, long did, struct data_item *out_data)
 {
     if (!key || !key[0]) return -EINVAL;
-    long ret = syscall(__NR_supercall, key, ver_and_cmd(key, SUPERCALL_KSTORAGE_READ), gid, did, out_data, (((long)offset << 32) | dlen));
+    long ret = syscall(__NR_supercall, key, ver_and_cmd(key, SUPERCALL_KSTORAGE_READ), gid, did, out_data);
     return ret;
 }
 
@@ -216,7 +216,13 @@ static inline long sc_kstorage_remove(const char *key, int gid, long did)
 static inline long sc_set_ap_mod_exclude(const char *key, uid_t uid, int exclude)
 {
     if(exclude) {
-        return sc_kstorage_write(key, KSTORAGE_EXCLUDE_LIST_GROUP, uid, &exclude, 0, sizeof(exclude));
+        struct data_item data_item = {
+            .data = &exclude,
+            .dlen = sizeof(exclude),
+            .offset = 0,
+        };
+
+        return sc_kstorage_write(key, KSTORAGE_EXCLUDE_LIST_GROUP, uid, &data_item);
     } else {
         return sc_kstorage_remove(key, KSTORAGE_EXCLUDE_LIST_GROUP, uid);
     }
@@ -234,7 +240,12 @@ static inline long sc_set_ap_mod_exclude(const char *key, uid_t uid, int exclude
 static inline int sc_get_ap_mod_exclude(const char *key, uid_t uid)
 {
     int exclude = 0;
-    int rc = sc_kstorage_read(key, KSTORAGE_EXCLUDE_LIST_GROUP, uid, &exclude, 0, sizeof(exclude));
+    struct data_item data_item = {
+        .data = &exclude,
+        .dlen = sizeof(exclude),
+        .offset = 0,
+    };
+    int rc = sc_kstorage_read(key, KSTORAGE_EXCLUDE_LIST_GROUP, uid, &data_item);
     if (rc < 0) return 0;
     return exclude;
 }
