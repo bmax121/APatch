@@ -38,7 +38,7 @@ class APApplication : Application(), Thread.UncaughtExceptionHandler {
     enum class State {
         UNKNOWN_STATE,
 
-        KERNELPATCH_INSTALLED, KERNELPATCH_NEED_UPDATE, KERNELPATCH_NEED_REBOOT, KERNELPATCH_UNINSTALLING,
+        KERNELPATCH_INSTALLED, KERNELPATCH_NEED_UPDATE, KERNELPATCH_INCOMPATIBLE, KERNELPATCH_NEED_REBOOT, KERNELPATCH_UNINSTALLING,
 
         ANDROIDPATCH_NOT_INSTALLED, ANDROIDPATCH_INSTALLED, ANDROIDPATCH_INSTALLING, ANDROIDPATCH_NEED_UPDATE, ANDROIDPATCH_UNINSTALLING,
     }
@@ -197,18 +197,25 @@ class APApplication : Application(), Thread.UncaughtExceptionHandler {
                     }
 
                     // KernelPatch version
-                    //val buildV = Version.buildKPVUInt()
-                    //val installedV = Version.installedKPVUInt()
-                    //use build time to check update
-                    val buildV = Version.getKpImg()
-                    val installedV = Version.installedKPTime()
-
+                    val buildV = Version.buildKPVUInt()
+                    val installedV = Version.installedKPVUInt()
 
                     Log.d(TAG, "kp installed version: ${installedV}, build version: $buildV")
 
-                    // use != instead of > to enable downgrade,
-                    if (buildV != installedV) {
-                        _kpStateLiveData.postValue(State.KERNELPATCH_NEED_UPDATE)
+                    when {
+                        installedV < buildV -> {
+                            _kpStateLiveData.postValue(State.KERNELPATCH_NEED_UPDATE)
+                        }
+                        installedV > buildV -> {
+                            // Running KP is newer. Patch-level bumps within the same minor
+                            // version (0.x) are considered safe. A different minor (or major)
+                            // may break compatibility, so warn the user.
+                            val buildMajorMinor  = buildV.and(0xffff00u)
+                            val installedMajorMinor = installedV.and(0xffff00u)
+                            if (installedMajorMinor != buildMajorMinor) {
+                                _kpStateLiveData.postValue(State.KERNELPATCH_INCOMPATIBLE)
+                            }
+                        }
                     }
                     Log.d(TAG, "kp state: " + _kpStateLiveData.value)
 
