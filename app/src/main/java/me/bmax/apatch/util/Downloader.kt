@@ -34,7 +34,10 @@ fun download(
             val status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
             val columnTitle = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_TITLE))
             if (url == uri || fileName == columnTitle) {
-                if (status == DownloadManager.STATUS_RUNNING || status == DownloadManager.STATUS_PENDING) {
+                if (status == DownloadManager.STATUS_RUNNING ||
+                    status == DownloadManager.STATUS_PAUSED ||
+                    status == DownloadManager.STATUS_PENDING
+                ) {
                     onDownloading()
                     return
                 } else if (status == DownloadManager.STATUS_SUCCESSFUL) {
