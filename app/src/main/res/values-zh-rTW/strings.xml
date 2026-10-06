@@ -5,6 +5,8 @@
     <string name="patch_warnning">安裝過程存在風險。請確保你的資料已備份。</string>
     <string name="reboot_download">重新啟動至 Download</string>
     <string name="reboot_edl">重新啟動至 EDL</string>
+    <string name="reboot_download_confirm">確定重新啟動至 Download 模式嗎？裝置將開機進入韌體刷寫介面。</string>
+    <string name="reboot_edl_confirm">確定重新啟動至 EDL（緊急下載）模式嗎？螢幕將保持黑屏，只能透過深度刷機工具恢復。</string>
     <string name="reboot_recovery">重新啟動至 Recovery</string>
     <string name="kernel_patch">核心修補</string>
     <string name="about">關於</string>
@@ -156,6 +158,7 @@
     <string name="home_dialog_uninstall_title">解除安裝</string>
     <string name="home_dialog_uninstall_ap_only">僅刪除 AndroidPatch</string>
     <string name="home_dialog_uninstall_all">完全卸載</string>
+    <string name="home_dialog_uninstall_message">僅移除系統補丁只會解除安裝管理器應用程式並保留已修補的開機映像檔。完全解除安裝還會還原原廠開機映像檔，裝置將失去 Root，直到重新修補為止。</string>
     <string name="home_system_version">系統版本</string>
     <string name="home_kpatch_version">KernelPatch 版本</string>
     <string name="patch_mode_install_to_next_slot">模式：安裝到另一個插槽（OTA之後）</string>
