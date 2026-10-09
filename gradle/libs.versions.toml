@@ -1,17 +1,17 @@
 [versions]
-agp = "9.3.1"
-kotlin = "2.4.10"
-ksp = "2.3.11"
-compose-bom = "2026.08.00"
+agp = "9.4.1"
+kotlin = "2.4.20"
+ksp = "2.3.12"
+compose-bom = "2026.09.00"
 lifecycle = "2.11.0"
 compose-destination = "2.3.0"
 libsu = "6.0.0"
-coil3 = "3.5.0"
+coil3 = "3.6.3"
 
 [plugins]
 agp-app = { id = "com.android.application", version.ref = "agp" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-lsplugin-apksign = { id = "org.lsposed.lsplugin.apksign", version = "1.4" }
+lsplugin-apksign = { id = "org.lsposed.lsplugin.apksign", version = "1.5" }
 lsplugin-resopt = { id = "org.lsposed.lsplugin.resopt", version = "1.6" }
 kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
@@ -55,4 +55,4 @@ markdown = { group = "io.noties.markwon", name = "core", version = "4.6.2" }
 
 ini4j = { group = "org.ini4j", name = "ini4j", version = "0.5.4" }
 
-cxx = { module = "org.lsposed.libcxx:libcxx", version = "29.0.14206865" }
+cxx = { module = "org.lsposed.libcxx:libcxx", version = "30.0.16248370" }
