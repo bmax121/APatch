@@ -1,6 +1,7 @@
 use std::{
-    fs::File,
+    fs::{File, OpenOptions},
     io::{self, BufRead},
+    os::unix::io::AsRawFd,
     path::Path,
     thread,
     time::Duration,
@@ -167,6 +168,12 @@ pub fn write_ap_package_config(package_configs: &[PackageConfig]) -> io::Result<
             continue;
         }
 
+        if let Err(e) = writer.get_ref().sync_all() {
+            warn!("Error syncing temp file: {}", e);
+            thread::sleep(Duration::from_secs(1));
+            continue;
+        }
+
         if let Err(e) = std::fs::rename(temp_path, "/data/adb/ap/package_config") {
             warn!("Error renaming temp file: {}", e);
             thread::sleep(Duration::from_secs(1));
@@ -175,6 +182,53 @@ pub fn write_ap_package_config(package_configs: &[PackageConfig]) -> io::Result<
         return Ok(());
     }
     Err(io::Error::other("Failed after max retries"))
+}
+
+struct PackageConfigLock(File);
+
+impl PackageConfigLock {
+    fn acquire() -> Option<PackageConfigLock> {
+        let file = match OpenOptions::new()
+            .read(true)
+            .write(true)
+            .create(true)
+            .open("/data/adb/ap/package_config.lock")
+        {
+            Ok(file) => file,
+            Err(e) => {
+                warn!("Failed to open config lock, proceeding unlocked: {}", e);
+                return None;
+            }
+        };
+        let fl = libc::flock {
+            l_type: libc::F_WRLCK as i16,
+            l_whence: libc::SEEK_SET as i16,
+            l_start: 0,
+            l_len: 0,
+            l_pid: 0,
+        };
+        if unsafe { libc::fcntl(file.as_raw_fd(), libc::F_SETLKW, &fl) } != 0 {
+            warn!(
+                "Failed to acquire config lock, proceeding unlocked: {}",
+                io::Error::last_os_error()
+            );
+            return None;
+        }
+        Some(PackageConfigLock(file))
+    }
+}
+
+impl Drop for PackageConfigLock {
+    fn drop(&mut self) {
+        let fl = libc::flock {
+            l_type: libc::F_UNLCK as i16,
+            l_whence: libc::SEEK_SET as i16,
+            l_start: 0,
+            l_len: 0,
+            l_pid: 0,
+        };
+        unsafe { libc::fcntl(self.0.as_raw_fd(), libc::F_SETLK, &fl) };
+    }
 }
 
 fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
@@ -197,15 +251,6 @@ pub fn synchronize_package_uid() -> io::Result<()> {
                 #[allow(clippy::lines_filter_map_ok)]
                 let lines: Vec<_> = lines.filter_map(|line| line.ok()).collect();
 
-                // A torn package_config read must fail-open: syncing (and
-                // persisting) against an empty snapshot would drop grants.
-                let read = read_ap_package_config_validated();
-                if !read.valid {
-                    warn!("[synchronize_package_uid] package_config unreadable, skipping sync");
-                    return Err(io::Error::other("package_config is unreadable"));
-                }
-                let mut package_configs = read.configs;
-
                 let system_packages: Vec<String> = lines
                     .iter()
                     .filter_map(|line| line.split_whitespace().next())
@@ -220,6 +265,17 @@ pub fn synchronize_package_uid() -> io::Result<()> {
                     warn!("[synchronize_package_uid] packages.list has no parsable entries, aborting sync");
                     return Err(io::Error::other("packages.list is empty"));
                 }
+
+                let _lock = PackageConfigLock::acquire();
+
+                // A torn package_config read must fail-open: syncing (and
+                // persisting) against an empty snapshot would drop grants.
+                let read = read_ap_package_config_validated();
+                if !read.valid {
+                    warn!("[synchronize_package_uid] package_config unreadable, skipping sync");
+                    return Err(io::Error::other("package_config is unreadable"));
+                }
+                let mut package_configs = read.configs;
 
                 let original_len = package_configs.len();
                 package_configs.retain(|config| system_packages.contains(&config.pkg));
