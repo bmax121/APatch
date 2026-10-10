@@ -18,6 +18,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Locale;
 import java.util.zip.GZIPInputStream;
 
 import me.bmax.apatch.util.APatchCliKt;
@@ -228,7 +229,7 @@ public final class SuFilePathHandler implements WebViewAssetLoader.PathHandler {
     @NonNull
     private static InputStream handleSvgzStream(@NonNull String path,
                                                 @NonNull InputStream stream) throws IOException {
-        return path.endsWith(".svgz") ? new GZIPInputStream(stream) : stream;
+        return path.toLowerCase(Locale.ROOT).endsWith(".svgz") ? new GZIPInputStream(stream) : stream;
     }
 
     public static InputStream openFile(@NonNull File file, @NonNull Shell shell) throws FileNotFoundException,
