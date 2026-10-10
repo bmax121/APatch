@@ -19,14 +19,8 @@ pub struct PackageConfig {
     pub sctx: String,
 }
 
-/// Outcome of reading package_config, distinguishing a legitimately empty
-/// config (header-only, i.e. user revoked everything) from a torn/unreadable
-/// one (missing, 0-byte, truncated) that must NOT trigger revokes.
 pub struct PackageConfigRead {
     pub configs: Vec<PackageConfig>,
-    /// true if the file was opened and every row parsed cleanly.
-    /// Header-only parses as valid-but-empty. 0-byte / missing / dirty
-    /// files are invalid after retries.
     pub valid: bool,
 }
 
@@ -77,7 +71,6 @@ pub fn read_ap_package_config_validated() -> PackageConfigRead {
             .from_reader(file);
         let mut package_configs = Vec::new();
         let mut success = true;
-        let mut saw_any_row = false;
 
         for record in reader.records() {
             let record = match record {
@@ -91,7 +84,6 @@ pub fn read_ap_package_config_validated() -> PackageConfigRead {
             if is_blank_record(&record) {
                 continue;
             }
-            saw_any_row = true;
             if is_header_record(&record) {
                 continue;
             }
@@ -110,13 +102,6 @@ pub fn read_ap_package_config_validated() -> PackageConfigRead {
                     break;
                 }
             }
-        }
-
-        // A 0-byte / blank-only file has no header and no rows: almost
-        // certainly a torn read, not a legit "revoke everything".
-        if success && !saw_any_row {
-            warn!("package_config has no parsable rows (empty?), treating as torn read");
-            success = false;
         }
 
         if success {

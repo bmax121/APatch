@@ -17,6 +17,7 @@ object PkgConfig {
     private const val TAG = "PkgConfig"
 
     private const val CSV_HEADER = "pkg,exclude,allow,uid,to_uid,sctx"
+    private val CSV_COLUMNS = CSV_HEADER.split(',')
 
     @Immutable
     @Parcelize
@@ -50,6 +51,12 @@ object PkgConfig {
         }
     }
 
+    private fun isHeaderLine(line: String): Boolean {
+        val columns = line.trimStart().removePrefix("\uFEFF").split(',')
+        if (columns.size != CSV_COLUMNS.size) return false
+        return columns.indices.all { columns[it].trim() == CSV_COLUMNS[it] }
+    }
+
     fun readConfigs(): HashMap<Int, Config> {
         val configs = HashMap<Int, Config>()
         val file = File(APApplication.PACKAGE_CONFIG_FILE)
@@ -58,8 +65,7 @@ object PkgConfig {
                 Log.d(TAG, it)
                 // Skip the CSV header (and a possible UTF-8 BOM) quietly:
                 // it is not a malformed row.
-                val stripped = it.trimStart().removePrefix("\uFEFF")
-                if (stripped == CSV_HEADER || stripped.startsWith("pkg,")) return@forEach
+                if (isHeaderLine(it)) return@forEach
                 val p = Config.fromLine(it)
                 if (p == null) {
                     Log.w(TAG, "Skip malformed package_config line: $it")
@@ -110,18 +116,31 @@ object PkgConfig {
             "package_config.lock"
         )
         lockFile.parentFile?.mkdirs()
-        return RandomAccessFile(lockFile, "rw").use { raf ->
-            raf.channel.use { channel ->
-                channel.lock().use { block() }
+        val raf = try {
+            RandomAccessFile(lockFile, "rw")
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to open config lock, proceeding unlocked", e)
+            return block()
+        }
+        return raf.use { r ->
+            val lock = try {
+                r.channel.lock()
+            } catch (e: Exception) {
+                Log.w(TAG, "Failed to acquire config lock, proceeding unlocked", e)
+                return@use block()
             }
+            lock.use { block() }
         }
     }
 
     fun changeConfig(config: Config) {
         thread {
             synchronized(PkgConfig.javaClass) {
+                if (!Natives.su()) {
+                    Log.e(TAG, "su failed, abort change config")
+                    return@synchronized
+                }
                 withConfigLock {
-                    Natives.su()
                     val configs = readConfigs()
                     val uid = config.profile.uid
                     // Root App should not be excluded
