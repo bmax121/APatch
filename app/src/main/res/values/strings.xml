@@ -160,6 +160,29 @@
     <string name="kpm_disabled">Disabled (takes effect after reboot)</string>
     <string name="kpm_embedded">Embedded</string>
     <string name="kpm_embedded_unload_invalid">Embedded KPMs cannot be unloaded; it will remain active after reboot.</string>
+    <string name="kpm_update">Update</string>
+    <string name="kpm_update_available">Update to %s</string>
+    <string name="kpm_update_confirm_title">Update KPModule</string>
+    <string name="kpm_update_confirm">Update %1$s to version %2$s? The installed KPM is replaced and takes effect after reboot.</string>
+    <string name="kpm_update_succ">Updated to %s; reboot to take effect</string>
+
+    <string name="online_module">Online modules</string>
+    <string name="online_module_title">Module repository</string>
+    <string name="online_filter_all">All</string>
+    <string name="online_filter_system">System</string>
+    <string name="online_filter_kpm">KPM</string>
+    <string name="online_install">Install</string>
+    <string name="online_update">Update</string>
+    <string name="online_update_available">Update to %s</string>
+    <string name="online_update_confirm">Update %1$s from %2$s to %3$s?</string>
+    <string name="online_installed">Installed</string>
+    <string name="online_installed_version">Installed %s</string>
+    <string name="online_stars">%s stars</string>
+    <string name="online_empty">No modules</string>
+    <string name="online_load_failed">Failed to load the module list</string>
+    <string name="online_download_failed">Download failed</string>
+    <string name="online_install_failed">Install failed: %d</string>
+    <string name="online_downloading">Downloading %1$s (%2$d%%)</string>
 
     <string name="su_title">Superuser</string>
     <string name="su_selinux_via_hook">Bypass via hook</string>

@@ -39,6 +39,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBarScrollBehavior
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -75,6 +78,7 @@ import androidx.lifecycle.viewModelScope
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootGraph
 import com.ramcosta.composedestinations.generated.destinations.InstallScreenDestination
+import com.ramcosta.composedestinations.generated.destinations.OnlineModuleScreenDestination
 import com.ramcosta.composedestinations.generated.destinations.PatchesDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.topjohnwu.superuser.nio.ExtendedFile
@@ -91,6 +95,8 @@ import me.bmax.apatch.apApp
 import me.bmax.apatch.ui.component.ConfirmResult
 import me.bmax.apatch.ui.component.KPModuleRemoveButton
 import me.bmax.apatch.ui.component.LoadingDialogHandle
+import me.bmax.apatch.ui.component.ModuleDownloadProgressDialog
+import me.bmax.apatch.ui.component.ModuleUpdateButton
 import me.bmax.apatch.ui.component.ProvideMenuShape
 import me.bmax.apatch.ui.component.SearchAppBar
 import me.bmax.apatch.ui.component.pinnedScrollBehavior
@@ -98,18 +104,21 @@ import me.bmax.apatch.ui.component.rememberConfirmDialog
 import me.bmax.apatch.ui.component.rememberLoadingDialog
 import me.bmax.apatch.ui.viewmodel.KPModel
 import me.bmax.apatch.ui.viewmodel.KPModuleViewModel
-import me.bmax.apatch.ui.viewmodel.safeKpmModuleId
 import me.bmax.apatch.ui.viewmodel.PatchesViewModel
+import me.bmax.apatch.util.ModuleRepo
+import me.bmax.apatch.util.safeKpmModuleId
 import me.bmax.apatch.util.inputStream
+import me.bmax.apatch.util.reboot
 import me.bmax.apatch.util.ui.APDialogBlurBehindUtils
 import me.bmax.apatch.util.writeTo
 import me.bmax.apatch.util.rootShellForResult
+import me.bmax.apatch.util.ui.LocalSnackbarHost
 import java.io.IOException
 import java.io.StringReader
 import org.ini4j.Ini
 
 private const val TAG = "KernelPatchModule"
-private val kpmInstallMutex = Mutex()
+internal val kpmInstallMutex = Mutex()
 private data class UninstallResult(
     val unloaded: Boolean,
     val removed: Boolean,
@@ -140,12 +149,15 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
     }
 
     val viewModel = viewModel<KPModuleViewModel>()
+    val snackBarHost = LocalSnackbarHost.current
     val scrollBehavior = pinnedScrollBehavior()
     val kpModuleListState = rememberLazyListState()
 
     LaunchedEffect(Unit) {
         if (viewModel.moduleList.isEmpty() || viewModel.isNeedRefresh) {
             viewModel.fetchModuleList()
+        } else {
+            viewModel.refreshOnlineUpdates()
         }
     }
 
@@ -155,11 +167,12 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
             onSearchTextChange = { viewModel.search = it },
             searchBarPlaceHolderText = stringResource(R.string.search_modules)
         )
-    }, floatingActionButton = run {
+    }, snackbarHost = { SnackbarHost(snackBarHost) }, floatingActionButton = run {
         {
             val scope = rememberCoroutineScope()
             val context = LocalContext.current
 
+            val moduleOnline = stringResource(id = R.string.online_module)
             val moduleLoad = stringResource(id = R.string.kpm_load)
             val moduleInstall = stringResource(id = R.string.kpm_install)
             val moduleEmbed = stringResource(id = R.string.kpm_embed)
@@ -218,7 +231,7 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
             }
 
             var expanded by remember { mutableStateOf(false) }
-            val options = listOf(moduleEmbed, moduleInstall, moduleLoad)
+            val options = listOf(moduleOnline, moduleEmbed, moduleInstall, moduleLoad)
 
             Column {
                 FloatingActionButton(
@@ -244,6 +257,10 @@ fun KPModuleScreen(navigator: DestinationsNavigator) {
                             DropdownMenuItem(text = { Text(label) }, onClick = {
                                 expanded = false
                                 when (label) {
+                                    moduleOnline -> {
+                                        navigator.navigate(OnlineModuleScreenDestination(kpmOnly = true))
+                                    }
+
                                     moduleEmbed -> {
                                         navigator.navigate(PatchesDestination(PatchesViewModel.PatchMode.PATCH_AND_INSTALL))
                                     }
@@ -447,6 +464,17 @@ private fun KPModuleList(
 
     val confirmDialog = rememberConfirmDialog()
     val loadingDialog = rememberLoadingDialog()
+    val snackBarHost = LocalSnackbarHost.current
+
+    val updateTitle = stringResource(id = R.string.kpm_update_confirm_title)
+    val updateConfirm = stringResource(id = R.string.kpm_update_confirm)
+    val updateText = stringResource(id = R.string.kpm_update)
+    val updateSuccess = stringResource(id = R.string.kpm_update_succ)
+    val updateFailed = stringResource(id = R.string.online_install_failed)
+    val downloadFailed = stringResource(id = R.string.online_download_failed)
+    val rebootText = stringResource(id = R.string.reboot)
+
+    var updateTask by remember { mutableStateOf<Pair<String, Int>?>(null) }
 
     suspend fun onModuleControl(module: KPModel.KPMInfo, param: String) {
         lateinit var controlResult: Natives.KPMCtlRes
@@ -513,6 +541,58 @@ private fun KPModuleList(
         }
     }
 
+    /**
+     * Replaces an installed KPM with the release the repository offers. The
+     * running instance keeps the old code until the next boot, so the last step
+     * is a reboot prompt rather than a reload.
+     */
+    suspend fun onModuleUpdate(module: KPModel.KPMInfo) {
+        val update = viewModel.updates[module.moduleId] ?: return
+        val confirmResult = confirmDialog.awaitConfirm(
+            updateTitle,
+            content = updateConfirm.format(module.name, update.version),
+            confirm = updateText,
+            dismiss = cancel
+        )
+        if (confirmResult != ConfirmResult.Confirmed) {
+            return
+        }
+
+        updateTask = module.name to 0
+        val file = try {
+            ModuleRepo.downloadModuleFile(
+                id = module.moduleId,
+                kpm = true,
+                fileName = "${module.moduleId}-${update.version}.kpm",
+                authorUrl = update.authorUrl,
+            ) { percent -> updateTask = module.name to percent }
+        } finally {
+            updateTask = null
+        }
+        if (file == null) {
+            Toast.makeText(context, downloadFailed, Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val rc = kpmInstallMutex.withLock { installKpm(Uri.fromFile(file)) }
+        file.delete()
+        if (rc != 0) {
+            Toast.makeText(context, updateFailed.format(rc), Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        viewModel.markNeedRefresh()
+        viewModel.fetchModuleList()
+        val result = snackBarHost.showSnackbar(
+            message = updateSuccess.format(update.version),
+            actionLabel = rebootText,
+            duration = SnackbarDuration.Long
+        )
+        if (result == SnackbarResult.ActionPerformed) {
+            withContext(Dispatchers.IO) { reboot() }
+        }
+    }
+
     PullToRefreshBox(
         modifier = modifier,
         onRefresh = { viewModel.fetchModuleList() },
@@ -550,12 +630,16 @@ private fun KPModuleList(
                         val scope = rememberCoroutineScope()
                         KPModuleItem(
                             module,
+                            update = viewModel.updates[module.moduleId],
                             onUninstall = {
                                 scope.launch { onModuleUninstall(module) }
                             },
                             onControl = {
                                 targetKPMToControl = module
                                 showKPMControlDialog.value = true
+                            },
+                            onUpdate = {
+                                scope.launch { onModuleUpdate(module) }
                             },
                             onToggle = { enabled ->
                                 scope.launch {
@@ -581,13 +665,19 @@ private fun KPModuleList(
             }
         }
     }
+
+    updateTask?.let { (name, progress) ->
+        ModuleDownloadProgressDialog(title = name, progress = progress)
+    }
 }
 
 @Composable
 private fun KPModuleItem(
     module: KPModel.KPMInfo,
+    update: KPModel.KpmUpdateInfo?,
     onUninstall: (KPModel.KPMInfo) -> Unit,
     onControl: (KPModel.KPMInfo) -> Unit,
+    onUpdate: (KPModel.KPMInfo) -> Unit,
     onToggle: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
     alpha: Float = 1f,
@@ -643,6 +733,14 @@ private fun KPModuleItem(
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
 
+                        if (update != null) {
+                            Text(
+                                text = stringResource(R.string.kpm_update_available, update.version),
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+
                         Text(
                             text = "$moduleArgs: ${module.args}",
                             style = MaterialTheme.typography.bodySmall,
@@ -680,6 +778,12 @@ private fun KPModuleItem(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Spacer(modifier = Modifier.weight(1f))
+
+                    if (update != null) {
+                        ModuleUpdateButton(onClick = { onUpdate(module) })
+
+                        Spacer(modifier = Modifier.width(12.dp))
+                    }
 
                     FilledTonalButton(
                         onClick = { onControl(module) },

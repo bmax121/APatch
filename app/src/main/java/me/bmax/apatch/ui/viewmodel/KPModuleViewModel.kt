@@ -9,11 +9,16 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import me.bmax.apatch.APApplication
 import me.bmax.apatch.Natives
 import me.bmax.apatch.util.HanziToPinyin
+import me.bmax.apatch.util.ModuleRepo
 import me.bmax.apatch.util.rootShellForResult
+import me.bmax.apatch.util.safeKpmModuleId
 import org.ini4j.Ini
 import java.io.StringReader
 import java.text.Collator
@@ -21,12 +26,8 @@ import java.util.Locale
 
 private const val TAG = "KPModuleViewModel"
 
-/** Keep filesystem paths safe: no separators, shell metacharacters or traversal. */
-fun safeKpmModuleId(name: String): String = name.trim()
-    .replace(Regex("[^A-Za-z0-9._-]"), "_")
-    .trim('.', '_', '-')
-    .take(64)
-    .ifEmpty { "kpm" }
+/** How long a repository lookup for one KPM is trusted before it is repeated. */
+private const val UPDATE_CACHE_TTL_MS = 5 * 60 * 1000L
 
 private fun parseKpmInfo(raw: String, fallbackId: String = ""): KPModel.KPMInfo? = runCatching {
     val section = Ini(StringReader(raw))["kpm"] ?: return null
@@ -64,10 +65,20 @@ class KPModuleViewModel : ViewModel() {
     companion object { private var modules by mutableStateOf<List<KPModel.KPMInfo>>(emptyList()) }
 
     var search by mutableStateOf("")
+
+    /** Repository releases that are newer than the persisted KPM files, by store id. */
+    var updates by mutableStateOf<Map<String, KPModel.KpmUpdateInfo>>(emptyMap())
+        private set
+
     var isRefreshing by mutableStateOf(false)
         private set
     var isNeedRefresh by mutableStateOf(false)
         private set
+
+    /** One repository answer per module, kept briefly so a refresh stays cheap. */
+    private data class CachedUpdate(val checkedAt: Long, val storedVersion: String, val update: KPModel.KpmUpdateInfo?)
+
+    private val updateCache = mutableMapOf<String, CachedUpdate>()
 
     val moduleList by derivedStateOf {
         val comparator = compareBy(Collator.getInstance(Locale.getDefault()), KPModel.KPMInfo::name)
@@ -140,14 +151,62 @@ class KPModuleViewModel : ViewModel() {
                         version = current.version.ifBlank { parsed.version },
                         license = current.license.ifBlank { parsed.license },
                         author = current.author.ifBlank { parsed.author },
-                        description = current.description.ifBlank { parsed.description }
-                    ) ?: parsed.copy(moduleId = id, installed = true, disabled = disabled, loadSource = "")
+                        description = current.description.ifBlank { parsed.description },
+                        storedVersion = parsed.version
+                    ) ?: parsed.copy(
+                        moduleId = id, installed = true, disabled = disabled,
+                        loadSource = "", storedVersion = parsed.version
+                    )
                 }
                 modules = result.values.toList()
                 isNeedRefresh = false
             }.onFailure { Log.e(TAG, "fetchModuleList", it) }
             isRefreshing = false
             Log.i(TAG, "load cost: ${SystemClock.elapsedRealtime() - start}, modules: ${modules.size}")
+
+            // The list is shown first; the repository lookups that decide which
+            // entries have an update land a moment later, and an unreachable
+            // repository must not hold the refresh indicator.
+            val installed = modules
+            launch { updates = checkOnlineUpdates(installed) }
         }
+    }
+
+    /**
+     * Re-checks the repository for the modules already in the list. The list
+     * itself outlives a screen visit, so a returning screen has to ask for the
+     * updates its fresh instance does not have yet.
+     */
+    fun refreshOnlineUpdates() {
+        viewModelScope.launch(Dispatchers.IO) {
+            updates = checkOnlineUpdates(modules)
+        }
+    }
+
+    private suspend fun checkOnlineUpdates(
+        installed: List<KPModel.KPMInfo>,
+    ): Map<String, KPModel.KpmUpdateInfo> = coroutineScope {
+        val now = SystemClock.elapsedRealtime()
+        installed
+            .filter { it.installed && it.loadSource != "embedded" && it.moduleId.isNotBlank() }
+            .map { module ->
+                async {
+                    val id = module.moduleId
+                    val stored = module.storedVersion.ifBlank { module.version }
+                    val cached = updateCache[id]
+                    if (cached != null && cached.storedVersion == stored && now - cached.checkedAt < UPDATE_CACHE_TTL_MS) {
+                        return@async cached.update?.let { id to it }
+                    }
+                    val doc = runCatching { ModuleRepo.moduleDoc(id, kpm = true) }.getOrNull()
+                    val update = doc?.takeIf {
+                        it.version.isNotBlank() && it.downloadUrl.isNotBlank() && it.version != stored
+                    }?.let { KPModel.KpmUpdateInfo(it.version, it.downloadUrl) }
+                    updateCache[id] = CachedUpdate(now, stored, update)
+                    update?.let { id to it }
+                }
+            }
+            .awaitAll()
+            .filterNotNull()
+            .toMap()
     }
 }

@@ -33,6 +33,7 @@ import me.bmax.apatch.util.copyAndClose
 import me.bmax.apatch.util.copyAndCloseOut
 import me.bmax.apatch.util.createRootShell
 import me.bmax.apatch.util.inputStream
+import me.bmax.apatch.util.safeKpmModuleId
 import me.bmax.apatch.util.shellForResult
 import me.bmax.apatch.util.writeTo
 import org.ini4j.Ini

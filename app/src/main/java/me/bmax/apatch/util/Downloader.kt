@@ -8,11 +8,19 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.Uri
 import android.os.Environment
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.core.net.toUri
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import me.bmax.apatch.apApp
+import okhttp3.Request
+import java.io.File
+import java.io.IOException
 import androidx.core.content.ContextCompat
+
+private const val TAG = "Downloader"
 
 @SuppressLint("Range")
 fun download(
@@ -52,6 +60,63 @@ fun download(
 
     downloadManager.enqueue(request)
 }
+
+/**
+ * Downloads [url] into the app cache and reports progress in whole percent, as
+ * soon as the length is known. Returns the downloaded file, or null when the
+ * transfer failed; a failed or empty download is deleted rather than passed on.
+ *
+ * The file is handed to the installer as a `file://` Uri, so it has to be
+ * readable by this process only — the app cache is exactly that.
+ */
+suspend fun downloadToCache(
+    url: String,
+    fileName: String,
+    onProgress: (Int) -> Unit = {},
+): File? = withContext(Dispatchers.IO) {
+    val dir = File(apApp.cacheDir, "online").apply { mkdirs() }
+    // Downloads are consumed by the install flow right away and never reused,
+    // so an earlier one is dead weight from here on.
+    dir.listFiles()?.forEach { it.delete() }
+    val target = File(dir, sanitizeFileName(fileName))
+    runCatching {
+        apApp.okhttpClient.newCall(Request.Builder().url(url).build()).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("HTTP ${response.code}")
+            val body = response.body
+            val total = body.contentLength()
+            body.byteStream().use { input ->
+                target.outputStream().use { output ->
+                    val buffer = ByteArray(64 * 1024)
+                    var copied = 0L
+                    var lastPercent = -1
+                    while (true) {
+                        val read = input.read(buffer)
+                        if (read < 0) break
+                        output.write(buffer, 0, read)
+                        copied += read
+                        if (total > 0) {
+                            val percent = ((copied * 100) / total).toInt()
+                            if (percent != lastPercent) {
+                                lastPercent = percent
+                                onProgress(percent)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        target.takeIf { it.length() > 0 } ?: throw IOException("empty file")
+    }.onFailure {
+        Log.w(TAG, "download $url failed", it)
+        target.delete()
+    }.getOrNull()
+}
+
+private fun sanitizeFileName(name: String): String =
+    name.replace(Regex("[^A-Za-z0-9._-]"), "_")
+        .trim('.', '_')
+        .take(96)
+        .ifEmpty { "module.zip" }
 
 fun checkNewVersion(): LatestVersionInfo {
     val url = "https://api.github.com/repos/bmax121/APatch/releases/latest"
