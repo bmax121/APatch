@@ -75,6 +75,7 @@ import me.bmax.apatch.ui.component.rememberConfirmDialog
 import me.bmax.apatch.ui.viewmodel.OnlineCategory
 import me.bmax.apatch.ui.viewmodel.OnlineModule
 import me.bmax.apatch.ui.viewmodel.OnlineModuleViewModel
+import me.bmax.apatch.util.DownloadCancelHandle
 import me.bmax.apatch.util.ModuleRepo
 import me.bmax.apatch.util.reboot
 import me.bmax.apatch.util.ui.LocalSnackbarHost
@@ -108,9 +109,11 @@ fun OnlineModuleScreen(navigator: DestinationsNavigator, kpmOnly: Boolean) {
     val cancelText = stringResource(android.R.string.cancel)
     val rebootText = stringResource(R.string.reboot)
     val downloadFailedText = stringResource(R.string.online_download_failed)
+    val downloadCancelledText = stringResource(R.string.online_download_cancelled)
     val installFailedText = stringResource(R.string.online_install_failed)
     val updateSuccessText = stringResource(R.string.kpm_update_succ)
     val updateConfirmText = stringResource(R.string.online_update_confirm)
+    val installConfirmText = stringResource(R.string.online_install_confirm)
     val kpmUnavailableText = stringResource(R.string.kpm_kp_not_installed)
 
     val state by APApplication.apStateLiveData.observeAsState(APApplication.State.UNKNOWN_STATE)
@@ -119,22 +122,29 @@ fun OnlineModuleScreen(navigator: DestinationsNavigator, kpmOnly: Boolean) {
     LaunchedEffect(Unit) { viewModel.onEnter(kpmOnly) }
 
     var downloadTask by remember { mutableStateOf<DownloadTask?>(null) }
+    var downloadHandle by remember { mutableStateOf<DownloadCancelHandle?>(null) }
 
     suspend fun install(module: OnlineModule) {
         if (!module.canInstall) return
-        if (module.installed) {
-            val confirmResult = confirmDialog.awaitConfirm(
-                title = updateText,
-                content = updateConfirmText.format(
-                    module.title, module.installedVersion, module.version
-                ),
-                confirm = updateText,
-                dismiss = cancelText,
-            )
-            if (confirmResult != ConfirmResult.Confirmed) return
-        }
+        // Nothing is written before the user has seen what is about to happen,
+        // whether that is a first install or a replacement of an older version.
+        val confirmResult = confirmDialog.awaitConfirm(
+            title = if (module.installed) updateText else installText,
+            content = if (module.installed) {
+                updateConfirmText.format(module.title, module.installedVersion, module.version)
+            } else {
+                installConfirmText.format(
+                    listOf(module.title, module.version).filter { it.isNotBlank() }.joinToString(" ")
+                )
+            },
+            confirm = if (module.installed) updateText else installText,
+            dismiss = cancelText,
+        )
+        if (confirmResult != ConfirmResult.Confirmed) return
 
         val fileName = "${module.id}-${module.version}.${if (module.kpm) "kpm" else "zip"}"
+        val handle = DownloadCancelHandle()
+        downloadHandle = handle
         downloadTask = DownloadTask(module.title, 0)
         val file = try {
             ModuleRepo.downloadModuleFile(
@@ -142,9 +152,15 @@ fun OnlineModuleScreen(navigator: DestinationsNavigator, kpmOnly: Boolean) {
                 kpm = module.kpm,
                 fileName = fileName,
                 authorUrl = module.downloadUrl,
+                cancel = handle,
             ) { percent -> downloadTask = DownloadTask(module.title, percent) }
         } finally {
             downloadTask = null
+            downloadHandle = null
+        }
+        if (handle.isCancelled) {
+            Toast.makeText(context, downloadCancelledText, Toast.LENGTH_SHORT).show()
+            return
         }
         if (file == null) {
             Toast.makeText(context, downloadFailedText, Toast.LENGTH_SHORT).show()
@@ -224,7 +240,11 @@ fun OnlineModuleScreen(navigator: DestinationsNavigator, kpmOnly: Boolean) {
     }
 
     downloadTask?.let { task ->
-        ModuleDownloadProgressDialog(title = task.title, progress = task.progress)
+        ModuleDownloadProgressDialog(
+            title = task.title,
+            progress = task.progress,
+            onCancel = { downloadHandle?.cancel() },
+        )
     }
 }
 

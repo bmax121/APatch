@@ -172,6 +172,7 @@
     <string name="online_filter_system">System</string>
     <string name="online_filter_kpm">KPM</string>
     <string name="online_install">Install</string>
+    <string name="online_install_confirm">Install %s?</string>
     <string name="online_update">Update</string>
     <string name="online_update_available">Update to %s</string>
     <string name="online_update_confirm">Update %1$s from %2$s to %3$s?</string>
@@ -181,6 +182,7 @@
     <string name="online_empty">No modules</string>
     <string name="online_load_failed">Failed to load the module list</string>
     <string name="online_download_failed">Download failed</string>
+    <string name="online_download_cancelled">Download cancelled</string>
     <string name="online_install_failed">Install failed: %d</string>
     <string name="online_downloading">Downloading %1$s (%2$d%%)</string>
 

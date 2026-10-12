@@ -123,6 +123,7 @@ object ModuleRepo {
         kpm: Boolean,
         fileName: String,
         authorUrl: String = "",
+        cancel: DownloadCancelHandle? = null,
         onProgress: (Int) -> Unit = {},
     ): File? {
         val candidates = LinkedHashSet<String>()
@@ -133,7 +134,10 @@ object ModuleRepo {
         }
         candidates += downloadUrl(id, kpm)
         for (url in candidates) {
-            downloadToCache(url, fileName, onProgress)?.let { return it }
+            downloadToCache(url, fileName, cancel, onProgress)?.let { return it }
+            // A cancelled download is the user's decision, not a failed address:
+            // moving on to the fallback would start over what they just stopped.
+            if (cancel?.isCancelled == true) return null
         }
         return null
     }

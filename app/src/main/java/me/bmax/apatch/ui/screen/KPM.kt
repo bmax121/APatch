@@ -105,6 +105,7 @@ import me.bmax.apatch.ui.component.rememberLoadingDialog
 import me.bmax.apatch.ui.viewmodel.KPModel
 import me.bmax.apatch.ui.viewmodel.KPModuleViewModel
 import me.bmax.apatch.ui.viewmodel.PatchesViewModel
+import me.bmax.apatch.util.DownloadCancelHandle
 import me.bmax.apatch.util.ModuleRepo
 import me.bmax.apatch.util.safeKpmModuleId
 import me.bmax.apatch.util.inputStream
@@ -472,9 +473,11 @@ private fun KPModuleList(
     val updateSuccess = stringResource(id = R.string.kpm_update_succ)
     val updateFailed = stringResource(id = R.string.online_install_failed)
     val downloadFailed = stringResource(id = R.string.online_download_failed)
+    val downloadCancelled = stringResource(id = R.string.online_download_cancelled)
     val rebootText = stringResource(id = R.string.reboot)
 
     var updateTask by remember { mutableStateOf<Pair<String, Int>?>(null) }
+    var updateHandle by remember { mutableStateOf<DownloadCancelHandle?>(null) }
 
     suspend fun onModuleControl(module: KPModel.KPMInfo, param: String) {
         lateinit var controlResult: Natives.KPMCtlRes
@@ -559,15 +562,23 @@ private fun KPModuleList(
         }
 
         updateTask = module.name to 0
+        val handle = DownloadCancelHandle()
+        updateHandle = handle
         val file = try {
             ModuleRepo.downloadModuleFile(
                 id = module.moduleId,
                 kpm = true,
                 fileName = "${module.moduleId}-${update.version}.kpm",
                 authorUrl = update.authorUrl,
+                cancel = handle,
             ) { percent -> updateTask = module.name to percent }
         } finally {
             updateTask = null
+            updateHandle = null
+        }
+        if (handle.isCancelled) {
+            Toast.makeText(context, downloadCancelled, Toast.LENGTH_SHORT).show()
+            return
         }
         if (file == null) {
             Toast.makeText(context, downloadFailed, Toast.LENGTH_SHORT).show()
@@ -667,7 +678,11 @@ private fun KPModuleList(
     }
 
     updateTask?.let { (name, progress) ->
-        ModuleDownloadProgressDialog(title = name, progress = progress)
+        ModuleDownloadProgressDialog(
+            title = name,
+            progress = progress,
+            onCancel = { updateHandle?.cancel() },
+        )
     }
 }
 

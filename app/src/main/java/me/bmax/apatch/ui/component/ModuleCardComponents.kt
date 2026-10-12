@@ -2,8 +2,10 @@ package me.bmax.apatch.ui.component
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,6 +24,7 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -102,13 +105,15 @@ fun ModuleStateIndicator(
 
 /**
  * Modal progress for a module download. Downloads run before an install starts,
- * so the progress cannot live in the install log.
+ * so the progress cannot live in the install log. Tapping outside or pressing
+ * back cancels, exactly like the button does, and the caller is expected to
+ * abort the transfer.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ModuleDownloadProgressDialog(title: String, progress: Int) {
+fun ModuleDownloadProgressDialog(title: String, progress: Int, onCancel: () -> Unit) {
     BasicAlertDialog(
-        onDismissRequest = {},
+        onDismissRequest = onCancel,
         properties = DialogProperties(
             decorFitsSystemWindows = true,
             usePlatformDefaultWidth = false,
@@ -132,6 +137,15 @@ fun ModuleDownloadProgressDialog(title: String, progress: Int) {
                     progress = { progress / 100f },
                     modifier = Modifier.fillMaxWidth(),
                 )
+                Spacer(Modifier.height(4.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End,
+                ) {
+                    TextButton(onClick = onCancel) {
+                        Text(stringResource(android.R.string.cancel))
+                    }
+                }
             }
         }
         val dialogWindowProvider = LocalView.current.parent as DialogWindowProvider

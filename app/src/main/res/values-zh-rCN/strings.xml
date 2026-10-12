@@ -254,6 +254,7 @@
     <string name="online_filter_system">系统模块</string>
     <string name="online_filter_kpm">KPM</string>
     <string name="online_install">安装</string>
+    <string name="online_install_confirm">安装 %s？</string>
     <string name="online_update">更新</string>
     <string name="online_update_available">可更新至 %s</string>
     <string name="online_update_confirm">将 %1$s 从 %2$s 更新到 %3$s？</string>
@@ -263,6 +264,7 @@
     <string name="online_empty">暂无模块</string>
     <string name="online_load_failed">加载模块列表失败</string>
     <string name="online_download_failed">下载失败</string>
+    <string name="online_download_cancelled">已取消下载</string>
     <string name="online_install_failed">安装失败：%d</string>
     <string name="online_downloading">正在下载 %1$s（%2$d%%）</string>
 </resources>

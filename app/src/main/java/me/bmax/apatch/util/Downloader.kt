@@ -15,6 +15,7 @@ import androidx.core.net.toUri
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import me.bmax.apatch.apApp
+import okhttp3.Call
 import okhttp3.Request
 import java.io.File
 import java.io.IOException
@@ -62,9 +63,36 @@ fun download(
 }
 
 /**
+ * Cancels a download in flight. The transfer is aborted at the socket, so a
+ * cancelled download stops costing bandwidth at once — and it is never retried
+ * by a fallback address, because the user asked for it to stop.
+ */
+class DownloadCancelHandle {
+    @Volatile
+    private var call: Call? = null
+
+    @Volatile
+    var isCancelled = false
+        private set
+
+    fun cancel() {
+        isCancelled = true
+        call?.cancel()
+    }
+
+    internal fun attach(call: Call) {
+        this.call = call
+        // A cancel that arrived before the request was handed to OkHttp still
+        // has to take effect.
+        if (isCancelled) call.cancel()
+    }
+}
+
+/**
  * Downloads [url] into the app cache and reports progress in whole percent, as
  * soon as the length is known. Returns the downloaded file, or null when the
- * transfer failed; a failed or empty download is deleted rather than passed on.
+ * transfer failed or [cancel] was triggered; a failed or empty download is
+ * deleted rather than passed on.
  *
  * The file is handed to the installer as a `file://` Uri, so it has to be
  * readable by this process only — the app cache is exactly that.
@@ -72,6 +100,7 @@ fun download(
 suspend fun downloadToCache(
     url: String,
     fileName: String,
+    cancel: DownloadCancelHandle? = null,
     onProgress: (Int) -> Unit = {},
 ): File? = withContext(Dispatchers.IO) {
     val dir = File(apApp.cacheDir, "online").apply { mkdirs() }
@@ -80,7 +109,9 @@ suspend fun downloadToCache(
     dir.listFiles()?.forEach { it.delete() }
     val target = File(dir, sanitizeFileName(fileName))
     runCatching {
-        apApp.okhttpClient.newCall(Request.Builder().url(url).build()).execute().use { response ->
+        val call = apApp.okhttpClient.newCall(Request.Builder().url(url).build())
+        cancel?.attach(call)
+        call.execute().use { response ->
             if (!response.isSuccessful) throw IOException("HTTP ${response.code}")
             val body = response.body
             val total = body.contentLength()
@@ -107,7 +138,11 @@ suspend fun downloadToCache(
         }
         target.takeIf { it.length() > 0 } ?: throw IOException("empty file")
     }.onFailure {
-        Log.w(TAG, "download $url failed", it)
+        if (cancel?.isCancelled == true) {
+            Log.i(TAG, "download $url cancelled")
+        } else {
+            Log.w(TAG, "download $url failed", it)
+        }
         target.delete()
     }.getOrNull()
 }
