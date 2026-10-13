@@ -85,8 +85,11 @@
 
     <string name="home_ap_cando_install">Install</string>
     <string name="home_ap_cando_update">Update</string>
+    <string name="home_ap_cando_downgrade">Downgrade</string>
     <string name="home_ap_cando_uninstall">Uninstall</string>
     <string name="home_ap_cando_reboot">Reboot</string>
+    <string name="home_kp_incompatible">May be incompatible</string>
+    <string name="home_kp_incompatible_summary">Version: %1$s -&gt; %2$s (Expected)</string>
 
     <string name="patch_title">Patch</string>
 
