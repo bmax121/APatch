@@ -15,6 +15,8 @@
     <string name="reboot_download">重启至 Download</string>
     <string name="home_click_to_learn_apatch">查看 APatch 的特性和用法</string>
     <string name="reboot_edl">重启至 EDL</string>
+    <string name="reboot_download_confirm">确定重启至 Download 模式吗？设备将启动进入固件刷写界面。</string>
+    <string name="reboot_edl_confirm">确定重启至 EDL（紧急下载）模式吗？屏幕将保持黑屏，只能通过深度刷机工具恢复。</string>
     <string name="home_installing">安装中</string>
     <string name="safe_mode">安全模式</string>
     <string name="reboot_recovery">重启至 Recovery</string>
@@ -195,6 +197,7 @@
     <string name="home_dialog_uninstall_title">卸载</string>
     <string name="home_dialog_uninstall_ap_only">仅卸载系统补丁</string>
     <string name="home_dialog_uninstall_all">完全卸载</string>
+    <string name="home_dialog_uninstall_message">仅移除系统补丁只会卸载管理器应用并保留已修补的启动映像。完全卸载还会还原原厂启动映像，设备将失去 Root，直到重新修补为止。</string>
     <string name="kpm_control_dialog_title">调节内核模块</string>
     <string name="kpm_control_dialog_content">请输入调控参数：</string>
     <string name="kpm_control_paramters">控制参数</string>
