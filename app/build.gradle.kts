@@ -131,7 +131,24 @@ android {
             useLegacyPackaging = true
         }
         resources {
-            excludes += "**"
+            // A blanket `excludes += "**"` strips every library Java resource
+            // from the APK. Libraries that load data files at runtime then
+            // break: org.commonmark (used by Markwon for the manager's
+            // markdown dialogs) needs
+            // /org/commonmark/internal/util/entities.properties, loaded via
+            // getResourceAsStream in Entities' static initializer. Without it
+            // every markdown dialog (module update changelog, Home update
+            // card) crashes with ExceptionInInitializerError /
+            // new InputStreamReader(null) — reproducible on release 11224.
+            // Exclude only entries that commonly cause duplicate-file merge
+            // failures instead of everything.
+            excludes += "META-INF/DEPENDENCIES"
+            excludes += "META-INF/LICENSE*"
+            excludes += "META-INF/NOTICE*"
+            excludes += "META-INF/*.version"
+            excludes += "META-INF/*.kotlin_module"
+            excludes += "**/*.proto"
+            excludes += "module-info.class"
             merges += "META-INF/com/google/android/**"
         }
     }
