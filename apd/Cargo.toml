@@ -15,7 +15,7 @@ const_format = "0.2.36"
 # "deflate-flate2-zlib-rs" instead of "deflate": drops the write-only zopfli
 # encoder but keeps the zlib-rs backend, which provides the inflate path
 # (flate2 without any backend fails to compile).
-zip = { version = "8.6.0",features = [
+zip = { version = "9.0.4",features = [
     "deflate-flate2-zlib-rs",
     "deflate64",
     "lzma",
