@@ -116,6 +116,12 @@ pub fn get_common_script_envs(module_id: Option<&str>) -> Vec<(&'static str, Str
         envs.push(("AP_MODULE", id.to_string()));
     }
 
+    // KernelPatch loaded at runtime (jailbreak) instead of being built into the
+    // boot image; counterpart of KernelSU's KSU_LATE_LOAD.
+    if Path::new("/sys/module/kernelpatch").exists() {
+        envs.push(("APATCH_LATE_LOAD", "1".to_string()));
+    }
+
     envs
 }
 

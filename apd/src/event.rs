@@ -346,7 +346,7 @@ pub fn start_uid_listener() -> Result<()> {
 }
 
 /// Emulate a system reboot: restart the Android framework (`stop` / `start`)
-/// and re-apply the service stage. Used by jailbreak mode so that a runtime-loaded
+/// and re-apply the service and boot-completed stages. Used by jailbreak mode so that a runtime-loaded
 /// `kernelpatch.ko` stays active (a full reboot would drop it).
 pub fn soft_reboot(superkey: Option<String>) -> Result<()> {
     use std::process::Command;
@@ -385,7 +385,26 @@ pub fn soft_reboot(superkey: Option<String>) -> Result<()> {
     }
 
     info!("services");
-    on_services(superkey)?;
+    on_services(superkey.clone())?;
+
+    // A real boot fires boot-completed once the framework is up; do the same.
+    wait_boot_completed(Duration::from_secs(120));
+    run_stage("boot-completed", superkey, false);
+    run_uid_monitor();
 
     Ok(())
+}
+
+/// Block until `sys.boot_completed` is `1`, or `timeout` elapses.
+fn wait_boot_completed(timeout: Duration) {
+    let step = Duration::from_secs(1);
+    let mut waited = Duration::ZERO;
+    while utils::getprop("sys.boot_completed").as_deref() != Some("1") {
+        if waited >= timeout {
+            warn!("sys.boot_completed not set after {timeout:?}, run boot-completed anyway");
+            return;
+        }
+        thread::sleep(step);
+        waited += step;
+    }
 }
