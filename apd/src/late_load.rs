@@ -60,7 +60,7 @@ fn apk_path(package: &str) -> Result<PathBuf> {
 }
 
 /// List the subdirectories of `dir`, or of each immediate subdirectory of
-/// `dir` when `dir` ends with `/*` (one extra level, for the `~~<random>/`
+/// `dir` when `dir` ends with `/*` (one extra level, the `~~<random>/`
 /// wrapper directories Android creates under `/data/app`).
 fn glob_dirs(dir: &str) -> Result<Vec<PathBuf>> {
     let Some(base) = dir.strip_suffix("/*") else {
@@ -114,6 +114,7 @@ pub fn run(
     // and adbd is restarted at the end of a magica jailbreak.
     utils::daemonize()?;
 
+    let package = package_name.as_deref().unwrap_or(DEFAULT_PACKAGE);
     let kmi = kmi.or_else(detect_kmi);
     let name = module.as_ref().map(|m| m.display().to_string());
 
@@ -135,7 +136,6 @@ pub fn run(
                     insmod::insmod(&path, &[])?;
                 } else {
                     info!("{} not found, loading {file} from APK assets", path.display());
-                    let package = package_name.as_deref().unwrap_or(DEFAULT_PACKAGE);
                     let data = read_from_assets(package, &file)?;
                     insmod::load_module(&data, &CString::default())?;
                 }
@@ -150,22 +150,6 @@ pub fn run(
     let _ = std::fs::create_dir_all("/data/adb/ap");
     let _ = std::fs::write("/data/adb/ap/jailbreak", "");
 
-    println!("late-load complete: {}", name.as_deref().unwrap_or("kernelpatch"));
-
-    // Restart the manager so it gets a fresh supercall fd from the newly loaded
-    // module and reflects the jailbroken (rooted) state.
-    if let Some(pkg) = package_name {
-        info!("restarting manager {pkg}...");
-        let _ = Command::new("am").args(["force-stop", &pkg]).status();
-        let _ = Command::new("am")
-            .args([
-                "start",
-                "-n",
-                &format!("{pkg}/me.bmax.apatch.ui.MainActivity"),
-            ])
-            .status();
-    }
-
     // The jailbreak needs permissive SELinux to run, but once the module, policy
     // and manager are all in place, restore enforcing.
     if let Err(e) = std::fs::write("/sys/fs/selinux/enforce", "1") {
@@ -173,6 +157,22 @@ pub fn run(
     } else {
         info!("SELinux set to enforcing");
     }
+
+    println!("late-load complete: {}", name.as_deref().unwrap_or("kernelpatch"));
+
+    // Restart the manager so it gets a fresh supercall fd from the newly loaded
+    // module and reflects the jailbroken (rooted) state.
+    info!("restarting manager {package}...");
+    let _ = Command::new("am")
+        .args(["force-stop", package])
+        .status();
+    let _ = Command::new("am")
+        .args([
+            "start",
+            "-n",
+            &format!("{package}/me.bmax.apatch.ui.MainActivity"),
+        ])
+        .status();
 
     Ok(())
 }
