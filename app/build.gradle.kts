@@ -262,7 +262,7 @@ registerDownloadTask(
 // package them into the APK assets so the app can load the matching one.
 val jailbreakKmis = listOf(
     "android12-5.10", "android13-5.10", "android13-5.15",
-    "android14-5.15", "android14-6.1", "android15-6.6", "android16-6.12",
+    "android14-5.15", "android14-6.1", "android15-6.6", "android16-6.12", "android17-6.18",
 )
 
 tasks.register("downloadJailbreakKo") {
