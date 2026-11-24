@@ -146,18 +146,19 @@ class APModuleViewModel : ViewModel() {
         val result = kotlin.runCatching {
             val url = m.updateJson
             Log.i(TAG, "checkUpdate url: $url")
-            val response = apApp.okhttpClient
+            apApp.okhttpClient
                 .newCall(
                     okhttp3.Request.Builder()
                         .url(url)
                         .build()
-                ).execute()
-            Log.d(TAG, "checkUpdate code: ${response.code}")
-            if (response.isSuccessful) {
-                response.body?.string() ?: ""
-            } else {
-                ""
-            }
+                ).execute().use { response ->
+                    Log.d(TAG, "checkUpdate code: ${response.code}")
+                    if (response.isSuccessful) {
+                        response.body?.string() ?: ""
+                    } else {
+                        ""
+                    }
+                }
         }.getOrDefault("")
         Log.i(TAG, "checkUpdate result: $result")
 
