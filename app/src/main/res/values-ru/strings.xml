@@ -216,8 +216,6 @@
     <string name="search">Поиск</string>
     <string name="search_apps">Поиск приложений</string>
     <string name="search_modules">Поиск модулей</string>
-    <string name="settings_sucompat">Совместимость со старым su</string>
-    <string name="settings_sucompat_summary">Включить совместимость со старым su (если su не работает)</string>
     <string name="settings_selinux_hide">Скрыть изменение SELinux (Тест)</string>
     <string name="settings_selinux_hide_summary">Скрывает изменения SELinux от обнаружения пользовательскими процессами (эта функция может быть нестабильной). Безопасный режим может отключить эту функцию.</string>
     <string name="settings_selinux_hide_warning_title">Предупреждение</string>

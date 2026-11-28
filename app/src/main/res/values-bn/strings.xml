@@ -216,8 +216,6 @@
     <string name="search">অনুসন্ধান</string>
     <string name="search_apps">অ্যাপ অনুসন্ধান করুন</string>
     <string name="search_modules">মডিউল অনুসন্ধান করুন</string>
-    <string name="settings_sucompat">লিগ্যাসি su সামঞ্জস্য</string>
-    <string name="settings_sucompat_summary">লিগ্যাসি su সামঞ্জস্য সক্ষম করুন (su কাজ না করলে)</string>
     <string name="settings_selinux_hide">SELinux পরিবর্তন লুকান (পরীক্ষা)</string>
     <string name="settings_selinux_hide_summary">ব্যবহারকারী প্রক্রিয়াগুলি যাতে এটি সনাক্ত করতে না পারে সেজন্য SELinux পরিবর্তনগুলি লুকান (এই বৈশিষ্ট্যটি অস্থির হতে পারে)। নিরাপদ মোড এই বৈশিষ্ট্যটি অক্ষম করতে পারে।</string>
     <string name="settings_selinux_hide_warning_title">সতর্কতা</string>

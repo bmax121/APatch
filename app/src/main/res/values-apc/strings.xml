@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="settings_sucompat">توافق su القديم</string>
-    <string name="settings_sucompat_summary">فعّل توافق su القديم (لما su ما يشتغل)</string>
     <string name="settings_selinux_hide">إخفاء تعديل SELinux (تجريبي)</string>
     <string name="settings_selinux_hide_summary">خبّي تعديلات SELinux عشان ما تنكشف من عمليات المستخدم (هالميزة ممكن تكون غير مستقرة). الوضع الآمن بيقدر يعطّلها.</string>
     <string name="settings_selinux_hide_warning_title">تحذير</string>

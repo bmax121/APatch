@@ -216,8 +216,6 @@
     <string name="search">Hledat</string>
     <string name="search_apps">Hledat aplikace</string>
     <string name="search_modules">Hledat moduly</string>
-    <string name="settings_sucompat">Kompatibilita staršího su</string>
-    <string name="settings_sucompat_summary">Enable path_probe hooks for legacy su compatibility</string>
     <string name="settings_selinux_hide">Skrýt úpravy SELinuxu (Test)</string>
     <string name="settings_selinux_hide_summary">Skryje změny SELinuxu před detekcí uživatelskými procesy (tato funkce může být nestabilní). Nouzový režim může tuto funkci zakázat.</string>
     <string name="settings_selinux_hide_warning_title">Varování</string>

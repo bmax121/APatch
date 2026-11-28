@@ -216,8 +216,6 @@
     <string name="search">Zoeken</string>
     <string name="search_apps">Apps zoeken</string>
     <string name="search_modules">Modules zoeken</string>
-    <string name="settings_sucompat">Oude su-compatibiliteit</string>
-    <string name="settings_sucompat_summary">Oude su-compatibiliteit inschakelen (voor wanneer su niet werkt)</string>
     <string name="settings_selinux_hide">SELinux-wijziging verbergen (Test)</string>
     <string name="settings_selinux_hide_summary">Verbergt SELinux-wijzigingen zodat ze niet worden gedetecteerd door gebruikersprocessen (deze functie kan onstabiel zijn). De veilige modus kan deze functie uitschakelen.</string>
     <string name="settings_selinux_hide_warning_title">Waarschuwing</string>

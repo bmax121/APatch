@@ -212,8 +212,6 @@
     <string name="settings_night_mode_follow_sys">Sundin ang dark theme ng system</string>
     <string name="settings_night_mode_follow_sys_summary">Awtomatikong lumipat sa dark theme batay sa mga setting ng system</string>
     <string name="settings_night_theme_enabled">Paganahin ang dark theme</string>
-    <string name="settings_sucompat">Legacy na su compatibility</string>
-    <string name="settings_sucompat_summary">I-enable ang lumang su compatibility (para kapag hindi gumagana ang su)</string>
     <string name="settings_selinux_hide">Itago ang pagbabago ng SELinux (Pagsubok)</string>
     <string name="settings_selinux_hide_summary">Itago ang mga pagbabago sa SELinux para hindi matukoy ng mga proseso ng user (maaaring hindi matatag ang feature na ito). Maaaring i-disable ng safe mode ang feature na ito.</string>
     <string name="settings_selinux_hide_warning_title">Babala</string>

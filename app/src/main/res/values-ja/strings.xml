@@ -218,8 +218,6 @@
     <string name="search">検索</string>
     <string name="search_apps">アプリを検索</string>
     <string name="search_modules">モジュールを検索</string>
-    <string name="settings_sucompat">レガシー su 互換性</string>
-    <string name="settings_sucompat_summary">レガシーsu互換性を有効にする（suが機能しない場合）</string>
     <string name="settings_selinux_hide">SELinux変更を隠す（テスト）</string>
     <string name="settings_selinux_hide_summary">SELinuxの変更がユーザープロセスから検出されるのを防ぎます（この機能は不安定な場合があります）。セーフモードではこの機能を無効にできます。</string>
     <string name="settings_selinux_hide_warning_title">警告</string>

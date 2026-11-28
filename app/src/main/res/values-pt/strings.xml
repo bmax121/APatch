@@ -218,8 +218,6 @@
     <string name="search">Pesquisar</string>
     <string name="search_apps">Pesquisar aplicações</string>
     <string name="search_modules">Pesquisar módulos</string>
-    <string name="settings_sucompat">Compatibilidade su legada</string>
-    <string name="settings_sucompat_summary">Ativar compatibilidade su (para quando su não funciona)</string>
     <string name="settings_selinux_hide">Ocultar modificação do SELinux (Teste)</string>
     <string name="settings_selinux_hide_summary">Oculta as alterações do SELinux para não serem detetadas por processos de utilizador (esta função pode ser instável). O modo de segurança pode desativar esta função.</string>
     <string name="settings_selinux_hide_warning_title">Aviso</string>

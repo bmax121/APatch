@@ -204,8 +204,6 @@
     <string name="settings_night_mode_follow_sys">Ikuti tema gelap sistem</string>
     <string name="settings_night_mode_follow_sys_summary">Tukar ke tema gelap secara automatik berdasarkan tetapan sistem</string>
     <string name="settings_night_theme_enabled">Dayakan tema gelap</string>
-    <string name="settings_sucompat">Keserasian su lama</string>
-    <string name="settings_sucompat_summary">Dayakan keserasian su lama (apabila su tidak berfungsi)</string>
     <string name="settings_selinux_hide">Sembunyikan pengubahsuaian SELinux (Ujian)</string>
     <string name="settings_selinux_hide_summary">Sembunyikan perubahan SELinux daripada dikesan oleh proses pengguna (ciri ini mungkin tidak stabil). Mod selamat boleh melumpuhkan ciri ini.</string>
     <string name="settings_selinux_hide_warning_title">Amaran</string>

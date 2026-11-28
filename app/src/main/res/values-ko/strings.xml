@@ -218,8 +218,6 @@
     <string name="search">검색</string>
     <string name="search_apps">앱 검색</string>
     <string name="search_modules">모듈 검색</string>
-    <string name="settings_sucompat">레거시 su 호환성</string>
-    <string name="settings_sucompat_summary">레거시 su 호환성 활성화 (su가 작동하지 않을 때)</string>
     <string name="settings_selinux_hide">SELinux 수정 숨기기(테스트)</string>
     <string name="settings_selinux_hide_summary">사용자 프로세스가 SELinux 변경 사항을 감지하지 못하도록 숨깁니다(이 기능은 불안정할 수 있음). 안전 모드에서 이 기능을 비활성화할 수 있습니다.</string>
     <string name="settings_selinux_hide_warning_title">경고</string>

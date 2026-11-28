@@ -202,8 +202,6 @@
     <string name="settings_night_mode_follow_sys">Seguir o tema escuro do sistema</string>
     <string name="settings_night_mode_follow_sys_summary">Cambiar automaticamente ao tema escuro segundo a configuración do sistema</string>
     <string name="settings_night_theme_enabled">Activar o tema escuro</string>
-    <string name="settings_sucompat">Compatibilidade co su legado</string>
-    <string name="settings_sucompat_summary">Activar a compatibilidade su (para cando su non funciona)</string>
     <string name="settings_selinux_hide">Agochar a modificación de SELinux (Proba)</string>
     <string name="settings_selinux_hide_summary">Agocha os cambios de SELinux para que non sexan detectados por procesos de usuario (esta función pode ser inestable). O modo seguro pode desactivar esta función.</string>
     <string name="settings_selinux_hide_warning_title">Aviso</string>

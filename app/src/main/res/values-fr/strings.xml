@@ -218,8 +218,6 @@
     <string name="search">Rechercher</string>
     <string name="search_apps">Rechercher des applications</string>
     <string name="search_modules">Rechercher des modules</string>
-    <string name="settings_sucompat">Compatibilité su héritée</string>
-    <string name="settings_sucompat_summary">Activer la compatibilité su héritée (lorsque su ne fonctionne pas)</string>
     <string name="settings_selinux_hide">Masquer les modifications SELinux (Test)</string>
     <string name="settings_selinux_hide_summary">"Masque les modifications SELinux pour qu'elles ne soient pas détectées par les processus utilisateur (cette fonction peut être instable). Le mode sans échec peut désactiver cette fonction."</string>
     <string name="settings_selinux_hide_warning_title">Avertissement</string>

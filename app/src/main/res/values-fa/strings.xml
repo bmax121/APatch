@@ -216,8 +216,6 @@
     <string name="search">جستجو</string>
     <string name="search_apps">جستجوی برنامه‌ها</string>
     <string name="search_modules">جستجوی ماژول‌ها</string>
-    <string name="settings_sucompat">سازگاری su قدیمی</string>
-    <string name="settings_sucompat_summary">فعال‌سازی سازگاری قدیمی su (برای زمانی که su کار نمی‌کند)</string>
     <string name="settings_selinux_hide">پنهان‌سازی تغییر SELinux (آزمایشی)</string>
     <string name="settings_selinux_hide_summary">پنهان‌کردن تغییرات SELinux از شناسایی توسط فرآیندهای کاربر (این قابلیت ممکن است ناپایدار باشد). حالت امن می‌تواند این قابلیت را غیرفعال کند.</string>
     <string name="settings_selinux_hide_warning_title">هشدار</string>

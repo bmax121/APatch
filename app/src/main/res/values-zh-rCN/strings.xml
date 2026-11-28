@@ -171,8 +171,6 @@
     <string name="home_new_apatch_found">发现新版本：%s，单击升级。</string>
     <string name="settings_check_update_summary">应用启动时自动检测更新</string>
     <string name="settings_clear_super_key_dialog">确定要继续吗？</string>
-    <string name="settings_sucompat">旧版 su 兼容</string>
-    <string name="settings_sucompat_summary">启用旧版su兼容(适用于su不生效)</string>
     <string name="settings_selinux_hide">隐藏Selinux修改(测试)</string>
     <string name="settings_selinux_hide_summary">隐藏selinux的修改防止被用户进程探测到(该功能可能不稳定)。安全模式可禁用生效。</string>
     <string name="settings_selinux_hide_warning_title">警告</string>

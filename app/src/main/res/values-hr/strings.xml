@@ -218,8 +218,6 @@
     <string name="search">Pretraži</string>
     <string name="search_apps">Pretraži aplikacije</string>
     <string name="search_modules">Pretraži module</string>
-    <string name="settings_sucompat">Starija su kompatibilnost</string>
-    <string name="settings_sucompat_summary">Omogući stariju su kompatibilnost (kada su ne radi)</string>
     <string name="settings_selinux_hide">Sakrij SELinux modifikaciju (Test)</string>
     <string name="settings_selinux_hide_summary">Sakrij SELinux promjene od otkrivanja od strane korisničkih procesa (ova značajka može biti nestabilna). Sigurni način rada može onemogućiti ovu značajku.</string>
     <string name="settings_selinux_hide_warning_title">Upozorenje</string>

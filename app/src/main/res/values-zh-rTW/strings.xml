@@ -218,8 +218,6 @@
     <string name="search">搜尋</string>
     <string name="search_apps">搜尋應用程式</string>
     <string name="search_modules">搜尋模組</string>
-    <string name="settings_sucompat">舊版 su 相容性</string>
-    <string name="settings_sucompat_summary">啟用舊版su兼容(適用於su不生效)</string>
     <string name="settings_selinux_hide">隱藏SELinux修改（測試）</string>
     <string name="settings_selinux_hide_summary">隱藏 SELinux 的修改以防止被使用者程序偵測到（此功能可能不穩定）。安全模式可停用此功能。</string>
     <string name="settings_selinux_hide_warning_title">警告</string>

@@ -216,8 +216,6 @@
     <string name="search">Buscar</string>
     <string name="search_apps">Buscar aplicaciones</string>
     <string name="search_modules">Buscar módulos</string>
-    <string name="settings_sucompat">Compatibilidad su heredada</string>
-    <string name="settings_sucompat_summary">Activar compatibilidad su heredada (para cuando su no funciona)</string>
     <string name="settings_selinux_hide">Ocultar modificación de SELinux (Prueba)</string>
     <string name="settings_selinux_hide_summary">Oculta los cambios de SELinux para que los procesos de usuario no los detecten (esta función puede ser inestable). El modo seguro puede desactivar esta función.</string>
     <string name="settings_selinux_hide_warning_title">Advertencia</string>

@@ -212,8 +212,6 @@
     <string name="settings_night_mode_follow_sys">Kövesd a rendszer sötét témáját</string>
     <string name="settings_night_mode_follow_sys_summary">Automatikus váltás sötét témára a rendszerbeállítások alapján</string>
     <string name="settings_night_theme_enabled">Sötét téma engedélyezése</string>
-    <string name="settings_sucompat">Örökölt su-kompatibilitás</string>
-    <string name="settings_sucompat_summary">Régi su-kompatibilitás engedélyezése (ha a su nem működik)</string>
     <string name="settings_selinux_hide">SELinux-módosítás elrejtése (Teszt)</string>
     <string name="settings_selinux_hide_summary">Elrejti a SELinux-módosításokat a felhasználói folyamatok észlelése elől (ez a funkció instabil lehet). A biztonságos mód letilthatja ezt a funkciót.</string>
     <string name="settings_selinux_hide_warning_title">Figyelmeztetés</string>

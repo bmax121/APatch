@@ -218,8 +218,6 @@
     <string name="search">Ara</string>
     <string name="search_apps">Uygulamaları ara</string>
     <string name="search_modules">Modülleri ara</string>
-    <string name="settings_sucompat">Eski su uyumluluğu</string>
-    <string name="settings_sucompat_summary">Enable path_probe hooks for legacy su compatibility</string>
     <string name="settings_selinux_hide">SELinux değişikliğini gizle (Test)</string>
     <string name="settings_selinux_hide_summary">SELinux değişikliklerini kullanıcı süreçleri tarafından algılanmaktan gizler (bu özellik kararsız olabilir). Güvenli mod bu özelliği devre dışı bırakabilir.</string>
     <string name="settings_selinux_hide_warning_title">Uyarı</string>

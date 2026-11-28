@@ -218,8 +218,6 @@
     <string name="search">بحث</string>
     <string name="search_apps">بحث التطبيقات</string>
     <string name="search_modules">بحث الوحدات</string>
-    <string name="settings_sucompat">توافق su القديم</string>
-    <string name="settings_sucompat_summary">تفعيل توافق su القديم (لحالات عدم عمل su)</string>
     <string name="settings_selinux_hide">إخفاء تعديل SELinux (اختباري)</string>
     <string name="settings_selinux_hide_summary">إخفاء تعديلات SELinux لمنع اكتشافها من قبل عمليات المستخدم (قد تكون هذه الميزة غير مستقرة). يمكن للوضع الآمن تعطيل هذه الميزة.</string>
     <string name="settings_selinux_hide_warning_title">تحذير</string>

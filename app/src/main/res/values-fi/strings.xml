@@ -216,8 +216,6 @@
     <string name="search">Haku</string>
     <string name="search_apps">Hae sovelluksia</string>
     <string name="search_modules">Hae moduuleja</string>
-    <string name="settings_sucompat">Vanha su-yhteensopivuus</string>
-    <string name="settings_sucompat_summary">Ota käyttöön vanha su-yhteensopivuus (kun su ei toimi)</string>
     <string name="settings_selinux_hide">Piilota SELinux-muokkaus (Testi)</string>
     <string name="settings_selinux_hide_summary">Piilottaa SELinux-muutokset käyttäjäprosessien havaitsemiselta (tämä toiminto voi olla epävakaa). Vikasietotila voi poistaa tämän toiminnon käytöstä.</string>
     <string name="settings_selinux_hide_warning_title">Varoitus</string>

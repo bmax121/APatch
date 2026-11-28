@@ -218,8 +218,6 @@
     <string name="search">Suchen</string>
     <string name="search_apps">Apps suchen</string>
     <string name="search_modules">Module suchen</string>
-    <string name="settings_sucompat">Alte su-Kompatibilität</string>
-    <string name="settings_sucompat_summary">Alt-su-Kompatibilität aktivieren (falls su nicht funktioniert)</string>
     <string name="settings_selinux_hide">SELinux-Änderung verbergen (Test)</string>
     <string name="settings_selinux_hide_summary">Verbirgt SELinux-Änderungen vor der Erkennung durch Benutzerprozesse (diese Funktion kann instabil sein). Der abgesicherte Modus kann diese Funktion deaktivieren.</string>
     <string name="settings_selinux_hide_warning_title">Warnung</string>

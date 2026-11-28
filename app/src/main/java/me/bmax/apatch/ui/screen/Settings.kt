@@ -33,7 +33,6 @@ import androidx.compose.material.icons.filled.Commit
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.DeveloperMode
 import androidx.compose.material.icons.filled.Engineering
-import androidx.compose.material.icons.automirrored.filled.FeaturedPlayList
 import androidx.compose.material.icons.filled.FormatColorFill
 import androidx.compose.material.icons.filled.InvertColors
 import androidx.compose.material.icons.filled.Save
@@ -206,38 +205,6 @@ fun SettingScreen() {
                             }
                         )
                         isGlobalNamespaceEnabled = it
-                    })
-            }
-
-            // Legacy sucompat (path_probe) support
-            if (kPatchReady && aPatchReady) {
-                var sucompatEnabled by rememberSaveable {
-                    mutableStateOf(
-                        prefs.getBoolean("sucompat_enabled", false)
-                    )
-                }
-                SwitchItem(
-                    icon = Icons.AutoMirrored.Filled.FeaturedPlayList,
-                    title = stringResource(id = R.string.settings_sucompat),
-                    summary = stringResource(id = R.string.settings_sucompat_summary),
-                    checked = sucompatEnabled,
-                    onCheckedChange = { enabled ->
-                        scope.launch(Dispatchers.IO) {
-                            val result = if (enabled) {
-                                // Enable: create marker file and register hooks via supercall
-                                rootShellForResult("touch ${APApplication.SUCOMPAT_FILE}")
-                                Natives.controlFeature("sucompat_extra", true)
-                            } else {
-                                // Disable: remove marker file and unregister hooks via supercall
-                                rootShellForResult("rm -f ${APApplication.SUCOMPAT_FILE}")
-                                Natives.controlFeature("sucompat_extra", false)
-                            }
-                            Log.d("SucompatToggle", "sucompat_extra ${if (enabled) "enable" else "disable"} result: $result")
-                            if (result == 0L) {
-                                prefs.edit { putBoolean("sucompat_enabled", enabled) }
-                                sucompatEnabled = enabled
-                            }
-                        }
                     })
             }
 

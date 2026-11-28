@@ -216,8 +216,6 @@
     <string name="search">Szukaj</string>
     <string name="search_apps">Szukaj aplikacji</string>
     <string name="search_modules">Szukaj modułów</string>
-    <string name="settings_sucompat">Zgodność ze starym su</string>
-    <string name="settings_sucompat_summary">Enable path_probe hooks for legacy su compatibility</string>
     <string name="settings_selinux_hide">Ukryj modyfikację SELinux (Test)</string>
     <string name="settings_selinux_hide_summary">Ukrywa zmiany SELinux przed wykryciem przez procesy użytkownika (ta funkcja może być niestabilna). Tryb bezpieczny może wyłączyć tę funkcję.</string>
     <string name="settings_selinux_hide_warning_title">Ostrzeżenie</string>

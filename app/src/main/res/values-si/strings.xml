@@ -216,8 +216,6 @@
     <string name="search">සොයන්න</string>
     <string name="search_apps">යෙදුම් සොයන්න</string>
     <string name="search_modules">මොඩියුල සොයන්න</string>
-    <string name="settings_sucompat">පැරණි su අනුකූලතාව</string>
-    <string name="settings_sucompat_summary">පැරණි su අනුකූලතාව සක්‍රීය කරන්න (su වැඩ නොකරන විට)</string>
     <string name="settings_selinux_hide">SELinux වෙනස්කම් සඟවන්න (පරීක්ෂණය)</string>
     <string name="settings_selinux_hide_summary">පරිශීලක ක්රියාවලි හඳුනා නොගැනීම සඳහා SELinux වෙනස්කම් සඟවන්න (මෙම විශේෂාංගය අස්ථායී විය හැක). ආරක්ෂිත ප්රකාරය මෙම විශේෂාංගය අක්රීය කළ හැක.</string>
     <string name="settings_selinux_hide_warning_title">අනතුරු ඇඟවීම</string>

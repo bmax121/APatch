@@ -216,8 +216,6 @@
     <string name="search">Cari</string>
     <string name="search_apps">Cari Aplikasi</string>
     <string name="search_modules">Cari modul</string>
-    <string name="settings_sucompat">Kompatibilitas su lama</string>
-    <string name="settings_sucompat_summary">Aktifkan kompatibilitas su lama (untuk saat su tidak berfungsi)</string>
     <string name="settings_selinux_hide">Sembunyikan modifikasi SELinux (Uji Coba)</string>
     <string name="settings_selinux_hide_summary">Menyembunyikan perubahan SELinux agar tidak terdeteksi oleh proses pengguna (fitur ini mungkin tidak stabil). Mode aman dapat menonaktifkan fitur ini.</string>
     <string name="settings_selinux_hide_warning_title">Peringatan</string>

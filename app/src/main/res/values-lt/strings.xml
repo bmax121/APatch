@@ -202,8 +202,6 @@
     <string name="settings_night_mode_follow_sys">Sekti sistemos tamsiąją temą</string>
     <string name="settings_night_mode_follow_sys_summary">Automatiškai perjungti tamsiąją temą pagal sistemos nustatymus</string>
     <string name="settings_night_theme_enabled">Įgalinti tamsiąją temą</string>
-    <string name="settings_sucompat">Senoji su suderinamumas</string>
-    <string name="settings_sucompat_summary">Įgalinti seną su suderinamumą (kai su neveikia)</string>
     <string name="settings_selinux_hide">Slėpti SELinux pakeitimus (Testas)</string>
     <string name="settings_selinux_hide_summary">Paslėpti SELinux pakeitimus, kad jų neaptiktų vartotojo procesai (ši funkcija gali būti nestabili). Saugusis režimas gali išjungti šią funkciją.</string>
     <string name="settings_selinux_hide_warning_title">Įspėjimas</string>

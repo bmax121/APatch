@@ -32,8 +32,6 @@
     <string name="system_default">System default</string>
     <string name="settings_global_namespace_mode">Global namespace mode</string>
     <string name="settings_global_namespace_mode_summary">All root sessions use the global mount namespace</string>
-    <string name="settings_sucompat">Legacy su compatibility</string>
-    <string name="settings_sucompat_summary">"Enable legacy su compatibility (for when su doesn't work)"</string>
     <string name="settings_selinux_hide">Hide SELinux modification (Test)</string>
     <string name="settings_selinux_hide_summary">"Hide SELinux changes from being detected by user processes (this feature may be unstable). Safe mode disables this feature."</string>
     <string name="settings_selinux_hide_warning_title">Warning</string>

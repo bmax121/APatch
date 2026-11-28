@@ -207,8 +207,6 @@
     <string name="settings_night_mode_follow_sys">Sekot sistēmas tumšajai tēmai</string>
     <string name="settings_night_mode_follow_sys_summary">Automātiski pārslēgties uz tumšo tēmu atbilstoši sistēmas iestatījumiem</string>
     <string name="settings_night_theme_enabled">Iespējot tumšo tēmu</string>
-    <string name="settings_sucompat">Vecā su saderība</string>
-    <string name="settings_sucompat_summary">Iespējot veco su saderību (ja su nedarbojas)</string>
     <string name="settings_selinux_hide">Paslēpt SELinux modifikāciju (Tests)</string>
     <string name="settings_selinux_hide_summary">Paslēpiet SELinux izmaiņas no lietotāja procesu noteikšanas (šī funkcija var būt nestabila). Drošais režīms var atspējot šo funkciju.</string>
     <string name="settings_selinux_hide_warning_title">Brīdinājums</string>

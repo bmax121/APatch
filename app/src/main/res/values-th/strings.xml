@@ -216,8 +216,6 @@
     <string name="search">ค้นหา</string>
     <string name="search_apps">ค้นหาแอป</string>
     <string name="search_modules">ค้นหาโมดูล</string>
-    <string name="settings_sucompat">ความเข้ากันได้กับ su รุ่นเก่า</string>
-    <string name="settings_sucompat_summary">เปิดใช้งานความเข้ากันได้กับ su เวอร์ชันเก่า (สำหรับเมื่อ su ไม่ทำงาน)</string>
     <string name="settings_selinux_hide">ซ่อนการแก้ไข SELinux (ทดสอบ)</string>
     <string name="settings_selinux_hide_summary">ซ่อนการเปลี่ยนแปลง SELinux ไม่ให้ถูกตรวจพบโดยกระบวนการของผู้ใช้ (ฟีเจอร์นี้อาจไม่เสถียร) โหมดปลอดภัยสามารถปิดการใช้งานฟีเจอร์นี้ได้</string>
     <string name="settings_selinux_hide_warning_title">คำเตือน</string>

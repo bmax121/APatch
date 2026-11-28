@@ -3,8 +3,6 @@
     <string name="su_pkg_excluded_setting_summary">\t</string>
     <string name="about_app_version">%1$s</string>
     <string name="about_app_desc">…\t\t…“”” </string>
-    <string name="settings_sucompat">توافق su القديم</string>
-    <string name="settings_sucompat_summary">فعّل توافق su القديم (عندما لا يعمل su)</string>
     <string name="settings_selinux_hide">إخفاء تعديل SELinux (اختباري)</string>
     <string name="settings_selinux_hide_summary">إخفاء تعديلات SELinux لمنع اكتشافها من قبل عمليات المستخدم (قد تكون هذه الميزة غير مستقرة). يمكن للوضع الآمن تعطيل هذه الميزة.</string>
     <string name="settings_selinux_hide_warning_title">تحذير</string>

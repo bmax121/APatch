@@ -566,7 +566,7 @@ static inline long __sc_test(const char *key, long a1, long a2, long a3)
 }
 
 /**
- * @brief Enable or disable a kernel feature (e.g. "sucompat_extra" / "path_probe")
+ * @brief Enable or disable a kernel feature (e.g. "selinux_hide")
  *
  * @param key : superkey
  * @param name : feature name

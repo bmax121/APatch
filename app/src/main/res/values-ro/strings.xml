@@ -220,8 +220,6 @@
     <string name="search">Caută</string>
     <string name="search_apps">Caută aplicații</string>
     <string name="search_modules">Caută module</string>
-    <string name="settings_sucompat">Compatibilitate cu su veche</string>
-    <string name="settings_sucompat_summary">Activați compatibilitatea su veche (pentru când su nu funcționează)</string>
     <string name="settings_selinux_hide">Ascunde modificarea SELinux (Test)</string>
     <string name="settings_selinux_hide_summary">Ascunde modificările SELinux de a fi detectate de procesele utilizatorului (această funcție poate fi instabilă). Modul de siguranță poate dezactiva această funcție.</string>
     <string name="settings_selinux_hide_warning_title">Avertisment</string>

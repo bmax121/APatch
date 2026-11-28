@@ -216,8 +216,6 @@
     <string name="search">தேடு</string>
     <string name="search_apps">பயன்பாடுகளைத் தேடு</string>
     <string name="search_modules">தொகுதிகளைத் தேடு</string>
-    <string name="settings_sucompat">பழைய su இணக்கத்தன்மை</string>
-    <string name="settings_sucompat_summary">பழைய su இணக்கத்தை இயக்கு (su வேலை செய்யாதபோது)</string>
     <string name="settings_selinux_hide">SELinux மாற்றத்தை மறை (சோதனை)</string>
     <string name="settings_selinux_hide_summary">SELinux மாற்றங்களை பயனர் செயல்முறைகள் கண்டறியாத வண்ணம் மறை (இந்த அம்சம் நிலையற்றதாக இருக்கலாம்). பாதுகாப்பு முறை இந்த அம்சத்தை முடக்கலாம்.</string>
     <string name="settings_selinux_hide_warning_title">எச்சரிக்கை</string>

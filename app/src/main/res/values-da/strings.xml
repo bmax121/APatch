@@ -202,8 +202,6 @@
     <string name="settings_night_mode_follow_sys">Følg systemets mørke tema</string>
     <string name="settings_night_mode_follow_sys_summary">Skift automatisk til mørkt tema baseret på systemindstillingerne</string>
     <string name="settings_night_theme_enabled">Aktivér mørkt tema</string>
-    <string name="settings_sucompat">Legacy su-kompatibilitet</string>
-    <string name="settings_sucompat_summary">Enable path_probe hooks for legacy su compatibility</string>
     <string name="settings_selinux_hide">Skjul SELinux-ændring (Test)</string>
     <string name="settings_selinux_hide_summary">Skjuler SELinux-ændringer fra at blive opdaget af brugerprocesser (denne funktion kan være ustabil). Sikker tilstand kan deaktivere denne funktion.</string>
     <string name="settings_selinux_hide_warning_title">Advarsel</string>

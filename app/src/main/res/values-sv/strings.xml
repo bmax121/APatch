@@ -216,8 +216,6 @@
     <string name="search_modules">Sök i moduler</string>
     <string name="settings_global_namespace_mode">Globalt namnområdesläge</string>
     <string name="settings_night_mode_follow_sys_summary">Byt automatiskt till mörkt tema baserat på systeminställningarna</string>
-    <string name="settings_sucompat">Äldre su-kompatibilitet</string>
-    <string name="settings_sucompat_summary">Aktivera äldre su-kompatibilitet (när su inte fungerar)</string>
     <string name="settings_selinux_hide">Dölj SELinux-ändring (Test)</string>
     <string name="settings_selinux_hide_summary">Döljer SELinux-ändringar från att upptäckas av användarprocesser (den här funktionen kan vara instabil). Säkerhetsläget kan inaktivera den här funktionen.</string>
     <string name="settings_selinux_hide_warning_title">Varning</string>
