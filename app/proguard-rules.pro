@@ -23,6 +23,14 @@
     public static void throw*(...);
 }
 
+# Keep JNI methods registered dynamically via JNI_OnLoad even when unreferenced
+-keep class me.bmax.apatch.Natives {
+    native <methods>;
+}
+-keep class me.bmax.apatch.magica.AppZygotePreload {
+    native <methods>;
+}
+
 -repackageclasses
 -allowaccessmodification
 -overloadaggressively
