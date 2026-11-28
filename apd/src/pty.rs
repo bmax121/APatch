@@ -56,10 +56,12 @@ fn watch_sigwinch_async(slave: RawFd) {
         let mut sig: c_int = 0;
         loop {
             let mut w = MaybeUninit::<winsize>::uninit();
-            if libc::ioctl(1, TIOCGWINSZ, w.as_mut_ptr()) < 0 {
-                continue;
+            // stdout may not be a tty (e.g. `su -c cmd | grep x` from a terminal).
+            // Skip the copy in that case, but still fall through to sigwait():
+            // `continue` here would spin at 100% CPU for the whole session.
+            if libc::ioctl(1, TIOCGWINSZ, w.as_mut_ptr()) == 0 {
+                libc::ioctl(slave, TIOCSWINSZ, w.as_mut_ptr());
             }
-            libc::ioctl(slave, TIOCSWINSZ, w.as_mut_ptr());
             if sigwait(winch.as_mut_ptr(), &mut sig) != 0 {
                 break;
             }
